@@ -1,4 +1,4 @@
-import { DEBUG, DEBUG_API, IS_AIR_APP } from '../config';
+import { DEBUG, DEBUG_API } from '../config';
 import { AssertionError } from './assert';
 
 export interface Log {
@@ -102,10 +102,6 @@ export function logDebugError(message: string, ...args: any[]) {
   if (DEBUG) {
     // eslint-disable-next-line no-console
     console.error(`[DEBUG][${message}]`, ...args);
-  }
-  // The `androidApp` bridge is only injected into the Android Air WebView, so its presence is the platform check
-  if (IS_AIR_APP && typeof window !== 'undefined') {
-    (window as any).androidApp?.logDebugError(message, JSON.stringify(args, errorReplacer));
   }
 }
 

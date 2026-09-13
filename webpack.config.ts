@@ -490,7 +490,6 @@ export default function createConfig(
         IS_EXTENSION: '', // It's necessary to use an empty string, because it's used in bundle-time conditions
         IS_FIREFOX_EXTENSION: 'false',
         IS_CAPACITOR: 'false',
-        IS_AIR_APP: 'false',
         IS_GRAM_WALLET: 'false',
         IS_TELEGRAM_APP: 'false',
         IS_EXPLORER: 'false',

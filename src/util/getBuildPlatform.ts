@@ -1,7 +1,6 @@
 import type { Platforms } from '@twa-dev/types';
 
 import {
-  IS_AIR_APP,
   IS_ANDROID_DIRECT,
   IS_CAPACITOR,
   IS_EXTENSION,
@@ -52,7 +51,6 @@ export function getFlagsValue() {
     IS_EXTENSION,
     IS_FIREFOX_EXTENSION,
     IS_PACKAGED_ELECTRON,
-    IS_AIR_APP,
     IS_ELECTRON,
     IS_OPERA_EXTENSION,
   };

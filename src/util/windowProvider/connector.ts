@@ -1,8 +1,7 @@
 import type { Connector } from '../PostMessageConnector';
 import type { WindowMethodArgs, WindowMethodResponse, WindowMethods } from './types';
 
-import { IS_AIR_APP, IS_HEADLESS, WINDOW_PROVIDER_CHANNEL, WINDOW_PROVIDER_PORT } from '../../config';
-import { airAppCallWindow } from '../../api/air/airAppCallWindow';
+import { IS_HEADLESS, WINDOW_PROVIDER_CHANNEL, WINDOW_PROVIDER_PORT } from '../../config';
 
 import { createReverseExtensionConnector } from '../PostMessageConnector';
 import { createConnector } from '../PostMessageConnector';
@@ -49,8 +48,6 @@ export function initWindowConnector() {
 }
 
 export function callWindow<T extends keyof WindowMethods>(methodName: T, ...args: WindowMethodArgs<T>) {
-  if (IS_AIR_APP) return airAppCallWindow(methodName, ...args) as EnsurePromise<WindowMethodResponse<T>>;
-
   // Read through `process.env` rather than the constant so bundling drops the branch outright, and
   // spell out the same comparison `IS_HEADLESS` makes: a truthiness test would keep the in-process
   // dispatch alive in a build whose flag is set to something falsey-looking but non-empty.

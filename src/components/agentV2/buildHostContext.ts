@@ -4,7 +4,7 @@ import type { GlobalState } from '../../global/types';
 
 import {
   APP_VERSION,
-  IS_AIR_APP,
+  IS_CAPACITOR,
   IS_EXTENSION,
   IS_PACKAGED_ELECTRON,
   IS_TELEGRAM_APP,
@@ -365,7 +365,7 @@ function isAgentChain(value: string): value is AgentApiChain {
 }
 
 function getClientKind(): AgentV2HostContextSnapshot['client'] {
-  if (IS_AIR_APP) return 'capacitor';
+  if (IS_CAPACITOR) return 'capacitor';
   if (IS_PACKAGED_ELECTRON) return 'electron';
   if (IS_EXTENSION) return 'extension';
   if (IS_TELEGRAM_APP) return 'tma';

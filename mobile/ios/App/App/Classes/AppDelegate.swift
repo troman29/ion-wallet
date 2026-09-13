@@ -1,207 +1,37 @@
 import UIKit
-import AirAsFramework
-import WalletContext
-import UIComponents
-import WalletCore
-import WebKit
+import Capacitor
 import FirebaseCore
 import FirebaseMessaging
-#if canImport(Capacitor)
-import Capacitor
-import MytonwalletAirAppLauncher
-#endif
 
-private let log = Log("AppDelegate")
-private let firstLaunchDateKey = "firstLaunchDate"
-private let firstLaunchVersionKey = "firstLaunchVersion"
-private let lastLaunchDateKey = "lastLaunchDate"
-private let lastLaunchVersionKey = "lastLaunchVersion"
+final class AppDelegate: UIResponder, UIApplicationDelegate {
 
-final class AppDelegate: UIResponder, UIApplicationDelegate, MtwAppDelegateProtocol {
-    
-    #if canImport(Capacitor)
-    public let canSwitchToCapacitor = true
-    #else
-    public let canSwitchToCapacitor = false
-    #endif
-    
-    public var isFirstLaunch: Bool = false
-    
-    private var isOnTheAir: Bool {
-        return AirLauncher.isOnTheAir
-    }
-
-    private func clean(webView: WKWebView?) {
-        webView?.load(URLRequest(url: URL(string: "about:blank")!))
-        webView?.navigationDelegate = nil
-        webView?.uiDelegate = nil
-        webView?.removeFromSuperview()
-    }
-    
-    func switchToAir() {
-        cleanWebViews()
-        clearCapacitorLaunchUrlCache()
-        UIApplication.shared.connectedSceneDelegate?.switchToAir()
-    }
-    
-    func switchToCapacitor() {
-        UIApplication.shared.connectedSceneDelegate?.switchToCapacitor()
-    }
-    
-    private func cleanWebViews() {
-         #if canImport(Capacitor)
-        if let window = UIApplication.shared.connectedSceneDelegate?.window,
-           let capBridgeVC = window.rootViewController as? CAPBridgeViewController {
-            self.clean(webView: capBridgeVC.webView)
-        }
-        #endif
-    }
-
-    private func clearCapacitorLaunchUrlCache() {
-        #if canImport(Capacitor)
-        let applicationDelegateProxy = ApplicationDelegateProxy.shared
-        if applicationDelegateProxy.lastURL != nil {
-            _ = applicationDelegateProxy.application(UIApplication.shared, open: URL(string: "about:blank")!)
-        }
-        #endif
-    }
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        logAppStart()
-        StartupTrace.reset(flow: "process-launch", origin: appStart)
-        StartupTrace.beginInterval("startup.toHomeVisible")
-        StartupTrace.beginInterval("startup.toHomeReady")
-        StartupTrace.beginInterval("startup.toPresentUnlock")
-        StartupTrace.mark("appDelegate.didFinishLaunching.begin", details: "isOnAir=\(isOnTheAir)")
-        
-        if application.isProtectedDataAvailable {
-            let isFirstLaunch = UserDefaults.standard.object(forKey: firstLaunchDateKey) as? Date == nil
-            if isFirstLaunch {
-                log.info("firstLaunchDate key not found")
-                UserDefaults.standard.set(Date(), forKey: firstLaunchDateKey)
-                UserDefaults.standard.set(appVersion, forKey: firstLaunchVersionKey)
-                self.isFirstLaunch = true
-                let decision = AirLauncher.applyMissingFirstLaunchMarkerPolicy()
-                StartupTrace.mark("appDelegate.startupModeDecision", details: decision.traceDetails)
-            }
-            
-            UserDefaults.standard.set(Date(), forKey: lastLaunchDateKey)
-            UserDefaults.standard.set(appVersion, forKey: lastLaunchVersionKey)
-        }
-
-        StartupTrace.mark(
-            "appDelegate.launchMetadata.ready",
-            details: "protectedData=\(application.isProtectedDataAvailable) firstLaunch=\(isFirstLaunch)"
-        )
-        
         FirebaseApp.configure()
-        StartupTrace.mark("appDelegate.firebase.configure")
-        
-        guard application.isProtectedDataAvailable else {
-            log.error("application.isProtectedDataAvailable = false")
-            StartupTrace.mark("appDelegate.didFinishLaunching.abort", details: "protectedDataUnavailable")
-            LogStore.shared.syncronize()
-            return false
-        }
-        
-        StartupTrace.mark("appDelegate.didFinishLaunching.end")
         return true
     }
 
-    func showDebugView() {
-        _showDebugView()
-    }
-    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        if isOnTheAir {
-            AirLauncher.handle(url: url)
-            return true
-        }
-        #if canImport(Capacitor)
+        // Keep this call so the App API can track app url opens
         return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
-        #else
-        fatalError()
-        #endif
-    }
-    
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        LogStore.shared.syncronize()
-    }
-
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        MainActor.assumeIsolated {
-            AppOrientation.supportedInterfaceOrientations
-        }
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        // Called when the app was launched with an activity, including Universal Links.
-        // Feel free to add additional processing here, but if you want the App API to support
-        // tracking app url opens, make sure to keep this call
-        if isOnTheAir {
-            guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-                  let url = userActivity.webpageURL else {
-                return false
-            }
-            log.info("continue user activity url=\(url)")
-            AirLauncher.handle(url: url)
-            return true
-        }
-        
-        #if canImport(Capacitor)
+        // Called for activities including Universal Links; keep this call for url open tracking
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
-        #else
-        fatalError()
-        #endif
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
         Messaging.messaging().token(completion: { (token, error) in
             if let error = error {
-                log.error("capacitorDidFailToRegisterForRemoteNotifications \(error, .public)")
-                #if canImport(Capacitor)
                 NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
-                #endif
             } else if let token = token {
-                log.info("capacitorDidRegisterForRemoteNotifications")
-                #if canImport(Capacitor)
                 NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: token)
-                #endif
-                if self.isOnTheAir {
-                    Task { @MainActor in
-                        AirLauncher.didRegisterForPushNotifications(userToken: token)
-                    }
-                }
             }
         })
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        log.error("didFailToRegisterForRemoteNotificationsWithError \(error, .public)")
-        #if canImport(Capacitor)
         NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
-        #endif
     }
-    
-}
-
-#if canImport(Capacitor)
-extension AppDelegate: @preconcurrency MTWAirToggleDelegate {
-}
-#endif
-
-
-private func logAppStart() {
-    let infoDict = Bundle.main.infoDictionary
-    let buildNumber = infoDict?["CFBundleVersion"] as? String ?? "unknown"
-    let deviceModel = UIDevice.current.model
-    let systemVersion = UIDevice.current.systemVersion
-    _ = appStart
-    log.info("**** APP START **** \(Date().formatted(.iso8601), .public) version=\(appVersion, .public) build=\(buildNumber, .public) device=\(deviceModel, .public) iOS=\(systemVersion, .public)")
-}
-
-private var appVersion: String {
-    Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
 }

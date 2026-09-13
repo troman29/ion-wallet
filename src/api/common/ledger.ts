@@ -8,7 +8,6 @@ import Transport from '@ledgerhq/hw-transport';
 import type { ApiLedgerDriver } from '../types';
 import { ApiHardwareError } from '../types';
 
-import { IS_AIR_APP } from '../../config';
 import { callWindow } from '../../util/windowProvider/connector';
 
 /**
@@ -16,7 +15,7 @@ import { callWindow } from '../../util/windowProvider/connector';
  *  - Native (AIR) apps: Use hex format (expected by native Ledger library implementations)
  *  - Web/Capacitor apps: Use base64 format (more efficient for browser message passing)
  */
-const serializationFormat = IS_AIR_APP ? 'hex' : 'base64';
+const serializationFormat = 'base64';
 
 const BROKEN_CONNECTION_ERRORS = new Set([
   // This error occurs sometimes if the chains' Ledger app is closed during a data transmission with Ledger

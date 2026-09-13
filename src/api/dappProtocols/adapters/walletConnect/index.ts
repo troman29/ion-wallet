@@ -69,16 +69,11 @@ import {
   APP_ICON_URL,
   APP_NAME,
   APP_WEBSITE_URL,
-  IS_AIR_APP,
   IS_EXTENSION,
   WALLET_CONNECT_PAY_APP_ID,
   WALLET_CONNECT_PROJECT_ID,
 } from '../../../../config';
 import { parseAccountId } from '../../../../util/account';
-import {
-  WALLETCONNECT_DEEPLINK,
-  WALLETCONNECT_UNIVERSAL_URLS,
-} from '../../../../util/deeplink/constants';
 import { getDappConnectionUniqueId } from '../../../../util/getDappConnectionUniqueId';
 import { logDebug, logDebugError } from '../../../../util/logs';
 import safeExec from '../../../../util/safeExec';
@@ -88,7 +83,6 @@ import {
   isWalletConnectPayAccountSwitch,
   isWalletConnectPayUserCancellation,
 } from '../../../../util/walletConnectPay';
-import { callWindow } from '../../../../util/windowProvider/connector';
 import chains from '../../../chains';
 import { getEvmProvider } from '../../../chains/evm/util/client';
 import {
@@ -212,14 +206,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       throw new Error('WalletConnect is unavailable: indexedDB is not supported');
     }
 
-    if (IS_AIR_APP) {
-      (globalThis as typeof globalThis & {
-        Linking?: { openURL(url: string): Promise<boolean> };
-      }).Linking ??= {
-        openURL: (url) => callWindow('openWalletConnectUrl', url),
-      };
-    }
-
     //
     // See: https://docs.walletconnect.network/wallet-sdk/web/usage
     //
@@ -231,11 +217,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         description: 'Multichain cryptocurrency wallet',
         url: APP_WEBSITE_URL,
         icons: [APP_ICON_URL],
-        redirect: IS_AIR_APP ? {
-          native: WALLETCONNECT_DEEPLINK,
-          universal: WALLETCONNECT_UNIVERSAL_URLS[0],
-          linkMode: true,
-        } : undefined,
       },
       payConfig: {
         appId: WALLET_CONNECT_PAY_APP_ID,

@@ -1,7 +1,7 @@
 import type { StorageKey } from '../storages/types';
 import type { ApiAccountAny, ApiNetwork, OnApiUpdate } from '../types';
 
-import { IS_AIR_APP, IS_GRAM_WALLET } from '../../config';
+import { IS_GRAM_WALLET } from '../../config';
 import { parseAccountId } from '../../util/account';
 import { omit } from '../../util/iteratees';
 import { storage } from '../storages';
@@ -70,7 +70,7 @@ export async function purgeCoreTwins(onUpdate: OnApiUpdate) {
   // Only the Gram web/extension builds inherit trimmed-build storage; other brands never created twins. Air is
   // excluded: its storage never held auto-mirrored twins, while a user may have deliberately added the same mnemonic
   // on both networks - the purge would silently remove that testnet account.
-  if (!IS_GRAM_WALLET || IS_AIR_APP) return;
+  if (!IS_GRAM_WALLET) return;
 
   if (await storage.getItem('coreTwinsPurged' as StorageKey)) return;
 
