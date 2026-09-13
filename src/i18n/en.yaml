@@ -901,8 +901,6 @@ $receive_action: Receive
 Change Palette: Change Palette
 Palette: Palette
 Unlock New Palettes: Unlock New Palettes
-Get a unique My Wallet Card to unlock new palettes.: Get a unique ION Wallet Card to unlock new palettes.
-Mint Cards: Mint Cards
 Card has been upgraded!: Card has been upgraded!
 $mint_card_result: NFT Card will be **minted** and **installed automatically** within a minute.
 Unique: Unique
@@ -1145,10 +1143,6 @@ Add the first one to track balances and activity for any address.: Add the first
 Customize Wallet: Customize Wallet
 "Select the card stored in this wallet:": "Select the card stored in this wallet:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.
-Get More Cards: Get More Cards
-Browse My Wallet Cards available for purchase.: Browse ION Wallet Cards available for purchase.
-You don’t have any cards to customize yet: You don’t have any cards to customize yet
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: ION Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.
 Get First Card: Get First Card
 Palette and Card: Palette and Card
 Customize the wallet's home screen and color accents the way you like.: Customize the wallet's home screen and color accents the way you like.
@@ -1642,7 +1636,6 @@ Use 6-digit Passcode: Use 6-digit Passcode
 $authorize_token_fee_capitalized: Authorize %token% Fee
 Awaiting Previous Fee: Awaiting Previous Fee
 Lock: Lock
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: ION Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.
 Receive: Receive
 Scan: Scan
 
@@ -1742,7 +1735,6 @@ Rounded Corners: Rounded Corners
 Enable Blur: Enable Blur
 App Font: App Font
 Rounded Balance Font: Rounded Balance Font
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: Selling to card is not supported in Testnet.
 Selling to card is not supported for this account.: Selling to card is not supported for this account.
 Deprecated Website: Deprecated Website

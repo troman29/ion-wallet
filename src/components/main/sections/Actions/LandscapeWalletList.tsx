@@ -123,7 +123,6 @@ function LandscapeWalletList({
                 isRecoveryRequired={isRecoveryRequired}
                 isSelected={accountId === currentAccountId}
                 balanceData={balancesByAccountId[accountId]}
-                cardBackgroundNft={settingsByAccountId?.[accountId]?.cardBackgroundNft}
                 isSensitiveDataHidden={isSensitiveDataHidden}
                 className={buildClassName(styles.item, isMenuOpen && styles.itemActive)}
                 avatarClassName={styles.itemAvatar}

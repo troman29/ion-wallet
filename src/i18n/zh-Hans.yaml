@@ -894,8 +894,6 @@ $receive_action: 接收
 Change Palette: 更改调色板
 Palette: 调色板
 Unlock New Palettes: 解锁新调色板
-Get a unique My Wallet Card to unlock new palettes.: 获取独特的 ION Wallet 卡片以解锁新的调色板。
-Mint Cards: 铸造卡片
 Card has been upgraded!: 卡片已升级！
 $mint_card_result: NFT 卡片将在一分钟内**铸造**并**自动安装**。
 Unique: 独特
@@ -1106,10 +1104,6 @@ Add the first one to track balances and activity for any address.: 添加第一�
 Customize Wallet: 自定义钱包
 "Select the card stored in this wallet:": 选择此钱包中存储的卡片：
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: 该卡片将安装到此钱包中，并显示在主屏幕和钱包列表中。
-Get More Cards: 获取更多卡片
-Browse My Wallet Cards available for purchase.: 浏览可购买的 ION Wallet 卡片。
-You don’t have any cards to customize yet: 您还没有可自定义的卡片。
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: ION Wallet 卡片可以安装到钱包中，并显示在主屏幕和钱包列表中。
 Get First Card: 获取第一张卡片
 Palette and Card: 调色板与卡片
 Customize the wallet's home screen and color accents the way you like.: 按照您的喜好自定义钱包主屏幕和颜色。
@@ -1602,7 +1596,6 @@ Use 6-digit Passcode: 使用 6 位 PIN 码
 $authorize_token_fee_capitalized: 授权 %token% 手续费
 Awaiting Previous Fee: 等待上一笔手续费
 Lock: 锁定
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: ION Wallet 卡片可安装到钱包，并在主屏和钱包列表中显示。
 Receive: 接收
 Scan: 扫描
 
@@ -1707,7 +1700,6 @@ Rounded Corners: 圆角
 Enable Blur: 启用模糊
 App Font: 应用字体
 Rounded Balance Font: 圆润余额字体
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: 测试网不支持出售到卡。
 Selling to card is not supported for this account.: 此账户不支持出售到卡。
 "Why is %tokenName% %direction% %timeframe%?": "%tokenName% 的价格为什么%timeframe%%direction%？"

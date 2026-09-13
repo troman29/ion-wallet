@@ -882,8 +882,6 @@ $receive_action: يستلم
 Change Palette: تغيير لوحة
 Palette: لوحة
 Unlock New Palettes: فتح لوحات جديدة
-Get a unique My Wallet Card to unlock new palettes.: احصل على بطاقة ION Wallet الفريدة لفتح لوحات جديدة.
-Mint Cards: بطاقات النعناع
 Card has been upgraded!: تمت ترقية البطاقة!
 $mint_card_result: سيتم **سك** بطاقة NFT و **تثبيتها تلقائيًا** خلال دقيقة واحدة.
 Unique: فريد
@@ -1098,10 +1096,6 @@ Add the first one to track balances and activity for any address.: أضف الأ
 Customize Wallet: تخصيص المحفظة
 "Select the card stored in this wallet:": "حدد البطاقة المخزنة في هذه المحفظة:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: سيتم تثبيت هذه البطاقة لهذه المحفظة وسيتم عرضها على الشاشة الرئيسية وفي قائمة المحافظ.
-Get More Cards: احصل على المزيد من البطاقات
-Browse My Wallet Cards available for purchase.: تصفح بطاقات ION Wallet المتاحة للشراء.
-You don’t have any cards to customize yet: ليس لديك أي بطاقات لتخصيصها بعد
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: يمكن تثبيت بطاقات ION Wallet للمحافظ وعرضها على الشاشة الرئيسية وفي قائمة المحفظة.
 Get First Card: احصل على البطاقة الأولى
 Palette and Card: لوحة وبطاقة
 Customize the wallet's home screen and color accents the way you like.: قم بتخصيص الشاشة الرئيسية للمحفظة ولون اللمسات بالطريقة التي تريدها.
@@ -1552,7 +1546,6 @@ Use 6-digit Passcode: استخدم رمز المرور المكون من 6 أر�
 $authorize_token_fee_capitalized: تفويض رسوم %token%
 Awaiting Previous Fee: في انتظار الرسوم السابقة
 Lock: قفل
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: يمكن تثبيت بطاقات ION Wallet للمحافظ وعرضها على الشاشة الرئيسية وفي قائمة المحفظة.
 Receive: يستلم
 Scan: مسح
 $web_permission_prompt: هل تسمح لـ %origin% باستخدام %permissions% الخاص بك؟
@@ -1678,7 +1671,6 @@ Rounded Corners: زوايا مستديرة
 Enable Blur: تفعيل التمويه
 App Font: خط التطبيق
 Rounded Balance Font: خط الرصيد المستدير
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: البيع على البطاقة غير مدعوم في Testnet.
 Selling to card is not supported for this account.: البيع على البطاقة غير مدعوم لهذا الحساب.
 Copy Wallet Link: نسخ رابط المحفظة

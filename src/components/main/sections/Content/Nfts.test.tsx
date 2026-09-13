@@ -4,7 +4,7 @@ import '../../../../global/actions/ui/nfts';
 
 import React from '../../../../lib/teact/teact';
 import TeactDOM from '../../../../lib/teact/teact-dom';
-import { addActionHandler, getActions, getGlobal, setGlobal } from '../../../../global';
+import { getActions, getGlobal, setGlobal } from '../../../../global';
 
 import type { ApiNft } from '../../../../api/types';
 
@@ -28,9 +28,6 @@ const NFT_WITHOUT_IMAGE: ApiNft = {
   isOnSale: false,
   metadata: {},
 };
-
-// The `updateNfts` handler triggers this API-layer action; the tests don't need its effects
-addActionHandler('checkCardNftOwnership', () => {});
 
 // TeactN flushes container updates on a microtask, Teact re-renders on rAF;
 // a generous macrotask pause covers both

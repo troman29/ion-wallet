@@ -46,7 +46,6 @@ import {
   DNS_IMAGE_GEN_URL,
   ETHENA_STAKING_VAULT,
   LIQUID_POOL,
-  MW_CARDS_COLLECTION,
   NFT_FRAGMENT_COLLECTIONS,
   STON_PTON_ADDRESS,
   TON_TSUSDE,
@@ -62,7 +61,7 @@ import { fixIpfsUrl, getProxiedLottieUrl } from '../../../../util/fetch';
 import { omitUndefined } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
 import safeExec from '../../../../util/safeExec';
-import { buildMwCardsNftMetadata, getIsNftUnverified, readComment } from '../util/metadata';
+import { getIsNftUnverified, readComment } from '../util/metadata';
 import { toBase64Address } from '../util/tonCore';
 import {
   checkHasScamLink,
@@ -1050,14 +1049,10 @@ export function parseToncenterNft(
     const isNsfw = isNsfwByModeration ?? collectionMetadata?.is_nsfw;
     const isHidden = extra?.render_type === 'hidden' || isScam;
     const isOnFragment = NFT_FRAGMENT_COLLECTIONS.includes(rawCollectionAddress!);
-    const isMwCard = collectionAddress === MW_CARDS_COLLECTION;
-    // A non-string `value` breaks the UI, and the IONWallet card traits are read as strings too
+    // A non-string `value` breaks the UI.
     const attributes = Array.isArray(extra?.attributes)
       ? extra.attributes.filter((attribute): attribute is ApiNftAttribute => typeof attribute?.value === 'string')
       : undefined;
-    // Our own collection served from our own CDN, so its metadata URL is as trusted as an indexer
-    // preview. Toncenter also fails to proxy these images, answering 404 for its cached source
-    const mwCardImage = isMwCard ? image : undefined;
     // The whitelisted collections have known authors, so the hosts of their metadata URLs are trusted.
     // Only a fallback: the indexer preview, when it exists, keeps the moderation applied
     const trustedRawImage = image && collectionAddress && checkIsTrustedCollection(collectionAddress)
@@ -1070,8 +1065,8 @@ export function parseToncenterNft(
       index: nftIndex,
       name: name!,
       address: nftAddress,
-      thumbnail: mwCardImage ?? extra?._image_medium ?? trustedRawImage,
-      image: mwCardImage ?? extra?._image_big ?? extra?._image_medium ?? trustedRawImage,
+      thumbnail: extra?._image_medium ?? trustedRawImage,
+      image: extra?._image_big ?? extra?._image_medium ?? trustedRawImage,
       description,
       ownerAddress,
       isOnSale: isOnSale ?? false,
@@ -1082,9 +1077,6 @@ export function parseToncenterNft(
       metadata: {
         ...(attributes && { attributes }),
         ...(lottie && { lottie }),
-        // `id` must be set to `index + 1`. Unlike TonApi where this field is preformatted,
-        // we need to manually adjust it here due to data source differences.
-        ...(isMwCard && buildMwCardsNftMetadata({ id: nftIndex + 1, image, attributes })),
       },
       ...(collectionAddress && {
         collectionAddress,

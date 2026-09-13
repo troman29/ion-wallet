@@ -899,8 +899,6 @@ $receive_action: Alım
 Change Palette: Paleti Değiştir
 Palette: Palet
 Unlock New Palettes: Yeni Paletleri Aç
-Get a unique My Wallet Card to unlock new palettes.: Yeni paletleri açmak için benzersiz bir ION Wallet Kartı al.
-Mint Cards: Kart Bas
 Card has been upgraded!: Kart yükseltildi!
 $mint_card_result: NFT kartı **basılacak** ve **bir dakika içinde otomatik olarak yüklenecektir**.
 Unique: Benzersiz
@@ -1112,10 +1110,6 @@ Add the first one to track balances and activity for any address.: Herhangi bir 
 Customize Wallet: Cüzdanı özelleştir
 "Select the card stored in this wallet:": "Bu cüzdanda saklanan kartı seçin:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Bu kart bu cüzdan için yüklenecek ve ana ekranda ve cüzdanlar listesinde görüntülenecektir.
-Get More Cards: Daha fazla kart al
-Browse My Wallet Cards available for purchase.: Satın alınabilecek ION Wallet Kartlarına göz atın.
-You don’t have any cards to customize yet: Henüz özelleştirebileceğiniz kartınız yok.
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: ION Wallet Kartları cüzdanlara yüklenebilir ve ana ekranda ile cüzdan listesinde görüntülenebilir.
 Get First Card: İlk kartı al
 Palette and Card: Palet ve Kart
 Customize the wallet's home screen and color accents the way you like.: Cüzdanın ana ekranını ve renk vurgularını istediğiniz gibi özelleştirin.
@@ -1609,7 +1603,6 @@ Use 6-digit Passcode: 6 haneli geçiş kodu kullan
 $authorize_token_fee_capitalized: "%token% ücretini onayla"
 Awaiting Previous Fee: Önceki ücret bekleniyor
 Lock: Kilitle
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: ION Wallet kartları cüzdanlara yüklenebilir ve ana ekranda ve cüzdan listesinde gösterilebilir.
 Receive: Al
 Scan: Tara
 
@@ -1714,7 +1707,6 @@ Rounded Corners: Yuvarlatılmış Köşeler
 Enable Blur: Bulanıklığı Etkinleştir
 App Font: Uygulama Yazı Tipi
 Rounded Balance Font: Yuvarlak Bakiye Yazı Tipi
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: Testnet'te karta satış desteklenmemektedir.
 Selling to card is not supported for this account.: Bu hesap karta satışı desteklemiyor.
 "Why is %tokenName% %direction% %timeframe%?": "%tokenName% fiyatı %timeframe% neden %direction%?"

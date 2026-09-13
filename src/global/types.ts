@@ -509,8 +509,6 @@ export interface AccountState {
     isFullLoadingByChain?: Partial<Record<ApiChain, boolean>>;
     /** Collection address -> last loaded timestamp for cache TTL */
     collectionLoadedTimestamps?: Record<string, number>;
-    /** Snapshot of MW card NFT addresses currently owned by this account */
-    ownedMwCardAddresses?: string[];
   };
   blacklistedNftAddresses?: string[];
   whitelistedNftAddresses?: string[];
@@ -603,8 +601,6 @@ export interface AccountSettings {
   chainDisplayConfiguration?: ChainDisplayConfiguration;
   // These NFTs should be saved in the settings for immediate use after launching the application,
   // without synchronizing the wallet history or complex state caching
-  cardBackgroundNft?: ApiNft;
-  accentColorNft?: ApiNft;
   accentColorIndex?: number;
   isAllowSuspiciousActions?: boolean;
   areAssetsHidden?: boolean;
@@ -1006,8 +1002,6 @@ export type GlobalState = {
   isHardwareModalOpen?: boolean;
   isStakingInfoModalOpen?: boolean;
   isQrScannerOpen?: boolean;
-  isCustomizeWalletModalOpen?: boolean;
-  customizeWalletReturnTo?: 'accountSelector' | 'settings';
   areSettingsOpen?: boolean;
   isExploreOpen?: boolean;
   isAppUpdateAvailable?: boolean;
@@ -1161,8 +1155,6 @@ export interface ActionPayloads {
   setIsBackupRequired: { isMnemonicChecked: boolean };
   openHardwareWalletModal: { chain: ApiChain };
   closeHardwareWalletModal: undefined;
-  openCustomizeWalletModal: { returnTo?: 'accountSelector' | 'settings' };
-  closeCustomizeWalletModal: undefined;
   resetHardwareWalletConnect: { chain: ApiChain; shouldLoadWallets?: boolean };
   setTransferScreen: { state: TransferState };
   setTransferAmount: { amount?: bigint };
@@ -1407,11 +1399,7 @@ export interface ActionPayloads {
   apiUpdateWalletVersions: ApiUpdateWalletVersions;
 
   // Account Settings
-  setCardBackgroundNft: { nft: ApiNft; accountId?: string };
-  clearCardBackgroundNft: undefined;
-  checkCardNftOwnership: { accountId: string } | undefined;
-  installAccentColorFromNft: { nft: ApiNft; accountId?: string };
-  clearAccentColorFromNft: undefined;
+  setAccentColorIndex: { accentColorIndex?: number };
 
   // TON Connect common
   apiUpdateDappLoading: ApiUpdateDappLoading;

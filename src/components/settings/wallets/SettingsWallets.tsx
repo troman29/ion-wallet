@@ -118,7 +118,6 @@ const SettingsWallets = ({
             title={title}
             isSelected={accountId === currentAccountId}
             balanceData={balancesByAccountId[accountId]}
-            cardBackgroundNft={settingsByAccountId?.[accountId]?.cardBackgroundNft}
             isSensitiveDataHidden={isSensitiveDataHidden}
             className={buildClassName(styles.item, styles.item_withWallet)}
             avatarClassName={styles.itemAvatarWallet}

@@ -55,7 +55,7 @@ describe('updateNfts api update', () => {
   }
 
   function dispatchUpdateNfts(global: GlobalState, nfts: ApiNft[], isFullLoading?: boolean) {
-    getApiUpdateHandler()(global, { checkCardNftOwnership: jest.fn() }, {
+    getApiUpdateHandler()(global, {}, {
       type: 'updateNfts', accountId: ACCOUNT_ID, chain: 'ton', nfts, isFullLoading,
     });
     const [updatedGlobal] = (setGlobal as jest.Mock).mock.calls.at(-1)!;

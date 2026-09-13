@@ -115,7 +115,6 @@ function AccountSwitcherSlide({
         <div className={styles.list}>
           {(orderedAccounts ?? []).map(([accountId, account]) => {
             const { title, byChain, type, isRecoveryRequired } = account;
-            const { cardBackgroundNft } = settingsByAccountId?.[accountId] || {};
 
             return (
               <AccountRowContent
@@ -126,7 +125,6 @@ function AccountSwitcherSlide({
                 accountType={type}
                 title={title}
                 isRecoveryRequired={isRecoveryRequired}
-                cardBackgroundNft={cardBackgroundNft}
                 balanceData={balancesByAccountId?.[accountId]}
                 isSelected={accountId === currentSelectedAccountId}
                 isDisabled={getIsAccountDisabled?.(account, accountId)}

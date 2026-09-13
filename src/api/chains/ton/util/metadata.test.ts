@@ -1,5 +1,4 @@
 import {
-  MW_CARDS_COLLECTION,
   NFT_FRAGMENT_COLLECTIONS,
   NOTCOIN_VOUCHERS_ADDRESS,
   TON_DNS_ZONES,
@@ -42,10 +41,6 @@ describe('getIsNftUnverified', () => {
 
   it('skips a Fragment NFT', () => {
     expect(getIsNftUnverified({ collectionAddress: NFT_FRAGMENT_COLLECTIONS[0], isOnFragment: true })).toBeUndefined();
-  });
-
-  it('skips IONWallet cards', () => {
-    expect(getIsNftUnverified({ collectionAddress: MW_CARDS_COLLECTION })).toBeUndefined();
   });
 
   it('skips Notcoin vouchers', () => {

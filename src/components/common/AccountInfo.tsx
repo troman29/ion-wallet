@@ -1,12 +1,11 @@
 import React, { memo } from '../../lib/teact/teact';
 import { withGlobal } from '../../global';
 
-import type { ApiChain, ApiNft } from '../../api/types';
+import type { ApiChain } from '../../api/types';
 import type { Account } from '../../global/types';
 import type { AccountBalance } from '../../hooks/useAccountsBalances';
 
 import {
-  selectAccountSettings,
   selectCurrentAccount,
   selectCurrentAccountChainDisplay,
   selectCurrentAccountId,
@@ -18,7 +17,6 @@ import { formatAccountAddresses } from '../../util/formatAccountAddress';
 import { formatCurrency } from '../../util/formatNumber';
 import isViewAccount from '../../util/isViewAccount';
 
-import CustomCardPreview from '../main/modals/accountSelector/CustomCardPreview';
 import SensitiveData from '../ui/SensitiveData';
 import WalletAvatar from '../ui/WalletAvatar';
 
@@ -28,7 +26,6 @@ interface StateProps {
   currentAccount?: Account;
   currentAccountId?: string;
   visibleChains?: ApiChain[];
-  cardBackgroundNft?: ApiNft;
   isSensitiveDataHidden?: boolean;
   isTestnet?: boolean;
   avatarUrl?: string;
@@ -42,7 +39,6 @@ function AccountInfo({
   currentAccount,
   currentAccountId,
   visibleChains,
-  cardBackgroundNft,
   isSensitiveDataHidden,
   isTestnet,
   avatarUrl,
@@ -84,10 +80,6 @@ function AccountInfo({
             </div>
           </SensitiveData>
         )}
-
-        {cardBackgroundNft && (
-          <CustomCardPreview nft={cardBackgroundNft} className={styles.nftIndicator} />
-        )}
       </div>
 
       <div className={styles.address}>
@@ -103,15 +95,12 @@ function AccountInfo({
 export default memo(withGlobal((global): StateProps => {
   const currentAccount = selectCurrentAccount(global);
   const currentAccountId = selectCurrentAccountId(global);
-  const accountSettings = selectAccountSettings(global, currentAccountId!);
-
   const { isSensitiveDataHidden, isTestnet } = global.settings;
 
   return {
     currentAccount,
     currentAccountId,
     visibleChains: selectCurrentAccountChainDisplay(global)?.visibleChains,
-    cardBackgroundNft: accountSettings?.cardBackgroundNft,
     isSensitiveDataHidden,
     isTestnet,
     avatarUrl: getTelegramAvatarUrlFromDomain(currentAccount?.byChain.ton?.domain),

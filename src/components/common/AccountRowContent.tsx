@@ -1,7 +1,7 @@
 import type { ElementRef, TeactNode } from '../../lib/teact/teact';
 import React, { memo } from '../../lib/teact/teact';
 
-import type { ApiChain, ApiNft } from '../../api/types';
+import type { ApiChain } from '../../api/types';
 import type { Account, AccountType } from '../../global/types';
 import type { AccountBalance } from '../../hooks/useAccountsBalances';
 
@@ -25,7 +25,6 @@ export interface AccountRowContentProps {
   isSelected?: boolean;
   isDisabled?: boolean;
   balanceData?: AccountBalance;
-  cardBackgroundNft?: ApiNft;
   isSensitiveDataHidden?: true;
   suffixIcon?: TeactNode;
   className?: string;
@@ -48,7 +47,6 @@ function AccountRowContent({
   isSelected,
   isDisabled,
   balanceData,
-  cardBackgroundNft,
   isSensitiveDataHidden,
   suffixIcon,
   className,
@@ -89,7 +87,6 @@ function AccountRowContent({
         isTestnet={isTestnet}
         isRecoveryRequired={isRecoveryRequired}
         balanceData={balanceData}
-        cardBackgroundNft={cardBackgroundNft}
         isSensitiveDataHidden={isSensitiveDataHidden}
         suffixIcon={suffixIcon}
         avatarClassName={avatarClassName}

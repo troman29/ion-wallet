@@ -83,8 +83,6 @@ function SettingsPushNotifications({
       toggleNotificationAccount({ accountId });
     };
 
-    const { cardBackgroundNft } = settingsByAccountId?.[accountId] || {};
-
     const isActive = enabledAccountsSet.has(accountId);
     const isDisabled = !isActive && enabledAccounts.length >= MAX_PUSH_NOTIFICATIONS_ACCOUNT_COUNT;
 
@@ -105,7 +103,6 @@ function SettingsPushNotifications({
         isActive={isActive}
 
         onClick={onClick}
-        cardBackgroundNft={cardBackgroundNft}
       />
     );
   }

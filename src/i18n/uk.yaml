@@ -910,8 +910,6 @@ $receive_action: Отримання
 Change Palette: Змінити палітру
 Palette: Палітра
 Unlock New Palettes: Відкрити нові палітри
-Get a unique My Wallet Card to unlock new palettes.: Отримайте унікальну карту ION Wallet, щоб відкрити нові палітри.
-Mint Cards: Створити карту
 Card has been upgraded!: Карту покращено!
 $mint_card_result: NFT-карта буде **створена** і **автоматично встановлена** протягом хвилини.
 Unique: Унікальність
@@ -1130,10 +1128,6 @@ Add the first one to track balances and activity for any address.: Додайт�
 Customize Wallet: Налаштувати гаманець
 "Select the card stored in this wallet:": "Виберіть карту, збережену в цьому гаманці:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Цю карту буде встановлено для гаманця й відображено на головному екрані та в списку гаманців.
-Get More Cards: Отримати більше карт
-Browse My Wallet Cards available for purchase.: Перегляньте доступні для покупки карти ION Wallet.
-You don’t have any cards to customize yet: У вас ще немає карт для налаштування.
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: Карти ION Wallet можна встановлювати для гаманців і відображати на головному екрані та у списку гаманців.
 Get First Card: Отримати першу карту
 Palette and Card: Палітра і карта
 Customize the wallet's home screen and color accents the way you like.: Налаштуйте головний екран гаманця та кольорові акценти так, як вам подобається.
@@ -1639,7 +1633,6 @@ Use 6-digit Passcode: Використати 6-значний код
 $authorize_token_fee_capitalized: Підтвердити комісію %token%
 Awaiting Previous Fee: Очікування попередньої комісії
 Lock: Заблокувати
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: Картки ION Wallet можна встановлювати для гаманців і показувати на головному екрані та у списку гаманців.
 Receive: Отримати
 Scan: Сканувати
 
@@ -1750,7 +1743,6 @@ Rounded Corners: Заокруглені кути
 Enable Blur: Увімкнути розмиття
 App Font: Шрифт застосунку
 Rounded Balance Font: Округлий шрифт балансу
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: Продаж на картку не підтримується в Testnet.
 Selling to card is not supported for this account.: Продаж на картку не підтримується для цього облікового запису.
 "Why is %tokenName% %direction% %timeframe%?": "Чому ціна %tokenName% %direction% %timeframe%?"

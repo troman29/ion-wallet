@@ -63,22 +63,6 @@
     :global(html.is-safari) & {
       background-image: var(--bg) !important;
     }
-
-    &:global(.MwCard__black) {
-      background-image: var(--bg), linear-gradient(to bottom, #{v.$blackCardGradient}) !important;
-    }
-
-    &:global(.MwCard__platinum) {
-      background-image: var(--bg), linear-gradient(to bottom, #{v.$platinumCardGradient}) !important;
-    }
-
-    &:global(.MwCard__gold) {
-      background-image: var(--bg), linear-gradient(to bottom, #{v.$goldCardGradient}) !important;
-    }
-
-    &:global(.MwCard__silver) {
-      background-image: var(--bg), linear-gradient(to bottom, #{v.$silverCardGradient}) !important;
-    }
   }
 
   @media (hover: hover) {

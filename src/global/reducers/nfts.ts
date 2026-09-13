@@ -1,11 +1,9 @@
 import type { ApiNft } from '../../api/types';
 import type { GlobalState } from '../types';
 
-import { MW_CARDS_COLLECTION } from '../../config';
 import isEmptyObject from '../../util/isEmptyObject';
-import { pinMwCardsFirst } from '../helpers/nfts';
 import { selectAccountState } from '../selectors';
-import { updateAccountSettings, updateAccountState } from './misc';
+import { updateAccountState } from './misc';
 
 export function addNft(global: GlobalState, accountId: string, nft: ApiNft, shouldAppendToEnd?: boolean) {
   const nftAddress = nft.address;
@@ -17,12 +15,9 @@ export function addNft(global: GlobalState, accountId: string, nft: ApiNft, shou
     nfts: {
       ...nfts,
       byAddress,
-      orderedAddresses: pinMwCardsFirst(
-        shouldAppendToEnd
-          ? orderedAddresses.concat(nftAddress)
-          : [nftAddress, ...orderedAddresses],
-        byAddress,
-      ),
+      orderedAddresses: shouldAppendToEnd
+        ? orderedAddresses.concat(nftAddress)
+        : [nftAddress, ...orderedAddresses],
     },
   });
 }
@@ -102,41 +97,6 @@ export function removeFromSelectedNfts(global: GlobalState, accountId: string, n
   });
 }
 
-export function updateAccountOwnedMwCards(
-  global: GlobalState,
-  accountId: string,
-  ownedMwCardAddresses: string[],
-): GlobalState {
-  const accountState = selectAccountState(global, accountId);
-  if (!accountState?.nfts) return global;
-
-  return updateAccountState(global, accountId, {
-    nfts: {
-      ...accountState.nfts,
-      ownedMwCardAddresses,
-    },
-  });
-}
-
-// Mirrors the `nftReceived` socket update from the activities pipeline so a freshly received NFT
-// (and the MW-card ownership snapshot) is applied immediately, without waiting for NFT polling
-export function applyIncomingNftFromActivity(
-  global: GlobalState,
-  accountId: string,
-  nft: ApiNft,
-): GlobalState {
-  global = addNft(global, accountId, nft);
-
-  if (nft.collectionAddress === MW_CARDS_COLLECTION) {
-    const owned = selectAccountState(global, accountId)?.nfts?.ownedMwCardAddresses ?? [];
-    if (!owned.includes(nft.address)) {
-      global = updateAccountOwnedMwCards(global, accountId, [...owned, nft.address]);
-    }
-  }
-
-  return global;
-}
-
 // Buying an NFT is an explicit intent to own it, so it stays visible even if its collection is untrusted
 export function whitelistNft(global: GlobalState, accountId: string, nftAddress: string): GlobalState {
   const { blacklistedNftAddresses = [], whitelistedNftAddresses = [] } = selectAccountState(global, accountId) ?? {};
@@ -148,42 +108,18 @@ export function whitelistNft(global: GlobalState, accountId: string, nftAddress:
   });
 }
 
-// Mirrors the `nftSent` socket update; `newOwnerAddress` may be `unknown` when applied from an outgoing
-// activity - `updateAccountSettingsBackgroundNft` only rewrites the persisted owner field
+// Socket updates mirror the regular NFT polling state without treating any collection specially.
+export function applyIncomingNftFromActivity(global: GlobalState, accountId: string, nft: ApiNft): GlobalState {
+  return addNft(global, accountId, nft);
+}
+
 export function applyOutgoingNftFromActivity(
   global: GlobalState,
   accountId: string,
   nft: ApiNft,
-  newOwnerAddress?: string,
+  _newOwnerAddress?: string,
 ): GlobalState {
-  global = removeNft(global, accountId, nft.address);
-
-  if (nft.collectionAddress === MW_CARDS_COLLECTION) {
-    // Sync owner snapshot in `settings.cardBackgroundNft`; final clear is done by `checkCardNftOwnership`
-    const sentNft = { ...nft, ownerAddress: newOwnerAddress };
-    global = updateAccountSettingsBackgroundNft(global, sentNft);
-
-    const owned = selectAccountState(global, accountId)?.nfts?.ownedMwCardAddresses;
-    if (owned?.includes(nft.address)) {
-      global = updateAccountOwnedMwCards(global, accountId, owned.filter((a) => a !== nft.address));
-    }
-  }
-
-  return global;
-}
-
-// Updates the account settings to ensure the specified NFT is up-to-date.
-export function updateAccountSettingsBackgroundNft(global: GlobalState, nft: ApiNft) {
-  Object.entries(global.settings.byAccountId).forEach(([accountId, settings]) => {
-    if (settings.cardBackgroundNft?.address === nft.address) {
-      global = updateAccountSettings(global, accountId, {
-        ...settings,
-        cardBackgroundNft: nft,
-      });
-    }
-  });
-
-  return global;
+  return removeNft(global, accountId, nft.address);
 }
 
 export function addUnorderedNfts(

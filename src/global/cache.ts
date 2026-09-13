@@ -670,14 +670,6 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
   }
 
   if (cached.stateVersion === 56) {
-    // `nfts.ownedMtwCardAddresses` renamed to `ownedMwCardAddresses` (MTW -> MW rebrand)
-    for (const accountId of Object.keys(cached.byAccountId)) {
-      const accountNfts = cached.byAccountId[accountId].nfts;
-      if (accountNfts && (accountNfts as any).ownedMtwCardAddresses !== undefined) {
-        accountNfts.ownedMwCardAddresses = (accountNfts as any).ownedMtwCardAddresses;
-        delete (accountNfts as any).ownedMtwCardAddresses;
-      }
-    }
     cached.stateVersion = 57;
   }
 
@@ -688,6 +680,17 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
   if (cached.stateVersion === 58) {
     clearActivities();
     cached.stateVersion = 59;
+  }
+
+  if (cached.stateVersion === 59) {
+    for (const accountSettings of Object.values(cached.settings?.byAccountId ?? {})) {
+      delete (accountSettings as any).cardBackgroundNft;
+      delete (accountSettings as any).accentColorNft;
+    }
+    for (const accountState of Object.values(cached.byAccountId)) {
+      if (accountState.nfts) delete (accountState.nfts as any).ownedMwCardAddresses;
+    }
+    cached.stateVersion = 60;
   }
   if (cached.stateVersion === 59 || cached.stateVersion === 60) {
     const hasMnemonicAccounts = cached.accounts
@@ -881,11 +884,8 @@ function reduceByAccountId(global: GlobalState) {
       'dapps',
     ]);
 
-    if (state.nfts?.collectionTabs || state.nfts?.ownedMwCardAddresses) {
-      acc[accountId].nfts = {
-        collectionTabs: state.nfts.collectionTabs,
-        ownedMwCardAddresses: state.nfts.ownedMwCardAddresses,
-      };
+    if (state.nfts?.collectionTabs) {
+      acc[accountId].nfts = { collectionTabs: state.nfts.collectionTabs };
     }
 
     const accountTokenSlugs = getAccountTokenSlugs(global, accountId);

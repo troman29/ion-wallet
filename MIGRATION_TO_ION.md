@@ -1,6 +1,6 @@
 # Migration to ION
 
-Этот файл — рабочий план превращения MyTonWallet в ION Wallet. Он фиксирует согласованный объём миграции, фактический статус и блокеры. Обновляем его после каждого законченного блока работы.
+Этот файл — рабочий план превращения MyTonWallet в ION Wallet. Он фиксирует согласованный объём миграции, фактический статус и блокеры. Внешние ссылки, store/registry-записи и графические материалы ведутся отдельно в [реестре ресурсов](REBRANDING_RESOURCE_REGISTRY.md). Обновляем оба файла после каждого законченного блока работы.
 
 ## Цель
 
@@ -13,7 +13,7 @@
 | Область | Статус | Что сделано |
 | --- | --- | --- |
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
-| Лишние продукты | ✅ | Удалены Portfolio, Multisend, MyTonWallet Cards, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. |
+| Лишние продукты | ◐ | Удалены Portfolio, Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
 | Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
 | Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, TonConnect/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
@@ -26,7 +26,7 @@
 - Поддерживаем только ION/TON и BNB Chain.
 - Нативный Air не возвращаем. Мобильные приложения работают через Capacitor.
 - Механизм миграций хранилища сохраняем, но проектные миграционные шаги не переносим.
-- Кастомизация кошелька остаётся, MyTonWallet Cards и их minting — нет.
+- Кастомизация кошелька без NFT Cards может остаться; My Wallet Cards и их minting удаляем полностью.
 - Token staking и liquid staking сохраняем; nominator staking — нет.
 - ION должен быть доступен как нативный актив сети ION и как единственный поддерживаемый ION-токен в BNB Chain.
 
@@ -50,6 +50,13 @@
   - Нейтральные упоминания браузерного `userAgent` и стороннего dApp `agents.ton.org` сохранены: они не включают функциональность Agent.
   - Критерий выполнен: в пользовательском интерфейсе, сборках и CI Agent больше не существует.
 
+- [x] **Удалить My Wallet Cards.**
+  - Удалены NFT collection, minting, CDN, кастомные NFT-фоны, меню, локализации и неиспользуемые ассеты Cards. Старые значения в storage очищаются миграцией.
+  - Обычные карточки аккаунтов, темы и палитры сохранены; палитры больше не требуют NFT Cards.
+
+- [x] **Проверить Giveaway.**
+  - Поиск по `src`, `mobile` и `public` не находит оставшегося Giveaway-кода; `app_giveaway_url` удалён из Android ресурсов.
+
 - [ ] **Проверить iOS Capacitor-проект.**
   - Удалены Air package products, `AirWidgetExtension`, Air-only target и ссылки на удалённые файлы.
   - Проверить открытие проекта, `cap sync ios`, сборку и запуск на симуляторе или устройстве.
@@ -72,11 +79,15 @@
   - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
   - Для собственного TonConnect-канала используется `ion-tc://`; public links используют `wallet.ice.io`.
-- [ ] Завершить замену внешней инфраструктуры.
-  - Runtime RPC, API, static, TonConnect bridge и public URL используют `wallet.ice.io`; переменные окружения позволяют задать реальные endpoint-ы до выпуска.
+- [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
+  - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
   - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.
+  - Зарегистрировать и проверить ION Wallet в ION Connect и WalletConnect, включая metadata, package IDs, deep links, icon и policy URL.
+  - Создать и оформить App Store Connect и Google Play Console приложения: signing, privacy/data disclosure, store listing, screenshots, support/policy URLs и тестовые каналы.
+  - Опубликовать доменные association-файлы (`apple-app-site-association`, `assetlinks.json`) и рабочие ION backend endpoint-ы.
   - GitHub forks и npm scopes старого проекта пока сохранены только как закреплённые источники зависимостей; их нельзя переименовывать, пока не созданы эквивалентные ION forks.
-  - Нужны доменные записи/`apple-app-site-association` и `assetlinks.json` для `wallet.ice.io`, а также рабочие ION backend endpoint-ы.
+- [ ] Утвердить и заменить все иконки, logo, splash и store assets по [реестру ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
+- [ ] Поддерживать README без унаследованных непроверенных маркетинговых заявлений; добавить публичные ссылки только после их публикации.
 - [ ] Проверить BNB bridge/swap-путь для ION между ION/TON и BNB Chain.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Закоммитить и перенести в репозиторий nginx-конфигурацию предпросмотра `wallet.lab.windbit.dev`, если она остаётся частью инфраструктуры проекта.

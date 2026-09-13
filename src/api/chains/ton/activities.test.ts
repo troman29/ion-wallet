@@ -406,8 +406,6 @@ describe('parseToncenterNft', () => {
   const RAW_SENDER_ADDRESS = '0:0D11588CDC0290CE2E808F7B047B2A85BBCA57AA1CBD43DC46A0877FD2AA7708';
   const RAW_NFT_ADDRESS = '0:6DA90942D3DC56FE838724EACCA1F0E616774EAD8EF30A377B6D810B22869B3B';
   const RAW_COLLECTION_ADDRESS = '0:2485DF4016504E8893F093C8D917D275B96DADE7A2D4F2010247817182F9EB91';
-  // `MW_CARDS_COLLECTION` in the raw form
-  const RAW_MW_CARDS_COLLECTION = '0:901362FD85FC31D55F2C82617D91EADA1F1D6B34AF559A047572D56F20D046CA';
   const AUTHOR_HOSTED_IMAGE = 'https://s.getgems.io/nft/b/c/6675a4fb084c43038af2c273/images/ad63ec80';
   const PROXIED_MEDIUM = 'https://imgproxy.toncenter.com/JuFXGLYNNFbAeGMdWXPiHMdbmWd85cDD6o3J3FrH-qE/pr:medium/enc';
   const PROXIED_BIG = 'https://imgproxy.toncenter.com/M9HLUi0lVj6JpH-HtOIw8yn6xmPciHtq_Kij-Tbo26c/pr:big/enc';
@@ -601,18 +599,6 @@ describe('parseToncenterNft', () => {
 
     expect(nft).toMatchObject({ thumbnail: PROXIED_MEDIUM });
     expect(nft?.metadata.attributes).toBeUndefined();
-  });
-
-  it('serves IONWallet cards from our own CDN, since Toncenter cannot proxy them', () => {
-    const CARD_IMAGE = 'https://static.wallet.ice.io/cards/v4/preview/178-02a4c.jpg';
-    const nft = parseNftFromTransfer(
-      { image: CARD_IMAGE, extra: { _image_medium: PROXIED_MEDIUM } },
-      RAW_MW_CARDS_COLLECTION,
-    );
-
-    expect(nft).toMatchObject({ thumbnail: CARD_IMAGE, image: CARD_IMAGE });
-    // The card id is the NFT index plus one
-    expect(nft?.metadata.mtwCardId).toBe(69147);
   });
 
   describe('when the collection is whitelisted', () => {

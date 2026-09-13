@@ -914,8 +914,6 @@ $receive_action: Odbieranie
 Change Palette: Zmień paletę
 Palette: Paleta
 Unlock New Palettes: Odblokuj nowe palety
-Get a unique My Wallet Card to unlock new palettes.: Zdobądź unikalną kartę ION Wallet, aby odblokować nowe palety.
-Mint Cards: Twórz karty
 Card has been upgraded!: Karta została ulepszona!
 $mint_card_result: Karta NFT zostanie **stworzona** i **zainstalowana automatycznie** w ciągu minuty.
 Unique: Unikalna
@@ -1135,10 +1133,6 @@ Add the first one to track balances and activity for any address.: Dodaj pierwsz
 Customize Wallet: Dostosuj portfel
 "Select the card stored in this wallet:": "Wybierz kartę zapisaną w tym portfelu:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Ta karta zostanie zainstalowana dla tego portfela i będzie wyświetlana na ekranie głównym oraz na liście portfeli.
-Get More Cards: Pobierz więcej kart
-Browse My Wallet Cards available for purchase.: Przeglądaj dostępne do zakupu karty ION Wallet.
-You don’t have any cards to customize yet: Nie masz jeszcze żadnych kart do dostosowania.
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: Karty ION Wallet można instalować w portfelach i wyświetlać na ekranie głównym oraz w liście portfeli.
 Get First Card: Pobierz pierwszą kartę
 Palette and Card: Paleta i karta
 Customize the wallet's home screen and color accents the way you like.: Dostosuj ekran główny portfela i akcenty kolorów według własnego uznania.
@@ -1644,7 +1638,6 @@ Use 6-digit Passcode: Użyj 6-cyfrowego kodu
 $authorize_token_fee_capitalized: Zatwierdź opłatę %token%
 Awaiting Previous Fee: Oczekiwanie na poprzednią opłatę
 Lock: Zablokuj
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: Karty ION Wallet można instalować dla portfeli i wyświetlać na ekranie głównym oraz na liście portfeli.
 Receive: Odbierz
 Scan: Skanuj
 
@@ -1753,7 +1746,6 @@ Rounded Corners: Zaokrąglone rogi
 Enable Blur: Włącz rozmycie
 App Font: Czcionka aplikacji
 Rounded Balance Font: Zaokrąglona czcionka salda
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: Sprzedaż na kartę nie jest obsługiwana w sieci testowej.
 Selling to card is not supported for this account.: Sprzedaż na kartę nie jest obsługiwana dla tego konta.
 "Why is %tokenName% %direction% %timeframe%?": "Dlaczego cena %tokenName% %direction% %timeframe%?"

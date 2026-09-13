@@ -901,8 +901,6 @@ $receive_action: دریافت
 Change Palette: تغییر پالت
 Palette: پالت
 Unlock New Palettes: باز کردن پالت‌های جدید
-Get a unique My Wallet Card to unlock new palettes.: یک کارت ION Wallet منحصربه‌فرد بگیرید تا پالت‌های جدید را باز کنید.
-Mint Cards: ضرب کارت‌ها
 Card has been upgraded!: کارت ارتقا یافت!
 $mint_card_result: کارت NFT ظرف یک دقیقه **ضرب** و **به‌صورت خودکار نصب** خواهد شد.
 Unique: منحصربه‌فرد
@@ -1117,10 +1115,6 @@ Add the first one to track balances and activity for any address.: اولین م
 Customize Wallet: سفارشی‌سازی کیف پول
 "Select the card stored in this wallet:": "کارت ذخیره‌شده در این کیف پول را انتخاب کنید:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: این کارت برای این کیف پول نصب خواهد شد و در صفحه اصلی و در فهرست کیف پول‌ها نمایش داده می‌شود.
-Get More Cards: دریافت کارت‌های بیشتر
-Browse My Wallet Cards available for purchase.: کارت‌های ION Wallet موجود برای خرید را مرور کنید.
-You don’t have any cards to customize yet: شما هنوز هیچ کارتی برای سفارشی‌سازی ندارید
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: کارت‌های ION Wallet می‌توانند برای کیف پول‌ها نصب شوند و در صفحه اصلی و در فهرست کیف پول نمایش داده شوند.
 Get First Card: دریافت اولین کارت
 Palette and Card: پالت و کارت
 Customize the wallet's home screen and color accents the way you like.: صفحه اصلی کیف پول و رنگ‌های تأکیدی را آن‌طور که دوست دارید سفارشی کنید.
@@ -1597,7 +1591,6 @@ Use 6-digit Passcode: استفاده از رمز عبور ۶ رقمی
 $authorize_token_fee_capitalized: تأیید کارمزد %token%
 Awaiting Previous Fee: در انتظار کارمزد قبلی
 Lock: قفل
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: کارت‌های ION Wallet می‌توانند برای کیف پول‌ها نصب شوند و در صفحه اصلی و در فهرست کیف پول نمایش داده شوند.
 Receive: دریافت
 Scan: اسکن
 $web_permission_prompt: به %origin% اجازه استفاده از %permissions% شما داده شود؟
@@ -1677,7 +1670,6 @@ Rounded Corners: گوشه‌های گرد
 Enable Blur: فعال‌سازی محو‌شدگی
 App Font: فونت اپلیکیشن
 Rounded Balance Font: فونت موجودی گرد
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: فروش به کارت در تست‌نت پشتیبانی نمی‌شود.
 Selling to card is not supported for this account.: فروش به کارت برای این حساب پشتیبانی نمی‌شود.
 Copy Wallet Link: کپی لینک کیف پول

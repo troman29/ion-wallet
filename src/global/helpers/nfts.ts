@@ -1,7 +1,5 @@
 import type { ApiChain, ApiNft } from '../../api/types';
 
-import { MW_CARDS_COLLECTION } from '../../config';
-
 export interface VisibleNftCollection {
   chain: ApiChain;
   address: string;
@@ -16,22 +14,6 @@ export interface NftCollectionIndex {
 
 export function getCollectionKey(chain: ApiChain, address: string) {
   return `${chain}_${address}`;
-}
-
-export function pinMwCardsFirst(
-  orderedAddresses: string[],
-  byAddress: Record<string, ApiNft>,
-): string[] {
-  const cards: string[] = [];
-  const rest: string[] = [];
-  for (const address of orderedAddresses) {
-    if (byAddress[address]?.collectionAddress === MW_CARDS_COLLECTION) {
-      cards.push(address);
-    } else {
-      rest.push(address);
-    }
-  }
-  return cards.length ? cards.concat(rest) : orderedAddresses;
 }
 
 /** The caller builds the sets, so this function creates nothing when it runs over a list */

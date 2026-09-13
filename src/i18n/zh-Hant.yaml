@@ -894,8 +894,6 @@ $receive_action: 接收
 Change Palette: 更改調色板
 Palette: 調色板
 Unlock New Palettes: 解鎖新調色板
-Get a unique My Wallet Card to unlock new palettes.: 獲取獨特的 ION Wallet 卡片以解鎖新的調色板。
-Mint Cards: 鑄造卡片
 Card has been upgraded!: 卡片已升級！
 $mint_card_result: NFT 卡片將在一分鐘內**鑄造**並**自動安裝**。
 Unique: 獨特
@@ -1106,10 +1104,6 @@ Add the first one to track balances and activity for any address.: 新增第一�
 Customize Wallet: 自訂錢包
 "Select the card stored in this wallet:": 選擇此錢包中儲存的卡片：
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: 此卡片將安裝於該錢包，並顯示在主畫面及錢包列表中。
-Get More Cards: 獲取更多卡片
-Browse My Wallet Cards available for purchase.: 瀏覽可購買的 ION Wallet 卡片。
-You don’t have any cards to customize yet: 您目前沒有可自訂的卡片。
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: ION Wallet 卡片可安裝於錢包，並顯示於主畫面與錢包列表中。
 Get First Card: 獲取第一張卡片
 Palette and Card: 調色盤與卡片
 Customize the wallet's home screen and color accents the way you like.: 依照您的喜好自訂錢包主畫面與顏色強調。
@@ -1594,7 +1588,6 @@ Use 6-digit Passcode: 使用六位 PIN 碼
 $authorize_token_fee_capitalized: 授權 %token% 手續費
 Awaiting Previous Fee: 等候前一筆手續費
 Lock: 鎖定
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: ION Wallet 卡片可安裝至錢包，並顯示在主畫面與錢包列表。
 Receive: 收款
 Scan: 掃描
 
@@ -1699,7 +1692,6 @@ Rounded Corners: 圓角
 Enable Blur: 啟用模糊
 App Font: 應用程式字體
 Rounded Balance Font: 圓潤餘額字體
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: 測試網不支援出售到卡。
 Selling to card is not supported for this account.: 此帳戶不支援出售到卡。
 "Why is %tokenName% %direction% %timeframe%?": "%tokenName% 的價格為什麼%timeframe%%direction%？"

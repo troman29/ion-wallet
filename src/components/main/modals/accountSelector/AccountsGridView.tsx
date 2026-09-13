@@ -62,7 +62,6 @@ function AccountsGridView({
     title?: string,
     isRecoveryRequired?: true,
   ) {
-    const { cardBackgroundNft } = settingsByAccountId?.[accountId] || {};
     const isActive = accountId === currentAccountId;
     const balanceData = balancesByAccountId[accountId];
 
@@ -78,7 +77,6 @@ function AccountsGridView({
         title={title}
         isRecoveryRequired={isRecoveryRequired}
         balanceData={balanceData}
-        cardBackgroundNft={cardBackgroundNft}
         withContextMenu
         isSensitiveDataHidden={isSensitiveDataHidden}
         onClick={onSwitchAccount}

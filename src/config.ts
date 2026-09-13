@@ -172,7 +172,6 @@ export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
   opensea: 'OpenSea',
 };
 export const MW_STATIC_BASE_URL = 'https://static.wallet.ice.io';
-export const MW_CARDS_BASE_URL = `${MW_STATIC_BASE_URL}/cards/v2/cards/`;
 export const APP_PROMO_URL = 'https://wallet.ice.io/';
 export const APP_WEBSITE_HOST = 'wallet.ice.io';
 export const APP_TERMS_OF_USE_URL = 'https://wallet.ice.io/terms-of-use';
@@ -317,7 +316,6 @@ export const NFT_FRAGMENT_COLLECTIONS = [
   '0:0e41dc1dc3c9067ed24248580e12b3359818d83dee0304fabcf80845eafafdb2', // Anonymous Telegram Numbers
   '0:80d78a35f955a14b679faa887ff4cd5bfc0f43b4a4eea2a7e6927f3701b273c2', // Telegram Usernames
 ];
-export const MW_CARDS_COLLECTION = 'EQCQE2L9hfwx1V8sgmF9keraHx1rNK9VmgR1ctVvINBGykyM';
 
 export const TON_DNS_RENEWAL_WARNING_DAYS = 14;
 export const TON_DNS_RENEWAL_NFT_WARNING_DAYS = 30;

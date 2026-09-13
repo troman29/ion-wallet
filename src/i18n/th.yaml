@@ -899,8 +899,6 @@ $receive_action: การรับ
 Change Palette: เปลี่ยนพาเลต
 Palette: พาเลต
 Unlock New Palettes: ปลดล็อกพาเลตใหม่
-Get a unique My Wallet Card to unlock new palettes.: รับบัตร ION Wallet สุดพิเศษเพื่อปลดล็อกพาเลตใหม่
-Mint Cards: สร้างบัตร
 Card has been upgraded!: บัตรได้รับการอัปเกรดแล้ว!
 $mint_card_result: บัตร NFT จะถูก **สร้าง** และ **ติดตั้งโดยอัตโนมัติ** ภายในหนึ่งนาที
 Unique: ไม่ซ้ำใคร
@@ -1106,10 +1104,6 @@ Add the first one to track balances and activity for any address.: เพิ่�
 Customize Wallet: ปรับแต่งกระเป๋าเงิน
 "Select the card stored in this wallet:": "เลือกการ์ดที่เก็บไว้ในกระเป๋าเงินนี้:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: การ์ดนี้จะถูกติดตั้งให้กับกระเป๋าเงินนี้และจะแสดงบนหน้าหลักและในรายการกระเป๋าเงิน
-Get More Cards: รับการ์ดเพิ่มเติม
-Browse My Wallet Cards available for purchase.: เรียกดูการ์ด ION Wallet ที่มีให้ซื้อ
-You don’t have any cards to customize yet: คุณยังไม่มีการ์ดให้ปรับแต่ง
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: การ์ด ION Wallet สามารถติดตั้งให้กับกระเป๋าเงินและแสดงบนหน้าหลักและในรายการกระเป๋าเงินได้
 Get First Card: รับการ์ดแรก
 Palette and Card: พาเลตและการ์ด
 Customize the wallet's home screen and color accents the way you like.: ปรับแต่งหน้าหลักและโทนสีของกระเป๋าเงินในแบบที่คุณต้องการ
@@ -1602,7 +1596,6 @@ Use 6-digit Passcode: ใช้รหัส 6 หลัก
 $authorize_token_fee_capitalized: อนุมัติค่าธรรมเนียม %token%
 Awaiting Previous Fee: กำลังรอค่าธรรมเนียมก่อนหน้า
 Lock: ล็อก
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: การ์ด ION Wallet สามารถติดตั้งสำหรับกระเป๋าและแสดงบนหน้าจอหลักรวมถึงรายการกระเป๋า
 Receive: รับ
 Scan: สแกน
 
@@ -1707,7 +1700,6 @@ Rounded Corners: มุมโค้งมน
 Enable Blur: เปิดใช้งานเอฟเฟกต์เบลอ
 App Font: แบบอักษรแอป
 Rounded Balance Font: แบบอักษรยอดคงเหลือแบบโค้งมน
-My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: การขายเข้าบัตรยังไม่รองรับบน Testnet.
 Selling to card is not supported for this account.: บัญชีนี้ไม่รองรับการขายเข้าบัตร
 "Why is %tokenName% %direction% %timeframe%?": "ทำไมราคา %tokenName% ถึง%direction%%timeframe%?"
