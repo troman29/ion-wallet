@@ -15,7 +15,6 @@ import './api/activities';
 import './api/domains';
 import './api/settings';
 import './api/mfa';
-import './api/portfolio';
 import './apiUpdates/initial';
 import './apiUpdates/activities';
 import './apiUpdates/dapp';

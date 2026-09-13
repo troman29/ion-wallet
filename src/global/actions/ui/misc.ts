@@ -770,28 +770,6 @@ addActionHandler('closeExplore', (global) => {
   return { ...global, isExploreOpen: undefined };
 });
 
-addActionHandler('openPortfolio', (global, actions, payload) => {
-  return { ...openSection(global, 'portfolio'), portfolioReturnTo: payload?.returnTo };
-});
-
-addActionHandler('closePortfolio', (global, actions) => {
-  const { portfolioReturnTo } = global;
-
-  if (portfolioReturnTo === 'settings') {
-    actions.openSettings();
-  }
-
-  const nextGlobal = { ...global, isPortfolioOpen: undefined, portfolioReturnTo: undefined };
-
-  // `switchToPortfolio` parks the landscape content tab on `Portfolio`; restore a real tab on close
-  // so the content area isn't left frozen, and the persisted value doesn't get stuck
-  if (selectCurrentAccountState(nextGlobal)?.activeContentTab === ContentTab.Portfolio) {
-    return updateCurrentAccountState(nextGlobal, { activeContentTab: ContentTab.Overview });
-  }
-
-  return nextGlobal;
-});
-
 addActionHandler('openFullscreen', (global) => {
   setGlobal({ ...global, isFullscreen: true });
 
@@ -826,18 +804,13 @@ addActionHandler('switchAccountAndOpenUrl', async (global, actions, payload) => 
 });
 
 addActionHandler('switchToWallet', (global: GlobalState, actions) => {
-  const {
-    areSettingsOpen, isExploreOpen, isPortfolioOpen,
-  } = global;
+  const { areSettingsOpen, isExploreOpen } = global;
   const accountState = selectCurrentAccountState(global);
   const areAssetsActive = accountState?.activeContentTab === ContentTab.Assets;
-  const isWalletTabActive = !isExploreOpen && !areSettingsOpen && !isPortfolioOpen;
-
-  setGlobal({ ...global, portfolioReturnTo: undefined });
+  const isWalletTabActive = !isExploreOpen && !areSettingsOpen;
 
   actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
   actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
 
   if (!areAssetsActive && isWalletTabActive) {
     actions.selectToken({ slug: undefined }, { forceOnHeavyAnimation: true });
@@ -852,28 +825,13 @@ addActionHandler('switchToExplore', (global: GlobalState, actions) => {
     actions.closeSiteCategory(undefined, { forceOnHeavyAnimation: true });
   }
 
-  setGlobal({ ...global, portfolioReturnTo: undefined });
-
   actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
   actions.openExplore(undefined, { forceOnHeavyAnimation: true });
 });
 
 addActionHandler('switchToSettings', (global: GlobalState, actions) => {
   actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
   actions.openSettings(undefined, { forceOnHeavyAnimation: true });
-});
-
-addActionHandler('switchToPortfolio', (global: GlobalState, actions) => {
-  const { isPortfolioOpen } = global;
-
-  if (isPortfolioOpen) return;
-
-  actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
-  actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.openPortfolio(undefined, { forceOnHeavyAnimation: true });
-  actions.setActiveContentTab({ tab: ContentTab.Portfolio }, { forceOnHeavyAnimation: true });
 });
 
 addActionHandler('openPromotionModal', (global) => {

@@ -1,17 +1,16 @@
 import React, {
   type ElementRef,
-  memo, useEffect, useLayoutEffect, useMemo, useRef, useState,
+  memo, useLayoutEffect, useMemo, useRef, useState,
 } from '../../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../../global';
 
 import type {
-  ApiBaseCurrency, ApiCurrencyRates, ApiNft, ApiPriceHistoryPeriod, ApiStakingState,
+  ApiBaseCurrency, ApiCurrencyRates, ApiNft, ApiStakingState,
 } from '../../../../api/types';
 import type { ApiBackendConfig } from '../../../../api/types/backend';
 import type { ApiPromotion } from '../../../../api/types/backend';
 import type {
   IAnchorPosition,
-  PortfolioPnlChange,
   UserToken,
 } from '../../../../global/types';
 import type { LangFn } from '../../../../hooks/useLang';
@@ -25,16 +24,12 @@ import {
   selectCurrentAccountState,
   selectCurrentAccountTokens,
   selectIsCurrentAccountViewMode,
-  selectPortfolioHistoryBundle,
-  selectPortfolioMainnetWalletKeys,
   selectSeasonalTheme,
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import { calculateFullBalance } from '../../../../util/calculateFullBalance';
 import { formatCurrency, formatCurrencyExtended, getShortCurrencySymbol } from '../../../../util/formatNumber';
-import { round } from '../../../../util/math';
 import { toNativeDigits } from '../../../../util/nativeDigits';
-import { DEFAULT_PORTFOLIO_TIME_RANGE } from '../../../../util/portfolio/timeRange';
 import { preloadedImageUrls } from '../../../../util/preloadImage';
 import { IS_IOS, IS_SAFARI } from '../../../../util/windowEnvironment';
 import getSensitiveDataMaskSkinFromCardNft from './helpers/getSensitiveDataMaskSkinFromCardNft';
@@ -84,10 +79,6 @@ interface StateProps {
   isSeasonalThemingDisabled?: boolean;
   seasonalTheme?: ApiBackendConfig['seasonalTheme'];
   activePromotion?: ApiPromotion;
-  portfolioActiveRange?: ApiPriceHistoryPeriod;
-  portfolioPnlChange?: PortfolioPnlChange;
-  isPnlChangeUpdating?: boolean;
-  isPortfolioOpen?: boolean;
 }
 
 let mainKey = 0;
@@ -144,14 +135,9 @@ function Card({
   isSeasonalThemingDisabled,
   seasonalTheme,
   activePromotion,
-  portfolioActiveRange,
-  portfolioPnlChange,
-  isPnlChangeUpdating,
-  isPortfolioOpen,
 }: OwnProps & StateProps) {
   const {
-    toggleSeasonalTheming, showToast, openPromotionModal, openMintCardModal, switchToPortfolio,
-    loadPortfolioPnlChange,
+    toggleSeasonalTheming, showToast, openPromotionModal, openMintCardModal,
   } = getActions();
   const lang = useLang();
   const amountRef = useRef<HTMLDivElement>();
@@ -219,23 +205,11 @@ function Card({
     return tokens ? calculateFullBalance(tokens, stakingStates, currencyRates[baseCurrency]) : undefined;
   }, [tokens, stakingStates, currencyRates, baseCurrency]);
 
-  // Refresh the card's range change while the Portfolio screen is closed (it keeps it updated on its own
-  // while open), and whenever the total balance changes, so the value tracks the live net worth
-  useEffect(() => {
-    if (portfolioActiveRange && !isPortfolioOpen) {
-      loadPortfolioPnlChange();
-    }
-  }, [currentAccountId, baseCurrency, portfolioActiveRange, isPortfolioOpen, values?.primaryValue]);
-
   const { primaryValue, primaryWholePart, primaryFractionPart } = values || {};
 
-  const changeValue = portfolioPnlChange ? portfolioPnlChange.amount : values?.changeValue;
-  const changePercent = portfolioPnlChange
-    ? (portfolioPnlChange.percent !== undefined ? round(portfolioPnlChange.percent, 2) : undefined)
-    : values?.changePercent;
-  const changePrefix = portfolioPnlChange
-    ? (portfolioPnlChange.amount > 0 ? 'up' : portfolioPnlChange.amount < 0 ? 'down' : undefined)
-    : values?.changePrefix;
+  const changeValue = values?.changeValue;
+  const changePercent = values?.changePercent;
+  const changePrefix = values?.changePrefix;
   const hasChangePercent = !!changePrefix && changePercent !== undefined;
 
   useLayoutEffect(() => {
@@ -337,11 +311,8 @@ function Card({
                 !hasCustomCard && changePrefix === 'up' && styles.positive,
                 'rounded-font',
               )}
-              role="button"
-              tabIndex={0}
-              onClick={() => switchToPortfolio()}
             >
-              <span className={buildClassName(styles.changeValue, isPnlChangeUpdating && 'glare-text')}>
+              <span className={styles.changeValue}>
                 {hasChangePercent && (
                   <>
                     <i
@@ -465,23 +436,6 @@ export default memo(
       const { cardBackgroundNft: cardNft } = selectCurrentAccountSettings(global) || {};
 
       const { baseCurrency } = global.settings;
-      // Portfolio history exists only for `mainnet` account
-      const isPortfolioSupported = selectPortfolioMainnetWalletKeys(global).length > 0;
-      const portfolioActiveRange = isPortfolioSupported ? global.portfolio?.activeRange : DEFAULT_PORTFOLIO_TIME_RANGE;
-      const rangePnlChange = portfolioActiveRange
-        ? selectPortfolioHistoryBundle(global, currentAccountId, baseCurrency, portfolioActiveRange)?.pnlChange
-        : undefined;
-      // The cached PnL is reused only while it matches the current range and currency
-      const cachedPnlChange = global.portfolio?.pnlChangeByAccountId?.[currentAccountId];
-      const isSlotMatch = cachedPnlChange?.baseCurrency === baseCurrency
-        && cachedPnlChange?.range === portfolioActiveRange;
-      const isPortfolioLoading = Boolean(global.portfolio?.isLoading || global.portfolio?.isRefreshing);
-      const freshPnlChange = rangePnlChange ?? (isSlotMatch ? cachedPnlChange : undefined);
-      // Show the up-to-date range value, or keep the previous value while a new range is still loading
-      const portfolioPnlChange = freshPnlChange
-        ?? (isPortfolioLoading && cachedPnlChange?.baseCurrency === baseCurrency ? cachedPnlChange : undefined);
-      const isPnlChangeUpdating = isPortfolioLoading
-        && (portfolioPnlChange === undefined || portfolioPnlChange !== freshPnlChange);
 
       return {
         currentAccountId,
@@ -498,10 +452,6 @@ export default memo(
         isSeasonalThemingDisabled: global.settings.isSeasonalThemingDisabled,
         seasonalTheme: selectSeasonalTheme(global),
         activePromotion: accountState?.config?.activePromotion,
-        portfolioActiveRange,
-        portfolioPnlChange,
-        isPnlChangeUpdating,
-        isPortfolioOpen: global.isPortfolioOpen,
       };
     },
     (global, _, stickToFirst) => stickToFirst(selectCurrentAccountId(global)),

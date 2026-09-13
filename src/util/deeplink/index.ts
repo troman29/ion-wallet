@@ -70,7 +70,6 @@ export const enum DeeplinkCommand {
   Token = 'token',
   Transaction = 'tx',
   Nft = 'nft',
-  Portfolio = 'portfolio',
   Settings = 'settings',
 }
 
@@ -78,7 +77,6 @@ const EXPLORER_ALLOWED_COMMANDS = new Set([
   DeeplinkCommand.View,
   DeeplinkCommand.Transaction,
   DeeplinkCommand.Nft,
-  DeeplinkCommand.Portfolio,
 ]);
 
 const SETTINGS_SECTION_MAP: Record<string, SettingsState> = {
@@ -100,7 +98,6 @@ const VIEW_MODE_ALLOWED_COMMANDS = new Set([
   DeeplinkCommand.Token,
   DeeplinkCommand.Transaction,
   DeeplinkCommand.Nft,
-  DeeplinkCommand.Portfolio,
 ]);
 
 const OPEN_IN_NATIVE_DELAY_MS = 2000;
@@ -690,7 +687,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
 
     logDebug('Processing deeplink', deeplink);
 
-    // In explorer mode, only allow `View`, `Nft`, `Portfolio` and `Transaction` commands
+    // In explorer mode, only allow `View`, `Nft` and `Transaction` commands
     if (IS_EXPLORER && !EXPLORER_ALLOWED_COMMANDS.has(command as DeeplinkCommand)) {
       actions.showError({ error: 'This action is not supported in explorer mode.' });
       return false;
@@ -1070,11 +1067,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         }
 
         actions.openSettingsWithState({ state: settingsState });
-        return true;
-      }
-
-      case DeeplinkCommand.Portfolio: {
-        getActions().switchToPortfolio();
         return true;
       }
 

@@ -375,9 +375,9 @@ export function updateRemoveMfa(global: GlobalState, mfaUpdate: Partial<GlobalSt
   } as GlobalState;
 }
 
-export type OpenableSection = 'settings' | 'explore' | 'portfolio';
+export type OpenableSection = 'settings' | 'explore';
 
-// Settings, Explore and Portfolio are mutually exclusive full-screen sections.
+// Settings and Explore are mutually exclusive full-screen sections.
 // Opening one must close the others - otherwise their flags stack and the lower-priority
 // view (see `getActiveKey` in LandscapeLayout / `getAppState` in App) silently stays hidden.
 export function openSection(global: GlobalState, section: OpenableSection): GlobalState {
@@ -385,7 +385,6 @@ export function openSection(global: GlobalState, section: OpenableSection): Glob
     ...global,
     areSettingsOpen: section === 'settings',
     isExploreOpen: section === 'explore' || undefined,
-    isPortfolioOpen: section === 'portfolio' || undefined,
   };
 }
 

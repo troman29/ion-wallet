@@ -10,5 +10,4 @@ export * from './vesting';
 export * from './cards';
 export * from './domains';
 export * from './hardware';
-export * from './portfolio';
 export * from './walletConnectPay';

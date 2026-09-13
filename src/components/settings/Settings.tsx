@@ -33,7 +33,6 @@ import {
 } from '../../global/selectors';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
-import { calculateFullBalance } from '../../util/calculateFullBalance';
 import captureEscKeyListener from '../../util/captureEscKeyListener';
 import { toBig, toDecimal } from '../../util/decimals';
 import { formatCurrency, getShortCurrencySymbol } from '../../util/formatNumber';
@@ -102,7 +101,6 @@ import installMobileImg from '../../assets/settings/settings_install-mobile.svg'
 import languageImg from '../../assets/settings/settings_language.svg';
 import mwCardsImg from '../../assets/settings/settings_mw-cards.svg';
 import notifications from '../../assets/settings/settings_notifications.svg';
-import portfolioImg from '../../assets/settings/settings_portfolio.svg';
 import securityImg from '../../assets/settings/settings_security.svg';
 import supportImg from '../../assets/settings/settings_support.svg';
 import tipsImg from '../../assets/settings/settings_tips.svg';
@@ -175,7 +173,6 @@ function Settings({
     toggleDeeplinkHook,
     toggleTonProxy,
     getDapps,
-    openPortfolio,
   } = getActions();
 
   const lang = useLang();
@@ -201,11 +198,6 @@ function Settings({
   const shortBaseSymbol = getShortCurrencySymbol(baseCurrency);
 
   const tonToken = useMemo(() => tokens?.find(({ slug }) => slug === TONCOIN.slug), [tokens]);
-
-  const isPortfolioAvailable = useMemo(() => {
-    if (!tokens) return false;
-    return calculateFullBalance(tokens, stakingStates, currencyRates[baseCurrency]).primaryValue !== '0';
-  }, [tokens, stakingStates, currencyRates, baseCurrency]);
 
   const wallets = useMemo(() => {
     return versions
@@ -249,11 +241,6 @@ function Settings({
   const handleConnectedDappsOpen = useLastCallback(() => {
     getDapps();
     setSettingsState({ state: SettingsState.Dapps });
-  });
-
-  const handleOpenPortfolio = useLastCallback(() => {
-    closeSettings(undefined, { forceOnHeavyAnimation: true });
-    openPortfolio({ returnTo: 'settings' });
   });
 
   function handleAppearanceOpen() {
@@ -488,20 +475,6 @@ function Settings({
           {IS_ELECTRON && (
             <div className={styles.block}>
               {renderHandleDeeplinkButton()}
-            </div>
-          )}
-
-          {isPortfolioAvailable && (
-            <div className={styles.block}>
-              <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleOpenPortfolio}>
-                <img className={styles.menuIcon} src={portfolioImg} alt={lang('Portfolio')} />
-                <div className={styles.itemContent}>
-                  <span className={styles.itemTitle}>{lang('Portfolio')}</span>
-                  <span className={styles.itemSubtitle}>{lang('Performance, insights and P&L')}</span>
-                </div>
-
-                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-              </div>
             </div>
           )}
 

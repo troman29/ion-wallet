@@ -9,7 +9,6 @@ export * from './exploreSites';
 export * from './legacyAuth';
 export * from './mfa';
 export * from './notifications';
-export * from './portfolio';
 export * from './staking';
 export * from './swap';
 export * from './walletConnectPay';

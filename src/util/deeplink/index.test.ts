@@ -289,7 +289,6 @@ describe('processSelfDeeplink', () => {
       setActiveContentTab: jest.fn(),
       openReceiveModal: jest.fn(),
       openTemporaryViewAccount: jest.fn(),
-      switchToPortfolio: jest.fn(),
       addSavedAddress: jest.fn(),
     };
 
@@ -570,15 +569,6 @@ describe('processSelfDeeplink', () => {
         error: 'Staking is not supported in Testnet.',
       });
       expect(mockActions.startStaking).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Portfolio command', () => {
-    it('should switch to portfolio screen', async () => {
-      const result = await processSelfDeeplink('mtw://portfolio');
-
-      expect(result).toBe(true);
-      expect(mockActions.switchToPortfolio).toHaveBeenCalled();
     });
   });
 

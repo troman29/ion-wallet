@@ -34,7 +34,6 @@ import type {
   ApiNetwork,
   ApiNft,
   ApiNftCollection,
-  ApiPortfolioHistoryResponse,
   ApiPriceHistoryPeriod,
   ApiSite,
   ApiSiteCategory,
@@ -74,39 +73,6 @@ export { SwapType } from '../util/swap/types';
 export type IAnchorPosition = {
   x: number;
   y: number;
-};
-
-export type PortfolioHistoryBundle = {
-  netWorth?: ApiPortfolioHistoryResponse;
-  pnlCumulative?: ApiPortfolioHistoryResponse;
-  pnl?: ApiPortfolioHistoryResponse;
-  // Precomputed P&L change for this range+currency, kept here (not just in the single-slot
-  // `pnlChangeByAccountId`) so switching back to a cached range shows the right value instantly
-  pnlChange?: PortfolioPnlChange;
-  // Quantized timestamp of the fetch (see `getPortfolioHistorySlot`); when the current slot
-  // still matches this value, the bundle is considered fresh and no network call is issued
-  fetchedAtSlot?: number;
-};
-
-type PortfolioHistoryByRange = Record<ApiPriceHistoryPeriod, PortfolioHistoryBundle>;
-type PortfolioHistoryByBaseCurrency = Record<ApiBaseCurrency, PortfolioHistoryByRange>;
-export type PortfolioHistoryByAccountId = Record<string, PortfolioHistoryByBaseCurrency>;
-export type PortfolioPnlChange = {
-  range: ApiPriceHistoryPeriod;
-  baseCurrency: ApiBaseCurrency;
-  amount: number;
-  percent?: number;
-  startTs?: number;
-  endTs?: number;
-};
-
-export type PortfolioState = {
-  historyByAccountId?: PortfolioHistoryByAccountId;
-  pnlChangeByAccountId?: Record<string, PortfolioPnlChange>;
-  activeRange?: ApiPriceHistoryPeriod;
-  isLoading?: boolean;
-  isRefreshing?: boolean;
-  error?: string;
 };
 
 export type AnimationLevel = 0 | 1 | 2;
@@ -200,7 +166,6 @@ export enum AppState {
   Auth,
   Main,
   Explore,
-  Portfolio,
   TokenInfo,
   Settings,
   Ledger,
@@ -445,7 +410,6 @@ export enum ContentTab {
   Explore,
   Nft,
   Settings,
-  Portfolio,
 }
 
 export enum MediaType {
@@ -1113,9 +1077,6 @@ export type GlobalState = {
   customizeWalletReturnTo?: 'accountSelector' | 'settings';
   areSettingsOpen?: boolean;
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
-  portfolioReturnTo?: 'settings';
-  portfolio?: PortfolioState;
   isAppUpdateAvailable?: boolean;
   // Force show the "Update My Wallet" pop-up on all platforms
   isAppUpdateRequired?: boolean;
@@ -1417,10 +1378,6 @@ export interface ActionPayloads {
 
   openExplore: undefined;
   closeExplore: undefined;
-  openPortfolio: { returnTo?: 'settings' } | undefined;
-  closePortfolio: undefined;
-  loadPortfolioHistory: { range?: ApiPriceHistoryPeriod } | undefined;
-  loadPortfolioPnlChange: undefined;
 
   closeAnyModal: undefined;
   submitSignature: { enclaveToken: string };
@@ -1451,7 +1408,6 @@ export interface ActionPayloads {
   switchToWallet: undefined;
   switchToExplore: undefined;
   switchToSettings: undefined;
-  switchToPortfolio: undefined;
 
   requestConfetti: undefined;
   setIsPinAccepted: undefined;

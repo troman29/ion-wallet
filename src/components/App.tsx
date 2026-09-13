@@ -64,7 +64,6 @@ import Toasts from './main/Toasts';
 import WalletRenameModal from './main/WalletRenameModal';
 import MediaViewer from './mediaViewer/MediaViewer';
 import MintCardModal from './mintCard/MintCardModal';
-import Portfolio from './portfolio/Portfolio';
 import Settings from './settings/Settings';
 import SwapModal from './swap/SwapModal';
 import TokenInfo from './tokenInfo/TokenInfo';
@@ -88,7 +87,6 @@ interface StateProps {
   isHardwareModalOpen?: boolean;
   isCustomizeWalletModalOpen?: boolean;
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
   currentTokenSlug?: string;
   isFullscreen: boolean;
   areSettingsOpen?: boolean;
@@ -116,7 +114,6 @@ function App({
   isCustomizeWalletModalOpen,
   isQrScannerOpen,
   isExploreOpen,
-  isPortfolioOpen,
   currentTokenSlug,
   isFullscreen,
   areSettingsOpen,
@@ -139,7 +136,7 @@ function App({
   const [canPrerenderMain, prerenderMain] = useFlag();
 
   const renderingKey = resolveRenderingKey({
-    isInactive, areSettingsOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
+    isInactive, areSettingsOpen, isExploreOpen, currentTokenSlug, isPortrait, appState,
   });
   const withBottomBar = isPortrait && (!IS_EXPLORER || isAppReady) && APP_STATES_WITH_BOTTOM_BAR.has(renderingKey);
   // Screens sharing the bottom bar are sibling tabs, so they cross-fade into each other. The token
@@ -226,8 +223,6 @@ function App({
         return <Explore isActive={isActive} />;
       case AppState.Settings:
         return <Settings isActive={isActive} />;
-      case AppState.Portfolio:
-        return <Portfolio isActive={isActive} />;
       case AppState.TokenInfo:
         return <TokenInfo isActive={isActive} />;
       case AppState.Ledger:
@@ -312,7 +307,6 @@ export default memo(withGlobal((global): StateProps => {
     isHardwareModalOpen: global.isHardwareModalOpen,
     isCustomizeWalletModalOpen: global.isCustomizeWalletModalOpen,
     isExploreOpen: global.isExploreOpen,
-    isPortfolioOpen: global.isPortfolioOpen,
     currentTokenSlug: selectCurrentAccountState(global)?.currentTokenSlug,
     areSettingsOpen: global.areSettingsOpen,
     isQrScannerOpen: global.isQrScannerOpen,
@@ -324,12 +318,11 @@ export default memo(withGlobal((global): StateProps => {
 })(App));
 
 function resolveRenderingKey({
-  isInactive, areSettingsOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
+  isInactive, areSettingsOpen, isExploreOpen, currentTokenSlug, isPortrait, appState,
 }: {
   isInactive: boolean;
   areSettingsOpen?: boolean;
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
   currentTokenSlug?: string;
   isPortrait: boolean;
   appState: AppState;
@@ -337,7 +330,6 @@ function resolveRenderingKey({
   if (isInactive) return AppState.Inactive;
   if (areSettingsOpen && isPortrait) return AppState.Settings;
   if (isExploreOpen && isPortrait) return AppState.Explore;
-  if (isPortfolioOpen && isPortrait) return AppState.Portfolio;
   // In landscape the token screen lives inside the main content, next to the wallet overview
   if (currentTokenSlug && isPortrait && appState === AppState.Main) return AppState.TokenInfo;
   return appState;

@@ -4,10 +4,8 @@ import { withGlobal } from '../../../../global';
 import { ContentTab } from '../../../../global/types';
 
 import { selectCurrentAccountId } from '../../../../global/selectors';
-import buildClassName from '../../../../util/buildClassName';
 
 import Explore from '../../../explore/Explore';
-import Portfolio from '../../../portfolio/Portfolio';
 import Settings from '../../../settings/Settings';
 import Transition from '../../../ui/Transition';
 import LandscapeContent from '../Content/LandscapeContent';
@@ -21,11 +19,10 @@ interface OwnProps {
 interface StateProps {
   areSettingsOpen?: boolean;
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
 }
 
 function LandscapeLayout({
-  onStakedTokenClick, areSettingsOpen, isExploreOpen, isPortfolioOpen,
+  onStakedTokenClick, areSettingsOpen, isExploreOpen,
 }: OwnProps & StateProps) {
   function renderSlide(isActive: boolean, _isFrom: boolean, currentKey: ContentTab) {
     switch (currentKey) {
@@ -41,12 +38,6 @@ function LandscapeLayout({
             <Settings isActive={isActive} />
           </div>
         );
-      case ContentTab.Portfolio:
-        return (
-          <div className={buildClassName(styles.standaloneWrapper, styles.portfolioWrapper)}>
-            <Portfolio isActive={isActive} />
-          </div>
-        );
       default:
         return <LandscapeContent onStakedTokenClick={onStakedTokenClick} />;
     }
@@ -55,7 +46,6 @@ function LandscapeLayout({
   function getActiveKey() {
     if (areSettingsOpen) return ContentTab.Settings;
     if (isExploreOpen) return ContentTab.Explore;
-    if (isPortfolioOpen) return ContentTab.Portfolio;
 
     return ContentTab.Overview;
   }
@@ -78,11 +68,11 @@ export default memo(
   withGlobal<OwnProps>(
     (global): StateProps => {
       const {
-        areSettingsOpen, isExploreOpen, isPortfolioOpen,
+        areSettingsOpen, isExploreOpen,
       } = global;
 
       return {
-        areSettingsOpen, isExploreOpen, isPortfolioOpen,
+        areSettingsOpen, isExploreOpen,
       };
     },
     (global, _, stickToFirst) => stickToFirst(selectCurrentAccountId(global)),

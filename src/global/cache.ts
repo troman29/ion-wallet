@@ -7,7 +7,6 @@ import type {
   AccountState,
   GlobalState,
   LanguageSource,
-  PortfolioState,
   SavedAddress,
   TokenPeriod,
 } from './types';
@@ -683,10 +682,6 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
   }
 
   if (cached.stateVersion === 57) {
-    // Net Change was replaced by PnL Change
-    if (cached.portfolio) {
-      delete (cached.portfolio as any).netChangeByAccountId;
-    }
     cached.stateVersion = 58;
   }
 
@@ -811,7 +806,6 @@ function updateCache(force?: boolean) {
       ...global.settings,
       byAccountId: pick(global.settings.byAccountId, accountIds),
     },
-    portfolio: global.portfolio?.activeRange ? reducePortfolio(global.portfolio, accountIds) : undefined,
   };
 
   const usedTokenSlugs = getUsedTokenSlugs(reducedGlobal);
@@ -893,19 +887,6 @@ function reduceByAccountId(global: GlobalState) {
 
     return acc;
   }, {} as GlobalState['byAccountId']);
-}
-
-function reducePortfolio(portfolio: PortfolioState, accountIds: string[]): PortfolioState {
-  const pnlChangeByAccountId = portfolio.pnlChangeByAccountId
-    ? pick(portfolio.pnlChangeByAccountId, accountIds)
-    : undefined;
-
-  return {
-    activeRange: portfolio.activeRange,
-    pnlChangeByAccountId: pnlChangeByAccountId && !isEmptyObject(pnlChangeByAccountId)
-      ? pnlChangeByAccountId
-      : undefined,
-  };
 }
 
 function reduceAccountBalances(balances?: AccountState['balances'], tokenSlugs?: string[]) {

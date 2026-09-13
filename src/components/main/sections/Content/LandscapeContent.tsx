@@ -155,8 +155,7 @@ function LandscapeContent({
   // `Transition`'s key frozen (see `landscapeActiveKey` below) so the slide underneath does not
   // change during the open/close animation; once the overlay is gone the inner key updates normally.
   const isCoveredByLandscapeOverlay = activeContentTab === ContentTab.Settings
-    || activeContentTab === ContentTab.Explore
-    || activeContentTab === ContentTab.Portfolio;
+    || activeContentTab === ContentTab.Explore;
 
   const shouldShowLandscapeOverview = !currentCollection
     && !hasNftSelection

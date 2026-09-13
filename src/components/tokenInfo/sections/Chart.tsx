@@ -12,8 +12,8 @@ import buildClassName from '../../../util/buildClassName';
 import { formatChartDate, formatShortDay, formatTime, SECOND } from '../../../util/dateFormat';
 import { formatCurrency, formatPercent, getShortCurrencySymbol } from '../../../util/formatNumber';
 import { vibrate } from '../../../util/haptics';
-import { TIME_RANGES } from '../../../util/portfolio/timeRange';
 import { SWIPE_DISABLED_CLASS_NAME } from '../../../util/swipeController';
+import { TIME_RANGES } from '../../../util/timeRange';
 import { IS_IOS } from '../../../util/windowEnvironment';
 
 import useInterval from '../../../hooks/useInterval';
