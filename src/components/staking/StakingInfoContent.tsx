@@ -20,7 +20,6 @@ import {
   selectAccountStakingStates,
   selectAccountStakingTotalProfit,
   selectCurrentAccountId,
-  selectCurrentAccountState,
   selectCurrentAccountTokens,
   selectIsCurrentAccountViewMode,
 } from '../../global/selectors';
@@ -70,7 +69,6 @@ interface StateProps {
   baseCurrency: ApiBaseCurrency;
   currencyRates: ApiCurrencyRates;
   theme: Theme;
-  shouldUseNominators?: boolean;
   isSensitiveDataHidden?: true;
 }
 
@@ -90,7 +88,6 @@ function StakingInfoContent({
   baseCurrency,
   currencyRates,
   theme,
-  shouldUseNominators,
   isViewMode,
   isSensitiveDataHidden,
   onClose,
@@ -194,7 +191,6 @@ function StakingInfoContent({
   const [selectedToken, selectableTokens] = useTokenDropdown({
     tokenBySlug,
     states,
-    shouldUseNominators,
     selectedStakingId: stakingId,
     isViewMode,
     shouldKeepActiveBlockedStates: true,
@@ -210,8 +206,6 @@ function StakingInfoContent({
 
       if (stakingType === 'ethena') {
         textKey = '$unstaking_when_receive_with_amount_ethena';
-      } else if (stakingType === 'nominators') {
-        textKey = '$unstaking_when_receive';
       }
 
       text = lang(textKey, {
@@ -457,7 +451,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     settings: { theme, isSensitiveDataHidden },
     tokenInfo: { bySlug: tokenBySlug },
   } = global;
-  const accountState = selectCurrentAccountState(global);
 
   const states = accountId ? selectAccountStakingStates(global, accountId) : undefined;
   const stakingState = accountId ? selectAccountStakingState(global, accountId) : undefined;
@@ -475,7 +468,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     baseCurrency: global.settings.baseCurrency,
     currencyRates: global.currencyRates,
     theme,
-    shouldUseNominators: accountState?.staking?.shouldUseNominators,
     isSensitiveDataHidden,
     isViewMode: selectIsCurrentAccountViewMode(global),
   };

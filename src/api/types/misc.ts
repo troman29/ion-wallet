@@ -218,7 +218,7 @@ export interface ApiDomainData {
 export type ApiHistoryList = Array<[number, number]>;
 
 export type ApiStakingType = ApiStakingState['type'];
-export type ApiBackendStakingType = 'nominators' | 'liquid';
+export type ApiBackendStakingType = 'liquid';
 
 type BaseStakingState = {
   id: string;
@@ -230,12 +230,6 @@ type BaseStakingState = {
   tvl?: bigint;
   totalStakers?: number;
   unstakeRequestAmount?: bigint;
-};
-
-export type ApiNominatorsStakingState = BaseStakingState & {
-  type: 'nominators';
-  start: number;
-  end: number;
 };
 
 export type ApiLiquidStakingState = BaseStakingState & {
@@ -278,27 +272,17 @@ export type ApiEthenaStakingState = BaseStakingState & {
 };
 
 export type ApiYieldType = 'APY' | 'APR';
-export type ApiStakingState = ApiNominatorsStakingState
-  | ApiLiquidStakingState
+export type ApiStakingState = ApiLiquidStakingState
   | ApiJettonStakingState
   | ApiEthenaStakingState;
-export type ApiToncoinStakingState = ApiNominatorsStakingState | ApiLiquidStakingState;
-
-export interface ApiNominatorsPool {
-  address: string;
-  apy: number;
-  start: number;
-  end: number;
-}
+export type ApiToncoinStakingState = ApiLiquidStakingState;
 
 export interface ApiBackendStakingState {
   balance: bigint;
   totalProfit: bigint;
   type?: ApiBackendStakingType;
-  nominatorsPool: ApiNominatorsPool;
   loyaltyType?: ApiLoyaltyType;
   loyaltyBalance?: bigint;
-  shouldUseNominators?: boolean;
   stakedAt?: number;
   ethena: {
     /**

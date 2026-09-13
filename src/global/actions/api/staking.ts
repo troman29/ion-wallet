@@ -270,7 +270,7 @@ addActionHandler('submitStaking', withEnclaveSessionRelease(async (global, actio
   const state = selectAccountStakingState(global, currentAccountId);
 
   if (isUnstaking) {
-    const unstakeAmount = state.type === 'nominators' ? state.balance : tokenAmount!;
+    const unstakeAmount = tokenAmount!;
     const result = await callApi(
       'submitUnstake',
       // This may be different from the `currentAccountId` if the user switched accounts
@@ -484,9 +484,7 @@ addActionHandler('updateStakingMfaRequestStatus', async (global) => {
       break;
     }
     case StakingState.UnstakeConfirmMfa: {
-      const unstakeAmount = stakingState.type === 'nominators'
-        ? stakingState.balance
-        : global.currentStaking.tokenAmount!;
+      const unstakeAmount = global.currentStaking.tokenAmount!;
       const isLongUnstakeRequested = getIsLongUnstake(stakingState, unstakeAmount);
 
       global = updateAccountState(global, currentAccountId, { isLongUnstakeRequested });

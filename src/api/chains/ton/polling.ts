@@ -392,7 +392,7 @@ function setupStakingPolling(accountId: string, getBalances: () => Promise<ApiBa
         ]);
         const states = await staking.getStakingStates(accountId, common, backendState, balances);
 
-        const { shouldUseNominators, totalProfit } = backendState;
+        const { totalProfit } = backendState;
 
         if (!areDeepEqual(states, lastStates)) {
           lastStates = states;
@@ -401,7 +401,6 @@ function setupStakingPolling(accountId: string, getBalances: () => Promise<ApiBa
             accountId,
             states,
             totalProfit,
-            shouldUseNominators,
           });
         }
       } catch (err) {

@@ -18,7 +18,6 @@ import {
   selectAccountStakingState,
   selectAccountStakingStates,
   selectCurrentAccountId,
-  selectCurrentAccountState,
   selectCurrentAccountTokens,
   selectIsCurrentAccountViewMode,
 } from '../../global/selectors';
@@ -67,7 +66,6 @@ interface StateProps {
   tokenBySlug?: Record<string, ApiTokenWithPrice>;
   stakingState?: ApiStakingState;
   states?: ApiStakingState[];
-  shouldUseNominators?: boolean;
   isSensitiveDataHidden?: true;
   baseCurrency: ApiBaseCurrency;
   currencyRates: ApiCurrencyRates;
@@ -96,7 +94,6 @@ function StakingInitial({
   tokenBySlug,
   stakingState,
   states,
-  shouldUseNominators,
   isSensitiveDataHidden,
   baseCurrency,
   currencyRates,
@@ -196,7 +193,6 @@ function StakingInitial({
   const [selectedToken, selectableTokens] = useTokenDropdown({
     tokenBySlug,
     states,
-    shouldUseNominators,
     selectedStakingId: stakingId,
     baseCurrency,
     currencyRates,
@@ -456,7 +452,6 @@ export default memo(
   withGlobal<OwnProps>(
     (global): StateProps => {
       const currentAccountId = selectCurrentAccountId(global);
-      const accountState = selectCurrentAccountState(global);
       const tokens = selectCurrentAccountTokens(global);
       const tokenBySlug = global.tokenInfo.bySlug;
 
@@ -482,7 +477,6 @@ export default memo(
         initialAmount,
         stakingState,
         states,
-        shouldUseNominators: accountState?.staking?.shouldUseNominators,
         isSensitiveDataHidden,
         baseCurrency,
         currencyRates: global.currencyRates,

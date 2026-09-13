@@ -30,12 +30,6 @@ export function getTonStakingFees(type?: ApiStakingType): {
   claim?: TonOperationFees;
 } {
   switch (type) {
-    case 'nominators': {
-      return {
-        stake: getTonOperationFees('stakeNominators'),
-        unstake: getTonOperationFees('unstakeNominators'),
-      };
-    }
     case 'liquid': {
       return {
         stake: getTonOperationFees('stakeLiquid'),

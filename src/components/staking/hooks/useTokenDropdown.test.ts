@@ -30,16 +30,16 @@ function getTokenIds(...args: Parameters<typeof getStakingTokens>) {
 describe('getStakingTokens', () => {
   it('keeps an active blocked position selectable in the info view even when it is not selected', () => {
     // Viewing the TON position; the active MY position must stay navigable in the dropdown
-    expect(getTokenIds(tokenBySlug, [activeMyState, tonState], undefined, 'ton-1', true)).toContain('my-1');
+    expect(getTokenIds(tokenBySlug, [activeMyState, tonState], 'ton-1', true)).toContain('my-1');
   });
 
   it('excludes a blocked token from the new-stake form when it is not selected', () => {
-    const ids = getTokenIds(tokenBySlug, [activeMyState, tonState], undefined, 'ton-1');
+    const ids = getTokenIds(tokenBySlug, [activeMyState, tonState], 'ton-1');
     expect(ids).not.toContain('my-1');
     expect(ids).toContain('ton-1');
   });
 
   it('keeps a blocked token when it is the currently selected position', () => {
-    expect(getTokenIds(tokenBySlug, [activeMyState, tonState], undefined, 'my-1')).toContain('my-1');
+    expect(getTokenIds(tokenBySlug, [activeMyState, tonState], 'my-1')).toContain('my-1');
   });
 });

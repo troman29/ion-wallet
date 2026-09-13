@@ -573,7 +573,6 @@ export interface AccountState {
     stakingId?: string;
     stateById?: Record<string, ApiStakingState>;
     totalProfit?: bigint;
-    shouldUseNominators?: boolean;
   };
 
   vesting?: {

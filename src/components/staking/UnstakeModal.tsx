@@ -67,7 +67,6 @@ type StateProps = GlobalState['currentStaking'] & {
   isViewMode: boolean;
   tokens?: UserToken[];
   baseCurrency: ApiBaseCurrency;
-  isNominators?: boolean;
   theme: Theme;
   stakingState?: ApiStakingState;
   isSensitiveDataHidden?: true;
@@ -95,7 +94,6 @@ function UnstakeModal({
   error,
   tokens,
   baseCurrency,
-  isNominators,
   theme,
   amount,
   mfaRequestHash,
@@ -135,7 +133,7 @@ function UnstakeModal({
     return tokenSlug ? tokens?.find(({ slug }) => slug === tokenSlug) : undefined;
   }, [tokenSlug, tokens]);
 
-  const isOnlyFullAmount = isNominators;
+  const isOnlyFullAmount = false;
   const [unstakeAmount, setUnstakeAmount] = useState(isOnlyFullAmount ? stakingBalance : undefined);
   const [successUnstakeAmount, setSuccessUnstakeAmount] = useState<bigint | undefined>(undefined);
 
@@ -523,13 +521,11 @@ export default memo(withGlobal((global): StateProps => {
   const tokens = selectCurrentAccountTokens(global);
   const { baseCurrency = DEFAULT_PRICE_CURRENCY, isSensitiveDataHidden } = global.settings;
   const stakingState = selectAccountStakingState(global, accountId);
-  const isNominators = stakingState?.type === 'nominators';
 
   return {
     ...global.currentStaking,
     tokens,
     baseCurrency,
-    isNominators,
     theme: global.settings.theme,
     stakingState,
     isSensitiveDataHidden,

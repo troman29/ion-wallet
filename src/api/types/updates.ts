@@ -125,7 +125,6 @@ export type ApiUpdateStaking = {
   accountId: string;
   states: ApiStakingState[];
   totalProfit: bigint;
-  shouldUseNominators?: boolean;
 };
 
 export type ApiUpdateDappSignData = {

@@ -5,7 +5,6 @@ import type {
   ApiChain,
   ApiLiquidStakingState,
   ApiNftMarketplace,
-  ApiNominatorsStakingState,
   ApiSwapAsset,
   ApiSwapDexLabel,
   ApiToken,
@@ -339,31 +338,9 @@ export const ONE_TON = 1_000_000_000n;
 export const DEFAULT_FEE = 15_000_000n; // 0.015 TON
 export const UNSTAKE_TON_GRACE_PERIOD = 20 * 60 * 1000; // 20 m.
 
-const LEGACY_NOMINATORS_STAKING_POOL = 'Ef8dgIOIRyCLU0NEvF8TD6Me3wrbrkS1z3Gpjk3ppd8m8-s_';
-const DEFAULT_NOMINATORS_STAKING_POOL = 'Ef84o4VJRnlp1wsqSHov1QttqSTQda2Z1vGK-b7EaPQoeJMx';
-
-// Must include every pool the backend can return in `nominatorsPool.address`, decommissioned ones
-// included (accounts with a legacy stake still need to see and unstake it): builds without the
-// STAKING_POOLS env var (e.g. the wallet.ton.org deploy) rely solely on this list, and an unknown
-// address makes `fetchBackendStakingState` throw, silently killing staking polling for the account.
-const DEFAULT_STAKING_POOLS = [
-  LEGACY_NOMINATORS_STAKING_POOL,
-  'Ef-WMmizoLk4CvqTKs-mDrGJwW4fiH5zVd4SaHih7PObxP_0',
-  'Ef9KkdMtAom9qYE64A_3ZA5sOP3OduRYPdavxGO3DH12fF5g',
-  'Ef9-8keOeXR4Sn-ywrlFgxma4ubJvEFRW3jgP0ib16A-HCiG',
-  DEFAULT_NOMINATORS_STAKING_POOL,
-  'Ef_CbvHoa5imR1x_ESkUT_6NJQoONbSGp8MkrAu1xtM6NOxE',
-  'Ef-j7wmnLdy54kZC0gtbVbCrdPA4cFLr3rxLOoDcpzR_SyBX',
-];
-
-export const STAKING_POOLS = [
-  ...(process.env.STAKING_POOLS ? process.env.STAKING_POOLS.split(' ') : []),
-  ...DEFAULT_STAKING_POOLS,
-].filter(Boolean);
 export const LIQUID_POOL = process.env.LIQUID_POOL || 'EQD2_4d91M4TVbEBVyBF8J1UwpMJc361LKVCz6bBlffMW05o';
 export const LIQUID_JETTON = process.env.LIQUID_JETTON || 'EQCqC6EhRJ_tpWngKxL6dV0k6DSnRUrs9GSVkLbfdCqsj6TE';
 export const STAKING_MIN_AMOUNT = ONE_TON;
-export const NOMINATORS_STAKING_MIN_AMOUNT = 10_000n * ONE_TON;
 export const MIN_ACTIVE_STAKING_REWARDS = 100_000_000n; // 0.1 MY
 // Staked tokens now showing with all other tokens, so we need to add a prefix to avoid collisions
 export const STAKING_SLUG_PREFIX = 'staking-';
@@ -713,7 +690,6 @@ export const TOKEN_CUSTOM_STYLES: Partial<Record<string, {
 
 export const ALL_STAKING_POOLS = [
   LIQUID_POOL,
-  ...DEFAULT_STAKING_POOLS,
   ETHENA_STAKING_VAULT,
   TON_TSUSDE.tokenAddress,
 ];
@@ -925,18 +901,6 @@ export const DEFAULT_STAKING_STATE: ApiLiquidStakingState = {
   end: 0,
   tvl: 0n,
   totalStakers: 0,
-};
-
-export const DEFAULT_NOMINATORS_STAKING_STATE: ApiNominatorsStakingState = {
-  type: 'nominators',
-  id: 'nominators',
-  tokenSlug: TONCOIN.slug,
-  annualYield: 10.37,
-  yieldType: 'APY',
-  balance: 0n,
-  pool: LEGACY_NOMINATORS_STAKING_POOL,
-  start: 0,
-  end: 0,
 };
 
 export const SWAP_API_VERSION = 3;

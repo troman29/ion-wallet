@@ -51,42 +51,17 @@ import {
 import { TsUSDeWallet } from './contracts/Ethena/TsUSDeWallet';
 import { StakeWallet } from './contracts/JettonStaking/StakeWallet';
 import { StakingPool } from './contracts/JettonStaking/StakingPool';
-import { NominatorPool } from './contracts/NominatorPool';
 import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/accounts';
 import { callBackendGet } from '../../common/backend';
 import { getAccountCache, getStakingCommonCache, updateAccountCache } from '../../common/cache';
 import { buildTokenSlug, getTokenByAddress, getTokenBySlug } from '../../common/tokens';
-import { isKnownStakingPool } from '../../common/utils';
-import { STAKE_COMMENT, TON_GAS, UNSTAKE_COMMENT } from './constants';
+import { TON_GAS } from './constants';
 import { checkTransactionDraft, submitGasfullTransfer } from './transfer';
 
 export async function checkStakeDraft(accountId: string, amount: bigint, state: ApiStakingState) {
   let result: ApiCheckTransactionDraftResult;
 
   switch (state.type) {
-    case 'nominators': {
-      if (amount < TON_GAS.stakeNominators) {
-        return { error: ApiTransactionDraftError.InvalidAmount };
-      }
-
-      result = await checkTransactionDraft({
-        accountId,
-        toAddress: state.pool,
-        amount: amount + TON_GAS.stakeNominators,
-        payload: { type: 'comment', text: STAKE_COMMENT },
-      });
-      if (result.explainedFee?.fullFee?.nativeSum !== undefined) {
-        const baseFee = result.explainedFee.fullFee.nativeSum;
-        const baseRealFee = result.explainedFee.realFee?.nativeSum ?? baseFee;
-
-        result.explainedFee = explainApiTransferFee({
-          fee: baseFee + TON_GAS.stakeNominators,
-          realFee: baseRealFee + TON_GAS.stakeNominators,
-          tokenSlug: getNativeToken('ton').slug,
-        });
-      }
-      break;
-    }
     case 'liquid': {
       result = await checkTransactionDraft({
         accountId,
@@ -148,15 +123,6 @@ export async function checkUnstakeDraft(
   let tokenAmount: bigint | undefined;
 
   switch (state.type) {
-    case 'nominators': {
-      result = await checkTransactionDraft({
-        accountId,
-        toAddress: state.pool,
-        amount: TON_GAS.unstakeNominators,
-        payload: { type: 'comment', text: UNSTAKE_COMMENT },
-      });
-      break;
-    }
     case 'liquid': {
       if (amount > state.balance) {
         return { error: ApiTransactionDraftError.InsufficientBalance };
@@ -224,21 +190,9 @@ export async function submitStake(
   let result: ApiSubmitGasfullTransferResult | { error: string };
   let toAddress: string;
 
-  const { network } = parseAccountId(accountId);
   const { address } = await fetchStoredWallet(accountId, 'ton');
 
   switch (state.type) {
-    case 'nominators': {
-      toAddress = toBase64Address(state.pool, true, network);
-      result = await submitGasfullTransfer({
-        accountId,
-        enclaveToken,
-        toAddress,
-        amount: amount + TON_GAS.stakeNominators,
-        payload: { type: 'comment', text: STAKE_COMMENT },
-      });
-      break;
-    }
     case 'liquid': {
       toAddress = LIQUID_POOL;
       result = await submitGasfullTransfer({
@@ -309,17 +263,6 @@ export async function submitUnstake(
   let tokenSlug: string = TONCOIN.slug;
 
   switch (state.type) {
-    case 'nominators': {
-      toAddress = toBase64Address(state.pool, true, network);
-      result = await submitGasfullTransfer({
-        accountId,
-        enclaveToken,
-        toAddress,
-        amount: TON_GAS.unstakeNominators,
-        payload: { type: 'comment', text: UNSTAKE_COMMENT },
-      });
-      break;
-    }
     case 'liquid': {
       const mode = !state.instantAvailable
         ? ApiLiquidUnstakeMode.BestRate
@@ -417,11 +360,7 @@ export async function getStakingStates(
   const { network } = parseAccountId(accountId);
   const { address } = await fetchStoredWallet(accountId, 'ton');
 
-  const {
-    loyaltyType,
-    shouldUseNominators,
-    type: backendType,
-  } = backendState;
+  const { loyaltyType } = backendState;
 
   const options: StakingStateOptions = {
     accountId,
@@ -440,10 +379,6 @@ export async function getStakingStates(
     if (slug in balances) {
       promises.push(buildJettonState(options, poolConfig));
     }
-  }
-
-  if (shouldUseNominators || backendType === 'nominators') {
-    promises.push(buildNominatorsState(options));
   }
 
   const hasEthenaBalance = TON_USDE.slug in balances || TON_TSUSDE.slug in balances;
@@ -498,41 +433,6 @@ function buildLiquidState({
     instantAvailable: liquidAvailable,
     start,
     end,
-  };
-}
-
-async function buildNominatorsState({
-  network,
-  address,
-  backendState,
-}: StakingStateOptions): Promise<ApiStakingState> {
-  const { address: pool, apy, start, end } = backendState.nominatorsPool;
-
-  const nominatorPool = getTonClient(network).open(new NominatorPool(Address.parse(pool)));
-  const nominators = await nominatorPool.getListNominators();
-  const addressObject = Address.parse(address);
-  const nominator = nominators.find((n) => n.address.equals(addressObject));
-
-  let balance = 0n;
-  if (backendState.type === 'nominators') {
-    // The backend state includes the loyalty bonus, so it takes priority.
-    balance = backendState.balance;
-  } else if (nominator) {
-    // A rare state when a user has two types of staking or switches between them.
-    balance = nominator.amount + nominator.pendingDepositAmount;
-  }
-
-  return {
-    type: 'nominators',
-    id: 'nominators',
-    tokenSlug: TONCOIN.slug,
-    balance,
-    annualYield: apy,
-    yieldType: 'APY',
-    pool,
-    start,
-    end: end + UNSTAKE_TON_GRACE_PERIOD,
-    unstakeRequestAmount: nominator?.withdrawRequested ? balance : 0n,
   };
 }
 
@@ -683,10 +583,6 @@ export async function fetchBackendStakingState(address: string, isViewOnly: bool
   stakingState.balance = fromDecimal(stakingState.balance);
   stakingState.totalProfit = fromDecimal(stakingState.totalProfit);
   stakingState.loyaltyBalance = fromDecimal(stakingState.loyaltyBalance ?? '0');
-
-  if (!isKnownStakingPool(stakingState.nominatorsPool.address)) {
-    throw Error('Unexpected pool address, likely a malicious activity');
-  }
 
   return stakingState as ApiBackendStakingState;
 }

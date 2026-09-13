@@ -66,20 +66,4 @@ describe('getFullStakingBalance', () => {
 
     expect(getFullStakingBalance(state)).toBe(1_025n);
   });
-
-  it('returns the bare balance for a nominators stake', () => {
-    const state = {
-      type: 'nominators',
-      id: 'nominators',
-      tokenSlug: TONCOIN.slug,
-      pool: 'EQCaPOOL',
-      balance: 700n,
-      annualYield: 3,
-      yieldType: 'APY',
-      start: 0,
-      end: 0,
-    } as unknown as ApiStakingState;
-
-    expect(getFullStakingBalance(state)).toBe(700n);
-  });
 });

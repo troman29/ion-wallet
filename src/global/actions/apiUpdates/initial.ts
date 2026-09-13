@@ -63,7 +63,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         accountId,
         states,
         totalProfit,
-        shouldUseNominators,
       } = update;
 
       const stateById = buildCollectionByKey(states, 'id');
@@ -79,7 +78,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
 
       global = updateAccountStaking(global, accountId, {
         stateById,
-        shouldUseNominators,
         totalProfit,
       });
 
@@ -97,10 +95,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         if (stateWithBiggestBalance && stateWithBiggestBalance.balance > 0n) {
           global = updateAccountStaking(global, accountId, {
             stakingId: stateWithBiggestBalance.id,
-          });
-        } else if (shouldUseNominators && stateById.nominators) {
-          global = updateAccountStaking(global, accountId, {
-            stakingId: stateById.nominators.id,
           });
         }
       }
