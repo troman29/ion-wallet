@@ -103,7 +103,7 @@ function LandscapeWalletList({
   return (
     <>
       <div className={styles.root}>
-        {filteredAccounts.map(([accountId, { title, byChain, type, isRecoveryRequired }]) => (
+        {filteredAccounts.map(([accountId, { title, byChain, type }]) => (
           <WithContextMenu
             key={accountId}
             items={WALLET_CONTEXT_MENU_ITEMS}
@@ -120,7 +120,6 @@ function LandscapeWalletList({
                 visibleChains={visibleChainsByAccountId?.[accountId]}
                 accountType={type}
                 title={title}
-                isRecoveryRequired={isRecoveryRequired}
                 isSelected={accountId === currentAccountId}
                 balanceData={balancesByAccountId[accountId]}
                 isSensitiveDataHidden={isSensitiveDataHidden}

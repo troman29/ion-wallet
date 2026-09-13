@@ -60,7 +60,6 @@ function AccountsGridView({
     byChain: Account['byChain'],
     accountType: AccountType,
     title?: string,
-    isRecoveryRequired?: true,
   ) {
     const isActive = accountId === currentAccountId;
     const balanceData = balancesByAccountId[accountId];
@@ -75,7 +74,6 @@ function AccountsGridView({
         accountType={accountType}
         isActive={isActive}
         title={title}
-        isRecoveryRequired={isRecoveryRequired}
         balanceData={balanceData}
         withContextMenu
         isSensitiveDataHidden={isSensitiveDataHidden}
@@ -109,9 +107,8 @@ function AccountsGridView({
               title,
               byChain,
               type,
-              isRecoveryRequired,
             }]) => {
-              return renderCard(accountId, byChain, type, title, isRecoveryRequired);
+              return renderCard(accountId, byChain, type, title);
             },
           )}
         </div>

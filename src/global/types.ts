@@ -61,7 +61,6 @@ import type {
   ApiWalletWithVersionInfo,
 } from '../api/types';
 import type { AUTOLOCK_OPTIONS_LIST } from '../config';
-import type { LegacyAuthConfig } from '../enclave';
 import type { CapacitorPlatform } from '../util/capacitor/platform';
 import type { ExplainedTransferFee } from '../util/fee/transferFee';
 import type { LedgerTransport } from '../util/ledger/types';
@@ -114,17 +113,6 @@ export type DialogType = {
     cancel?: { title?: string };
   };
 };
-
-/**
- * How a stopped legacy migration is put to the user. The inline form belongs under the input, next to
- * the attempt that can be repeated; the dialog form answers a failure the retry cannot help with, and
- * carries a code for support when the app could not establish a cause.
- */
-export type MigrationErrorPresentation =
-  /** Nothing to say: the person stopped the migration themselves, and the screen keeps its retry */
-  | { kind: 'silent' }
-  | { kind: 'inline'; text: string }
-  | { kind: 'dialog'; titleKey: string; messageKey: string; errorCode?: string };
 
 export type LangCode = 'en' | 'es' | 'ru' | 'zh-Hant' | 'zh-Hans' | 'tr' | 'de' | 'th' | 'uk' | 'pl' | 'ar' | 'fa';
 export type LanguageSource = 'system' | 'user';
@@ -456,8 +444,6 @@ export interface Account {
   byChain: Partial<Record<ApiChain, AccountChain>>;
   isTemporary?: true;
   isPrivateKeyBased?: true;
-  /** The stored secret of this wallet could not be read during the Enclave migration, so signing is impossible */
-  isRecoveryRequired?: true;
 }
 
 export type AssetPairs = Record<string, {
@@ -1132,22 +1118,6 @@ export interface ActionPayloads {
 
   setEnclaveSession: EnclaveSession;
   releaseEnclaveSession: { enclaveToken: string };
-
-  rollbackEnclaveMigration: undefined;
-  migrateLegacyAuth: {
-    password: string;
-    isLongSession: boolean;
-    usageCount?: number;
-    onSuccess: (token: string) => void;
-    onError: (error: MigrationErrorPresentation) => void;
-  };
-  migrateLegacyBiometricAuth: {
-    legacyAuthConfig: LegacyAuthConfig;
-    isLongSession: boolean;
-    usageCount?: number;
-    onSuccess: (token: string) => void;
-    onError: (error: MigrationErrorPresentation) => void;
-  };
 
   selectToken: { slug?: string } | undefined;
   openBackupWalletModal: undefined;

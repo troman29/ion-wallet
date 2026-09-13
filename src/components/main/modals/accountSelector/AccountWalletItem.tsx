@@ -23,7 +23,6 @@ import styles from './AccountWalletItem.module.scss';
 interface OwnProps {
   isSelected: boolean;
   isTestnet?: boolean;
-  isRecoveryRequired?: true;
   accountId: string;
   byChain: Account['byChain'];
   visibleChains?: ApiChain[];
@@ -50,7 +49,6 @@ const CONTEXT_MENU_VERTICAL_SHIFT_PX = 4;
 function AccountWalletItem({
   isSelected,
   isTestnet,
-  isRecoveryRequired,
   accountId,
   byChain,
   visibleChains,
@@ -165,7 +163,6 @@ function AccountWalletItem({
           accountType={accountType}
           title={title}
           isTestnet={isTestnet}
-          isRecoveryRequired={isRecoveryRequired}
           balanceData={balanceData}
           isSensitiveDataHidden={isSensitiveDataHidden}
         />

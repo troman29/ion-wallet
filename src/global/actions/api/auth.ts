@@ -1,12 +1,11 @@
 import type { ApiChain, ApiNetwork } from '../../../api/types';
-import type { Account, AuthType, GlobalState, MigrationErrorPresentation } from '../../types';
+import type { AuthType, GlobalState } from '../../types';
 import { ApiAuthError, ApiCommonError } from '../../../api/types';
 import { AppState, AuthState, BiometricsState } from '../../types';
 
 import {
   MNEMONIC_CHECK_COUNT,
   MNEMONIC_COUNT,
-  SHOULD_CLEANUP_LEGACY_AUTH,
   TEMPORARY_ACCOUNT_NAME,
 } from '../../../config';
 import { generateAccountTitle, generateNextSubwalletTitle, parseAccountId } from '../../../util/account';
@@ -26,14 +25,7 @@ import {
   IS_IOS,
 } from '../../../util/windowEnvironment';
 import { callApi } from '../../../api';
-import {
-  checkIsMigrationFailure,
-  describeThrownError,
-  enclave,
-  legacyAuth,
-  type LegacyAuthConfig,
-  type MigrationStep,
-} from '../../../enclave';
+import { enclave } from '../../../enclave';
 import { addActionHandler, getActions, getGlobal, setGlobal } from '../..';
 import {
   clearAbortDappConnectWalletCreation,
@@ -42,7 +34,6 @@ import {
 } from '../../helpers/abortDappConnectWalletCreation';
 import { handleStandardMode, removeTemporaryAccount } from '../../helpers/auth';
 import { dropEnclaveSessionHold, holdEnclaveSession, withEnclaveSessionRelease } from '../../helpers/enclave';
-import { presentMigrationFailure } from '../../helpers/migrationFailure';
 import { isErrorTransferResult } from '../../helpers/transfer';
 import { INITIAL_STATE } from '../../initialState';
 import {
@@ -1309,208 +1300,6 @@ addActionHandler('saveTemporaryAccount', (global, actions) => {
   actions.tryAddNotificationAccount({ accountId: newAccountId });
   actions.showToast({ message: getTranslation('Account Saved'), icon: 'icon-check' });
   void vibrateOnSuccess();
-});
-
-addActionHandler('rollbackEnclaveMigration', async (global, actions) => {
-  await callApi('rollbackEnclaveMigration');
-
-  global = getGlobal();
-  setGlobal({
-    ...global,
-    authTypes: undefined,
-    enclaveSession: undefined,
-  });
-
-  actions.showToast({ message: 'Migration was rolled back' });
-});
-
-/**
- * The secrets live in the worker storage while the wallet list lives in the global state, and the two are
- * known to diverge, so an account the list never learned about is passed over here: a mark that has nowhere
- * to be drawn is not worth throwing away a migration that has already reached the Enclave.
- */
-function markAccounts(global: GlobalState, accountIds: string[], partial: Partial<Account>) {
-  for (const accountId of accountIds) {
-    if (!selectAccount(global, accountId)) continue;
-
-    global = updateAccount(global, accountId, partial);
-  }
-
-  return global;
-}
-
-/**
- * A migrated profile that left wallets behind is the state support has to recognise, and the account
- * ids are the only thing that identifies which ones. The mark is what every screen reads to warn that
- * the wallet cannot sign until its secret is recovered.
- */
-function markUnreadableAccounts(global: GlobalState, context: string, accountIds: string[]) {
-  if (!accountIds.length) return global;
-
-  logDebugError(context, `Migrated without secrets for accounts: ${accountIds.join(', ')}`);
-
-  return markAccounts(global, accountIds, { isRecoveryRequired: true });
-}
-
-/**
- * The screen that starts a migration holds a guard until one of the callbacks answers, and it has no
- * way to await the action. A throw that reached the action runner instead would leave that guard set:
- * every later submit, biometric tap and retry returns at it, and only closing and reopening the screen
- * clears it. So every exit from these handlers, a throw included, goes through a callback.
- */
-function reportMigrationThrow(
-  context: string,
-  err: unknown,
-  step: MigrationStep,
-  onError: (error: MigrationErrorPresentation) => void,
-  isPasswordFromStore = false,
-) {
-  logDebugError(context, err);
-  onError(presentMigrationFailure(describeThrownError(err, step), isPasswordFromStore));
-}
-
-addActionHandler('migrateLegacyAuth', async (global, actions, payload: {
-  password: string;
-  isLongSession: boolean;
-  usageCount?: number;
-  onSuccess: (token: string) => void;
-  onError: (error: MigrationErrorPresentation) => void;
-}) => {
-  const { password, isLongSession, usageCount, onSuccess, onError } = payload;
-  let token: string;
-
-  try {
-    const legacyAccounts = await callApi('fetchLegacyAccountsWithMnemonic');
-    if (!legacyAccounts?.length) {
-      onError({ kind: 'inline', text: 'Unable to migrate wallet data. Please contact support.' });
-      return;
-    }
-
-    const migrationOutcome = await legacyAuth.migrateFromLegacy(
-      legacyAccounts, password, isLongSession, usageCount,
-    );
-    if (checkIsMigrationFailure(migrationOutcome)) {
-      onError(presentMigrationFailure(migrationOutcome.error));
-      return;
-    }
-
-    const { session, privateKeyAccountIds, migratedAccountIds, unreadableAccountIds } = migrationOutcome;
-
-    global = getGlobal();
-    global = { ...global, authTypes: ['passcode'], enclaveSession: session };
-    global = markAccounts(global, privateKeyAccountIds, { isPrivateKeyBased: true });
-    global = markUnreadableAccounts(global, 'migrateLegacyAuth', unreadableAccountIds);
-    setGlobal(global);
-
-    token = session.token;
-
-    // Best-effort: the migration is committed by now, so a cleanup that throws must not turn the
-    // success into a reported failure
-    if (SHOULD_CLEANUP_LEGACY_AUTH) {
-      try {
-        await callApi('cleanupLegacyAuthAfterMigration', migratedAccountIds);
-      } catch (err) {
-        logDebugError('migrateLegacyAuth', err);
-      }
-    }
-  } catch (err) {
-    reportMigrationThrow('migrateLegacyAuth', err, 'read', onError);
-    return;
-  }
-
-  onSuccess(token);
-});
-
-addActionHandler('migrateLegacyBiometricAuth', async (global, actions, payload: {
-  legacyAuthConfig: LegacyAuthConfig;
-  isLongSession: boolean;
-  usageCount?: number;
-  onSuccess: (token: string) => void;
-  onError: (error: MigrationErrorPresentation) => void;
-}) => {
-  const { legacyAuthConfig, isLongSession, usageCount, onSuccess, onError } = payload;
-  let step: MigrationStep = 'legacyPassword';
-  let token: string;
-
-  try {
-    // Get password from old biometric storage
-    const password = await legacyAuth.getPasswordFromLegacyBiometrics(legacyAuthConfig);
-    if (!password) {
-      onError({ kind: 'inline', text: 'Failed to retrieve password from biometrics' });
-      return;
-    }
-
-    step = 'read';
-    const legacyAccounts = await callApi('fetchLegacyAccountsWithMnemonic');
-    if (!legacyAccounts?.length) {
-      onError({ kind: 'inline', text: 'Unable to migrate wallet data. Please contact support.' });
-      return;
-    }
-
-    let session;
-    let privateKeyAccountIds: string[] = [];
-    let migratedAccountIds: string[] = [];
-    let unreadableAccountIds: string[] = [];
-    let authTypes: ('passcode' | 'biometric')[];
-
-    if (legacyAuthConfig.kind === 'native-biometrics') {
-      // Native biometrics stored user's real password - migrate to both passcode and biometric
-      const migrationOutcome = await legacyAuth.migrateFromLegacy(legacyAccounts, password, isLongSession);
-      if (checkIsMigrationFailure(migrationOutcome)) {
-        onError(presentMigrationFailure(migrationOutcome.error, true));
-        return;
-      }
-
-      ({ session, privateKeyAccountIds, migratedAccountIds, unreadableAccountIds } = migrationOutcome);
-
-      // Add biometric as second auth method (don't replace passcode). The caller is handed the session
-      // this mints rather than the one the migration returned, so the budget is declared here
-      step = 'secondAuth';
-      const biometricSession = await enclave.migrateAuth(session.token, 'biometric', undefined, false, usageCount);
-      if (biometricSession) {
-        session = biometricSession;
-        authTypes = ['passcode', 'biometric'];
-      } else {
-        // Biometric setup failed, but passcode migration succeeded - continue with passcode only
-        authTypes = ['passcode'];
-      }
-    } else {
-      // electron-safe-storage or webauthn - password was random, user doesn't know it
-      const migrationOutcome = await legacyAuth.migrateFromLegacyBiometric(legacyAccounts, password, usageCount);
-      if (checkIsMigrationFailure(migrationOutcome)) {
-        onError(presentMigrationFailure(migrationOutcome.error, true));
-        return;
-      }
-
-      ({ session, privateKeyAccountIds, migratedAccountIds, unreadableAccountIds } = migrationOutcome);
-      // Legacy WebAuthn/electron-safe-storage users had a random password they don't know.
-      // They remain biometric-only after migration. They can add a passcode via Settings > Change Password.
-      authTypes = ['biometric'];
-    }
-
-    global = getGlobal();
-    global = { ...global, authTypes, enclaveSession: session };
-    global = markAccounts(global, privateKeyAccountIds, { isPrivateKeyBased: true });
-    global = markUnreadableAccounts(global, 'migrateLegacyBiometricAuth', unreadableAccountIds);
-    setGlobal(global);
-
-    token = session.token;
-
-    // Best-effort: the migration is committed by now, so a cleanup that throws must not turn the
-    // success into a reported failure
-    if (SHOULD_CLEANUP_LEGACY_AUTH) {
-      try {
-        await callApi('cleanupLegacyAuthAfterMigration', migratedAccountIds);
-      } catch (err) {
-        logDebugError('migrateLegacyBiometricAuth', err);
-      }
-    }
-  } catch (err) {
-    reportMigrationThrow('migrateLegacyBiometricAuth', err, step, onError, true);
-    return;
-  }
-
-  onSuccess(token);
 });
 
 function reduceGlobalForDebug() {

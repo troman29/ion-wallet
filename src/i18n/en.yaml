@@ -1028,34 +1028,6 @@ No additional data.: No additional data.
 $in_currency: in %currency%
 Rename Wallet: Rename Wallet
 You can rename this wallet for easier identification.: You can rename this wallet for easier identification.
-$enclave_migration_damaged_title: Wallet Data Damaged
-$enclave_migration_damaged_message: |
-  This is not a password problem. The stored data of one of your wallets cannot be read, so the update stopped and your other wallets stayed on the previous format.
-
-  Do not reinstall the app and do not clear its data: that would erase the wallets that are still intact. Please contact %support_link% and we will help you recover them.
-$enclave_recovery_required_tooltip: Saved data of this wallet cannot be read. Do not remove this wallet and do not clear the app data, and contact support to recover it.
-$logout_recovery_required_warning: Saved data of this wallet cannot be read, so its secret words cannot be shown. Removing the wallet destroys the only copy left on this device, and it cannot be restored without the secret words.
-$logout_recovery_required_accounts_warning: Saved data of %links% cannot be read, so the secret words cannot be shown. Removing destroys the only copy of those wallets left on this device, and they cannot be restored without the secret words.
-$enclave_migration_interrupted_title: Update Was Interrupted
-$enclave_migration_interrupted_message: |
-  An earlier attempt to update your wallet data stopped halfway, and it cannot be resumed from this screen. Trying again here will not help.
-
-  Do not reinstall the app and do not clear its data: your wallets are still stored on this device. Please contact %support_link% and we will help you finish the update.
-$enclave_migration_unexpected_title: Update Could Not Be Completed
-$enclave_migration_unexpected_message: |
-  The update to your wallet data stopped on an unexpected error, and the app cannot tell what caused it. Nothing has been deleted: every wallet is still stored on this device.
-
-  Close this message and try again - another attempt cannot harm your wallets. If it keeps stopping, do not reinstall the app and do not clear its data, and send this code to %support_link%: %error_code%
-$enclave_migration_retry_title: Update Did Not Finish
-$enclave_migration_retry_message: |
-  The update to your wallet data stopped before it finished. Nothing has been deleted: every wallet is still stored on this device.
-
-  Close this message and try again - another attempt cannot harm your wallets. If it keeps stopping, do not reinstall the app and do not clear its data, and send this code to %support_link%: %error_code%
-$enclave_migration_storage_full_title: Not Enough Space
-$enclave_migration_storage_full_message: |
-  The update to your wallet data needs more free space than this device has left, so it stopped. Nothing has been deleted: every wallet is still stored on this device.
-
-  Free up some space and open the app again. Do not reinstall the app and do not clear its data: that would erase the wallets that are still intact.
 Collectibles: Collectibles
 Bluetooth unavailable: Bluetooth unavailable
 $bluetooth_enable_guide: Turn on Bluetooth in the device settings and allow the app to access Bluetooth.
@@ -1185,7 +1157,6 @@ This command is not supported in explorer mode: This command is not supported in
 $saved_addresses_header: Saved
 confirm an action in My Wallet: confirm an action in ION Wallet
 Migration was rolled back: Migration was rolled back
-Rollback Enclave Migration: Rollback Enclave Migration
 Unable to migrate wallet data. Please contact support.: Unable to migrate wallet data. Please contact support.
 Failed to retrieve password from biometrics: Failed to retrieve password from biometrics
 Migration failed. Please try again.: Migration failed. Please try again.
@@ -1277,7 +1248,6 @@ Different blockchain. Cannot be selected: Different blockchain. Cannot be select
 Chains: Chains
 enclave_use_biometrics: Use Biometrics
 Copy Storage Data: Copy Storage Data
-Rollback Migration: Rollback Migration
 Enclave session expired: Enclave session expired
 Failed to setup auth: Failed to setup auth
 Failed to setup biometric auth: Failed to setup biometric auth

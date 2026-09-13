@@ -693,16 +693,6 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     cached.stateVersion = 60;
   }
   if (cached.stateVersion === 59 || cached.stateVersion === 60) {
-    const hasMnemonicAccounts = cached.accounts
-      && Object.values(cached.accounts.byId).some((account) => account.type === 'mnemonic');
-    const authConfig = (cached.settings as any).authConfig as { kind?: string } | undefined;
-    const isLegacyBiometricActivated = authConfig && authConfig.kind !== 'password';
-
-    if (!hasMnemonicAccounts || !isLegacyBiometricActivated) {
-      // Ensure no unnecessary biometric settings are stored
-      delete (cached.settings as any).authConfig;
-    }
-
     // The flat `hiddenChains` list moves into `chainDisplayConfiguration`, the shape the native apps read.
     // The mode becomes `manual`, the same way the native apps interpret a configuration that carries hidden chains
     // but no mode: the user picked the visibility by hand, so the app must not start picking it by balance instead.

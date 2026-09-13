@@ -12,9 +12,6 @@ import { formatAccountAddresses } from '../../util/formatAccountAddress';
 import { formatCurrency } from '../../util/formatNumber';
 import isViewAccount from '../../util/isViewAccount';
 
-import useLang from '../../hooks/useLang';
-
-import IconWithTooltip from '../ui/IconWithTooltip';
 import SensitiveData from '../ui/SensitiveData';
 import WalletAvatar from '../ui/WalletAvatar';
 
@@ -27,7 +24,6 @@ export interface AccountRowInnerProps {
   accountType: AccountType;
   title?: string;
   isTestnet?: boolean;
-  isRecoveryRequired?: true;
   balanceData?: AccountBalance;
   isSensitiveDataHidden?: true;
   suffixIcon?: TeactNode;
@@ -46,14 +42,12 @@ function AccountRowInner({
   accountType,
   title,
   isTestnet,
-  isRecoveryRequired,
   balanceData,
   isSensitiveDataHidden,
   suffixIcon,
   avatarClassName,
   avatarUrl,
 }: AccountRowInnerProps) {
-  const lang = useLang();
   const isHardware = accountType === 'hardware';
   const isView = isViewAccount(accountType);
   const chains = visibleChains ?? getOrderedAccountChains(byChain);
@@ -72,15 +66,6 @@ function AccountRowInner({
       <div className={styles.info}>
         <div className={styles.titleRow}>
           <span className={styles.title}>{title}</span>
-          {isRecoveryRequired && (
-            <IconWithTooltip
-              type="danger"
-              size="small"
-              message={lang('$enclave_recovery_required_tooltip')}
-              iconClassName={styles.recoveryIcon}
-              canHoverOnTooltip
-            />
-          )}
         </div>
         <div className={styles.address}>
           {isTestnet && <i className={buildClassName(styles.icon, 'icon-testnet')} aria-hidden />}

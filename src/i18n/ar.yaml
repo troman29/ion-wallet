@@ -1691,14 +1691,12 @@ push_domain_expires_in_days_number:
   manyValue: ستنتهي صلاحية نطاقك %domain% خلال %days% يومًا. يرجى تجديده لتجنب فقدان الوصول
   otherValue: ستنتهي صلاحية نطاقك %domain% خلال %days% يوم. يرجى تجديده لتجنب فقدان الوصول
 Migration was rolled back: تم التراجع عن الترحيل
-Rollback Enclave Migration: التراجع عن ترحيل Enclave
 Unable to migrate wallet data. Please contact support.: تعذر ترحيل بيانات المحفظة. يرجى التواصل مع الدعم.
 Failed to retrieve password from biometrics: فشل استرداد كلمة المرور من القياسات الحيوية
 Migration failed. Please try again.: فشل الترحيل. يرجى المحاولة مرة أخرى.
 Chains: السلاسل
 enclave_use_biometrics: استخدم القياسات الحيوية
 Copy Storage Data: نسخ بيانات التخزين
-Rollback Migration: التراجع عن الترحيل
 Enclave session expired: انتهت صلاحية جلسة Enclave
 Failed to setup auth: فشل إعداد المصادقة
 Failed to setup biometric auth: فشل إعداد المصادقة البيومترية
@@ -1753,34 +1751,6 @@ $token_info_open_in_browser_hint: يفتح في المتصفح.
 $token_info_fallback_description: لا تتوفر معلومات عامة
 $token_info_no_description: لا يتوفر وصف
 $swap_cex_aml_kyc_policy_with_provider: AML/KYC الخاصة بـ %provider%
-$enclave_migration_damaged_title: بيانات المحفظة تالفة
-$enclave_migration_damaged_message: |
-  المشكلة ليست في كلمة المرور. تعذّرت قراءة البيانات المحفوظة لإحدى محافظك، لذلك توقّف التحديث وبقيت محافظك الأخرى بالتنسيق السابق.
-
-  لا تعِد تثبيت التطبيق ولا تمسح بياناته، فهذا سيمحو المحافظ التي ما زالت سليمة. يُرجى التواصل مع %support_link% وسنساعدك في استعادتها.
-$enclave_recovery_required_tooltip: تعذّرت قراءة البيانات المحفوظة لهذه المحفظة. لا تحذف هذه المحفظة ولا تمسح بيانات التطبيق، وتواصل مع الدعم لاستعادتها.
-$logout_recovery_required_warning: تعذّرت قراءة البيانات المحفوظة لهذه المحفظة، لذلك لا يمكن عرض عبارات الاسترداد الخاصة بها. حذف المحفظة يمحو النسخة الوحيدة المتبقية على هذا الجهاز، ولا يمكن استعادتها بدون عبارات الاسترداد.
-$logout_recovery_required_accounts_warning: تعذّرت قراءة البيانات المحفوظة لـ %links%، لذلك لا يمكن عرض عبارات الاسترداد. الحذف يمحو النسخة الوحيدة المتبقية من هذه المحافظ على هذا الجهاز، ولا يمكن استعادتها بدون عبارات الاسترداد.
-$enclave_migration_interrupted_title: توقّف التحديث
-$enclave_migration_interrupted_message: |
-  توقّفت محاولة سابقة لتحديث بيانات محفظتك في منتصفها، ولا يمكن استئنافها من هذه الشاشة. إعادة المحاولة هنا لن تفيد.
-
-  لا تعِد تثبيت التطبيق ولا تمسح بياناته، فمحافظك ما زالت مخزّنة على هذا الجهاز. يُرجى التواصل مع %support_link% وسنساعدك في إكمال التحديث.
-$enclave_migration_unexpected_title: تعذّر إكمال التحديث
-$enclave_migration_unexpected_message: |
-  توقّف تحديث بيانات محفظتك بسبب خطأ غير متوقّع، ولا يستطيع التطبيق تحديد سببه. لم يُحذف أي شيء: ما زالت جميع محافظك مخزّنة على هذا الجهاز.
-
-  أغلق هذه الرسالة وحاول مرة أخرى، فالمحاولة مرة أخرى لن تضرّ بمحافظك. إذا استمرّ التحديث في التوقّف، فلا تعِد تثبيت التطبيق ولا تمسح بياناته، وأرسل هذا الرمز إلى %support_link%: %error_code%
-$enclave_migration_retry_title: لم يكتمل التحديث
-$enclave_migration_retry_message: |
-  توقّف تحديث بيانات محفظتك قبل اكتماله. لم يُحذف أي شيء: ما زالت جميع محافظك مخزّنة على هذا الجهاز.
-
-  أغلق هذه الرسالة وحاول مرة أخرى، فالمحاولة مرة أخرى لن تضرّ بمحافظك. إذا استمرّ التحديث في التوقّف، فلا تعِد تثبيت التطبيق ولا تمسح بياناته، وأرسل هذا الرمز إلى %support_link%: %error_code%
-$enclave_migration_storage_full_title: لا توجد مساحة كافية
-$enclave_migration_storage_full_message: |
-  يحتاج تحديث بيانات محفظتك إلى مساحة خالية أكبر من المساحة المتبقية على هذا الجهاز، لذلك توقّف. لم يُحذف أي شيء: ما زالت جميع محافظك مخزّنة على هذا الجهاز.
-
-  وفّر بعض المساحة وافتح التطبيق مرة أخرى. لا تعِد تثبيت التطبيق ولا تمسح بياناته، فذلك سيمحو المحافظ التي ما زالت سليمة.
 Hide Unverified NFTs: إخفاء NFTs غير الموثّقة
 Unverified: غير موثّقة
 Switched to %account%: تم التبديل إلى %account%

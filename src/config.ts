@@ -75,8 +75,6 @@ export const DEBUG_ALERT_MSG = 'Shoot!\nSomething went wrong, please see the err
 
 export const PIN_LENGTH = 4;
 
-/** If true, legacy auth data (mnemonicEncrypted, authConfig) will be removed after migration to Enclave */
-export const SHOULD_CLEANUP_LEGACY_AUTH = false;
 export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in ION Wallet';
 // Keychain and Keystore address the stored secret by this pair, so changing either orphans
 // the credentials already saved on the device

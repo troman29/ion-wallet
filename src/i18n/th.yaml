@@ -1147,7 +1147,6 @@ This command is not supported in explorer mode: คำสั่งนี้ไ�
 $saved_addresses_header: บันทึกแล้ว
 confirm an action in My Wallet: ยืนยันการดำเนินการใน ION Wallet
 Migration was rolled back: การโยกย้ายถูกย้อนกลับ
-Rollback Enclave Migration: ย้อนกลับการโยกย้ายเอนคลีฟ
 Unable to migrate wallet data. Please contact support.: ไม่สามารถโยกย้ายข้อมูลวอลเล็ตได้ กรุณาติดต่อฝ่ายสนับสนุน
 Failed to retrieve password from biometrics: ดึงรหัสผ่านจากไบโอเมทริกส์ล้มเหลว
 Migration failed. Please try again.: การโยกย้ายล้มเหลว กรุณาลองอีกครั้ง
@@ -1239,7 +1238,6 @@ Different blockchain. Cannot be selected: บล็อกเชนต่าง�
 Chains: เครือข่าย
 enclave_use_biometrics: ใช้ไบโอเมทริกส์
 Copy Storage Data: คัดลอกข้อมูลที่เก็บ
-Rollback Migration: ย้อนกลับการโยกย้าย
 Enclave session expired: เซสชัน Enclave หมดอายุ
 Failed to setup auth: ตั้งค่าการรับรองตัวตนล้มเหลว
 Failed to setup biometric auth: ตั้งค่าการรับรองตัวตนด้วยไบโอเมทริกส์ล้มเหลว
@@ -1741,19 +1739,6 @@ $token_info_open_in_browser_hint: เปิดในเบราว์เซอ�
 $token_info_fallback_description: ไม่มีข้อมูลสาธารณะ
 $token_info_no_description: ไม่มีคำอธิบาย
 $swap_cex_aml_kyc_policy_with_provider: AML/KYC ของ %provider%
-$enclave_migration_damaged_title: ข้อมูลกระเป๋าเงินเสียหาย
-$enclave_migration_damaged_message: |
-  ปัญหานี้ไม่ได้เกิดจากรหัสผ่าน ข้อมูลที่บันทึกไว้ของกระเป๋าเงินหนึ่งใบของคุณไม่สามารถอ่านได้ การอัปเดตจึงหยุดลง และกระเป๋าเงินอื่นของคุณยังคงอยู่ในรูปแบบเดิม
-
-  อย่าติดตั้งแอปใหม่และอย่าล้างข้อมูลของแอป เพราะจะเป็นการลบกระเป๋าเงินที่ยังสมบูรณ์อยู่ กรุณาติดต่อ %support_link% แล้วเราจะช่วยกู้คืนให้
-$enclave_recovery_required_tooltip: ข้อมูลที่บันทึกไว้ของกระเป๋าเงินนี้ไม่สามารถอ่านได้ อย่าลบกระเป๋าเงินนี้และอย่าล้างข้อมูลของแอป กรุณาติดต่อฝ่ายสนับสนุนเพื่อกู้คืน
-$logout_recovery_required_warning: ข้อมูลที่บันทึกไว้ของกระเป๋าเงินนี้ไม่สามารถอ่านได้ จึงไม่สามารถแสดงคำลับของกระเป๋าเงินนี้ การลบจะทำลายสำเนาเดียวที่เหลืออยู่บนอุปกรณ์นี้ และหากไม่มีคำลับจะกู้คืนไม่ได้
-$logout_recovery_required_accounts_warning: ข้อมูลที่บันทึกไว้ของ %links% ไม่สามารถอ่านได้ จึงไม่สามารถแสดงคำลับ การลบจะทำลายสำเนาเดียวของกระเป๋าเงินเหล่านี้ที่เหลืออยู่บนอุปกรณ์นี้ และหากไม่มีคำลับจะกู้คืนไม่ได้
-$enclave_migration_interrupted_title: การอัปเดตถูกขัดจังหวะ
-$enclave_migration_interrupted_message: |
-  ความพยายามอัปเดตข้อมูลกระเป๋าเงินก่อนหน้านี้หยุดกลางคัน และไม่สามารถดำเนินต่อจากหน้าจอนี้ได้ การลองใหม่ที่นี่จะไม่ช่วยอะไร
-
-  อย่าติดตั้งแอปใหม่และอย่าล้างข้อมูลของแอป กระเป๋าเงินของคุณยังคงถูกเก็บไว้ในอุปกรณ์นี้ กรุณาติดต่อ %support_link% แล้วเราจะช่วยดำเนินการอัปเดตให้เสร็จ
 Insufficient %token% for fee.%fee%: มี %token% ไม่เพียงพอสำหรับค่าธรรมเนียม%fee%
 EIP-712 typed data: ข้อมูลแบบระบุชนิด EIP-712
 Primary type: ประเภทหลัก
@@ -1761,21 +1746,6 @@ Deprecated Website: เว็บไซต์ที่เลิกใช้แล
 This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: เวอร์ชันนี้เลิกใช้งานแล้ว โปรดนำเข้ากระเป๋าเงินของคุณอีกครั้งบน %new_domain% หรือ %download_app%
 download the app: ดาวน์โหลดแอป
 Open %new_domain%: เปิด %new_domain%
-$enclave_migration_unexpected_title: ไม่สามารถดำเนินการอัปเดตให้เสร็จได้
-$enclave_migration_unexpected_message: |
-  การอัปเดตข้อมูลกระเป๋าเงินของคุณหยุดลงเนื่องจากข้อผิดพลาดที่ไม่คาดคิด และแอปไม่สามารถระบุสาเหตุได้ ไม่มีข้อมูลใดถูกลบ กระเป๋าเงินทั้งหมดของคุณยังคงถูกเก็บไว้ในอุปกรณ์นี้
-
-  ปิดข้อความนี้แล้วลองอีกครั้ง การลองอีกครั้งจะไม่ทำให้กระเป๋าเงินของคุณเสียหาย หากการอัปเดตยังคงหยุดลง อย่าติดตั้งแอปใหม่ อย่าล้างข้อมูลของแอป และส่งรหัสนี้ให้ %support_link%: %error_code%
-$enclave_migration_retry_title: การอัปเดตยังไม่เสร็จสิ้น
-$enclave_migration_retry_message: |
-  การอัปเดตข้อมูลกระเป๋าเงินของคุณหยุดลงก่อนที่จะเสร็จสิ้น ไม่มีข้อมูลใดถูกลบ กระเป๋าเงินทั้งหมดของคุณยังคงถูกเก็บไว้ในอุปกรณ์นี้
-
-  ปิดข้อความนี้แล้วลองอีกครั้ง การลองอีกครั้งจะไม่ทำให้กระเป๋าเงินของคุณเสียหาย หากการอัปเดตยังคงหยุดลง อย่าติดตั้งแอปใหม่ อย่าล้างข้อมูลของแอป และส่งรหัสนี้ให้ %support_link%: %error_code%
-$enclave_migration_storage_full_title: พื้นที่ไม่เพียงพอ
-$enclave_migration_storage_full_message: |
-  การอัปเดตข้อมูลกระเป๋าเงินของคุณต้องใช้พื้นที่ว่างมากกว่าที่เหลืออยู่ในอุปกรณ์นี้ จึงหยุดลง ไม่มีข้อมูลใดถูกลบ กระเป๋าเงินทั้งหมดของคุณยังคงถูกเก็บไว้ในอุปกรณ์นี้
-
-  เพิ่มพื้นที่ว่างแล้วเปิดแอปอีกครั้ง อย่าติดตั้งแอปใหม่และอย่าล้างข้อมูลของแอป เพราะจะลบกระเป๋าเงินที่ยังสมบูรณ์อยู่
 Hide Unverified NFTs: ซ่อน NFT ที่ยังไม่ได้ตรวจสอบ
 Unverified: ยังไม่ได้ตรวจสอบ
 Switched to %account%: สลับไปยัง %account% แล้ว

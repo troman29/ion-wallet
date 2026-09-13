@@ -1153,7 +1153,6 @@ This command is not supported in explorer mode: Bu komut kaşif modunda destekle
 $saved_addresses_header: Kaydedildi
 confirm an action in My Wallet: ION Wallet'da bir işlemi onaylayın
 Migration was rolled back: Geçiş geri alındı
-Rollback Enclave Migration: Enclave Geçişini Geri Al
 Unable to migrate wallet data. Please contact support.: Cüzdan verileri taşınamadı. Lütfen destek ile iletişime geçin.
 Failed to retrieve password from biometrics: Parola biyometriden alınamadı
 Migration failed. Please try again.: Geçiş başarısız oldu. Lütfen tekrar deneyin.
@@ -1245,7 +1244,6 @@ Different blockchain. Cannot be selected: Farklı blockchain. Seçilemez
 Chains: Ağlar
 enclave_use_biometrics: Biyometri Kullan
 Copy Storage Data: Depolama Verilerini Kopyala
-Rollback Migration: Geçişi Geri Al
 Enclave session expired: Enclave oturumu süresi doldu
 Failed to setup auth: Kimlik doğrulama kurulamadı
 Failed to setup biometric auth: Biyometrik kimlik doğrulama kurulamadı
@@ -1748,40 +1746,12 @@ $token_info_open_in_browser_hint: Tarayıcıda açar.
 $token_info_fallback_description: Kamuya açık bilgi mevcut değil
 $token_info_no_description: Açıklama mevcut değil
 $swap_cex_aml_kyc_policy_with_provider: "%provider% AML/KYC"
-$enclave_migration_damaged_title: Cüzdan Verileri Bozuk
-$enclave_migration_damaged_message: |
-  Sorun parolada değil. Cüzdanlarınızdan birinin kayıtlı verileri okunamıyor, bu yüzden güncelleme durduruldu ve diğer cüzdanlarınız önceki biçiminde kaldı.
-
-  Uygulamayı yeniden yüklemeyin ve verilerini temizlemeyin: bu, hâlâ sağlam olan cüzdanları siler. Lütfen %support_link% ile iletişime geçin, onları kurtarmanıza yardımcı olacağız.
-$enclave_recovery_required_tooltip: Bu cüzdanın kayıtlı verileri okunamıyor. Bu cüzdanı silmeyin ve uygulama verilerini temizlemeyin, kurtarmak için destek ile iletişime geçin.
-$logout_recovery_required_warning: Bu cüzdanın kayıtlı verileri okunamıyor, bu yüzden gizli kelimeleri gösterilemiyor. Silmek, bu cihazda kalan tek kopyayı yok eder ve gizli kelimeler olmadan cüzdan kurtarılamaz.
-$logout_recovery_required_accounts_warning: "%links% cüzdanlarının kayıtlı verileri okunamıyor, bu yüzden gizli kelimeler gösterilemiyor. Silmek, bu cihazda kalan tek kopyayı yok eder ve gizli kelimeler olmadan kurtarılamazlar."
-$enclave_migration_interrupted_title: Güncelleme Yarıda Kesildi
-$enclave_migration_interrupted_message: |
-  Cüzdan verilerinizi güncellemeye yönelik önceki bir deneme yarıda kaldı ve bu ekrandan sürdürülemiyor. Burada tekrar denemek yardımcı olmaz.
-
-  Uygulamayı yeniden yüklemeyin ve verilerini temizlemeyin: cüzdanlarınız hâlâ bu cihazda saklanıyor. Lütfen %support_link% ile iletişime geçin, güncellemeyi tamamlamanıza yardımcı olacağız.
 EIP-712 typed data: EIP-712 tipli veri
 Primary type: Birincil tür
 Deprecated Website: Kullanımdan Kaldırılmış Web Sitesi
 This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: Bu sürüm artık kullanımdan kaldırıldı. Cüzdanlarınızı %new_domain% üzerinde yeniden içe aktarın veya %download_app%.
 download the app: uygulamayı indirin
 Open %new_domain%: "%new_domain% adresini aç"
-$enclave_migration_unexpected_title: Güncelleme Tamamlanamadı
-$enclave_migration_unexpected_message: |
-  Cüzdan verilerinizin güncellenmesi beklenmeyen bir hata nedeniyle durdu ve uygulama hatanın nedenini belirleyemiyor. Hiçbir şey silinmedi: tüm cüzdanlarınız hâlâ bu cihazda saklanıyor.
-
-  Bu mesajı kapatıp tekrar deneyin; yeniden denemek cüzdanlarınıza zarar vermez. Güncelleme durmaya devam ederse uygulamayı yeniden yüklemeyin, verilerini temizlemeyin ve şu kodu %support_link% adresine gönderin: %error_code%
-$enclave_migration_retry_title: Güncelleme Tamamlanmadı
-$enclave_migration_retry_message: |
-  Cüzdan verilerinizin güncellenmesi tamamlanmadan durdu. Hiçbir şey silinmedi: tüm cüzdanlarınız hâlâ bu cihazda saklanıyor.
-
-  Bu mesajı kapatıp tekrar deneyin; yeniden denemek cüzdanlarınıza zarar vermez. Güncelleme durmaya devam ederse uygulamayı yeniden yüklemeyin, verilerini temizlemeyin ve şu kodu %support_link% adresine gönderin: %error_code%
-$enclave_migration_storage_full_title: Yeterli Alan Yok
-$enclave_migration_storage_full_message: |
-  Cüzdan verilerinizin güncellenmesi için bu cihazda kalan alandan daha fazla boş alan gerekiyor, bu yüzden güncelleme durdu. Hiçbir şey silinmedi: tüm cüzdanlarınız hâlâ bu cihazda saklanıyor.
-
-  Biraz yer açıp uygulamayı yeniden açın. Uygulamayı yeniden yüklemeyin ve verilerini temizlemeyin; bunu yapmak hâlâ sağlam olan cüzdanları siler.
 Hide Unverified NFTs: Doğrulanmamış NFT'leri Gizle
 Unverified: Doğrulanmamış
 Switched to %account%: "%account% hesabına geçildi"

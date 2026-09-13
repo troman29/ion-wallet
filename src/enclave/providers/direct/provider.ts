@@ -3,10 +3,9 @@ import { CHANNEL_NAME } from '../../config';
 import { createPostMessageInterface } from '../../../util/createPostMessageInterface';
 import { IS_ELECTRON } from '../../../util/windowEnvironment';
 import * as enclaveApi from '../../enclave';
-import * as legacyMigrationApi from '../../legacyMigration';
 import idbStorage from '../../storage/idb';
 
-const enclaveRpcApi = { ...enclaveApi, ...legacyMigrationApi };
+const enclaveRpcApi = enclaveApi;
 
 createPostMessageInterface(enclaveRpcApi, CHANNEL_NAME, window, true, window.location.origin);
 

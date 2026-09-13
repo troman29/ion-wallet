@@ -6,7 +6,6 @@
  * reach the dispatch table through a guarded `require` instead, so a `NO_EXTRA_FEATURES` build drops them.
  */
 export * from './exploreSites';
-export * from './legacyAuth';
 export * from './notifications';
 export * from './staking';
 export * from './swap';

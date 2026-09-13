@@ -1147,7 +1147,6 @@ This command is not supported in explorer mode: 此命令在浏览器模式下�
 $saved_addresses_header: 已保存
 confirm an action in My Wallet: 在 ION Wallet 中确认操作
 Migration was rolled back: 迁移已回滚
-Rollback Enclave Migration: 回退飞地迁移
 Unable to migrate wallet data. Please contact support.: 无法迁移钱包数据。请联系支持。
 Failed to retrieve password from biometrics: 无法从生物识别中获取密码
 Migration failed. Please try again.: 迁移失败。请重试。
@@ -1239,7 +1238,6 @@ Different blockchain. Cannot be selected: 不同的区块链。无法选择
 Chains: 区块链
 enclave_use_biometrics: 使用生物识别
 Copy Storage Data: 复制存储数据
-Rollback Migration: 回滚迁移
 Enclave session expired: Enclave 会话已过期
 Failed to setup auth: 设置身份验证失败
 Failed to setup biometric auth: 设置生物识别身份验证失败
@@ -1741,19 +1739,6 @@ $token_info_open_in_browser_hint: 在浏览器中打开。
 $token_info_fallback_description: 暂无公开信息
 $token_info_no_description: 暂无描述
 $swap_cex_aml_kyc_policy_with_provider: "%provider% AML/KYC"
-$enclave_migration_damaged_title: 钱包数据已损坏
-$enclave_migration_damaged_message: |
-  这与密码无关。您其中一个钱包的存储数据无法读取，因此更新已停止，其余钱包仍保持先前的格式。
-
-  请不要重新安装应用，也不要清除其数据，那会抹掉仍然完好的钱包。请联系 %support_link%，我们会帮您恢复。
-$enclave_recovery_required_tooltip: 该钱包的存储数据无法读取。请不要删除此钱包，也不要清除应用数据，并联系客服以恢复。
-$logout_recovery_required_warning: 该钱包的存储数据无法读取，因此无法显示它的密语。删除会销毁本设备上仅存的副本，没有密语将无法恢复。
-$logout_recovery_required_accounts_warning: "%links% 的存储数据无法读取，因此无法显示密语。删除会销毁这些钱包在本设备上仅存的副本，没有密语将无法恢复。"
-$enclave_migration_interrupted_title: 更新被中断
-$enclave_migration_interrupted_message: |
-  先前一次更新钱包数据的尝试中途停止，无法从此页面继续。在这里重试不会有帮助。
-
-  请不要重新安装应用，也不要清除其数据，您的钱包仍存储在本设备上。请联系 %support_link%，我们会帮您完成更新。
 Unexpected: 预期外的错误
 Bitcoin: 比特币
 EIP-712 typed data: EIP-712 类型化数据
@@ -1762,21 +1747,6 @@ Deprecated Website: 已弃用的网站
 This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: 此版本已弃用。请在 %new_domain% 上重新导入您的钱包，或%download_app%。
 download the app: 下载应用
 Open %new_domain%: 打开 %new_domain%
-$enclave_migration_unexpected_title: 无法完成更新
-$enclave_migration_unexpected_message: |
-  钱包数据更新因意外错误而停止，应用无法确定错误原因。没有删除任何内容：您的所有钱包仍存储在本设备上。
-
-  关闭此消息并重试，再次尝试不会损坏您的钱包。如果更新仍然停止，请不要重新安装应用，也不要清除其数据，并将此代码发送给 %support_link%：%error_code%
-$enclave_migration_retry_title: 更新未完成
-$enclave_migration_retry_message: |
-  钱包数据更新在完成前停止。没有删除任何内容：您的所有钱包仍存储在本设备上。
-
-  关闭此消息并重试，再次尝试不会损坏您的钱包。如果更新仍然停止，请不要重新安装应用，也不要清除其数据，并将此代码发送给 %support_link%：%error_code%
-$enclave_migration_storage_full_title: 空间不足
-$enclave_migration_storage_full_message: |
-  更新钱包数据所需的可用空间超过本设备的剩余空间，因此更新已停止。没有删除任何内容：您的所有钱包仍存储在本设备上。
-
-  请释放一些空间，然后重新打开应用。请不要重新安装应用，也不要清除其数据，否则仍然完好的钱包会被抹掉。
 Hide Unverified NFTs: 隐藏未验证的NFT
 Unverified: 未验证
 Switched to %account%: 已切换到 %account%

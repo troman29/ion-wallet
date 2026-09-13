@@ -1176,7 +1176,6 @@ This command is not supported in explorer mode: To polecenie nie jest obsługiwa
 $saved_addresses_header: Zapisane
 confirm an action in My Wallet: potwierdź działanie w ION Wallet
 Migration was rolled back: Migracja została wycofana
-Rollback Enclave Migration: Wycofaj migrację enclave
 Unable to migrate wallet data. Please contact support.: Nie można przeprowadzić migracji danych portfela. Proszę skontaktować się z pomocą techniczną.
 Failed to retrieve password from biometrics: Nie udało się pobrać hasła z biometrii
 Migration failed. Please try again.: Migracja nie powiodła się. Proszę spróbować ponownie.
@@ -1268,7 +1267,6 @@ Different blockchain. Cannot be selected: Inny blockchain. Nie można wybrać
 Chains: Łańcuchy
 enclave_use_biometrics: Użyj biometrii
 Copy Storage Data: Skopiuj dane pamięci
-Rollback Migration: Wycofaj migrację
 Enclave session expired: Sesja Enclave wygasła
 Failed to setup auth: Nie udało się skonfigurować uwierzytelniania
 Failed to setup biometric auth: Nie udało się skonfigurować uwierzytelniania biometrycznego
@@ -1787,40 +1785,12 @@ $token_info_open_in_browser_hint: Otwiera w przeglądarce.
 $token_info_fallback_description: Brak dostępnych informacji publicznych
 $token_info_no_description: Brak dostępnego opisu
 $swap_cex_aml_kyc_policy_with_provider: AML/KYC %provider%
-$enclave_migration_damaged_title: Dane portfela uszkodzone
-$enclave_migration_damaged_message: |
-  Nie chodzi o hasło. Zapisanych danych jednego z Twoich portfeli nie da się odczytać, dlatego aktualizacja została zatrzymana, a pozostałe portfele zostały w poprzednim formacie.
-
-  Nie instaluj aplikacji ponownie i nie czyść jej danych: to usunęłoby portfele, które są jeszcze nienaruszone. Skontaktuj się z %support_link%, a pomożemy je odzyskać.
-$enclave_recovery_required_tooltip: Zapisanych danych tego portfela nie da się odczytać. Nie usuwaj tego portfela i nie czyść danych aplikacji, a w sprawie odzyskania skontaktuj się z pomocą techniczną.
-$logout_recovery_required_warning: Zapisanych danych tego portfela nie da się odczytać, więc nie można pokazać jego tajnych słów. Usunięcie niszczy jedyną kopię pozostałą na tym urządzeniu, a bez tajnych słów portfela nie da się odzyskać.
-$logout_recovery_required_accounts_warning: Zapisanych danych %links% nie da się odczytać, więc nie można pokazać tajnych słów. Usunięcie niszczy jedyną kopię tych portfeli pozostałą na tym urządzeniu, a bez tajnych słów nie da się ich odzyskać.
-$enclave_migration_interrupted_title: Aktualizacja została przerwana
-$enclave_migration_interrupted_message: |
-  Wcześniejsza próba aktualizacji danych portfela zatrzymała się w połowie i nie można jej wznowić z tego ekranu. Ponowna próba tutaj nie pomoże.
-
-  Nie instaluj aplikacji ponownie i nie czyść jej danych: Twoje portfele nadal są zapisane na tym urządzeniu. Skontaktuj się z %support_link%, a pomożemy dokończyć aktualizację.
 EIP-712 typed data: Dane typowane EIP-712
 Primary type: Typ główny
 Deprecated Website: Nieaktualna strona internetowa
 This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: Ta wersja jest nieaktualna. Zaimportuj ponownie portfele w %new_domain% lub %download_app%.
 download the app: pobierz aplikację
 Open %new_domain%: Otwórz %new_domain%
-$enclave_migration_unexpected_title: Nie udało się ukończyć aktualizacji
-$enclave_migration_unexpected_message: |
-  Aktualizacja danych portfela została zatrzymana przez nieoczekiwany błąd, a aplikacja nie potrafi ustalić jego przyczyny. Nic nie zostało usunięte: wszystkie Twoje portfele nadal są zapisane na tym urządzeniu.
-
-  Zamknij ten komunikat i spróbuj ponownie — kolejna próba nie zaszkodzi Twoim portfelom. Jeśli aktualizacja nadal będzie się zatrzymywać, nie instaluj aplikacji ponownie ani nie czyść jej danych. Wyślij ten kod do %support_link%: %error_code%
-$enclave_migration_retry_title: Aktualizacja nie została ukończona
-$enclave_migration_retry_message: |
-  Aktualizacja danych portfela zatrzymała się przed ukończeniem. Nic nie zostało usunięte: wszystkie Twoje portfele nadal są zapisane na tym urządzeniu.
-
-  Zamknij ten komunikat i spróbuj ponownie — kolejna próba nie zaszkodzi Twoim portfelom. Jeśli aktualizacja nadal będzie się zatrzymywać, nie instaluj aplikacji ponownie ani nie czyść jej danych. Wyślij ten kod do %support_link%: %error_code%
-$enclave_migration_storage_full_title: Za mało miejsca
-$enclave_migration_storage_full_message: |
-  Aktualizacja danych portfela wymaga więcej wolnego miejsca, niż zostało na tym urządzeniu, dlatego została zatrzymana. Nic nie zostało usunięte: wszystkie Twoje portfele nadal są zapisane na tym urządzeniu.
-
-  Zwolnij trochę miejsca i ponownie otwórz aplikację. Nie instaluj aplikacji ponownie ani nie czyść jej danych — usunęłoby to portfele, które nadal są nienaruszone.
 Hide Unverified NFTs: Ukryj niezweryfikowane NFT
 Unverified: Niezweryfikowane
 Switched to %account%: Przełączono na %account%

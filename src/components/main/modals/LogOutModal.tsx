@@ -42,7 +42,6 @@ interface StateProps {
   accountStates: Record<string, AccountState>;
   isBackupRequired?: boolean;
   isViewMode: boolean;
-  isRecoveryRequired?: true;
 }
 
 interface LinkAccount {
@@ -58,7 +57,6 @@ function LogOutModal({
   accountStates,
   isBackupRequired,
   isViewMode,
-  isRecoveryRequired,
   isInAppLock,
   onClose,
 }: OwnProps & StateProps) {
@@ -83,23 +81,6 @@ function LogOutModal({
       return acc;
     }, []);
   }, [orderedAccounts, accountStates, accountId, hasManyAccounts]);
-
-  const recoveryRequiredAccounts = useMemo(() => {
-    if (!hasManyAccounts) {
-      return [];
-    }
-
-    return orderedAccounts.reduce<LinkAccount[]>((acc, [id, account]) => {
-      if (id !== accountId && account.isRecoveryRequired) {
-        acc.push({
-          id,
-          title: getAccountTitle(account) ?? '',
-        });
-      }
-
-      return acc;
-    }, []);
-  }, [orderedAccounts, accountId, hasManyAccounts]);
 
   useEffect(() => {
     if (isOpen) {
@@ -173,25 +154,6 @@ function LogOutModal({
     );
   }
 
-  function renderRecoveryRequiredWarning() {
-    return (
-      <p className={modalStyles.text}>
-        <b className={styles.warning}>{lang('Warning!')}</b> {lang('$logout_recovery_required_warning')}
-      </p>
-    );
-  }
-
-  function renderRecoveryRequiredForAccountsWarning() {
-    return (
-      <p className={modalStyles.text}>
-        <b className={styles.warning}>{lang('Warning!')}</b>{' '}
-        {lang('$logout_recovery_required_accounts_warning', {
-          links: <>{recoveryRequiredAccounts.map(renderAccountLink)}</>,
-        })}
-      </p>
-    );
-  }
-
   const shouldRenderWarningForAnotherAccounts = isLogOutFromAllAccounts && accountsWithoutBackups.length > 0;
   const shouldRenderWarningForCurrentAccount = isBackupRequired && !shouldRenderWarningForAnotherAccounts;
   // Sibling button has wider text on iOS due to App Store "Remove Wallet" requirements
@@ -206,7 +168,7 @@ function LogOutModal({
       isInAppLock={isInAppLock}
     >
       <p className={buildClassName(modalStyles.text, modalStyles.text_noExtraMargin)}>
-        {renderText(isViewMode || isRecoveryRequired
+        {renderText(isViewMode
           ? lang('$logout_current_wallet_warning')
           : `${lang('$logout_current_wallet_warning')} ${lang('$secret_words_backup_reminder')}`)}
       </p>
@@ -223,8 +185,6 @@ function LogOutModal({
 
       {shouldRenderWarningForCurrentAccount && renderBackupWarning()}
       {shouldRenderWarningForAnotherAccounts && renderBackupForAccountsWarning()}
-      {isRecoveryRequired && renderRecoveryRequiredWarning()}
-      {isLogOutFromAllAccounts && recoveryRequiredAccounts.length > 0 && renderRecoveryRequiredForAccountsWarning()}
 
       <div className={modalStyles.buttons}>
         <Button className={cancelButtonClassNames} onClick={handleClose}>
@@ -258,7 +218,6 @@ export default memo(
       accountStates: global.byAccountId,
       isBackupRequired: targetAccountState?.isBackupRequired,
       isViewMode,
-      isRecoveryRequired: targetAccount?.isRecoveryRequired,
     };
   })(LogOutModal),
 );

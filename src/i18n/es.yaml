@@ -1156,7 +1156,6 @@ This command is not supported in explorer mode: Este comando no es compatible en
 $saved_addresses_header: Guardado
 confirm an action in My Wallet: confirmar una acción en ION Wallet
 Migration was rolled back: La migración fue revertida
-Rollback Enclave Migration: Revertir migración de enclave
 Unable to migrate wallet data. Please contact support.: No se pudieron migrar los datos de la billetera. Por favor, contacte al soporte.
 Failed to retrieve password from biometrics: No se pudo recuperar la contraseña de la biometría
 Migration failed. Please try again.: Migración fallida. Por favor, intente de nuevo.
@@ -1248,7 +1247,6 @@ Different blockchain. Cannot be selected: Blockchain diferente. No se puede sele
 Chains: Redes
 enclave_use_biometrics: Usar biometría
 Copy Storage Data: Copiar datos de almacenamiento
-Rollback Migration: Revertir migración
 Enclave session expired: Sesión de enclave expirada
 Failed to setup auth: Error al configurar la autenticación
 Failed to setup biometric auth: Error al configurar la autenticación biométrica
@@ -1754,40 +1752,12 @@ $token_info_open_in_browser_hint: Abre en el navegador.
 $token_info_fallback_description: No hay información pública disponible
 $token_info_no_description: No hay descripción disponible
 $swap_cex_aml_kyc_policy_with_provider: AML/KYC de %provider%
-$enclave_migration_damaged_title: Datos de la billetera dañados
-$enclave_migration_damaged_message: |
-  No se trata de la contraseña. Los datos guardados de una de sus billeteras no se pueden leer, por eso la actualización se detuvo y el resto de sus billeteras permaneció en el formato anterior.
-
-  No reinstale la aplicación ni borre sus datos: eso eliminaría las billeteras que aún están intactas. Por favor, contacte con %support_link% y le ayudaremos a recuperarlas.
-$enclave_recovery_required_tooltip: Los datos guardados de esta billetera no se pueden leer. No elimine esta billetera ni borre los datos de la aplicación, y contacte con el soporte para recuperarla.
-$logout_recovery_required_warning: Los datos guardados de esta billetera no se pueden leer, por eso no es posible mostrar sus frases secretas. Al eliminarla se destruye la única copia que queda en este dispositivo, y sin las frases secretas no se puede recuperar.
-$logout_recovery_required_accounts_warning: Los datos guardados de %links% no se pueden leer, por eso no es posible mostrar las frases secretas. Al eliminarlas se destruye la única copia de esas billeteras que queda en este dispositivo, y sin las frases secretas no se pueden recuperar.
-$enclave_migration_interrupted_title: La actualización se interrumpió
-$enclave_migration_interrupted_message: |
-  Un intento anterior de actualizar los datos de su billetera se detuvo a la mitad y no se puede reanudar desde esta pantalla. Volver a intentarlo aquí no ayudará.
-
-  No reinstale la aplicación ni borre sus datos: sus billeteras siguen guardadas en este dispositivo. Por favor, contacte con %support_link% y le ayudaremos a completar la actualización.
 EIP-712 typed data: Datos tipados EIP-712
 Primary type: Tipo principal
 Deprecated Website: Sitio web obsoleto
 This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: Esta versión está obsoleta. Vuelva a importar sus billeteras en %new_domain% o %download_app%.
 download the app: descargue la aplicación
 Open %new_domain%: Abrir %new_domain%
-$enclave_migration_unexpected_title: No se pudo completar la actualización
-$enclave_migration_unexpected_message: |
-  La actualización de los datos de su billetera se detuvo por un error inesperado y la aplicación no puede determinar la causa. No se ha eliminado nada: todas sus billeteras siguen guardadas en este dispositivo.
-
-  Cierre este mensaje y vuelva a intentarlo; otro intento no dañará sus billeteras. Si sigue deteniéndose, no reinstale la aplicación ni borre sus datos y envíe este código a %support_link%: %error_code%
-$enclave_migration_retry_title: La actualización no se completó
-$enclave_migration_retry_message: |
-  La actualización de los datos de su billetera se detuvo antes de completarse. No se ha eliminado nada: todas sus billeteras siguen guardadas en este dispositivo.
-
-  Cierre este mensaje y vuelva a intentarlo; otro intento no dañará sus billeteras. Si sigue deteniéndose, no reinstale la aplicación ni borre sus datos y envíe este código a %support_link%: %error_code%
-$enclave_migration_storage_full_title: No hay suficiente espacio
-$enclave_migration_storage_full_message: |
-  La actualización de los datos de su billetera necesita más espacio libre del que queda en este dispositivo, por lo que se detuvo. No se ha eliminado nada: todas sus billeteras siguen guardadas en este dispositivo.
-
-  Libere espacio y vuelva a abrir la aplicación. No reinstale la aplicación ni borre sus datos: eso eliminaría las billeteras que aún están intactas.
 Hide Unverified NFTs: Ocultar NFTs No Verificados
 Unverified: No Verificados
 Switched to %account%: Has cambiado a %account%
