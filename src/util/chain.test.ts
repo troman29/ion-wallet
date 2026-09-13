@@ -1,4 +1,5 @@
-import { getIsSupportedChain } from './chain';
+import { ION_BNB_MAINNET, TON_USDT_MAINNET } from '../config';
+import { getIsSupportedChain, getIsTokenKept } from './chain';
 
 describe('getIsSupportedChain', () => {
   it('recognizes configured chains in the legacy browser baseline', () => {
@@ -13,5 +14,20 @@ describe('getIsSupportedChain', () => {
     } finally {
       Object.defineProperty(Object, 'hasOwn', descriptor);
     }
+  });
+});
+
+describe('getIsTokenKept', () => {
+  it('keeps the listed token of a chain that names its own', () => {
+    expect(getIsTokenKept('bnb', ION_BNB_MAINNET.slug)).toBe(true);
+  });
+
+  it('drops an unlisted token of that chain', () => {
+    expect(getIsTokenKept('bnb', 'bnb-0xdeadbeef')).toBe(false);
+  });
+
+  it('keeps any token of a chain that names none', () => {
+    expect(getIsTokenKept('ton', TON_USDT_MAINNET.slug)).toBe(true);
+    expect(getIsTokenKept('ton', 'ton-eqsomethingelse')).toBe(true);
   });
 });

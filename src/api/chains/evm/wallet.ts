@@ -13,7 +13,7 @@ import type {
 import { ApiCommonError } from '../../types';
 
 import { throwIfAborted } from '../../../util/abortSignal';
-import { getChainConfig, getChainsByStandard } from '../../../util/chain';
+import { getChainConfig, getChainsByStandard, getIsTokenKept } from '../../../util/chain';
 import { buildRequestUrl, fetchJson, fetchWithRetry, isNegativeCacheableStatus } from '../../../util/fetch';
 import { compact } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
@@ -283,6 +283,10 @@ async function fetchAccountAssetsUncoalesced(
       }
 
       const slug = buildTokenSlug(assetChain, assetImplementation.address);
+
+      if (!getIsTokenKept(assetChain, slug)) {
+        return;
+      }
 
       slugPairs[slug] = BigInt(e.attributes.quantity.int ?? 0);
 

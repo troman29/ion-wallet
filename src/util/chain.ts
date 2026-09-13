@@ -113,6 +113,12 @@ export interface ChainConfig {
   usdcSlug?: Record<ApiNetwork, string | undefined>;
   /** The token slugs of this chain added to new accounts by default. */
   defaultEnabledSlugs: Record<ApiNetwork, string[]>;
+  /**
+   * The only non-native tokens of this chain the wallet keeps; unset means it keeps whatever the
+   * balance provider reports. Enforced where EVM balances are ingested (`chains/evm/wallet.ts`),
+   * so an unlisted token never reaches the balances, the token list or the total.
+   */
+  keptTokenSlugs?: string[];
   /** The token slugs of this chain supported by the crosschain (CEX) swap mechanism. */
   crosschainSwapSlugs: string[];
   /**
@@ -288,6 +294,9 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       mainnet: [BNB.slug, ION_BNB_MAINNET.slug],
       testnet: [BNB.slug],
     },
+    // BNB carries ION and nothing else for now: the chain is here to hold the bridged coin, and
+    // an open list means every airdropped token lands in the wallet, priced and counted.
+    keptTokenSlugs: [ION_BNB_MAINNET.slug],
     crosschainSwapSlugs: [BNB.slug],
     tokenInfo: [BNB, ION_BNB_MAINNET, BSC_USDT_MAINNET],
     explorers: [{
@@ -451,6 +460,13 @@ export const getTrustedUsdtSlugs = /* #__PURE__ */ withCache((): ReadonlySet<str
  *
  * A single-chain account passes its own chains, so it is never offered a row it cannot use.
  */
+/** Whether the wallet keeps this token, per its chain's `keptTokenSlugs` */
+export function getIsTokenKept(chain: ApiChain, slug: string) {
+  const { keptTokenSlugs } = getChainConfig(chain);
+
+  return !keptTokenSlugs || keptTokenSlugs.includes(slug);
+}
+
 export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((
   network: ApiNetwork,
   chains?: readonly ApiChain[],

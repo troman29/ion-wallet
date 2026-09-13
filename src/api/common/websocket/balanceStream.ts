@@ -5,7 +5,7 @@ import type { AbstractWebsocketClient, BalanceUpdate, WalletWatcher } from './ab
 
 import { areDeepEqual } from '../../../util/areDeepEqual';
 import { createCallbackManager } from '../../../util/callbacks';
-import { getChainConfig, getSupportedChains } from '../../../util/chain';
+import { getChainConfig, getIsTokenKept, getSupportedChains } from '../../../util/chain';
 import Deferred from '../../../util/Deferred';
 import { pick } from '../../../util/iteratees';
 import { logDebug } from '../../../util/logs';
@@ -525,9 +525,17 @@ function balanceByTokenAddressToBySlug(chain: ApiChain, byAddress: BalanceByToke
   const bySlug: ApiBalanceBySlug = {};
 
   for (const [tokenAddress, balance] of Object.entries(byAddress)) {
-    const slug = tokenAddress === VIRTUAL_ADDRESS
+    const isNative = tokenAddress === VIRTUAL_ADDRESS;
+    const slug = isNative
       ? getChainConfig(chain).nativeToken.slug
       : buildTokenSlug(chain, tokenAddress);
+
+    // The socket is the second way a token reaches the balances, so the chain's kept list has to
+    // hold here too - otherwise an incoming transfer adds the very row the poller filters out
+    if (!isNative && !getIsTokenKept(chain, slug)) {
+      continue;
+    }
+
     bySlug[slug] = balance;
   }
 
