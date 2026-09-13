@@ -410,6 +410,27 @@ export const TON_TSUSDE = {
   image: 'https://cache.tonapi.io/imgproxy/vGZJ7erwsWPo7DpVG_V7ygNn7VGs0szZXcNLHB_l0ms/rs:fill:200:200:1/g:no/aHR0cHM6Ly9tZXRhZGF0YS5sYXllcnplcm8tYXBpLmNvbS9hc3NldHMvdHNVU0RlLnBuZw.webp',
 } as const;
 
+/**
+ * The display names this fork insists on, whatever the backend answers. The wallet still reads the
+ * token list from MyTonWallet's backend, which calls the native coin Gram; until ION serves its own
+ * list, the rebranded names would be overwritten on every poll.
+ */
+export const TOKEN_NAME_OVERRIDES: Record<string, { name: string; symbol: string }> = {
+  [TONCOIN.slug]: { name: TONCOIN.name, symbol: TONCOIN.symbol },
+};
+
+// Wrapped ION on BNB Smart Chain: the bridged form of the native coin, verified on-chain
+// (symbol ION, name "Ice Open Network", 9 decimals).
+export const ION_BNB_MAINNET = {
+  name: 'Ice Open Network',
+  symbol: 'ION',
+  decimals: 9,
+  chain: 'bnb',
+  slug: 'bnb-0xe1ab61f7',
+  tokenAddress: '0xe1ab61f7b093435204df32f5b3a405de55445ea8',
+  label: 'BEP-20',
+} as const;
+
 export const BSC_USDT_MAINNET = {
   name: 'Tether USD',
   symbol: 'USDT',

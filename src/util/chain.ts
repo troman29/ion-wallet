@@ -4,6 +4,7 @@ import {
   BNB,
   BSC_USDT_MAINNET,
   DEBUG,
+  ION_BNB_MAINNET,
   TON_TSUSDE,
   TON_USDE,
   TON_USDT_MAINNET,
@@ -284,11 +285,11 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       testnet: BSC_USDT_MAINNET.slug,
     },
     defaultEnabledSlugs: {
-      mainnet: [BNB.slug],
+      mainnet: [BNB.slug, ION_BNB_MAINNET.slug],
       testnet: [BNB.slug],
     },
     crosschainSwapSlugs: [BNB.slug],
-    tokenInfo: [BNB, BSC_USDT_MAINNET],
+    tokenInfo: [BNB, ION_BNB_MAINNET, BSC_USDT_MAINNET],
     explorers: [{
       id: 'bsctrace',
       name: 'BSCTrace',
@@ -443,10 +444,20 @@ export const getTrustedUsdtSlugs = /* #__PURE__ */ withCache((): ReadonlySet<str
   );
 });
 
-export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((network: ApiNetwork): ReadonlySet<string> => {
-  // `updateBalances` (`global/reducers/misc.ts`) seeds every default slug at zero, so an empty
-  // wallet renders them all and has somewhere to receive its first funds.
-  const chainConfigs = Object.values(CHAIN_CONFIG);
+/**
+ * The tokens a wallet shows whatever its balances are: the native coin of every chain it holds, plus
+ * the bridged forms of our own coin. `updateBalances` (`global/reducers/misc.ts`) seeds them at zero,
+ * so they stay on screen for an empty wallet and give it somewhere to receive the first funds.
+ *
+ * A single-chain account passes its own chains, so it is never offered a row it cannot use.
+ */
+export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((
+  network: ApiNetwork,
+  chains?: readonly ApiChain[],
+): ReadonlySet<string> => {
+  const chainConfigs = chains
+    ? chains.filter(getIsSupportedChain).map((chain) => CHAIN_CONFIG[chain])
+    : Object.values(CHAIN_CONFIG);
 
   return new Set(
     chainConfigs.flatMap((chainConfig) => chainConfig.defaultEnabledSlugs[network]),

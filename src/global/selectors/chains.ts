@@ -5,7 +5,6 @@ import { sortChainsByBalance } from '../../util/calculateFullBalance';
 import { getOrderedAccountChains } from '../../util/chain';
 import {
   DEFAULT_CHAIN_DISPLAY_CONFIGURATION,
-  getChainsWithBalance,
   getDefaultVisibleChains,
   getOrderedChainsForDisplay,
   getVisibleChains,
@@ -40,10 +39,7 @@ const selectChainDisplayMemoizedFor = withCache((accountId: string) => memoize((
 ): ChainDisplay => {
   const defaultOrder = getOrderedAccountChains(byChain);
   const valueOrder = sortChainsByBalance(defaultOrder, tokens, stakingStates);
-  const defaultVisibleChains = getDefaultVisibleChains(
-    defaultOrder,
-    getChainsWithBalance(tokens, stakingStates),
-  );
+  const defaultVisibleChains = getDefaultVisibleChains(defaultOrder);
 
   const visibleChains = getVisibleChains(config, defaultOrder, valueOrder, defaultVisibleChains);
 

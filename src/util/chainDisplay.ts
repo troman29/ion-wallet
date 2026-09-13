@@ -1,56 +1,23 @@
-import type { ApiChain, ApiStakingState } from '../api/types';
-import type { ChainDisplayConfiguration, UserToken } from '../global/types';
+import type { ApiChain } from '../api/types';
+import type { ChainDisplayConfiguration } from '../global/types';
 
 import { getAllSupportedVisibleChains } from './chain';
 import { unique } from './iteratees';
-import { getFullStakingBalance } from './staking';
 
 export const DEFAULT_CHAIN_DISPLAY_CONFIGURATION: ChainDisplayConfiguration = { displayMode: 'value' };
 
 /**
- * The chains the app shows automatically, until the user changes the list themselves.
+ * The chains the app shows automatically, until the user changes the list themselves: every chain the
+ * account holds.
  *
- * If the wallet already holds funds, the app shows the chains those funds are in. If the wallet is empty,
- * the app shows every supported chain - otherwise the user would have nowhere to receive their first funds.
- *
- * When the wallet holds funds but none of them are in the account's own chains, only the first chain is shown,
- * matching `automaticallyVisibleChains` on iOS.
+ * Upstream narrowed this to the funded chains once a wallet held anything, which suited a wallet of a
+ * dozen chains. With two it hid half the app, and any airdropped token was enough to do it: a single
+ * unsolicited BEP-20 took the ION address off the card.
  */
-export function getDefaultVisibleChains(accountChains: ApiChain[], chainsWithBalance: ReadonlySet<ApiChain>) {
-  const availableChains = unique(accountChains);
+export function getDefaultVisibleChains(accountChains: ApiChain[]) {
+  const supportedChains = getAllSupportedVisibleChains();
 
-  if (!chainsWithBalance.size) {
-    const supportedChains = getAllSupportedVisibleChains();
-
-    return new Set(availableChains.filter((chain) => supportedChains.has(chain)));
-  }
-
-  const fundedChains = availableChains.filter((chain) => chainsWithBalance.has(chain));
-
-  return new Set(fundedChains.length ? fundedChains : availableChains.slice(0, 1));
-}
-
-/** Chains holding a non-zero amount of any token, staked balances included */
-export function getChainsWithBalance(tokens?: UserToken[], stakingStates?: ApiStakingState[]) {
-  const result = new Set<ApiChain>();
-  if (!tokens?.length) return result;
-
-  const chainBySlug = new Map(tokens.map((token) => [token.slug, token.chain]));
-
-  for (const token of tokens) {
-    if (token.amount > 0n) {
-      result.add(token.chain);
-    }
-  }
-
-  for (const stakingState of stakingStates ?? []) {
-    const chain = chainBySlug.get(stakingState.tokenSlug);
-    if (chain && getFullStakingBalance(stakingState) > 0n) {
-      result.add(chain);
-    }
-  }
-
-  return result;
+  return new Set(unique(accountChains).filter((chain) => supportedChains.has(chain)));
 }
 
 export function getIsChainVisible(

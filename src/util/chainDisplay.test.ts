@@ -1,9 +1,8 @@
-import type { ApiChain, ApiStakingState } from '../api/types';
-import type { ChainDisplayConfiguration, UserToken } from '../global/types';
+import type { ApiChain } from '../api/types';
+import type { ChainDisplayConfiguration } from '../global/types';
 
 import {
   DEFAULT_CHAIN_DISPLAY_CONFIGURATION,
-  getChainsWithBalance,
   getDefaultVisibleChains,
   getNormalizedManualOrder,
   getOrderedChainsForDisplay,
@@ -22,48 +21,19 @@ const ALPHA = foreignChain('alpha');
 const BETA = foreignChain('beta');
 const GAMMA = foreignChain('gamma');
 
-function buildToken(slug: string, chain: ApiChain, amount: bigint, isDisabled?: boolean) {
-  return { slug, chain, amount, isDisabled } as UserToken;
-}
-
-function buildStakingState(tokenSlug: string, balance: bigint) {
-  return { type: 'liquid', tokenSlug, balance } as ApiStakingState;
-}
-
-describe('getChainsWithBalance', () => {
-  it('collects the chains of non-empty tokens', () => {
-    const tokens = [
-      buildToken('ton', 'ton', 10n),
-      buildToken('bnb', 'bnb', 0n),
-      buildToken('usdt', 'ton', 5n),
-    ];
-
-    expect([...getChainsWithBalance(tokens)]).toEqual(['ton']);
-  });
-
-  it('counts staked balances of otherwise empty tokens', () => {
-    const tokens = [buildToken('ton', 'ton', 0n), buildToken('bnb', 'bnb', 0n)];
-    const stakingStates = [buildStakingState('ton', 100n)];
-
-    expect([...getChainsWithBalance(tokens, stakingStates)]).toEqual(['ton']);
-  });
-});
-
 describe('getDefaultVisibleChains', () => {
-  it('shows every chain of an empty wallet', () => {
+  it('shows every chain the account holds', () => {
     const chains: ApiChain[] = ['ton', 'bnb'];
 
-    expect([...getDefaultVisibleChains(chains, new Set())]).toEqual(chains);
+    expect([...getDefaultVisibleChains(chains)]).toEqual(chains);
   });
 
-  it('shows only the funded chains of a non-empty wallet', () => {
-    const chains: ApiChain[] = ['ton', 'bnb'];
-
-    expect([...getDefaultVisibleChains(chains, new Set(['bnb', ALPHA]))]).toEqual(['bnb']);
+  it('shows a single-chain account its own chain alone', () => {
+    expect([...getDefaultVisibleChains(['ton'])]).toEqual(['ton']);
   });
 
-  it('shows only the first chain when the funds are outside the account chains', () => {
-    expect([...getDefaultVisibleChains(['ton', 'bnb'], new Set([ALPHA]))]).toEqual(['ton']);
+  it('drops a stored chain the app no longer supports', () => {
+    expect([...getDefaultVisibleChains(['ton', ALPHA, 'bnb'])]).toEqual(['ton', 'bnb']);
   });
 });
 
