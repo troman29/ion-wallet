@@ -30,15 +30,6 @@ url("./brilliant-icons.woff2?2e431e1abefb9e480f539c154df27a51") format("woff2");
 .icon-action-swap::before {
     content: "\f105";
 }
-.icon-agent-actions::before {
-    content: "\f106";
-}
-.icon-agent-outline::before {
-    content: "\f107";
-}
-.icon-agent::before {
-    content: "\f108";
-}
 .icon-arrow-down::before {
     content: "\f109";
 }

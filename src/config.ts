@@ -299,7 +299,7 @@ export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
  *
  * What stays is a plain wallet: accounts, transfers, tokens, activities, NFTs, domains and TON Connect.
  * Swap, staking, WalletConnect, the explore catalogue, portfolio history, push notifications, legacy
- * (pre-Enclave) auth, the Agent, encrypted comments and the receive-screen backgrounds all go — their
+ * (pre-Enclave) auth, encrypted comments and the receive-screen backgrounds all go — their
  * methods leave the dispatch table and their modules leave the bundle.
  *
  * `NO_LEDGER` stays a separate axis: hardware wallet support is orthogonal to the extras.

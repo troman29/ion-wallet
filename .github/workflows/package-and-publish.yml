@@ -172,7 +172,7 @@ jobs:
           # each mobile platform regardless of what the tip commit happens to touch. The filter
           # above reads HEAD~1..HEAD, which describes one commit rather than the push: on 26.9 an
           # Android-only commit landed last and took the whole iOS matrix down with it, leaving the
-          # Agent V1 restoration with no TestFlight build to verify it.
+          # release without an iOS build to verify it.
           if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
             ANDROID_ONLY="false"
             IOS_ONLY="false"
