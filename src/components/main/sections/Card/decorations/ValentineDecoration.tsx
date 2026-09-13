@@ -1,14 +1,14 @@
-import React, { memo, useState } from '../../lib/teact/teact';
+import React, { memo, useState } from '../../../../../lib/teact/teact';
 
-import { ANIMATION_LEVEL_MIN } from '../../config';
-import buildClassName from '../../util/buildClassName';
-import { stopEvent } from '../../util/domEvents';
+import { ANIMATION_LEVEL_MIN } from '../../../../../config';
+import buildClassName from '../../../../../util/buildClassName';
+import { stopEvent } from '../../../../../util/domEvents';
 
-import useLastCallback from '../../hooks/useLastCallback';
+import useLastCallback from '../../../../../hooks/useLastCallback';
 
 import styles from './ValentineDecoration.module.scss';
 
-import valentineImageUrl from '../../assets/cards/valentine.svg';
+import valentineImageUrl from '../../../../../assets/cards/valentine.svg';
 
 interface OwnProps {
   animationLevel?: number;

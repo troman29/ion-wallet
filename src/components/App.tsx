@@ -63,7 +63,6 @@ import BottomBar from './main/sections/Actions/BottomBar';
 import Toasts from './main/Toasts';
 import WalletRenameModal from './main/WalletRenameModal';
 import MediaViewer from './mediaViewer/MediaViewer';
-import MintCardModal from './mintCard/MintCardModal';
 import Settings from './settings/Settings';
 import SwapModal from './swap/SwapModal';
 import TokenInfo from './tokenInfo/TokenInfo';
@@ -263,7 +262,6 @@ function App({
           />
           <TransferModal />
           <SwapModal />
-          <MintCardModal />
           <CustomizeWalletModal isOpen={isCustomizeWalletModalOpen} />
           <SignatureModal />
           <TransactionModal />

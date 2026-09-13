@@ -30,7 +30,6 @@ import type {
   ApiImportAddressByChain,
   ApiLedgerDriver,
   ApiLedgerWalletInfo,
-  ApiMtwCardType,
   ApiNetwork,
   ApiNft,
   ApiNftCollection,
@@ -395,14 +394,6 @@ export enum SettingsState {
   Chains,
 }
 
-export enum MintCardState {
-  Initial,
-  Password,
-  ConnectHardware,
-  ConfirmHardware,
-  Done,
-}
-
 export enum ContentTab {
   Overview,
   Assets,
@@ -599,7 +590,6 @@ export interface AccountState {
 
   isDieselAuthorizationStarted?: boolean;
   isLongUnstakeRequested?: boolean;
-  isCardMinting?: boolean;
   receiveModalChain?: ApiChain;
   invoiceTokenSlug?: string;
 
@@ -1095,13 +1085,6 @@ export type GlobalState = {
     url: string;
     title?: string;
     subtitle?: string;
-  };
-
-  currentMintCard?: {
-    type?: ApiMtwCardType;
-    state?: MintCardState;
-    error?: string;
-    isLoading?: boolean;
   };
 
   currentQrScan?: {
@@ -1654,13 +1637,8 @@ export interface ActionPayloads {
   clearVestingError: undefined;
   cancelClaimingVesting: undefined;
 
-  openMintCardModal: undefined;
-  closeMintCardModal: undefined;
   openPromotionModal: undefined;
   closePromotionModal: undefined;
-  startCardMinting: { type: ApiMtwCardType };
-  submitMintCard: { enclaveToken?: string } | undefined;
-  clearMintCardError: undefined;
 
   toggleNotifications: { isEnabled: boolean };
   renameNotificationAccount: { accountId: string };

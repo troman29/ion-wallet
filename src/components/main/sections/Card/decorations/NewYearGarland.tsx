@@ -1,19 +1,19 @@
 import React, {
   memo, useEffect, useMemo, useRef,
-} from '../../lib/teact/teact';
+} from '../../../../../lib/teact/teact';
 
-import { ANIMATION_LEVEL_MIN } from '../../config';
-import { forceMutation } from '../../lib/fasterdom/stricterdom';
-import buildClassName from '../../util/buildClassName';
-import forceReflow from '../../util/forceReflow';
-import { pause } from '../../util/schedulers';
+import { ANIMATION_LEVEL_MIN } from '../../../../../config';
+import { forceMutation } from '../../../../../lib/fasterdom/stricterdom';
+import buildClassName from '../../../../../util/buildClassName';
+import forceReflow from '../../../../../util/forceReflow';
+import { pause } from '../../../../../util/schedulers';
 
-import useFlag from '../../hooks/useFlag';
-import useLastCallback from '../../hooks/useLastCallback';
+import useFlag from '../../../../../hooks/useFlag';
+import useLastCallback from '../../../../../hooks/useLastCallback';
 
 import styles from './NewYearGarland.module.scss';
 
-import garlandImageUrl from '../../assets/cards/mint-card-garland.png';
+import garlandImageUrl from '../../../../../assets/cards/mint-card-garland.png';
 
 const RAW_BULBS = [
   { x: 8, y: 27, hex: '#FFFFAE' },

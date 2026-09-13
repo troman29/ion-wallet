@@ -42,7 +42,6 @@ import useSyncEffect from '../../../../hooks/useSyncEffect';
 import useUpdateIndicator from '../../../../hooks/useUpdateIndicator';
 import useWindowSize from '../../../../hooks/useWindowSize';
 
-import MintCardButton from '../../../mintCard/MintCardButton';
 import AnimatedCounter from '../../../ui/AnimatedCounter';
 import Image from '../../../ui/Image';
 import LoadingDots from '../../../ui/LoadingDots';
@@ -137,7 +136,7 @@ function Card({
   activePromotion,
 }: OwnProps & StateProps) {
   const {
-    toggleSeasonalTheming, showToast, openPromotionModal, openMintCardModal,
+    toggleSeasonalTheming, showToast, openPromotionModal,
   } = getActions();
   const lang = useLang();
   const amountRef = useRef<HTMLDivElement>();
@@ -197,7 +196,6 @@ function Card({
     promoBgMaskUrl,
     promoOverlayMaskUrl,
     openPromotionModal,
-    openMintCardModal,
     isPortrait,
   });
 
@@ -417,9 +415,6 @@ function Card({
           >
             <CardAddress withTextGradient={withTextGradient} />
           </Transition>
-          {!isNftBuyingDisabled && !isViewMode && (
-            <MintCardButton />
-          )}
         </div>
       </div>
 
@@ -463,14 +458,12 @@ function usePromotionModal({
   promoBgMaskUrl: promoBgMaskUrlParam,
   promoOverlayMaskUrl: promoOverlayMaskUrlParam,
   openPromotionModal,
-  openMintCardModal,
   isPortrait,
 }: {
   activePromotion?: ApiPromotion;
   promoBgMaskUrl: string;
   promoOverlayMaskUrl: string;
   openPromotionModal: NoneToVoidFunction;
-  openMintCardModal: NoneToVoidFunction;
   isPortrait: boolean;
 }) {
   const shouldRenderPromo = Boolean(activePromotion?.kind === 'cardOverlay');
@@ -499,9 +492,6 @@ function usePromotionModal({
     switch (onClickAction) {
       case 'openPromotionModal':
         openPromotionModal();
-        break;
-      case 'openMintCardModal':
-        openMintCardModal();
         break;
       default:
         break;

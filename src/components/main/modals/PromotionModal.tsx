@@ -11,7 +11,7 @@ import { IS_ANDROID } from '../../../util/windowEnvironment';
 
 import useLastCallback from '../../../hooks/useLastCallback';
 
-import AvailabilityIndicator from '../../mintCard/AvailabilityIndicator';
+import AvailabilityIndicator from '../../ui/AvailabilityIndicator';
 import Button from '../../ui/Button';
 import Image from '../../ui/Image';
 import Modal from '../../ui/Modal';

@@ -1,0 +1,48 @@
+.availability {
+  position: absolute;
+  bottom: 0;
+  inset-inline-start: 1rem;
+  inset-inline-end: 1rem;
+
+  height: 2.25rem;
+  border-radius: var(--border-radius-default);
+
+  background: var(--color-card-button);
+  backdrop-filter: blur(12px);
+}
+
+.progress {
+  position: absolute;
+  z-index: 1;
+  top: 0.25rem;
+  inset-inline-start: 0.25rem;
+
+  overflow: hidden;
+
+  width: calc(var(--progress) * 100% - var(--progress) * 0.5rem);
+  height: 1.75rem;
+  border-radius: var(--border-radius-mini);
+
+  background: var(--color-card-text);
+}
+
+.soldOut {
+  padding: 0 1rem;
+
+  font-size: 1rem;
+  line-height: 2.25rem;
+  color: var(--color-card-text);
+  text-align: center;
+}
+
+.amount {
+  position: absolute;
+  top: 0.625rem;
+
+  width: 100%;
+
+  font-size: 1rem;
+  line-height: 1;
+  color: #8491A5;
+  text-align: center;
+}

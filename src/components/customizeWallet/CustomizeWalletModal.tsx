@@ -4,7 +4,7 @@ import { getActions, withGlobal } from '../../global';
 import type { ApiBaseCurrency, ApiCurrencyRates, ApiNft } from '../../api/types';
 import type { Account, Theme, UserToken } from '../../global/types';
 
-import { MW_CARDS_COLLECTION, MW_CARDS_WEBSITE } from '../../config';
+import { MW_CARDS_COLLECTION } from '../../config';
 import {
   selectAccount,
   selectAccountSettings,
@@ -13,7 +13,6 @@ import {
   selectCurrentAccountTokens,
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
-import { openUrl } from '../../util/openUrl';
 import { DEFAULT_CARD_ADDRESS } from './constants';
 
 import useEffectWithPrevDeps from '../../hooks/useEffectWithPrevDeps';
@@ -48,7 +47,6 @@ interface StateProps {
   baseCurrency?: ApiBaseCurrency;
   currencyRates?: ApiCurrencyRates;
   theme: Theme;
-  isMintingCardsAvailable?: boolean;
   isViewMode?: boolean;
   isNftBuyingDisabled: boolean;
   returnTo?: 'settings' | 'accountSelector';
@@ -67,17 +65,14 @@ function CustomizeWalletModal({
   baseCurrency,
   currencyRates,
   theme,
-  isMintingCardsAvailable,
   isNftBuyingDisabled,
   returnTo,
   areCardsLoading,
 }: OwnProps & StateProps) {
   const {
-    openCustomizeWalletModal,
     closeCustomizeWalletModal,
     setCardBackgroundNft,
     clearCardBackgroundNft,
-    openMintCardModal,
     fetchNftsFromCollection,
     clearNftCollectionLoading,
   } = getActions();
@@ -160,20 +155,6 @@ function CustomizeWalletModal({
     }
   });
 
-  const handleGetMoreCards = useLastCallback(() => {
-    // Reset `returnTo` to avoid opening the previous modal above the browser
-    openCustomizeWalletModal({ returnTo: undefined });
-    closeCustomizeWalletModal();
-    const callback = () => {
-      if (isMintingCardsAvailable && !isNftBuyingDisabled) {
-        openMintCardModal();
-      } else {
-        void openUrl(MW_CARDS_WEBSITE);
-      }
-    };
-    callback();
-  });
-
   function renderCardsSelector() {
     return (
       <>
@@ -214,15 +195,6 @@ function CustomizeWalletModal({
           />
           <p className={styles.helperTextOutside}>
             {lang('Get a unique My Wallet Card to unlock new palettes.')}
-          </p>
-        </div>
-        <div className={styles.section}>
-          <div className={styles.getMoreButton} onClick={handleGetMoreCards} role="button" tabIndex={0}>
-            <span className={styles.getMoreText}>{lang('Get More Cards')}</span>
-          </div>
-
-          <p className={styles.helperTextOutside}>
-            {lang('Browse My Wallet Cards available for purchase.')}
           </p>
         </div>
       </>
@@ -303,7 +275,7 @@ function CustomizeWalletModal({
         >
           {renderingKey === RenderingKey.Loading && renderLoading()}
           {renderingKey === RenderingKey.CardsSelector && renderCardsSelector()}
-          {renderingKey === RenderingKey.EmptyState && <EmptyState onGetFirstCard={handleGetMoreCards} />}
+          {renderingKey === RenderingKey.EmptyState && <EmptyState />}
         </Transition>
       </div>
     </Modal>
@@ -323,7 +295,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
   const accountState = selectAccountState(global, accountId);
   const accountSettings = selectAccountSettings(global, accountId);
   const tokens = selectCurrentAccountTokens(global);
-  const { config: { cardsInfo } = {} } = accountState || {};
 
   const areCardsLoading = !accountState?.nfts?.isLoadedByAddress?.[MW_CARDS_COLLECTION];
 
@@ -338,7 +309,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     baseCurrency: global.settings.baseCurrency,
     currencyRates: global.currencyRates,
     theme: global.settings.theme,
-    isMintingCardsAvailable: Boolean(cardsInfo),
     isViewMode: global.accounts?.byId[accountId]?.type === 'view',
     isNftBuyingDisabled: global.restrictions.isNftBuyingDisabled,
     returnTo: global.customizeWalletReturnTo,

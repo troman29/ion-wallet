@@ -16,7 +16,6 @@ import {
   IS_EXPLORER,
   IS_EXTENSION,
   LANG_LIST,
-  MW_CARDS_WEBSITE,
   PROXY_HOSTS,
   SUPPORT_USERNAME,
   TONCOIN,
@@ -99,7 +98,6 @@ import installAppImg from '../../assets/settings/settings_install-app.svg';
 import installDesktopImg from '../../assets/settings/settings_install-desktop.svg';
 import installMobileImg from '../../assets/settings/settings_install-mobile.svg';
 import languageImg from '../../assets/settings/settings_language.svg';
-import mwCardsImg from '../../assets/settings/settings_mw-cards.svg';
 import notifications from '../../assets/settings/settings_notifications.svg';
 import securityImg from '../../assets/settings/settings_security.svg';
 import supportImg from '../../assets/settings/settings_support.svg';
@@ -627,19 +625,6 @@ function Settings({
 
           <p className={buildClassName(styles.blockTitle, styles.blockTitleSmall)}>{lang('About')}</p>
           <div className={styles.block}>
-            {!isNftBuyingDisabled && (
-              <a
-                href={MW_CARDS_WEBSITE}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buildClassName(styles.item, styles.itemMenu)}
-              >
-                <img className={styles.menuIcon} src={mwCardsImg} alt={lang('My Wallet Cards NFT')} />
-                <span className={styles.itemTitle}>{lang('My Wallet Cards NFT')}</span>
-
-                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-              </a>
-            )}
             {IS_EXTENSION && (
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallApp}>
                 <img className={styles.menuIcon} src={installAppImg} alt={lang('Install App')} />
