@@ -2,9 +2,9 @@
 <resources>
   <string name="app_name" translatable="false">ION Wallet</string>
   <string name="package_name" translatable="false">io.ice.wallet</string>
-  <string name="ton_url_scheme" translatable="false">ion</string>
-  <string name="tc_url_scheme" translatable="false">tc</string>
-  <string name="app_tc_url_scheme" translatable="false">ion-tc</string>
+  <string name="ion_url_scheme" translatable="false">ion</string>
+  <string name="ion_gateway_url_scheme" translatable="false">tc</string>
+  <string name="app_ion_gateway_url_scheme" translatable="false">ion-gateway</string>
   <string name="app_url_scheme" translatable="false">ion</string>
   <string name="wc_url_scheme" translatable="false">wc</string>
   <string name="app_website_url" translatable="false">https://wallet.ice.io</string>

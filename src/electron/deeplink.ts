@@ -8,10 +8,9 @@ import {
   focusMainWindow, IS_LINUX, IS_MAC_OS, IS_WINDOWS, mainWindow,
 } from './utils';
 
-const TON_PROTOCOL = 'ton';
-const TONCONNECT_PROTOCOL = 'tc';
-const TONCONNECT_PROTOCOL_SELF = 'ion-tc';
-const SELF_PROTOCOL = 'mtw';
+const ION_PROTOCOL = 'ion';
+const ION_GATEWAY_PROTOCOL = 'tc';
+const ION_GATEWAY_PROTOCOL_SELF = 'ion-gateway';
 const WALLETCONNECT_SCHEME = 'wc';
 const WALLETCONNECT_DEEPLINK_SCHEME = 'ion-wc';
 const WALLETCONNECT_DEEPLINK = 'ion-wc://';
@@ -21,16 +20,14 @@ let deeplinkUrl: string | undefined;
 export function initDeeplink() {
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient(TONCONNECT_PROTOCOL, process.execPath, [path.resolve(process.argv[1])]);
-      app.setAsDefaultProtocolClient(TONCONNECT_PROTOCOL_SELF, process.execPath, [path.resolve(process.argv[1])]);
-      app.setAsDefaultProtocolClient(SELF_PROTOCOL, process.execPath, [path.resolve(process.argv[1])]);
+      app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL, process.execPath, [path.resolve(process.argv[1])]);
+      app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL_SELF, process.execPath, [path.resolve(process.argv[1])]);
       app.setAsDefaultProtocolClient(WALLETCONNECT_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
       app.setAsDefaultProtocolClient(WALLETCONNECT_DEEPLINK_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
     }
   } else {
-    app.setAsDefaultProtocolClient(TONCONNECT_PROTOCOL);
-    app.setAsDefaultProtocolClient(TONCONNECT_PROTOCOL_SELF);
-    app.setAsDefaultProtocolClient(SELF_PROTOCOL);
+    app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL);
+    app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL_SELF);
     app.setAsDefaultProtocolClient(WALLETCONNECT_SCHEME);
     app.setAsDefaultProtocolClient(WALLETCONNECT_DEEPLINK_SCHEME);
   }
@@ -39,16 +36,16 @@ export function initDeeplink() {
     validateIpcSender(event);
 
     if (!isEnabled) {
-      app.removeAsDefaultProtocolClient(TON_PROTOCOL);
+      app.removeAsDefaultProtocolClient(ION_PROTOCOL);
       return;
     }
 
     if (process.defaultApp) {
       if (process.argv.length >= 2) {
-        app.setAsDefaultProtocolClient(TON_PROTOCOL, process.execPath, [path.resolve(process.argv[1])]);
+        app.setAsDefaultProtocolClient(ION_PROTOCOL, process.execPath, [path.resolve(process.argv[1])]);
       }
     } else {
-      app.setAsDefaultProtocolClient(TON_PROTOCOL);
+      app.setAsDefaultProtocolClient(ION_PROTOCOL);
     }
   });
 
@@ -103,10 +100,9 @@ function findDeeplink(args: string[]) {
 }
 
 function getIsDeeplink(url: string) {
-  return url.startsWith(`${TON_PROTOCOL}://`)
-    || url.startsWith(`${TONCONNECT_PROTOCOL}://`)
-    || url.startsWith(`${TONCONNECT_PROTOCOL_SELF}://`)
-    || url.startsWith(`${SELF_PROTOCOL}://`)
+  return url.startsWith(`${ION_PROTOCOL}://`)
+    || url.startsWith(`${ION_GATEWAY_PROTOCOL}://`)
+    || url.startsWith(`${ION_GATEWAY_PROTOCOL_SELF}://`)
     || url.startsWith(`${WALLETCONNECT_SCHEME}:`)
     || url.startsWith(WALLETCONNECT_DEEPLINK);
 }

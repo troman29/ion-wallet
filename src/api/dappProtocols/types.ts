@@ -2,7 +2,7 @@
  * Unified dApp Protocol Abstraction Types
  *
  * This module defines interfaces for abstracting different dApp connection protocols
- * (TON Connect, WalletConnect) behind a common interface.
+ * (ION Gateway, WalletConnect) behind a common interface.
  */
 import type {
   ConnectEventSuccess,
@@ -42,7 +42,7 @@ import type { StoredDappConnection } from './storage';
 
 /**
  * Supported dApp connection protocols.
- * - 'TonConnect': TON Connect protocol for TON blockchain
+ * - 'TonConnect': ION Gateway protocol (legacy-compatible storage identifier)
  * - 'WalletConnect': WalletConnect v2 for EVM, Solana, and other chains
  */
 export enum DappProtocolType {
@@ -59,7 +59,7 @@ export const DAPP_PROTOCOL_TYPES = Object.values(DappProtocolType);
 export type DappTransportType =
   | 'extension' // Browser extension injection
   | 'inAppBrowser' // Mobile in-app browser
-  | 'sse' // Server-sent events (TON Connect bridge)
+  | 'sse' // Server-sent events (ION Gateway bridge)
   | 'relay'; // WalletConnect relay server
 
 export type UnifiedSignDataPayload = SignDataPayload | EvmEip712SignDataPayload;
@@ -94,7 +94,7 @@ export interface DappMetadata {
   iconUrl: string;
   /** Optional description */
   description?: string;
-  /** Manifest URL (for TON Connect) */
+  /** Manifest URL (for ION Gateway) */
   manifestUrl?: string;
 }
 

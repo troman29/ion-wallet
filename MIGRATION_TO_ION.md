@@ -15,7 +15,7 @@
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
 | Лишние продукты | ◐ | Удалены Portfolio, Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
 | Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
-| Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, TonConnect/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
+| Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, ION Gateway/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
 | ION API и инфраструктура | ◐ | Runtime URL переведены на `wallet.ice.io`; в предпросмотре подключён ION RPC v2. Полноценного совместимого v3 indexer пока нет. Firebase использует безопасную заглушку до получения настоящих ключей. |
 | Agent | ✅ | Удалены оставшиеся ключи storage и локализаций, CI-задачи, иконки, анимации, CSS и комментарии. |
@@ -78,7 +78,7 @@
   - Удалён iOS target и ресурсы Gram Wallet, включая widget extension.
   - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
-  - Для собственного TonConnect-канала используется `ion-tc://`; public links используют `wallet.ice.io`.
+  - Для собственного ION Gateway-канала используется `ion-gateway://`. Стандартный входящий URI ION Gateway `tc://` сохранён для совместимости с официальным SDK; public links используют `wallet.ice.io`.
 - [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
   - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
   - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.
@@ -95,7 +95,7 @@
 ### P2 — проверка перед выпуском
 
 - [ ] TypeScript, ESLint, Stylelint, Jest и production webpack build.
-- [ ] Web: создание и импорт кошелька, receive, send, swap, staking, история, токены и TonConnect.
+- [ ] Web: создание и импорт кошелька, receive, send, swap, staking, история, токены и ION Gateway.
 - [ ] Extension и Electron: запуск и основные пользовательские сценарии.
 - [ ] Android Capacitor: `cap sync`, сборка, запуск, биометрия, QR, ссылки и уведомления.
 - [ ] iOS Capacitor: `cap sync`, Xcode build, запуск, биометрия, QR, ссылки и уведомления.

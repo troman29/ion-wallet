@@ -52,7 +52,7 @@ concurrency:
 env:
   # Base of downloadable artifact filenames (dmg/exe/AppImage/apk). The user-visible
   # app name is NOT set here - it comes from `APP_NAME` in src/config.ts, and the
-  # TonConnect protocol identity stays 'IONWallet' via the mapping in
+  # ION Gateway protocol identity stays 'IONWallet' via the mapping in
   # src/util/tonConnectEnvironment.ts.
   # Must match `artifactName` in src/electron/config.yml (pinned by config.test.ts).
   ARTIFACT_NAME_BASE: IONWallet
