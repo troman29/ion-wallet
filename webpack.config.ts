@@ -77,13 +77,6 @@ const cspConnectSrcExtra = APP_ENV === 'development'
   : '';
 const cspScriptSrcExtra = IS_TELEGRAM_APP ? 'https://telegram.org' : '';
 const cspFrameSrcExtra = [
-  'https://buy-sandbox.moonpay.com/',
-  'https://buy.moonpay.com/',
-  'https://sell.moonpay.com/',
-  'https://sell-sandbox.moonpay.com/',
-  'https://*.onetrust.com/', // This is a GDPR cookie consent widget from Moonpay
-  'https://dreamwalkers.io/',
-  'https://avanchange.com/',
   ...WALLET_CONNECT_PAY_FRAME_ORIGINS,
   ...IFRAME_WHITELIST,
   SUBPROJECT_URL_MASK,
