@@ -23,7 +23,7 @@ import { getSupportedChains } from '../../util/chain';
 import { readClipboardContent } from '../../util/clipboard';
 import { isTonChainDns } from '../../util/dns';
 import { getLocalAddressName } from '../../util/getLocalAddressName';
-import { isTonsiteAddress, isValidAddressOrDomain } from '../../util/isValidAddress';
+import { isIonsiteAddress, isValidAddressOrDomain } from '../../util/isValidAddress';
 import { shortenAddress } from '../../util/shortenAddress';
 import { getHostnameFromUrl } from '../../util/url';
 import {
@@ -243,7 +243,7 @@ function AddressInput({
       const { type, text } = await readClipboardContent();
 
       if (type === 'text/plain') {
-        const newValue = cleanTonsiteAddress(text.trim());
+        const newValue = cleanIonsiteAddress(text.trim());
         onInput(newValue, true);
         onPaste?.(newValue);
 
@@ -265,7 +265,7 @@ function AddressInput({
     if (!validateAddress) return;
 
     if (address) {
-      address = cleanTonsiteAddress(address);
+      address = cleanIonsiteAddress(address);
     }
 
     if ((address && chain && isValidAddressOrDomain(address, chain)) || !address) {
@@ -322,7 +322,7 @@ function AddressInput({
       return;
     }
 
-    let addressToCheck = cleanTonsiteAddress(value);
+    let addressToCheck = cleanIonsiteAddress(value);
     if (isTonChainDns(value) && value !== value.toLowerCase()) {
       addressToCheck = value.toLowerCase().trim();
       onInput(addressToCheck);
@@ -346,7 +346,7 @@ function AddressInput({
   const handleAddressPaste = useLastCallback((event: ClipboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     event.preventDefault();
     let value = event.clipboardData.getData('text').trim();
-    value = cleanTonsiteAddress(value);
+    value = cleanIonsiteAddress(value);
     onInput(value, false);
     onPaste?.(value);
     handleAddressErrorCheck(value);
@@ -483,8 +483,8 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
   };
 })(AddressInput));
 
-function cleanTonsiteAddress(address: string) {
-  if (isTonsiteAddress(address)) {
+function cleanIonsiteAddress(address: string) {
+  if (isIonsiteAddress(address)) {
     return getHostnameFromUrl(address);
   } else {
     return address;

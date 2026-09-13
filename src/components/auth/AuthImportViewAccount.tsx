@@ -10,7 +10,7 @@ import buildClassName from '../../util/buildClassName';
 import { getChainConfig, getSupportedChains } from '../../util/chain';
 import { stopEvent } from '../../util/domEvents';
 import isEmptyObject from '../../util/isEmptyObject';
-import { isTonsiteAddress, isValidAddressOrDomain } from '../../util/isValidAddress';
+import { isIonsiteAddress, isValidAddressOrDomain } from '../../util/isValidAddress';
 import { getHostnameFromUrl } from '../../util/url';
 import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
 
@@ -62,7 +62,7 @@ function AuthImportViewAccount({
 
     for (let address of addresses) {
       for (const chain of getSupportedChains()) {
-        if (getChainConfig(chain).isDnsSupported && isTonsiteAddress(address)) {
+        if (getChainConfig(chain).isDnsSupported && isIonsiteAddress(address)) {
           address = getHostnameFromUrl(address);
         }
         if (isValidAddressOrDomain(address, chain)) {
