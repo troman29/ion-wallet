@@ -99,6 +99,9 @@
 - [ ] Утвердить и заменить все иконки, logo, splash и store assets по [реестру ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
 - [ ] Поддерживать README без унаследованных непроверенных маркетинговых заявлений; добавить публичные ссылки только после их публикации.
 - [ ] Проверить BNB bridge/swap-путь для ION между ION/TON и BNB Chain.
+- [ ] Подготовить Electron publish-конфигурацию к выпуску.
+  - В `src/electron/config.yml` установить generic publish URL `https://s3.wallet.ice.io/public/desktop-beta` и versioned artifact name `IONWallet-${version}-${arch}.${ext}`.
+  - Одновременно сверить update feed, `package-and-publish.yml` и публичную desktop download-страницу, чтобы имена файлов и URL совпадали.
 - [ ] Заменить `TON_DNS_ZONES` на единственную утверждённую ION DNS-зону.
   - Получить suffix, resolver, название коллекции и правила renewal/linking для ION DNS, затем убрать TON-специфичные зоны из `src/config.ts`.
   - Проверить валидацию доменов, receive/send, NFT metadata и экран управления доменом с новой зоной.
