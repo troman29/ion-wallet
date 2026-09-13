@@ -9,7 +9,6 @@ import {
   DEFAULT_TRANSFER_TOKEN_SLUG,
   IS_CAPACITOR,
   IS_EXTENSION,
-  IS_TELEGRAM_APP,
   TEST_MNEMONIC,
   TEST_PASSWORD,
   TONCOIN,
@@ -26,9 +25,7 @@ import { clearPreviousLangpacks, setLanguage } from '../../../util/langProvider'
 import { initializeSounds } from '../../../util/notificationSound';
 import switchAnimationLevel from '../../../util/switchAnimationLevel';
 import switchTheme, { setStatusBarStyle } from '../../../util/switchTheme';
-import { initTelegramWithGlobal } from '../../../util/telegram';
 import {
-  getIsMobileTelegramApp,
   IS_ANDROID,
   IS_ANDROID_APP,
   IS_ELECTRON,
@@ -96,13 +93,6 @@ addActionHandler('init', (global, actions) => {
     if (IS_ELECTRON) {
       documentElement.classList.add('is-electron');
     }
-    if (IS_TELEGRAM_APP) {
-      documentElement.classList.add('is-telegram-app');
-    }
-    if (getIsMobileTelegramApp()) {
-      documentElement.classList.add('is-mobile-telegram-app');
-    }
-
     setScrollbarWidthProperty();
 
     actions.afterInit();
@@ -130,10 +120,6 @@ addActionHandler('afterInit', (global, actions) => {
   if (IS_CAPACITOR) {
     void initCapacitorWithGlobal(!!global.authTypes?.includes('biometric'));
   } else {
-    if (IS_TELEGRAM_APP) {
-      initTelegramWithGlobal(global);
-    }
-
     document.addEventListener('click', initializeSounds, { once: true });
   }
 

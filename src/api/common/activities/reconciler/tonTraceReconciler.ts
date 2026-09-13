@@ -1,6 +1,6 @@
 import type { ApiActivity, ApiSwapActivity, ApiTransactionActivity } from '../../../types';
 
-import { DIESEL_ADDRESS, MW_AGGREGATOR_QUERY_ID, SWAP_FEE_ADDRESS } from '../../../../config';
+import { MW_AGGREGATOR_QUERY_ID, SWAP_FEE_ADDRESS } from '../../../../config';
 import { Big } from '../../../../lib/big.js';
 import { getIsBackendSwapId, parseTxId } from '../../../../util/activities';
 import { sortActivities } from '../../../../util/activities/order';
@@ -651,7 +651,7 @@ function getIncludedFeeTransferAmount(activities: readonly ApiActivity[], slug: 
     }
 
     try {
-      return [SWAP_FEE_ADDRESS, DIESEL_ADDRESS].includes(toBase64Address(activity.toAddress, false));
+      return toBase64Address(activity.toAddress, false) === SWAP_FEE_ADDRESS;
     } catch {
       return false;
     }

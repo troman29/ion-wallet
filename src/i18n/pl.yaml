@@ -1046,7 +1046,6 @@ No additional data.: Brak dodatkowych danych.
 $in_currency: w %currency%
 Rename Wallet: Zmień nazwę portfela
 You can rename this wallet for easier identification.: Możesz zmienić nazwę tego portfela dla łatwiejszej identyfikacji.
-Telegram Gifts: Prezenty Telegram
 Collectibles: Kolekcjonerskie
 Bluetooth unavailable: Bluetooth niedostępne
 $bluetooth_enable_guide: Włącz Bluetooth w ustawieniach urządzenia i zezwól aplikacji na dostęp do Bluetooth.
@@ -1064,7 +1063,6 @@ Multisig Wallet Detected: Wykryto portfel Multisig
 $multisig_warning_text: "**Wypłacenie środków** z tego portfela przez %app_name% jest **niemożliwe**. Upewnij się, że naprawdę jest Twój — inaczej może to być oszustwo. %multisig_warning_link%"
 $multisig_warning_link: Kliknij, aby dowiedzieć się więcej
 Multisig sending disabled: Nie można z multisig
-$try_new_air_version: Wypróbuj natywne aplikacje — lżejsze, szybsze i stworzone dla Twojego urządzenia. W każdej chwili możesz wrócić.
 $accept_terms_with_link: Zgadzam się %link%
 use the wallet responsibly: używać portfela odpowiedzialnie
 "%app_name% Resources": Zasoby %app_name%
@@ -1779,7 +1777,6 @@ $no_activity_history: |
   jest jeszcze pusta.
 Standalone: Samodzielny
 "Enter wallet name:": "Wpisz nazwę portfela:"
-All Telegram Gifts: Wszystkie prezenty Telegramu
 Add Crypto: Dodaj kryptowalutę
 Share QR Code: Udostępnij kod QR
 $send_only_ton: Wysyłaj na ten adres wyłącznie ION lub aktywa sieci ION. Wysłanie innych tokenów spowoduje ich utratę.
@@ -2253,7 +2250,6 @@ Earn is not supported on this account.: Staking nie jest obsługiwany na tym kon
 Export Logs: Eksportuj logi
 Failed to load chat: Nie udało się załadować czatu
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: Przelewy NFT z MFA obsługują maksymalnie 4 NFT naraz.
 More Details: Więcej szczegółów
 Open Telegram: Otwórz Telegram
 Open addresses: Otwiera adresy

@@ -5,12 +5,11 @@ import { SwapType } from '../swap/types';
 
 import { Big } from '../../lib/big.js';
 import { bigintMax } from '../bigint';
-import { bigMax, bigMin } from '../bigNumber';
-import { fromDecimal, toBig } from '../decimals';
+import { fromDecimal } from '../decimals';
 import { findNativeToken, getChainBySlug, getIsNativeToken } from '../tokens';
 
 type ExplainSwapFeeInput = Pick<GlobalState['currentSwap'],
-'tokenInSlug' | 'networkFee' | 'realNetworkFee' | 'dieselStatus' | 'dieselFee'
+'tokenInSlug' | 'networkFee' | 'realNetworkFee'
 > & {
   swapType: SwapType;
   /** The balance of the "in" token blockchain's native token. Undefined means that it's unknown. */
@@ -18,8 +17,6 @@ type ExplainSwapFeeInput = Pick<GlobalState['currentSwap'],
 };
 
 export type ExplainedSwapFee = {
-  /** Whether the result implies paying the fee with a diesel */
-  isGasless: boolean;
   /**
    * The fee that will be sent with the swap. The wallet must have it on the balance to conduct the swap.
    * Show this in the swap form when the input amount is ≤ the balance, but the remaining balance can't cover the
@@ -78,9 +75,7 @@ type CanAffordSwapVariant = {
  * Converts the swap fee data returned from API into data that is ready to be displayed in the swap form UI.
  */
 export function explainSwapFee(input: ExplainSwapFeeInput): ExplainedSwapFee {
-  return shouldSwapBeGasless(input)
-    ? explainGaslessSwapFee(input)
-    : explainGasfullSwapFee(input);
+  return explainGasfullSwapFee(input);
 }
 
 /**
@@ -187,42 +182,11 @@ export function canAffordSwapEstimateVariant(input: CanAffordSwapVariant) {
     return true;
   }
 
-  // Otherwise, try to pay with diesel
-  if (input.variant.dieselFee) {
-    if (input.tokenInBalance === undefined) {
-      return undefined;
-    }
-    const dieselFeeBigint = fromDecimal(input.variant.dieselFee, input.tokenIn.decimals);
-    if (input.tokenInBalance >= dieselFeeBigint) {
-      return true;
-    }
-  }
-
   return false;
 }
 
-export function shouldSwapBeGasless(
-  input: Pick<ExplainSwapFeeInput, 'tokenInSlug' | 'nativeTokenInBalance' | 'networkFee' | 'dieselStatus' | 'swapType'>,
-) {
-  const isNativeIn = getIsNativeToken(input.tokenInSlug);
-  const nativeTokenBalance = getBigNativeTokenInBalance(input);
-  const isInsufficientNative = input.networkFee !== undefined && nativeTokenBalance !== undefined
-    && nativeTokenBalance.lt(input.networkFee);
-
-  return (
-    input.swapType === SwapType.OnChain
-    && isInsufficientNative
-    && !isNativeIn
-    && Boolean(input.dieselStatus) && input.dieselStatus !== 'not-available'
-  );
-}
-
-/**
- * Converts the data of a swap not involving diesel
- */
 function explainGasfullSwapFee(input: ExplainSwapFeeInput) {
   const result: ExplainedSwapFee = {
-    isGasless: false,
     excessFee: getExcessFee(input),
   };
 
@@ -248,68 +212,6 @@ function explainGasfullSwapFee(input: ExplainSwapFeeInput) {
   }
 
   return result;
-}
-
-/**
- * Converts the diesel of semi-diesel swap data
- */
-function explainGaslessSwapFee(input: ExplainSwapFeeInput): ExplainedSwapFee {
-  const nativeTokenBalance = getBigNativeTokenInBalance(input);
-  const result: ExplainedSwapFee = {
-    isGasless: true,
-    excessFee: getExcessFee(input),
-  };
-
-  if (input.networkFee === undefined || input.dieselFee === undefined || nativeTokenBalance === undefined) {
-    return result;
-  }
-
-  const isExact = result.excessFee === '0';
-  const isStarsDiesel = input.dieselStatus === 'stars-fee';
-  const dieselKey = isStarsDiesel ? 'stars' : 'token';
-
-  const networkTerms = {
-    [dieselKey]: input.dieselFee,
-    native: nativeTokenBalance.toString(),
-  };
-  result.fullFee = {
-    precision: isExact ? 'exact' : 'lessThan',
-    terms: networkTerms,
-    networkTerms,
-  };
-  result.realFee = result.fullFee;
-
-  if (input.realNetworkFee !== undefined) {
-    // We are sure this amount is > 0 because `shouldBeGasless` would return `false` otherwise and this function
-    // wouldn't be called.
-    const networkFeeCoveredByDiesel = Big(input.networkFee).sub(nativeTokenBalance);
-    const realFeeInDiesel = Big(input.dieselFee).div(networkFeeCoveredByDiesel).mul(input.realNetworkFee);
-    // Cover as much displayed real fee as possible with diesel, because in the excess it will return as the native token.
-    const dieselRealFee = bigMin(input.dieselFee, realFeeInDiesel);
-    // Cover the remaining real fee with the native token.
-    const nativeRealFee = bigMax(0, Big(input.realNetworkFee).sub(networkFeeCoveredByDiesel));
-
-    const realNetworkTerms = {
-      [dieselKey]: dieselRealFee.toString(),
-      native: nativeRealFee.toString(),
-    };
-    result.realFee = {
-      precision: isExact ? 'exact' : 'approximate',
-      terms: realNetworkTerms,
-      networkTerms: realNetworkTerms,
-    };
-  }
-
-  return result;
-}
-
-function getBigNativeTokenInBalance(input: Pick<ExplainSwapFeeInput, 'tokenInSlug' | 'nativeTokenInBalance'>) {
-  if (!input.tokenInSlug || input.nativeTokenInBalance === undefined) {
-    return undefined;
-  }
-
-  const nativeToken = findNativeToken(getChainBySlug(input.tokenInSlug));
-  return nativeToken ? toBig(input.nativeTokenInBalance, nativeToken.decimals) : undefined;
 }
 
 function getExcessFee({ networkFee, realNetworkFee }: Pick<ExplainSwapFeeInput, 'networkFee' | 'realNetworkFee'>) {

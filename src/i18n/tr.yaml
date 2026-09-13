@@ -1025,7 +1025,6 @@ No additional data.: Ek veri yok.
 $in_currency: → %currency%
 Rename Wallet: Cüzdanı Yeniden Adlandır
 You can rename this wallet for easier identification.: Bu cüzdanı daha kolay tanımlamak için yeniden adlandırabilirsiniz.
-Telegram Gifts: Telegram Hediyeleri
 Collectibles: Koleksiyonlar
 Bluetooth unavailable: Bluetooth kullanılamıyor
 $bluetooth_enable_guide: Cihaz ayarlarında Bluetooth'u açın ve uygulamanın Bluetooth'a erişmesine izin verin.
@@ -1043,7 +1042,6 @@ Multisig Wallet Detected: Multisig Cüzdan Tespit Edildi
 $multisig_warning_text: Bu cüzdandan %app_name% üzerinden **para çekmek** **imkansızdır**. Gerçekten sizin olduğundan emin olun — aksi takdirde bir dolandırıcılık olabilir. %multisig_warning_link%
 $multisig_warning_link: Daha fazla öğrenmek için tıklayın
 Multisig sending disabled: Multisig'den olmaz
-$try_new_air_version: Yerel uygulama deneyimini deneyin — daha hafif, daha hızlı ve cihazınız için oluşturuldu. İstediğiniz zaman geri dönebilirsiniz.
 $accept_terms_with_link: "%link% kabul ediyorum"
 use the wallet responsibly: Cüzdanı sorumlu bir şekilde kullanmak
 "%app_name% Resources": "%app_name% Kaynakları"
@@ -1750,7 +1748,6 @@ $no_activity_history: |
   işlem geçmişi yok.
 Standalone: Bağımsız
 "Enter wallet name:": "Cüzdan adını girin:"
-All Telegram Gifts: Tüm Telegram hediyeleri
 Add Crypto: Kripto ekle
 Share QR Code: QR kodu paylaş
 $send_only_ton: Bu adrese yalnızca ION veya ION tabanlı varlıklar gönderin. Diğer tokenlar kaybolur.
@@ -2214,7 +2211,6 @@ Earn is not supported on this account.: Bu hesapta staking desteklenmiyor.
 Export Logs: Günlükleri Dışa Aktar
 Failed to load chat: Sohbet yüklenemedi
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: MFA ile NFT transferleri tek seferde en fazla 4 NFT'yi destekler.
 More Details: Daha Fazla Detay
 Open Telegram: Telegram'ı aç
 Open addresses: Adresleri açar

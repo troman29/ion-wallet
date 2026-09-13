@@ -19,33 +19,12 @@
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		581C041C2F7131F50021E2E3 /* HomeScreenQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C041B2F7131F50021E2E3 /* HomeScreenQuickAction.swift */; };
 		581C041D2F7131F50021E2E3 /* HomeScreenQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C041B2F7131F50021E2E3 /* HomeScreenQuickAction.swift */; };
-		581C041E2F7131F50021E2E3 /* HomeScreenQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C041B2F7131F50021E2E3 /* HomeScreenQuickAction.swift */; };
 		581C04222F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C04212F7138A00021E2E3 /* WalletAppShortcuts.swift */; };
 		581C04232F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C04212F7138A00021E2E3 /* WalletAppShortcuts.swift */; };
-		581C04242F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C04212F7138A00021E2E3 /* WalletAppShortcuts.swift */; };
 		581C04252F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C04212F7138A00021E2E3 /* WalletAppShortcuts.swift */; };
 		581C04262F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C04212F7138A00021E2E3 /* WalletAppShortcuts.swift */; };
-		582009C82E820AD20010E2B5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 582009A92E820A840010E2B5 /* WidgetKit.framework */; };
-		582009C92E820AD20010E2B5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 582009AB2E820A850010E2B5 /* SwiftUI.framework */; };
-		582009D62E820AD40010E2B5 /* AirWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 582009C72E820AD20010E2B5 /* AirWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		582009F72E822DDD0010E2B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 582009F42E822DDD0010E2B5 /* Assets.xcassets */; };
-		582009FC2E822DDD0010E2B5 /* AirWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582009F32E822DDD0010E2B5 /* AirWidgetBundle.swift */; };
 		585CF17B2E6E1CE100A5804F /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 585CF17A2E6E1CE100A5804F /* AppIcon.icon */; };
-		5864B2E92F6C049D0083626C /* AirAsFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 5864B2E82F6C049D0083626C /* AirAsFramework */; };
-		5864B2EB2F6C04A60083626C /* AirAsFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 5864B2EA2F6C04A60083626C /* AirAsFramework */; };
-		5864B2ED2F6C04B00083626C /* AirAsFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 5864B2EC2F6C04B00083626C /* AirAsFramework */; };
-		588AD2222E83D44600588415 /* ActionsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588AD2212E83D44600588415 /* ActionsWidget.swift */; };
-		588AD2242E83D48F00588415 /* ActionsWidgetTimelineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588AD2232E83D48F00588415 /* ActionsWidgetTimelineEntry.swift */; };
-		588AD2262E83D4EE00588415 /* ActionsWidgetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588AD2252E83D4EE00588415 /* ActionsWidgetConfiguration.swift */; };
-		588AD2282E83D5C800588415 /* ActionsWidgetTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588AD2272E83D5C800588415 /* ActionsWidgetTimelineProvider.swift */; };
-		5890CBAE2E858CE100110FDF /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5890CBA82E858CE100110FDF /* ChartView.swift */; };
-		5890CBAF2E858CE100110FDF /* TokenWithChartWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5890CBA92E858CE100110FDF /* TokenWithChartWidget.swift */; };
-		5890CBB02E858CE100110FDF /* TokenWithChartWidgetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5890CBAA2E858CE100110FDF /* TokenWithChartWidgetConfiguration.swift */; };
-		5890CBB12E858CE100110FDF /* TokenWithChartWidgetTimelineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5890CBAB2E858CE100110FDF /* TokenWithChartWidgetTimelineEntry.swift */; };
-		5890CBB22E858CE100110FDF /* TokenWithChartWidgetTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5890CBAC2E858CE100110FDF /* TokenWithChartWidgetTimelineProvider.swift */; };
 		58ADCD1A2D3D7DF600198370 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58ADCD192D3D7DF600198370 /* DebugView.swift */; };
-		58B1A72E2E87030400880BB1 /* ChartStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B1A72D2E87030400880BB1 /* ChartStyle.swift */; };
-		58B1A7302E87036900880BB1 /* ActionsStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B1A72F2E87036900880BB1 /* ActionsStyle.swift */; };
 		58E2E5582E15210500B90FFD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E2E5572E15210500B90FFD /* SceneDelegate.swift */; };
 		58F6317F2EB8CD8D00A90B79 /* AppSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271019AC2CBE75EA00972D1A /* AppSwitcher.swift */; };
 		58F631802EB8CD8D00A90B79 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E2E5572E15210500B90FFD /* SceneDelegate.swift */; };
@@ -58,22 +37,8 @@
 		58F631AE2EB8CD8D00A90B79 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 585CF17A2E6E1CE100A5804F /* AppIcon.icon */; };
 		58F631AF2EB8CD8D00A90B79 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		58F631B02EB8CD8D00A90B79 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE7F3EF2CE1FBCE009D2B34 /* GoogleService-Info.plist */; };
-		58F631DA2EB8CDFA00A90B79 /* AppSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271019AC2CBE75EA00972D1A /* AppSwitcher.swift */; };
-		58F631DB2EB8CDFA00A90B79 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E2E5572E15210500B90FFD /* SceneDelegate.swift */; };
-		58F631DC2EB8CDFA00A90B79 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F19F5C2CECB4EB00ACE1B9 /* main.swift */; };
-		58F631DD2EB8CDFA00A90B79 /* MyTonWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F19F5D2CECB4EB00ACE1B9 /* MyTonWalletApp.swift */; };
-		58F631DE2EB8CDFA00A90B79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
-		58F631E02EB8CDFA00A90B79 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58ADCD192D3D7DF600198370 /* DebugView.swift */; };
-		58F632052EB8CDFA00A90B79 /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
-		58F632072EB8CDFA00A90B79 /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
-		58F632092EB8CDFA00A90B79 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 585CF17A2E6E1CE100A5804F /* AppIcon.icon */; };
-		58F6320A2EB8CDFA00A90B79 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
-		58F6320B2EB8CDFA00A90B79 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE7F3EF2CE1FBCE009D2B34 /* GoogleService-Info.plist */; };
-		58F9CCB92FD1970A0054DAD3 /* WalletCoreTypes in Frameworks */ = {isa = PBXBuildFile; productRef = 58F9CCB82FD1970A0054DAD3 /* WalletCoreTypes */; };
 		59A4C2E82F4D1001009A1B2C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 59A4C2E62F4D1001009A1B2C /* Localizable.xcstrings */; };
 		59A4C2E92F4D1001009A1B2C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 59A4C2E62F4D1001009A1B2C /* Localizable.xcstrings */; };
-		59A4C2EA2F4D1001009A1B2C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 59A4C2E62F4D1001009A1B2C /* Localizable.xcstrings */; };
-		59B6E9A22F7B0001001A2B3C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 59B6E9A12F7B0001001A2B3C /* Localizable.xcstrings */; };
 		59C000012F81000100ABCD01 /* GramWalletWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 59C000292F81000100ABCD01 /* GramWalletWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		59C000032F81000100ABCD01 /* AppSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271019AC2CBE75EA00972D1A /* AppSwitcher.swift */; };
 		59C000042F81000100ABCD01 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E2E5572E15210500B90FFD /* SceneDelegate.swift */; };
@@ -85,7 +50,6 @@
 		59C0000F2F81000100ABCD01 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 59C000272F81000100ABCD01 /* AppIcon.icon */; };
 		59C000112F81000100ABCD01 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 59C0003E2F81000100ABCD01 /* GoogleService-Info.plist */; };
 		59C000122F81000100ABCD01 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 59A4C2E62F4D1001009A1B2C /* Localizable.xcstrings */; };
-		59C000132F81000100ABCD01 /* AirAsFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 59C0003D2F81000100ABCD01 /* AirAsFramework */; };
 		59C000152F81000100ABCD01 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 582009AB2E820A850010E2B5 /* SwiftUI.framework */; };
 		59C000162F81000100ABCD01 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 582009A92E820A840010E2B5 /* WidgetKit.framework */; };
 		59C000172F81000100ABCD01 /* ActionsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588AD2212E83D44600588415 /* ActionsWidget.swift */; };
@@ -105,21 +69,17 @@
 		59C0009B2F81000100ABCD01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59C0009A2F81000100ABCD01 /* Assets.xcassets */; };
 		59D100012F90000100FACE01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59D100062F90000100FACE01 /* Assets.xcassets */; };
 		59D100022F90000100FACE01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59D100062F90000100FACE01 /* Assets.xcassets */; };
-		59D100032F90000100FACE01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59D100062F90000100FACE01 /* Assets.xcassets */; };
 		59D100042F90000100FACE01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59D100062F90000100FACE01 /* Assets.xcassets */; };
 		59D100052F90000100FACE01 /* diamond.tgs in Resources */ = {isa = PBXBuildFile; fileRef = 59D1000A2F90000100FACE01 /* diamond.tgs */; };
 		59E000052FA0000100BEEF01 /* WalletResources in Frameworks */ = {isa = PBXBuildFile; productRef = 59E0000A2FA0000100BEEF01 /* WalletResources */; };
 		59E000062FA0000100BEEF01 /* WalletResources in Frameworks */ = {isa = PBXBuildFile; productRef = 59E0000B2FA0000100BEEF01 /* WalletResources */; };
-		59E000072FA0000100BEEF01 /* WalletResources in Frameworks */ = {isa = PBXBuildFile; productRef = 59E0000C2FA0000100BEEF01 /* WalletResources */; };
 		59E000082FA0000100BEEF01 /* WalletResources in Frameworks */ = {isa = PBXBuildFile; productRef = 59E0000D2FA0000100BEEF01 /* WalletResources */; };
 		59E000092FA0000100BEEF01 /* WalletResources in Frameworks */ = {isa = PBXBuildFile; productRef = 59E0000E2FA0000100BEEF01 /* WalletResources */; };
 		59E002012FA2000100BEEF01 /* WalletCoreTypes in Frameworks */ = {isa = PBXBuildFile; productRef = 59E002022FA2000100BEEF01 /* WalletCoreTypes */; };
 		59F100012FB0000100CAFE01 /* JS in Resources */ = {isa = PBXBuildFile; fileRef = 59F100102FB0000100CAFE01 /* JS */; };
 		59F100022FB0000100CAFE01 /* JS in Resources */ = {isa = PBXBuildFile; fileRef = 59F100102FB0000100CAFE01 /* JS */; };
-		59F100032FB0000100CAFE01 /* JS in Resources */ = {isa = PBXBuildFile; fileRef = 59F100102FB0000100CAFE01 /* JS */; };
 		59F100042FB0000100CAFE01 /* JS in Resources */ = {isa = PBXBuildFile; fileRef = 59F100102FB0000100CAFE01 /* JS */; };
 		59F100052FB0000100CAFE01 /* JS in Resources */ = {isa = PBXBuildFile; fileRef = 59F100112FB0000100CAFE01 /* JS */; };
-		5A31C303501E34B6ECF0848B /* AirAsFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 753F88850EDD2EDED1236C11 /* AirAsFramework */; };
 		5AE429864DBD1B9726792ABC /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		64B5317D60F6C186CD8F8DFA /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 585CF17A2E6E1CE100A5804F /* AppIcon.icon */; };
 		65C5B0BAE3D9A00A06DDBF32 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E2E5572E15210500B90FFD /* SceneDelegate.swift */; };
@@ -128,26 +88,17 @@
 		71798E4B19FC45A9B531DC7F /* Pods_MyTonWallet_Preview.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33AFA1C24DA894DF2CD8A681 /* Pods_MyTonWallet_Preview.framework */; };
 		74CBF4B1480ADEF6F8B6CE71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		8109CE061EF3B5CFFD3BA3EB /* AppSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271019AC2CBE75EA00972D1A /* AppSwitcher.swift */; };
-		A2F6C8F58E74FF70AA316904 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 25561833DFEA1EB541CE6CFA /* FirebaseCore */; };
 		A8F86EF3D77B48377D3E0039 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE7F3EF2CE1FBCE009D2B34 /* GoogleService-Info.plist */; };
 		A95570473A46014B40615A92 /* HomeScreenQuickAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581C041B2F7131F50021E2E3 /* HomeScreenQuickAction.swift */; };
 		BBBE0A7A3FE5AE7B3AEF04AE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F19F5C2CECB4EB00ACE1B9 /* main.swift */; };
 		C4D16308205C59A627997B13 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4105E6D6E2A708EB52003A /* FirebaseCore */; };
 		CEE7F3F02CE1FBCE009D2B34 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEE7F3EF2CE1FBCE009D2B34 /* GoogleService-Info.plist */; };
 		D730E78D88D7FB7CD2D30F77 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
-		DEC5F7D0F4B76E59868A6B79 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 238EDAED8A39AE9B0BC5976B /* FirebaseMessaging */; };
 		F0B41E894369BE4E4690BA34 /* Pods_MyTonWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9600AA328195207D1968E709 /* Pods_MyTonWallet.framework */; };
 		F4EC0D4A6C88C0984080302D /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		582009D42E820AD40010E2B5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 582009C62E820AD20010E2B5;
-			remoteInfo = AirWidgetExtension;
-		};
 		59C000362F81000100ABCD01 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
@@ -178,28 +129,7 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		582009BE2E820A860010E2B5 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				582009D62E820AD40010E2B5 /* AirWidgetExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		58F631B12EB8CD8D00A90B79 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		58F6320C2EB8CDFA00A90B79 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -258,13 +188,10 @@
 		581C04212F7138A00021E2E3 /* WalletAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAppShortcuts.swift; sourceTree = "<group>"; };
 		582009A92E820A840010E2B5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		582009AB2E820A850010E2B5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		582009C72E820AD20010E2B5 /* AirWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AirWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		582009EE2E822C860010E2B5 /* AirWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AirWidgetExtension.entitlements; sourceTree = "<group>"; };
 		582009F32E822DDD0010E2B5 /* AirWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirWidgetBundle.swift; sourceTree = "<group>"; };
 		582009F42E822DDD0010E2B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		582009F52E822DDD0010E2B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58200A162E8239B50010E2B5 /* Widgets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Widgets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		584C517D2F6142520079935F /* Air */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Air; path = ../Air; sourceTree = "<group>"; };
 		585CF17A2E6E1CE100A5804F /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		588AD2212E83D44600588415 /* ActionsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsWidget.swift; sourceTree = "<group>"; };
 		588AD2232E83D48F00588415 /* ActionsWidgetTimelineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsWidgetTimelineEntry.swift; sourceTree = "<group>"; };
@@ -280,11 +207,8 @@
 		58B1A72F2E87036900880BB1 /* ActionsStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsStyle.swift; sourceTree = "<group>"; };
 		58E2E5572E15210500B90FFD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		58F631D32EB8CD8D00A90B79 /* MyTonWallet_NoExtensions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet_NoExtensions.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		58F631D42EB8CD8D00A90B79 /* MyTonWallet_AirOnly-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyTonWallet_AirOnly-Info.plist"; sourceTree = "<group>"; };
-		58F6322E2EB8CDFA00A90B79 /* MyTonWallet_AirOnly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet_AirOnly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58F6322F2EB8CDFA00A90B79 /* MyTonWallet_NoExtensions-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyTonWallet_NoExtensions-Info.plist"; sourceTree = "<group>"; };
 		58F632302EB8CE8000A90B79 /* MyTonWallet_NoExtensions.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTonWallet_NoExtensions.entitlements; sourceTree = "<group>"; };
-		58F632312EB8CE9C00A90B79 /* MyTonWallet_AirOnly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTonWallet_AirOnly.entitlements; sourceTree = "<group>"; };
 		59A4C2E62F4D1001009A1B2C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		59B6E9A12F7B0001001A2B3C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		59C000252F81000100ABCD01 /* GramWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GramWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -349,19 +273,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5864B2ED2F6C04B00083626C /* AirAsFramework in Frameworks */,
 				59E000052FA0000100BEEF01 /* WalletResources in Frameworks */,
 				F0B41E894369BE4E4690BA34 /* Pods_MyTonWallet.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		582009C42E820AD20010E2B5 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				58F9CCB92FD1970A0054DAD3 /* WalletCoreTypes in Frameworks */,
-				582009C92E820AD20010E2B5 /* SwiftUI.framework in Frameworks */,
-				582009C82E820AD20010E2B5 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,20 +282,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5864B2EB2F6C04A60083626C /* AirAsFramework in Frameworks */,
 				59E000062FA0000100BEEF01 /* WalletResources in Frameworks */,
 				0A5CBED435F033B692B7658D /* Pods_MyTonWallet_NoExtensions.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		58F631E12EB8CDFA00A90B79 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5864B2E92F6C049D0083626C /* AirAsFramework in Frameworks */,
-				59E000072FA0000100BEEF01 /* WalletResources in Frameworks */,
-				A2F6C8F58E74FF70AA316904 /* FirebaseCore in Frameworks */,
-				DEC5F7D0F4B76E59868A6B79 /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +291,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59C000132F81000100ABCD01 /* AirAsFramework in Frameworks */,
 				59E000082FA0000100BEEF01 /* WalletResources in Frameworks */,
 				C4D16308205C59A627997B13 /* FirebaseCore in Frameworks */,
 				67EFEAD7CE812E8CF3664678 /* FirebaseMessaging in Frameworks */,
@@ -411,7 +311,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A31C303501E34B6ECF0848B /* AirAsFramework in Frameworks */,
 				59E000092FA0000100BEEF01 /* WalletResources in Frameworks */,
 				71798E4B19FC45A9B531DC7F /* Pods_MyTonWallet_Preview.framework in Frameworks */,
 			);
@@ -467,7 +366,6 @@
 			isa = PBXGroup;
 			children = (
 				504EC3061FED79650016851F /* App */,
-				584C517D2F6142520079935F /* Air */,
 				582009F62E822DDD0010E2B5 /* AirWidget */,
 				58F632322EB8CECA00A90B79 /* Entitlements */,
 				504EC3051FED79650016851F /* Products */,
@@ -480,9 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* MyTonWallet.app */,
-				582009C72E820AD20010E2B5 /* AirWidgetExtension.appex */,
 				58F631D32EB8CD8D00A90B79 /* MyTonWallet_NoExtensions.app */,
-				58F6322E2EB8CDFA00A90B79 /* MyTonWallet_AirOnly.app */,
 				59C000252F81000100ABCD01 /* GramWallet.app */,
 				59C000292F81000100ABCD01 /* GramWalletWidgetExtension.appex */,
 				47944749FD2D0A00CA7F241E /* MyTonWallet_Preview.app */,
@@ -546,10 +442,8 @@
 		58F632322EB8CECA00A90B79 /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
-				582009EE2E822C860010E2B5 /* AirWidgetExtension.entitlements */,
 				CE138AE22AC7209B00BE5802 /* MyTonWallet.entitlements */,
 				58F632302EB8CE8000A90B79 /* MyTonWallet_NoExtensions.entitlements */,
-				58F632312EB8CE9C00A90B79 /* MyTonWallet_AirOnly.entitlements */,
 				59C000282F81000100ABCD01 /* GramWallet.entitlements */,
 				59C0002A2F81000100ABCD01 /* GramWalletWidgetExtension.entitlements */,
 				579622823A5A8EDC7EE38C44 /* MyTonWallet_Preview.entitlements */,
@@ -573,7 +467,6 @@
 				585CF17A2E6E1CE100A5804F /* AppIcon.icon */,
 				CEE7F3EF2CE1FBCE009D2B34 /* GoogleService-Info.plist */,
 				504EC3131FED79650016851F /* Info.plist */,
-				58F631D42EB8CD8D00A90B79 /* MyTonWallet_AirOnly-Info.plist */,
 				58F6322F2EB8CDFA00A90B79 /* MyTonWallet_NoExtensions-Info.plist */,
 				CAC3D6138B5E7B5AF24B8370 /* MyTonWallet_Preview-Info.plist */,
 			);
@@ -619,47 +512,19 @@
 				504EC3021FED79650016851F /* Resources */,
 				279105522C89BC3B0075D4B5 /* Embed Frameworks */,
 				D9FA27FD0BDF4FB3BFA5DE07 /* [CP] Embed Pods Frameworks */,
-				582009BE2E820A860010E2B5 /* Embed Foundation Extensions */,
 				E4C5666F70C526DDFE10A3B4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				582009D52E820AD40010E2B5 /* PBXTargetDependency */,
 			);
 			name = MyTonWallet;
 			packageProductDependencies = (
-				5864B2EC2F6C04B00083626C /* AirAsFramework */,
 				59E0000A2FA0000100BEEF01 /* WalletResources */,
 			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* MyTonWallet.app */;
 			productType = "com.apple.product-type.application";
-		};
-		582009C62E820AD20010E2B5 /* AirWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 582009D82E820AD40010E2B5 /* Build configuration list for PBXNativeTarget "AirWidgetExtension" */;
-			buildPhases = (
-				582009C32E820AD20010E2B5 /* Sources */,
-				582009C42E820AD20010E2B5 /* Frameworks */,
-				582009C52E820AD20010E2B5 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				588AC1662E82428700588415 /* TokenWidget */,
-				588AC1892E82EC7400588415 /* Models */,
-				588AD21B2E83CE6500588415 /* SharedUI */,
-			);
-			name = AirWidgetExtension;
-			packageProductDependencies = (
-				58F9CCB82FD1970A0054DAD3 /* WalletCoreTypes */,
-			);
-			productName = AirWidgetExtension;
-			productReference = 582009C72E820AD20010E2B5 /* AirWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 		58F6317A2EB8CD8D00A90B79 /* MyTonWallet_NoExtensions */ = {
 			isa = PBXNativeTarget;
@@ -679,35 +544,10 @@
 			);
 			name = MyTonWallet_NoExtensions;
 			packageProductDependencies = (
-				5864B2EA2F6C04A60083626C /* AirAsFramework */,
 				59E0000B2FA0000100BEEF01 /* WalletResources */,
 			);
 			productName = App;
 			productReference = 58F631D32EB8CD8D00A90B79 /* MyTonWallet_NoExtensions.app */;
-			productType = "com.apple.product-type.application";
-		};
-		58F631D52EB8CDFA00A90B79 /* MyTonWallet_AirOnly */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 58F6322B2EB8CDFA00A90B79 /* Build configuration list for PBXNativeTarget "MyTonWallet_AirOnly" */;
-			buildPhases = (
-				58F631D92EB8CDFA00A90B79 /* Sources */,
-				58F631E12EB8CDFA00A90B79 /* Frameworks */,
-				58F632032EB8CDFA00A90B79 /* Resources */,
-				58F6320C2EB8CDFA00A90B79 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = MyTonWallet_AirOnly;
-			packageProductDependencies = (
-				5864B2E82F6C049D0083626C /* AirAsFramework */,
-				59E0000C2FA0000100BEEF01 /* WalletResources */,
-				25561833DFEA1EB541CE6CFA /* FirebaseCore */,
-				238EDAED8A39AE9B0BC5976B /* FirebaseMessaging */,
-			);
-			productName = App;
-			productReference = 58F6322E2EB8CDFA00A90B79 /* MyTonWallet_AirOnly.app */;
 			productType = "com.apple.product-type.application";
 		};
 		59C000332F81000100ABCD01 /* GramWallet */ = {
@@ -727,7 +567,6 @@
 			);
 			name = GramWallet;
 			packageProductDependencies = (
-				59C0003D2F81000100ABCD01 /* AirAsFramework */,
 				59E0000D2FA0000100BEEF01 /* WalletResources */,
 				2F4105E6D6E2A708EB52003A /* FirebaseCore */,
 				F9BE5EF7B8C92B9D9B26DF89 /* FirebaseMessaging */,
@@ -779,7 +618,6 @@
 			);
 			name = MyTonWallet_Preview;
 			packageProductDependencies = (
-				753F88850EDD2EDED1236C11 /* AirAsFramework */,
 				59E0000E2FA0000100BEEF01 /* WalletResources */,
 			);
 			productName = MyTonWallet_Preview;
@@ -799,9 +637,6 @@
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1100;
-					};
-					582009C62E820AD20010E2B5 = {
-						CreatedOnToolsVersion = 26.0;
 					};
 					59C000332F81000100ABCD01 = {
 						CreatedOnToolsVersion = 26.3;
@@ -838,8 +673,6 @@
 			targets = (
 				504EC3031FED79650016851F /* MyTonWallet */,
 				58F6317A2EB8CD8D00A90B79 /* MyTonWallet_NoExtensions */,
-				58F631D52EB8CDFA00A90B79 /* MyTonWallet_AirOnly */,
-				582009C62E820AD20010E2B5 /* AirWidgetExtension */,
 				59C000332F81000100ABCD01 /* GramWallet */,
 				59C000342F81000100ABCD01 /* GramWalletWidgetExtension */,
 				7388E62D305CB72073B797EA /* MyTonWallet_Preview */,
@@ -878,15 +711,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		582009C52E820AD20010E2B5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				582009F72E822DDD0010E2B5 /* Assets.xcassets in Resources */,
-				59B6E9A22F7B0001001A2B3C /* Localizable.xcstrings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		58F631A82EB8CD8D00A90B79 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -899,21 +723,6 @@
 				58F631AF2EB8CD8D00A90B79 /* config.xml in Resources */,
 				58F631B02EB8CD8D00A90B79 /* GoogleService-Info.plist in Resources */,
 				59A4C2E92F4D1001009A1B2C /* Localizable.xcstrings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		58F632032EB8CDFA00A90B79 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				58F632052EB8CDFA00A90B79 /* public in Resources */,
-				59F100032FB0000100CAFE01 /* JS in Resources */,
-				59D100032F90000100FACE01 /* Assets.xcassets in Resources */,
-				58F632072EB8CDFA00A90B79 /* capacitor.config.json in Resources */,
-				58F632092EB8CDFA00A90B79 /* AppIcon.icon in Resources */,
-				58F6320A2EB8CDFA00A90B79 /* config.xml in Resources */,
-				58F6320B2EB8CDFA00A90B79 /* GoogleService-Info.plist in Resources */,
-				59A4C2EA2F4D1001009A1B2C /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1137,25 +946,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		582009C32E820AD20010E2B5 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				588AD2222E83D44600588415 /* ActionsWidget.swift in Sources */,
-				582009FC2E822DDD0010E2B5 /* AirWidgetBundle.swift in Sources */,
-				5890CBAE2E858CE100110FDF /* ChartView.swift in Sources */,
-				5890CBAF2E858CE100110FDF /* TokenWithChartWidget.swift in Sources */,
-				5890CBB02E858CE100110FDF /* TokenWithChartWidgetConfiguration.swift in Sources */,
-				58B1A7302E87036900880BB1 /* ActionsStyle.swift in Sources */,
-				5890CBB12E858CE100110FDF /* TokenWithChartWidgetTimelineEntry.swift in Sources */,
-				5890CBB22E858CE100110FDF /* TokenWithChartWidgetTimelineProvider.swift in Sources */,
-				58B1A72E2E87030400880BB1 /* ChartStyle.swift in Sources */,
-				588AD2262E83D4EE00588415 /* ActionsWidgetConfiguration.swift in Sources */,
-				588AD2242E83D48F00588415 /* ActionsWidgetTimelineEntry.swift in Sources */,
-				588AD2282E83D5C800588415 /* ActionsWidgetTimelineProvider.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		58F6317E2EB8CD8D00A90B79 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1168,21 +958,6 @@
 				581C041D2F7131F50021E2E3 /* HomeScreenQuickAction.swift in Sources */,
 				581C04232F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */,
 				58F631852EB8CD8D00A90B79 /* DebugView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		58F631D92EB8CDFA00A90B79 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				58F631DA2EB8CDFA00A90B79 /* AppSwitcher.swift in Sources */,
-				58F631DB2EB8CDFA00A90B79 /* SceneDelegate.swift in Sources */,
-				58F631DC2EB8CDFA00A90B79 /* main.swift in Sources */,
-				58F631DD2EB8CDFA00A90B79 /* MyTonWalletApp.swift in Sources */,
-				58F631DE2EB8CDFA00A90B79 /* AppDelegate.swift in Sources */,
-				581C041E2F7131F50021E2E3 /* HomeScreenQuickAction.swift in Sources */,
-				581C04242F7138A00021E2E3 /* WalletAppShortcuts.swift in Sources */,
-				58F631E02EB8CDFA00A90B79 /* DebugView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1223,11 +998,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		582009D52E820AD40010E2B5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 582009C62E820AD20010E2B5 /* AirWidgetExtension */;
-			targetProxy = 582009D42E820AD40010E2B5 /* PBXContainerItemProxy */;
-		};
 		59C000352F81000100ABCD01 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 59C000342F81000100ABCD01 /* GramWalletWidgetExtension */;
@@ -1436,91 +1206,6 @@
 			};
 			name = Release;
 		};
-		582009D92E820AD40010E2B5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = Entitlements/AirWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3517;
-				DEVELOPMENT_TEAM = Y54Z4K69Z9;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = AirWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AirWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 4.8.6;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mytonwallet.app.AirWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		582009DA2E820AD40010E2B5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = Entitlements/AirWidgetExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3517;
-				DEVELOPMENT_TEAM = Y54Z4K69Z9;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = AirWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AirWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 4.8.6;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mytonwallet.app.AirWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		58F631D12EB8CD8D00A90B79 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 46B5FC650931B3990E86CF4E /* Pods-MyTonWallet_NoExtensions.debug.xcconfig */;
@@ -1571,61 +1256,6 @@
 				MARKETING_VERSION = 4.8.6;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mytonwallet.app;
 				PRODUCT_NAME = "My Wallet_NoExtensions";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		58F6322C2EB8CDFA00A90B79 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = Entitlements/MyTonWallet_AirOnly.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3517;
-				DEVELOPMENT_TEAM = Y54Z4K69Z9;
-				INFOPLIST_FILE = "App/Resources/MyTonWallet/MyTonWallet_AirOnly-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.8.6;
-				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mytonwallet.app;
-				PRODUCT_NAME = "My Wallet_AirOnly";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		58F6322D2EB8CDFA00A90B79 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = Entitlements/MyTonWallet_AirOnly.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3517;
-				DEVELOPMENT_TEAM = Y54Z4K69Z9;
-				INFOPLIST_FILE = "App/Resources/MyTonWallet/MyTonWallet_AirOnly-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 4.8.6;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mytonwallet.app;
-				PRODUCT_NAME = "My Wallet_AirOnly";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_VERSION = 5.0;
@@ -1824,29 +1454,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		582009D82E820AD40010E2B5 /* Build configuration list for PBXNativeTarget "AirWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				582009D92E820AD40010E2B5 /* Debug */,
-				582009DA2E820AD40010E2B5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		58F631D02EB8CD8D00A90B79 /* Build configuration list for PBXNativeTarget "MyTonWallet_NoExtensions" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58F631D12EB8CD8D00A90B79 /* Debug */,
 				58F631D22EB8CD8D00A90B79 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		58F6322B2EB8CDFA00A90B79 /* Build configuration list for PBXNativeTarget "MyTonWallet_AirOnly" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				58F6322C2EB8CDFA00A90B79 /* Debug */,
-				58F6322D2EB8CDFA00A90B79 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1892,50 +1504,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		238EDAED8A39AE9B0BC5976B /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2054E5367348F6E9D47E2836 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
-		};
-		25561833DFEA1EB541CE6CFA /* FirebaseCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2054E5367348F6E9D47E2836 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
-		};
 		2F4105E6D6E2A708EB52003A /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2054E5367348F6E9D47E2836 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
-		};
-		5864B2E82F6C049D0083626C /* AirAsFramework */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AirAsFramework;
-		};
-		5864B2EA2F6C04A60083626C /* AirAsFramework */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AirAsFramework;
-		};
-		5864B2EC2F6C04B00083626C /* AirAsFramework */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AirAsFramework;
-		};
-		58F9CCB82FD1970A0054DAD3 /* WalletCoreTypes */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletCoreTypes;
-		};
-		59C0003D2F81000100ABCD01 /* AirAsFramework */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AirAsFramework;
 		};
 		59E0000A2FA0000100BEEF01 /* WalletResources */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletResources;
 		};
 		59E0000B2FA0000100BEEF01 /* WalletResources */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WalletResources;
-		};
-		59E0000C2FA0000100BEEF01 /* WalletResources */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletResources;
 		};
@@ -1950,10 +1528,6 @@
 		59E002022FA2000100BEEF01 /* WalletCoreTypes */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletCoreTypes;
-		};
-		753F88850EDD2EDED1236C11 /* AirAsFramework */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AirAsFramework;
 		};
 		F9BE5EF7B8C92B9D9B26DF89 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;

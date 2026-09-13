@@ -708,15 +708,6 @@ describe('processSelfDeeplink', () => {
     });
   });
 
-  describe('Air command', () => {
-    it('should return false when not in Capacitor environment', async () => {
-      // IS_CAPACITOR is false by default in tests
-      const result = await processSelfDeeplink('mtw://air');
-
-      expect(result).toBe(false);
-    });
-  });
-
   describe('Invalid deeplinks', () => {
     it('should return false for unknown commands', async () => {
       const result = await processSelfDeeplink('mtw://unknown-command');

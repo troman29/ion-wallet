@@ -1,22 +1,17 @@
-import type { ApiFetchEstimateDieselResult } from '../../api/types';
 import type { FeePrecision, FeeTerms } from './types';
 
-import { Big } from '../../lib/big.js';
-import { bigintMax, bigintMin } from '../bigint';
+import { bigintMax } from '../bigint';
 import { getChainConfig } from '../chain';
 import { getChainBySlug, getIsNativeToken } from '../tokens';
 
 type ApiFee = {
   fee?: bigint;
   realFee?: bigint;
-  diesel?: ApiFetchEstimateDieselResult;
   /** The slug of the token that is being transferred */
   tokenSlug: string;
 };
 
 export type ExplainedTransferFee = {
-  /** Whether the result implies paying the fee with a diesel */
-  isGasless: boolean;
   /**
    * The fee that will be sent with the transfer. The wallet must have it on the balance to send the transfer.
    * Show this in the transfer form when the input amount is ≤ the balance, but the remaining balance can't cover the
@@ -47,9 +42,6 @@ export type ExplainedTransferFee = {
   canTransferFullBalance: boolean;
 };
 
-type AvailableDiesel = ApiFetchEstimateDieselResult & { amount: bigint };
-type ApiFeeWithDiesel = ApiFee & { diesel: AvailableDiesel };
-
 type MaxTransferAmountInput = {
   /** The wallet balance of the transferred token. Undefined means that it's unknown. */
   tokenBalance: bigint | undefined;
@@ -72,9 +64,7 @@ type BalanceSufficientForTransferInput = Omit<MaxTransferAmountInput, 'tokenSlug
  * Converts the transfer fee data returned from API into data that is ready to be displayed in the transfer form UI.
  */
 export function explainApiTransferFee(input: ApiFee): ExplainedTransferFee {
-  return shouldUseDiesel(input)
-    ? explainGaslessTransferFee(input)
-    : explainGasfullTransferFee(input);
+  return explainGasfullTransferFee(input);
 }
 
 /**
@@ -127,24 +117,8 @@ export function isBalanceSufficientForTransfer({
   return tokenRequiredAmount <= tokenBalance && nativeTokenRequiredAmount <= nativeTokenBalance;
 }
 
-export function isDieselAvailable(diesel: ApiFetchEstimateDieselResult): diesel is AvailableDiesel {
-  return diesel.status !== 'not-available' && diesel.amount !== undefined;
-}
-
-export function getDieselTokenAmount(diesel: ApiFetchEstimateDieselResult) {
-  return diesel.status === 'stars-fee' ? 0n : (diesel.amount ?? 0n);
-}
-
-function shouldUseDiesel(input: ApiFee): input is ApiFeeWithDiesel {
-  return input.diesel !== undefined && isDieselAvailable(input.diesel);
-}
-
-/**
- * Converts the data of a transfer not involving diesel
- */
 function explainGasfullTransferFee(input: ApiFee) {
   const result: ExplainedTransferFee = {
-    isGasless: false,
     canTransferFullBalance: getIsNativeToken(input.tokenSlug)
       && getChainConfig(getChainBySlug(input.tokenSlug)).canTransferFullNativeBalance,
   };
@@ -171,53 +145,4 @@ function explainGasfullTransferFee(input: ApiFee) {
   }
 
   return result;
-}
-
-/**
- * Converts the diesel of semi-diesel transfer data
- */
-function explainGaslessTransferFee({ diesel }: ApiFeeWithDiesel) {
-  const isStarsDiesel = diesel.status === 'stars-fee';
-  const dieselKey = isStarsDiesel ? 'stars' : 'token';
-  const realFeeInDiesel = convertFee(diesel.realFee, diesel.nativeAmount, diesel.amount);
-  // Cover as much displayed real fee as possible with diesel, because in the excess it will return as the native token.
-  const dieselRealFee = bigintMin(diesel.amount, realFeeInDiesel);
-  // Cover the remaining real fee with the native token.
-  const nativeRealFee = bigintMax(0n, diesel.realFee - diesel.nativeAmount);
-
-  return {
-    isGasless: true,
-    canTransferFullBalance: false,
-    fullFee: {
-      precision: 'lessThan',
-      terms: {
-        [dieselKey]: diesel.amount,
-        native: diesel.remainingFee,
-      },
-      nativeSum: diesel.nativeAmount + diesel.remainingFee,
-    },
-    realFee: {
-      precision: 'approximate',
-      terms: {
-        [dieselKey]: dieselRealFee,
-        native: nativeRealFee,
-      },
-      nativeSum: diesel.realFee,
-    },
-    excessFee: diesel.nativeAmount + diesel.remainingFee - diesel.realFee,
-  } satisfies ExplainedTransferFee;
-}
-
-/**
- * `exampleFromAmount` and `exampleToAmount` define the exchange rate used to convert `amount`.
- * `exampleFromAmount` is defined in the same currency as `amount`. Mustn't be 0.
- * `exampleToAmount` is defined in the currency you want to get.
- */
-function convertFee(
-  amount: bigint,
-  exampleFromAmount: bigint,
-  exampleToAmount: bigint,
-) {
-  const exchangeRate = Big(exampleToAmount.toString()).div(exampleFromAmount.toString());
-  return BigInt(Big(amount.toString()).mul(exchangeRate).round().toString());
 }

@@ -287,17 +287,10 @@ addActionHandler('submitStaking', withEnclaveSessionRelease(async (global, actio
     }
 
     global = getGlobal();
-    if (result && 'mfaRequestHash' in result) {
-      global = updateCurrentStaking(global, {
-        state: StakingState.UnstakeConfirmMfa,
-        mfaRequestHash: result.mfaRequestHash,
-      });
-    } else {
-      const isLongUnstakeRequested = getIsLongUnstake(state, unstakeAmount);
+    const isLongUnstakeRequested = getIsLongUnstake(state, unstakeAmount);
 
-      global = updateAccountState(global, currentAccountId, { isLongUnstakeRequested });
-      global = updateCurrentStaking(global, { state: StakingState.UnstakeComplete, mfaRequestHash: undefined });
-    }
+    global = updateAccountState(global, currentAccountId, { isLongUnstakeRequested });
+    global = updateCurrentStaking(global, { state: StakingState.UnstakeComplete });
     setGlobal(global);
   } else {
     const result = await callApi(
@@ -316,13 +309,7 @@ addActionHandler('submitStaking', withEnclaveSessionRelease(async (global, actio
     }
 
     global = getGlobal();
-    global = updateCurrentStaking(global, result && 'mfaRequestHash' in result ? {
-      state: StakingState.StakeConfirmMfa,
-      mfaRequestHash: result.mfaRequestHash,
-    } : {
-      state: StakingState.StakeComplete,
-      mfaRequestHash: undefined,
-    });
+    global = updateCurrentStaking(global, { state: StakingState.StakeComplete });
     setGlobal(global);
   }
 }));
@@ -444,69 +431,11 @@ addActionHandler('submitStakingClaim', withEnclaveSessionRelease(async (global, 
   }
 
   global = getGlobal();
-  if (result && 'mfaRequestHash' in result) {
-    global = updateCurrentStaking(global, {
-      state: StakingState.ClaimConfirmMfa,
-      mfaRequestHash: result.mfaRequestHash,
-    });
-  } else {
-    global = updateCurrentStaking(global, {
-      state: isEthenaStaking ? StakingState.ClaimComplete : StakingState.None,
-      mfaRequestHash: undefined,
-    });
-  }
+  global = updateCurrentStaking(global, {
+    state: isEthenaStaking ? StakingState.ClaimComplete : StakingState.None,
+  });
   setGlobal(global);
 }));
-
-addActionHandler('updateStakingMfaRequestStatus', async (global) => {
-  const hash = global.currentStaking.mfaRequestHash;
-  if (!hash) return;
-
-  const result = await callApi('fetchMfaRequest', hash);
-
-  if (!result?.isConfirmed) {
-    return;
-  }
-
-  global = getGlobal();
-
-  const currentAccountId = selectCurrentAccountId(global);
-  if (!currentAccountId) return;
-
-  const stakingState = selectAccountStakingState(global, currentAccountId);
-
-  switch (global.currentStaking.state) {
-    case StakingState.StakeConfirmMfa: {
-      global = updateCurrentStaking(global, {
-        state: StakingState.StakeComplete,
-        mfaRequestHash: undefined,
-      });
-      break;
-    }
-    case StakingState.UnstakeConfirmMfa: {
-      const unstakeAmount = global.currentStaking.tokenAmount!;
-      const isLongUnstakeRequested = getIsLongUnstake(stakingState, unstakeAmount);
-
-      global = updateAccountState(global, currentAccountId, { isLongUnstakeRequested });
-      global = updateCurrentStaking(global, {
-        state: StakingState.UnstakeComplete,
-        mfaRequestHash: undefined,
-      });
-      break;
-    }
-    case StakingState.ClaimConfirmMfa: {
-      const isEthenaStaking = (stakingState as ApiEthenaStakingState | ApiJettonStakingState).type === 'ethena';
-
-      global = updateCurrentStaking(global, {
-        state: isEthenaStaking ? StakingState.ClaimComplete : StakingState.None,
-        mfaRequestHash: undefined,
-      });
-      break;
-    }
-  }
-
-  setGlobal(global);
-});
 
 // Opens the staking info modal if the modal is available. Otherwise, opens the staking start modal.
 addActionHandler('openStakingInfoOrStart', (global, actions) => {

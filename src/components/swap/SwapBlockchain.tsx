@@ -13,7 +13,7 @@ import { readClipboardContent } from '../../util/clipboard';
 import { vibrate } from '../../util/haptics';
 import { shortenAddress } from '../../util/shortenAddress';
 import getChainNetworkName from '../../util/swap/getChainNetworkName';
-import { getIsMobileTelegramApp, IS_CLIPBOARDS_SUPPORTED, IS_IOS } from '../../util/windowEnvironment';
+import { IS_CLIPBOARDS_SUPPORTED } from '../../util/windowEnvironment';
 import { callApi } from '../../api';
 import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
 
@@ -168,11 +168,6 @@ function SwapBlockchain({
   });
 
   const handleQrScanClick = useLastCallback(() => {
-    if (IS_IOS && getIsMobileTelegramApp()) {
-      alert('Scanning is temporarily not available');
-      return;
-    }
-
     requestOpenQrScanner();
     cancelSwap();
   });

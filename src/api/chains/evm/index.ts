@@ -76,11 +76,7 @@ class EVMChainSdk<T extends EVMChain> implements ChainSdk<T> {
 
   checkTransactionDraft = this.#bindChain(checkTransactionDraft);
 
-  fetchEstimateDiesel = notSupported;
-
   submitGasfullTransfer = this.#bindChain(submitGasfullTransfer);
-
-  submitGaslessTransfer = notSupported;
   verifyLedgerWalletAddress = notSupported;
 
   buildOnchainSwapTransfer = notSupported;

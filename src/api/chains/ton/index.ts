@@ -38,9 +38,7 @@ import { fetchTransactionById } from './transactionInfo';
 import {
   checkToAddress,
   checkTransactionDraft,
-  fetchEstimateDiesel,
   submitGasfullTransfer,
-  submitGaslessTransfer,
 } from './transfer';
 import {
   fetchBalances,
@@ -69,9 +67,7 @@ const tonSdk: ChainSdk<'ton'> = {
   fetchToken,
   importToken,
   checkTransactionDraft,
-  fetchEstimateDiesel,
   submitGasfullTransfer,
-  submitGaslessTransfer,
   buildOnchainSwapTransfer,
   submitOnchainSwapTransfer,
   getAddressInfo: checkToAddress,
@@ -110,12 +106,11 @@ const tonSdk: ChainSdk<'ton'> = {
   getOtherVersionWallet,
 };
 
-// Staking and MFA reach the SDK through guarded `require`s so a `NO_EXTRA_FEATURES` build drops both
-// modules — and with them the jetton-staking, Ethena and MFA-extension contracts — from the bundle.
+// Staking reaches the SDK through a guarded `require` so a `NO_EXTRA_FEATURES` build drops its optional
+// contracts from the bundle.
 if (process.env.NO_EXTRA_FEATURES !== '1') {
   /* eslint-disable @typescript-eslint/no-require-imports */
   const staking = require('./staking') as typeof import('./staking');
-  const mfa = require('./mfa') as typeof import('./mfa');
   /* eslint-enable @typescript-eslint/no-require-imports */
 
   tonSdk.staking = {
@@ -126,12 +121,6 @@ if (process.env.NO_EXTRA_FEATURES !== '1') {
     submitTokenStakingClaim: staking.submitTokenStakingClaim,
     submitUnstakeEthenaLocked: staking.submitUnstakeEthenaLocked,
     getCommonData: staking.getStakingCommonData,
-  };
-
-  tonSdk.mfa = {
-    installMfaExtension: mfa.installMfaExtension,
-    createRemoveMfaExtensionPayload: mfa.createRemoveMfaExtensionPayload,
-    resolveExtensionAddress: mfa.resolveExtensionAddress,
   };
 }
 
@@ -151,7 +140,6 @@ export {
   submitGasfullTransfer,
   checkMultiTransactionDraft,
   submitMultiTransfer,
-  submitMultiTransferWithMfa,
   signTransfers,
 } from './transfer';
 export {

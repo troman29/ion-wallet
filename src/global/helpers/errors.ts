@@ -66,9 +66,6 @@ export function errorCodeToMessage(error: ApiAnyDisplayError | string = ApiCommo
     case ApiTransactionDraftError.InactiveContract:
       return '$transfer_inactive_contract_error';
 
-    case ApiTransactionDraftError.MfaNftBatchLimit:
-      return 'MFA NFT transfers support up to 4 NFTs at a time.';
-
     case ApiHardwareError.HardwareOutdated:
       return '$ledger_outdated';
 

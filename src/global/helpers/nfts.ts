@@ -1,6 +1,6 @@
 import type { ApiChain, ApiNft } from '../../api/types';
 
-import { MW_CARDS_COLLECTION, TELEGRAM_GIFTS_SUPER_COLLECTION } from '../../config';
+import { MW_CARDS_COLLECTION } from '../../config';
 
 export interface VisibleNftCollection {
   chain: ApiChain;
@@ -74,14 +74,10 @@ export function buildNftCollectionIndex(
 
   const blacklistedSet = new Set(blacklistedNftAddresses);
   const whitelistedSet = new Set(whitelistedNftAddresses);
-  let telegramGiftsCount = 0;
-
   for (const nft of Object.values(nftsByAddress)) {
     if (!getIsNftVisible(nft, blacklistedSet, whitelistedSet, areUnverifiedNftsHidden)) continue;
 
     totalVisibleCount += 1;
-
-    if (nft.isTelegramGift) telegramGiftsCount += 1;
 
     if (!nft.collectionAddress) continue;
 
@@ -100,14 +96,6 @@ export function buildNftCollectionIndex(
         existing.name = nft.collectionName;
       }
     }
-  }
-
-  if (telegramGiftsCount > 0) {
-    byKey.set(getCollectionKey('ton', TELEGRAM_GIFTS_SUPER_COLLECTION), {
-      chain: 'ton',
-      address: TELEGRAM_GIFTS_SUPER_COLLECTION,
-      count: telegramGiftsCount,
-    });
   }
 
   return { byKey, totalVisibleCount };

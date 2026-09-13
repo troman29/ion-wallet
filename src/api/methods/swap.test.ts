@@ -6,7 +6,6 @@ import type {
 } from '../types';
 
 import {
-  confirmSwapMfaRequest,
   fetchSwaps,
   initSwap,
   swapCexCreateTransaction,
@@ -79,10 +78,6 @@ jest.mock('../hooks', () => ({
   callHook: jest.fn(),
 }));
 
-jest.mock('./mfa', () => ({
-  publishSignedMfaRequest: jest.fn(),
-}));
-
 jest.mock('./other', () => ({
   getBackendAuthToken: jest.fn().mockResolvedValue('backend-auth-token'),
   getStoredBackendAuthToken: jest.fn(),
@@ -105,11 +100,6 @@ const { patchSwapItem, swapGetHistoryItem, swapItemToActivity } = require('../co
   patchSwapItem: jest.Mock;
   swapGetHistoryItem: jest.Mock;
   swapItemToActivity: jest.Mock;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { publishSignedMfaRequest } = require('./mfa') as {
-  publishSignedMfaRequest: jest.Mock;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -204,22 +194,6 @@ describe('DEX swap submitted identities', () => {
     );
     expect(result).toEqual({ activityId: 'swap-id::local', swapId: 'swap-id' });
   });
-
-  it('persists the confirmed MFA transaction hash before patching swap history', async () => {
-    await confirmSwapMfaRequest('0-mainnet', 'swap-id', 'confirmed-mfa-hash');
-
-    expect(rememberWalletOperationSubmittedHashes).toHaveBeenCalledWith(
-      '0-mainnet',
-      'swap:swap-id',
-      ['confirmed-mfa-hash'],
-    );
-    expect(patchSwapItem).toHaveBeenCalledWith({
-      address: 'EQ-ton-history-owner',
-      swapId: 'swap-id',
-      authToken: 'stored-auth-token',
-      msgHash: 'confirmed-mfa-hash',
-    });
-  });
 });
 
 describe('swapCexCreateTransaction', () => {
@@ -275,7 +249,6 @@ describe('swapCexSubmit', () => {
     jest.clearAllMocks();
     chains.base.submitGasfullTransfer.mockResolvedValue({ txId: '0xbase-deposit' });
     fetchStoredWallet.mockResolvedValue({ address: 'EQ-ton-history-owner' });
-    publishSignedMfaRequest.mockResolvedValue({ mfaRequestHash: 'mfa-request-hash' });
   });
 
   it('patches CEX history by TON owner address after a non-TON deposit transfer', async () => {
@@ -393,28 +366,6 @@ describe('swapCexSubmit', () => {
       error: expect.stringContaining('submit failed'),
       swapId: 'swap-id',
     });
-  });
-
-  it('publishes MFA requests instead of patching CEX history immediately', async () => {
-    const mfaRequest = {
-      payload: 'payload',
-      signature: 'signature',
-      transaction: 'transaction',
-    };
-    chains.base.submitGasfullTransfer.mockResolvedValue({ mfaRequest });
-    const transferOptions = {
-      accountId: '0-mainnet',
-      enclaveToken: 'enclave-token',
-      toAddress: '0xdeposit',
-      amount: 1n,
-      fee: 1n,
-    } as unknown as ApiSubmitGasfullTransferOptions;
-
-    const result = await swapCexSubmit('base' as ApiChain, transferOptions, 'swap-id');
-
-    expect(publishSignedMfaRequest).toHaveBeenCalledWith('0-mainnet', 'base', mfaRequest);
-    expect(patchSwapItem).not.toHaveBeenCalled();
-    expect(result).toEqual({ swapId: 'swap-id', mfaRequestHash: 'mfa-request-hash' });
   });
 });
 

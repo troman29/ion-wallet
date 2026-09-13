@@ -1,10 +1,7 @@
 import React, { memo } from '../../../../lib/teact/teact';
 import { withGlobal } from '../../../../global';
 
-import {
-  IS_EXTENSION,
-  IS_TELEGRAM_APP,
-} from '../../../../config';
+import { IS_EXTENSION } from '../../../../config';
 import {
   selectCurrentAccountId,
   selectHasPassword,
@@ -20,7 +17,6 @@ import AccountSelector from './AccountSelector';
 import AppLockButton from './actionButtons/AppLockButton';
 import BackButton from './actionButtons/BackButton';
 import QrScannerButton from './actionButtons/QrScannerButton';
-import ToggleFullscreenButton from './actionButtons/ToggleFullscreenButton';
 import ToggleLayoutButton from './actionButtons/ToggleLayoutButton';
 import ToggleSensitiveDataButton from './actionButtons/ToggleSensitiveDataButton';
 
@@ -65,7 +61,7 @@ function Header({
 
   const buttonsAmount = Math.max(
     1 + (showBackButton ? 1 : 0) + (isAppLockEnabled ? 1 : 0),
-    (isQrScannerSupported ? 1 : 0) + (canToggleAppLayout ? 1 : 0) + (IS_TELEGRAM_APP ? 1 : 0),
+    (isQrScannerSupported ? 1 : 0) + (canToggleAppLayout ? 1 : 0),
   );
 
   const actionsStartClassName = isPortrait
@@ -96,7 +92,6 @@ function Header({
 
         <div className={actionsEndClassName}>
           <QrScannerButton isViewMode={isViewMode} />
-          {IS_TELEGRAM_APP && <ToggleFullscreenButton isFullscreen={isFullscreen} />}
           {canToggleAppLayout && <ToggleLayoutButton />}
         </div>
       </div>

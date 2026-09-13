@@ -38,7 +38,6 @@ export async function rememberDexSwapOperationIntent(
   accountId: string,
   swap: ApiSwapHistoryItem,
   options: {
-    gasless?: boolean;
     expectedExternalMsgHashNorm?: string;
   } = {},
 ) {
@@ -77,7 +76,6 @@ export function buildDexSwapOperationIntent(
   accountId: string,
   swap: ApiSwapHistoryItem,
   options: {
-    gasless?: boolean;
     expectedExternalMsgHashNorm?: string;
   } = {},
 ): WalletOperationIntent {
@@ -104,7 +102,6 @@ export function buildDexSwapOperationIntent(
       backendSwapId,
       expectedExternalMsgHashNorm: options.expectedExternalMsgHashNorm,
       submittedHashes: swap.hashes,
-      gasless: options.gasless,
     },
   };
 }

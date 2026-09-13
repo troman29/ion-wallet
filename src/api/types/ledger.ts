@@ -3,7 +3,7 @@ import type { DeviceModelId } from '@ledgerhq/devices';
 import type { ApiChain, ApiLedgerDriver } from './misc';
 import type { ApiWalletByChain } from './storage';
 
-// This type has only several fields from DeviceModel, because the Air apps implement only that fields.
+// Only the fields used by the app are retained from DeviceModel.
 export type ApiLedgerDeviceModel = null | undefined | {
   id: DeviceModelId;
   productName: string;

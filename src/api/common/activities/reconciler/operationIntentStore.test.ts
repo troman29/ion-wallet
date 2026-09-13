@@ -60,9 +60,8 @@ function makeSwap(overrides: Partial<ApiSwapActivity> = {}): ApiSwapActivity {
 }
 
 describe('wallet operation intent store helpers', () => {
-  it('builds a TON DEX swap intent with gasless and expected external message metadata', () => {
+  it('builds a TON DEX swap intent with expected external message metadata', () => {
     const intent = buildDexSwapOperationIntent('account-1', makeSwap(), {
-      gasless: true,
       expectedExternalMsgHashNorm: 'external-message-hash',
     });
 
@@ -76,7 +75,6 @@ describe('wallet operation intent store helpers', () => {
       swap: expect.objectContaining({
         type: 'dex',
         backendSwapId: 'swap-id',
-        gasless: true,
         expectedExternalMsgHashNorm: 'external-message-hash',
       }),
     }));

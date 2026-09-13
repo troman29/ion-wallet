@@ -6,11 +6,8 @@ import type { IAnchorPosition } from '../../../../global/types';
 import type { DropdownItem } from '../../../ui/Dropdown';
 
 import {
-  GETGEMS_BASE_MAINNET_URL,
-  GETGEMS_BASE_TESTNET_URL,
   NFT_FRAGMENT_COLLECTIONS,
   RENEWABLE_TON_DNS_COLLECTIONS,
-  TELEGRAM_GIFTS_SUPER_COLLECTION,
 } from '../../../../config';
 import { selectCurrentAccountState, selectIsCurrentAccountViewMode } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
@@ -77,19 +74,15 @@ function NftCollectionHeader({
   const ref = useRef<HTMLButtonElement>();
   const menuRef = useRef<HTMLDivElement>();
 
-  const isTelegramGifts = collection.address === TELEGRAM_GIFTS_SUPER_COLLECTION;
-
   const collectionNfts = useMemo(() => {
     if (!nfts) {
       return [];
     }
 
-    return Object.values(nfts).filter((nft) => {
-      return (isTelegramGifts && nft.isTelegramGift)
-        || (nft.collectionAddress === collection.address
-          && nft.chain === collection.chain);
-    });
-  }, [collection, isTelegramGifts, nfts]);
+    return Object.values(nfts).filter((nft) => (
+      nft.collectionAddress === collection.address && nft.chain === collection.chain
+    ));
+  }, [collection, nfts]);
 
   const dnsExpireInDays = useMemo(() => {
     if (!RENEWABLE_TON_DNS_COLLECTIONS.has(collection.address)) return undefined;
@@ -98,9 +91,7 @@ function NftCollectionHeader({
     return date ? getCountDaysToDate(date) : undefined;
   }, [collectionNfts, collection, dnsExpiration]);
 
-  const collectionName = isTelegramGifts
-    ? lang('Telegram Gifts')
-    : collectionNfts?.[0]?.collectionName || lang('Unnamed Collection');
+  const collectionName = collectionNfts?.[0]?.collectionName || lang('Unnamed Collection');
 
   const menuItems: DropdownItem<MenuHandler>[] = useMemo(() => {
     const isInTabs = collectionTabs?.some((e) =>
@@ -122,7 +113,7 @@ function NftCollectionHeader({
         value: 'marketplace',
         fontIcon: 'external',
       },
-      !isTelegramGifts && {
+      {
         name: getExplorerName(collection.chain),
         value: 'explorer',
         fontIcon: 'external',
@@ -154,7 +145,7 @@ function NftCollectionHeader({
         value: isInTabs ? 'removeTab' : 'addTab',
       },
     ]);
-  }, [collectionNfts, collectionTabs, collection, dnsExpireInDays, isTelegramGifts, isViewMode, lang]);
+  }, [collectionNfts, collectionTabs, collection, dnsExpireInDays, isViewMode, lang]);
 
   useHistoryBack({
     isActive: true,
@@ -179,11 +170,6 @@ function NftCollectionHeader({
       }
 
       case 'marketplace': {
-        if (isTelegramGifts) {
-          const getgemsBaseUrl = isTestnet ? GETGEMS_BASE_TESTNET_URL : GETGEMS_BASE_MAINNET_URL;
-          void openUrl(`${getgemsBaseUrl}top-gifts`);
-          break;
-        }
         const url = getMarketplaceNftCollectionUrl(
           collection.chain,
           collection.address,
@@ -212,9 +198,7 @@ function NftCollectionHeader({
       }
 
       case 'fragment': {
-        if (isTelegramGifts) {
-          void openUrl('https://fragment.com/gifts');
-        } else if (collection.address === NFT_FRAGMENT_COLLECTIONS[0]) {
+        if (collection.address === NFT_FRAGMENT_COLLECTIONS[0]) {
           void openUrl('https://fragment.com/numbers');
         } else if (collection.address === NFT_FRAGMENT_COLLECTIONS[1]) {
           void openUrl('https://fragment.com');

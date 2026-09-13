@@ -40,7 +40,7 @@ export function confirmDappRequestConnect(promiseId: string, data: ApiDappReques
 
 export function confirmDappRequestSendTransaction<T extends DappProtocolType>(
   promiseId: string,
-  data: ApiSignedTransfer<T>[] | { mfaRequestHash: string },
+  data: ApiSignedTransfer<T>[],
 ) {
   dappPromises.resolveDappPromise(promiseId, data);
 }

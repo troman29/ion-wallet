@@ -14,7 +14,6 @@ import { logDebug, logDebugError } from '../../util/logs';
 import chains from '../chains';
 import { fetchStoredWallet } from '../common/accounts';
 import { callBackendPost } from '../common/backend';
-import { requireMfaMethods } from './optional';
 import { createLocalTransactions } from './transfer';
 
 let onUpdate: OnApiUpdate;
@@ -54,7 +53,7 @@ export async function submitNftTransfers(
   comment?: string,
   totalRealFee = 0n,
   isNftBurn?: boolean,
-): Promise<{ activityIds: string[] } | { mfaRequestHash: string } | { error: string }> {
+): Promise<{ activityIds: string[] } | { error: string }> {
   const { address: fromAddress } = await fetchStoredWallet(accountId, chain);
 
   logDebug('submitNftTransfers', 'Request', {
@@ -76,39 +75,6 @@ export async function submitNftTransfers(
     return result;
   }
 
-  if ('mfaRequest' in result) {
-    const { publishSignedMfaRequest, registerMfaConfirmationHandler } = requireMfaMethods();
-    const { mfaRequestHash } = await publishSignedMfaRequest(accountId, chain, result.mfaRequest);
-    const realFeePerNft = bigintDivideToNumber(totalRealFee, nfts.length);
-
-    registerMfaConfirmationHandler(mfaRequestHash, (txHash) => {
-      createLocalTransactions(accountId, chain, nfts.map((nft) => ({
-        id: txHash,
-        amount: 0n,
-        fromAddress,
-        toAddress,
-        comment,
-        fee: realFeePerNft,
-        normalizedAddress: nft.address,
-        slug: getChainConfig(chain).nativeToken.slug,
-        externalMsgHashNorm: txHash,
-        nft,
-      })));
-    });
-
-    logDebug('submitNftTransfers', 'Returning MFA request hash', {
-      chain,
-      accountId,
-      fromAddress,
-      nftsCount: nfts.length,
-      reqId: mfaRequestHash,
-    });
-
-    return {
-      mfaRequestHash,
-    };
-  }
-
   const realFeePerNft = bigintDivideToNumber(totalRealFee, Object.keys(result.transfers).length);
 
   const localActivities = createLocalTransactions(accountId, chain, result.transfers.map((transfer, index) => ({
@@ -123,23 +89,6 @@ export async function submitNftTransfers(
     externalMsgHashNorm: result.msgHashNormalized,
     nft: nfts?.[index],
   })));
-
-  if (process.env.NO_EXTRA_FEATURES !== '1' && chain === 'ton') {
-    void requireMfaMethods().refreshMfaState(accountId, enclaveToken)
-      .then((mfaUpdate) => {
-        if (mfaUpdate?.changed) {
-          onUpdate({
-            type: 'updateAccount',
-            accountId,
-            chain: 'ton',
-            mfa: mfaUpdate.mfa ?? false,
-          });
-        }
-      })
-      .catch((err) => {
-        logDebugError('submitNftTransfers:refreshMfaState', err);
-      });
-  }
 
   return {
     activityIds: extractKey(localActivities, 'id'),

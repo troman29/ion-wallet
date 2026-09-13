@@ -252,11 +252,8 @@ describe('activity reconciler matcher', () => {
     expect(getActivityIdReplacementsFromSdkMatcher([previous], [incoming])).toEqual({});
   });
 
-  it('does not infer W5 gasless transaction identity from recipient and amount', () => {
-    const local = makeTransaction({
-      id: 'local-transaction::local',
-      extra: { withW5Gasless: true },
-    });
+  it('does not infer local transaction identity from recipient and amount', () => {
+    const local = makeTransaction({ id: 'local-transaction::local' });
     const previousIdenticalTransfer = makeTransaction({
       id: 'previous-chain-transaction',
       status: 'completed',

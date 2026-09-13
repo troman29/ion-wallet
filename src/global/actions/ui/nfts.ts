@@ -1,4 +1,3 @@
-import { TELEGRAM_GIFTS_SUPER_COLLECTION } from '../../../config';
 import { getIsNftVisible } from '../../helpers/nfts';
 import { addActionHandler, setGlobal } from '../../index';
 import {
@@ -92,10 +91,6 @@ addActionHandler('addCollectionTab', (global, actions, { collection, isAuto }) =
   const accountState = selectAccountState(global, accountId);
   const currentNfts = accountState?.nfts || { byAddress: {} };
 
-  if (isAuto && collection.address === TELEGRAM_GIFTS_SUPER_COLLECTION && currentNfts.wasTelegramGiftsAutoAdded) {
-    return global;
-  }
-
   const existingCollectionTabs = currentNfts.collectionTabs || [];
 
   if (!existingCollectionTabs.some((e) => e.address === collection.address)) {
@@ -103,7 +98,6 @@ addActionHandler('addCollectionTab', (global, actions, { collection, isAuto }) =
       nfts: {
         ...currentNfts,
         collectionTabs: [...existingCollectionTabs, collection],
-        ...(isAuto && collection.address === TELEGRAM_GIFTS_SUPER_COLLECTION && { wasTelegramGiftsAutoAdded: true }),
       },
     });
   }

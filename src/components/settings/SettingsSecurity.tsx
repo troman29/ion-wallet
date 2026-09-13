@@ -5,15 +5,12 @@ import type { AutolockValueType, GlobalState } from '../../global/types';
 import { BiometricsState } from '../../global/types';
 
 import {
-  APP_ENV,
   DEFAULT_AUTOLOCK_OPTION,
   IS_CAPACITOR,
 } from '../../config';
 import {
   selectAccount,
-  selectCurrentAccount,
   selectCurrentAccountId,
-  selectCurrentAccountState,
   selectIsAllowSuspiciousActions,
   selectIsBiometricAuthEnabled,
   selectIsEnclaveSessionValid,
@@ -37,9 +34,6 @@ import CreatePasswordForm from '../ui/CreatePasswordForm';
 import ModalHeader from '../ui/ModalHeader';
 import PasswordForm from '../ui/PasswordForm';
 import Transition from '../ui/Transition';
-import Mfa from './mfa/Mfa';
-import MfaInstalled from './mfa/MfaInstalled';
-import MfaPassword from './mfa/MfaPassword';
 import BackupFlow, { BackupSlide } from './security/BackupFlow';
 import BiometricsFlow, { BiometricsSlide } from './security/BiometricsFlow';
 import BiometricsWarningModal from './security/BiometricsWarningModal';
@@ -56,12 +50,8 @@ const enum SLIDES {
   backup,
   biometrics,
   disableBiometricsCreatePassword,
-  mfa,
-  confirmMfaInstallation,
-  mfaInstalled,
 }
 
-const SHOULD_FORCE_SHOW_MFA_IN_DEV = APP_ENV === 'development';
 interface OwnProps {
   isActive: boolean;
   isInsideModal?: boolean;
@@ -84,8 +74,6 @@ interface StateProps {
   currentAccountId: string;
   biometricsState: BiometricsState;
   biometricsError?: string;
-  isMfaEnabled: boolean;
-  hasCurrentAccountMfa: boolean;
 }
 
 function SettingsSecurity({
@@ -107,8 +95,6 @@ function SettingsSecurity({
   shouldShowBackup,
   biometricsState,
   biometricsError,
-  isMfaEnabled,
-  hasCurrentAccountMfa,
 }: OwnProps & StateProps) {
   const {
     setIsPinAccepted,
@@ -276,19 +262,6 @@ function SettingsSecurity({
     });
   });
 
-  const handleOpenMfa = useLastCallback(() => {
-    setCurrentSlide(SLIDES.mfa);
-  });
-
-  const handleOpenInstallConfirmation = useLastCallback(() => {
-    setCurrentSlide(SLIDES.confirmMfaInstallation);
-  });
-
-  const handleOpenMfaInstalled = useLastCallback(() => {
-    setCurrentSlide(SLIDES.mfaInstalled);
-    setNextKey(SLIDES.mfa);
-  });
-
   const handleAppLockToggle = useLastCallback(() => {
     ensureAuthenticatedAction(() => {
       setAppLockValue({ value: autolockValue, isEnabled: !isAppLockEnabled });
@@ -374,11 +347,9 @@ function SettingsSecurity({
             isAllowSuspiciousActions={isAllowSuspiciousActions}
             isAutoUpdateEnabled={isAutoUpdateEnabled}
             shouldShowBackup={shouldShowBackup}
-            isMfaVisible={SHOULD_FORCE_SHOW_MFA_IN_DEV || hasCurrentAccountMfa}
             onBackClick={handleBackToSettingsClick}
             onChangePasswordClick={handleChangePasswordClick}
             onOpenBackupWallet={handleOpenBackupWallet}
-            onOpenMfa={handleOpenMfa}
             onBiometricAuthToggle={handleBiometricAuthToggle}
             onAppLockToggle={handleAppLockToggle}
             onAutolockChange={handleAutolockChange}
@@ -505,36 +476,6 @@ function SettingsSecurity({
         );
       }
 
-      case SLIDES.mfa:
-        return (
-          <Mfa
-            isActive={isActive}
-            isInsideModal={isInsideModal}
-            onBackClick={openSettingsSlide}
-            currentAccountId={currentAccountId}
-            isSlideActive={isSlideActive}
-            openMfaPassword={handleOpenInstallConfirmation}
-            openMfaInstalled={handleOpenMfaInstalled}
-          />
-        );
-      case SLIDES.confirmMfaInstallation:
-        return (
-          <MfaPassword
-            isActive={isActive}
-            isInsideModal={isInsideModal}
-            onBackClick={handleOpenMfa}
-            openMfaInstalled={handleOpenMfaInstalled}
-            openMfa={handleOpenMfa}
-          />
-        );
-      case SLIDES.mfaInstalled:
-        return (
-          <MfaInstalled
-            isSlideActive={isSlideActive}
-            onClick={handleOpenMfa}
-          />
-        );
-
       default:
         return undefined;
     }
@@ -587,10 +528,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
   const isAllowSuspiciousActions = selectIsAllowSuspiciousActions(global, currentAccountId);
   const isMultichainAccount = selectIsMultichainAccount(global, currentAccountId);
   const isMnemonicAccount = selectIsMnemonicAccount(global);
-  const currentAccount = selectCurrentAccount(global);
-  const hasCurrentAccountMfa = Boolean(currentAccount?.byChain.ton?.mfa);
-  const isMfaEnabled = selectCurrentAccountState(global)?.config?.isMfaEnabled ?? false;
-
   return {
     isBiometricAuthEnabled,
     isMultichainAccount,
@@ -604,8 +541,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     currentAccountId,
     biometricsState: global.biometrics.state,
     biometricsError: global.biometrics.error,
-    isMfaEnabled,
-    hasCurrentAccountMfa,
   };
 })(SettingsSecurity));
 

@@ -2,7 +2,7 @@ import type { TeactNode } from '../../lib/teact/teact';
 import React, { memo, useCallback, useEffect, useMemo, useRef } from '../../lib/teact/teact';
 import { getActions, withGlobal } from '../../global';
 
-import type { ApiBaseCurrency, ApiFetchEstimateDieselResult, ApiNft } from '../../api/types';
+import type { ApiBaseCurrency, ApiNft } from '../../api/types';
 import type { SavedAddress, UserToken } from '../../global/types';
 import type { LangFn } from '../../hooks/useLang';
 import type { ExplainedTransferFee } from '../../util/fee/transferFee';
@@ -24,7 +24,6 @@ import {
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import { getChainConfig } from '../../util/chain';
-import { SECOND } from '../../util/dateFormat';
 import { stopEvent } from '../../util/domEvents';
 import { getMaxTransferAmount, isBalanceSufficientForTransfer } from '../../util/fee/transferFee';
 import { vibrate } from '../../util/haptics';
@@ -35,7 +34,6 @@ import { getChainBySlug, getIsNativeToken, getIsServiceToken, getNativeToken } f
 
 import useCurrentOrPrev from '../../hooks/useCurrentOrPrev';
 import useFlag from '../../hooks/useFlag';
-import useInterval from '../../hooks/useInterval';
 import useLang from '../../hooks/useLang';
 import useLastCallback from '../../hooks/useLastCallback';
 import { useTransitionActiveKey } from '../../hooks/useTransitionActiveKey';
@@ -76,8 +74,6 @@ interface StateProps {
   nfts?: ApiNft[];
   binPayload?: string;
   stateInit?: string;
-  diesel?: ApiFetchEstimateDieselResult;
-  isDieselAuthorizationStarted?: boolean;
   isMultisig: boolean;
   isSensitiveDataHidden?: true;
   scamWarningType?: ScamWarningType;
@@ -91,8 +87,6 @@ interface StateProps {
 
 const COMMENT_MAX_SIZE_BYTES = 5000;
 const ACTIVE_STATES = new Set([TransferState.Initial, TransferState.None]);
-const AUTHORIZE_DIESEL_INTERVAL_MS = SECOND;
-
 const runDebounce = debounce((cb) => cb(), 500, false);
 
 function TransferInitial({
@@ -115,8 +109,6 @@ function TransferInitial({
   nfts,
   binPayload,
   stateInit,
-  diesel,
-  isDieselAuthorizationStarted,
   isMultisig,
   isSensitiveDataHidden,
   scamWarningType,
@@ -138,8 +130,6 @@ function TransferInitial({
     setTransferShouldEncrypt,
     cancelTransfer,
     showDialog,
-    authorizeDiesel,
-    fetchTransferDieselState,
     checkTransferAddress,
     dismissTransferScamWarning,
     setTransferScreen,
@@ -188,7 +178,6 @@ function TransferInitial({
 
   const safeExplainedFee = useMemo(() => {
     return explainedFee ?? {
-      isGasless: false,
       canTransferFullBalance: false,
     };
   }, [explainedFee]);
@@ -210,17 +199,6 @@ function TransferInitial({
     fullFee: safeExplainedFee.fullFee?.terms,
     canTransferFullBalance: safeExplainedFee.canTransferFullBalance,
   });
-
-  const isDieselNotAuthorized = diesel?.status === 'not-authorized';
-  const authorizeDieselInterval = isDieselNotAuthorized && isDieselAuthorizationStarted
-    ? AUTHORIZE_DIESEL_INTERVAL_MS
-    : undefined;
-
-  const updateDieselState = useLastCallback(() => {
-    fetchTransferDieselState({ tokenSlug });
-  });
-
-  useInterval(updateDieselState, authorizeDieselInterval);
 
   const fullFee = useMemo(() => {
     return getFullFee(safeExplainedFee.fullFee?.terms, tokenSlug);
@@ -347,8 +325,7 @@ function TransferInitial({
 
   const isAmountGreaterThanBalance = !isNftTransfer && balance !== undefined && amount !== undefined
     && amount > balance;
-  const hasInsufficientFeeError = isEnoughBalance === false && !isAmountGreaterThanBalance
-    && diesel?.status !== 'not-authorized' && diesel?.status !== 'pending-previous';
+  const hasInsufficientFeeError = isEnoughBalance === false && !isAmountGreaterThanBalance;
   const hasAmountError = !isNftTransfer && amount !== undefined && (
     (maxAmount !== undefined && amount > maxAmount)
     || hasInsufficientFeeError // Ideally, the insufficient fee error message should be displayed somewhere else
@@ -356,13 +333,12 @@ function TransferInitial({
   const isCommentRequired = Boolean(toAddress) && isMemoRequired;
   const hasCommentError = isCommentRequired && !comment;
 
-  const canSubmit = isDieselNotAuthorized || Boolean(
+  const canSubmit = Boolean(
     isAddressValid
     && !isAmountMissing && !hasAmountError
     && isEnoughBalance
     && !hasCommentError
     && !isMultisig
-    && (!safeExplainedFee.isGasless || diesel?.status === 'available' || diesel?.status === 'stars-fee')
     && !(isNftTransfer && !nfts?.length),
   );
 
@@ -370,11 +346,6 @@ function TransferInitial({
     if (e) stopEvent(e);
 
     if (scamWarningType) return;
-
-    if (isDieselNotAuthorized) {
-      authorizeDiesel();
-      return;
-    }
 
     if (!canSubmit) {
       return;
@@ -390,8 +361,6 @@ function TransferInitial({
       binPayload,
       shouldEncrypt,
       nfts,
-      isGasless: safeExplainedFee.isGasless,
-      isGaslessWithStars: diesel?.status === 'stars-fee',
       stateInit,
     });
   });
@@ -442,12 +411,6 @@ function TransferInitial({
   }, [amount, hasInsufficientFeeError, isAmountGreaterThanBalance, isMultisig, lang]);
 
   function renderButtonText() {
-    if (diesel?.status === 'not-authorized') {
-      return lang('$authorize_token_fee_capitalized', { token: symbol! });
-    }
-    if (diesel?.status === 'pending-previous') {
-      return lang('Awaiting Previous Fee');
-    }
     return lang('$send_token_symbol', isNftTransfer ? 'NFT' : symbol || UNKNOWN_TOKEN.symbol);
   }
 
@@ -646,7 +609,6 @@ export default memo(
         nfts,
         binPayload,
         isMemoRequired,
-        diesel,
         stateInit,
         scamWarningType,
         isTransferReadonly,
@@ -681,8 +643,6 @@ export default memo(
         isComplete: state === TransferState.Complete,
         baseCurrency,
         nativeTokenBalance: selectCurrentAccountTokenBalance(global, getNativeToken(chain).slug),
-        diesel,
-        isDieselAuthorizationStarted: accountState?.isDieselAuthorizationStarted,
         isMultisig: selectIsMultisigWallet(global, currentAccountId, chain),
         isSensitiveDataHidden,
         scamWarningType,

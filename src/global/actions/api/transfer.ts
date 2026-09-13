@@ -14,7 +14,6 @@ import { bigintDivideToNumber } from '../../../util/bigint';
 import { getDoesUsePinPad } from '../../../util/biometrics';
 import { getChainConfig } from '../../../util/chain';
 import { toDecimal } from '../../../util/decimals';
-import { getDieselTokenAmount } from '../../../util/fee/transferFee';
 import { split } from '../../../util/iteratees';
 import { getTranslation } from '../../../util/langProvider';
 import { shouldShowDomainScamWarning, shouldShowSeedPhraseScamWarning } from '../../../util/scamDetection';
@@ -25,14 +24,11 @@ import { addActionHandler, getGlobal, setGlobal } from '../../index';
 import {
   clearCurrentTransfer,
   clearIsPinAccepted,
-  preserveMaxTransferAmount,
-  updateAccountState,
   updateCurrentTransfer,
   updateCurrentTransferByCheckResult,
   updateCurrentTransferLoading,
 } from '../../reducers';
 import {
-  selectAccountState,
   selectCurrentAccount,
   selectCurrentAccountId,
   selectCurrentAccountTokens,
@@ -87,9 +83,7 @@ addActionHandler('submitTransferInitial', async (global, actions, payload) => {
     comment,
     shouldEncrypt,
     nfts,
-    isGasless,
     stateInit,
-    isGaslessWithStars,
     binPayload,
     isNftBurn,
   } = payload;
@@ -120,7 +114,6 @@ addActionHandler('submitTransferInitial', async (global, actions, payload) => {
       amount,
       payload: getTransferPayload(chain, binPayload, comment, shouldEncrypt),
       stateInit,
-      allowGasless: true,
     });
   }
 
@@ -153,8 +146,6 @@ addActionHandler('submitTransferInitial', async (global, actions, payload) => {
     shouldEncrypt,
     tokenSlug,
     isToNewAddress: result.isToAddressNew,
-    isGasless,
-    isGaslessWithStars,
     isNftBurn,
   }));
 });
@@ -177,7 +168,6 @@ addActionHandler('fetchTransferFee', async (global, actions, payload) => {
     payload: getTransferPayload(chain, binPayload, comment, shouldEncrypt),
     tokenAddress,
     stateInit,
-    allowGasless: true,
   });
 
   global = getGlobal();
@@ -274,10 +264,7 @@ addActionHandler('submitTransfer', withEnclaveSessionRelease(async (global, acti
     shouldEncrypt,
     binPayload,
     nfts,
-    isGasless,
-    diesel,
     stateInit,
-    isGaslessWithStars,
     isNftBurn,
   } = global.currentTransfer;
 
@@ -297,7 +284,7 @@ addActionHandler('submitTransfer', withEnclaveSessionRelease(async (global, acti
   const fullNativeFee = explainedFee?.fullFee?.nativeSum;
   const realNativeFee = explainedFee?.realFee?.nativeSum;
 
-  let result: { activityId?: string; mfaRequestHash?: string }
+  let result: { activityId?: string }
     | { activityIds: string[] } | { error: string } | undefined;
 
   if (nfts?.length) {
@@ -327,7 +314,7 @@ addActionHandler('submitTransfer', withEnclaveSessionRelease(async (global, acti
       // TODO - process all responses from the API
       result = batchResult;
 
-      if (!batchResult || 'error' in batchResult || 'mfaRequestHash' in batchResult) {
+      if (!batchResult || 'error' in batchResult) {
         break;
       }
     }
@@ -343,12 +330,8 @@ addActionHandler('submitTransfer', withEnclaveSessionRelease(async (global, acti
       tokenAddress,
       fee: fullNativeFee,
       realFee: realNativeFee,
-      isGasless,
-      dieselAmount: diesel && getDieselTokenAmount(diesel),
       stateInit,
-      isGaslessWithStars,
       noFeeCheck: true,
-      gaslessTransaction: diesel?.transaction,
     };
 
     result = await callApi('submitTransfer', chain, options);
@@ -359,14 +342,11 @@ addActionHandler('submitTransfer', withEnclaveSessionRelease(async (global, acti
   }
 
   setGlobal(updateCurrentTransfer(getGlobal(), {
-    state: ('mfaRequestHash' in result) ? TransferState.ConfirmMfa : TransferState.Complete,
+    state: TransferState.Complete,
     txId: ('activityIds' in result && result.activityIds[0])
       || ('activityId' in result && result.activityId)
       || undefined,
-    mfaRequestHash: ('mfaRequestHash' in result && result.mfaRequestHash) || undefined,
   }));
-
-  actions.fetchTransferDieselState({ tokenSlug });
 }));
 
 addActionHandler('cancelTransfer', (global, actions, { shouldReset } = {}) => {
@@ -391,27 +371,6 @@ addActionHandler('cancelTransfer', (global, actions, { shouldReset } = {}) => {
   setGlobal(global);
 });
 
-addActionHandler('fetchTransferDieselState', async (global, actions, { tokenSlug }) => {
-  const { tokenAddress, chain } = selectToken(global, tokenSlug);
-  if (!tokenAddress || chain !== 'ton') return;
-
-  const diesel = await callApi('fetchEstimateDiesel', selectCurrentAccountId(global)!, chain, tokenAddress);
-  if (!diesel) return;
-
-  global = getGlobal();
-  if (hasCurrentTokenChanged(global, tokenSlug)) {
-    return;
-  }
-
-  const currentAccountId = selectCurrentAccountId(global)!;
-  const accountState = selectAccountState(global, currentAccountId);
-  global = preserveMaxTransferAmount(global, updateCurrentTransfer(global, { diesel }));
-  if (accountState?.isDieselAuthorizationStarted && diesel.status !== 'not-authorized') {
-    global = updateAccountState(global, currentAccountId, { isDieselAuthorizationStarted: undefined });
-  }
-  setGlobal(global);
-});
-
 addActionHandler('checkTransferAddress', async (global, actions, { address, chain }) => {
   if (!address || !chain) {
     global = updateCurrentTransfer(global, { toAddressName: undefined, resolvedAddress: undefined });
@@ -433,19 +392,6 @@ addActionHandler('checkTransferAddress', async (global, actions, { address, chai
     });
   }
   setGlobal(global);
-});
-
-addActionHandler('updateMfaRequestStatus', async (global) => {
-  const hash = global.currentTransfer.mfaRequestHash;
-  if (!hash) return;
-
-  const result = await callApi('fetchMfaRequest', hash);
-
-  if (result?.isConfirmed) {
-    global = getGlobal();
-    global = updateCurrentTransfer(global, { state: TransferState.Complete });
-    setGlobal(global);
-  }
 });
 
 function getTransferPayload(

@@ -1,5 +1,3 @@
-import type { Platforms } from '@twa-dev/types';
-
 import {
   IS_ANDROID_DIRECT,
   IS_CAPACITOR,
@@ -7,21 +5,17 @@ import {
   IS_FIREFOX_EXTENSION,
   IS_OPERA_EXTENSION,
   IS_PACKAGED_ELECTRON,
-  IS_TELEGRAM_APP,
 } from '../config';
-import { getTelegramApp } from './telegram';
 import { IS_ANDROID, IS_ELECTRON, IS_IOS } from './windowEnvironment';
 
-export type BuildPlatform = Platforms
-  | 'web'
+export type BuildPlatform = 'web'
   | 'extension'
   | 'firefox-extension'
   | 'opera-extension'
   | 'electron'
   | 'android'
   | 'android-direct'
-  | 'ios'
-  | 'telegram-unknown';
+  | 'ios';
 
 export function getBuildPlatform(): BuildPlatform {
   if (IS_FIREFOX_EXTENSION) return 'firefox-extension';
@@ -34,10 +28,6 @@ export function getBuildPlatform(): BuildPlatform {
     if (IS_IOS) return 'ios';
   }
 
-  if (IS_TELEGRAM_APP) {
-    return getTelegramApp()?.platform || 'telegram-unknown';
-  }
-
   if (IS_ELECTRON) return 'electron';
 
   return 'web';
@@ -47,7 +37,6 @@ export function getFlagsValue() {
   return {
     IS_ANDROID_DIRECT,
     IS_CAPACITOR,
-    IS_TELEGRAM_APP,
     IS_EXTENSION,
     IS_FIREFOX_EXTENSION,
     IS_PACKAGED_ELECTRON,

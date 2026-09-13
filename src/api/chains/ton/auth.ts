@@ -1,7 +1,6 @@
 import * as tonWebMnemonic from 'tonweb-mnemonic';
 import * as bip39 from 'bip39';
 import nacl from 'tweetnacl';
-import { WalletContractV5R1 } from '@ton/ton/dist/wallets/WalletContractV5R1';
 
 import type {
   ApiDerivation } from '../../types';
@@ -19,7 +18,6 @@ import isMnemonicPrivateKey from '../../../util/isMnemonicPrivateKey';
 import { extractKey, omitUndefined } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
 import { getWalletPublicKey, toBase64Address } from './util/tonCore';
-import { resolveMfaExtensionAddress } from './contracts/util';
 import { fetchStoredAccount } from '../../common/accounts';
 import { getMnemonic, validateBip39Mnemonic } from '../../common/mnemonic';
 import { bytesToHex, hexToBytes } from '../../common/utils';
@@ -254,12 +252,6 @@ async function getWalletFromKeys(
   variants: { publicKey: Uint8Array; derivation?: { path: string; index: number } }[],
 ): Promise<(ApiTonWallet & { lastTxId?: string })> {
   const { wallet, version, lastTxId, derivation } = await pickBestWallet(network, variants);
-  let mfaExtensionAddress: string | undefined;
-
-  if (wallet instanceof WalletContractV5R1) {
-    mfaExtensionAddress = await resolveMfaExtensionAddress(network, wallet.address);
-  }
-
   const address = toBase64Address(wallet.address, false, network);
   const publicKeyHex = bytesToHex(wallet.publicKey);
 
@@ -270,7 +262,6 @@ async function getWalletFromKeys(
     index: 0,
     lastTxId,
     derivation,
-    mfa: mfaExtensionAddress ? { address: mfaExtensionAddress } : undefined,
   };
 }
 

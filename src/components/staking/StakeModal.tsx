@@ -20,14 +20,12 @@ import { getIsViewAccountDisabled } from '../../util/isViewAccount';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { getIsNewStakeAllowed } from '../../util/staking';
 
-import useInterval from '../../hooks/useInterval';
 import useLang from '../../hooks/useLang';
 import useLastCallback from '../../hooks/useLastCallback';
 import useModalTransitionKeys from '../../hooks/useModalTransitionKeys';
 
 import AccountSwitcherPill from '../common/AccountSwitcherPill';
 import AccountSwitcherSlide from '../common/AccountSwitcherSlide';
-import MfaConfirm from '../common/MfaConfirm';
 import TransactionBanner from '../common/TransactionBanner';
 import TransferResult from '../common/TransferResult';
 import LedgerConfirmOperation from '../ledger/LedgerConfirmOperation';
@@ -55,7 +53,6 @@ const IS_OPEN_STATES = new Set([
   StakingState.StakePassword,
   StakingState.StakeConnectHardware,
   StakingState.StakeConfirmHardware,
-  StakingState.StakeConfirmMfa,
   StakingState.StakeComplete,
   StakingState.StakeSelectAccount,
 ]);
@@ -67,7 +64,6 @@ function StakeModal({
   amount,
   error,
   tokenBySlug,
-  mfaRequestHash,
   accountId,
   accountTitle,
   hasMultipleAccounts,
@@ -79,7 +75,6 @@ function StakeModal({
     clearStakingError,
     submitStaking,
     openStakingInfo,
-    updateStakingMfaRequestStatus,
     switchStakingAccount,
   } = getActions();
 
@@ -92,12 +87,6 @@ function StakeModal({
   const [renderedStakingAmount, setRenderedStakingAmount] = useState(amount);
 
   const { renderingKey, nextKey, updateNextKey } = useModalTransitionKeys(state, isOpen);
-
-  useInterval(() => {
-    if (state === StakingState.StakeConfirmMfa && mfaRequestHash) {
-      updateStakingMfaRequestStatus();
-    }
-  }, state === StakingState.StakeConfirmMfa ? 1000 : undefined);
 
   const handleBackClick = useLastCallback(() => {
     if (state === StakingState.StakePassword) {
@@ -260,17 +249,6 @@ function StakeModal({
             onClose={cancelStaking}
             onTryAgain={handleLedgerConnect}
           />
-        );
-
-      case StakingState.StakeConfirmMfa:
-        return (
-          <>
-            <ModalHeader onClose={cancelStaking} />
-            <MfaConfirm
-              onClose={cancelStaking}
-              mfaRequestHash={mfaRequestHash}
-            />
-          </>
         );
 
       case StakingState.StakeComplete:

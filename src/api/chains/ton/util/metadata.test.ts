@@ -40,7 +40,7 @@ describe('getIsNftUnverified', () => {
     expect(getIsNftUnverified({ collectionAddress: TRUSTED_COLLECTION })).toBeUndefined();
   });
 
-  it('skips a Fragment NFT, which covers Telegram gifts, numbers and usernames', () => {
+  it('skips a Fragment NFT', () => {
     expect(getIsNftUnverified({ collectionAddress: NFT_FRAGMENT_COLLECTIONS[0], isOnFragment: true })).toBeUndefined();
   });
 

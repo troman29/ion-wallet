@@ -4,7 +4,6 @@
 
 import type * as tonAuth from '../chains/ton/auth';
 import type * as tonDomains from '../chains/ton/domains';
-import type * as tonMfa from '../chains/ton/mfa';
 import type * as tonStaking from '../chains/ton/staking';
 import type { ChainDappSupport } from '../dappProtocols/types';
 import type {
@@ -37,11 +36,8 @@ import type {
 import type {
   ApiCheckTransactionDraftOptions,
   ApiCheckTransactionDraftResult,
-  ApiFetchEstimateDieselResult,
   ApiSubmitGasfullTransferOptions,
   ApiSubmitGasfullTransferResult,
-  ApiSubmitGaslessTransferOptions,
-  ApiSubmitGaslessTransferResult,
   ApiSubmitNftTransferResult,
 } from './transfer';
 import type { OnApiUpdate } from './updates';
@@ -71,16 +67,6 @@ export interface ChainDnsSupport {
   submitDnsRenewal: typeof tonDomains.submitDnsRenewal;
   checkDnsChangeWalletDraft: typeof tonDomains.checkDnsChangeWalletDraft;
   submitDnsChangeWallet: typeof tonDomains.submitDnsChangeWallet;
-}
-
-/**
- * Optional per-chain multi-factor (Telegram MFA) support. Exposed by chains that support the MFA
- * extension; omitted by the rest. Method types mirror the TON implementation contract.
- */
-export interface ChainMfaSupport {
-  installMfaExtension: typeof tonMfa.installMfaExtension;
-  createRemoveMfaExtensionPayload: typeof tonMfa.createRemoveMfaExtensionPayload;
-  resolveExtensionAddress: typeof tonMfa.resolveExtensionAddress;
 }
 
 /**
@@ -237,22 +223,10 @@ export interface ChainSdk<T extends ApiChain> {
     signal?: AbortSignal,
   ): Promise<ApiCheckTransactionDraftResult>;
 
-  /** The goal of the function is acting like `checkTransactionDraft` but return only the diesel information */
-  fetchEstimateDiesel(accountId: string, tokenAddress: string): MaybePromise<ApiFetchEstimateDieselResult>;
-
   /** Builds, signs and sends a transfer with the fee paid from the current wallet */
   submitGasfullTransfer(
     options: ApiSubmitGasfullTransferOptions,
   ): Promise<ApiSubmitGasfullTransferResult | { error: string }>;
-
-  /**
-   * Builds, signs and sends a transfer with the fee paid by My Wallet in exchange to diesel, i.e. a small amount
-   * of the transferred token. If the chain doesn't support gasless transfers, it mustn't add `diesel` to the
-   * `checkTransactionDraft` result.
-   */
-  submitGaslessTransfer(
-    options: ApiSubmitGaslessTransferOptions,
-  ): Promise<ApiSubmitGaslessTransferResult | { error: string }>;
 
   //
   // Onchain swap (DEX)
@@ -328,9 +302,6 @@ export interface ChainSdk<T extends ApiChain> {
 
   /** SDK submodule responsible for on-chain naming (DNS). Omitted by chains without a name service. */
   dns?: ChainDnsSupport;
-
-  /** SDK submodule responsible for multi-factor (Telegram MFA) support. Omitted by chains without MFA. */
-  mfa?: ChainMfaSupport;
 
   /** SDK submodule for a chain's native (non-BIP39) mnemonic scheme. Omitted by BIP39-only chains. */
   nativeMnemonic?: ChainNativeMnemonicSupport;

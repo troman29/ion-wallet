@@ -29,7 +29,6 @@ type BaseActivity = {
   shouldLoadDetails?: boolean;
   isScam?: boolean;
   extra?: {
-    withW5Gasless?: boolean; // Only for TON
     dex?: ApiSwapDexLabel; // Only for TON liquidity deposit and withdrawal
     marketplace?: ApiNftMarketplace;
     /** Request identifier from the underlying message where available (TON only) */

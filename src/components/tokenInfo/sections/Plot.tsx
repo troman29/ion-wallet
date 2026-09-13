@@ -1,9 +1,8 @@
-import React, { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from '../../../lib/teact/teact';
+import React, { memo, useLayoutEffect, useMemo, useRef, useState } from '../../../lib/teact/teact';
 
 import type { ApiHistoryList } from '../../../api/types';
 
 import buildClassName from '../../../util/buildClassName';
-import useTelegramMiniAppSwipeToClose from '../../../util/telegram/hooks/useTelegramMiniAppSwipeToClose';
 
 import useLastCallback from '../../../hooks/useLastCallback';
 import useUniqueId from '../../../hooks/useUniqueId';
@@ -38,11 +37,6 @@ function Plot({ prices, selectedIndex, className, onSelectIndex }: OwnProps) {
   const gradientId = useUniqueId('token-plot-gradient-');
   const pastClipId = useUniqueId('token-plot-past-');
   const restClipId = useUniqueId('token-plot-rest-');
-
-  const { disableSwipeToClose, enableSwipeToClose } = useTelegramMiniAppSwipeToClose();
-
-  // Leaving the screen mid-touch must not keep the gesture disabled
-  useEffect(() => enableSwipeToClose, [enableSwipeToClose]);
 
   useLayoutEffect(() => {
     const element = containerRef.current;
@@ -81,14 +75,10 @@ function Plot({ prices, selectedIndex, className, onSelectIndex }: OwnProps) {
 
   const handleTouchStart = useLastCallback((e: React.TouchEvent<HTMLDivElement>) => {
     handleMove(e);
-
-    disableSwipeToClose();
   });
 
   const handleLeave = useLastCallback(() => {
     onSelectIndex(-1);
-
-    enableSwipeToClose();
   });
 
   function renderPlot(allPoints: Point[], { line, area }: { line: string; area: string }) {

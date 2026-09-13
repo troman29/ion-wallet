@@ -1021,7 +1021,6 @@ No additional data.: ไม่มีข้อมูลเพิ่มเติ�
 $in_currency: เป็น %currency%
 Rename Wallet: เปลี่ยนชื่อกระเป๋าเงิน
 You can rename this wallet for easier identification.: คุณสามารถเปลี่ยนชื่อกระเป๋าเงินนี้เพื่อให้ระบุได้ง่ายขึ้น
-Telegram Gifts: ของขวัญ Telegram
 Collectibles: ของสะสม
 Bluetooth unavailable: บลูทูธไม่พร้อมใช้งาน
 $bluetooth_enable_guide: เปิดบลูทูธในการตั้งค่าอุปกรณ์และอนุญาตให้แอปเข้าถึงบลูทูธ
@@ -1039,7 +1038,6 @@ Multisig Wallet Detected: ตรวจพบกระเป๋าเงิน Mu
 $multisig_warning_text: "**การถอนเงิน** จากกระเป๋านี้ผ่าน %app_name% เป็น**ไปไม่ได้** โปรดแน่ใจว่าเป็นกระเป๋าของคุณจริงๆ — มิฉะนั้นอาจเป็นการหลอกลวง %multisig_warning_link%"
 $multisig_warning_link: คลิกเพื่อเรียนรู้เพิ่มเติม
 Multisig sending disabled: ไม่ส่งจาก Multisig
-$try_new_air_version: ลองใช้ประสบการณ์แอปแบบเนทีฟ — เบากว่า เร็วกว่า และสร้างมาสำหรับอุปกรณ์ของคุณ คุณสามารถเปลี่ยนกลับได้ตลอดเวลา
 $accept_terms_with_link: ฉันยอมรับ %link%
 use the wallet responsibly: ใช้งานกระเป๋าเงินอย่างมีความรับผิดชอบ
 "%app_name% Resources": ทรัพยากร %app_name%
@@ -1743,7 +1741,6 @@ $no_activity_history: |
   ประวัติการทำรายการ
 Standalone: แยกเดี่ยว
 "Enter wallet name:": "ใส่ชื่อกระเป๋า:"
-All Telegram Gifts: ของขวัญ Telegram ทั้งหมด
 Add Crypto: เพิ่มคริปโต
 Share QR Code: แชร์ QR โค้ด
 $send_only_ton: ส่ง ION หรือสินทรัพย์บน ION เท่านั้นไปยังที่อยู่นี้ การส่งโทเคนอื่นจะทำให้สูญหาย
@@ -2208,7 +2205,6 @@ Earn is not supported on this account.: บัญชีนี้ไม่รอ�
 Export Logs: ส่งออกบันทึก
 Failed to load chat: โหลดแชทไม่สำเร็จ
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: การโอน NFT ด้วย MFA รองรับ NFT สูงสุด 4 รายการต่อครั้ง
 More Details: รายละเอียดเพิ่มเติม
 Open Telegram: เปิด Telegram
 Open addresses: เปิดรายการที่อยู่

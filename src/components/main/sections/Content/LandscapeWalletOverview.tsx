@@ -8,7 +8,7 @@ import type { CollectiblesMenuHandler } from './hooks/useCollectiblesOverviewMen
 import type { CollectionMenuHandler } from './hooks/useCollectionOverviewMenu';
 import { ContentTab } from '../../../../global/types';
 
-import { ANIMATION_LEVEL_MIN, TELEGRAM_GIFTS_SUPER_COLLECTION } from '../../../../config';
+import { ANIMATION_LEVEL_MIN } from '../../../../config';
 import { getCollectionKey } from '../../../../global/helpers/nfts';
 import {
   selectCurrentAccountId,
@@ -106,8 +106,6 @@ function LandscapeWalletOverview({
   const stretchedCellClass = shouldStretchCell ? styles.stretchedCell : undefined;
 
   const getCollectionCaption = useLastCallback((collection: ApiNftCollection) => {
-    if (collection.address === TELEGRAM_GIFTS_SUPER_COLLECTION) return lang('Telegram Gifts');
-
     return collectionByKey.get(getCollectionKey(collection.chain, collection.address))?.name ?? '';
   });
 
@@ -218,7 +216,6 @@ function LandscapeWalletOverview({
           {visibleCollectionTabs.map((collection) => {
             const collectionCaption = getCollectionCaption(collection);
             const collectionKey = getCollectionKey(collection.chain, collection.address);
-            const isTelegramGifts = collection.address === TELEGRAM_GIFTS_SUPER_COLLECTION;
             return (
               <OverviewCell<ApiNftCollection, CollectionMenuHandler>
                 key={`${collection.chain}_${collection.address}`}
@@ -227,9 +224,7 @@ function LandscapeWalletOverview({
                   'Show All %collection_name%',
                   { collection_name: collectionCaption },
                 ) as string}
-                showAllIcon={isTelegramGifts
-                  ? buildClassName(styles.gifIconFix, 'icon-gift')
-                  : 'icon-show-all-collectibles'}
+                showAllIcon="icon-show-all-collectibles"
                 showAllAmount={collectionByKey.get(collectionKey)?.count}
                 clickArg={collection}
                 menuItems={collectionMenuItems}

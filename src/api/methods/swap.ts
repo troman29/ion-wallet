@@ -50,7 +50,6 @@ import {
 } from '../common/swap';
 import { ApiServerError } from '../errors';
 import { callHook } from '../hooks';
-import { publishSignedMfaRequest } from './mfa';
 import { getBackendAuthToken, getStoredBackendAuthToken } from './other';
 
 let onUpdate: OnApiUpdate;
@@ -97,9 +96,8 @@ export async function swapSubmit(
   enclaveToken: string,
   transfers: ApiSwapTransfer[] | undefined,
   historyItem: ApiSwapHistoryItem,
-  isGasless?: boolean,
   transaction?: string,
-): Promise<{ activityId?: string; mfaRequestHash?: string; swapId: string } | { error: string }> {
+): Promise<{ activityId?: string; swapId: string } | { error: string }> {
   const swapId = historyItem.id;
 
   const authToken = await getBackendAuthToken(accountId, enclaveToken);
@@ -124,7 +122,7 @@ export async function swapSubmit(
       },
     },
   };
-  await rememberDexSwapOperationIntent(accountId, localSwap, { gasless: isGasless });
+  await rememberDexSwapOperationIntent(accountId, localSwap);
 
   const result = await chains[chain].submitOnchainSwapTransfer({
     accountId,
@@ -132,7 +130,6 @@ export async function swapSubmit(
     transfers,
     transaction,
     historyItem,
-    isGasless,
     authToken,
     localSwap,
     swapId,
@@ -140,36 +137,13 @@ export async function swapSubmit(
   }, onUpdate);
 
   if ('error' in result) {
-    await rememberDexSwapOperationIntent(accountId, { ...localSwap, status: 'failed' }, { gasless: isGasless });
+    await rememberDexSwapOperationIntent(accountId, { ...localSwap, status: 'failed' });
     return result;
-  }
-
-  if ('mfaRequest' in result) {
-    const { mfaRequestHash } = await publishSignedMfaRequest(accountId, chain, result.mfaRequest);
-
-    return { swapId, mfaRequestHash };
   }
 
   await rememberWalletOperationSubmittedHashes(accountId, operationId, result.submittedHashes);
 
   return { activityId: result.activityId, swapId };
-}
-
-export async function confirmSwapMfaRequest(accountId: string, swapId: string, txHash: string) {
-  const { address } = await fetchStoredWallet(accountId, 'ton');
-  const authToken = await getStoredBackendAuthToken(accountId);
-
-  if (!authToken) {
-    throw new Error('Missing backend auth token for swap MFA confirmation');
-  }
-
-  await rememberWalletOperationSubmittedHashes(accountId, buildSwapOperationId(swapId), [txHash]);
-  await patchSwapItem({
-    address,
-    swapId,
-    authToken,
-    msgHash: txHash,
-  });
 }
 
 export async function fetchSwaps(
@@ -369,13 +343,6 @@ export async function swapCexSubmit(chain: ApiChain, transferOptions: ApiSubmitG
   if ('error' in result) {
     await patchSwapSubmitError(transferOptions, swapId, result.error);
     return result;
-  }
-
-  if (result.mfaRequest) {
-    const { accountId } = transferOptions;
-    const { mfaRequestHash } = await publishSignedMfaRequest(accountId, chain, result.mfaRequest);
-
-    return { swapId, mfaRequestHash };
   }
 
   const backendMsgHash = result.msgHashForCexSwap ?? result.txId;

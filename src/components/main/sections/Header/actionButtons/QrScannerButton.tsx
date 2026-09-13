@@ -1,8 +1,6 @@
 import React, { memo } from '../../../../../lib/teact/teact';
 import { getActions } from '../../../../../global';
 
-import { getIsMobileTelegramApp, IS_IOS } from '../../../../../util/windowEnvironment';
-
 import useLang from '../../../../../hooks/useLang';
 import useLastCallback from '../../../../../hooks/useLastCallback';
 import useQrScannerSupport from '../../../../../hooks/useQrScannerSupport';
@@ -22,11 +20,6 @@ function QrScannerButton({ isViewMode }: OwnProps) {
   const isQrScannerSupported = useQrScannerSupport() && !isViewMode;
 
   const handleQrScanClick = useLastCallback(() => {
-    if (IS_IOS && getIsMobileTelegramApp()) {
-      alert('Scanning is temporarily not available');
-      return;
-    }
-
     requestOpenQrScanner();
   });
 

@@ -27,7 +27,7 @@ import { parseTxId } from '../../../util/activities';
 import { getDoesUsePinPad } from '../../../util/biometrics';
 import { getChainConfig, getEvmChains, getIsSupportedChain } from '../../../util/chain';
 import { fromDecimal, roundDecimal, toDecimal } from '../../../util/decimals';
-import { canAffordSwapEstimateVariant, shouldSwapBeGasless } from '../../../util/fee/swapFee';
+import { canAffordSwapEstimateVariant } from '../../../util/fee/swapFee';
 import generateUniqueId from '../../../util/generateUniqueId';
 import { pick } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
@@ -100,7 +100,6 @@ export function buildSwapBuildRequest(global: GlobalState): ApiSwapBuildTransact
     networkFee,
     swapFee,
     ourFee,
-    dieselFee,
     realNetworkFee,
     routes,
   } = global.currentSwap;
@@ -116,9 +115,6 @@ export function buildSwapBuildRequest(global: GlobalState): ApiSwapBuildTransact
   if (!historyAddress) {
     throw new Error('TON history address is required to build swap transaction');
   }
-  const nativeTokenIn = findNativeToken(getChainBySlug(tokenIn.slug));
-  const nativeTokenInBalance = nativeTokenIn ? selectCurrentAccountTokenBalance(global, nativeTokenIn.slug) : undefined;
-  const swapType = selectSwapType(global);
   return {
     from,
     to,
@@ -131,13 +127,11 @@ export function buildSwapBuildRequest(global: GlobalState): ApiSwapBuildTransact
     slippage,
     fromAddress: account?.byChain[tokenIn.chain as ApiChain]?.address ?? historyAddress,
     historyAddress,
-    shouldTryDiesel: shouldSwapBeGasless({ ...global.currentSwap, swapType, nativeTokenInBalance }),
     dexRouterLabel: dexRouterLabel || undefined,
     dexLabel,
     networkFee: realNetworkFee ?? networkFee,
     swapFee: swapFee!,
     ourFee: ourFee!,
-    dieselFee,
     routes,
   };
 }
@@ -155,7 +149,6 @@ function buildSwapEstimates(estimate: ApiSwapDexEstimateResponse): ApiSwapEstima
       'swapFee',
       'swapFeePercent',
       'ourFee',
-      'dieselFee',
       'networkFee',
       'routes',
     ]),
@@ -333,7 +326,6 @@ addActionHandler('submitSwap', withEnclaveSessionRelease(async (global, actions,
     enclaveToken,
     buildResult.transfers,
     swapHistoryItem,
-    swapBuildRequest.shouldTryDiesel,
     buildResult.transaction,
   );
 
@@ -347,10 +339,9 @@ addActionHandler('submitSwap', withEnclaveSessionRelease(async (global, actions,
 
   setGlobal(updateCurrentSwap(getGlobal(), {
     isLoading: undefined,
-    state: result.mfaRequestHash ? SwapState.ConfirmMfa : SwapState.Complete,
+    state: SwapState.Complete,
     activityId: result.activityId,
     swapId: result.swapId,
-    mfaRequestHash: result.mfaRequestHash,
   }));
 }));
 
@@ -460,16 +451,6 @@ addActionHandler('submitSwapCex', withEnclaveSessionRelease(async (global, actio
       reportErrorTransferResult(transferResult, updateCurrentSwap);
       return;
     }
-
-    if ('mfaRequestHash' in transferResult && transferResult.mfaRequestHash) {
-      global = getGlobal();
-      global = updateCurrentSwap(global, {
-        state: SwapState.ConfirmMfa,
-        swapId: 'swapId' in transferResult ? transferResult.swapId : swapItem.swap.id,
-        mfaRequestHash: transferResult.mfaRequestHash,
-      });
-      setGlobal(global);
-    }
   }
 }));
 
@@ -501,30 +482,6 @@ export function shouldBlockUnsupportedNearIntentsMemo(
 function canAutoSubmitCexMemo(chain: string) {
   return chain === 'ton';
 }
-
-addActionHandler('updateSwapMfaRequestStatus', async (global) => {
-  const { mfaRequestHash, swapId } = global.currentSwap;
-  if (!mfaRequestHash || !swapId) return;
-
-  const result = await callApi('fetchMfaRequest', mfaRequestHash);
-  if (!result?.isConfirmed) return;
-
-  const accountId = selectCurrentAccountId(getGlobal());
-  if (!accountId) return;
-
-  try {
-    await callApi('confirmSwapMfaRequest', accountId, swapId, result.txHash);
-  } catch (err) {
-    logDebugError('updateSwapMfaRequestStatus:confirmSwapMfaRequest', err);
-  }
-
-  global = getGlobal();
-  global = updateCurrentSwap(global, {
-    state: SwapState.Complete,
-    mfaRequestHash: undefined,
-  });
-  setGlobal(global);
-});
 
 addActionHandler('switchSwapTokens', (global) => {
   const {
@@ -665,12 +622,10 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
   const to = resolveSwapAssetId(tokenOut);
 
   let estimateRequest: ApiSwapEstimateRequest;
-  let shouldTryDiesel: boolean | undefined;
   let isFromAmountMax: boolean | undefined;
   let toncoinBalance: bigint | undefined;
 
   if (isOnChain) {
-    const nativeTokenIn = getNativeToken(getChainBySlug(tokenIn.slug));
     const { fromAmount, isFromAmountMax: isMax } = processNativeMaxSwap(global);
 
     isFromAmountMax = isMax;
@@ -680,8 +635,6 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
 
     if (tokenIn.chain === 'ton') {
       toncoinBalance = selectCurrentToncoinBalance(global);
-
-      shouldTryDiesel = toncoinBalance < fromDecimal(global.currentSwap.networkFee ?? '0', nativeTokenIn.decimals);
     }
 
     estimateRequest = {
@@ -690,7 +643,6 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
       to,
       slippage: global.currentSwap.slippage,
       fromAddress: selectCurrentAccount(global)!.byChain[tokenIn.chain as ApiChain]!.address,
-      shouldTryDiesel,
       isFromAmountMax,
       toncoinBalance: toncoinBalance !== undefined
         ? toDecimal(toncoinBalance ?? 0n, TONCOIN.decimals)
@@ -742,8 +694,6 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
 
     return {
       ...getSwapEstimateResetParams(global),
-      // Keep the fee that enabled diesel; otherwise the next poll falls back to gasfull and oscillates.
-      ...(shouldTryDiesel ? { networkFee: global.currentSwap.networkFee } : undefined),
       errorType,
     };
   }
@@ -759,9 +709,7 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
     }
 
     const dexEstimate = estimate;
-    const errorType = dexEstimate.toAmount === '0' && shouldTryDiesel
-      ? SwapErrorType.NotEnoughForFee
-      : undefined;
+    const errorType = undefined;
 
     const estimates = buildSwapEstimates(dexEstimate);
     const currentEstimate = chooseSwapEstimate(global, estimates, dexEstimate.dexLabel);
@@ -781,7 +729,6 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
       priceImpact: currentEstimate.impact,
       dexRouterLabel: dexEstimate.dexRouterLabel || undefined,
       errorType,
-      dieselStatus: dexEstimate.dieselStatus,
       dexLabel: currentEstimate.dexLabel,
       routes: currentEstimate.routes,
       networkFee: currentEstimate.networkFee,
@@ -790,7 +737,6 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
       swapFeePercent: currentEstimate.swapFeePercent,
       ourFee: currentEstimate.ourFee,
       ourFeePercent: dexEstimate.ourFeePercent,
-      dieselFee: currentEstimate.dieselFee,
     };
   }
 
@@ -857,7 +803,6 @@ async function estimateSwap(global: GlobalState, shouldStop: () => boolean): Pro
       realNetworkFee,
       ourFee: cexEstimate.ourFee ?? '0',
       ourFeePercent: cexEstimate.ourFeePercent ?? 0,
-      dieselStatus: 'not-available',
       amountOutMin: cexEstimate.toAmount,
       errorType: Big(fromAmount).lt(cexEstimate.fromMin)
         ? SwapErrorType.ChangellyMinSwap

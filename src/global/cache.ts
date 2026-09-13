@@ -723,6 +723,18 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     }
     cached.stateVersion = 62;
   }
+
+  if (cached.stateVersion === 62) {
+    for (const accountState of Object.values(cached.byAccountId)) {
+      const accountNfts = accountState.nfts;
+      if (accountNfts?.collectionTabs) {
+        accountNfts.collectionTabs = accountNfts.collectionTabs.filter(
+          (tab) => tab.address !== 'super:telegram-gifts',
+        );
+      }
+    }
+    cached.stateVersion = 63;
+  }
   // When adding migration here, increase `STATE_VERSION`
 }
 
@@ -872,7 +884,6 @@ function reduceByAccountId(global: GlobalState) {
     if (state.nfts?.collectionTabs || state.nfts?.ownedMwCardAddresses) {
       acc[accountId].nfts = {
         collectionTabs: state.nfts.collectionTabs,
-        wasTelegramGiftsAutoAdded: state.nfts.wasTelegramGiftsAutoAdded,
         ownedMwCardAddresses: state.nfts.ownedMwCardAddresses,
       };
     }

@@ -2,7 +2,6 @@
  * Legacy authentication module for migration purposes.
  * This module retrieves passwords from old biometric storage systems.
  */
-import { IS_TELEGRAM_APP } from '../../config';
 import { logDebugError } from '../../util/logs';
 import { randomBytes } from '../../util/random';
 
@@ -49,7 +48,7 @@ export async function getLegacyBiometricPassword(config: LegacyAuthConfig): Prom
     }
 
     if (config.kind === 'native-biometrics') {
-      return await getNativeBiometricsPassword();
+      return undefined;
     }
   } catch (err: any) {
     logDebugError('getLegacyBiometricPassword', err);
@@ -98,37 +97,6 @@ async function getWebAuthnPassword(config: LegacyWebAuthn): Promise<string | und
     throw new Error('Missing credBlob');
   }
   return Buffer.from(blob).toString('hex');
-}
-
-async function getNativeBiometricsPassword(): Promise<string | undefined> {
-  if (IS_TELEGRAM_APP) {
-    return getTelegramBiometricsPassword();
-  }
-
-  return undefined;
-}
-
-async function getTelegramBiometricsPassword(): Promise<string | undefined> {
-  const { getTelegramApp } = await import('../../util/telegram');
-  const biometricManager = getTelegramApp()?.BiometricManager;
-
-  if (!biometricManager?.isAccessGranted) {
-    throw new Error('Telegram biometric access not granted');
-  }
-
-  return new Promise((resolve, reject) => {
-    biometricManager.authenticate(
-      { reason: '' },
-      // @ts-ignore Wrong type signature
-      (success: boolean, token: string) => {
-        if (success) {
-          resolve(token);
-        } else {
-          reject(new Error('Telegram biometric authentication failed'));
-        }
-      },
-    );
-  });
 }
 
 export function isLegacyBiometricAuth(config: LegacyAuthConfig): boolean {

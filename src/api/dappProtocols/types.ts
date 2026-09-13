@@ -505,7 +505,7 @@ export interface ChainDappSupport<T extends ApiChain = any> {
     T extends 'ton'
       ? DappProtocolType.TonConnect
       : DappProtocolType.WalletConnect
-  >[] | { mfaRequestHash: string } | { error: ApiAnyDisplayError }
+  >[] | { error: ApiAnyDisplayError }
   >;
 
   signDappData(

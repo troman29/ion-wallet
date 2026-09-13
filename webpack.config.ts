@@ -34,9 +34,7 @@ import {
   IS_HEADLESS,
   IS_OPERA_EXTENSION,
   IS_PACKAGED_ELECTRON,
-  IS_TELEGRAM_APP,
   LANG_LIST,
-  MFA_API_BASE_URL,
   MW_STATIC_BASE_URL,
   PROXY_API_BASE_URL,
   SSE_BRIDGE_URL,
@@ -73,7 +71,7 @@ const canUseStatoscope = isStatoscopeBuild || isWebApp;
 const cspConnectSrcExtra = APP_ENV === 'development'
   ? `http://localhost:3000 ${process.env.CSP_CONNECT_SRC_EXTRA_URL}`
   : '';
-const cspScriptSrcExtra = IS_TELEGRAM_APP ? 'https://telegram.org' : '';
+const cspScriptSrcExtra = '';
 const cspFrameSrcExtra = [
   ...WALLET_CONNECT_PAY_FRAME_ORIGINS,
   ...IFRAME_WHITELIST,
@@ -99,7 +97,6 @@ const cspConnectSrcHosts = Array.from(new Set([
   EVM_TESTNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
   ensureTrailingSlash(IPFS_GATEWAY_BASE_URL),
   ensureTrailingSlash(SSE_BRIDGE_URL),
-  MFA_API_BASE_URL,
   TON_CONNECT_ANALYTICS_URL,
 ])).join(' ');
 
@@ -132,9 +129,7 @@ const CSP = `
 // Kept out of `CSP` because that string is also served via a `<meta>` tag and the extension manifest,
 // where `frame-ancestors` is invalid. It only works as an HTTP header, so it is appended in `_headers`.
 // `X-Frame-Options` stays in `_headers` as a fail-closed fallback should this directive ever be dropped.
-// Empty for the Telegram build, which is itself framed by web.telegram.org and whose framing policy
-// `_headers_telegram` owns; any directive here would override that file's `X-Frame-Options`.
-const cspFrameAncestors = IS_TELEGRAM_APP ? '' : `${[
+const cspFrameAncestors = `${[
   'frame-ancestors \'self\'',
   'https://stand.ton-connect.io', // The TON Connect conformance stand embeds the wallet in an iframe.
   ...(APP_ENV === 'production' ? [] : ['http://localhost:*', 'http://127.0.0.1:*']),
@@ -451,18 +446,12 @@ export default function createConfig(
         IS_EXTENSION: '', // It's necessary to use an empty string, because it's used in bundle-time conditions
         IS_FIREFOX_EXTENSION: 'false',
         IS_CAPACITOR: 'false',
-        IS_TELEGRAM_APP: 'false',
         IS_HEADLESS: '', // Empty string for the same reason as IS_EXTENSION above
         SWAP_FEE_ADDRESS: '',
-        DIESEL_ADDRESS: '',
         GIVEAWAY_CHECKIN_URL: '',
         PROXY_API_BASE_URL: '',
         WALLET_CONNECT_PROJECT_ID: '',
         WALLET_CONNECT_PAY_APP_ID: '',
-        MFA_BOT_URL: '',
-        MFA_API_BASE_URL: '',
-        MFA_MASTER_ADDRESS: '',
-        MFA_EXTENSION_CODE_HASH: '',
         NO_TON: '0',
         NO_EVM: '0',
         NO_PENDING_ACTIVITIES: '0',
@@ -515,7 +504,7 @@ export default function createConfig(
             ) as any,
           },
           {
-            from: IS_TELEGRAM_APP ? 'src/_headers_telegram' : 'src/_headers',
+            from: 'src/_headers',
             transform: (content: Buffer) => {
               const headers = content.toString().replace('{{CSP}}', `${CSP} ${cspFrameAncestors}`.trim());
 

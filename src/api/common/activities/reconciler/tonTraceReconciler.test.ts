@@ -1,6 +1,6 @@
 import type { ApiSwapActivity, ApiTransactionActivity } from '../../../types';
 
-import { DIESEL_ADDRESS, MW_AGGREGATOR_QUERY_ID, SWAP_FEE_ADDRESS, TON_USDT_MAINNET } from '../../../../config';
+import { MW_AGGREGATOR_QUERY_ID, SWAP_FEE_ADDRESS, TON_USDT_MAINNET } from '../../../../config';
 import { projectTonAggregatorActivities } from './tonTraceReconciler';
 
 const BASE_TIMESTAMP = 1_700_000_000_000;
@@ -112,23 +112,6 @@ describe('TON trace reconciler', () => {
 
     const result = projectTonAggregatorActivities([swap, fee]);
     expect(visibleSwaps(result.activities)[0]).toMatchObject({ from, fromAmount: expectedFromAmount, to });
-  });
-
-  it('includes the combined fee and diesel transfer in the aggregate source amount', () => {
-    const swap = makeSwap({ from: TON_USDT_MAINNET.slug, fromAmount: '99', to: 'toncoin' });
-    const feeAndDiesel = makeMarkerTransaction({
-      amount: -2_000_000n,
-      slug: TON_USDT_MAINNET.slug,
-      toAddress: DIESEL_ADDRESS,
-      extra: { isOurSwapFee: true },
-    });
-    const result = projectTonAggregatorActivities([swap, feeAndDiesel]);
-
-    expect(visibleSwaps(result.activities)[0]).toMatchObject({
-      from: TON_USDT_MAINNET.slug,
-      fromAmount: '101',
-      to: 'toncoin',
-    });
   });
 
   it('keeps an explicitly incomplete page-boundary trace raw even when its visible subset looks clean', () => {

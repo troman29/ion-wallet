@@ -6,7 +6,6 @@ import type { UserToken } from '../../global/types';
 import { selectCurrentAccountState, selectUserTokenMemoized } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import { captureControlledSwipe } from '../../util/swipeController';
-import useTelegramMiniAppSwipeToClose from '../../util/telegram/hooks/useTelegramMiniAppSwipeToClose';
 import { IS_TOUCH_ENV } from '../../util/windowEnvironment';
 
 import useCurrentOrPrev from '../../hooks/useCurrentOrPrev';
@@ -35,8 +34,6 @@ function TokenInfo({ isActive, token }: OwnProps & StateProps) {
   const rootRef = useRef<HTMLDivElement>();
   const { handleScroll, isScrolled } = useScrolledState();
 
-  const { disableSwipeToClose, enableSwipeToClose } = useTelegramMiniAppSwipeToClose(isActive);
-
   const renderedToken = useCurrentOrPrev(token, true);
   const slug = token?.slug;
 
@@ -46,14 +43,12 @@ function TokenInfo({ isActive, token }: OwnProps & StateProps) {
     return captureControlledSwipe(rootRef.current!, {
       onSwipeRightStart: () => {
         closeTokenActivity();
-        disableSwipeToClose();
       },
       onCancel: () => {
         selectToken({ slug });
-        enableSwipeToClose();
       },
     });
-  }, [slug, disableSwipeToClose, enableSwipeToClose]);
+  }, [slug]);
 
   if (!renderedToken) return undefined;
 

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="enclave_use_biometrics">Biyometrik koruma kullanın</string>
-    <string name="enclave_enter_passcode_or_use_biometrics">Parola girin veya parmak izi kullanın</string>
-    <string name="enclave_use_pin">PIN kullan</string>
-    <string name="enclave_cancel">İptal</string>
-</resources>

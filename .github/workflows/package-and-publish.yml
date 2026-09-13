@@ -60,7 +60,6 @@ env:
   PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
   SWAP_FEE_ADDRESS: ${{ vars.SWAP_FEE_ADDRESS }}
-  DIESEL_ADDRESS: ${{ vars.DIESEL_ADDRESS }}
   WALLET_CONNECT_PROJECT_ID: ${{ vars.WALLET_CONNECT_PROJECT_ID }}
   WALLET_CONNECT_PAY_APP_ID: ${{ vars.WALLET_CONNECT_PAY_APP_ID }}
 
@@ -890,10 +889,8 @@ jobs:
             mytonwallet)
               echo "IOS_APP_NAME=MyTonWallet" >> "$GITHUB_ENV"
               echo "IOS_APP_IDENTIFIER=org.mytonwallet.app" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER_WIDGET=org.mytonwallet.app.AirWidget" >> "$GITHUB_ENV"
               echo "IOS_APP_IDENTIFIER_NOTIFICATION=org.mytonwallet.app.notification-service" >> "$GITHUB_ENV"
               echo "IOS_SCHEME=MyTonWallet" >> "$GITHUB_ENV"
-              echo "IOS_WIDGET_SCHEME=AirWidgetExtension" >> "$GITHUB_ENV"
               echo "IOS_NOTIFICATION_SCHEME=MyTonWalletNotificationServiceExtension" >> "$GITHUB_ENV"
               echo "IOS_PLIST_PATH=../../App/App/Resources/MyTonWallet/Info.plist" >> "$GITHUB_ENV"
               echo "IOS_TESTFLIGHT_GROUP=${IOS_TESTFLIGHT_GROUP:-MTW external group}" >> "$GITHUB_ENV"
@@ -931,7 +928,6 @@ jobs:
           IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
           IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
-          IOS_PROVISION_PROFILE_WIDGET_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_WIDGET_BASE64 }}
           IOS_PROVISION_PROFILE_NOTIFICATION_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_NOTIFICATION_BASE64 }}
           IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
         run: |
@@ -940,7 +936,6 @@ jobs:
           CERTIFICATE_BASE64="$IOS_CERTIFICATE_BASE64"
           CERTIFICATE_PASSWORD="$IOS_CERTIFICATE_PASSWORD"
           PROVISION_PROFILE_BASE64="$IOS_PROVISION_PROFILE_BASE64"
-          PROVISION_PROFILE_WIDGET_BASE64="$IOS_PROVISION_PROFILE_WIDGET_BASE64"
           PROVISION_PROFILE_NOTIFICATION_BASE64="$IOS_PROVISION_PROFILE_NOTIFICATION_BASE64"
 
           if [ -z "$CERTIFICATE_BASE64" ]; then
@@ -951,7 +946,7 @@ jobs:
             echo "::error::Missing iOS distribution certificate password for $APP_VARIANT"
             exit 1
           fi
-          if [ -z "$PROVISION_PROFILE_BASE64" ] || [ -z "$PROVISION_PROFILE_WIDGET_BASE64" ] || [ -z "$PROVISION_PROFILE_NOTIFICATION_BASE64" ]; then
+          if [ -z "$PROVISION_PROFILE_BASE64" ] || [ -z "$PROVISION_PROFILE_NOTIFICATION_BASE64" ]; then
             echo "::error::Missing iOS provisioning profiles for $APP_VARIANT"
             exit 1
           fi
@@ -959,14 +954,12 @@ jobs:
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          PP_WIDGET_PATH=$RUNNER_TEMP/build_pp_widget.mobileprovision
           PP_NOTIFICATION_PATH=$RUNNER_TEMP/build_pp_notification.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n "$CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-          echo -n "$PROVISION_PROFILE_WIDGET_BASE64" | base64 --decode -o $PP_WIDGET_PATH
           echo -n "$PROVISION_PROFILE_NOTIFICATION_BASE64" | base64 --decode -o $PP_NOTIFICATION_PATH
 
           # create temporary keychain
@@ -981,23 +974,18 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_WIDGET_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_NOTIFICATION_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
           # print keychain contents
           security find-identity -v -p codesigning "$KEYCHAIN_PATH" || true
           security cms -D -i "$PP_PATH" > /tmp/app_profile.plist
-          security cms -D -i "$PP_WIDGET_PATH" > /tmp/widget_profile.plist
           security cms -D -i "$PP_NOTIFICATION_PATH" > /tmp/notification_profile.plist
           APP_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' /tmp/app_profile.plist)
-          WIDGET_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' /tmp/widget_profile.plist)
           NOTIFICATION_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' /tmp/notification_profile.plist)
           echo "IOS_PROFILE_NAME=$APP_PROFILE_NAME" >> "$GITHUB_ENV"
-          echo "IOS_PROFILE_NAME_WIDGET=$WIDGET_PROFILE_NAME" >> "$GITHUB_ENV"
           echo "IOS_PROFILE_NAME_NOTIFICATION=$NOTIFICATION_PROFILE_NAME" >> "$GITHUB_ENV"
           /usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' /tmp/app_profile.plist
           /usr/libexec/PlistBuddy -c 'Print :Name' /tmp/app_profile.plist
-          /usr/libexec/PlistBuddy -c 'Print :Name' /tmp/widget_profile.plist
           /usr/libexec/PlistBuddy -c 'Print :Name' /tmp/notification_profile.plist
 
       - name: "iOS: Package and publish"

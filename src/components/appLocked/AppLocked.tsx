@@ -3,7 +3,7 @@ import { getActions, getGlobal, withGlobal } from '../../global';
 
 import type { AutolockValueType } from '../../global/types';
 
-import { AUTOLOCK_OPTIONS_LIST, DEBUG, IS_TELEGRAM_APP } from '../../config';
+import { AUTOLOCK_OPTIONS_LIST, DEBUG } from '../../config';
 import { selectHasPassword, selectIsBiometricAuthEnabled } from '../../global/selectors';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
@@ -306,7 +306,7 @@ function AppLocked({
 
   const handleUnlockIntent = isBiometricOnly
     ? slideForBiometricAuth === SLIDES.passwordForm
-      ? (!IS_TELEGRAM_APP ? triggerPasswordFormHandleBiometrics : undefined)
+      ? triggerPasswordFormHandleBiometrics
       : handleChangeSlideForBiometricAuth
     : undefined;
 
@@ -319,7 +319,7 @@ function AppLocked({
   return (
     <Transition
       ref={transitionRef}
-      name={isBiometricOnly && IS_TELEGRAM_APP ? 'slideFade' : 'semiFade'}
+      name="semiFade"
       onContainerClick={handleUnlockIntent}
       activeKey={transitionKey}
       className={styles.appLockedWrapper}

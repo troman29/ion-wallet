@@ -29,7 +29,6 @@ export type WalletOperationIntent = {
     expectedTraceId?: string;
     expectedExternalMsgHashNorm?: string;
     submittedHashes?: string[];
-    gasless?: boolean;
   };
 };
 

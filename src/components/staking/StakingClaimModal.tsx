@@ -24,14 +24,12 @@ import { getIsViewAccountDisabled } from '../../util/isViewAccount';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { shortenAddress } from '../../util/shortenAddress';
 
-import useInterval from '../../hooks/useInterval';
 import useLang from '../../hooks/useLang';
 import useLastCallback from '../../hooks/useLastCallback';
 import useModalTransitionKeys from '../../hooks/useModalTransitionKeys';
 
 import AccountSwitcherPill from '../common/AccountSwitcherPill';
 import AccountSwitcherSlide from '../common/AccountSwitcherSlide';
-import MfaConfirm from '../common/MfaConfirm';
 import TransactionBanner from '../common/TransactionBanner';
 import TransferResult from '../common/TransferResult';
 import LedgerConfirmOperation from '../ledger/LedgerConfirmOperation';
@@ -55,7 +53,6 @@ interface StateProps {
   address?: string;
   error?: string;
   state?: StakingState;
-  mfaRequestHash?: string;
   isHardwareAccount?: boolean;
   isSensitiveDataHidden?: true;
   accountId?: string;
@@ -67,7 +64,6 @@ const IS_OPEN_STATES = new Set([
   StakingState.ClaimPassword,
   StakingState.ClaimConfirmHardware,
   StakingState.ClaimConnectHardware,
-  StakingState.ClaimConfirmMfa,
   StakingState.ClaimComplete,
   StakingState.ClaimSelectAccount,
 ]);
@@ -80,7 +76,6 @@ function StakingClaimModal({
   address,
   error,
   state = StakingState.ClaimPassword,
-  mfaRequestHash,
   isHardwareAccount,
   isSensitiveDataHidden,
   accountId,
@@ -91,7 +86,6 @@ function StakingClaimModal({
     submitStakingClaim,
     cancelStakingClaim,
     clearStakingError,
-    updateStakingMfaRequestStatus,
     setStakingScreen,
     startStakingClaim,
     switchStakingAccount,
@@ -115,12 +109,6 @@ function StakingClaimModal({
   const isNativeEnough = nativeBalance > networkFee;
   const { renderingKey, nextKey, updateNextKey } = useModalTransitionKeys(state, Boolean(isOpen));
   const confirmTitle = lang(stakingState?.type === 'ethena' ? 'Confirm Unstaking' : 'Confirm Rewards Claim');
-
-  useInterval(() => {
-    if (state === StakingState.ClaimConfirmMfa && mfaRequestHash) {
-      updateStakingMfaRequestStatus();
-    }
-  }, state === StakingState.ClaimConfirmMfa ? 1000 : undefined);
 
   const handleAuthorize = useLastCallback((enclaveToken: string) => {
     if (!isNativeEnough) return;
@@ -246,19 +234,6 @@ function StakingClaimModal({
           />
         );
 
-      case StakingState.ClaimConfirmMfa:
-        return (
-          <>
-            {!isHardwareAccount && !getDoesUsePinPad() && (
-              <ModalHeader title={confirmTitle} onClose={cancelStakingClaim} />
-            )}
-            <MfaConfirm
-              onClose={cancelStakingClaim}
-              mfaRequestHash={mfaRequestHash}
-            />
-          </>
-        );
-
       case StakingState.ClaimComplete:
         return (
           <>
@@ -317,7 +292,6 @@ export default memo(withGlobal((global): StateProps => {
     isLoading,
     error,
   } = global?.currentStaking || {};
-  const { mfaRequestHash } = global.currentStaking;
 
   const stakingState = accountId ? selectAccountStakingState(global, accountId) : undefined;
   const tokens = selectCurrentAccountTokens(global);
@@ -327,7 +301,6 @@ export default memo(withGlobal((global): StateProps => {
     stakingState: canBeClaimed ? stakingState : undefined,
     isOpen: IS_OPEN_STATES.has(state),
     state,
-    mfaRequestHash,
     tokens,
     isLoading,
     error,

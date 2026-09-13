@@ -8,17 +8,13 @@ import React, {
 import { addExtraClass } from '../../lib/teact/teact-dom';
 import { getGlobal } from '../../global';
 
-import { ANIMATION_END_DELAY, IS_CAPACITOR, IS_EXTENSION, IS_TELEGRAM_APP } from '../../config';
+import { ANIMATION_END_DELAY, IS_CAPACITOR, IS_EXTENSION } from '../../config';
 import { selectCurrentAccountId } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import { captureEvents, SwipeDirection } from '../../util/captureEvents';
 import captureKeyboardListeners from '../../util/captureKeyboardListeners';
 import { getIsSwipeToCloseDisabled } from '../../util/modalSwipeManager';
 import { createSignal } from '../../util/signals';
-import {
-  disableTelegramMiniAppSwipeToClose,
-  enableTelegramMiniAppSwipeToClose,
-} from '../../util/telegram';
 import trapFocus from '../../util/trapFocus';
 import { IS_ANDROID, IS_TOUCH_ENV } from '../../util/windowEnvironment';
 import windowSize from '../../util/windowSize';
@@ -113,15 +109,7 @@ function Modal({
   const animationDuration = (isPortrait ? CLOSE_DURATION_PORTRAIT : CLOSE_DURATION) + ANIMATION_END_DELAY;
   const isSlideUp = !isCompact && isPortrait;
 
-  useHistoryBack({ isActive: isOpen, onBack: onClose, shouldIgnoreForTelegram: isCompact });
-
-  useEffect(() => {
-    if (!IS_TELEGRAM_APP || !isOpen || isCompact) return undefined;
-
-    disableTelegramMiniAppSwipeToClose();
-
-    return enableTelegramMiniAppSwipeToClose;
-  }, [isCompact, isOpen]);
+  useHistoryBack({ isActive: isOpen, onBack: onClose });
 
   useEffect(() => {
     if (!isOpen) return undefined;

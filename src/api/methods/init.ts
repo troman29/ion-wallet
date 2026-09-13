@@ -39,7 +39,6 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
   if (process.env.NO_EXTRA_FEATURES !== '1') {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const extra = require('./extra') as typeof import('./extra');
-    extra.initMfa(onUpdate);
     extra.initStaking();
     extra.initSwap(onUpdate);
   }

@@ -439,11 +439,6 @@ addActionHandler('createAccount', async (global, actions) => {
 
   global = getGlobal();
 
-  if (isImporting) {
-    await refreshImportedAccountsMfa(accounts, enclaveToken);
-    global = getGlobal();
-  }
-
   const authAccounts = isPrivateKeyBased
     ? accounts.map((account) => ({ ...account, partial: { isPrivateKeyBased: true as const } }))
     : accounts;
@@ -501,24 +496,6 @@ async function duplicateSecretOrShowError(fromAccountId: string, toAccountId: st
 
     return false;
   }
-}
-
-async function refreshImportedAccountsMfa(
-  accounts: { accountId: string; byChain: Account['byChain'] }[],
-  enclaveToken: string,
-) {
-  await Promise.all(accounts.map(async (account) => {
-    if (!account.byChain.ton) return;
-
-    try {
-      const result = await callApi('refreshMfaState', account.accountId, enclaveToken);
-      if (result?.mfa) {
-        account.byChain.ton.mfa = result.mfa;
-      }
-    } catch (err) {
-      logDebugError('refreshImportedAccountsMfa', err);
-    }
-  }));
 }
 
 addActionHandler('createHardwareAccounts', async (global, actions) => {

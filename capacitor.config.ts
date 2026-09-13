@@ -24,7 +24,6 @@ const COMMON_PLUGINS = [
   '@capgo/capacitor-native-biometric',
   '@capgo/native-audio',
   '@mauricewegner/capacitor-navigation-bar',
-  '@mytonwallet/air-app-launcher',
   '@mytonwallet/capacitor-usb-hid',
   'capacitor-native-settings',
   'capacitor-plugin-safe-area',

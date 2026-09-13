@@ -10,7 +10,6 @@ import {
   ANIMATION_LEVEL_MIN,
   NFT_MARKETPLACE_TITLE,
   NFT_MARKETPLACE_URL,
-  TELEGRAM_GIFTS_SUPER_COLLECTION,
   TON_NFT_MARKETPLACE_TITLE,
   TON_NFT_MARKETPLACE_URL,
 } from '../../../../config';
@@ -112,7 +111,7 @@ function Nfts({
 
   // In compact mode (`LandscapeWalletOverview`) NFTs are already in global state - no need to fetch
   useEffect(() => {
-    if (!isWidget && collection && collection.address !== TELEGRAM_GIFTS_SUPER_COLLECTION) {
+    if (!isWidget && collection) {
       fetchNftsFromCollection({ collection });
     }
   }, [collection, isWidget]);
@@ -151,8 +150,7 @@ function Nfts({
       if (!nft) return false;
 
       const matchesCollection = !collection?.address
-        || (nft.collectionAddress === collection.address && nft.chain === collection.chain)
-        || (collection.address === TELEGRAM_GIFTS_SUPER_COLLECTION && nft.isTelegramGift);
+        || (nft.collectionAddress === collection.address && nft.chain === collection.chain);
 
       return matchesCollection
         && getIsNftVisible(nft, blacklistedNftAddressesSet, whitelistedNftAddressesSet, areUnverifiedNftsHidden);

@@ -15,7 +15,7 @@ jest.mock('../../common/swap', () => ({ patchSwapItem: jest.fn() }));
 jest.mock('../../hooks', () => ({ callHook: jest.fn() }));
 jest.mock('./transfer', () => ({
   checkMultiTransactionDraft: jest.fn(),
-  submitMultiTransferWithMfa: jest.fn(),
+  submitMultiTransfer: jest.fn(),
 }));
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -24,8 +24,8 @@ const { fetchStoredChainAccount, fetchStoredWallet } = require('../../common/acc
   fetchStoredWallet: jest.Mock;
 };
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { submitMultiTransferWithMfa } = require('./transfer') as {
-  submitMultiTransferWithMfa: jest.Mock;
+const { submitMultiTransfer } = require('./transfer') as {
+  submitMultiTransfer: jest.Mock;
 };
 
 describe('submitOnchainSwapTransfer', () => {
@@ -33,11 +33,10 @@ describe('submitOnchainSwapTransfer', () => {
     jest.clearAllMocks();
     fetchStoredWallet.mockResolvedValue({ address: 'EQ-wallet' });
     fetchStoredChainAccount.mockResolvedValue({ byChain: { ton: {} } });
-    submitMultiTransferWithMfa.mockResolvedValue({
+    submitMultiTransfer.mockResolvedValue({
       msgHash: 'raw-boc-hash',
       msgHashNormalized: 'normalized-external-hash',
       messages: [{}],
-      withW5Gasless: true,
     });
   });
 
@@ -71,7 +70,6 @@ describe('submitOnchainSwapTransfer', () => {
       enclaveToken: 'enclave-token',
       transfers: [{ amount: '1', payload: '', toAddress: 'EQ-destination' }],
       historyItem: { from: 'TON' },
-      isGasless: false,
       authToken: 'auth-token',
       localSwap,
       swapId: 'swap-id',
@@ -84,7 +82,6 @@ describe('submitOnchainSwapTransfer', () => {
       activities: [expect.objectContaining({
         externalMsgHashNorm: 'normalized-external-hash',
         extra: expect.objectContaining({
-          withW5Gasless: true,
           reconciliation: expect.objectContaining({
             operationId: 'swap:swap-id',
             reason: 'local-intent',

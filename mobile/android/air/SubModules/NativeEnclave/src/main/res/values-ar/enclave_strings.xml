@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="enclave_use_biometrics">استخدم القياسات الحيوية</string>
-    <string name="enclave_enter_passcode_or_use_biometrics">أدخل رمز المرور أو استخدم بصمة الإصبع</string>
-    <string name="enclave_use_pin">استخدم رمز PIN</string>
-    <string name="enclave_cancel">إلغاء</string>
-</resources>

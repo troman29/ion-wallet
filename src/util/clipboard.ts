@@ -1,8 +1,7 @@
 import { Clipboard } from '@capacitor/clipboard';
 
-import { IS_CAPACITOR, IS_TELEGRAM_APP } from '../config';
+import { IS_CAPACITOR } from '../config';
 import { vibrate } from './haptics';
-import { getTelegramApp } from './telegram';
 
 const textCopyEl = document.createElement('textarea');
 textCopyEl.setAttribute('readonly', '');
@@ -22,14 +21,7 @@ export const copyTextToClipboard = (str: string): Promise<void> => {
 };
 
 export async function readClipboardContent() {
-  if (IS_TELEGRAM_APP) {
-    return new Promise((resolve: ({ text, type }: { text: string; type: string | undefined }) => void) => {
-      getTelegramApp()?.readTextFromClipboard((text) => {
-        void vibrate();
-        resolve({ text, type: 'text/plain' });
-      });
-    });
-  } else if (IS_CAPACITOR) {
+  if (IS_CAPACITOR) {
     const { value, type } = await Clipboard.read();
     void vibrate();
     return { text: value, type };

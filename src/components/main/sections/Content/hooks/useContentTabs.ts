@@ -10,7 +10,6 @@ import {
   DEFAULT_CHAIN,
   PORTRAIT_MIN_ASSETS_TAB_VIEW,
   STAKING_SLUG_PREFIX,
-  TELEGRAM_GIFTS_SUPER_COLLECTION,
 } from '../../../../../config';
 import { getChainsSupportingNft, getOrderedAccountChains } from '../../../../../util/chain';
 import { compact } from '../../../../../util/iteratees';
@@ -164,7 +163,6 @@ export default function useContentTabs({
         id: MAIN_CONTENT_TABS_LENGTH + index,
         title: name,
         className: styles.tab,
-        icon: tab.address === TELEGRAM_GIFTS_SUPER_COLLECTION ? 'icon-gift' : undefined,
       };
     }));
 
