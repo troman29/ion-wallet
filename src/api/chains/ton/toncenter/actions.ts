@@ -47,7 +47,6 @@ import {
   ETHENA_STAKING_VAULT,
   LIQUID_POOL,
   MW_CARDS_COLLECTION,
-  MYCOIN_STAKING_POOL,
   NFT_FRAGMENT_COLLECTIONS,
   NFT_FRAGMENT_GIFT_IMAGE_TO_URL_REGEX,
   STON_PTON_ADDRESS,
@@ -418,10 +417,6 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
   let type: ApiTransactionType;
   if (toAddress === BURN_ADDRESS) {
     type = 'burn';
-  } else if (toAddress === MYCOIN_STAKING_POOL) {
-    type = 'stake';
-  } else if (fromAddress === MYCOIN_STAKING_POOL) {
-    type = 'unstake';
   } else if (tokenAddress === TON_USDE.tokenAddress) {
     if (fromAddress === ETHENA_STAKING_VAULT) {
       type = 'unstake';

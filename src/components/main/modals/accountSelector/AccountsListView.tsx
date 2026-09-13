@@ -23,7 +23,7 @@ interface OwnProps {
   activeTab: AccountTab;
   balancesByAccountId: Record<string, AccountBalance>;
   settingsByAccountId?: Record<string, AccountSettings>;
-  addressLineChainsByAccountId?: Record<string, ApiChain[]>;
+  visibleChainsByAccountId?: Record<string, ApiChain[]>;
   currentAccountId: string;
   isSensitiveDataHidden?: true;
   onSwitchAccount: (accountId: string) => void;
@@ -48,7 +48,7 @@ function AccountsListView({
   activeTab,
   balancesByAccountId,
   settingsByAccountId,
-  addressLineChainsByAccountId,
+  visibleChainsByAccountId,
   currentAccountId,
   isSensitiveDataHidden,
   onSwitchAccount,
@@ -130,7 +130,7 @@ function AccountsListView({
                 isRecoveryRequired={isRecoveryRequired}
                 accountId={accountId}
                 byChain={byChain}
-                visibleChains={addressLineChainsByAccountId?.[accountId]}
+                visibleChains={visibleChainsByAccountId?.[accountId]}
                 accountType={type}
                 isSelected={isCurrentAccount}
                 title={title}

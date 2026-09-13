@@ -6,7 +6,7 @@ import type {
   Account,
   AccountState,
   GlobalState,
-  PortfolioState,
+  LanguageSource,
   SavedAddress,
   TokenPeriod,
 } from './types';
@@ -18,6 +18,7 @@ import {
   DEBUG,
   GLOBAL_STATE_CACHE_DISABLED,
   GLOBAL_STATE_CACHE_KEY,
+  IS_CAPACITOR,
   MAIN_ACCOUNT_ID,
   TONCOIN,
 } from '../config';
@@ -35,12 +36,12 @@ import {
 } from '../util/poisoningHash';
 import { onBeforeUnload, throttle } from '../util/schedulers';
 import { getIsActiveStakingState } from '../util/staking';
-import { IS_ELECTRON } from '../util/windowEnvironment';
+import { IS_ANDROID_APP, IS_ELECTRON, setUserAgentLangCode, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 import { addActionHandler, getGlobal } from './index';
 import { INITIAL_STATE, STATE_VERSION } from './initialState';
 import { selectAccountState, selectAccountTokens } from './selectors';
 
-const UPDATE_THROTTLE = 5000;
+const UPDATE_THROTTLE = IS_CAPACITOR ? 500 : 5000;
 const ACTIVITIES_LIMIT = 20;
 const ACTIVITY_TOKENS_LIMIT = 30;
 const STAKING_HISTORY_LIMIT = 30;
@@ -130,10 +131,30 @@ export function loadCache(initialState: GlobalState): GlobalState {
     ...cached,
   };
 
-  return merged;
+  return normalizeCapacitorLanguageSettings(merged);
+}
+
+function normalizeCapacitorLanguageSettings(global: GlobalState): GlobalState {
+  if (!IS_CAPACITOR) {
+    return global;
+  }
+
+  const settings = global.settings;
+  const langSource: LanguageSource = settings.langSource === 'user' ? 'user' : 'system';
+
+  return {
+    ...global,
+    settings: {
+      ...settings,
+      langCode: !IS_ANDROID_APP && langSource === 'user' ? settings.langCode : USER_AGENT_LANG_CODE,
+      langSource,
+    },
+  };
 }
 
 function migrateCache(cached: GlobalState, initialState: GlobalState) {
+  const rawSettings = cached.settings;
+
   // Pre-fill settings with defaults
   cached.settings = {
     ...initialState.settings,
@@ -613,6 +634,13 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
   }
 
   if (cached.stateVersion === 53) {
+    const hasStoredLangSource = rawSettings ? Object.hasOwn(rawSettings, 'langSource') : false;
+    if (IS_CAPACITOR && !hasStoredLangSource) {
+      cached.settings.langSource = 'user';
+      if (IS_ANDROID_APP) {
+        setUserAgentLangCode(cached.settings.langCode);
+      }
+    }
     cached.stateVersion = 54;
   }
 
@@ -654,10 +682,6 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
   }
 
   if (cached.stateVersion === 57) {
-    // Net Change was replaced by PnL Change
-    if (cached.portfolio) {
-      delete (cached.portfolio as any).netChangeByAccountId;
-    }
     cached.stateVersion = 58;
   }
 
@@ -782,7 +806,6 @@ function updateCache(force?: boolean) {
       ...global.settings,
       byAccountId: pick(global.settings.byAccountId, accountIds),
     },
-    portfolio: global.portfolio?.activeRange ? reducePortfolio(global.portfolio, accountIds) : undefined,
   };
 
   const usedTokenSlugs = getUsedTokenSlugs(reducedGlobal);
@@ -864,19 +887,6 @@ function reduceByAccountId(global: GlobalState) {
 
     return acc;
   }, {} as GlobalState['byAccountId']);
-}
-
-function reducePortfolio(portfolio: PortfolioState, accountIds: string[]): PortfolioState {
-  const pnlChangeByAccountId = portfolio.pnlChangeByAccountId
-    ? pick(portfolio.pnlChangeByAccountId, accountIds)
-    : undefined;
-
-  return {
-    activeRange: portfolio.activeRange,
-    pnlChangeByAccountId: pnlChangeByAccountId && !isEmptyObject(pnlChangeByAccountId)
-      ? pnlChangeByAccountId
-      : undefined,
-  };
 }
 
 function reduceAccountBalances(balances?: AccountState['balances'], tokenSlugs?: string[]) {

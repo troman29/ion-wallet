@@ -2,11 +2,8 @@ import getChainNetworkName from './getChainNetworkName';
 
 describe('getChainNetworkName', () => {
   it.each([
-    ['ton', 'TON'],
-    ['base', 'Base'],
-    ['avalanche', 'Avalanche'],
-    ['hyperliquid', 'Hyperliquid'],
-    ['robinhood', 'Robinhood'],
+    ['ton', 'ION'],
+    ['bnb', 'BNB'],
   ])('uses the canonical title for the supported %s chain', (chain, expectedTitle) => {
     expect(getChainNetworkName(chain)).toBe(expectedTitle);
   });

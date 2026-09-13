@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enclave_use_biometrics">Використовуйте біометрію</string>
+    <string name="enclave_enter_passcode_or_use_biometrics">Введіть код або використайте відбиток пальця</string>
+    <string name="enclave_use_pin">Використати PIN</string>
+    <string name="enclave_cancel">Скасувати</string>
+</resources>

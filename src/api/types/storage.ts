@@ -29,33 +29,12 @@ export type ApiTonWallet = ApiBaseWallet & {
   mfa?: ApiMfa;
 };
 
-export type ApiTronWallet = ApiBaseWallet;
-
-export type ApiSolanaWallet = ApiBaseWallet & {
-  /**
-   * Monotonic schema version for the stored derivation. When the target version
-   * in CHAIN_CONFIG.solana.derivation.version is bumped, the chain-upgrade subsystem
-   * will re-derive this wallet and write the new version here.
-   */
-  derivationVersion?: number;
-};
-
 export type ApiEVMWallet = ApiBaseWallet;
 
 /** A helper type that converts the chain names to the corresponding wallet types */
 export type ApiWalletByChain = {
   ton: ApiTonWallet;
-  tron: ApiTronWallet;
-  solana: ApiSolanaWallet;
-  ethereum: ApiEVMWallet;
-  base: ApiEVMWallet;
   bnb: ApiEVMWallet;
-  polygon: ApiEVMWallet;
-  arbitrum: ApiEVMWallet;
-  monad: ApiEVMWallet;
-  avalanche: ApiEVMWallet;
-  hyperliquid: ApiEVMWallet;
-  robinhood: ApiEVMWallet;
 };
 
 type ApiBaseAccount = {

@@ -1,33 +1,7 @@
-import type { GlobalState } from '../../types';
-import { MintCardState } from '../../types';
-
 import { getAccentColorIndexFromNft } from '../../../util/accentColor';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
-import { resetHardware, updateAccountSettings, updateCurrentAccountSettings, updateMintCards } from '../../reducers';
-import { selectCurrentAccountId, selectIsHardwareAccount } from '../../selectors';
-
-addActionHandler('openMintCardModal', (global): GlobalState => {
-  return updateMintCards(global, { state: MintCardState.Initial });
-});
-
-addActionHandler('closeMintCardModal', (global): GlobalState => {
-  return { ...global, currentMintCard: undefined };
-});
-
-addActionHandler('startCardMinting', (global, action, { type }): GlobalState => {
-  if (selectIsHardwareAccount(global)) {
-    global = resetHardware(global, 'ton');
-    global = updateMintCards(global, { state: MintCardState.ConnectHardware });
-  } else {
-    global = updateMintCards(global, { state: MintCardState.Password });
-  }
-
-  return updateMintCards(global, { type });
-});
-
-addActionHandler('clearMintCardError', (global): GlobalState => {
-  return updateMintCards(global, { error: undefined });
-});
+import { updateAccountSettings, updateCurrentAccountSettings } from '../../reducers';
+import { selectCurrentAccountId } from '../../selectors';
 
 addActionHandler('setCardBackgroundNft', (global, actions, { nft, accountId }) => {
   global = updateAccountSettings(global, accountId ?? selectCurrentAccountId(global)!, { cardBackgroundNft: nft });

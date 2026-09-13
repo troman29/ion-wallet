@@ -5,9 +5,9 @@ import type { DropdownItem } from '../../../ui/Dropdown';
 
 import buildClassName from '../../../../util/buildClassName';
 
-import NewYearGarland from '../../../mintCard/NewYearGarland';
-import ValentineDecoration from '../../../mintCard/ValentineDecoration';
 import WithContextMenu from '../../../ui/WithContextMenu';
+import NewYearGarland from './decorations/NewYearGarland';
+import ValentineDecoration from './decorations/ValentineDecoration';
 
 import styles from './Card.module.scss';
 

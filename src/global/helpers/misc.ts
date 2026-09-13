@@ -26,10 +26,17 @@ export function parsePlainAddressQr(global: GlobalState, qrData: string) {
   };
 }
 
-export function closeAllOverlays() {
+export async function closeAllOverlays() {
+  // It's important to close the in-app browser before closing the modal, because when a modal closes, it calls
+  // `show()` on the hidden in-app browser, and calling `close()` right after `show()` causes the app to crash.
+  // Meanwhile, calling `close()` before `show()` makes the in-app browser ignore the `show()` call.
+  // A situation, where it happens, is pressing an "openUrl" notification while the app shows a TON Connect modal.
+  // Imported lazily so this module stays free of the component tree: it is reached from action handlers whose
+  // tests stub `global/index`, and a top-level import would run `withGlobal` against that stub.
+  const { getInAppBrowser } = await import('../../components/ui/InAppBrowser');
+  await getInAppBrowser()?.close();
   getActions().closeAnyModal();
   getActions().closeMediaViewer();
-  return Promise.resolve();
 }
 
 /** replaceMap: keys - old (removed) activity ids, value - new (added) activity ids */

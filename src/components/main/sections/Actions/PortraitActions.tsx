@@ -1,43 +1,31 @@
-import React, { type ElementRef, memo } from '../../../../lib/teact/teact';
+import React, { memo } from '../../../../lib/teact/teact';
 import { getActions } from '../../../../global';
 
 import type { StakingStateStatus } from '../../../../util/staking';
 
 import buildClassName from '../../../../util/buildClassName';
 import { vibrate } from '../../../../util/haptics';
-import {
-  handleSendMenuItemClick, SEND_CONTEXT_MENU_ITEMS, SEND_CONTEXT_MENU_ITEMS_WITHOUT_SELL,
-} from './helpers/sendMenu';
 import { STAKING_TAB_TEXT_VARIANTS } from './helpers/stakingLabels';
 
 import useLang from '../../../../hooks/useLang';
 import useLastCallback from '../../../../hooks/useLastCallback';
 
 import Button from '../../../ui/Button';
-import WithContextMenu from '../../../ui/WithContextMenu';
 
 import styles from './PortraitActions.module.scss';
 
 interface OwnProps {
-  isTestnet?: boolean;
   isLedger?: boolean;
   stakingStatus: StakingStateStatus;
   isSwapDisabled?: boolean;
   isStakingDisabled?: boolean;
-  isOnRampDisabled?: boolean;
-  isOffRampDisabled?: boolean;
-  containerRef: ElementRef<HTMLDivElement>;
   onEarnClick: NoneToVoidFunction;
 }
 
 function PortraitActions({
-  isTestnet,
   stakingStatus,
   isStakingDisabled,
   isSwapDisabled,
-  isOnRampDisabled,
-  isOffRampDisabled,
-  containerRef,
   onEarnClick,
 }: OwnProps) {
   const {
@@ -46,34 +34,28 @@ function PortraitActions({
 
   const lang = useLang();
 
-  const isOnRampAllowed = !isTestnet && !isOnRampDisabled;
-  const addBuyButtonName = !isSwapDisabled || isOnRampAllowed
-    ? lang('Fund')
-    : lang('Add');
-  const sendButtonName = isOffRampDisabled || lang.code !== 'en'
-    ? lang('Send')
-    : <span className={styles.name}>{lang('Send')}<span className={styles.divider}>/</span>{lang('Sell')}</span>;
+  const addBuyButtonName = isSwapDisabled ? lang('Add') : lang('Fund');
 
   const handleStartSwap = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     startSwap();
   });
 
   const handleStartTransfer = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     startTransfer();
   });
 
   const handleAddBuyClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     openReceiveModal();
   });
 
   const handleEarnClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     onEarnClick();
   });
@@ -89,26 +71,14 @@ function PortraitActions({
           <i className={buildClassName(styles.buttonIcon, 'icon-action-add')} aria-hidden />
           {addBuyButtonName}
         </Button>
-        <WithContextMenu
-          rootRef={containerRef}
-          items={isOffRampDisabled ? SEND_CONTEXT_MENU_ITEMS_WITHOUT_SELL : SEND_CONTEXT_MENU_ITEMS}
-          withBackdrop
-          menuClassName={styles.menu}
-          onItemClick={handleSendMenuItemClick}
+        <Button
+          isSimple
+          className={styles.button}
+          onClick={handleStartTransfer}
         >
-          {(buttonProps, isMenuOpen) => (
-            <Button
-              {...buttonProps}
-              isSimple
-              className={buildClassName(styles.button, isMenuOpen && styles.buttonActive)}
-              onClick={handleStartTransfer}
-              ref={buttonProps.ref as ElementRef<HTMLButtonElement>}
-            >
-              <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
-              {sendButtonName}
-            </Button>
-          )}
-        </WithContextMenu>
+          <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
+          {lang('Send')}
+        </Button>
         {!isSwapDisabled && (
           <Button
             isSimple

@@ -4,11 +4,6 @@ import type { ChainIdByChain, EvmTransactionParams } from '../../../api/dappProt
 import type { DappConnectionResult, DappSessionChain } from '../../../api/dappProtocols/types';
 import type { ApiChain, ApiNetwork } from '../../../api/types';
 import type { RegisterEvmInjectedWalletCb } from '../../injectedConnector/evmConnector';
-import type {
-  RegisterSolanaInjectedWalletCb,
-  SolanaStandardWallet,
-  StandardWalletAddress,
-} from '../../injectedConnector/solanaConnector';
 import type { BridgeApi } from '../provider/bridgeApi';
 import type { BrowserTonConnectBridgeMethods } from '../provider/tonConnectBridgeApi';
 
@@ -48,20 +43,22 @@ type InMessageData = {
   update: string;
 };
 
+type CordovaPostMessageTarget = { postMessage: AnyToVoidFunction };
 type Handler = (update: string) => void;
 
 /**
- * Allows calling functions, provided by the parent window, in this messenger.
+ * Allows calling functions, provided by another messenger (the parent window, or the Capacitor main view), in this messenger.
  * The other messenger must provide the functions using `createReverseIFrameInterface`.
+ *
+ * `PostMessageConnect` is not used here (as any other dependencies) because this needs to be easily stringified.
  */
 export function initConnector(
   bridgeKey: string,
   channel: string,
-  target: Window,
+  target: Window | CordovaPostMessageTarget,
   tonConnectProperties: TonConnectProperties,
   appName: string,
   icon: string,
-  registerSolanaInjectedWallet: RegisterSolanaInjectedWalletCb,
   registerEvmInjectedWallet: RegisterEvmInjectedWalletCb,
 ) {
   if ((window as any)[bridgeKey]) return;
@@ -70,12 +67,10 @@ export function initConnector(
 
   const requestStates = new Map<string, RequestState>();
   const tonUpdateHandlers = new Set<Handler>();
-  const solanaUpdateHandlers = new Set<Handler>();
 
   setupPostMessageHandler();
   setupGlobalOverrides();
   initTonConnect();
-  initSolanaConnect();
   initEvmConnect();
 
   function setupPostMessageHandler() {
@@ -158,123 +153,6 @@ export function initConnector(
     };
   }
 
-  function initSolanaConnect() {
-    class SolanaConnect implements SolanaStandardWallet {
-      accounts: StandardWalletAddress[] = [];
-
-      version = '1.0.0';
-      name = appName;
-
-      icon = `data:image/svg+xml,${encodeURIComponent(icon)}`;
-      chains = [
-        'solana:mainnet',
-        'solana:devnet',
-        'solana:testnet',
-      ];
-
-      features = {
-        'standard:connect': {
-          version: '1.0.0',
-          connect: async (input?: { silent: boolean }): Promise<{ accounts: StandardWalletAddress[] }> => {
-            try {
-              if (!input?.silent && this.accounts.length) {
-                return { accounts: this.accounts };
-              }
-
-              const metadata = {
-                url: window.origin,
-                name: (document.querySelector<HTMLMetaElement>('meta[property*="og:title"]'))?.content
-                  || document.title,
-                description: '',
-                icons: [(document.querySelector<HTMLLinkElement>('link[rel*="icon"]'))?.href
-                  || `${window.location.origin}/favicon.ico` || ''],
-              };
-
-              const result = await callApi('solanaConnect:connect', ...[metadata, input?.silent]);
-
-              this.accounts = result.accounts.map((e) => ({
-                ...e,
-                publicKey: new Uint8Array(Object.values(e.publicKey)),
-              }));
-
-              return { accounts: this.accounts };
-            } catch (error) {
-              return { accounts: [] };
-            }
-          },
-        },
-        'standard:disconnect': {
-          version: '1.0.0',
-          disconnect: async () => {
-            await callApi('solanaConnect:disconnect');
-
-            this.accounts = [];
-          },
-        },
-        'standard:events': {
-          version: '1.0.0',
-          on: (event: any, listener: any) => {
-            if (event !== 'change') {
-              return () => {};
-            }
-
-            solanaUpdateHandlers.add(listener);
-            return () => {
-              solanaUpdateHandlers.delete(listener);
-            };
-          },
-        },
-        'solana:signAndSendTransaction': {
-          version: '1.0.0',
-          supportedTransactionVersions: ['legacy', 0],
-          signAndSendTransaction: async (input: any) => {
-            // TODO: find dapp to test this
-            await Promise.resolve();
-          },
-        },
-        'solana:signTransaction': {
-          version: '1.0.0',
-          supportedTransactionVersions: ['legacy', 0],
-          signTransaction: async (input: {
-            account: { address: string; chains: string[]; features: string[] };
-            transaction: Uint8Array;
-          }): Promise<{ signedTransaction: Uint8Array<ArrayBufferLike> }[]> => {
-            const response = await callApi('solanaConnect:signTransaction', input);
-
-            return response.map((e) => ({
-              signedTransaction: new Uint8Array(Object.values(e.signedTransaction)),
-            }));
-          },
-        },
-        'solana:signMessage': {
-          version: '1.0.0',
-          signMessage: async (input: {
-            account: { address: string; chains: string[]; features: string[] };
-            message: Uint8Array;
-          }) => {
-            const response = await callApi('solanaConnect:signMessage', input);
-
-            return response.map((e) => ({
-              signature: new Uint8Array(Object.values(e.signature)),
-              signedMessage: new Uint8Array(Object.values(e.signedMessage)),
-            }));
-          },
-        },
-        'solana:signIn': {
-          version: '1.0.0',
-          signIn: async (input: any) => {
-            // TODO: find dapp to test this
-            await Promise.resolve();
-
-            return [];
-          },
-        },
-      };
-    }
-
-    registerSolanaInjectedWallet(new SolanaConnect());
-  }
-
   function callApi<ApiMethodName extends keyof BridgeApi>(
     name: ApiMethodName,
     ...args: ApiArgs<ApiMethodName>
@@ -293,7 +171,11 @@ export function initConnector(
       args,
     };
 
-    target.postMessage(messageData, '*');
+    if ('parent' in target) {
+      target.postMessage(messageData, '*');
+    } else {
+      target.postMessage(JSON.stringify(messageData));
+    }
 
     return promise as ApiMethodResponse<ApiMethodName>;
   }
@@ -337,25 +219,11 @@ export function initConnector(
   }
 
   function initEvmConnect() {
+    const BNB_MAINNET_CAIP = 'eip155:56';
+
     const EVM_CHAIN_IDS: ChainIdByChain = {
-      'eip155:1': { chain: 'ethereum', network: 'mainnet' },
-      'eip155:5': { chain: 'ethereum', network: 'testnet' },
-      'eip155:8453': { chain: 'base', network: 'mainnet' },
-      'eip155:84532': { chain: 'base', network: 'testnet' },
-      'eip155:137': { chain: 'polygon', network: 'mainnet' },
-      'eip155:80002': { chain: 'polygon', network: 'testnet' },
-      'eip155:42161': { chain: 'arbitrum', network: 'mainnet' },
-      'eip155:421614': { chain: 'arbitrum', network: 'testnet' },
-      'eip155:56': { chain: 'bnb', network: 'mainnet' },
+      [BNB_MAINNET_CAIP]: { chain: 'bnb', network: 'mainnet' },
       'eip155:97': { chain: 'bnb', network: 'testnet' },
-      'eip155:43114': { chain: 'avalanche', network: 'mainnet' },
-      'eip155:43113': { chain: 'avalanche', network: 'testnet' },
-      'eip155:143': { chain: 'monad', network: 'mainnet' },
-      'eip155:10143': { chain: 'monad', network: 'testnet' },
-      'eip155:999': { chain: 'hyperliquid', network: 'mainnet' },
-      'eip155:998': { chain: 'hyperliquid', network: 'testnet' },
-      'eip155:4663': { chain: 'robinhood', network: 'mainnet' },
-      'eip155:46630': { chain: 'robinhood', network: 'testnet' },
     };
 
     const EVM_EIP155_NAMESPACES = {
@@ -560,20 +428,21 @@ export function initConnector(
 
       private chainIdHex(): string {
         const caip2 = this.selectedCaip2 ?? getCaip2ForSessionChain(
-          this.evmChains[0]?.chain ?? 'ethereum',
+          this.evmChains[0]?.chain ?? 'bnb',
           this.evmChains[0]?.network ?? 'mainnet',
         );
 
         if (!caip2) {
-          return '0x1';
+          return caip2ToHexChainId(BNB_MAINNET_CAIP);
         }
 
         return caip2ToHexChainId(caip2);
       }
 
       private resolveChainForAddress(address: string, caip?: string): { chain: ApiChain; network: ApiNetwork } {
-        // Default to Ethereum mainnet if no CAIP is provided (for chain-agnostic methods like personal_sign, eth_sign, etc.)
-        caip = caip || 'eip155:1';
+        // Chain-agnostic methods (personal_sign, eth_sign and the like) carry no CAIP, so they land
+        // on the only EVM chain we support.
+        caip = caip || BNB_MAINNET_CAIP;
 
         // Cannot use getAddress here, so use toLowerCase instead
         const normalized = address.toLowerCase();
@@ -581,7 +450,7 @@ export function initConnector(
         const targetChain = caip ? EVM_CHAIN_IDS[caip] : undefined;
 
         if (!targetChain) {
-          return { chain: 'ethereum', network: 'mainnet' };
+          return { chain: 'bnb', network: 'mainnet' };
         }
 
         const row = this.evmChains.find(
@@ -592,7 +461,7 @@ export function initConnector(
         }
 
         return {
-          chain: this.evmChains[0]?.chain ?? 'ethereum',
+          chain: this.evmChains[0]?.chain ?? 'bnb',
           network: this.evmChains[0]?.network ?? 'mainnet',
         };
       }
@@ -872,7 +741,6 @@ export function initConnector(
             url: window.origin,
             address,
             data,
-            isEthSign: true,
           },
         };
 
@@ -968,3 +836,5 @@ export function initConnector(
     });
   }
 }
+
+export const initConnectorString = initConnector.toString();

@@ -100,11 +100,7 @@ export async function callApi<T extends keyof AllMethods>(
       args,
     }) as Promise<MethodResponseWithMaybePrefix<T>>);
 
-    if (isAgentV2Method(fnName)) {
-      logDebugApi(`callApi: ${fnName}`, { status: 'completed' });
-    } else {
-      logDebugApi(`callApi: ${fnName}`, args, result);
-    }
+    logDebugApi(`callApi: ${fnName}`, args, result);
 
     return result;
   } catch (err) {
@@ -113,10 +109,6 @@ export async function callApi<T extends keyof AllMethods>(
     logDebugError(`callApi: ${fnName}`, err);
     return undefined;
   }
-}
-
-export function isAgentV2Method(fnName: PropertyKey): boolean {
-  return typeof fnName === 'string' && fnName.includes('AgentV2');
 }
 
 export async function callApiWithThrow<T extends keyof AllMethods>(

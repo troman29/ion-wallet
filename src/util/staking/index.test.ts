@@ -1,14 +1,9 @@
 import type { ApiStakingState } from '../../api/types';
 
-import { MYCOIN_MAINNET, MYCOIN_TESTNET, TONCOIN } from '../../config';
+import { TON_USDE, TONCOIN } from '../../config';
 import { getFullStakingBalance, getIsNewStakeAllowed } from '.';
 
 describe('getIsNewStakeAllowed', () => {
-  it('forbids new stakes for MY coin (mainnet and testnet)', () => {
-    expect(getIsNewStakeAllowed(MYCOIN_MAINNET.slug)).toBe(false);
-    expect(getIsNewStakeAllowed(MYCOIN_TESTNET.slug)).toBe(false);
-  });
-
   it('allows new stakes for other tokens', () => {
     expect(getIsNewStakeAllowed(TONCOIN.slug)).toBe(true);
     expect(getIsNewStakeAllowed('ton-some-other-jetton')).toBe(true);
@@ -61,7 +56,7 @@ describe('getFullStakingBalance', () => {
     const state = {
       type: 'jetton',
       id: 'jetton',
-      tokenSlug: MYCOIN_MAINNET.slug,
+      tokenSlug: TON_USDE.slug,
       pool: 'EQCaSTAKE',
       balance: 1_000n,
       unclaimedRewards: 25n,
@@ -70,21 +65,5 @@ describe('getFullStakingBalance', () => {
     } as unknown as ApiStakingState;
 
     expect(getFullStakingBalance(state)).toBe(1_025n);
-  });
-
-  it('returns the bare balance for a nominators stake', () => {
-    const state = {
-      type: 'nominators',
-      id: 'nominators',
-      tokenSlug: TONCOIN.slug,
-      pool: 'EQCaPOOL',
-      balance: 700n,
-      annualYield: 3,
-      yieldType: 'APY',
-      start: 0,
-      end: 0,
-    } as unknown as ApiStakingState;
-
-    expect(getFullStakingBalance(state)).toBe(700n);
   });
 });

@@ -5,10 +5,7 @@ import { sortChainsByBalance } from '../../util/calculateFullBalance';
 import { getOrderedAccountChains } from '../../util/chain';
 import {
   DEFAULT_CHAIN_DISPLAY_CONFIGURATION,
-  getAddressLineChains,
-  getChainsWithBalance,
   getDefaultVisibleChains,
-  getHasOnlyTonTokens,
   getOrderedChainsForDisplay,
   getVisibleChains,
 } from '../../util/chainDisplay';
@@ -26,10 +23,8 @@ export interface ChainDisplay {
   defaultOrder: ApiChain[];
   /** The same chains in the order the Blockchains screen lists them: the shown ones first, the hidden ones after */
   orderedChains: ApiChain[];
-  /** The chains the app shows outside the address rows: the address menu, the share link */
+  /** The chains the app shows: the address rows, the address menu, the share link */
   visibleChains: ApiChain[];
-  /** The chains the address rows show: `visibleChains` narrowed by the Gram Wallet gate (see `getAddressLineChains`) */
-  addressLineChains: ApiChain[];
   /** The chains that would be shown if the user had not flipped any switch - needed to interpret those switches */
   defaultVisibleChains: ReadonlySet<ApiChain>;
 }
@@ -44,10 +39,7 @@ const selectChainDisplayMemoizedFor = withCache((accountId: string) => memoize((
 ): ChainDisplay => {
   const defaultOrder = getOrderedAccountChains(byChain);
   const valueOrder = sortChainsByBalance(defaultOrder, tokens, stakingStates);
-  const defaultVisibleChains = getDefaultVisibleChains(
-    defaultOrder,
-    getChainsWithBalance(tokens, stakingStates),
-  );
+  const defaultVisibleChains = getDefaultVisibleChains(defaultOrder);
 
   const visibleChains = getVisibleChains(config, defaultOrder, valueOrder, defaultVisibleChains);
 
@@ -56,7 +48,6 @@ const selectChainDisplayMemoizedFor = withCache((accountId: string) => memoize((
     defaultOrder,
     orderedChains: getOrderedChainsForDisplay(config, defaultOrder, valueOrder, defaultVisibleChains),
     visibleChains,
-    addressLineChains: getAddressLineChains(visibleChains, getHasOnlyTonTokens(tokens)),
     defaultVisibleChains,
   };
 }));
@@ -81,7 +72,7 @@ export function selectCurrentAccountChainDisplay(global: GlobalState) {
  * Suffixed `Slow` because it loops over every account, which is too much work for a `mapStateToProps`.
  * Call it from a container's `useMemo` that already holds the account tokens instead.
  */
-export function selectMultipleAccountsAddressLineChainsSlow(
+export function selectMultipleAccountsVisibleChainsSlow(
   accounts: Record<string, Account>,
   settingsByAccountId: Record<string, AccountSettings>,
   tokensByAccountId: Record<string, UserToken[] | undefined>,
@@ -95,7 +86,7 @@ export function selectMultipleAccountsAddressLineChainsSlow(
       settingsByAccountId[accountId]?.chainDisplayConfiguration ?? DEFAULT_CHAIN_DISPLAY_CONFIGURATION,
       tokensByAccountId[accountId],
       stakingStatesByAccountId[accountId],
-    ).addressLineChains;
+    ).visibleChains;
   }
 
   return result;

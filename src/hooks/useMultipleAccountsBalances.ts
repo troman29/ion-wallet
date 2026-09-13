@@ -6,9 +6,9 @@ import type {
 import type { Account, AccountSettings, GlobalState } from '../global/types';
 
 import {
-  selectMultipleAccountsAddressLineChainsSlow,
   selectMultipleAccountsStakingStatesSlow,
   selectMultipleAccountsTokensSlow,
+  selectMultipleAccountsVisibleChainsSlow,
 } from '../global/selectors';
 import { useAccountsBalances } from './useAccountsBalances';
 
@@ -65,12 +65,12 @@ export function useMultipleAccountsBalances({
     return selectMultipleAccountsStakingStatesSlow(sourceAccounts, byAccountId, stakingDefault);
   }, [sourceAccounts, byAccountId, stakingDefault]);
 
-  const addressLineChainsByAccountId = useMemo(() => {
+  const visibleChainsByAccountId = useMemo(() => {
     if (!sourceAccounts || !settingsByAccountId || !allAccountsTokens || !allAccountsStakingStates) {
       return undefined;
     }
 
-    return selectMultipleAccountsAddressLineChainsSlow(
+    return selectMultipleAccountsVisibleChainsSlow(
       sourceAccounts,
       settingsByAccountId,
       allAccountsTokens,
@@ -86,5 +86,5 @@ export function useMultipleAccountsBalances({
     currencyRates,
   );
 
-  return { ...balances, addressLineChainsByAccountId };
+  return { ...balances, visibleChainsByAccountId };
 }

@@ -2,8 +2,6 @@ import { convertExplorerUrl, getViewAccountUrl, isInIframeWhitelist, isValidUrl,
 
 // Test constants
 const TEST_TON_ADDRESS = 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S';
-const TEST_TRON_ADDRESS = 'TRjE1H8dxypKM1NZRdysbs9wo7huR4bdNz';
-const TEST_SOLANA_ADDRESS = '6fHx3tfJdMz7NEjjSdzFy18byg328vnrNH5Z23zGprKL';
 const TEST_EVM_ADDRESS = '0x9429C8Af1089efD542b313156Af2DFA35c7e0a81';
 const TEST_TON_HASH = 'cd3547d822b1f33e5825572709b9ac95e64d46680cde5fc6e5ae489ecec83b27';
 const TEST_NFT_ADDRESS = 'EQCchzdeVwH5js22ReWU7smONvgpB9bZG9k_VEmYmGhIhuTL';
@@ -44,14 +42,14 @@ describe('normalizeUrl', () => {
 
   it('should not modify URLs that already have https:// protocol', () => {
     expect(normalizeUrl('https://example.com')).toBe('https://example.com');
-    expect(normalizeUrl('https://my.tt/view/?ton=123&tron=456')).toBe('https://my.tt/view/?ton=123&tron=456');
+    expect(normalizeUrl('https://my.tt/view/?ton=123&bnb=456')).toBe('https://my.tt/view/?ton=123&bnb=456');
   });
 
   it('should handle URLs with query parameters and fragments', () => {
     expect(normalizeUrl('example.com/path?query=value#fragment'))
       .toBe('https://example.com/path?query=value#fragment');
-    const deeplinkUrl = `my.tt/view/?ton=${TEST_TON_ADDRESS}&tron=${TEST_TRON_ADDRESS}`;
-    const expectedUrl = `https://my.tt/view/?ton=${TEST_TON_ADDRESS}&tron=${TEST_TRON_ADDRESS}`;
+    const deeplinkUrl = `my.tt/view/?ton=${TEST_TON_ADDRESS}&bnb=${TEST_EVM_ADDRESS}`;
+    const expectedUrl = `https://my.tt/view/?ton=${TEST_TON_ADDRESS}&bnb=${TEST_EVM_ADDRESS}`;
     expect(normalizeUrl(deeplinkUrl)).toBe(expectedUrl);
   });
 
@@ -61,47 +59,22 @@ describe('normalizeUrl', () => {
 });
 
 describe('getViewAccountUrl', () => {
-  it('should collapse matching EVM chain addresses into the evm parameter', () => {
+  it('should collapse the EVM chain address into the evm parameter', () => {
     expect(getViewAccountUrl({
-      ethereum: TEST_EVM_ADDRESS,
-      solana: TEST_SOLANA_ADDRESS,
-      ton: TEST_TON_ADDRESS,
-      tron: TEST_TRON_ADDRESS,
       bnb: TEST_EVM_ADDRESS,
-      hyperliquid: TEST_EVM_ADDRESS,
-      robinhood: TEST_EVM_ADDRESS,
-      base: TEST_EVM_ADDRESS,
-      arbitrum: TEST_EVM_ADDRESS,
-      monad: TEST_EVM_ADDRESS,
-      polygon: TEST_EVM_ADDRESS,
-      avalanche: TEST_EVM_ADDRESS,
-    })).toBe(
-      `https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&solana=${TEST_SOLANA_ADDRESS}`
-      + `&ton=${TEST_TON_ADDRESS}&tron=${TEST_TRON_ADDRESS}`,
-    );
+      ton: TEST_TON_ADDRESS,
+    })).toBe(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&ton=${TEST_TON_ADDRESS}`);
   });
 
-  it('should keep concrete EVM chain parameters when the EVM set is incomplete', () => {
+  it('should name a non-EVM chain by its own parameter', () => {
     expect(getViewAccountUrl({
-      ethereum: TEST_EVM_ADDRESS,
-      base: TEST_EVM_ADDRESS,
       ton: TEST_TON_ADDRESS,
-    })).toBe(
-      `https://my.tt/view/?ethereum=${TEST_EVM_ADDRESS}&base=${TEST_EVM_ADDRESS}&ton=${TEST_TON_ADDRESS}`,
-    );
+    })).toBe(`https://my.tt/view/?ton=${TEST_TON_ADDRESS}`);
   });
 
   it('should keep testnet parameter after the collapsed EVM parameter', () => {
     expect(getViewAccountUrl({
-      ethereum: TEST_EVM_ADDRESS,
-      base: TEST_EVM_ADDRESS,
       bnb: TEST_EVM_ADDRESS,
-      polygon: TEST_EVM_ADDRESS,
-      arbitrum: TEST_EVM_ADDRESS,
-      monad: TEST_EVM_ADDRESS,
-      avalanche: TEST_EVM_ADDRESS,
-      hyperliquid: TEST_EVM_ADDRESS,
-      robinhood: TEST_EVM_ADDRESS,
     }, true)).toBe(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&testnet=true`);
   });
 });
@@ -222,8 +195,8 @@ describe('convertExplorerUrl', () => {
     });
 
     it('should return undefined for cross-chain conversion attempts', () => {
-      const tronUrl = `https://tronscan.org/#/address/${TEST_TRON_ADDRESS}`;
-      expect(convertExplorerUrl(tronUrl, 'tonscan')).toBeUndefined();
+      const bnbUrl = `https://bscscan.com/address/${TEST_EVM_ADDRESS}`;
+      expect(convertExplorerUrl(bnbUrl, 'tonscan')).toBeUndefined();
     });
 
     it('should use fallback for URLs that do not match any pattern', () => {
@@ -234,14 +207,14 @@ describe('convertExplorerUrl', () => {
     });
   });
 
-  describe('TRON explorer (single explorer, no conversion)', () => {
-    it('should return the same URL for TRON explorer (only one explorer available)', () => {
-      const input = `https://tronscan.org/#/address/${TEST_TRON_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tronscan')).toBe(input);
+  describe('BNB explorer (single explorer, no conversion)', () => {
+    it('should return the same URL for the BNB explorer (only one explorer available)', () => {
+      const input = `https://bscscan.com/address/${TEST_EVM_ADDRESS}`;
+      expect(convertExplorerUrl(input, 'bsctrace')).toBe(input);
     });
 
-    it('should return undefined when trying to convert TRON to non-existent explorer', () => {
-      const input = `https://tronscan.org/#/address/${TEST_TRON_ADDRESS}`;
+    it('should return undefined when trying to convert BNB to a non-existent explorer', () => {
+      const input = `https://bscscan.com/address/${TEST_EVM_ADDRESS}`;
       expect(convertExplorerUrl(input, 'tonscan')).toBeUndefined();
     });
   });

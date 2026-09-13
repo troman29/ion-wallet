@@ -9,12 +9,12 @@ On the count of three...: با شمارش تا سه...
 $back_up_auth: پشتیبان‌گیری
 $back_up_security: پشتیبان‌گیری
 Confirm with: تأیید با
-Add an extra layer of security for your wallet in TON network.: یک لایه امنیتی اضافی برای کیف پول خود در شبکه TON اضافه کنید.
+Add an extra layer of security for your wallet in TON network.: یک لایه امنیتی اضافی برای کیف پول خود در شبکه ION اضافه کنید.
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: انتقال‌ها و اقدامات مهم را با رمز عبور خود امضا کنید، سپس آن‌ها را در تلگرام تأیید نمایید.
 This helps protect your funds even if your recovery phrase or keys are compromised.: این کار حتی در صورت لو رفتن عبارت بازیابی یا کلیدهای شما، از دارایی‌هایتان محافظت می‌کند.
 "Connection Fee:": "کارمزد اتصال:"
 Connect Telegram: اتصال تلگرام
-Add in Gram Wallet: افزودن در Gram Wallet
+Add in Gram Wallet: افزودن در ION Wallet
 Telegram will be used to confirm transfers and important actions.: از تلگرام برای تأیید انتقال‌ها و اقدامات مهم استفاده خواهد شد.
 My Telegram Account: حساب تلگرام من
 Without username: بدون نام کاربری
@@ -140,7 +140,7 @@ Toggle Hide Tiny Transfers: تغییر وضعیت پنهان کردن انتقا
 Network: شبکه
 Developer Options: گزینه‌های توسعه‌دهنده
 All Wallet Versions: همه نسخه‌های کیف پول
-Create TON-Only Wallet: ساخت کیف پول فقط TON
+Create TON-Only Wallet: ساخت کیف پول فقط ION
 Confirmation: تأیید
 Signing Data: امضای داده
 Contract Initialization Data: داده مقداردهی اولیه قرارداد
@@ -240,7 +240,7 @@ Current APY: بازده سالانه فعلی
 Est. Yearly Earnings: درآمد سالانه تخمینی
 Staking Details: جزئیات استیکینگ
 Why this is safe: چرا این امن است
-$safe_staking_description1: استیکینگ **کاملاً غیرمتمرکز** است و توسط قراردادهای هوشمند **استیکینگ نقدی رسمی TON** اداره می‌شود.
+$safe_staking_description1: استیکینگ **کاملاً غیرمتمرکز** است و توسط قراردادهای هوشمند **استیکینگ نقدی رسمی ION** اداره می‌شود.
 $safe_staking_description2: استیک واریزشده به‌عنوان بخشی از ماهیت **اثبات سهام** آن، برای اعتبارسنجی شبکه %chain% استفاده خواهد شد.
 $safe_staking_description3: می‌توانید استیک خود را در **هر زمان** برداشت کنید و ظرف **دو روز** به حساب شما بازگردانده خواهد شد.
 $safe_staking_description_jetton1: استیکینگ توکن **کاملاً غیرمتمرکز** است و توسط قراردادهای هوشمند **متن‌باز** توسعه‌یافته توسط %jvault_link% که **ممیزی‌های امنیتی** را گذرانده‌اند، اداره می‌شود.
@@ -901,7 +901,7 @@ $receive_action: دریافت
 Change Palette: تغییر پالت
 Palette: پالت
 Unlock New Palettes: باز کردن پالت‌های جدید
-Get a unique My Wallet Card to unlock new palettes.: یک کارت My Wallet منحصربه‌فرد بگیرید تا پالت‌های جدید را باز کنید.
+Get a unique My Wallet Card to unlock new palettes.: یک کارت ION Wallet منحصربه‌فرد بگیرید تا پالت‌های جدید را باز کنید.
 Mint Cards: ضرب کارت‌ها
 Card has been upgraded!: کارت ارتقا یافت!
 $mint_card_result: کارت NFT ظرف یک دقیقه **ضرب** و **به‌صورت خودکار نصب** خواهد شد.
@@ -938,7 +938,7 @@ DappurlTrustStatusDangerousTitle: سایت بالقوه مخرب
 $DappurlTrustStatusDangerousHelp: این دامنه توسط بررسی‌های امنیتی به‌عنوان خطرناک علامت‌گذاری شده است. اتصال ممکن است دارایی‌های شما را در معرض خطر قرار دهد. تنها در صورتی ادامه دهید که کاملاً مطمئن هستید.
 $reopen_in_iab: لطفاً برای جلوگیری از این هشدار، از %mobileAppButton% یا %browserExtensionButton% مربوط به %app_name% استفاده کنید.
 $reopen_in_iab_explore: لطفاً هنگام مرور اپلیکیشن‌ها برای جلوگیری از این هشدار، از بخش %exploreTab% استفاده کنید.
-My Wallet Browser: مرورگر My Wallet
+My Wallet Browser: مرورگر ION Wallet
 mobile app: اپلیکیشن موبایل
 browser extension: افزونه مرورگر
 Exit all wallets: خروج از همه کیف پول‌ها
@@ -1120,9 +1120,9 @@ Customize Wallet: سفارشی‌سازی کیف پول
 "Select the card stored in this wallet:": "کارت ذخیره‌شده در این کیف پول را انتخاب کنید:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: این کارت برای این کیف پول نصب خواهد شد و در صفحه اصلی و در فهرست کیف پول‌ها نمایش داده می‌شود.
 Get More Cards: دریافت کارت‌های بیشتر
-Browse My Wallet Cards available for purchase.: کارت‌های My Wallet موجود برای خرید را مرور کنید.
+Browse My Wallet Cards available for purchase.: کارت‌های ION Wallet موجود برای خرید را مرور کنید.
 You don’t have any cards to customize yet: شما هنوز هیچ کارتی برای سفارشی‌سازی ندارید
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: کارت‌های My Wallet می‌توانند برای کیف پول‌ها نصب شوند و در صفحه اصلی و در فهرست کیف پول نمایش داده شوند.
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: کارت‌های ION Wallet می‌توانند برای کیف پول‌ها نصب شوند و در صفحه اصلی و در فهرست کیف پول نمایش داده شوند.
 Get First Card: دریافت اولین کارت
 Palette and Card: پالت و کارت
 Customize the wallet's home screen and color accents the way you like.: صفحه اصلی کیف پول و رنگ‌های تأکیدی را آن‌طور که دوست دارید سفارشی کنید.
@@ -1160,7 +1160,7 @@ Adding wallets is not available in explorer mode: افزودن کیف پول‌�
 $explorer_mode_warning: "حالت اکسپلورر: در انتظار یک دیپ‌لینک مشاهده برای باز کردن یک آدرس"
 This command is not supported in explorer mode: این فرمان در حالت اکسپلورر پشتیبانی نمی‌شود
 $saved_addresses_header: ذخیره‌شده
-confirm an action in My Wallet: تأیید یک اقدام در My Wallet
+confirm an action in My Wallet: تأیید یک اقدام در ION Wallet
 Timed out waiting for account to be ready: زمان انتظار برای آماده شدن حساب به پایان رسید
 $connected_apps:
   otherValue: "%count% متصل"
@@ -1372,7 +1372,7 @@ $agent_notice_receive_details_required: رمزارز و شبکه مورد نظر
 $agent_notice_receive_asset_required: رمزارز مورد نظر برای واریز را مشخص کنید.
 $agent_notice_receive_network_required: شبکه مورد نظر برای واریز را مشخص کنید.
 $agent_notice_receive_ready: صفحه دریافت شما آماده باز شدن است.
-$agent_notice_receive_memo_not_required: هنگام تأمین مالی آدرس My Wallet خود، یادداشت لازم نیست — فیلد را خالی بگذارید.
+$agent_notice_receive_memo_not_required: هنگام تأمین مالی آدرس ION Wallet خود، یادداشت لازم نیست — فیلد را خالی بگذارید.
 $agent_notice_receive_unavailable: دریافت برای این کیف پول در دسترس نیست.
 $agent_notice_receive_planning_unavailable: درخواست دریافت قابل تفسیر نبود. آن را دوباره بیان کنید یا دریافت را باز کنید.
 $agent_notice_receive_active_account_unavailable: کیف پول فعال در دسترس نیست. کیف پول را تغییر دهید و دوباره امتحان کنید.
@@ -1617,7 +1617,7 @@ $agent_portfolio_history_on: تاریخچه در شبکه %network%
 $agent_portfolio_no_activity: هیچ فعالیت اخیر وجود ندارد.
 Clear Chat: پاک کردن گفتگو
 Unsupported link: لینک پشتیبانی‌نشده
-My Wallet Features: قابلیت‌های My Wallet
+My Wallet Features: قابلیت‌های ION Wallet
 Notifications: اعلان‌ها
 Wrong passcode, please try again: رمز عبور اشتباه است، لطفاً دوباره تلاش کنید
 Use biometric authentication or create a passcode to protect it.: از احراز هویت بیومتریک استفاده کنید یا برای محافظت از آن یک رمز عبور بسازید.
@@ -1663,7 +1663,7 @@ Show All Collectibles: نمایش همه کالکتیبل‌ها
 Show All Actions: نمایش همه
 Show All %collection_name%: نمایش همه %collection_name%
 Scanning for subwallets...: در حال جستجوی زیرکیف‌پول‌ها...
-Your assets on other TON contracts: دارایی‌های شما در قراردادهای دیگر TON
+Your assets on other TON contracts: دارایی‌های شما در قراردادهای دیگر ION
 No existing subwallets found: هیچ زیرکیف‌پول موجودی یافت نشد
 You can create a new subwallet if you need another address on the same secret words.: اگر به آدرس دیگری با همان کلمات محرمانه نیاز دارید، می‌توانید یک زیرکیف‌پول جدید بسازید.
 You have tokens on other subwallets. Each subwallet has its own address.: شما توکن‌هایی روی زیرکیف‌پول‌های دیگر دارید. هر زیرکیف‌پول آدرس خاص خود را دارد.
@@ -1733,7 +1733,7 @@ Screen Recording: ضبط صفحه
 Disable Screen Record Warning: غیرفعال‌سازی هشدار ضبط صفحه
 I Understand, Proceed: متوجه شدم، ادامه می‌دهم
 Waiting for Network: در انتظار شبکه
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: |
   هنوز هیچ تاریخچه فعالیتی در این کیف پول وجود ندارد.
 Standalone: مستقل
@@ -1741,7 +1741,7 @@ Standalone: مستقل
 All Telegram Gifts: همه هدایای تلگرام
 Add Crypto: افزودن کریپتو
 Share QR Code: اشتراک‌گذاری کد QR
-$send_only_ton: تنها Gram (GRAM) یا دارایی‌های مبتنی بر TON را به این آدرس ارسال کنید. ارسال توکن‌های دیگر منجر به از دست رفتن آن‌ها خواهد شد.
+$send_only_ton: تنها ION یا دارایی‌های مبتنی بر ION را به این آدرس ارسال کنید. ارسال توکن‌های دیگر منجر به از دست رفتن آن‌ها خواهد شد.
 $send_only_chain: تنها %chain% (%symbol%) یا دارایی‌های مبتنی بر %chain% را به این آدرس ارسال کنید. ارسال توکن‌های دیگر منجر به از دست رفتن آن‌ها خواهد شد.
 Buying with card is not supported for this account.: خرید با کارت برای این حساب پشتیبانی نمی‌شود.
 Swapped at: مبادله‌شده در
@@ -1815,7 +1815,7 @@ Swap is not supported on this account.: مبادله در این حساب پشت
 Connecting your wallet: در حال اتصال کیف پول شما
 Action is not possible on a view-only wallet.: این اقدام روی کیف پول فقط‌مشاهده ممکن نیست.
 No matching chains: هیچ شبکه سازگاری وجود ندارد
-Logged in with My Wallet: واردشده با My Wallet
+Logged in with My Wallet: واردشده با ION Wallet
 You have no apps connected to this wallet.: هیچ اپلیکیشنی به این کیف پول متصل نیست.
 Asset: دارایی
 Sent to: ارسال‌شده به
@@ -1862,7 +1862,7 @@ Payment Address: آدرس پرداخت
 "Install Palette": "نصب پالت"
 Ledger: لجر
 "Moving to staking balance": "در حال انتقال به موجودی استیکینگ"
-My Wallet uses biometric authentication to unlock and authorize transactions: "\u200FMy Wallet از احراز هویت بیومتریک برای باز کردن قفل و تأیید تراکنش‌ها استفاده می‌کند"
+My Wallet uses biometric authentication to unlock and authorize transactions: "\u200FION Wallet از احراز هویت بیومتریک برای باز کردن قفل و تأیید تراکنش‌ها استفاده می‌کند"
 "Network error": "خطای شبکه"
 "No Camera Access": "بدون دسترسی به دوربین"
 "Not all transactions were sent successfully.": "همه تراکنش‌ها با موفقیت ارسال نشدند."
@@ -1879,7 +1879,7 @@ Read-only account: حساب فقط‌خواندنی
 "Request for unstaking": "درخواست برداشت استیک"
 Set a passcode: یک رمز عبور تنظیم کنید
 "Show All %name%": "نمایش همه %name%"
-"TON Wallet Versions": "نسخه‌های کیف پول TON"
+"TON Wallet Versions": "نسخه‌های کیف پول ION"
 "Tap to reveal": "برای نمایش ضربه بزنید"
 "The current version of Ledger only supports English-language comments without special characters.": "نسخه فعلی لجر تنها از نظرات انگلیسی‌زبان بدون کاراکترهای ویژه پشتیبانی می‌کند."
 "There is no activity history for this wallet yet.": "هنوز هیچ تاریخچه فعالیتی برای این کیف پول وجود ندارد."
@@ -1893,7 +1893,7 @@ Bluetooth access is needed to connect Ledger.: برای اتصال لجر به �
 Address not resolved: آدرس تشخیص داده نشد
 Sending more than one NFT isn't supported by Ledger: ارسال بیش از یک NFT توسط لجر پشتیبانی نمی‌شود
 "Updating…": "در حال به‌روزرسانی…"
-This is how the TON Blockchain works.: این نحوه کار بلاک‌چین TON است.
+This is how the TON Blockchain works.: این نحوه کار بلاک‌چین ION است.
 "Waiting for network…": "در انتظار شبکه…"
 Wallet is Locked: کیف پول قفل است
 Warning: هشدار
@@ -1988,7 +1988,7 @@ Use 6-digit Passcode: استفاده از رمز عبور ۶ رقمی
 $authorize_token_fee_capitalized: تأیید کارمزد %token%
 Awaiting Previous Fee: در انتظار کارمزد قبلی
 Lock: قفل
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: کارت‌های My Wallet می‌توانند برای کیف پول‌ها نصب شوند و در صفحه اصلی و در فهرست کیف پول نمایش داده شوند.
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: کارت‌های ION Wallet می‌توانند برای کیف پول‌ها نصب شوند و در صفحه اصلی و در فهرست کیف پول نمایش داده شوند.
 Receive: دریافت
 Scan: اسکن
 $web_permission_prompt: به %origin% اجازه استفاده از %permissions% شما داده شود؟
@@ -2028,8 +2028,8 @@ push_activity_swap_completed: مبادله %from_symbol% → %to_symbol%
 push_activity_swap_failed: مبادله %from_symbol% → %to_symbol% ناموفق بود
 push_activity_swap_expired: مبادله %from_symbol% → %to_symbol% منقضی شد
 push_activity_swap_pending: مبادله %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: سود استیکینگ %amount% GRAM
-push_activity_staking_loyalty_profit: سود وفاداری استیکینگ %amount% GRAM
+push_activity_staking_profit: سود استیکینگ %amount% ION
+push_activity_staking_loyalty_profit: سود وفاداری استیکینگ %amount% ION
 push_domain_title_renew: دامنه خود را تمدید کنید
 push_domain_expired_yesterday: دامنه %domain% شما دیروز منقضی شد. لطفاً برای جلوگیری از از دست دادن دسترسی، در اسرع وقت آن را تمدید کنید
 push_domain_expired_days_ago: دامنه %domain% شما %days% روز پیش منقضی شد. لطفاً برای جلوگیری از از دست دادن دسترسی، در اسرع وقت آن را تمدید کنید
@@ -2068,11 +2068,11 @@ Rounded Corners: گوشه‌های گرد
 Enable Blur: فعال‌سازی محو‌شدگی
 App Font: فونت اپلیکیشن
 Rounded Balance Font: فونت موجودی گرد
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: فروش به کارت در تست‌نت پشتیبانی نمی‌شود.
 Selling to card is not supported for this account.: فروش به کارت برای این حساب پشتیبانی نمی‌شود.
 Copy Wallet Link: کپی لینک کیف پول
-$connect_dapp_no_compatible_wallets_found: این اتصال به کیف پول چندزنجیره‌ای نیاز دارد. کیف پول فعلی شما فقط از TON پشتیبانی می‌کند و کیف پول چندزنجیره‌ای دیگری ندارید. برای ساخت کیف پول چندزنجیره‌ای جدید از دکمه زیر استفاده کنید.
+$connect_dapp_no_compatible_wallets_found: این اتصال به کیف پول چندزنجیره‌ای نیاز دارد. کیف پول فعلی شما فقط از ION پشتیبانی می‌کند و کیف پول چندزنجیره‌ای دیگری ندارید. برای ساخت کیف پول چندزنجیره‌ای جدید از دکمه زیر استفاده کنید.
 Create Multichain Wallet: ساخت کیف پول چندزنجیره‌ای
 push_domain_expired_days_ago_number:
   zeroValue: دامنه شما %domain% %days% روز پیش منقضی شد. لطفاً برای از دست ندادن دسترسی، هرچه زودتر آن را تمدید کنید
@@ -2193,7 +2193,7 @@ $agent_time_minutes: "%value% دقیقه"
 $agent_time_seconds: "%value% ثانیه"
 Switched to %account%: به %account% تغییر یافت
 See All: مشاهده همه
-Add an **extra layer of security** for your wallet in TON network.: یک **لایه امنیتی اضافی** برای کیف پول خود در شبکه TON اضافه کنید.
+Add an **extra layer of security** for your wallet in TON network.: یک **لایه امنیتی اضافی** برای کیف پول خود در شبکه ION اضافه کنید.
 Agent is unavailable: دستیار در دسترس نیست
 Another transaction was sent from this wallet simultaneously. Please try again.: تراکنش دیگری به‌طور همزمان از این کیف پول ارسال شد. لطفاً دوباره تلاش کنید.
 Buying with card is not supported for this chain.: خرید با کارت برای این شبکه پشتیبانی نمی‌شود.
@@ -2205,7 +2205,7 @@ EIP-712 domain: دامنه EIP-712
 Earn is not supported on this account.: استیکینگ در این حساب پشتیبانی نمی‌شود.
 Export Logs: خروجی گرفتن از گزارش‌ها
 Failed to load chat: بارگذاری گفتگو ناموفق بود
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: انتقال‌های NFT با MFA حداکثر ۴ NFT را به‌طور همزمان پشتیبانی می‌کنند.
 More Details: جزئیات بیشتر
 Open Telegram: باز کردن تلگرام

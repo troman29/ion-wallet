@@ -13,12 +13,12 @@ $2fa_security: 2FA с Telegram
 2FA with Telegram: 2FA с Telegram
 Confirm operations in Telegram as a second step.: Подтверждайте операции в Telegram вторым шагом.
 Confirm with: Подтвердить через
-Add an extra layer of security for your wallet in TON network.: Добавьте дополнительный уровень безопасности для кошелька в сети TON.
+Add an extra layer of security for your wallet in TON network.: Добавьте дополнительный уровень безопасности для кошелька в сети ION.
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: Подписывайте переводы и важные действия кодом доступа, а затем подтверждайте их в Telegram.
 This helps protect your funds even if your recovery phrase or keys are compromised.: Это помогает защитить ваши средства, даже если сид-фраза или ключи скомпрометированы.
 "Connection Fee:": "Комиссия за подключение:"
 Connect Telegram: Подключить Telegram
-Add in Gram Wallet: Добавить в Gram Wallet
+Add in Gram Wallet: Добавить в ION Wallet
 Telegram will be used to confirm transfers and important actions.: Telegram будет использоваться для подтверждения переводов и важных действий.
 My Telegram Account: Мой аккаунт Telegram
 Without username: Без username
@@ -145,7 +145,7 @@ Toggle Hide Tiny Transfers: Переключить отображение мел
 Network: Сеть
 Developer Options: Инструменты разработчика
 All Wallet Versions: Все версии кошелька
-Create TON-Only Wallet: Создать TON-кошелёк
+Create TON-Only Wallet: Создать ION-кошелёк
 Confirmation: Подтверждение
 Signing Data: Данные для подписи
 Contract Initialization Data: Данные для инициализации контракта
@@ -248,7 +248,7 @@ Current APY: Текущий APY
 Est. Yearly Earnings: Приблизительный доход в год
 Staking Details: Детали стейкинга
 Why this is safe: Почему это безопасно
-$safe_staking_description1: Стейкинг **полностью децентрализован** и управляется **официальными смарт-контрактами** TON Liquid Staking.
+$safe_staking_description1: Стейкинг **полностью децентрализован** и управляется **официальными смарт-контрактами** ION Liquid Staking.
 $safe_staking_description2: Ваш депозит будет использован для валидации транзакций в блокчейне %chain% в рамках механизма **proof-of-stake**.
 $safe_staking_description3: Вы можете вывести депозит с заработанными процентами **в любой момент** — средства переведутся на ваш основной счёт **в течение двух дней**.
 $safe_staking_description_jetton1: Стейкинг токенов является **полностью децентрализованным** и управляется **опенсорсными** смарт-контрактами, разработанными %jvault_link% и прошедшими **аудит безопасности**.
@@ -913,7 +913,7 @@ $receive_action: Получение
 Change Palette: Изменить палитру
 Palette: Палитра
 Unlock New Palettes: Открыть новые палитры
-Get a unique My Wallet Card to unlock new palettes.: Получите уникальную карту My Wallet, чтобы открыть новые палитры.
+Get a unique My Wallet Card to unlock new palettes.: Получите уникальную карту ION Wallet, чтобы открыть новые палитры.
 Mint Cards: Создать карту
 Card has been upgraded!: Карта улучшена!
 $mint_card_result: NFT-карта будет **создана** и **автоматически установлена** в течение минуты.
@@ -950,7 +950,7 @@ DappurlTrustStatusDangerousTitle: Потенциально опасный сай
 $DappurlTrustStatusDangerousHelp: Домен помечен проверками безопасности как опасный. Подключение может подвергнуть риску ваши средства. Продолжайте только если полностью уверены.
 $reopen_in_iab: Пожалуйста, используйте %app_name% %mobileAppButton% или %browserExtensionButton%, чтобы избежать этого предупреждения.
 $reopen_in_iab_explore: Пожалуйста, используйте раздел %exploreTab% при просмотре приложений, чтобы избежать этого предупреждения.
-My Wallet Browser: браузере My Wallet
+My Wallet Browser: браузере ION Wallet
 mobile app: мобильное приложение
 browser extension: расширение браузера
 Exit all wallets: Выйти из всех кошельков
@@ -1137,9 +1137,9 @@ Customize Wallet: Настроить кошелёк
 "Select the card stored in this wallet:": "Выберите карту, сохранённую в этом кошельке:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Эта карта будет установлена для кошелька и отображаться на главном экране и в списке кошельков.
 Get More Cards: Получить больше карт
-Browse My Wallet Cards available for purchase.: Просмотрите доступные для покупки карты My Wallet.
+Browse My Wallet Cards available for purchase.: Просмотрите доступные для покупки карты ION Wallet.
 You don’t have any cards to customize yet: У вас пока нет карт для настройки.
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: Карты My Wallet можно устанавливать для кошельков и отображать на главном экране и в списке кошельков.
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: Карты ION Wallet можно устанавливать для кошельков и отображать на главном экране и в списке кошельков.
 Get First Card: Получить первую карту
 Palette and Card: Палитра и карта
 Customize the wallet's home screen and color accents the way you like.: Настройте главный экран кошелька и цветовые акценты по своему вкусу.
@@ -1164,7 +1164,7 @@ Sell on Card: Продать на карту
 Sell %symbol%: Продать %symbol%
 $connect_dapp_description: Подключённые приложения могут видеть только адрес вашего кошелька и не смогут перемещать ваши активы без вашего разрешения.
 $connect_dapp_title: Подключить к %name%?
-$connect_dapp_no_compatible_wallets_found: Для этого подключения нужен мультичейн-кошелёк. Текущий кошелёк поддерживает только TON, а других мультичейн-кошельков нет. Нажмите кнопку ниже, чтобы создать новый мультичейн-кошелёк.
+$connect_dapp_no_compatible_wallets_found: Для этого подключения нужен мультичейн-кошелёк. Текущий кошелёк поддерживает только ION, а других мультичейн-кошельков нет. Нажмите кнопку ниже, чтобы создать новый мультичейн-кошелёк.
 Choose Wallet: Выбрать кошелёк
 Wallet to use on %host%: Кошелёк для %host%
 Selected Wallet: Выбранный кошелёк
@@ -1181,7 +1181,7 @@ Adding wallets is not available in explorer mode: Добавление коше�
 $explorer_mode_warning: "Режим обозревателя: ожидание диплинка View для открытия адреса"
 This command is not supported in explorer mode: Эта команда не поддерживается в режиме обозревателя
 $saved_addresses_header: Сохраненные
-confirm an action in My Wallet: подтвердить действие в My Wallet
+confirm an action in My Wallet: подтвердить действие в ION Wallet
 Migration was rolled back: Миграция была откачена
 Rollback Enclave Migration: Откатить миграцию аутентификации
 Unable to migrate wallet data. Please contact support.: Не удалось перенести данные кошелька. Пожалуйста, обратитесь в службу поддержки.
@@ -1397,7 +1397,7 @@ $agent_notice_receive_details_required: Укажите криптоактив и
 $agent_notice_receive_asset_required: Укажите криптоактив для пополнения.
 $agent_notice_receive_network_required: Укажите сеть для пополнения.
 $agent_notice_receive_ready: Экран получения готов к открытию.
-$agent_notice_receive_memo_not_required: Для пополнения собственного адреса My Wallet memo не нужен — оставьте поле пустым.
+$agent_notice_receive_memo_not_required: Для пополнения собственного адреса ION Wallet memo не нужен — оставьте поле пустым.
 $agent_notice_receive_unavailable: Получение недоступно для этого кошелька.
 $agent_notice_receive_planning_unavailable: Не удалось однозначно разобрать запрос на получение. Переформулируйте его или откройте экран получения.
 $agent_notice_receive_active_account_unavailable: Активный кошелёк недоступен. Переключите кошелёк и попробуйте снова.
@@ -1642,7 +1642,7 @@ $agent_portfolio_history_on: "История в %network%"
 $agent_portfolio_no_activity: Недавней истории нет.
 Clear Chat: Очистить чат
 Unsupported link: Эта ссылка не поддерживается
-My Wallet Features: Возможности My Wallet
+My Wallet Features: Возможности ION Wallet
 Notifications: Уведомления
 Wrong passcode, please try again: Неверный код, пожалуйста, попробуйте ещё раз.
 Use biometric authentication or create a passcode to protect it.: Используйте биометрическую аутентификацию или создайте код для защиты.
@@ -1695,7 +1695,7 @@ Deposit: Пополнить
 Trade: Торговля
 Show All %collection_name%: Показать все %collection_name%
 Scanning for subwallets...: Поиск субкошельков...
-Your assets on other TON contracts: Ваши активы на других TON-контрактах
+Your assets on other TON contracts: Ваши активы на других ION-контрактах
 No existing subwallets found: Существующие субкошельки не найдены
 You can create a new subwallet if you need another address on the same secret words.: Вы можете создать новый субкошелёк, если вам нужен другой адрес на тех же секретных словах.
 You have tokens on other subwallets. Each subwallet has its own address.: У вас есть токены на других субкошельках. Каждый субкошелёк имеет свой адрес.
@@ -1772,7 +1772,7 @@ Screen Recording: Запись экрана
 Disable Screen Record Warning: Отключить предупреждение о записи экрана
 I Understand, Proceed: Понимаю, продолжить
 Waiting for Network: Ожидание сети
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: |
   История операций в этом кошельке пока отсутствует.
 Standalone: Отдельный
@@ -1780,7 +1780,7 @@ Standalone: Отдельный
 All Telegram Gifts: Все подарки Telegram
 Add Crypto: Пополнить
 Share QR Code: Поделиться QR кодом
-$send_only_ton: Отправляйте только Gram (GRAM) или активы на базе TON на этот адрес. Отправка других токенов приведёт к их потере.
+$send_only_ton: Отправляйте только ION или активы на базе ION на этот адрес. Отправка других токенов приведёт к их потере.
 $send_only_chain: Отправляйте только %chain% (%symbol%) или активы на базе %chain% на этот адрес. Отправка других токенов приведёт к их потере.
 Buying with card is not supported for this account.: Покупка с карты не поддерживается для этого аккаунта.
 Swapped at: Обмен выполнен в
@@ -1854,7 +1854,7 @@ Swap is not supported on this account.: Обмен не поддерживает
 Connecting your wallet: Подключение кошелька
 Action is not possible on a view-only wallet.: Действие невозможно на кошельке только для просмотра.
 No matching chains: Нет совместимых сетей
-Logged in with My Wallet: Вход выполнен через My Wallet
+Logged in with My Wallet: Вход выполнен через ION Wallet
 You have no apps connected to this wallet.: У вас нет приложений, подключённых к этому кошельку.
 Asset: Актив
 Sent to: Отправлено на
@@ -1906,7 +1906,7 @@ Payment Address: Платёжный адрес
 "Install Palette": "Установить палитру"
 Ledger: Ledger
 "Moving to staking balance": "Перевод в баланс стейкинга"
-My Wallet uses biometric authentication to unlock and authorize transactions: My Wallet использует биометрию для разблокировки и подтверждения транзакций
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet использует биометрию для разблокировки и подтверждения транзакций
 "Network error": "Сетевая ошибка"
 "No Camera Access": "Нет доступа к камере"
 "Not all transactions were sent successfully.": "Не все транзакции были отправлены успешно."
@@ -1923,7 +1923,7 @@ Read-only account: Аккаунт только для просмотра
 "Request for unstaking": "Запрос на вывод из стейкинга"
 Set a passcode: Установить код
 "Show All %name%": "Показать все %name%"
-"TON Wallet Versions": "Версии кошелька TON"
+"TON Wallet Versions": "Версии кошелька ION"
 "Tap to reveal": "Нажмите, чтобы показать"
 "The current version of Ledger only supports English-language comments without special characters.": "Текущая версия Ledger поддерживает только комментарии на английском без специальных символов."
 "There is no activity history for this wallet yet.": "История операций для этого кошелька пока отсутствует."
@@ -2033,7 +2033,7 @@ Use 6-digit Passcode: Использовать 6-значный код
 $authorize_token_fee_capitalized: Подтвердить комиссию %token%
 Awaiting Previous Fee: Ожидание предыдущей комиссии
 Lock: Заблокировать
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: Карты My Wallet можно устанавливать для кошельков и отображать на главном экране и в списке кошельков.
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: Карты ION Wallet можно устанавливать для кошельков и отображать на главном экране и в списке кошельков.
 Receive: Получить
 Scan: Сканировать
 
@@ -2082,8 +2082,8 @@ push_activity_swap_completed: Обмен %from_symbol% → %to_symbol% выпо�
 push_activity_swap_failed: Обмен %from_symbol% → %to_symbol% не выполнен
 push_activity_swap_expired: Обмен %from_symbol% → %to_symbol% истек
 push_activity_swap_pending: Обмен %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: Доход от стейкинга %amount% GRAM
-push_activity_staking_loyalty_profit: Доход от стейкинга за лояльность %amount% GRAM
+push_activity_staking_profit: Доход от стейкинга %amount% ION
+push_activity_staking_loyalty_profit: Доход от стейкинга за лояльность %amount% ION
 push_domain_title_renew: Продлите ваш домен
 push_domain_expired_yesterday: Срок действия вашего домена %domain% истек вчера. Пожалуйста, продлите его как можно скорее, чтобы не потерять доступ
 push_domain_expired_days_ago: Срок действия вашего домена %domain% истек %days% дней назад. Пожалуйста, продлите его как можно скорее, чтобы не потерять доступ
@@ -2137,7 +2137,7 @@ Rounded Corners: Скруглённые углы
 Enable Blur: Включить размытие
 App Font: Шрифт приложения
 Rounded Balance Font: Округлый шрифт баланса
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: Продажа на карту не поддерживается в Testnet.
 Selling to card is not supported for this account.: Продажа на карту не поддерживается для этого аккаунта.
 "Why is %tokenName% %direction% %timeframe%?": "Почему цена %tokenName% %direction% %timeframe%?"
@@ -2236,7 +2236,7 @@ $agent_time_minutes: "%value% мин"
 $agent_time_seconds: "%value% с"
 Switched to %account%: Вы переключились на %account%
 See All: Показать все
-Add an **extra layer of security** for your wallet in TON network.: Добавьте **дополнительный уровень безопасности** для кошелька в сети TON.
+Add an **extra layer of security** for your wallet in TON network.: Добавьте **дополнительный уровень безопасности** для кошелька в сети ION.
 Agent is unavailable: Агент недоступен
 Another transaction was sent from this wallet simultaneously. Please try again.: Одновременно из этого кошелька была отправлена другая транзакция. Пожалуйста, попробуйте ещё раз.
 Buying with card is not supported for this chain.: Покупка с карты не поддерживается для этой сети.
@@ -2248,7 +2248,7 @@ EIP-712 domain: Домен EIP-712
 Earn is not supported on this account.: Стейкинг не поддерживается на этом аккаунте.
 Export Logs: Экспортировать логи
 Failed to load chat: Не удалось загрузить чат
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: Переводы NFT с MFA поддерживают до 4 NFT за раз.
 More Details: Подробнее
 Open Telegram: Открыть Telegram

@@ -44,8 +44,6 @@ export interface WalletConnectNamespace {
 export interface WalletConnectNamespaces {
   /** EVM chains (Ethereum, Polygon, etc.) */
   eip155?: WalletConnectNamespace;
-  /** Solana */
-  solana?: WalletConnectNamespace;
   /** Cosmos */
   cosmos?: WalletConnectNamespace;
   /** Other namespaces */
@@ -80,7 +78,6 @@ export interface WalletConnectSignRequest {
   data?: string | string[] | EvmTransactionParams;
   /** EIP-712 typed data (eth_signTypedData_v4); takes precedence over `data` for signing */
   eip712?: WalletConnectEip712Params;
-  isEthSign?: boolean;
   isSessionAuthenticate?: boolean;
 }
 
@@ -160,39 +157,18 @@ export interface SignTypedDataParams {
 export type ChainId = { chain: ApiChain; network: ApiNetwork };
 export type ChainIdByChain = Record<string, ChainId>;
 
-export const SOLANA_CHAIN_IDS: ChainIdByChain = {
-  'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp': { chain: 'solana', network: 'mainnet' },
-  'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ': { chain: 'solana', network: 'testnet' },
-};
+export const BNB_MAINNET_CAIP = 'eip155:56';
 
 export const EVM_CHAIN_IDS: ChainIdByChain = {
-  'eip155:1': { chain: 'ethereum', network: 'mainnet' },
-  'eip155:5': { chain: 'ethereum', network: 'testnet' },
-  'eip155:8453': { chain: 'base', network: 'mainnet' },
-  'eip155:84532': { chain: 'base', network: 'testnet' },
-  'eip155:137': { chain: 'polygon', network: 'mainnet' },
-  'eip155:80002': { chain: 'polygon', network: 'testnet' },
-  'eip155:42161': { chain: 'arbitrum', network: 'mainnet' },
-  'eip155:421614': { chain: 'arbitrum', network: 'testnet' },
-  'eip155:56': { chain: 'bnb', network: 'mainnet' },
+  [BNB_MAINNET_CAIP]: { chain: 'bnb', network: 'mainnet' },
   'eip155:97': { chain: 'bnb', network: 'testnet' },
-  'eip155:43114': { chain: 'avalanche', network: 'mainnet' },
-  'eip155:43113': { chain: 'avalanche', network: 'testnet' },
-  'eip155:143': { chain: 'monad', network: 'mainnet' },
-  'eip155:10143': { chain: 'monad', network: 'testnet' },
-  'eip155:999': { chain: 'hyperliquid', network: 'mainnet' },
-  'eip155:998': { chain: 'hyperliquid', network: 'testnet' },
-  'eip155:4663': { chain: 'robinhood', network: 'mainnet' },
-  'eip155:46630': { chain: 'robinhood', network: 'testnet' },
 };
 
 export const CHAIN_IDS_BY_CHAIN: Record<string, ChainIdByChain> = {
-  solana: SOLANA_CHAIN_IDS,
   eip155: EVM_CHAIN_IDS,
 };
 
 export const CHAIN_IDS: ChainIdByChain = {
-  ...SOLANA_CHAIN_IDS,
   ...EVM_CHAIN_IDS,
 };
 

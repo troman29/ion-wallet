@@ -8,9 +8,7 @@ import {
   ANIMATED_STICKER_BIG_SIZE_PX,
   ANIMATED_STICKER_SMALL_SIZE_PX,
   ANIMATION_LEVEL_MIN,
-  IS_GRAM_WALLET,
   NFT_MARKETPLACE_TITLE,
-  NFT_MARKETPLACE_TITLES,
   NFT_MARKETPLACE_URL,
   TELEGRAM_GIFTS_SUPER_COLLECTION,
   TON_NFT_MARKETPLACE_TITLE,
@@ -46,13 +44,6 @@ import styles from './Nft.module.scss';
 const SLIDE_TRANSITION_DURATION_MS = 300;
 
 function getNftEmptyStateMarketplace(isMultichainAccount?: boolean) {
-  if (IS_GRAM_WALLET) {
-    return {
-      title: NFT_MARKETPLACE_TITLES.fragment,
-      url: 'https://fragment.com/',
-    };
-  }
-
   return isMultichainAccount
     ? {
       title: NFT_MARKETPLACE_TITLE,

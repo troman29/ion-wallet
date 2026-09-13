@@ -12,12 +12,12 @@ $2fa_security: Telegram 2FA
 2FA with Telegram: Telegram 2FA
 Confirm operations in Telegram as a second step.: 在 Telegram 中作为第二步确认操作。
 Confirm with: 通过以下方式确认
-Add an extra layer of security for your wallet in TON network.: 为你在 TON 网络中的钱包添加额外安全层。
+Add an extra layer of security for your wallet in TON network.: 为你在 ION 网络中的钱包添加额外安全层。
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: 使用密码签署转账和重要操作，然后在 Telegram 中确认。
 This helps protect your funds even if your recovery phrase or keys are compromised.: 即使你的助记词或密钥泄露，这也有助于保护你的资金。
 "Connection Fee:": "连接费用："
 Connect Telegram: 连接 Telegram
-Add in Gram Wallet: 在 Gram Wallet 中添加
+Add in Gram Wallet: 在 ION Wallet 中添加
 Telegram will be used to confirm transfers and important actions.: Telegram 将用于确认转账和重要操作。
 My Telegram Account: 我的 Telegram 账户
 Without username: 无用户名
@@ -242,9 +242,9 @@ Current APY: 当前年化收益率
 Est. Yearly Earnings: 预计年收益
 Staking Details: 质押详情
 Why this is safe: 为什么这很安全
-$safe_staking_description1: GRAM 质押是**完全去中心化的**，由官方 TON Liquid Staking 智能合约运营。
-$safe_staking_description2: 作为其 **权益证明** 的一部分，您存入的 GRAM 将用于 %chain% 区块网络验证。
-$safe_staking_description3: 您可以在 **任何时候** 解除您 GRAM 的质押，它会在 **36小时** 内存入您的账户。
+$safe_staking_description1: ION 质押是**完全去中心化的**，由官方 ION Liquid Staking 智能合约运营。
+$safe_staking_description2: 作为其 **权益证明** 的一部分，您存入的 ION 将用于 %chain% 区块网络验证。
+$safe_staking_description3: 您可以在 **任何时候** 解除您 ION 的质押，它会在 **36小时** 内存入您的账户。
 $safe_staking_description_jetton1: 代币质押是 **完全去中心化的**，由 %jvault_link% 开发的 **开源** 智能合约操作，并已通过 **安全审计**。
 $safe_staking_description_jetton2: 您可以在 **任何时候** 提取您的质押，并会 **立即** 存入您的账户。
 $min_value: 最小 %value%
@@ -894,7 +894,7 @@ $receive_action: 接收
 Change Palette: 更改调色板
 Palette: 调色板
 Unlock New Palettes: 解锁新调色板
-Get a unique My Wallet Card to unlock new palettes.: 获取独特的 My Wallet 卡片以解锁新的调色板。
+Get a unique My Wallet Card to unlock new palettes.: 获取独特的 ION Wallet 卡片以解锁新的调色板。
 Mint Cards: 铸造卡片
 Card has been upgraded!: 卡片已升级！
 $mint_card_result: NFT 卡片将在一分钟内**铸造**并**自动安装**。
@@ -931,7 +931,7 @@ DappurlTrustStatusDangerousTitle: Potentially malicious site
 $DappurlTrustStatusDangerousHelp: This domain was flagged as dangerous by security checks. Connecting may put your funds at risk. Only continue if you are absolutely sure.
 $reopen_in_iab: 请使用 %app_name% %mobileAppButton% 或 %browserExtensionButton% 以避免此警告。
 $reopen_in_iab_explore: 浏览应用时，请使用 %exploreTab% 栏目以避免此警告。
-My Wallet Browser: My Wallet 浏览器
+My Wallet Browser: ION Wallet 浏览器
 mobile app: 移动应用
 browser extension: 浏览器扩展
 Exit all wallets: 退出所有钱包
@@ -1109,9 +1109,9 @@ Customize Wallet: 自定义钱包
 "Select the card stored in this wallet:": 选择此钱包中存储的卡片：
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: 该卡片将安装到此钱包中，并显示在主屏幕和钱包列表中。
 Get More Cards: 获取更多卡片
-Browse My Wallet Cards available for purchase.: 浏览可购买的 My Wallet 卡片。
+Browse My Wallet Cards available for purchase.: 浏览可购买的 ION Wallet 卡片。
 You don’t have any cards to customize yet: 您还没有可自定义的卡片。
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: My Wallet 卡片可以安装到钱包中，并显示在主屏幕和钱包列表中。
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: ION Wallet 卡片可以安装到钱包中，并显示在主屏幕和钱包列表中。
 Get First Card: 获取第一张卡片
 Palette and Card: 调色板与卡片
 Customize the wallet's home screen and color accents the way you like.: 按照您的喜好自定义钱包主屏幕和颜色。
@@ -1136,7 +1136,7 @@ Sell on Card: 出售到卡
 Sell %symbol%: 出售 %symbol%
 $connect_dapp_description: 已连接的应用只能看到你的钱包地址，未经你的许可无法转移你的资产。
 $connect_dapp_title: 连接到 %name%？
-$connect_dapp_no_compatible_wallets_found: 此连接需要多链钱包。您当前的钱包仅支持 TON，且没有其他多链钱包。请使用下方按钮创建新的多链钱包。
+$connect_dapp_no_compatible_wallets_found: 此连接需要多链钱包。您当前的钱包仅支持 ION，且没有其他多链钱包。请使用下方按钮创建新的多链钱包。
 Choose Wallet: 选择钱包
 Wallet to use on %host%: 用于 %host% 的钱包
 Selected Wallet: 已选钱包
@@ -1153,7 +1153,7 @@ Adding wallets is not available in explorer mode: 在浏览器模式下无法添
 $explorer_mode_warning: "浏览器模式：正在等待查看深层链接以打开地址"
 This command is not supported in explorer mode: 此命令在浏览器模式下不受支持
 $saved_addresses_header: 已保存
-confirm an action in My Wallet: 在 My Wallet 中确认操作
+confirm an action in My Wallet: 在 ION Wallet 中确认操作
 Migration was rolled back: 迁移已回滚
 Rollback Enclave Migration: 回退飞地迁移
 Unable to migrate wallet data. Please contact support.: 无法迁移钱包数据。请联系支持。
@@ -1370,7 +1370,7 @@ $agent_notice_receive_details_required: 请指定用于接收的加密资产和�
 $agent_notice_receive_asset_required: 请指定用于接收的加密资产。
 $agent_notice_receive_network_required: 请指定用于接收的网络。
 $agent_notice_receive_ready: 接收页面已可打开。
-$agent_notice_receive_memo_not_required: 向您自己的 My Wallet 地址转入资产时无需填写备注，请将该字段留空。
+$agent_notice_receive_memo_not_required: 向您自己的 ION Wallet 地址转入资产时无需填写备注，请将该字段留空。
 $agent_notice_receive_unavailable: 此钱包无法接收资产。
 $agent_notice_receive_planning_unavailable: 无法解析接收请求。请重新表述，或打开接收页面。
 $agent_notice_receive_active_account_unavailable: 当前钱包不可用。请切换钱包后重试。
@@ -1615,7 +1615,7 @@ $agent_portfolio_history_on: "%network% 网络上的历史记录"
 $agent_portfolio_no_activity: 近期无活动。
 Clear Chat: 清空聊天
 Unsupported link: 此链接不受支持
-My Wallet Features: My Wallet 功能
+My Wallet Features: ION Wallet 功能
 Notifications: 通知
 Wrong passcode, please try again: 密码错误，请重试。
 Use biometric authentication or create a passcode to protect it.: 使用生物识别认证或创建密码进行保护。
@@ -1667,7 +1667,7 @@ Deposit: 存入
 Trade: 交易
 Show All %collection_name%: 显示全部 %collection_name%
 Scanning for subwallets...: 正在扫描子钱包...
-Your assets on other TON contracts: 您在其他 TON 合约上的资产
+Your assets on other TON contracts: 您在其他 ION 合约上的资产
 No existing subwallets found: 未找到现有子钱包
 You can create a new subwallet if you need another address on the same secret words.: 如果您需要相同密语上的另一个地址，可以创建新的子钱包。
 You have tokens on other subwallets. Each subwallet has its own address.: 您在其他子钱包中有代币。每个子钱包都有自己的地址。
@@ -1737,7 +1737,7 @@ Screen Recording: 屏幕录制
 Disable Screen Record Warning: 关闭屏幕录制警告
 I Understand, Proceed: 知道了，继续
 Waiting for Network: 正在等待网络
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: |
   这个钱包还没有
   任何交易记录。
@@ -1746,7 +1746,7 @@ Standalone: 独立模式
 All Telegram Gifts: 所有 Telegram 礼物
 Add Crypto: 充值加密货币
 Share QR Code: 分享二维码
-$send_only_ton: 仅向此地址发送 Gram (GRAM) 或 TON 网络资产。发送其他代币会导致丢失。
+$send_only_ton: 仅向此地址发送 ION 或 ION 网络资产。发送其他代币会导致丢失。
 $send_only_chain: 仅向此地址发送 %chain% (%symbol%) 或 %chain% 网络资产。发送其他代币会导致丢失。
 Buying with card is not supported for this account.: 此账户不支持银行卡购买。
 Swapped at: 兑换时间
@@ -1820,7 +1820,7 @@ Swap is not supported on this account.: 此账户不支持兑换。
 Connecting your wallet: 正在连接你的钱包
 Action is not possible on a view-only wallet.: 只读钱包无法执行此操作。
 No matching chains: 没有兼容的网络
-Logged in with My Wallet: 已通过 My Wallet 登录
+Logged in with My Wallet: 已通过 ION Wallet 登录
 You have no apps connected to this wallet.: 尚无应用连接到此钱包。
 Asset: 资产
 Sent to: 已发送至
@@ -1867,7 +1867,7 @@ Payment Address: 支付地址
 "Install Palette": 安装调色板
 Ledger: Ledger
 "Moving to staking balance": 正转入质押余额
-My Wallet uses biometric authentication to unlock and authorize transactions: My Wallet 使用生物识别来解锁并授权交易
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet 使用生物识别来解锁并授权交易
 "Network error": 网络错误
 "No Camera Access": 无法访问相机
 "Not all transactions were sent successfully.": 并非所有交易都发送成功。
@@ -1884,7 +1884,7 @@ Read-only account: 只读账户
 "Request for unstaking": 解锁质押申请
 Set a passcode: 设置 PIN 码
 "Show All %name%": "显示全部 %name%"
-"TON Wallet Versions": TON 钱包版本
+"TON Wallet Versions": ION 钱包版本
 "Tap to reveal": 点击查看
 "The current version of Ledger only supports English-language comments without special characters.": 当前版本的 Ledger 仅支持不含特殊字符的英文备注。
 "There is no activity history for this wallet yet.": 该钱包暂时没有活动记录。
@@ -1993,7 +1993,7 @@ Use 6-digit Passcode: 使用 6 位 PIN 码
 $authorize_token_fee_capitalized: 授权 %token% 手续费
 Awaiting Previous Fee: 等待上一笔手续费
 Lock: 锁定
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: My Wallet 卡片可安装到钱包，并在主屏和钱包列表中显示。
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: ION Wallet 卡片可安装到钱包，并在主屏和钱包列表中显示。
 Receive: 接收
 Scan: 扫描
 
@@ -2042,8 +2042,8 @@ push_activity_swap_completed: 兑换 %from_symbol% → %to_symbol% 已完成
 push_activity_swap_failed: 兑换 %from_symbol% → %to_symbol% 失败
 push_activity_swap_expired: 兑换 %from_symbol% → %to_symbol% 已过期
 push_activity_swap_pending: 兑换 %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: 质押收益 %amount% GRAM
-push_activity_staking_loyalty_profit: 质押忠诚度收益 %amount% GRAM
+push_activity_staking_profit: 质押收益 %amount% ION
+push_activity_staking_loyalty_profit: 质押忠诚度收益 %amount% ION
 push_domain_title_renew: 续订您的域名
 push_domain_expired_yesterday: 您的域名 %domain% 昨天已过期。请尽快续订，以免失去访问权限
 push_domain_expired_days_ago: 您的域名 %domain% 已于 %days% 天前过期。请尽快续订，以免失去访问权限
@@ -2098,7 +2098,7 @@ Rounded Corners: 圆角
 Enable Blur: 启用模糊
 App Font: 应用字体
 Rounded Balance Font: 圆润余额字体
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: 测试网不支持出售到卡。
 Selling to card is not supported for this account.: 此账户不支持出售到卡。
 "Why is %tokenName% %direction% %timeframe%?": "%tokenName% 的价格为什么%timeframe%%direction%？"
@@ -2196,7 +2196,7 @@ $agent_time_minutes: "%value% 分钟"
 $agent_time_seconds: "%value% 秒"
 Switched to %account%: 已切换到 %account%
 See All: 查看全部
-Add an **extra layer of security** for your wallet in TON network.: 为你在 TON 网络中的钱包添加**额外安全层**。
+Add an **extra layer of security** for your wallet in TON network.: 为你在 ION 网络中的钱包添加**额外安全层**。
 Agent is unavailable: 助手不可用
 Another transaction was sent from this wallet simultaneously. Please try again.: 此钱包同时发送了另一笔交易。请重试。
 Buying with card is not supported for this chain.: 此网络不支持银行卡购买。
@@ -2208,7 +2208,7 @@ EIP-712 domain: EIP-712 域
 Earn is not supported on this account.: 此账户不支持质押。
 Export Logs: 导出日志
 Failed to load chat: 无法加载聊天
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: MFA NFT 转移一次最多支持 4 个 NFT。
 More Details: 更多详情
 Open Telegram: 打开 Telegram

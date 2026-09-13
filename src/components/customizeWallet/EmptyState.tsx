@@ -9,11 +9,7 @@ import AnimatedIconWithPreview from '../ui/AnimatedIconWithPreview';
 
 import styles from './CustomizeWalletModal.module.scss';
 
-interface OwnProps {
-  onGetFirstCard: NoneToVoidFunction;
-}
-
-function EmptyState({ onGetFirstCard }: OwnProps) {
+function EmptyState() {
   const lang = useLang();
 
   return (
@@ -36,15 +32,6 @@ function EmptyState({ onGetFirstCard }: OwnProps) {
           {lang(
             'My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.',
           )}
-        </p>
-      </div>
-
-      <div className={styles.buttonContainer}>
-        <div className={styles.getMoreButton} onClick={onGetFirstCard} role="button" tabIndex={0}>
-          <span className={styles.getMoreText}>{lang('Get First Card')}</span>
-        </div>
-        <p className={styles.helperTextOutside}>
-          {lang('Browse My Wallet Cards available for purchase.')}
         </p>
       </div>
     </div>

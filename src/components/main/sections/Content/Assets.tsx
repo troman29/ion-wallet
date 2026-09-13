@@ -2,7 +2,7 @@ import React, { memo, useMemo, useRef } from '../../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../../global';
 
 import type {
-  ApiBaseCurrency, ApiCurrencyRates, ApiStakingState, ApiTokenWithPrice, ApiVestingInfo,
+  ApiBaseCurrency, ApiCurrencyRates, ApiStakingState,
 } from '../../../../api/types';
 import type { LoadMoreDirection, Theme, UserSwapToken, UserToken } from '../../../../global/types';
 import { SettingsState } from '../../../../global/types';
@@ -18,7 +18,6 @@ import {
   selectIsMultichainAccount,
   selectIsStakingDisabled,
   selectIsSwapDisabled,
-  selectMycoin,
   selectSwapTokens,
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
@@ -39,7 +38,6 @@ import useLang from '../../../../hooks/useLang';
 import useLastCallback from '../../../../hooks/useLastCallback';
 import usePrevious2 from '../../../../hooks/usePrevious2';
 import useTokensWithStaking from '../../../../hooks/useTokensWithStaking';
-import useVesting from '../../../../hooks/useVesting';
 
 import InfiniteScroll from '../../../ui/InfiniteScroll';
 import Spinner from '../../../ui/Spinner';
@@ -62,12 +60,10 @@ type OwnProps = {
 interface StateProps {
   tokens?: UserToken[];
   swapTokens?: UserSwapToken[];
-  vesting?: ApiVestingInfo[];
   isInvestorViewEnabled?: boolean;
   currentTokenSlug?: string;
   baseCurrency: ApiBaseCurrency;
   theme: Theme;
-  mycoin?: ApiTokenWithPrice;
   isSensitiveDataHidden?: true;
   areTokenNamesLocalized?: boolean;
   states?: ApiStakingState[];
@@ -86,13 +82,11 @@ function Assets({
   isActive,
   tokens,
   swapTokens,
-  vesting,
   isInvestorViewEnabled,
   isSeparatePanel,
   isWidget,
   currentTokenSlug,
   baseCurrency,
-  mycoin,
   isSensitiveDataHidden,
   areTokenNamesLocalized,
   theme,
@@ -112,14 +106,6 @@ function Assets({
   const { openSettingsWithState } = getActions();
 
   const renderedTokens = useCurrentOrPrev(tokens, true);
-  const renderedMycoin = useCurrentOrPrev(mycoin, true);
-
-  const userMycoin = useMemo(() => {
-    if (!renderedTokens || !renderedMycoin) return undefined;
-
-    return renderedTokens.find(({ slug }) => slug === renderedMycoin.slug);
-  }, [renderedMycoin, renderedTokens]);
-
   const { isLandscape, isPortrait } = useDeviceScreen();
   const appTheme = useAppTheme(theme);
 
@@ -144,15 +130,6 @@ function Assets({
     return buildCollectionByKey<UserSwapToken>(swapTokens ?? [], 'slug');
   }, [swapTokens]);
 
-  const {
-    ref: vestingTokenRef,
-    shouldRender: shouldRenderVestingToken,
-    amount: vestingAmount,
-    vestingStatus,
-    unfreezeEndDate,
-    onVestingTokenClick,
-  } = useVesting({ vesting, userMycoin });
-
   const tokenSlugs = useMemo(() => (
     allTokensWithStaked
       ?.filter(({ isDisabled }) => !isDisabled)
@@ -166,9 +143,8 @@ function Assets({
 
   const viewportIndex = useMemo(() => {
     if (!viewportSlugs) return -1;
-    const baseIndex = tokenSlugs!.indexOf(viewportSlugs[0]);
-    return shouldRenderVestingToken ? baseIndex + 1 : baseIndex;
-  }, [shouldRenderVestingToken, tokenSlugs, viewportSlugs]);
+    return tokenSlugs!.indexOf(viewportSlugs[0]);
+  }, [tokenSlugs, viewportSlugs]);
 
   // Smart jump for widget mode: when `InfiniteScroll` asks to load more after a fast scroll
   // that left the viewport far outside the rendered window, recenter the slice around the
@@ -185,11 +161,10 @@ function Assets({
     }
 
     const itemHeightPx = TOKEN_HEIGHT_REM * REM;
-    const vestingOffsetPx = shouldRenderVestingToken ? itemHeightPx : 0;
     const visibleCenterPx = scrollContainer.scrollTop + scrollContainer.offsetHeight / 2;
     const targetIndex = Math.max(
       0,
-      Math.min(tokenSlugs.length - 1, Math.floor((visibleCenterPx - vestingOffsetPx) / itemHeightPx)),
+      Math.min(tokenSlugs.length - 1, Math.floor(visibleCenterPx / itemHeightPx)),
     );
     getMore({ direction: args.direction, offsetId: tokenSlugs[targetIndex] });
   });
@@ -199,16 +174,14 @@ function Assets({
 
   const shouldUseAnimations = Boolean(isActive && allTokensWithStaked);
 
-  // Size the container to the rendered window (viewportIndex already includes the vesting row),
-  // not the full token list. Avoids a ~8000rem spacer for wallets with thousands of tokens that
-  // wrecks scrollbar precision; the height grows progressively as `useInfiniteScroll` advances.
+  // Size the container to the rendered window, not the full token list. Avoids a ~8000rem spacer
+  // for wallets with thousands of tokens that wrecks scrollbar precision; the height grows
+  // progressively as `useInfiniteScroll` advances.
   const currentContainerHeight = useMemo(() => {
     const visibleCount = viewportSlugs?.length ?? 0;
-    const renderedRows = visibleCount > 0
-      ? viewportIndex + visibleCount
-      : (shouldRenderVestingToken ? 1 : 0);
+    const renderedRows = visibleCount > 0 ? viewportIndex + visibleCount : 0;
     return renderedRows > 0 ? renderedRows * TOKEN_HEIGHT_REM : undefined;
-  }, [viewportIndex, viewportSlugs?.length, shouldRenderVestingToken]);
+  }, [viewportIndex, viewportSlugs?.length]);
 
   const handleOpenTokenSettings = useLastCallback(() => {
     openSettingsWithState({ state: SettingsState.Assets });
@@ -269,31 +242,6 @@ function Assets({
     return prevIndex === currentIndex && prevIndex !== -1;
   }, [pinToggledSlug, prevAllTokensWithStaked, allTokensWithStaked]);
 
-  function renderVestingToken() {
-    return (
-      <TokenListItem
-        key="vesting"
-        topOffset={0}
-        withAnimation={shouldUseAnimations}
-      >
-        <Token
-          ref={vestingTokenRef}
-          token={userMycoin!}
-          vestingStatus={vestingStatus}
-          unfreezeEndDate={unfreezeEndDate}
-          amount={vestingAmount}
-          isInvestorView={isInvestorViewEnabled}
-          baseCurrency={baseCurrency}
-          appTheme={appTheme}
-          isSensitiveDataHidden={isSensitiveDataHidden}
-          areTokenNamesLocalized={areTokenNamesLocalized}
-          tokenClassName={isWidget ? styles.tokenInWidget : undefined}
-          onClick={onVestingTokenClick}
-        />
-      </TokenListItem>
-    );
-  }
-
   function renderToken(token: UserToken, indexInViewport: number) {
     const topOffset = (viewportIndex + indexInViewport) * TOKEN_HEIGHT_REM;
 
@@ -349,7 +297,7 @@ function Assets({
     );
   }
 
-  const isEmpty = !shouldRenderVestingToken && !tokenSlugs?.length;
+  const isEmpty = !tokenSlugs?.length;
 
   if (isEmpty) {
     return (
@@ -381,7 +329,6 @@ function Assets({
         style={widgetStyle}
         onLoadMore={handleWidgetGetMore}
       >
-        {shouldRenderVestingToken && renderVestingToken()}
         {viewportSlugs?.map((tokenSlug, i) => renderToken(tokensBySlug![tokenSlug], i))}
       </InfiniteScroll>
     );
@@ -411,7 +358,6 @@ function Assets({
           <Spinner />
         </div>
       )}
-      {shouldRenderVestingToken && renderVestingToken()}
       {viewportSlugs?.map((tokenSlug, i) => renderToken(tokensBySlug![tokenSlug], i))}
     </InfiniteScroll>
   );
@@ -433,11 +379,9 @@ export default memo(
       return {
         tokens,
         swapTokens,
-        vesting: accountState?.vesting?.info,
         isInvestorViewEnabled,
         currentTokenSlug: accountState?.currentTokenSlug,
         baseCurrency: global.settings.baseCurrency,
-        mycoin: selectMycoin(global),
         isSensitiveDataHidden: global.settings.isSensitiveDataHidden,
         areTokenNamesLocalized,
         theme: global.settings.theme,

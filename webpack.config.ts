@@ -16,7 +16,6 @@ import { Compilation, EnvironmentPlugin, IgnorePlugin, ProvidePlugin, sources } 
 
 import { convertI18nYamlToJson } from './dev/locales/convertI18nYamlToJson';
 import {
-  AGENT_API_URL,
   APP_COMMIT_HASH,
   APP_ENV,
   APP_NAME,
@@ -29,10 +28,9 @@ import {
   GLOBAL_STATE_CACHE_KEY,
   IFRAME_WHITELIST,
   IPFS_GATEWAY_BASE_URL,
-  IS_EXPLORER,
+  IS_CAPACITOR,
   IS_EXTENSION,
   IS_FIREFOX_EXTENSION,
-  IS_GRAM_WALLET,
   IS_HEADLESS,
   IS_OPERA_EXTENSION,
   IS_PACKAGED_ELECTRON,
@@ -40,12 +38,7 @@ import {
   LANG_LIST,
   MFA_API_BASE_URL,
   MW_STATIC_BASE_URL,
-  PORTFOLIO_API_URL,
   PROXY_API_BASE_URL,
-  SOLANA_MAINNET_API_URL,
-  SOLANA_MAINNET_RPC_URL,
-  SOLANA_TESTNET_API_URL,
-  SOLANA_TESTNET_RPC_URL,
   SSE_BRIDGE_URL,
   SUBPROJECT_URL_MASK,
   TON_CONNECT_ANALYTICS_URL,
@@ -53,8 +46,6 @@ import {
   TONAPIIO_TESTNET_URL,
   TONCENTER_MAINNET_URL,
   TONCENTER_TESTNET_URL,
-  TRON_MAINNET_API_URL,
-  TRON_TESTNET_API_URL,
   WALLET_CONNECT_BRIDGE_PATTERNS,
   WALLET_CONNECT_PAY_CONNECT_ORIGINS,
   WALLET_CONNECT_PAY_FRAME_ORIGINS,
@@ -77,20 +68,13 @@ if (JSON.stringify([...fallbackRtlCodes].sort()) !== JSON.stringify([...langList
 const destinationDir = path.resolve(__dirname, 'dist');
 const appCommitHash = APP_COMMIT_HASH || new GitRevisionPlugin().commithash();
 const isStatoscopeBuild = process.env.IS_STATOSCOPE === '1'; // "Statoscope build" is a special mode where all the entries are used. It is used for comprehensive code size comparison in PRs.
-const isWebApp = !(IS_EXTENSION || IS_PACKAGED_ELECTRON || IS_HEADLESS);
+const isWebApp = !(IS_EXTENSION || IS_PACKAGED_ELECTRON || IS_HEADLESS || IS_CAPACITOR);
 const canUseStatoscope = isStatoscopeBuild || isWebApp;
 const cspConnectSrcExtra = APP_ENV === 'development'
   ? `http://localhost:3000 ${process.env.CSP_CONNECT_SRC_EXTRA_URL}`
   : '';
 const cspScriptSrcExtra = IS_TELEGRAM_APP ? 'https://telegram.org' : '';
 const cspFrameSrcExtra = [
-  'https://buy-sandbox.moonpay.com/',
-  'https://buy.moonpay.com/',
-  'https://sell.moonpay.com/',
-  'https://sell-sandbox.moonpay.com/',
-  'https://*.onetrust.com/', // This is a GDPR cookie consent widget from Moonpay
-  'https://dreamwalkers.io/',
-  'https://avanchange.com/',
   ...WALLET_CONNECT_PAY_FRAME_ORIGINS,
   ...IFRAME_WHITELIST,
   SUBPROJECT_URL_MASK,
@@ -107,17 +91,8 @@ const cspConnectSrcHosts = Array.from(new Set([
   TONCENTER_TESTNET_URL.replace(/^http(s?):/, 'ws$1:'),
   TONAPIIO_MAINNET_URL,
   TONAPIIO_TESTNET_URL,
-  TRON_MAINNET_API_URL,
-  TRON_TESTNET_API_URL,
-  SOLANA_MAINNET_RPC_URL,
-  SOLANA_MAINNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
-  SOLANA_TESTNET_RPC_URL,
-  SOLANA_TESTNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
-  SOLANA_MAINNET_API_URL,
-  SOLANA_TESTNET_API_URL,
   WALLET_CONNECT_BRIDGE_PATTERNS,
   ...WALLET_CONNECT_PAY_CONNECT_ORIGINS,
-  AGENT_API_URL ? new URL(AGENT_API_URL).origin : undefined,
   EVM_MAINNET_RPC_URL,
   EVM_TESTNET_RPC_URL,
   EVM_MAINNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
@@ -125,7 +100,6 @@ const cspConnectSrcHosts = Array.from(new Set([
   ensureTrailingSlash(IPFS_GATEWAY_BASE_URL),
   ensureTrailingSlash(SSE_BRIDGE_URL),
   MFA_API_BASE_URL,
-  ensureTrailingSlash(PORTFOLIO_API_URL),
   TON_CONNECT_ANALYTICS_URL,
 ])).join(' ');
 
@@ -236,6 +210,9 @@ export default function createConfig(
       ...(APP_ENV === 'staging' && {
         chunkIds: 'named',
       }),
+      ...(IS_CAPACITOR && {
+        splitChunks: false,
+      }),
     },
 
     entry: {
@@ -258,7 +235,7 @@ export default function createConfig(
       hot: false,
       // When using the History API, the index.html page will likely have to be served in place of any 404 responses
       // https://webpack.js.org/configuration/dev-server/#devserverhistoryapifallback
-      historyApiFallback: IS_EXPLORER,
+      historyApiFallback: false,
       static: [
         {
           directory: path.resolve(__dirname, 'public'),
@@ -424,8 +401,8 @@ export default function createConfig(
         csp: CSP,
         cache_key: GLOBAL_STATE_CACHE_KEY,
         title: APP_NAME,
-        homepage: IS_GRAM_WALLET ? 'https://wallet.ton.org' : 'https://mywallet.io',
-        assets_prefix: IS_GRAM_WALLET ? 'gramWallet/' : '',
+        homepage: 'https://mywallet.io',
+        assets_prefix: '',
       }),
       new PreloadWebpackPlugin({
         include: 'allAssets',
@@ -435,9 +412,6 @@ export default function createConfig(
           /theme_.*?\.png/, // Theme icons
           /chain_.*?\.png/, // Chain icons
           /settings_.*?\.svg/, // Settings icons (svg)
-          ...(IS_GRAM_WALLET ? [
-            /gram_wallet_.*?\.png/, // Lottie thumbs for Gram Wallet
-          ] : []),
         ],
         as(entry: string) {
           if (/\.png$/.test(entry)) return 'image';
@@ -463,18 +437,9 @@ export default function createConfig(
         TONAPIIO_MAINNET_URL: '',
         TONAPIIO_TESTNET_URL: '',
         BRILLIANT_API_BASE_URL: '',
-        TRON_MAINNET_API_URL: '',
-        SOLANA_MAINNET_RPC_URL: '',
-        SOLANA_TESTNET_RPC_URL: '',
-        SOLANA_MAINNET_API_URL: '',
-        SOLANA_MAINNET_API_KEY: '',
-        SOLANA_TESTNET_API_URL: '',
-        SOLANA_TESTNET_API_KEY: '',
         EVM_MAINNET_RPC_URL: '',
         EVM_TESTNET_RPC_URL: '',
-        TRON_TESTNET_API_URL: '',
         PROXY_HOSTS: '',
-        STAKING_POOLS: '',
         LIQUID_POOL: '',
         LIQUID_JETTON: '',
         IS_PACKAGED_ELECTRON: 'false',
@@ -485,10 +450,8 @@ export default function createConfig(
         BOT_USERNAME: '',
         IS_EXTENSION: '', // It's necessary to use an empty string, because it's used in bundle-time conditions
         IS_FIREFOX_EXTENSION: 'false',
-        IS_AIR_APP: 'false',
-        IS_GRAM_WALLET: 'false',
+        IS_CAPACITOR: 'false',
         IS_TELEGRAM_APP: 'false',
-        IS_EXPLORER: 'false',
         IS_HEADLESS: '', // Empty string for the same reason as IS_EXTENSION above
         SWAP_FEE_ADDRESS: '',
         DIESEL_ADDRESS: '',
@@ -496,19 +459,13 @@ export default function createConfig(
         PROXY_API_BASE_URL: '',
         WALLET_CONNECT_PROJECT_ID: '',
         WALLET_CONNECT_PAY_APP_ID: '',
-        MULTISEND_DAPP_URL: '',
-        PORTFOLIO_DAPP_URL: '',
-        AGENT_API_URL: '',
-        AGENT_OVERRIDE: 'v1',
-        AGENT_V2_QUOTA_STATUS_ENABLED: '0',
         MFA_BOT_URL: '',
         MFA_API_BASE_URL: '',
         MFA_MASTER_ADDRESS: '',
         MFA_EXTENSION_CODE_HASH: '',
         NO_TON: '0',
-        NO_TRON: '0',
-        NO_SOLANA: '0',
         NO_EVM: '0',
+        NO_PENDING_ACTIVITIES: '0',
         NO_EXTRA_FEATURES: '0',
         NO_LEDGER: '0',
       }),
@@ -531,13 +488,7 @@ export default function createConfig(
                 extension_pages: CSP,
               };
               manifest.action = { default_title: APP_NAME };
-              manifest.icons = IS_GRAM_WALLET
-                ? {
-                  192: 'gramWallet/icon-192x192.png',
-                  256: 'gramWallet/icon-256x256.png',
-                  512: 'gramWallet/icon-512x512.png',
-                }
-                : { 192: 'icon-192x192.png', 384: 'icon-384x384.png', 512: 'icon-512x512.png' };
+              manifest.icons = { 192: 'icon-192x192.png', 384: 'icon-384x384.png', 512: 'icon-512x512.png' };
 
               if (IS_FIREFOX_EXTENSION) {
                 manifest.background = {
@@ -571,14 +522,9 @@ export default function createConfig(
               // Consolidate the retiring mytonwallet.app brand host onto mywallet.io in search. The app
               // keeps serving on .app (installed PWAs and deeplinks pin it), so this is a canonical
               // header rather than a redirect; the same site also answers on web(.beta).mywallet.io, which
-              // self-canonicalizes. Omitted for Gram: it is a different brand
-              // (wallet.ton.org ships to ton-blockchain/ton-wallet) and must never point at mywallet.io.
-              const canonical = IS_GRAM_WALLET ? undefined
-                : APP_ENV === 'staging' ? 'https://web-beta.mywallet.io/'
-                  : 'https://web.mywallet.io/';
-              return canonical
-                ? headers.replace('{{CANONICAL}}', canonical)
-                : headers.replace(/^.*\{\{CANONICAL\}\}.*\n?/m, '');
+              // self-canonicalizes.
+              const canonical = APP_ENV === 'staging' ? 'https://web-beta.mywallet.io/' : 'https://web.mywallet.io/';
+              return headers.replace('{{CANONICAL}}', canonical);
             },
           },
         ],

@@ -56,7 +56,7 @@ const useContextMenuHandlers = ({
     setIsContextMenuOpen(true);
     setContextMenuAnchor({ x: e.clientX, y: e.clientY });
     setContextMenuTarget(e.target as HTMLElement);
-    vibrate();
+    void vibrate();
   });
 
   const handleContextMenuClose = useLastCallback(() => {
@@ -139,7 +139,7 @@ const useContextMenuHandlers = ({
 
       setIsContextMenuOpen(true);
       setContextMenuAnchor({ x: clientX, y: clientY });
-      vibrate();
+      void vibrate();
     };
 
     const startLongPressTimer = (e: TouchEvent) => {

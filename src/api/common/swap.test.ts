@@ -2,11 +2,10 @@ import type { ApiSwapActivity, ApiSwapHistoryItem, ApiTransactionActivity } from
 import type { WalletOperationIntent } from './activities/reconciler/types';
 
 import {
-  ETH_USDT_MAINNET,
-  SOLANA,
-  SOLANA_USDC_MAINNET,
+  BNB,
+  BSC_USDT_MAINNET,
+  TON_USDT_MAINNET,
   TONCOIN,
-  TRC20_USDT_MAINNET,
 } from '../../config';
 import { getActivityTokenSlugs } from '../../util/activities';
 import {
@@ -17,7 +16,7 @@ import {
   swapItemToActivity,
 } from './swap';
 
-const SOLANA_EXAMPLE_MINT = 'AymATz4TCL9sWNEEV9Kvyz45CHVhDZ6kUgjTJPzLpU9P';
+const BNB_EXAMPLE_TOKEN = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984';
 
 const BASE_SWAP: ApiSwapHistoryItem = {
   id: 'cex-backend-id',
@@ -25,7 +24,7 @@ const BASE_SWAP: ApiSwapHistoryItem = {
   from: TONCOIN.symbol,
   fromAmount: '16.4',
   fromAddress: 'ton-address',
-  to: TRC20_USDT_MAINNET.tokenAddress,
+  to: BSC_USDT_MAINNET.tokenAddress,
   toAmount: '28.854382',
   networkFee: '0.1',
   swapFee: '0',
@@ -64,8 +63,8 @@ function buildDexSwapIntent(overrides: Partial<WalletOperationIntent> = {}): Wal
 
 describe('getSwapItemSlug', () => {
   it('passes legacy backend asset ids through unchanged', () => {
-    expect(getSwapItemSlug('solana-usdc')).toBe('solana-usdc');
-    expect(getSwapItemSlug('sol')).toBe('sol');
+    expect(getSwapItemSlug('bnb-usdc')).toBe('bnb-usdc');
+    expect(getSwapItemSlug('bnb')).toBe('bnb');
   });
 
   it('maps legacy TON symbol to the frontend TON slug', () => {
@@ -73,28 +72,28 @@ describe('getSwapItemSlug', () => {
   });
 
   it('uses chain context for legacy raw token addresses in locally-created swap items', () => {
-    expect(getSwapItemSlug(SOLANA_USDC_MAINNET.tokenAddress, 'solana')).toBe(SOLANA_USDC_MAINNET.slug);
+    expect(getSwapItemSlug(BSC_USDT_MAINNET.tokenAddress, 'bnb')).toBe(BSC_USDT_MAINNET.slug);
   });
 
   it('maps NewBackendId native assets to frontend native token slugs', () => {
     expect(getSwapItemSlug('ton:native')).toBe(TONCOIN.slug);
-    expect(getSwapItemSlug('solana:native')).toBe('sol');
+    expect(getSwapItemSlug('bnb:native')).toBe(BNB.slug);
   });
 
   it('maps known NewBackendId token addresses to frontend token slugs', () => {
-    expect(getSwapItemSlug(`solana:${SOLANA_USDC_MAINNET.tokenAddress}`)).toBe(SOLANA_USDC_MAINNET.slug);
-    expect(getSwapItemSlug(`ethereum:${ETH_USDT_MAINNET.tokenAddress}`)).toBe(ETH_USDT_MAINNET.slug);
+    expect(getSwapItemSlug(`bnb:${BSC_USDT_MAINNET.tokenAddress}`)).toBe(BSC_USDT_MAINNET.slug);
+    expect(getSwapItemSlug(`ton:${TON_USDT_MAINNET.tokenAddress}`)).toBe(TON_USDT_MAINNET.slug);
   });
 
   it('builds a frontend token slug for unknown NewBackendId token addresses', () => {
-    expect(getSwapItemSlug(`solana:${SOLANA_EXAMPLE_MINT}`)).toBe('solana-aymatz4tcl');
+    expect(getSwapItemSlug(`bnb:${BNB_EXAMPLE_TOKEN}`)).toBe('bnb-0x1f9840a8');
   });
 
   it('does not require chain context for CEX cross-chain asset ids', () => {
     const activity = swapItemToActivity({
       id: '42',
       timestamp: 1,
-      from: `solana:${SOLANA_EXAMPLE_MINT}`,
+      from: `bnb:${BNB_EXAMPLE_TOKEN}`,
       fromAmount: '1',
       fromAddress: 'EQ-address',
       to: 'ton:native',
@@ -107,7 +106,7 @@ describe('getSwapItemSlug', () => {
       cex: { status: 'waiting', transactionId: 'correlation-id' },
     } as any);
 
-    expect(activity.from).toBe('solana-aymatz4tcl');
+    expect(activity.from).toBe('bnb-0x1f9840a8');
     expect(activity.to).toBe(TONCOIN.slug);
   });
 });
@@ -115,8 +114,8 @@ describe('getSwapItemSlug', () => {
 describe('getSwapHistoryTokenFilter', () => {
   it('uses backend legacy asset ids for CEX history filters', () => {
     expect(getSwapHistoryTokenFilter(TONCOIN.slug)).toBe('TON');
-    expect(getSwapHistoryTokenFilter(SOLANA.slug)).toBe(SOLANA.slug);
-    expect(getSwapHistoryTokenFilter(ETH_USDT_MAINNET.slug)).toBe(ETH_USDT_MAINNET.tokenAddress);
+    expect(getSwapHistoryTokenFilter(BNB.slug)).toBe(BNB.slug);
+    expect(getSwapHistoryTokenFilter(BSC_USDT_MAINNET.slug)).toBe(BSC_USDT_MAINNET.tokenAddress);
   });
 });
 
@@ -125,8 +124,8 @@ describe('swap activity projection', () => {
     const activity = swapItemToActivity(BASE_SWAP);
 
     expect(activity.from).toBe(TONCOIN.slug);
-    expect(activity.to).toBe(TRC20_USDT_MAINNET.slug);
-    expect(getActivityTokenSlugs(activity)).toEqual([TONCOIN.slug, TRC20_USDT_MAINNET.slug]);
+    expect(activity.to).toBe(BSC_USDT_MAINNET.slug);
+    expect(getActivityTokenSlugs(activity)).toEqual([TONCOIN.slug, BSC_USDT_MAINNET.slug]);
   });
 
   it('projects a backend TON DEX swap into source and target histories while hiding raw submitted transactions', () => {

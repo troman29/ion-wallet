@@ -110,7 +110,7 @@ export default function useDraggablePill({
 
       state.isDragStarted = true;
       detachAbortRef.current?.();
-      vibrate();
+      void vibrate();
       setIsDragging(true);
       try {
         capsuleRef.current.setPointerCapture(e.pointerId);

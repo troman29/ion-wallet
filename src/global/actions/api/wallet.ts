@@ -1,7 +1,7 @@
 import type { ApiAnyDisplayError, ApiChain, ApiSwapAsset, ApiToken, ApiTokenWithPrice } from '../../../api/types';
 import { ApiHardwareError } from '../../../api/types';
 
-import { getChainTitle } from '../../../util/chain';
+import { getLedgerAppName } from '../../../util/chain';
 import { unique } from '../../../util/iteratees';
 import { getTranslation } from '../../../util/langProvider';
 import { logDebugError } from '../../../util/logs';
@@ -194,7 +194,7 @@ addActionHandler('verifyHardwareAddress', async (global, actions, { chain }) => 
 
   if (!(await connectLedger(chain))) {
     actions.showError({
-      error: getTranslation('$ledger_not_ready', { chain: getChainTitle(chain) }),
+      error: getTranslation('$ledger_not_ready', { chain: getLedgerAppName(chain) }),
     });
     return;
   }

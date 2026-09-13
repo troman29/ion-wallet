@@ -3,7 +3,7 @@ import type { ZerionNftTransfer, ZerionTokenTransfer, ZerionTransaction, ZerionT
 
 import { throwIfAborted } from '../../../util/abortSignal';
 import { parseAccountId } from '../../../util/account';
-import { getChainConfig, getIsSupportedChain } from '../../../util/chain';
+import { getChainConfig, getIsEvmChain, getIsSupportedChain } from '../../../util/chain';
 import { toDecimal } from '../../../util/decimals';
 import { fetchJson, isNegativeCacheableStatus } from '../../../util/fetch';
 import { compact } from '../../../util/iteratees';
@@ -246,7 +246,7 @@ async function collectCrossChainTokensFromTransactions(
 function getZerionTransactionChain(tx: ZerionTransaction) {
   const chain = getApiChainByZerionChain(tx.relationships.chain.data.id);
 
-  if (!getIsSupportedChain(chain) || getChainConfig(chain).chainStandard !== 'ethereum') {
+  if (!getIsSupportedChain(chain) || !getIsEvmChain(chain)) {
     logDebugError('getZerionTransactionChain', 'Unsupported chain', { chain });
 
     return undefined;
@@ -261,10 +261,10 @@ export async function fetchCrossChainActivitySlice(options: ApiFetchActivitySlic
   } = options;
 
   const { network } = parseAccountId(accountId);
-  const { address } = await fetchStoredWallet(accountId, 'ethereum');
+  const { address } = await fetchStoredWallet(accountId, 'bnb');
 
   const { activities } = await getTokenActivitySlice(
-    'ethereum', network, address, tokenSlug, toTimestamp, fromTimestamp, limit, true, signal,
+    'bnb', network, address, tokenSlug, toTimestamp, fromTimestamp, limit, true, signal,
   );
 
   return activities;

@@ -13,7 +13,7 @@ import type {
 import { ApiCommonError } from '../../types';
 
 import { throwIfAborted } from '../../../util/abortSignal';
-import { getChainConfig, getChainsByStandard } from '../../../util/chain';
+import { getChainConfig, getChainsByStandard, getIsTokenKept } from '../../../util/chain';
 import { buildRequestUrl, fetchJson, fetchWithRetry, isNegativeCacheableStatus } from '../../../util/fetch';
 import { compact } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
@@ -100,7 +100,7 @@ export function fetchCrosschainAccountAssets(
   sendUpdateTokens: NoneToVoidFunction,
   options?: { signal?: AbortSignal },
 ) {
-  return fetchAccountAssets('ethereum', network, address, sendUpdateTokens, {
+  return fetchAccountAssets('bnb', network, address, sendUpdateTokens, {
     isCrossChain: true,
     ...(options?.signal && { signal: options.signal }),
   });
@@ -284,6 +284,10 @@ async function fetchAccountAssetsUncoalesced(
 
       const slug = buildTokenSlug(assetChain, assetImplementation.address);
 
+      if (!getIsTokenKept(assetChain, slug)) {
+        return;
+      }
+
       slugPairs[slug] = BigInt(e.attributes.quantity.int ?? 0);
 
       tokenEntities.push({
@@ -444,7 +448,6 @@ export const getIsWalletActive = withCacheAsync(
               'erc721',
               'erc1155',
               'external',
-              chain === 'ethereum' ? 'internal' : undefined,
               'erc20',
               'specialnft',
             ]),

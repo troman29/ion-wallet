@@ -27,7 +27,7 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
 
   await withStorage(runtimeStorage, async () => {
     await initClientId();
-    await tryMigrateStorage(onUpdate, args.accountIds);
+    await tryMigrateStorage(onUpdate);
   });
 
   methods.initAccounts(onUpdate);
@@ -43,12 +43,6 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
     extra.initStaking();
     extra.initSwap(onUpdate);
   }
-  if (process.env.NO_EXTRA_FEATURES !== '1') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { initAgentV2IfEnabled } = require('./agentV2Lifecycle') as typeof import('./agentV2Lifecycle');
-    await initAgentV2IfEnabled(onUpdate);
-  }
-
   await initProtocolManager(onUpdate, environment);
 
   if (environment.isDappSupported) {
@@ -68,11 +62,6 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
 
 export function destroy() {
   void destroyPolling();
-  if (process.env.NO_EXTRA_FEATURES !== '1') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { destroyAgentV2IfEnabled } = require('./agentV2Lifecycle') as typeof import('./agentV2Lifecycle');
-    void destroyAgentV2IfEnabled();
-  }
   disconnectUpdater();
 }
 

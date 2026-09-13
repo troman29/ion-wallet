@@ -1,5 +1,4 @@
 import type { GlobalState } from '../../global/types';
-import type { ApiUpdateAgentV2, ApiUpdateAgentV2PortfolioHistory } from '../agentV2/types';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
 import type { TonConnectProof } from '../dappProtocols/adapters';
 import type {
@@ -126,7 +125,6 @@ export type ApiUpdateStaking = {
   accountId: string;
   states: ApiStakingState[];
   totalProfit: bigint;
-  shouldUseNominators?: boolean;
 };
 
 export type ApiUpdateDappSignData = {
@@ -385,9 +383,6 @@ export type ApiUpdateConfig = {
   swapVersion?: ApiSwapVersion;
   seasonalTheme: ApiBackendConfig['seasonalTheme'];
   knowledgeBaseVersion?: string;
-  agentProtocolVersion?: ApiBackendConfig['agentProtocolVersion'];
-  preferredAgent?: ApiBackendConfig['preferredAgent'];
-  allowedOnOffRampCurrencies?: string[];
 };
 
 export type ApiUpdateWalletVersions = {
@@ -451,8 +446,6 @@ export type ApiUpdateAccountDomainData = {
 };
 
 export type ApiUpdate =
-  | ApiUpdateAgentV2
-  | ApiUpdateAgentV2PortfolioHistory
   | ApiUpdateBalances
   | ApiUpdateInitialActivities
   | ApiUpdateNewActivities

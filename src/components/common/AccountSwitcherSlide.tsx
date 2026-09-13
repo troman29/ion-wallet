@@ -82,7 +82,7 @@ function AccountSwitcherSlide({
   const currentSelectedAccountId = selectedAccountId ?? currentAccountId;
 
   // The per-account balances rely on the "Slow" selectors, so skip them entirely while the slide is hidden
-  const { balancesByAccountId, addressLineChainsByAccountId } = useMultipleAccountsBalances({
+  const { balancesByAccountId, visibleChainsByAccountId } = useMultipleAccountsBalances({
     filteredAccounts: isActive ? orderedAccounts : undefined,
     sourceAccounts: isActive ? accounts : undefined,
     byAccountId: isActive ? byAccountId : undefined,
@@ -122,7 +122,7 @@ function AccountSwitcherSlide({
                 key={accountId}
                 accountId={accountId}
                 byChain={byChain}
-                visibleChains={addressLineChainsByAccountId?.[accountId]}
+                visibleChains={visibleChainsByAccountId?.[accountId]}
                 accountType={type}
                 title={title}
                 isRecoveryRequired={isRecoveryRequired}

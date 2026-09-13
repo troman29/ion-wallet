@@ -7,7 +7,7 @@ import { BiometricsState } from '../../global/types';
 import {
   APP_ENV,
   DEFAULT_AUTOLOCK_OPTION,
-  IS_GRAM_WALLET,
+  IS_CAPACITOR,
 } from '../../config';
 import {
   selectAccount,
@@ -374,7 +374,7 @@ function SettingsSecurity({
             isAllowSuspiciousActions={isAllowSuspiciousActions}
             isAutoUpdateEnabled={isAutoUpdateEnabled}
             shouldShowBackup={shouldShowBackup}
-            isMfaVisible={SHOULD_FORCE_SHOW_MFA_IN_DEV || (IS_GRAM_WALLET && isMfaEnabled) || hasCurrentAccountMfa}
+            isMfaVisible={SHOULD_FORCE_SHOW_MFA_IN_DEV || hasCurrentAccountMfa}
             onBackClick={handleBackToSettingsClick}
             onChangePasswordClick={handleChangePasswordClick}
             onOpenBackupWallet={handleOpenBackupWallet}
@@ -417,7 +417,7 @@ function SettingsSecurity({
               isActive={isSlideActive && isActive}
               error={passwordError}
               pinPadTitle={pinPadTitle}
-              containerClassName={styles.passwordFormWithHeaderOffset}
+              containerClassName={IS_CAPACITOR ? styles.passwordFormContent : styles.passwordFormWithHeaderOffset}
               forceBiometricsInMain={isBiometricsTurnOn ? false : !isInsideModal}
               noBiometrics={isChangePasscode}
               operationType={isBiometricsTurnOn ? 'turnOnBiometrics' : undefined}

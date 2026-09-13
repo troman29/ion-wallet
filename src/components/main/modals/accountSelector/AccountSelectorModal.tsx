@@ -146,7 +146,7 @@ function AccountSelectorModal({
   const currentTabIndex = useMemo(() => getCurrentTabIndex(tabs, activeTab), [activeTab, tabs]);
   const selectedTab = tabs[currentTabIndex]?.id ?? DEFAULT_TAB;
   const filteredAccounts = useFilteredAccounts(orderedAccounts, selectedTab);
-  const { balancesByAccountId, totalBalance, addressLineChainsByAccountId } = useMultipleAccountsBalances({
+  const { balancesByAccountId, totalBalance, visibleChainsByAccountId } = useMultipleAccountsBalances({
     filteredAccounts,
     sourceAccounts: networkAccounts,
     byAccountId,
@@ -296,7 +296,7 @@ function AccountSelectorModal({
   });
 
   const handleSwitchAccount = useLastCallback((accountId: string) => {
-    vibrate();
+    void vibrate();
     handleCloseAccountSelectorForced();
 
     if (accountId !== currentAccountId) {
@@ -373,7 +373,7 @@ function AccountSelectorModal({
   });
 
   const handleAddWalletClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     setPreviousViewMode(renderingKey);
 
     const selectedTabId = tabs[currentTabIndex]?.id ?? AccountTab.My;
@@ -395,7 +395,7 @@ function AccountSelectorModal({
   });
 
   const handleReorderDoneClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     const previousMode = viewModeInitial === 'list'
       ? AccountSelectorState.List
       : AccountSelectorState.Cards;
@@ -403,12 +403,12 @@ function AccountSelectorModal({
   });
 
   const handleRenameClick = useLastCallback((accountId: string) => {
-    vibrate();
+    void vibrate();
     openWalletRenameModal({ accountId });
   });
 
   const handleLogOutClick = useLastCallback((accountId: string) => {
-    vibrate();
+    void vibrate();
     setLogOutAccountId(accountId);
     openLogOutModal();
   });
@@ -492,7 +492,7 @@ function AccountSelectorModal({
       activeTab: selectedTab,
       balancesByAccountId,
       settingsByAccountId,
-      addressLineChainsByAccountId,
+      visibleChainsByAccountId,
       currentAccountId,
       isSensitiveDataHidden,
       onScrollInitialize: handleScrollInitialize,

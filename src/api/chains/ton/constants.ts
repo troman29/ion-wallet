@@ -49,8 +49,6 @@ export const NFT_TRANSFER_FORWARD_AMOUNT = 1n; // 0.000000001 TON
 export const NFT_PAYLOAD_SAFE_MARGIN = 14 * 8;
 
 export const TON_GAS = {
-  stakeNominators: ONE_TON,
-  unstakeNominators: ONE_TON,
   stakeLiquid: ONE_TON,
   unstakeLiquid: ONE_TON,
   stakeJettonsForward: JettonStakingGas.STAKE_JETTONS,
@@ -67,8 +65,6 @@ export const TON_GAS = {
 } as const;
 
 export const TON_GAS_REAL = {
-  stakeNominators: 1_000_052_853n,
-  unstakeNominators: 148_337_433n,
   stakeLiquid: 20_251_387n,
   unstakeLiquid: 18_625_604n,
   stakeJettons: 74_879_996n,

@@ -151,10 +151,10 @@ describe('formatCurrencyExtended', () => {
     expect(formatCurrencyExtended(-99.999, '₽')).toBe('− ₽99.99');
   });
 
-  test('suffix short symbol (Gram)', () => {
-    expect(formatCurrencyExtended(123.45678, 'GRAM')).toBe(`+\u202F123.45 GRAM`);
-    expect(formatCurrencyExtended(-1234.56789, 'GRAM'))
-      .toBe(`−\u202F1${WHOLE_PART_DELIMITER}234.56 GRAM`);
+  test('suffix short symbol (ION)', () => {
+    expect(formatCurrencyExtended(123.45678, 'ION')).toBe(`+\u202F123.45 ION`);
+    expect(formatCurrencyExtended(-1234.56789, 'ION'))
+      .toBe(`−\u202F1${WHOLE_PART_DELIMITER}234.56 ION`);
   });
 
   test('noSign', () => {

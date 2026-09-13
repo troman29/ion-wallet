@@ -1,7 +1,6 @@
 import React, { memo, useRef } from '../../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../../global';
 
-import type { ApiChain } from '../../../../api/types';
 import type { Theme } from '../../../../global/types';
 import type { StakingStateStatus } from '../../../../util/staking';
 
@@ -12,10 +11,7 @@ import {
   selectCurrentAccountId,
   selectCurrentAccountSettings,
   selectCurrentAccountState,
-  selectDefaultOffRampChain,
-  selectDefaultOnRampChain,
   selectIsCurrentAccountViewMode,
-  selectIsOffRampAllowed,
   selectIsStakingDisabled,
   selectIsSwapDisabled,
 } from '../../../../global/selectors';
@@ -58,9 +54,6 @@ interface StateProps {
   isViewMode: boolean;
   isSwapDisabled?: boolean;
   isEarnHidden: boolean;
-  isOnRampDisabled?: boolean;
-  isOffRampDisabled?: boolean;
-  onRampChain?: ApiChain;
   stakingStatus: StakingStateStatus;
   theme: Theme;
   accentColorIndex?: number;
@@ -70,9 +63,6 @@ function TopActions({
   isViewMode,
   isSwapDisabled,
   isEarnHidden,
-  isOnRampDisabled,
-  isOffRampDisabled,
-  onRampChain,
   stakingStatus,
   theme,
   accentColorIndex,
@@ -82,8 +72,6 @@ function TopActions({
     startTransfer,
     startSwap,
     openReceiveModal,
-    openOnRampWidgetModal,
-    openOffRampWidgetModal,
     openStakingInfoOrStart,
   } = getActions();
 
@@ -95,35 +83,23 @@ function TopActions({
   const containerRef = useRef<HTMLDivElement>();
   useHorizontalScroll({ containerRef, shouldPreventDefault: true });
 
-  const handleBuyClick = useLastCallback(() => {
-    if (!onRampChain) return;
-
-    vibrate();
-    openOnRampWidgetModal({ chain: onRampChain });
-  });
-
   const handleDepositClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     openReceiveModal();
   });
 
   const handleTradeClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     startSwap();
   });
 
   const handleEarnClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     openStakingInfoOrStart();
   });
 
-  const handleSellClick = useLastCallback(() => {
-    vibrate();
-    openOffRampWidgetModal();
-  });
-
   const handleSendClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     startTransfer();
   });
 
@@ -148,15 +124,6 @@ function TopActions({
       ref={containerRef}
       className={buildClassName(styles.root, 'no-scrollbar', SWIPE_DISABLED_CLASS_NAME, className)}
     >
-      {!isOnRampDisabled && (
-        <ActionButton
-          label={lang('Buy')}
-          tgsUrl={stickerPaths.iconBuy}
-          previewUrl={stickerPaths.preview.iconBuy}
-          accentColor={accentColor}
-          onClick={handleBuyClick}
-        />
-      )}
       {depositButton}
       <ActionButton
         label={lang('Send')}
@@ -184,15 +151,6 @@ function TopActions({
           onClick={handleEarnClick}
         />
       )}
-      {!isOffRampDisabled && (
-        <ActionButton
-          label={lang('Sell')}
-          tgsUrl={stickerPaths.iconSell}
-          previewUrl={stickerPaths.preview.iconSell}
-          accentColor={accentColor}
-          onClick={handleSellClick}
-        />
-      )}
     </div>
   );
 }
@@ -213,16 +171,10 @@ export default memo(
           && !getIsActiveStakingState(currentStakingState),
         );
 
-      // Neither button carries a chain of its own, so each is answered for the very chain its click will open
-      const onRampChain = selectDefaultOnRampChain(global);
-
       return {
         isViewMode: selectIsCurrentAccountViewMode(global),
         isSwapDisabled: selectIsSwapDisabled(global),
         isEarnHidden,
-        isOnRampDisabled: !onRampChain,
-        isOffRampDisabled: !selectIsOffRampAllowed(global, selectDefaultOffRampChain(global)),
-        onRampChain,
         stakingStatus: stakingState ? getStakingStateStatus(stakingState) : 'inactive',
         theme: global.settings.theme,
         accentColorIndex: selectCurrentAccountSettings(global)?.accentColorIndex,

@@ -12,12 +12,9 @@ import * as commonMethods from '.';
 export const methods = { ...commonMethods } as Methods;
 
 // `process.env` is read inline rather than through `config`, because Webpack substitutes it before
-// dead-code elimination: that leaves the `require`s in a statically false branch and drops `./extra`,
-// `./agentV2` and everything they pull. Read through `config`, the branch survives and nothing is
-// eliminated.
+// dead-code elimination: that leaves the `require` in a statically false branch and drops `./extra`
+// and everything it pulls. Read through `config`, the branch survives and nothing is eliminated.
 if (process.env.NO_EXTRA_FEATURES !== '1') {
-  /* eslint-disable @typescript-eslint/no-require-imports */
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   Object.assign(methods, require('./extra') as typeof import('./extra'));
-  Object.assign(methods, require('./agentV2') as typeof import('./agentV2'));
-  /* eslint-enable @typescript-eslint/no-require-imports */
 }

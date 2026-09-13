@@ -40,29 +40,29 @@ describe('token lookup', () => {
   it('does not resolve a chainless address when multiple cached tokens share it', () => {
     const cache = getTokensCache();
     const address = '0x00000000000000000000000000000000ABCDEF12';
-    const ethereumSlug = buildTokenSlug('ethereum', address);
-    const baseSlug = buildTokenSlug('base', address);
-    const previousEthereumToken = cache.bySlug[ethereumSlug];
-    const previousBaseToken = cache.bySlug[baseSlug];
+    const tonSlug = buildTokenSlug('ton', address);
+    const bnbSlug = buildTokenSlug('bnb', address);
+    const previousTonToken = cache.bySlug[tonSlug];
+    const previousBnbToken = cache.bySlug[bnbSlug];
 
-    cache.bySlug[ethereumSlug] = makeToken(ethereumSlug, 'ethereum', address.toLowerCase());
-    cache.bySlug[baseSlug] = makeToken(baseSlug, 'base', address.toUpperCase());
+    cache.bySlug[tonSlug] = makeToken(tonSlug, 'ton', address.toLowerCase());
+    cache.bySlug[bnbSlug] = makeToken(bnbSlug, 'bnb', address.toUpperCase());
 
     try {
       expect(getTokenByAddress(address)).toBeUndefined();
-      expect(getTokenByAddress(address, 'ethereum')?.slug).toBe(ethereumSlug);
-      expect(getTokenByAddress(address, 'base')?.slug).toBe(baseSlug);
+      expect(getTokenByAddress(address, 'ton')?.slug).toBe(tonSlug);
+      expect(getTokenByAddress(address, 'bnb')?.slug).toBe(bnbSlug);
     } finally {
-      if (previousEthereumToken) {
-        cache.bySlug[ethereumSlug] = previousEthereumToken;
+      if (previousTonToken) {
+        cache.bySlug[tonSlug] = previousTonToken;
       } else {
-        delete cache.bySlug[ethereumSlug];
+        delete cache.bySlug[tonSlug];
       }
 
-      if (previousBaseToken) {
-        cache.bySlug[baseSlug] = previousBaseToken;
+      if (previousBnbToken) {
+        cache.bySlug[bnbSlug] = previousBnbToken;
       } else {
-        delete cache.bySlug[baseSlug];
+        delete cache.bySlug[bnbSlug];
       }
     }
   });

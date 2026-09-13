@@ -8,7 +8,7 @@ import type {
   WcPayPaymentInfo,
   WcPayPaymentOption,
 } from './types';
-import { CHAIN_IDS, EVM_CHAIN_IDS, SOLANA_CHAIN_IDS } from './types';
+import { CHAIN_IDS, EVM_CHAIN_IDS } from './types';
 
 import { parseAccountId } from '../../../../util/account';
 import { checkIsKycUrlAllowed } from '../../../../util/walletConnectPay';
@@ -32,17 +32,6 @@ export async function buildPayAccounts(accountId: string, isFake?: boolean): Pro
     const address = account.byChain[entry.chain]?.address;
     if (address) {
       accounts.push(`${caip2}:${address.toLowerCase()}`);
-    }
-  }
-
-  const solanaAddress = account.byChain.solana?.address;
-  if (solanaAddress) {
-    for (const [caip2, entry] of Object.entries(SOLANA_CHAIN_IDS)) {
-      if (entry.network !== network) {
-        continue;
-      }
-
-      accounts.push(`${caip2}:${solanaAddress}`);
     }
   }
 

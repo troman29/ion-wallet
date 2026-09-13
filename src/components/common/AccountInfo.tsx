@@ -110,7 +110,7 @@ export default memo(withGlobal((global): StateProps => {
   return {
     currentAccount,
     currentAccountId,
-    visibleChains: selectCurrentAccountChainDisplay(global)?.addressLineChains,
+    visibleChains: selectCurrentAccountChainDisplay(global)?.visibleChains,
     cardBackgroundNft: accountSettings?.cardBackgroundNft,
     isSensitiveDataHidden,
     isTestnet,

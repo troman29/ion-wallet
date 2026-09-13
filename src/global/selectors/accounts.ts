@@ -182,23 +182,6 @@ export function selectAccountIdByAddress(
 }
 
 // Slow, not to be used in `withGlobal`
-export function selectVestingPartsReadyToUnfreeze(global: GlobalState, accountId: string) {
-  const vesting = selectAccountState(global, accountId)?.vesting?.info || [];
-
-  return vesting.reduce((acc, currentVesting) => {
-    currentVesting.parts.forEach((part) => {
-      if (part.status === 'ready') {
-        acc.push({
-          id: currentVesting.id,
-          partId: part.id,
-        });
-      }
-    });
-
-    return acc;
-  }, [] as { id: number; partId: number }[]);
-}
-
 export function selectCurrentAccountNftByAddress(global: GlobalState, nftAddress: string) {
   const accountId = selectCurrentAccountId(global);
   return accountId ? selectAccountNftByAddress(global, accountId, nftAddress) : undefined;

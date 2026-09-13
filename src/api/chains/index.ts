@@ -20,26 +20,10 @@ if (process.env.NO_TON !== '1') {
   chains.ton = require('./ton').default;
 }
 
-if (process.env.NO_TRON !== '1') {
-  chains.tron = require('./tron').default;
-}
-
-if (process.env.NO_SOLANA !== '1') {
-  chains.solana = require('./solana').default;
-}
-
 if (process.env.NO_EVM !== '1') {
   const EVMSdk = require('./evm').default;
   Object.assign(chains, {
-    ethereum: new EVMSdk('ethereum'),
-    base: new EVMSdk('base'),
     bnb: new EVMSdk('bnb'),
-    polygon: new EVMSdk('polygon'),
-    arbitrum: new EVMSdk('arbitrum'),
-    monad: new EVMSdk('monad'),
-    avalanche: new EVMSdk('avalanche'),
-    hyperliquid: new EVMSdk('hyperliquid'),
-    robinhood: new EVMSdk('robinhood'),
   });
 }
 /* eslint-enable @typescript-eslint/no-require-imports */

@@ -1,8 +1,6 @@
 import type { NftItem } from 'tonapi-sdk-js';
-import type { Base58EncodedBytes } from '@solana/kit';
 
 import type { LangCode } from '../../global/types';
-import type { AgentOverride } from '../../util/agent/agentOverride';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
 import type { DappProtocolType } from '../dappProtocols';
 import type { ApiStorageConfig } from '../storages/types';
@@ -11,17 +9,8 @@ import type { ApiParsedPayload } from './payload';
 import type { ApiSseOptions, ApiWalletByChain } from './storage';
 import type { ApiUpdatingStatus } from './updates';
 
-export type EVMChain =
-  'ethereum'
-  | 'base'
-  | 'bnb'
-  | 'polygon'
-  | 'arbitrum'
-  | 'monad'
-  | 'avalanche'
-  | 'hyperliquid'
-  | 'robinhood';
-export type ApiChain = 'ton' | 'tron' | 'solana' | EVMChain;
+export type EVMChain = 'bnb';
+export type ApiChain = 'ton' | EVMChain;
 export type ApiNetwork = 'mainnet' | 'testnet';
 export type ApiLedgerDriver = 'HID' | 'USB';
 export type ApiTokenType = 'lp_token' | 'legacy_token' | 'token_2022';
@@ -36,7 +25,6 @@ export interface ApiInitArgs {
   isElectron?: boolean;
   isIosApp?: boolean;
   isAndroidApp?: boolean;
-  agentOverride?: AgentOverride;
   langCode?: LangCode;
   referrer?: string;
   channel?: string;
@@ -220,7 +208,7 @@ export interface ApiDomainData {
 export type ApiHistoryList = Array<[number, number]>;
 
 export type ApiStakingType = ApiStakingState['type'];
-export type ApiBackendStakingType = 'nominators' | 'liquid';
+export type ApiBackendStakingType = 'liquid';
 
 type BaseStakingState = {
   id: string;
@@ -232,12 +220,6 @@ type BaseStakingState = {
   tvl?: bigint;
   totalStakers?: number;
   unstakeRequestAmount?: bigint;
-};
-
-export type ApiNominatorsStakingState = BaseStakingState & {
-  type: 'nominators';
-  start: number;
-  end: number;
 };
 
 export type ApiLiquidStakingState = BaseStakingState & {
@@ -280,27 +262,17 @@ export type ApiEthenaStakingState = BaseStakingState & {
 };
 
 export type ApiYieldType = 'APY' | 'APR';
-export type ApiStakingState = ApiNominatorsStakingState
-  | ApiLiquidStakingState
+export type ApiStakingState = ApiLiquidStakingState
   | ApiJettonStakingState
   | ApiEthenaStakingState;
-export type ApiToncoinStakingState = ApiNominatorsStakingState | ApiLiquidStakingState;
-
-export interface ApiNominatorsPool {
-  address: string;
-  apy: number;
-  start: number;
-  end: number;
-}
+export type ApiToncoinStakingState = ApiLiquidStakingState;
 
 export interface ApiBackendStakingState {
   balance: bigint;
   totalProfit: bigint;
   type?: ApiBackendStakingType;
-  nominatorsPool: ApiNominatorsPool;
   loyaltyType?: ApiLoyaltyType;
   loyaltyBalance?: bigint;
-  shouldUseNominators?: boolean;
   stakedAt?: number;
   ethena: {
     /**
@@ -364,7 +336,8 @@ export interface ApiSignedTransfer<T extends DappProtocolType = any> {
     seqno: number;
   } : {
     signature: string;
-    signedTx: Base58EncodedBytes;
+    /** The serialized signed transaction, in the chain's own encoding (hex for EVM) */
+    signedTx: string;
   };
 }
 

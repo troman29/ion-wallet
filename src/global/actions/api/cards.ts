@@ -1,57 +1,12 @@
-import type { ApiSubmitTransferOptions } from '../../../api/types';
-import type { AccountSettings, GlobalState } from '../../types';
-import { MintCardState } from '../../types';
+import type { AccountSettings } from '../../types';
 
-import { DEFAULT_CHAIN, MINT_CARD_ADDRESS, MINT_CARD_COMMENT } from '../../../config';
-import { fromDecimal } from '../../../util/decimals';
+import { DEFAULT_CHAIN } from '../../../config';
 import { debounce } from '../../../util/schedulers';
 import { callApi } from '../../../api';
-import { withEnclaveSessionRelease } from '../../helpers/enclave';
-import { handleTransferResult, prepareTransfer } from '../../helpers/transfer';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
-import { updateAccountSettings, updateAccountState, updateMintCards } from '../../reducers';
-import { selectAccountState, selectCurrentAccountId, selectMycoin } from '../../selectors';
+import { updateAccountSettings } from '../../reducers';
 
 const CHECK_OWNERSHIP_DEBOUNCE_MS = 3000;
-
-addActionHandler('submitMintCard', withEnclaveSessionRelease(async (global, actions, payload) => {
-  const { enclaveToken } = payload ?? {};
-  const accountId = selectCurrentAccountId(global)!;
-
-  if (!prepareTransfer(MintCardState.ConfirmHardware, updateMintCards)) {
-    return;
-  }
-
-  const options = createTransferOptions(getGlobal(), enclaveToken);
-  const result = await callApi('submitTransfer', 'ton', options);
-
-  if (!handleTransferResult(result, updateMintCards)) {
-    return;
-  }
-
-  global = getGlobal();
-  global = updateMintCards(global, { state: MintCardState.Done });
-  global = updateAccountState(global, accountId, { isCardMinting: true });
-  setGlobal(global);
-}));
-
-function createTransferOptions(globalState: GlobalState, enclaveToken?: string): ApiSubmitTransferOptions {
-  const { currentAccountId, currentMintCard } = globalState;
-  const { config } = selectAccountState(globalState, currentAccountId!)!;
-  const mycoin = selectMycoin(globalState);
-  const { cardsInfo } = config!;
-  const type = currentMintCard!.type!;
-  const cardInfo = cardsInfo![type];
-
-  return {
-    accountId: currentAccountId!,
-    enclaveToken,
-    toAddress: MINT_CARD_ADDRESS,
-    amount: fromDecimal(cardInfo.price, mycoin.decimals),
-    tokenAddress: mycoin.tokenAddress,
-    payload: { type: 'comment', text: MINT_CARD_COMMENT },
-  };
-}
 
 // Debounced to avoid API rate limits: NFT update events fire per-account, causing a burst of ownership checks
 const accountIdsToCheckCardNftOwnership = new Set<string>();

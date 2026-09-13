@@ -3,6 +3,7 @@ import type { Period } from '../../../common/polling/utils';
 import type { DefaultActivitiesUpdate, WalletWatcher } from '../../../common/websocket/abstractWsClient';
 import type { ApiActivity, ApiNetwork } from '../../../types';
 
+import { NO_PENDING_ACTIVITIES } from '../../../../config';
 import { mergeSortedActivities, sortActivities } from '../../../../util/activities/order';
 import { createCallbackManager } from '../../../../util/callbacks';
 import { focusAwareDelay } from '../../../../util/focusAwareDelay';
@@ -158,7 +159,7 @@ export class ActivityStream {
       this.#loadingListeners.runCallbacks(true);
 
       const [pendingActivities, newFinalizedActivities] = await Promise.all([
-        loadPendingActivities(this.#network, this.#address),
+        NO_PENDING_ACTIVITIES ? undefined : loadPendingActivities(this.#network, this.#address),
         this.#loadNewFinalizedActivities(),
       ]);
 

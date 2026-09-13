@@ -1,6 +1,5 @@
 import React, { memo } from '../../lib/teact/teact';
 
-import { IS_EXPLORER } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import getDeterministicRandom from '../../util/getDeterministicRandom';
 
@@ -40,7 +39,6 @@ const ACTIVITY_ITEMS: ActivityItemData[][] = [
   ],
 ];
 
-const NAVIGATION_LINKS_COUNT = 4;
 const BOTTOM_BAR_BUTTONS_COUNT = 3;
 
 function sizeVar(min: number, max: number, seed: string) {
@@ -62,20 +60,6 @@ function renderCard() {
         <Skeleton className={styles.cardBalance} />
         <Skeleton className={styles.cardBalanceSecondary} />
         <Skeleton className={styles.cardAddress} />
-      </div>
-    </div>
-  );
-}
-
-function renderOpenInWallet() {
-  return (
-    <div className={styles.openInWallet}>
-      <Skeleton className={styles.openInWalletAction} />
-      <Skeleton className={styles.openInWalletActionInner} />
-      <div className={styles.navigation}>
-        {Array.from({ length: NAVIGATION_LINKS_COUNT }, (_, i) => (
-          <Skeleton key={i} className={styles.navigationLink} />
-        ))}
       </div>
     </div>
   );
@@ -205,7 +189,6 @@ function MainSkeleton({ isViewMode }: OwnProps) {
       <div className={buildClassName(styles.sidebar, mainStyles.sidebar, 'custom-scroll')}>
         {renderHeader()}
         {renderCard()}
-        {IS_EXPLORER && renderOpenInWallet()}
       </div>
       <div className={styles.main}>
         <div className={styles.assets}>

@@ -162,10 +162,6 @@ $signSizeDiff: 0.375rem;
 
   @include mixins.transition('transform var(--slide-transition), filter var(--slide-transition) !important');
 
-  &:global(.gram) {
-    @include mixins.card-image("../../../../assets/cards/", "card_gram", v.$gramCardGradient);
-  }
-
   &:global(.tegro) {
     @include mixins.card-image("../../../../assets/cards/", "card_tegro", v.$tegroCardGradient);
   }

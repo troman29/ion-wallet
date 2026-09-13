@@ -1,6 +1,5 @@
 package org.mytonwallet.app;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,25 +10,17 @@ import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.webkit.WebViewCompat;
 
-import org.mytonwallet.app_air.airasframework.airLauncher.AirLauncher;
-import org.mytonwallet.app_air.airasframework.airLauncher.LaunchConfig;
-
 /*
-  Application entry point.
-    - Triggers AirLauncher.
-    - Only passes deeplink data into active activity and finishes itself if any activities are already open.
-    - Plays splash-screen for MTW Air (This flow may be enhanced later)
+  Application entry point. Hands the launch intent, deeplink included, to the
+  Capacitor-hosted LegacyActivity and finishes itself.
  */
 public class MainActivity extends BaseActivity {
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Log.i("MTWAirApplication", "Main Activity Created");
-    boolean shouldAnimateSplash = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
-      Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU;
-    SplashScreen splashScreen = shouldAnimateSplash ? SplashScreen.installSplashScreen(this) : null;
+    Log.i("MTWApplication", "Main Activity Created");
     super.onCreate(savedInstanceState);
 
     if (!isWebViewAvailable()) {
@@ -37,33 +28,26 @@ public class MainActivity extends BaseActivity {
       return;
     }
 
-    LaunchConfig.recordAppOpened(this);
-    Activity activity = this;
-
-    AirLauncher airLauncher = AirLauncher.getInstance();
-
-    // Do not let MainActivity open again if MTW Air is already on, just pass deeplink to handle, if required.
-    if (airLauncher != null && airLauncher.getIsOnTheAir()) {
-      airLauncher.handle(activity, getIntent());
-      finish();
-      return;
-    }
-
-    makeStatusBarTransparent();
-    makeNavigationBarTransparent();
-
-    airLauncher = new AirLauncher(this);
-    AirLauncher.setInstance(airLauncher);
-    airLauncher.handle(getIntent());
-    if (splashScreen != null) {
-      splashScreen.setKeepOnScreenCondition(() -> !AirLauncher.getInstance().getIsOnTheAir());
-    }
-    airLauncher.soarIntoAir(this);
+    launchLegacyActivity();
   }
 
   @Override
   protected void onNewIntent(@NonNull Intent intent) {
     super.onNewIntent(intent);
+  }
+
+  private void launchLegacyActivity() {
+    Intent sourceIntent = getIntent();
+    Intent intent = new Intent(this, LegacyActivity.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    intent.setAction(sourceIntent.getAction());
+    intent.setData(sourceIntent.getData());
+    if (sourceIntent.getExtras() != null) {
+      intent.putExtras(sourceIntent.getExtras());
+    }
+    startActivity(intent);
+    overridePendingTransition(0, 0);
+    finish();
   }
 
   private boolean isWebViewAvailable() {
@@ -76,7 +60,7 @@ public class MainActivity extends BaseActivity {
       new WebView(this).destroy();
       return true;
     } catch (Throwable t) {
-      Log.e("MTWAirApplication", "WebView unavailable", t);
+      Log.e("MTWApplication", "WebView unavailable", t);
       return false;
     }
   }

@@ -31,9 +31,6 @@ declare global {
     mytonwallet: {
       tonconnect: TonConnect;
     };
-    gramwallet: {
-      tonconnect: TonConnect;
-    };
   }
 }
 

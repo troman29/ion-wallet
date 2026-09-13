@@ -13,7 +13,7 @@ const mockToRawAddress = jest.fn();
 
 jest.mock('../../../../config', () => ({
   ...jest.requireActual('../../../../config'),
-  IS_AIR_APP: false,
+  IS_CAPACITOR: false,
   IS_EXTENSION: false,
   SSE_BRIDGE_URL: 'https://bridge.example/',
 }));
@@ -149,7 +149,7 @@ describe('TonConnectAdapter.connect', () => {
     await adapter.init({
       onUpdate,
       env: {
-        agentOverride: 'v1', isAgentV2Enabled: false, isSseSupported: false, byNetwork: { mainnet: {}, testnet: {} },
+        isSseSupported: false, byNetwork: { mainnet: {}, testnet: {} },
       },
       chainDappSupports: {},
     });

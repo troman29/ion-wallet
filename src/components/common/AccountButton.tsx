@@ -3,7 +3,6 @@ import React, { memo } from '../../lib/teact/teact';
 import type { ApiChain, ApiNft } from '../../api/types';
 import type { Account, AccountType } from '../../global/types';
 
-import { IS_GRAM_WALLET } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import buildStyle from '../../util/buildStyle';
 import { getOrderedAccountChains } from '../../util/chain';
@@ -57,7 +56,6 @@ function AccountButton({
   const fullClassName = buildClassName(
     className,
     styles.account,
-    IS_GRAM_WALLET && 'gram',
     imageUrl && styles.customCard,
     imageUrl && mwCardClassNames,
     isActive && !withCheckbox && styles.account_current,

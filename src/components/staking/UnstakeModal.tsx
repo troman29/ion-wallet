@@ -10,6 +10,7 @@ import { StakingState } from '../../global/types';
 import {
   ANIMATED_STICKER_TINY_ICON_PX,
   DEFAULT_PRICE_CURRENCY,
+  IS_CAPACITOR,
   TONCOIN,
   VALIDATION_PERIOD_MS,
 } from '../../config';
@@ -66,7 +67,6 @@ type StateProps = GlobalState['currentStaking'] & {
   isViewMode: boolean;
   tokens?: UserToken[];
   baseCurrency: ApiBaseCurrency;
-  isNominators?: boolean;
   theme: Theme;
   stakingState?: ApiStakingState;
   isSensitiveDataHidden?: true;
@@ -94,7 +94,6 @@ function UnstakeModal({
   error,
   tokens,
   baseCurrency,
-  isNominators,
   theme,
   amount,
   mfaRequestHash,
@@ -134,7 +133,7 @@ function UnstakeModal({
     return tokenSlug ? tokens?.find(({ slug }) => slug === tokenSlug) : undefined;
   }, [tokenSlug, tokens]);
 
-  const isOnlyFullAmount = isNominators;
+  const isOnlyFullAmount = false;
   const [unstakeAmount, setUnstakeAmount] = useState(isOnlyFullAmount ? stakingBalance : undefined);
   const [successUnstakeAmount, setSuccessUnstakeAmount] = useState<bigint | undefined>(undefined);
 
@@ -392,6 +391,7 @@ function UnstakeModal({
         <PasswordForm
           isActive={isActive}
           isLoading={isLoading}
+          withCloseButton={IS_CAPACITOR}
           operationType="unstaking"
           error={error}
           placeholder={lang(placeholder)}
@@ -521,13 +521,11 @@ export default memo(withGlobal((global): StateProps => {
   const tokens = selectCurrentAccountTokens(global);
   const { baseCurrency = DEFAULT_PRICE_CURRENCY, isSensitiveDataHidden } = global.settings;
   const stakingState = selectAccountStakingState(global, accountId);
-  const isNominators = stakingState?.type === 'nominators';
 
   return {
     ...global.currentStaking,
     tokens,
     baseCurrency,
-    isNominators,
     theme: global.settings.theme,
     stakingState,
     isSensitiveDataHidden,

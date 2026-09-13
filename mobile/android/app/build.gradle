@@ -10,6 +10,8 @@ android {
   }
   namespace = "org.mytonwallet.app"
   compileSdk = rootProject.ext.compileSdkVersion
+  // Source compatibility moved here from the (no-longer-applied) generated
+  // capacitor.build.gradle.
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_21
     targetCompatibility JavaVersion.VERSION_21
@@ -37,15 +39,12 @@ android {
     }
   }
 
-  // Both flavors are Air-only: `main` exposes only res-shared/ (shared static
-  // resources). Air native code loads i18n JSONs from assets, so `main` narrows
-  // its asset roots to just that subdir (excluding any other build-generated
-  // content under src/main/assets/); contents land at <assets-root>/<lang>.json.
-  // Each flavor keeps its own default src/<flavor>/assets root (the Air SDK js).
+  // `cap sync` writes the web bundle and generated resources into src/main/,
+  // alongside res-shared/ which holds the static ones checked into the repo.
   sourceSets {
     main {
-      res.srcDirs = ['src/main/res-shared']
-      assets.srcDirs = ['src/main/assets/public/i18n']
+      res.srcDirs = ['src/main/res-shared', 'src/main/res']
+      assets.srcDirs = ['src/main/assets']
     }
   }
 
@@ -55,10 +54,6 @@ android {
       dimension "brand"
       applicationId "org.mytonwallet.app"
       getIsDefault().set(true)
-    }
-    gram {
-      dimension "brand"
-      applicationId "io.gramwallet.app"
     }
     prod {
       dimension "env"
@@ -98,7 +93,7 @@ android {
 
 repositories {
   flatDir {
-    dirs 'libs'
+    dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
   }
 }
 
@@ -108,18 +103,41 @@ dependencies {
   implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
   implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
   implementation "androidx.webkit:webkit:$androidxWebkitVersion"
+  // FilesystemPlugin uses Dispatchers.Main during teardown and needs the Android dispatcher at runtime.
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxCoroutinesVersion"
   testImplementation "junit:junit:$junitVersion"
   testImplementation libs.kotlin.reflect
   androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
   androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-  implementation "com.google.android.gms:play-services-mlkit-barcode-scanning:$playServicesMlkitBarcodeScanningVersion"
-  implementation "com.google.android.gms:play-services-base:$playServicesBaseVersion"
-  implementation "androidx.camera:camera-camera2:$cameraCamera2Version"
   implementation platform('com.google.firebase:firebase-bom:33.5.1')
   implementation 'com.google.firebase:firebase-messaging'
 
-  implementation project("$airSubModulePath:AirAsFramework")
-
-  debugImplementation libs.leakcanary.android
+  // The generated capacitor.build.gradle (rewritten by `cap sync`) is deliberately
+  // not applied - it is listed here instead, so a plugin added to or dropped from
+  // `capacitor.config.ts` has to be mirrored below.
+  implementation project(':capacitor-android')
+  implementation project(':capacitor-cordova-android-plugins')
+  implementation project(':capacitor-community-bluetooth-le')
+  implementation project(':capacitor-mlkit-barcode-scanning')
+  implementation project(':capacitor-app')
+  implementation project(':capacitor-app-launcher')
+  implementation project(':capacitor-clipboard')
+  implementation project(':capacitor-dialog')
+  implementation project(':capacitor-filesystem')
+  implementation project(':capacitor-haptics')
+  implementation project(':capacitor-keyboard')
+  implementation project(':capacitor-push-notifications')
+  implementation project(':capacitor-share')
+  implementation project(':capacitor-status-bar')
+  implementation project(':capgo-capacitor-native-biometric')
+  implementation project(':capgo-native-audio')
+  implementation project(':mauricewegner-capacitor-navigation-bar')
+  implementation project(':mytonwallet-capacitor-usb-hid')
+  implementation project(':capacitor-native-settings')
+  implementation project(':capacitor-plugin-safe-area')
+  implementation project(':capacitor-secure-storage-plugin')
 }
+
+// Cordova ext-vars script (`cdvMinSdkVersion`, `cordovaConfig`, …) is required
+// by the `:capacitor-cordova-android-plugins` Gradle module's evaluation.
+apply from: '../capacitor-cordova-android-plugins/cordova.variables.gradle'

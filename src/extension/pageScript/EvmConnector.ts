@@ -15,9 +15,8 @@ import type { ApiChain, ApiNetwork } from '../../api/types';
 import type {
   EIP1193Provider,
 } from '../../util/injectedConnector/evmConnector';
-import type { SolanaRequestMethods } from '../../util/injectedConnector/solanaConnector';
 import type { Connector } from '../../util/PostMessageConnector';
-import { EVM_CHAIN_IDS } from '../../api/dappProtocols/adapters/walletConnect/types';
+import { BNB_MAINNET_CAIP, EVM_CHAIN_IDS } from '../../api/dappProtocols/adapters/walletConnect/types';
 
 import { APP_NAME } from '../../config';
 import {
@@ -72,6 +71,15 @@ function getCaip2ForSessionChain(chain: ApiChain, network: ApiNetwork): string |
     ([, v]) => v.chain === chain && v.network === network,
   )?.[0];
 }
+
+// The names the wallet dispatches under the shared `walletConnect_*` namespace.
+type WalletConnectRequestMethod =
+  | 'connect'
+  | 'reconnect'
+  | 'disconnect'
+  | 'sendTransaction'
+  | 'signData'
+  | 'proxyEvmRpc';
 
 type Eip1193Event = 'accountsChanged' | 'chainChanged' | 'connect' | 'disconnect';
 
@@ -169,20 +177,21 @@ export class EvmConnect {
 
   private chainIdHex(): string {
     const caip2 = this.selectedCaip2 ?? getCaip2ForSessionChain(
-      this.evmChains[0]?.chain ?? 'ethereum',
+      this.evmChains[0]?.chain ?? 'bnb',
       this.evmChains[0]?.network ?? 'mainnet',
     );
 
     if (!caip2) {
-      return '0x1';
+      return caip2ToHexChainId(BNB_MAINNET_CAIP);
     }
 
     return caip2ToHexChainId(caip2);
   }
 
   private resolveChainForAddress(address: string, caip?: string): { chain: ApiChain; network: ApiNetwork } {
-    // Default to Ethereum mainnet if no CAIP is provided (for chain-agnostic methods like personal_sign, eth_sign, etc.)
-    caip = caip || 'eip155:1';
+    // Chain-agnostic methods (personal_sign, eth_sign and the like) carry no CAIP, so they land
+    // on the only EVM chain we support.
+    caip = caip || BNB_MAINNET_CAIP;
 
     // Cannot use getAddress here, so use toLowerCase instead
     const normalized = address.toLowerCase();
@@ -190,7 +199,7 @@ export class EvmConnect {
     const targetChain = caip ? EVM_CHAIN_IDS[caip] : undefined;
 
     if (!targetChain) {
-      return { chain: 'ethereum', network: 'mainnet' };
+      return { chain: 'bnb', network: 'mainnet' };
     }
 
     const row = this.evmChains.find(
@@ -201,7 +210,7 @@ export class EvmConnect {
     }
 
     return {
-      chain: this.evmChains[0]?.chain ?? 'ethereum',
+      chain: this.evmChains[0]?.chain ?? 'bnb',
       network: this.evmChains[0]?.network ?? 'mainnet',
     };
   }
@@ -325,7 +334,7 @@ export class EvmConnect {
     return response;
   }
 
-  private requestWc(name: SolanaRequestMethods, args: unknown[] = []) {
+  private requestWc(name: WalletConnectRequestMethod, args: unknown[] = []) {
     return this.apiConnector.request({ name: `walletConnect_${name}`, args });
   }
 
@@ -533,7 +542,6 @@ export class EvmConnect {
         url: window.origin,
         address,
         data,
-        isEthSign: true,
       },
     };
 

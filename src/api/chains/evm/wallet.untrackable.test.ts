@@ -28,7 +28,7 @@ describe('fetchAccountAssets untrackable handling', () => {
     setNegVerdictCacheFlag(true);
     fetchMock.mockRejectedValue(new ApiServerError('untrackable wallet address', 400));
 
-    const { balances } = await fetchAccountAssets('ethereum', 'mainnet', '0xdead', jest.fn());
+    const { balances } = await fetchAccountAssets('bnb', 'mainnet', '0xdead', jest.fn());
 
     // Not an empty object: the native slug must be present at 0 so the poller emits a zero update
     // instead of leaving the previous balances stale.
@@ -40,7 +40,7 @@ describe('fetchAccountAssets untrackable handling', () => {
   it('flag off: a positions 400 rethrows and marks nothing (dark-ship guard)', async () => {
     fetchMock.mockRejectedValue(new ApiServerError('untrackable wallet address', 400));
 
-    await expect(fetchAccountAssets('ethereum', 'mainnet', '0xdead', jest.fn()))
+    await expect(fetchAccountAssets('bnb', 'mainnet', '0xdead', jest.fn()))
       .rejects.toBeInstanceOf(ApiServerError);
     expect(untrackableRegistry.has('mainnet', '0xdead')).toBe(false);
   });

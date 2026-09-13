@@ -1,17 +1,5 @@
 import type { TeactNode } from '../lib/teact/teact';
 
-import type {
-  AgentActionProposal,
-  AgentMessageErrorV2,
-  AgentPersistedActionV2,
-  AgentPublicFollowUpV2,
-  AgentPublicInputContinuationV1,
-  AgentSemanticContentV1,
-} from '../api/agentV2/protocol/types';
-import type {
-  AgentV2ActionPresentation,
-  AgentV2WalletConversationControls,
-} from '../api/agentV2/types';
 import type { ApiTonWalletVersion } from '../api/chains/ton/types';
 import type { TonConnectProof } from '../api/dappProtocols/adapters';
 import type {
@@ -42,11 +30,9 @@ import type {
   ApiImportAddressByChain,
   ApiLedgerDriver,
   ApiLedgerWalletInfo,
-  ApiMtwCardType,
   ApiNetwork,
   ApiNft,
   ApiNftCollection,
-  ApiPortfolioHistoryResponse,
   ApiPriceHistoryPeriod,
   ApiSite,
   ApiSiteCategory,
@@ -74,10 +60,10 @@ import type {
   ApiUpdateWalletVersions,
   ApiVestingInfo,
   ApiWalletWithVersionInfo,
-  NativePlatform,
 } from '../api/types';
 import type { AUTOLOCK_OPTIONS_LIST } from '../config';
 import type { LegacyAuthConfig } from '../enclave';
+import type { CapacitorPlatform } from '../util/capacitor/platform';
 import type { ExplainedTransferFee } from '../util/fee/transferFee';
 import type { LedgerTransport } from '../util/ledger/types';
 
@@ -88,44 +74,11 @@ export type IAnchorPosition = {
   y: number;
 };
 
-export type PortfolioHistoryBundle = {
-  netWorth?: ApiPortfolioHistoryResponse;
-  pnlCumulative?: ApiPortfolioHistoryResponse;
-  pnl?: ApiPortfolioHistoryResponse;
-  // Precomputed P&L change for this range+currency, kept here (not just in the single-slot
-  // `pnlChangeByAccountId`) so switching back to a cached range shows the right value instantly
-  pnlChange?: PortfolioPnlChange;
-  // Quantized timestamp of the fetch (see `getPortfolioHistorySlot`); when the current slot
-  // still matches this value, the bundle is considered fresh and no network call is issued
-  fetchedAtSlot?: number;
-};
-
-type PortfolioHistoryByRange = Record<ApiPriceHistoryPeriod, PortfolioHistoryBundle>;
-type PortfolioHistoryByBaseCurrency = Record<ApiBaseCurrency, PortfolioHistoryByRange>;
-export type PortfolioHistoryByAccountId = Record<string, PortfolioHistoryByBaseCurrency>;
-export type PortfolioPnlChange = {
-  range: ApiPriceHistoryPeriod;
-  baseCurrency: ApiBaseCurrency;
-  amount: number;
-  percent?: number;
-  startTs?: number;
-  endTs?: number;
-};
-
-export type PortfolioState = {
-  historyByAccountId?: PortfolioHistoryByAccountId;
-  pnlChangeByAccountId?: Record<string, PortfolioPnlChange>;
-  activeRange?: ApiPriceHistoryPeriod;
-  isLoading?: boolean;
-  isRefreshing?: boolean;
-  error?: string;
-};
-
 export type AnimationLevel = 0 | 1 | 2;
 export type Theme = 'light' | 'dark' | 'system';
 export type AppTheme = 'dark' | 'light';
 export type AppLayout = 'portrait' | 'landscape';
-export type DialogAction = 'openReturnUrl';
+export type DialogAction = 'openBluetoothSettings' | 'openReturnUrl';
 export type ToastAction = 'openRenameWallet';
 
 export type DeveloperSettingsUndefinedOverride = '__undefined';
@@ -211,9 +164,7 @@ type SignOutLevel = 'account' | 'network' | 'all';
 export enum AppState {
   Auth,
   Main,
-  Agent,
   Explore,
-  Portfolio,
   TokenInfo,
   Settings,
   Ledger,
@@ -443,23 +394,13 @@ export enum SettingsState {
   Chains,
 }
 
-export enum MintCardState {
-  Initial,
-  Password,
-  ConnectHardware,
-  ConfirmHardware,
-  Done,
-}
-
 export enum ContentTab {
   Overview,
   Assets,
   Activity,
-  Agent,
   Explore,
   Nft,
   Settings,
-  Portfolio,
 }
 
 export enum MediaType {
@@ -549,32 +490,6 @@ export type AssetPairs = Record<string, {
   isReverseProhibited?: boolean;
 }>;
 
-export interface AgentMessage {
-  id: number;
-  text: string;
-  shouldCommitMarkdownTail?: boolean;
-  isOutgoing: boolean;
-  timestamp: number;
-  isTyping?: boolean;
-  isStreaming?: boolean;
-  semanticContent?: AgentSemanticContentV1;
-  walletControls?: AgentV2WalletConversationControls;
-  actions?: Array<AgentActionProposal | AgentPersistedActionV2>;
-  actionPresentations?: Record<string, AgentV2ActionPresentation>;
-  followups?: AgentPublicFollowUpV2[];
-  inputContinuations?: AgentPublicInputContinuationV1[];
-  error?: AgentMessageErrorV2;
-  isRetryAvailable?: boolean;
-}
-
-export interface AgentHint {
-  id: string;
-  langCode: LangCode;
-  title: string;
-  subtitle: string;
-  prompt: string;
-}
-
 export interface AccountState {
   balances?: {
     bySlug: ApiBalanceBySlug;
@@ -658,7 +573,6 @@ export interface AccountState {
     stakingId?: string;
     stateById?: Record<string, ApiStakingState>;
     totalProfit?: bigint;
-    shouldUseNominators?: boolean;
   };
 
   vesting?: {
@@ -675,7 +589,6 @@ export interface AccountState {
 
   isDieselAuthorizationStarted?: boolean;
   isLongUnstakeRequested?: boolean;
-  isCardMinting?: boolean;
   receiveModalChain?: ApiChain;
   invoiceTokenSlug?: string;
 
@@ -834,7 +747,6 @@ export type GlobalState = {
     isGaslessWithStars?: boolean;
     scamWarningType?: ScamWarningType;
     isTransferReadonly?: boolean;
-    isOfframp?: boolean;
     isNftBurn?: boolean;
     /**
      * Normalized explanation of the fee and gasless parameters for the current draft, ready for UI consumption.
@@ -1148,16 +1060,11 @@ export type GlobalState = {
   isBackupWalletModalOpen?: boolean;
   isHardwareModalOpen?: boolean;
   isStakingInfoModalOpen?: boolean;
+  isQrScannerOpen?: boolean;
   isCustomizeWalletModalOpen?: boolean;
   customizeWalletReturnTo?: 'accountSelector' | 'settings';
   areSettingsOpen?: boolean;
-  isAgentOpen?: boolean;
-  agentMeta?: { messageCount: number; lastTimestamp?: number };
-  agentHints?: AgentHint[];
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
-  portfolioReturnTo?: 'settings';
-  portfolio?: PortfolioState;
   isAppUpdateAvailable?: boolean;
   // Force show the "Update My Wallet" pop-up on all platforms
   isAppUpdateRequired?: boolean;
@@ -1165,8 +1072,6 @@ export type GlobalState = {
   isPromotionModalOpen?: boolean;
   confettiRequestedAt?: number;
   isPinAccepted?: boolean;
-  chainForOnRampWidgetModal?: ApiChain;
-  chainForOffRampWidgetModal?: ApiChain;
   isInvoiceModalOpen?: boolean;
   isReceiveModalOpen?: boolean;
   isVestingModalOpen?: boolean;
@@ -1178,11 +1083,10 @@ export type GlobalState = {
     subtitle?: string;
   };
 
-  currentMintCard?: {
-    type?: ApiMtwCardType;
-    state?: MintCardState;
-    error?: string;
-    isLoading?: boolean;
+  currentQrScan?: {
+    currentTransfer?: GlobalState['currentTransfer'];
+    currentSwap?: GlobalState['currentSwap'];
+    currentDomainLinking?: GlobalState['currentDomainLinking'];
   };
 
   latestAppVersion?: string;
@@ -1190,13 +1094,10 @@ export type GlobalState = {
   restrictions: {
     isLimitedRegion: boolean;
     isSwapDisabled: boolean;
-    isOnRampDisabled: boolean;
-    isOffRampDisabled: boolean;
     isNftBuyingDisabled: boolean;
     isCopyStorageEnabled?: boolean;
     supportAccountsCount?: number;
     countryCode?: ApiCountryCode;
-    allowedOnOffRampCurrencies?: ApiBaseCurrency[];
   };
 
   mediaViewer: {
@@ -1221,7 +1122,7 @@ export type GlobalState = {
   pushNotifications: {
     isAvailable?: boolean;
     userToken?: string;
-    platform?: NativePlatform;
+    platform?: CapacitorPlatform;
     enabledAccounts: string[]; // Values - account ids
   };
 
@@ -1333,7 +1234,6 @@ export interface ActionPayloads {
     binPayload?: string;
     stateInit?: string;
     isTransferReadonly?: boolean;
-    isOfframp?: boolean;
   } | undefined;
   changeTransferToken: { tokenSlug: string; withResetAmount?: boolean };
   fetchTransferFee: {
@@ -1451,16 +1351,8 @@ export interface ActionPayloads {
   openNftAttributesModal: { nft: ApiNft; withOwner?: true };
   closeNftAttributesModal: undefined;
 
-  openAgent: undefined;
-  closeAgent: undefined;
-  setAgentMeta: { messageCount: number; lastTimestamp?: number };
-  setAgentHints: { hints: AgentHint[] };
   openExplore: undefined;
   closeExplore: undefined;
-  openPortfolio: { returnTo?: 'settings' } | undefined;
-  closePortfolio: undefined;
-  loadPortfolioHistory: { range?: ApiPriceHistoryPeriod } | undefined;
-  loadPortfolioPnlChange: undefined;
 
   closeAnyModal: undefined;
   submitSignature: { enclaveToken: string };
@@ -1489,16 +1381,15 @@ export interface ActionPayloads {
 
   // BottomBar actions
   switchToWallet: undefined;
-  switchToAgent: undefined;
   switchToExplore: undefined;
   switchToSettings: undefined;
-  switchToPortfolio: undefined;
 
   requestConfetti: undefined;
   setIsPinAccepted: undefined;
   clearIsPinAccepted: undefined;
 
   requestOpenQrScanner: undefined;
+  closeQrScanner: undefined;
   handleQrCode: { data: string };
 
   // Staking
@@ -1677,12 +1568,6 @@ export interface ActionPayloads {
   toggleSwapSettingsModal: { isOpen: boolean };
   updatePendingSwaps: { forceProviderRefresh?: boolean; contextActivities?: ApiActivity[] } | undefined;
 
-  openOnRampWidgetModal: { chain: ApiChain };
-  closeOnRampWidgetModal: undefined;
-
-  openOffRampWidgetModal: undefined;
-  closeOffRampWidgetModal: undefined;
-
   // WalletConnect Pay
   apiUpdateWalletConnectPayLoading: { accountId: string };
   apiUpdateWalletConnectPayProcessing: ApiUpdateWalletConnectPayProcessing;
@@ -1730,7 +1615,6 @@ export interface ActionPayloads {
   openLoadingOverlay: undefined;
   closeLoadingOverlay: undefined;
 
-  loadMycoin: undefined;
   openVestingModal: undefined;
   closeVestingModal: undefined;
   startClaimingVesting: undefined;
@@ -1738,13 +1622,8 @@ export interface ActionPayloads {
   clearVestingError: undefined;
   cancelClaimingVesting: undefined;
 
-  openMintCardModal: undefined;
-  closeMintCardModal: undefined;
   openPromotionModal: undefined;
   closePromotionModal: undefined;
-  startCardMinting: { type: ApiMtwCardType };
-  submitMintCard: { enclaveToken?: string } | undefined;
-  clearMintCardError: undefined;
 
   toggleNotifications: { isEnabled: boolean };
   renameNotificationAccount: { accountId: string };
@@ -1753,7 +1632,7 @@ export interface ActionPayloads {
   tryAddNotificationAccount: { accountId: string };
   deleteNotificationAccount: { accountId: string; withAbort?: boolean };
   deleteAllNotificationAccounts: undefined | { accountIds: string[] };
-  registerNotifications: { userToken: string; platform: NativePlatform };
+  registerNotifications: { userToken: string; platform: CapacitorPlatform };
 
   openFullscreen: undefined;
   closeFullscreen: undefined;

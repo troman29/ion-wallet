@@ -6,7 +6,7 @@ import type { AppLayout } from '../global/types';
 import { ElectronAction } from './types';
 
 import {
-  BASE_URL, DEFAULT_LANDSCAPE_WINDOW_SIZE, DEFAULT_PORTRAIT_WINDOW_SIZE, IS_PRODUCTION, IS_STAGING,
+  APP_NAME, BASE_URL, DEFAULT_LANDSCAPE_WINDOW_SIZE, DEFAULT_PORTRAIT_WINDOW_SIZE, IS_PRODUCTION, IS_STAGING,
 } from '../config';
 import { AUTO_UPDATE_SETTING_KEY, getIsAutoUpdateEnabled, setupAutoUpdates } from './autoUpdates';
 import { processDeeplink } from './deeplink';
@@ -56,7 +56,7 @@ export function createWindow() {
     height: windowState.height,
 
     titleBarStyle: 'hidden',
-    title: 'My Wallet',
+    title: APP_NAME,
     frame: false,
 
     webPreferences: {

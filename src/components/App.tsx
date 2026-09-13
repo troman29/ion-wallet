@@ -8,8 +8,7 @@ import {
   APP_NAME,
   INACTIVE_MARKER,
   IS_ANDROID_DIRECT,
-  IS_EXPLORER,
-  IS_GRAM_WALLET,
+  IS_CAPACITOR,
 } from '../config';
 import { selectCurrentAccountId, selectCurrentAccountSettings, selectCurrentAccountState } from '../global/selectors';
 import { useAccentColor } from '../util/accentColor';
@@ -36,8 +35,6 @@ import useInterval from '../hooks/useInterval';
 import useSyncEffect from '../hooks/useSyncEffect';
 import useTimeout from '../hooks/useTimeout';
 
-import Agent from './agent/AgentRuntime';
-import AgentV2HostContextBridgeRuntime from './agent/AgentV2HostContextBridgeRuntime';
 import AppEmpty from './AppEmpty';
 import AppInactive from './AppInactive';
 import AppLocked from './appLocked/AppLocked';
@@ -54,8 +51,7 @@ import LedgerModal from './ledger/LedgerModal';
 import Main from './main/Main';
 import BackupModal from './main/modals/BackupModal';
 import NftAttributesModal from './main/modals/NftAttributesModal';
-import OffRampWidgetModal from './main/modals/OffRampWidgetModal';
-import OnRampWidgetModal from './main/modals/OnRampWidgetModal';
+import QrScannerModal from './main/modals/QrScannerModal';
 import ReportNftModal from './main/modals/ReportNftModal';
 import SignatureModal from './main/modals/SignatureModal';
 import UnhideNftModal from './main/modals/UnhideNftModal';
@@ -63,13 +59,12 @@ import BottomBar from './main/sections/Actions/BottomBar';
 import Toasts from './main/Toasts';
 import WalletRenameModal from './main/WalletRenameModal';
 import MediaViewer from './mediaViewer/MediaViewer';
-import MintCardModal from './mintCard/MintCardModal';
-import Portfolio from './portfolio/Portfolio';
 import Settings from './settings/Settings';
 import SwapModal from './swap/SwapModal';
 import TokenInfo from './tokenInfo/TokenInfo';
 import TransferModal from './transfer/TransferModal';
 import ConfettiContainer from './ui/ConfettiContainer';
+import InAppBrowser from './ui/InAppBrowser';
 import LoadingOverlay from './ui/LoadingOverlay';
 import Transition from './ui/Transition';
 import WalletConnectPayDataCollectionModal from './walletConnectPay/WalletConnectPayDataCollectionModal';
@@ -83,11 +78,10 @@ interface StateProps {
   appState: AppState;
   accountId?: string;
   isBackupWalletModalOpen?: boolean;
+  isQrScannerOpen?: boolean;
   isHardwareModalOpen?: boolean;
   isCustomizeWalletModalOpen?: boolean;
-  isAgentOpen?: boolean;
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
   currentTokenSlug?: string;
   isFullscreen: boolean;
   areSettingsOpen?: boolean;
@@ -97,7 +91,7 @@ interface StateProps {
 }
 
 const APP_STATES_WITH_BOTTOM_BAR = new Set([
-  AppState.Main, AppState.Agent, AppState.Settings, AppState.Explore, AppState.TokenInfo,
+  AppState.Main, AppState.Settings, AppState.Explore, AppState.TokenInfo,
 ]);
 const APP_UPDATE_INTERVAL = (IS_ELECTRON && !IS_LINUX) || IS_ANDROID_DIRECT
   ? 5 * MINUTE
@@ -113,9 +107,8 @@ function App({
   isBackupWalletModalOpen,
   isHardwareModalOpen,
   isCustomizeWalletModalOpen,
-  isAgentOpen,
+  isQrScannerOpen,
   isExploreOpen,
-  isPortfolioOpen,
   currentTokenSlug,
   isFullscreen,
   areSettingsOpen,
@@ -128,6 +121,7 @@ function App({
     closeHardwareWalletModal,
     closeSettings,
     cancelCaching,
+    closeQrScanner,
     checkAppVersion,
   } = getActions();
 
@@ -137,9 +131,9 @@ function App({
   const [canPrerenderMain, prerenderMain] = useFlag();
 
   const renderingKey = resolveRenderingKey({
-    isInactive, areSettingsOpen, isAgentOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
+    isInactive, areSettingsOpen, isExploreOpen, currentTokenSlug, isPortrait, appState,
   });
-  const withBottomBar = isPortrait && (!IS_EXPLORER || isAppReady) && APP_STATES_WITH_BOTTOM_BAR.has(renderingKey);
+  const withBottomBar = isPortrait && APP_STATES_WITH_BOTTOM_BAR.has(renderingKey);
   // Screens sharing the bottom bar are sibling tabs, so they cross-fade into each other. The token
   // screen is the exception: the bar stays visible, but the transition slides in.
   const withSlide = isPortrait && (!withBottomBar || renderingKey === AppState.TokenInfo);
@@ -150,8 +144,7 @@ function App({
     renderingKey === AppState.Auth && !canPrerenderMain ? PRERENDER_MAIN_DELAY : undefined,
   );
 
-  // Gram Wallet Web is deployed to a domain we do not own and has no store presence, so there is no version to nag about
-  useInterval(checkAppVersion, IS_GRAM_WALLET ? undefined : APP_UPDATE_INTERVAL);
+  useInterval(checkAppVersion, APP_UPDATE_INTERVAL);
 
   useEffect(() => {
     document.documentElement.classList.toggle('with-bottombar', withBottomBar);
@@ -220,14 +213,10 @@ function App({
           </Transition>
         );
       }
-      case AppState.Agent:
-        return <Agent isActive={isActive} />;
       case AppState.Explore:
         return <Explore isActive={isActive} />;
       case AppState.Settings:
         return <Settings isActive={isActive} />;
-      case AppState.Portfolio:
-        return <Portfolio isActive={isActive} />;
       case AppState.TokenInfo:
         return <TokenInfo isActive={isActive} />;
       case AppState.Ledger:
@@ -241,7 +230,6 @@ function App({
 
   return (
     <>
-      <AgentV2HostContextBridgeRuntime />
       {IS_ELECTRON && <ElectronHeader withTitle />}
 
       <Transition
@@ -269,7 +257,6 @@ function App({
           />
           <TransferModal />
           <SwapModal />
-          <MintCardModal />
           <CustomizeWalletModal isOpen={isCustomizeWalletModalOpen} />
           <SignatureModal />
           <TransactionModal />
@@ -278,19 +265,23 @@ function App({
           <DappConnectModal />
           <DappSignDataModal />
           <DappTransferModal />
-          <OnRampWidgetModal />
-          <OffRampWidgetModal />
           <WalletConnectPayModal />
           <WalletConnectPayOptionSelectionModal />
           <WalletConnectPayDataCollectionModal />
           <UnhideNftModal />
           <ReportNftModal />
           <NftAttributesModal />
+          {IS_CAPACITOR && (
+            <QrScannerModal
+              isOpen={isQrScannerOpen}
+              onClose={closeQrScanner}
+            />
+          )}
           <Toasts />
           <WalletRenameModal />
           <Dialogs />
           <ConfettiContainer />
-          <IFrameBrowser />
+          {IS_CAPACITOR ? <InAppBrowser /> : <IFrameBrowser />}
           <LoadingOverlay />
         </>
       )}
@@ -306,11 +297,10 @@ export default memo(withGlobal((global): StateProps => {
     isBackupWalletModalOpen: global.isBackupWalletModalOpen,
     isHardwareModalOpen: global.isHardwareModalOpen,
     isCustomizeWalletModalOpen: global.isCustomizeWalletModalOpen,
-    isAgentOpen: global.isAgentOpen,
     isExploreOpen: global.isExploreOpen,
-    isPortfolioOpen: global.isPortfolioOpen,
     currentTokenSlug: selectCurrentAccountState(global)?.currentTokenSlug,
     areSettingsOpen: global.areSettingsOpen,
+    isQrScannerOpen: global.isQrScannerOpen,
     isFullscreen: Boolean(global.isFullscreen),
     theme: global.settings.theme,
     accentColorIndex: selectCurrentAccountSettings(global)?.accentColorIndex,
@@ -319,22 +309,18 @@ export default memo(withGlobal((global): StateProps => {
 })(App));
 
 function resolveRenderingKey({
-  isInactive, areSettingsOpen, isAgentOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
+  isInactive, areSettingsOpen, isExploreOpen, currentTokenSlug, isPortrait, appState,
 }: {
   isInactive: boolean;
   areSettingsOpen?: boolean;
-  isAgentOpen?: boolean;
   isExploreOpen?: boolean;
-  isPortfolioOpen?: boolean;
   currentTokenSlug?: string;
   isPortrait: boolean;
   appState: AppState;
 }) {
   if (isInactive) return AppState.Inactive;
   if (areSettingsOpen && isPortrait) return AppState.Settings;
-  if (isAgentOpen && isPortrait) return AppState.Agent;
   if (isExploreOpen && isPortrait) return AppState.Explore;
-  if (isPortfolioOpen && isPortrait) return AppState.Portfolio;
   // In landscape the token screen lives inside the main content, next to the wallet overview
   if (currentTokenSlug && isPortrait && appState === AppState.Main) return AppState.TokenInfo;
   return appState;

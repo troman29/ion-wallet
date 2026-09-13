@@ -11,7 +11,7 @@ import type {
 } from '../types';
 import { AuthState } from '../types';
 
-import { POPULAR_WALLET_VERSIONS } from '../../config';
+import { POPULAR_WALLET_VERSIONS, TOKEN_NAME_OVERRIDES } from '../../config';
 import { generateAccountTitle } from '../../util/account';
 import { getDefaultEnabledSlugs } from '../../util/chain';
 import { getIsDefaultChainDisplayConfiguration } from '../../util/chainDisplay';
@@ -214,13 +214,10 @@ export function updateBalances(
   const importedSlugs = selectAccountSettings(global, accountId)?.importedSlugs ?? [];
   const network = selectCurrentNetwork(global);
 
-  // Initialize all default tokens with 0n if not yet set, across all chains.
-  // This ensures tokens from chains whose first balance fetch hasn't completed yet are still visible.
-  //
-  // For example: inactive (new) Solana wallets are never polled - BalanceStream skips fetching entirely
-  // once the wallet is determined to be inactive. So, it is necessary to initialize Solana tokens to 0n
-  // until the wallet receives its first transaction and becomes active.
-  // This is why all default tokens are initialized in this place.
+  // Seed every default token at zero so they stay on screen before the first balance fetch returns -
+  // an inactive wallet is never polled at all, so without this it would show nothing. The account may
+  // not be in the global state yet when its first balances arrive, so this cannot narrow by its
+  // chains; `selectAccountTokens` does that instead, where the account is known.
   for (const slug of getDefaultEnabledSlugs(network)) {
     if (!(slug in newBalances)) {
       newBalances[slug] = 0n;
@@ -260,6 +257,8 @@ export function updateTokens(
 ): GlobalState {
   const existingTokens = global.tokenInfo?.bySlug;
 
+  partial = applyTokenNameOverrides(partial);
+
   if (shouldPreservePrices) {
     partial = Object.values(partial).reduce((result, token) => {
       const existingToken = existingTokens?.[token.slug];
@@ -286,6 +285,22 @@ export function updateTokens(
         ...partial,
       },
     },
+  };
+}
+
+function applyTokenNameOverrides(tokens: Record<string, ApiTokenWithPrice>) {
+  const overridden = Object.entries(tokens).filter(([slug]) => slug in TOKEN_NAME_OVERRIDES);
+  if (!overridden.length) return tokens;
+
+  return {
+    ...tokens,
+    // `localizedName` goes with them: it is the backend's own translation of the old name, and it
+    // wins over `name` wherever token names are localized
+    ...Object.fromEntries(overridden.map(([slug, token]) => [slug, {
+      ...token,
+      ...TOKEN_NAME_OVERRIDES[slug],
+      localizedName: undefined,
+    }])),
   };
 }
 
@@ -375,18 +390,16 @@ export function updateRemoveMfa(global: GlobalState, mfaUpdate: Partial<GlobalSt
   } as GlobalState;
 }
 
-export type OpenableSection = 'settings' | 'agent' | 'explore' | 'portfolio';
+export type OpenableSection = 'settings' | 'explore';
 
-// Settings, Agent, Explore and Portfolio are mutually exclusive full-screen sections.
+// Settings and Explore are mutually exclusive full-screen sections.
 // Opening one must close the others - otherwise their flags stack and the lower-priority
 // view (see `getActiveKey` in LandscapeLayout / `getAppState` in App) silently stays hidden.
 export function openSection(global: GlobalState, section: OpenableSection): GlobalState {
   return {
     ...global,
     areSettingsOpen: section === 'settings',
-    isAgentOpen: section === 'agent' || undefined,
     isExploreOpen: section === 'explore' || undefined,
-    isPortfolioOpen: section === 'portfolio' || undefined,
   };
 }
 

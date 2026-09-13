@@ -11,10 +11,7 @@ import {
   DEFAULT_SWAP_AMOUNT,
   DEFAULT_SWAP_FIRST_TOKEN_SLUG,
   DEFAULT_SWAP_SECOND_TOKEN_SLUG,
-  IS_EXPLORER,
   TONCOIN,
-  TRC20_USDT_MAINNET,
-  TRX,
 } from '../../config';
 import {
   selectAccountTokenBySlug,
@@ -58,9 +55,6 @@ export const enum DeeplinkCommand {
   CheckinWithR = 'r',
   Swap = 'swap',
   BuyWithCrypto = 'buy-with-crypto',
-  BuyWithCard = 'buy-with-card',
-  SellOnCard = 'sell-on-card',
-  Offramp = 'offramp',
   Stake = 'stake',
   Transfer = 'transfer',
   Send = 'send',
@@ -70,17 +64,8 @@ export const enum DeeplinkCommand {
   Token = 'token',
   Transaction = 'tx',
   Nft = 'nft',
-  Portfolio = 'portfolio',
-  Agent = 'agent',
   Settings = 'settings',
 }
-
-const EXPLORER_ALLOWED_COMMANDS = new Set([
-  DeeplinkCommand.View,
-  DeeplinkCommand.Transaction,
-  DeeplinkCommand.Nft,
-  DeeplinkCommand.Portfolio,
-]);
 
 const SETTINGS_SECTION_MAP: Record<string, SettingsState> = {
   appearance: SettingsState.Appearance,
@@ -101,8 +86,6 @@ const VIEW_MODE_ALLOWED_COMMANDS = new Set([
   DeeplinkCommand.Token,
   DeeplinkCommand.Transaction,
   DeeplinkCommand.Nft,
-  DeeplinkCommand.Portfolio,
-  DeeplinkCommand.Agent,
 ]);
 
 const OPEN_IN_NATIVE_DELAY_MS = 2000;
@@ -147,7 +130,6 @@ export async function openDeeplinkOrUrl(
 ) {
   if (
     isTonDeeplink(url)
-    || isTronDeeplink(url)
     || isTonConnectDeeplink(url)
     || isWalletConnectDeeplink(url)
     || isPaymentLink(url)
@@ -182,14 +164,6 @@ export function processDeeplink(url: string, isFromInAppBrowser = false): Promis
 
   if (isSelfDeeplink(url)) {
     return processSelfDeeplink(url, isFromInAppBrowser);
-  }
-
-  if (url.startsWith('tether:')) {
-    return processTronTetherDeeplink(url);
-  }
-
-  if (url.startsWith('tron:')) {
-    return processTronDeeplink(url);
   }
 
   return processTonDeeplink(url);
@@ -237,10 +211,6 @@ export function tryOpenNativeApp(fallbackUrl: string) {
 
 export function isTonDeeplink(url: string) {
   return url.startsWith(TON_PROTOCOL);
-}
-
-export function isTronDeeplink(url: string) {
-  return url.startsWith('tron:') || url.startsWith('tether:');
 }
 
 // Generic handler for transfer deeplinks
@@ -292,14 +262,6 @@ async function processTonDeeplink(url: string): Promise<boolean> {
   }
 
   return processTransferDeeplink((global) => parseTonDeeplink(url, global));
-}
-
-async function processTronDeeplink(url: string): Promise<boolean> {
-  return processTransferDeeplink((global) => parseTronDeeplinkForTrx(url, global));
-}
-
-async function processTronTetherDeeplink(url: string): Promise<boolean> {
-  return processTransferDeeplink((global) => parseTronTetherDeeplink(url, global));
 }
 
 // Handles mtw://send/{chain}:{address}?amount=...&token=...&text=...
@@ -460,70 +422,6 @@ export function parseTonDeeplink(url: string, global: GlobalState) {
   }
 
   return omitUndefined(transferParams);
-}
-
-function parseTronDeeplink(
-  url: string,
-  global: GlobalState,
-  getTokenSlug: (global: GlobalState) => string | undefined,
-  decimals: number,
-) {
-  const params = rawParseTronDeeplink(url);
-  if (!params) return undefined;
-
-  const {
-    toAddress, amount, hasUnsupportedParams,
-  } = params;
-
-  const verifiedAddress = isValidAddressOrDomain(toAddress, 'tron') ? toAddress : undefined;
-  const tokenSlug = getTokenSlug(global);
-
-  const transferParams: NonNullable<ActionPayloads['startTransfer']> & { error?: string } = {
-    toAddress: verifiedAddress,
-    tokenSlug,
-    amount: amount ? fromDecimal(amount, decimals) : undefined,
-  };
-
-  if (hasUnsupportedParams) {
-    transferParams.error = '$unsupported_deeplink_parameter';
-  }
-
-  return omitUndefined(transferParams);
-}
-
-function parseTronDeeplinkForTrx(url: string, global: GlobalState) {
-  return parseTronDeeplink(url, global, () => TRX.slug, TRX.decimals);
-}
-
-function parseTronTetherDeeplink(url: string, global: GlobalState) {
-  const { isTestnet } = global.settings;
-  const network: ApiNetwork = isTestnet ? 'testnet' : 'mainnet';
-  const { usdtSlug } = getChainConfig('tron');
-  const getTokenSlug = () => usdtSlug[network];
-
-  return parseTronDeeplink(url, global, getTokenSlug, TRC20_USDT_MAINNET.decimals);
-}
-
-function rawParseTronDeeplink(value: string) {
-  try {
-    const withoutScheme = value.replace(/^(tron|tether):/, '');
-    const [addressPart, queryPart] = withoutScheme.split('?');
-    const toAddress = addressPart ?? '';
-
-    const searchParams = new URLSearchParams(queryPart ?? '');
-    const amount = searchParams.get('amount') ?? undefined;
-
-    const urlParams = Array.from(searchParams.keys());
-    const hasUnsupportedParams = urlParams.some((param) => param !== 'amount');
-
-    return {
-      toAddress,
-      amount,
-      hasUnsupportedParams,
-    };
-  } catch (err) {
-    return undefined;
-  }
 }
 
 function rawParseTonDeeplink(value?: string) {
@@ -692,12 +590,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
 
     logDebug('Processing deeplink', deeplink);
 
-    // In explorer mode, only allow `View`, `Nft`, `Portfolio` and `Transaction` commands
-    if (IS_EXPLORER && !EXPLORER_ALLOWED_COMMANDS.has(command as DeeplinkCommand)) {
-      actions.showError({ error: 'This action is not supported in explorer mode.' });
-      return false;
-    }
-
     if (selectIsCurrentAccountViewMode(global) && !VIEW_MODE_ALLOWED_COMMANDS.has(command as DeeplinkCommand)) {
       actions.showError({ error: '$action_not_available_view_mode' });
       return false;
@@ -754,89 +646,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
             amountIn: toNumberOrEmptyString(searchParams.get('amount')) || defaultBuySwap!.amountIn,
           });
         }
-        return true;
-      }
-
-      case DeeplinkCommand.BuyWithCard: {
-        if (isTestnet) {
-          actions.showError({ error: 'Buying with card is not supported in Testnet.' });
-        } else {
-          actions.openOnRampWidgetModal({ chain: 'ton' });
-        }
-        return true;
-      }
-
-      case DeeplinkCommand.SellOnCard: {
-        if (isTestnet) {
-          actions.showError({ error: 'Selling to card is not supported in Testnet.' });
-        } else {
-          actions.openOffRampWidgetModal();
-        }
-        return true;
-      }
-
-      case DeeplinkCommand.Offramp: {
-        if (isFromInAppBrowser) {
-          actions.showError({ error: '$unsupported_deeplink_parameter' });
-          return true;
-        }
-
-        const transactionId = searchParams.get('transactionId') ?? undefined;
-        const baseCurrencyCode = searchParams.get('baseCurrencyCode') ?? undefined;
-        const baseCurrencyAmount = searchParams.get('baseCurrencyAmount') ?? undefined;
-        const depositWalletAddress = searchParams.get('depositWalletAddress') ?? undefined;
-        const depositWalletAddressTag = searchParams.get('depositWalletAddressTag') ?? undefined;
-
-        logDebug('Processing offramp deeplink', {
-          transactionId,
-          baseCurrencyCode,
-          baseCurrencyAmount,
-          depositWalletAddress,
-          depositWalletAddressTag,
-        });
-
-        if (!depositWalletAddress) {
-          actions.showError({ error: '$missing_offramp_deposit_address' });
-          return false;
-        }
-
-        const mapping = getOfframpTokenMapping(baseCurrencyCode, global);
-
-        if (!mapping) {
-          actions.showError({ error: '$unsupported_deeplink_parameter' });
-          return false;
-        }
-
-        let amount: bigint | undefined;
-
-        if (baseCurrencyAmount) {
-          try {
-            const tokenInfo = global.tokenInfo.bySlug[mapping.tokenSlug];
-            const decimals = tokenInfo?.decimals;
-
-            if (decimals !== undefined) {
-              amount = fromDecimal(baseCurrencyAmount, decimals);
-            }
-          } catch (err) {
-            logDebugError('processSelfDeeplinkOfframpAmount', err);
-          }
-        }
-
-        actions.addSavedAddress({
-          address: depositWalletAddress,
-          name: 'MoonPay Off-Ramp',
-          chain: mapping.chain,
-        });
-
-        actions.startTransfer({
-          tokenSlug: mapping.tokenSlug,
-          toAddress: depositWalletAddress,
-          comment: depositWalletAddressTag ?? undefined,
-          amount,
-          isTransferReadonly: true,
-          isOfframp: true,
-        });
-
         return true;
       }
 
@@ -943,7 +752,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
           }
         });
 
-        if (evmAddress && isValidAddressOrDomain(evmAddress, 'ethereum')) {
+        if (evmAddress && getEvmChains().some((chain) => isValidAddressOrDomain(evmAddress, chain))) {
           getEvmChains().forEach((chain) => {
             addressByChain[chain] ??= evmAddress;
           });
@@ -1011,7 +820,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         }
 
         const { network } = ensureNetwork(searchParams, currentNetwork);
-        const shouldOpenViewAccount = IS_EXPLORER || network !== currentNetwork;
+        const shouldOpenViewAccount = network !== currentNetwork;
 
         const activities = await callApi('fetchTransactionById', {
           chain,
@@ -1045,11 +854,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         return true;
       }
 
-      case DeeplinkCommand.Agent: {
-        actions.switchToAgent();
-        return true;
-      }
-
       case DeeplinkCommand.Settings: {
         const currentAccountId = selectCurrentAccountId(global);
         if (!currentAccountId) return false;
@@ -1080,11 +884,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         return true;
       }
 
-      case DeeplinkCommand.Portfolio: {
-        getActions().switchToPortfolio();
-        return true;
-      }
-
       case DeeplinkCommand.Nft: {
         // Format: mtw://nft/{nftAddress}
         const pathParts = pathname.split('/');
@@ -1093,7 +892,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         if (!nftAddress) return false;
 
         const { network } = ensureNetwork(searchParams, currentNetwork);
-        const shouldOpenViewAccount = IS_EXPLORER || network !== currentNetwork;
+        const shouldOpenViewAccount = network !== currentNetwork;
 
         const nft = await callApi('fetchNftByAddress', 'ton', network, nftAddress);
 
@@ -1179,34 +978,6 @@ function ensureNetwork(searchParams: URLSearchParams, currentNetwork: ApiNetwork
   };
 }
 
-function getOfframpTokenMapping(
-  baseCurrencyCode: string | undefined,
-  global: GlobalState,
-) {
-  if (!baseCurrencyCode) {
-    return undefined;
-  }
-
-  const normalizedCode = baseCurrencyCode.toLowerCase();
-
-  if (normalizedCode === 'ton' || normalizedCode === 'toncoin') {
-    return {
-      chain: 'ton' as ApiChain,
-      tokenSlug: TONCOIN.slug,
-    };
-  }
-
-  const tokenBySlug = global.tokenInfo.bySlug[normalizedCode];
-  if (tokenBySlug) {
-    return {
-      chain: tokenBySlug.chain,
-      tokenSlug: tokenBySlug.slug,
-    };
-  }
-
-  return undefined;
-}
-
 /**
  * Parses a deeplink and checks whether the transfer can be initiated.
  * See `parseTonDeeplink` for information about the returned values.
@@ -1242,14 +1013,6 @@ export function parseDeeplinkTransferParams(url: string, global: GlobalState) {
     }
 
     return parseTonDeeplink(tonDeeplink, global);
-  }
-
-  if (url.startsWith('tron:')) {
-    return parseTronDeeplinkForTrx(url, global);
-  }
-
-  if (url.startsWith('tether:')) {
-    return parseTronTetherDeeplink(url, global);
   }
 
   return undefined;

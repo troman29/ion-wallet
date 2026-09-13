@@ -424,20 +424,20 @@ describe('fetchSwaps', () => {
     fetchStoredAccount.mockResolvedValue({
       byChain: {
         ton: { address: 'EQ-ton-history-owner' },
-        solana: { address: 'solana-source-wallet' },
+        bnb: { address: '0x-bnb-source-wallet' },
       },
     });
     swapGetHistoryItem.mockResolvedValue({
       id: 'swap-id',
       timestamp: 1,
-      from: 'sol',
-      to: 'solana-usdc',
+      from: 'bnb',
+      to: 'bnb-usdc',
       fromAmount: '1',
       toAmount: '2',
       networkFee: '0.01',
       swapFee: '0',
       status: 'completed',
-      hashes: ['solana-signature'],
+      hashes: ['bnb-tx-hash'],
       cex: {
         payinAddress: 'payin-address',
         payoutAddress: 'payout-address',
@@ -459,15 +459,15 @@ describe('fetchSwaps', () => {
     }));
   });
 
-  it('uses TON owner address for Solana chain-hinted backend swap history lookup', async () => {
-    const result = await fetchSwaps('0-mainnet', [{ id: 'swap-id', chain: 'solana' }]);
+  it('looks the backend swap history up under the address of the hinted chain', async () => {
+    const result = await fetchSwaps('0-mainnet', [{ id: 'swap-id', chain: 'bnb' }]);
 
-    expect(swapGetHistoryItem).toHaveBeenCalledWith('EQ-ton-history-owner', 'swap-id', {});
-    expect(swapGetHistoryItem).not.toHaveBeenCalledWith('solana-source-wallet', 'swap-id', {});
+    expect(swapGetHistoryItem).toHaveBeenCalledWith('0x-bnb-source-wallet', 'swap-id', {});
+    expect(swapGetHistoryItem).not.toHaveBeenCalledWith('EQ-ton-history-owner', 'swap-id', {});
     expect(rememberActiveCexSwaps).toHaveBeenCalledWith(
-      '0-mainnet', [expect.objectContaining({ id: 'solana:swap-id' })],
+      '0-mainnet', [expect.objectContaining({ id: 'bnb:swap-id' })],
     );
-    expect(result.swaps).toEqual([expect.objectContaining({ id: 'solana:swap-id' })]);
+    expect(result.swaps).toEqual([expect.objectContaining({ id: 'bnb:swap-id' })]);
   });
 
   it('passes force provider refresh option to backend history item lookup', async () => {

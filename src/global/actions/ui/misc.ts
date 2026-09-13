@@ -1,22 +1,31 @@
+import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+
 import type { GlobalState } from '../../types';
 import {
   AppState,
   AuthState,
   ContentTab,
+  DomainLinkingState,
   SettingsState,
+  SwapState,
   TransactionInfoState,
+  TransferState,
 } from '../../types';
 
 import {
   ANIMATION_LEVEL_MIN,
   APP_VERSION,
+  BETA_URL,
   BOT_USERNAME,
   DEBUG,
+  IS_PRODUCTION,
+  PRODUCTION_URL,
 } from '../../../config';
 import { parseNotificationTxId } from '../../../util/activities';
 import { getDoesUsePinPad } from '../../../util/biometrics';
 import {
   openDeeplinkOrUrl,
+  parseDeeplinkTransferParams,
   processDeeplink,
 } from '../../../util/deeplink';
 import getIsAppUpdateNeeded from '../../../util/getIsAppUpdateNeeded';
@@ -28,6 +37,7 @@ import { openUrl } from '../../../util/openUrl';
 import { getTelegramApp } from '../../../util/telegram';
 import {
   getIsMobileTelegramApp,
+  IS_ANDROID_APP,
   IS_ELECTRON,
 } from '../../../util/windowEnvironment';
 import { callApi } from '../../../api';
@@ -39,11 +49,15 @@ import {
   clearIsPinAccepted,
   openSection,
   renameAccount,
+  setCurrentTransferAddress,
   setIsPinAccepted,
   updateAccounts,
   updateAuth,
   updateCurrentAccountState,
+  updateCurrentDomainLinking,
+  updateCurrentSwap,
   updateCurrentTransactionInfo,
+  updateCurrentTransfer,
   updateDappConnectRequest,
   updateSettings,
 } from '../../reducers';
@@ -52,16 +66,13 @@ import {
   selectCurrentAccountId,
   selectCurrentAccountState,
   selectCurrentNetwork,
-  selectDefaultOffRampChain,
   selectHasPassword,
-  selectIsOffRampAllowed,
-  selectIsOnRampAllowed,
 } from '../../selectors';
 import { switchAccount } from '../api/auth';
 
 import { closeModal } from '../../../components/ui/Modal';
 
-const APP_VERSION_URL = 'version.txt';
+const APP_VERSION_URL = IS_ANDROID_APP ? `${IS_PRODUCTION ? PRODUCTION_URL : BETA_URL}/version.txt` : 'version.txt';
 
 addActionHandler('showActivityInfo', (global, actions, { id }) => {
   return updateCurrentAccountState(global, { currentActivityId: id });
@@ -519,7 +530,7 @@ addActionHandler('requestConfetti', (global) => {
   };
 });
 
-addActionHandler('requestOpenQrScanner', (global, actions) => {
+addActionHandler('requestOpenQrScanner', async (global, actions) => {
   if (getIsMobileTelegramApp()) {
     const webApp = getTelegramApp();
     webApp?.showScanQrPopup({}, (data) => {
@@ -527,10 +538,77 @@ addActionHandler('requestOpenQrScanner', (global, actions) => {
       webApp.closeScanQrPopup();
       actions.handleQrCode({ data });
     });
+    return;
   }
+
+  let currentQrScan: GlobalState['currentQrScan'];
+  if (global.currentTransfer.state === TransferState.Initial) {
+    currentQrScan = { currentTransfer: global.currentTransfer };
+  } else if (global.currentSwap.state === SwapState.Blockchain) {
+    currentQrScan = { currentSwap: global.currentSwap };
+  } else if (global.currentDomainLinking.state === DomainLinkingState.Initial) {
+    currentQrScan = { currentDomainLinking: global.currentDomainLinking };
+  }
+
+  const { camera } = await BarcodeScanner.requestPermissions();
+  const isGranted = camera === 'granted' || camera === 'limited';
+  if (!isGranted) {
+    actions.showToast({
+      message: getTranslation('Permission denied. Please grant camera permission to use the QR code scanner.'),
+    });
+    return;
+  }
+
+  global = getGlobal();
+  global = {
+    ...global,
+    isQrScannerOpen: true,
+    currentQrScan,
+  };
+
+  setGlobal(global);
+});
+
+addActionHandler('closeQrScanner', (global) => {
+  return {
+    ...global,
+    isQrScannerOpen: undefined,
+    currentQrScan: undefined,
+  };
 });
 
 addActionHandler('handleQrCode', async (global, actions, { data }) => {
+  const { currentTransfer, currentSwap, currentDomainLinking } = global.currentQrScan || {};
+
+  if (currentTransfer) {
+    const transferParams = parseDeeplinkTransferParams(data, global);
+    if (transferParams) {
+      if ('error' in transferParams) {
+        actions.showError({ error: transferParams.error });
+        // Not returning on error is intentional
+      }
+      setGlobal(updateCurrentTransfer(global, {
+        ...currentTransfer,
+        ...omit(transferParams, ['error']),
+      }));
+    } else {
+      // Assuming that the QR code content is a plain wallet address
+      setGlobal(setCurrentTransferAddress(updateCurrentTransfer(global, currentTransfer), data));
+    }
+    return;
+  }
+
+  if (currentSwap || currentDomainLinking) {
+    const linkParams = parseDeeplinkTransferParams(data, global);
+    const toAddress = linkParams?.toAddress ?? data;
+    if (currentSwap) {
+      setGlobal(updateCurrentSwap(global, { ...currentSwap, toAddress }));
+    } else {
+      setGlobal(updateCurrentDomainLinking(global, { ...currentDomainLinking, walletAddress: toAddress }));
+    }
+    return;
+  }
+
   if (await processDeeplink(data)) {
     return;
   }
@@ -561,29 +639,6 @@ addActionHandler('setIsPinAccepted', (global) => {
 
 addActionHandler('clearIsPinAccepted', (global) => {
   return clearIsPinAccepted(global);
-});
-
-addActionHandler('openOnRampWidgetModal', (global, actions, { chain }) => {
-  // Single choke point for every dispatch site, including deeplinks and menu items with no gate of their own
-  if (!selectIsOnRampAllowed(global, chain)) return;
-
-  setGlobal({ ...global, chainForOnRampWidgetModal: chain });
-});
-
-addActionHandler('closeOnRampWidgetModal', (global) => {
-  setGlobal({ ...global, chainForOnRampWidgetModal: undefined });
-});
-
-addActionHandler('openOffRampWidgetModal', (global) => {
-  const chain = selectDefaultOffRampChain(global);
-
-  if (!selectIsOffRampAllowed(global, chain)) return;
-
-  setGlobal({ ...global, chainForOffRampWidgetModal: chain });
-});
-
-addActionHandler('closeOffRampWidgetModal', (global) => {
-  setGlobal({ ...global, chainForOffRampWidgetModal: undefined });
 });
 
 addActionHandler('openMediaViewer', (global, actions, {
@@ -685,64 +740,26 @@ addActionHandler('openExplore', (global) => {
   return openSection(global, 'explore');
 });
 
-addActionHandler('openAgent', (global) => {
-  return openSection(global, 'agent');
-});
-
-addActionHandler('closeAgent', (global) => {
-  return { ...global, isAgentOpen: undefined };
-});
-
-addActionHandler('setAgentMeta', (global, actions, payload) => {
-  return { ...global, agentMeta: { ...global.agentMeta, ...payload } };
-});
-
-addActionHandler('setAgentHints', (global, actions, { hints }) => {
-  return { ...global, agentHints: hints };
-});
-
 addActionHandler('closeExplore', (global) => {
   return { ...global, isExploreOpen: undefined };
-});
-
-addActionHandler('openPortfolio', (global, actions, payload) => {
-  return { ...openSection(global, 'portfolio'), portfolioReturnTo: payload?.returnTo };
-});
-
-addActionHandler('closePortfolio', (global, actions) => {
-  const { portfolioReturnTo } = global;
-
-  if (portfolioReturnTo === 'settings') {
-    actions.openSettings();
-  }
-
-  const nextGlobal = { ...global, isPortfolioOpen: undefined, portfolioReturnTo: undefined };
-
-  // `switchToPortfolio` parks the landscape content tab on `Portfolio`; restore a real tab on close
-  // so the content area isn't left frozen, and the persisted value doesn't get stuck
-  if (selectCurrentAccountState(nextGlobal)?.activeContentTab === ContentTab.Portfolio) {
-    return updateCurrentAccountState(nextGlobal, { activeContentTab: ContentTab.Overview });
-  }
-
-  return nextGlobal;
 });
 
 addActionHandler('openFullscreen', (global) => {
   setGlobal({ ...global, isFullscreen: true });
 
-  vibrate();
+  void vibrate();
 });
 
 addActionHandler('closeFullscreen', (global) => {
   setGlobal({ ...global, isFullscreen: undefined });
 
-  vibrate();
+  void vibrate();
 });
 
 addActionHandler('setIsSensitiveDataHidden', (global, actions, { isHidden }) => {
   setGlobal(updateSettings(global, { isSensitiveDataHidden: isHidden ? true : undefined }));
 
-  vibrate();
+  void vibrate();
 });
 
 addActionHandler('setIsAppLockActive', (global, actions, { isActive }) => {
@@ -761,38 +778,18 @@ addActionHandler('switchAccountAndOpenUrl', async (global, actions, payload) => 
 });
 
 addActionHandler('switchToWallet', (global: GlobalState, actions) => {
-  const {
-    areSettingsOpen, isAgentOpen, isExploreOpen, isPortfolioOpen,
-  } = global;
+  const { areSettingsOpen, isExploreOpen } = global;
   const accountState = selectCurrentAccountState(global);
   const areAssetsActive = accountState?.activeContentTab === ContentTab.Assets;
-  const isWalletTabActive = !isAgentOpen && !isExploreOpen && !areSettingsOpen && !isPortfolioOpen;
+  const isWalletTabActive = !isExploreOpen && !areSettingsOpen;
 
-  setGlobal({ ...global, portfolioReturnTo: undefined });
-
-  actions.closeAgent(undefined, { forceOnHeavyAnimation: true });
   actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
   actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
 
   if (!areAssetsActive && isWalletTabActive) {
     actions.selectToken({ slug: undefined }, { forceOnHeavyAnimation: true });
     actions.setActiveContentTab({ tab: ContentTab.Assets }, { forceOnHeavyAnimation: true });
   }
-});
-
-addActionHandler('switchToAgent', (global: GlobalState, actions) => {
-  const { isAgentOpen } = global;
-
-  if (isAgentOpen) return;
-
-  setGlobal({ ...global, portfolioReturnTo: undefined });
-
-  actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
-  actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
-  actions.openAgent(undefined, { forceOnHeavyAnimation: true });
-  actions.setActiveContentTab({ tab: ContentTab.Agent }, { forceOnHeavyAnimation: true });
 });
 
 addActionHandler('switchToExplore', (global: GlobalState, actions) => {
@@ -802,31 +799,13 @@ addActionHandler('switchToExplore', (global: GlobalState, actions) => {
     actions.closeSiteCategory(undefined, { forceOnHeavyAnimation: true });
   }
 
-  setGlobal({ ...global, portfolioReturnTo: undefined });
-
-  actions.closeAgent(undefined, { forceOnHeavyAnimation: true });
   actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
   actions.openExplore(undefined, { forceOnHeavyAnimation: true });
 });
 
 addActionHandler('switchToSettings', (global: GlobalState, actions) => {
-  actions.closeAgent(undefined, { forceOnHeavyAnimation: true });
   actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
-  actions.closePortfolio(undefined, { forceOnHeavyAnimation: true });
   actions.openSettings(undefined, { forceOnHeavyAnimation: true });
-});
-
-addActionHandler('switchToPortfolio', (global: GlobalState, actions) => {
-  const { isPortfolioOpen } = global;
-
-  if (isPortfolioOpen) return;
-
-  actions.closeAgent(undefined, { forceOnHeavyAnimation: true });
-  actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
-  actions.closeSettings(undefined, { forceOnHeavyAnimation: true });
-  actions.openPortfolio(undefined, { forceOnHeavyAnimation: true });
-  actions.setActiveContentTab({ tab: ContentTab.Portfolio }, { forceOnHeavyAnimation: true });
 });
 
 addActionHandler('openPromotionModal', (global) => {

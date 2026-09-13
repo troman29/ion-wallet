@@ -12,10 +12,9 @@ import {
   APP_ENV_MARKER, APP_INSTALL_URL,
   APP_NAME,
   APP_VERSION,
-  IS_EXPLORER,
+  IS_CAPACITOR,
   IS_EXTENSION,
   LANG_LIST,
-  MW_CARDS_WEBSITE,
   PROXY_HOSTS,
   SUPPORT_USERNAME,
   TONCOIN,
@@ -32,7 +31,6 @@ import {
 } from '../../global/selectors';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
-import { calculateFullBalance } from '../../util/calculateFullBalance';
 import captureEscKeyListener from '../../util/captureEscKeyListener';
 import { toBig, toDecimal } from '../../util/decimals';
 import { formatCurrency, getShortCurrencySymbol } from '../../util/formatNumber';
@@ -46,6 +44,7 @@ import { getTelegramTipsChannelUrl } from '../../util/url';
 import {
   IS_DAPP_SUPPORTED,
   IS_ELECTRON,
+  IS_IOS_APP,
   IS_TOUCH_ENV,
   IS_WEB,
 } from '../../util/windowEnvironment';
@@ -66,6 +65,7 @@ import LogOutModal from '../main/modals/LogOutModal';
 import Switcher from '../ui/Switcher';
 import Transition from '../ui/Transition';
 import SettingsAbout from './SettingsAbout';
+import SettingsAccountHeader from './SettingsAccountHeader';
 import SettingsAppearance from './SettingsAppearance';
 import SettingsAssets from './SettingsAssets';
 import SettingsChains from './SettingsChains';
@@ -79,6 +79,7 @@ import SettingsPermissions from './SettingsPermissions';
 import SettingsPushNotifications from './SettingsPushNotifications';
 import SettingsSecurity from './SettingsSecurity';
 import SettingsTokenList from './SettingsTokenList';
+import SettingsWallets from './wallets/SettingsWallets';
 import SettingsWalletVariants from './wallets/SettingsWalletVariants';
 import SettingsWalletVersions from './wallets/SettingsWalletVersions';
 
@@ -93,11 +94,10 @@ import disclaimerImg from '../../assets/settings/settings_disclaimer.svg';
 import exitImg from '../../assets/settings/settings_exit.svg';
 import helpcenterImg from '../../assets/settings/settings_helpcenter.svg';
 import installAppImg from '../../assets/settings/settings_install-app.svg';
+import installDesktopImg from '../../assets/settings/settings_install-desktop.svg';
 import installMobileImg from '../../assets/settings/settings_install-mobile.svg';
 import languageImg from '../../assets/settings/settings_language.svg';
-import mwCardsImg from '../../assets/settings/settings_mw-cards.svg';
 import notifications from '../../assets/settings/settings_notifications.svg';
-import portfolioImg from '../../assets/settings/settings_portfolio.svg';
 import securityImg from '../../assets/settings/settings_security.svg';
 import supportImg from '../../assets/settings/settings_support.svg';
 import tipsImg from '../../assets/settings/settings_tips.svg';
@@ -170,13 +170,13 @@ function Settings({
     toggleDeeplinkHook,
     toggleTonProxy,
     getDapps,
-    openPortfolio,
   } = getActions();
 
   const lang = useLang();
   const { isPortrait } = useDeviceScreen();
 
   const transitionRef = useRef<HTMLDivElement>();
+  const currentWalletRef = useRef<HTMLDivElement>();
   const { disableSwipeToClose, enableSwipeToClose } = useTelegramMiniAppSwipeToClose(isOpen);
   const [clicksAmount, setClicksAmount] = useState<number>(isTestnet ? AMOUNT_OF_CLICKS_FOR_DEVELOPERS_MODE : 0);
   const prevRenderingKeyRef = useStateRef(usePrevious2(renderingKey));
@@ -195,11 +195,6 @@ function Settings({
   const shortBaseSymbol = getShortCurrencySymbol(baseCurrency);
 
   const tonToken = useMemo(() => tokens?.find(({ slug }) => slug === TONCOIN.slug), [tokens]);
-
-  const isPortfolioAvailable = useMemo(() => {
-    if (!tokens) return false;
-    return calculateFullBalance(tokens, stakingStates, currencyRates[baseCurrency]).primaryValue !== '0';
-  }, [tokens, stakingStates, currencyRates, baseCurrency]);
 
   const wallets = useMemo(() => {
     return versions
@@ -243,11 +238,6 @@ function Settings({
   const handleConnectedDappsOpen = useLastCallback(() => {
     getDapps();
     setSettingsState({ state: SettingsState.Dapps });
-  });
-
-  const handleOpenPortfolio = useLastCallback(() => {
-    closeSettings(undefined, { forceOnHeavyAnimation: true });
-    openPortfolio({ returnTo: 'settings' });
   });
 
   function handleAppearanceOpen() {
@@ -317,6 +307,10 @@ function Settings({
 
   function handleClickInstallApp() {
     void openUrl(APP_INSTALL_URL, { isExternal: true });
+  }
+
+  function handleClickInstallOnDesktop() {
+    void openUrl(`${APP_INSTALL_URL}desktop`, { isExternal: true });
   }
 
   function handleClickInstallOnMobile() {
@@ -420,7 +414,15 @@ function Settings({
   function renderSettings() {
     return (
       <div className={styles.slide}>
-        {isPortrait && (
+        {IS_CAPACITOR && (
+          <SettingsAccountHeader
+            isViewMode={isViewMode}
+            isActive={isActive}
+            currentWalletRef={currentWalletRef}
+            onRemoveClick={openLogOutModal}
+          />
+        )}
+        {isPortrait && !IS_CAPACITOR && (
           <SettingsHeader title={lang('Settings')} className={styles.mobileHeader} isScrolled={isScrolled} />
         )}
 
@@ -429,10 +431,16 @@ function Settings({
             styles.content,
             styles.content_main,
             'custom-scroll',
-            !isPortrait && styles.content_noHeader,
+            !IS_CAPACITOR && !isPortrait && styles.content_noHeader,
           )}
-          onScroll={isPortrait ? handleContentScroll : undefined}
+          onScroll={isPortrait && !IS_CAPACITOR ? handleContentScroll : undefined}
         >
+          {isPortrait && IS_CAPACITOR && (
+            <SettingsWallets
+              currentWalletRef={currentWalletRef}
+              onAddAccount={handleCloseSettings}
+            />
+          )}
 
           {IS_WEB && (
             <div className={styles.block}>
@@ -464,20 +472,6 @@ function Settings({
           {IS_ELECTRON && (
             <div className={styles.block}>
               {renderHandleDeeplinkButton()}
-            </div>
-          )}
-
-          {isPortfolioAvailable && (
-            <div className={styles.block}>
-              <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleOpenPortfolio}>
-                <img className={styles.menuIcon} src={portfolioImg} alt={lang('Portfolio')} />
-                <div className={styles.itemContent}>
-                  <span className={styles.itemTitle}>{lang('Portfolio')}</span>
-                  <span className={styles.itemSubtitle}>{lang('Performance, insights and P&L')}</span>
-                </div>
-
-                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-              </div>
             </div>
           )}
 
@@ -630,23 +624,18 @@ function Settings({
 
           <p className={buildClassName(styles.blockTitle, styles.blockTitleSmall)}>{lang('About')}</p>
           <div className={styles.block}>
-            {!isNftBuyingDisabled && (
-              <a
-                href={MW_CARDS_WEBSITE}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buildClassName(styles.item, styles.itemMenu)}
-              >
-                <img className={styles.menuIcon} src={mwCardsImg} alt={lang('My Wallet Cards NFT')} />
-                <span className={styles.itemTitle}>{lang('My Wallet Cards NFT')}</span>
-
-                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-              </a>
-            )}
             {IS_EXTENSION && (
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallApp}>
                 <img className={styles.menuIcon} src={installAppImg} alt={lang('Install App')} />
                 <span className={styles.itemTitle}>{lang('Install App')}</span>
+
+                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
+              </div>
+            )}
+            {IS_CAPACITOR && (
+              <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallOnDesktop}>
+                <img className={styles.menuIcon} src={installDesktopImg} alt={lang('Install on Desktop')} />
+                <span className={styles.itemTitle}>{lang('Install on Desktop')}</span>
 
                 <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
               </div>
@@ -673,17 +662,17 @@ function Settings({
                 <img
                   className={styles.menuIcon}
                   src={exitImg}
-                  alt={lang('Exit')}
+                  alt={IS_IOS_APP ? lang('Remove Wallet') : lang('Exit')}
                 />
                 <span className={styles.itemTitle}>
-                  {lang('Exit')}
+                  {IS_IOS_APP ? lang('Remove Wallet') : lang('Exit')}
                 </span>
                 <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
               </div>
             </div>
           )}
 
-          <div className={styles.version} onClick={IS_EXPLORER ? undefined : handleMultipleClick}>
+          <div className={styles.version} onClick={handleMultipleClick}>
             {APP_NAME} {APP_VERSION} {APP_ENV_MARKER}
           </div>
         </div>
@@ -846,17 +835,15 @@ function Settings({
       >
         {renderContent}
       </Transition>
-      {!IS_EXPLORER && (
-        <SettingsDeveloperOptions
-          isOpen={isDeveloperModalOpen}
-          isTestnet={isTestnet}
-          isCopyStorageEnabled={isCopyStorageEnabled}
-          isViewMode={isViewMode}
-          onShowAllWalletVersions={handleShowAllWalletVersions}
-          onOpenPermissions={handleOpenPermissionsFromDev}
-          onClose={handlCloseDeveloperModal}
-        />
-      )}
+      <SettingsDeveloperOptions
+        isOpen={isDeveloperModalOpen}
+        isTestnet={isTestnet}
+        isCopyStorageEnabled={isCopyStorageEnabled}
+        isViewMode={isViewMode}
+        onShowAllWalletVersions={handleShowAllWalletVersions}
+        onOpenPermissions={handleOpenPermissionsFromDev}
+        onClose={handlCloseDeveloperModal}
+      />
       <LogOutModal isOpen={isLogOutModalOpened} onClose={handleCloseLogOutModal} />
     </div>
   );

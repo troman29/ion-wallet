@@ -1,6 +1,8 @@
 import React, { memo } from '../../../../lib/teact/teact';
 
+import { IS_CAPACITOR } from '../../../../config';
 import { getDoesUsePinPad } from '../../../../util/biometrics';
+import buildClassName from '../../../../util/buildClassName';
 
 import useHistoryBack from '../../../../hooks/useHistoryBack';
 import useLang from '../../../../hooks/useLang';
@@ -9,6 +11,7 @@ import ModalHeader from '../../../ui/ModalHeader';
 import PasswordForm from '../../../ui/PasswordForm';
 
 import modalStyles from '../../../ui/Modal.module.scss';
+import styles from './AccountSelectorModal.module.scss';
 
 interface OwnProps {
   isActive: boolean;
@@ -38,7 +41,12 @@ function AddAccountPasswordModal({
   });
 
   return (
-    <div className={modalStyles.transitionContentWrapper}>
+    <div className={buildClassName(
+      modalStyles.transitionContentWrapper,
+      styles.compensateSafeArea,
+      canUsePinPad && styles.compensateSafeAreaPinPad,
+    )}
+    >
       {!canUsePinPad && (
         <ModalHeader
           title={lang('Enter Password')}
@@ -51,10 +59,12 @@ function AddAccountPasswordModal({
         isLoading={isLoading}
         error={error}
         operationType="passcode"
+        withCloseButton={IS_CAPACITOR}
         submitLabel={lang('Confirm')}
         noAutoConfirm
         isFullWidthButton
         onAuthorize={onAuthorize}
+        onCancel={IS_CAPACITOR ? onClose : undefined}
         onUpdate={onClearError}
       />
     </div>

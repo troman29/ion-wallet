@@ -1,9 +1,7 @@
-import type { ApiActivity, ApiChain, ApiTransactionActivity } from '../../../api/types';
+import type { ApiActivity, ApiChain } from '../../../api/types';
 import type { GlobalState } from '../../types';
 
 import {
-  MINT_CARD_ADDRESS,
-  MINT_CARD_REFUND_COMMENT,
   MW_CARDS_COLLECTION,
 } from '../../../config';
 import { getIsHiddenNftActivity } from '../../../util/activities';
@@ -22,7 +20,6 @@ import { addActionHandler, getActions, getGlobal, setGlobal } from '../../index'
 import {
   addInitialActivities,
   addNewActivities,
-  addNft,
   applyActivitiesPatch,
   applyIncomingNftFromActivity,
   applyOutgoingNftFromActivity,
@@ -32,7 +29,6 @@ import {
   replaceCurrentSwapId,
   replaceCurrentTransferId,
   replacePendingActivities,
-  updateAccountState,
   whitelistNft,
 } from '../../reducers';
 import {
@@ -207,10 +203,6 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
           }
         }
 
-        // Handles the `isCardMinting` flag reset and refund branch. `addNft`/`setCardBackgroundNft` are
-        // idempotent, so the small overlap with the loop above is harmless.
-        global = processCardMintingActivity(global, accountId, newConfirmedActivities);
-
         setGlobal(global);
       });
 
@@ -240,40 +232,6 @@ function notifyAboutNewActivities(global: GlobalState, accountId: string, newAct
   if (shouldPlaySound) {
     playIncomingTransactionSound();
   }
-}
-
-function processCardMintingActivity(global: GlobalState, accountId: string, activities: ApiActivity[]): GlobalState {
-  const { isCardMinting } = selectAccountState(global, accountId) || {};
-
-  if (!isCardMinting || !activities.length) {
-    return global;
-  }
-
-  const mintCardActivity = activities.find((activity) => {
-    return activity.kind === 'transaction'
-      && activity.isIncoming
-      && activity?.nft?.collectionAddress === MW_CARDS_COLLECTION;
-  });
-
-  const refundActivity = activities.find((activity) => {
-    return activity.kind === 'transaction'
-      && activity.isIncoming
-      && activity.fromAddress === MINT_CARD_ADDRESS
-      && activity?.comment === MINT_CARD_REFUND_COMMENT;
-  });
-
-  if (mintCardActivity) {
-    const nft = (mintCardActivity as ApiTransactionActivity).nft!;
-
-    global = updateAccountState(global, accountId, { isCardMinting: undefined });
-    global = addNft(global, accountId, nft);
-    getActions().setCardBackgroundNft({ nft, accountId });
-    getActions().installAccentColorFromNft({ nft, accountId });
-  } else if (refundActivity) {
-    global = updateAccountState(global, accountId, { isCardMinting: undefined });
-  }
-
-  return global;
 }
 
 async function preloadTopTokenHistory(accountId: string, chain: ApiChain) {

@@ -4,12 +4,12 @@ import { getActions, withGlobal } from '../../global';
 import {
   selectCurrentAccount,
   selectCurrentAccountId,
-  selectDefaultOnRampChain,
   selectHasMultipleAccounts,
   selectIsHardwareAccount,
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
+import { IS_IOS_APP } from '../../util/windowEnvironment';
 
 import useAccountSwitcherScreen, { AccountSwitcherScreen } from '../../hooks/useAccountSwitcherScreen';
 import useLang from '../../hooks/useLang';
@@ -30,7 +30,6 @@ type StateProps = {
   isLedger?: boolean;
   isTestnet?: boolean;
   isSwapDisabled: boolean;
-  isOnRampDisabled: boolean;
   currentAccountId?: string;
   accountTitle?: string;
   hasMultipleAccounts?: boolean;
@@ -41,7 +40,6 @@ function ReceiveModal({
   isTestnet,
   isLedger,
   isSwapDisabled,
-  isOnRampDisabled,
   currentAccountId,
   accountTitle,
   hasMultipleAccounts,
@@ -54,8 +52,7 @@ function ReceiveModal({
   } = useAccountSwitcherScreen(isOpen, currentAccountId);
 
   const isSwapAllowed = !isTestnet && !isLedger && !isSwapDisabled;
-  const isOnRampAllowed = !isTestnet && !isOnRampDisabled;
-  const modalTitle = lang(isSwapAllowed || isOnRampAllowed ? 'Fund' : 'Add');
+  const modalTitle = lang(isSwapAllowed ? 'Fund' : 'Add');
 
   const handleSelectAccount = useLastCallback((accountId: string) => {
     switchAccount({ accountId });
@@ -102,7 +99,7 @@ function ReceiveModal({
   return (
     <Modal
       isOpen={isOpen}
-      dialogClassName={styles.modalDialog}
+      dialogClassName={IS_IOS_APP ? styles.iosModalDialog : styles.modalDialog}
       onClose={closeReceiveModal}
       onCloseAnimationEnd={updateNextKey}
     >
@@ -129,7 +126,6 @@ export default memo(withGlobal((global): StateProps => {
     isTestnet: global.settings.isTestnet,
     isSwapDisabled,
     // The title claims the modal can do more than receive, so it asks whether this account has a chain to buy on
-    isOnRampDisabled: !selectDefaultOnRampChain(global),
     isLedger,
     currentAccountId: selectCurrentAccountId(global),
     accountTitle: selectCurrentAccount(global)?.title,

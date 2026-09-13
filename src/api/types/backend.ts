@@ -1,8 +1,7 @@
 import type { DieselStatus } from '../../global/types';
-import type { AgentProtocolVersion } from '../../util/agent/agentOverride';
 import type { StakingPoolConfig } from '../chains/ton/contracts/JettonStaking/StakingPool';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
-import type { ApiChain, ApiCountryCode, ApiLoyaltyType, ApiMtwCardType, ApiTokenWithPrice } from './misc';
+import type { ApiChain, ApiCountryCode, ApiLoyaltyType, ApiTokenWithPrice } from './misc';
 
 export type ApiTokenPriceDetails = Pick<
   ApiTokenWithPrice, 'slug' | 'type' | 'priceUsd' | 'percentChange24h' | 'localizedName'
@@ -435,16 +434,7 @@ export type ApiVestingInfo = {
   }[];
 };
 
-export type ApiCardInfo = {
-  all: number;
-  notMinted: number;
-  price: number;
-};
-
-export type ApiCardsInfo = Record<ApiMtwCardType, ApiCardInfo>;
-
 export type ApiAccountConfig = {
-  cardsInfo?: ApiCardsInfo;
   activePromotion?: ApiPromotion;
   isMfaEnabled?: boolean;
 };
@@ -463,7 +453,7 @@ export type ApiPromotion = {
       width: number;
       rotation: number;
     };
-    onClickAction: 'openPromotionModal' | 'openMintCardModal';
+    onClickAction: 'openPromotionModal';
   };
   modal?: {
     backgroundImageUrl: string;
@@ -497,8 +487,5 @@ export type ApiBackendConfig = {
   swapVersion?: ApiSwapVersion;
   seasonalTheme?: 'newYear' | 'valentine';
   knowledgeBaseVersion?: string;
-  agentProtocolVersion?: AgentProtocolVersion;
-  preferredAgent?: 'local' | 'online' | 'hybrid';
   // Lower-case currency codes the on/off-ramp surfaces may offer; the client may only narrow its own baseline with it
-  allowedOnOffRampCurrencies?: string[];
 };

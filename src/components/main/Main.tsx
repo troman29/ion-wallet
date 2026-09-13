@@ -4,16 +4,12 @@ import { getActions, withGlobal } from '../../global';
 import type { ApiStakingState } from '../../api/types';
 import type { Theme } from '../../global/types';
 
-import { IS_EXPLORER } from '../../config';
 import {
   selectAccountStakingState,
   selectCurrentAccountId,
   selectCurrentAccountSettings,
   selectCurrentAccountState,
-  selectDefaultOffRampChain,
-  selectDefaultOnRampChain,
   selectIsCurrentAccountViewMode,
-  selectIsOffRampAllowed,
   selectIsStakingDisabled,
   selectIsSwapDisabled,
 } from '../../global/selectors';
@@ -42,11 +38,7 @@ import StakeModal from '../staking/StakeModal';
 import StakingClaimModal from '../staking/StakingClaimModal';
 import StakingInfoModal from '../staking/StakingInfoModal';
 import UnstakeModal from '../staking/UnstakeModal';
-import Transition from '../ui/Transition';
 import UpdateAvailable from '../ui/UpdateAvailable';
-import VestingModal from '../vesting/VestingModal';
-import VestingPasswordModal from '../vesting/VestingPasswordModal';
-import MainSkeleton from './MainSkeleton';
 import AccountSelectorModal from './modals/accountSelector/AccountSelectorModal';
 import PromotionModal from './modals/PromotionModal';
 import {
@@ -54,7 +46,6 @@ import {
   LandscapeWalletList,
   PortraitActions,
 } from './sections/Actions';
-import PromoteWallet from './sections/Actions/PromoteWallet';
 import Card from './sections/Card';
 import PortraitContent from './sections/Content/PortraitContent';
 import Header, { HEADER_HEIGHT_REM } from './sections/Header/Header';
@@ -74,8 +65,6 @@ type StateProps = {
   isStakingInfoModalOpen?: boolean;
   isSwapDisabled?: boolean;
   isStakingDisabled?: boolean;
-  isOnRampDisabled?: boolean;
-  isOffRampAllowed?: boolean;
   isMediaViewerOpen?: boolean;
   isAppReady?: boolean;
   theme: Theme;
@@ -93,8 +82,6 @@ function Main({
   isStakingInfoModalOpen,
   isSwapDisabled,
   isStakingDisabled,
-  isOnRampDisabled,
-  isOffRampAllowed,
   isMediaViewerOpen,
   isAppReady,
   theme,
@@ -172,13 +159,9 @@ function Main({
 
           {!isViewMode && (
             <PortraitActions
-              containerRef={portraitContainerRef}
-              isTestnet={isTestnet}
               stakingStatus={stakingStatus}
               isStakingDisabled={isStakingDisabled}
               isSwapDisabled={isSwapDisabled}
-              isOnRampDisabled={isOnRampDisabled}
-              isOffRampDisabled={!isOffRampAllowed}
               onEarnClick={handleEarnClick}
             />
           )}
@@ -205,7 +188,6 @@ function Main({
 
           <LandscapeNavBar />
           <LandscapeWalletList />
-          {IS_EXPLORER && <PromoteWallet />}
         </div>
         <div className={styles.main}>
           <LandscapeLayout onStakedTokenClick={handleEarnClick} />
@@ -215,16 +197,6 @@ function Main({
   }
 
   function renderContent() {
-    if (IS_EXPLORER) {
-      return (
-        <Transition name="semiFade" activeKey={isAppReady ? 1 : 0}>
-          {isAppReady
-            ? (isPortrait ? renderPortraitLayout() : renderLandscapeLayout())
-            : <MainSkeleton isViewMode={isViewMode} />}
-        </Transition>
-      );
-    }
-
     return isPortrait ? renderPortraitLayout() : renderLandscapeLayout();
   }
 
@@ -238,8 +210,6 @@ function Main({
       <InvoiceModal />
       <UnstakeModal />
       <StakingClaimModal />
-      <VestingModal />
-      <VestingPasswordModal />
       <RenewDomainModal />
       <LinkingDomainModal />
       <PromotionModal />
@@ -269,8 +239,6 @@ export default memo(
         isSwapDisabled: selectIsSwapDisabled(global),
         isStakingDisabled: selectIsStakingDisabled(global),
         // Both labels stand for the ramps reachable from this account, so they read the very chain each would open
-        isOnRampDisabled: !selectDefaultOnRampChain(global),
-        isOffRampAllowed: selectIsOffRampAllowed(global, selectDefaultOffRampChain(global)),
         isAppReady,
         theme: global.settings.theme,
         accentColorIndex: selectCurrentAccountSettings(global)?.accentColorIndex,

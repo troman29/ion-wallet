@@ -25,11 +25,11 @@ describe('getSwapTransactionIdRows', () => {
     expect(getSwapTransactionIdRows(makeSwapActivity({
       transactionIds: {
         outgoing: { hash: 'outgoing-hash', chain: 'ton' },
-        incoming: { hash: 'incoming-hash', chain: 'solana' },
+        incoming: { hash: 'incoming-hash', chain: 'bnb' },
       },
     }))).toEqual([
       { label: 'Outgoing Transaction ID', hash: 'outgoing-hash', chain: 'ton' },
-      { label: 'Incoming Transaction ID', hash: 'incoming-hash', chain: 'solana' },
+      { label: 'Incoming Transaction ID', hash: 'incoming-hash', chain: 'bnb' },
     ]);
   });
 

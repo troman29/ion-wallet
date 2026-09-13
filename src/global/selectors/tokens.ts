@@ -8,8 +8,6 @@ import type {
 import type { Account, AccountSettings, AccountState, GlobalState, UserToken } from '../types';
 
 import {
-  MYCOIN_MAINNET,
-  MYCOIN_TESTNET,
   PRICELESS_TOKEN_HASHES,
   TINY_TRANSFER_MAX_COST,
   TONCOIN,
@@ -23,6 +21,7 @@ import { round } from '../../util/round';
 import { sortTokens } from '../../util/tokens';
 import withCache from '../../util/withCache';
 import {
+  selectAccount,
   selectAccountSettings,
   selectAccountState,
   selectCurrentAccountId,
@@ -58,9 +57,13 @@ export const selectAccountTokensMemoizedFor = withCache((accountId: string) => m
   baseCurrency: ApiBaseCurrency,
   currencyRates: ApiCurrencyRates,
   hasActivities: boolean = false,
+  accountChains?: readonly ApiChain[],
 ) => {
   const { network } = parseAccountId(accountId);
   const shouldShowOnlyDefaultTokens = !hasActivities && getAreAllBalancesNearZero(balancesBySlug, tokenInfo);
+  // Balances are seeded for every default slug regardless of the account, so a single-chain account
+  // would otherwise be offered rows it cannot use
+  const defaultEnabledSlugs = getDefaultEnabledSlugs(network, accountChains);
   const pinnedSlugs = accountSettings.pinnedSlugs ?? [];
 
   const tokens = Object
@@ -78,10 +81,13 @@ export const selectAccountTokensMemoizedFor = withCache((accountId: string) => m
       const hasCost = balanceBig.mul(priceUsd ?? 0).gte(TINY_TRANSFER_MAX_COST);
       const isPricelessTokenWithBalance = PRICELESS_TOKEN_HASHES.has(codeHash!) && balance > 0n;
 
+      // The default tokens stay listed whatever they are worth: they are the coins the wallet is for,
+      // and hiding an empty one leaves the user without the row they came to fund. Everything else has
+      // to earn its place with a balance worth showing.
       const isEnabled = accountSettings.alwaysShownSlugs?.includes(slug)
-        || (shouldShowOnlyDefaultTokens
-          ? getDefaultEnabledSlugs(network).has(slug)
-          : (hasCost || isPricelessTokenWithBalance || (!areTokensWithNoCostHidden && balance > 0n)));
+        || defaultEnabledSlugs.has(slug)
+        || (!shouldShowOnlyDefaultTokens
+          && (hasCost || isPricelessTokenWithBalance || (!areTokensWithNoCostHidden && balance > 0n)));
 
       const isDisabled = !isEnabled || accountSettings.alwaysHiddenSlugs?.includes(slug);
 
@@ -142,6 +148,7 @@ export function selectAccountTokens(global: GlobalState, accountId: string) {
     baseCurrency,
     global.currencyRates,
     getHasConfirmedActivities(accountState?.activities),
+    Object.keys(selectAccount(global, accountId)?.byChain ?? {}) as ApiChain[],
   );
 }
 
@@ -200,11 +207,6 @@ export function selectTokenInfoUserTokens(global: GlobalState) {
     global.settings.baseCurrency,
     global.currencyRates,
   );
-}
-
-export function selectMycoin(global: GlobalState) {
-  const { isTestnet } = global.settings;
-  return selectToken(global, isTestnet ? MYCOIN_TESTNET.slug : MYCOIN_MAINNET.slug);
 }
 
 export function selectTokenByMinterAddress(global: GlobalState, minter: string) {
@@ -289,6 +291,7 @@ export function selectMultipleAccountsTokensSlow(
       baseCurrency,
       currencyRates,
       getHasConfirmedActivities(accountState?.activities),
+      Object.keys(networkAccounts[accountId].byChain) as ApiChain[],
     );
   }
 

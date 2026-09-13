@@ -3,19 +3,16 @@ import type { AccountChain } from '../../types';
 
 import {
   DEFAULT_STAKING_STATE,
-  IS_GRAM_WALLET,
   MW_CARDS_COLLECTION,
   STAKING_SLUG_PREFIX,
   SWAP_API_VERSION,
   TELEGRAM_GIFTS_SUPER_COLLECTION,
 } from '../../../config';
 import { parseAccountId } from '../../../util/account';
-import { setBackendAgentProtocolVersion } from '../../../util/agent/agentProtocolVersion';
-import { areDeepEqual } from '../../../util/areDeepEqual';
 import { buildCollectionByKey, omitUndefined, unique } from '../../../util/iteratees';
 import { openUrl } from '../../../util/openUrl';
-import { normalizeAllowedOnOffRampCurrencies } from '../../../util/ramp-currencies';
 import { getIsActiveStakingState } from '../../../util/staking';
+import { IS_IOS_APP } from '../../../util/windowEnvironment';
 import { omitAccounts } from '../../helpers/auth';
 import { pinMwCardsFirst } from '../../helpers/nfts';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
@@ -38,15 +35,12 @@ import {
   updateStakingDefault,
   updateSwapTokens,
   updateTokens,
-  updateVesting,
-  updateVestingInfo,
 } from '../../reducers';
 import {
   selectAccount,
   selectAccountNftByAddress,
   selectAccountSettings,
   selectAccountState,
-  selectVestingPartsReadyToUnfreeze,
 } from '../../selectors';
 
 // Accumulates new My Wallet Cards across multi-batch streaming rounds.
@@ -66,7 +60,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         accountId,
         states,
         totalProfit,
-        shouldUseNominators,
       } = update;
 
       const stateById = buildCollectionByKey(states, 'id');
@@ -82,7 +75,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
 
       global = updateAccountStaking(global, accountId, {
         stateById,
-        shouldUseNominators,
         totalProfit,
       });
 
@@ -100,10 +92,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         if (stateWithBiggestBalance && stateWithBiggestBalance.balance > 0n) {
           global = updateAccountStaking(global, accountId, {
             stakingId: stateWithBiggestBalance.id,
-          });
-        } else if (shouldUseNominators && stateById.nominators) {
-          global = updateAccountStaking(global, accountId, {
-            stakingId: stateById.nominators.id,
           });
         }
       }
@@ -385,34 +373,23 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         isAppUpdateRequired,
         swapVersion,
         seasonalTheme,
-        agentProtocolVersion,
-        allowedOnOffRampCurrencies,
       } = update;
 
-      setBackendAgentProtocolVersion(agentProtocolVersion);
-
-      const normalizedRampCurrencies = normalizeAllowedOnOffRampCurrencies(allowedOnOffRampCurrencies);
-      const previousRampCurrencies = global.restrictions.allowedOnOffRampCurrencies;
+      const shouldRestrictRegionalFeatures = IS_IOS_APP && isLimitedRegion;
 
       global = updateRestrictions(global, {
         isLimitedRegion,
-        isSwapDisabled: false,
-        isOnRampDisabled: false,
-        isOffRampDisabled: false,
+        isSwapDisabled: shouldRestrictRegionalFeatures,
         // The `restrictions` object is cached, so an excluded key will allow a stale value stored in an older build
         // to survive a shallow merge with a cached state
-        isNftBuyingDisabled: false,
+        isNftBuyingDisabled: shouldRestrictRegionalFeatures,
         isCopyStorageEnabled,
         supportAccountsCount,
         countryCode,
-        // Keep the previous reference for an unchanged list so connected containers do not re-render on every poll
-        allowedOnOffRampCurrencies: areDeepEqual(normalizedRampCurrencies, previousRampCurrencies)
-          ? previousRampCurrencies
-          : normalizedRampCurrencies,
       });
       global = {
         ...global,
-        isAppUpdateRequired: IS_GRAM_WALLET ? undefined : isAppUpdateRequired,
+        isAppUpdateRequired,
         swapVersion: swapVersion ?? SWAP_API_VERSION,
         seasonalTheme,
       };
@@ -439,18 +416,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       if (!global.isIncorrectTimeNotificationReceived) {
         actions.showIncorrectTimeError();
       }
-      break;
-    }
-
-    case 'updateVesting': {
-      const { accountId, vestingInfo } = update;
-      const unfreezeRequestedIds = selectVestingPartsReadyToUnfreeze(global, accountId);
-      global = updateVestingInfo(global, accountId, vestingInfo);
-      const newUnfreezeRequestedIds = selectVestingPartsReadyToUnfreeze(global, accountId);
-      if (!areDeepEqual(unfreezeRequestedIds, newUnfreezeRequestedIds)) {
-        global = updateVesting(global, accountId, { unfreezeRequestedIds: undefined });
-      }
-      setGlobal(global);
       break;
     }
 

@@ -16,6 +16,8 @@ COPYFILE_DISABLE=1 tar \
   --exclude=./.idea \
   --exclude=./mobile/android \
   --exclude=./mobile/ios \
-  "$@" -cvzf /tmp/MyWallet-firefox-sources.tgz ./
+  --exclude=./mobile/plugins/air-app-launcher/node_modules \
+  --exclude=./mobile/plugins/native-dialog/node_modules \
+  "$@" -cvzf /tmp/MyTonWallet-firefox-sources.tgz ./
 
-mv /tmp/MyWallet-firefox-sources.tgz ./
+mv /tmp/MyTonWallet-firefox-sources.tgz ./

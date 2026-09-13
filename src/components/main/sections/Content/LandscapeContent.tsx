@@ -18,7 +18,6 @@ import {
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import { IS_TOUCH_ENV } from '../../../../util/windowEnvironment';
-import { calcVestingAmountByStatus } from '../../helpers/calcVestingAmountByStatus';
 
 import useHistoryBack from '../../../../hooks/useHistoryBack';
 import useLang from '../../../../hooks/useLang';
@@ -62,7 +61,6 @@ interface StateProps {
   whitelistedNftAddresses?: string[];
   areUnverifiedNftsHidden?: boolean;
   states?: ApiStakingState[];
-  hasVesting: boolean;
   alwaysHiddenSlugs?: string[];
   activityReturnContentTab?: ContentTab;
   selectedNftsToHide?: {
@@ -84,7 +82,6 @@ function LandscapeContent({
   areUnverifiedNftsHidden,
   selectedNftsToHide,
   states,
-  hasVesting,
   alwaysHiddenSlugs,
   activeContentTab,
   activityReturnContentTab,
@@ -122,7 +119,6 @@ function LandscapeContent({
     currentCollection,
     currentTokenSlug,
     states,
-    hasVesting,
     alwaysHiddenSlugs,
     tokensCount,
     isPortrait: false,
@@ -150,14 +146,12 @@ function LandscapeContent({
     },
   });
 
-  // Settings/Agent/Explore render on top of the landscape main area as full-screen overlay slides
+  // Settings and Explore render on top of the landscape main area as full-screen overlay slides
   // in `LandscapeLayout`'s outer `Transition`. While such an overlay is active we keep the inner
   // `Transition`'s key frozen (see `landscapeActiveKey` below) so the slide underneath does not
   // change during the open/close animation; once the overlay is gone the inner key updates normally.
   const isCoveredByLandscapeOverlay = activeContentTab === ContentTab.Settings
-    || activeContentTab === ContentTab.Agent
-    || activeContentTab === ContentTab.Explore
-    || activeContentTab === ContentTab.Portfolio;
+    || activeContentTab === ContentTab.Explore;
 
   const shouldShowLandscapeOverview = !currentCollection
     && !hasNftSelection
@@ -177,10 +171,7 @@ function LandscapeContent({
 
   const landscapeRenderCount = mainContentTabsCount + visibleCollectionTabs.length + 1;
 
-  // Agent manages its own scroll container, so we skip it here
   const handleContentTransitionStop = useLastCallback(() => {
-    if (activeContentTab === ContentTab.Agent) return;
-
     requestMeasure(() => {
       // Every slide keeps its own scroll position, so the shown one is addressed by its key
       const scrollContainer = transitionRef.current?.querySelector<HTMLElement>(
@@ -318,7 +309,6 @@ export default memo(
         blacklistedNftAddresses,
         whitelistedNftAddresses,
         selectedNftsToHide,
-        vesting,
         nfts: {
           byAddress: nfts,
           currentCollection,
@@ -330,10 +320,6 @@ export default memo(
 
       const tokens = selectCurrentAccountTokens(global);
       const tokensCount = accountId ? selectEnabledTokensCountMemoizedFor(accountId)(tokens) : 0;
-      const vestingInfo = vesting?.info;
-      const hasVesting = Boolean(
-        vestingInfo?.length && calcVestingAmountByStatus(vestingInfo, ['frozen', 'ready']) !== '0',
-      );
       const states = accountId ? selectAccountStakingStates(global, accountId) : undefined;
       const alwaysHiddenSlugs = selectCurrentAccountSettings(global)?.alwaysHiddenSlugs;
 
@@ -351,7 +337,6 @@ export default memo(
         areUnverifiedNftsHidden: global.settings.areUnverifiedNftsHidden,
         selectedNftsToHide,
         states,
-        hasVesting,
         alwaysHiddenSlugs,
         currentSiteCategoryId,
         collectionTabs,

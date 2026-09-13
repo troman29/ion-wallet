@@ -26,5 +26,5 @@ export function isSwapPairValid(
 
 // TODO: implement chainAgnostic system
 function isWellKnownAllowedPair(tokenInChain: ApiChain, tokenOutChain: ApiChain, swapVersion: ApiSwapVersion) {
-  return swapVersion === 3 && tokenInChain === tokenOutChain && ['ton', 'solana'].includes(tokenInChain);
+  return swapVersion === 3 && tokenInChain === tokenOutChain && tokenInChain === 'ton';
 }

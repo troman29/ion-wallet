@@ -148,6 +148,7 @@ function SettingsAppearance({
         className={buildClassName(styles.content, 'custom-scroll')}
         onScroll={handleContentScroll}
       >
+
         <p className={styles.blockTitle}>{lang('Theme')}</p>
         <div className={styles.settingsBlock}>
           <div className={styles.themeWrapper}>

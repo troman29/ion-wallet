@@ -9,6 +9,7 @@ import type { ApiBaseCurrency, ApiChain, ApiCurrencyRates, ApiGroupedWalletVaria
 import type { Account, AccountChain, GlobalState, UserToken } from '../../../global/types';
 import type Big from '../../../lib/big.js';
 
+import { IS_CAPACITOR } from '../../../config';
 import { dropEnclaveSessionHold, holdEnclaveSession } from '../../../global/helpers/enclave';
 import {
   selectCurrentAccountId,
@@ -592,7 +593,7 @@ function SettingsWalletVariants({
             />
             <PasswordForm
               isActive={isSlideActive && !!isActive}
-              containerClassName={styles.passwordFormWithHeaderOffset}
+              containerClassName={IS_CAPACITOR ? styles.passwordFormContent : styles.passwordFormWithHeaderOffset}
               placeholder={lang('Enter your current password')}
               forceBiometricsInMain={!isInsideModal}
               submitLabel={lang('Continue')}

@@ -19,7 +19,7 @@ interface OwnProps {
   activeTab: AccountTab;
   balancesByAccountId: Record<string, { wholePart: string; fractionPart?: string; currencySymbol: string }>;
   settingsByAccountId?: Record<string, AccountSettings>;
-  addressLineChainsByAccountId?: Record<string, ApiChain[]>;
+  visibleChainsByAccountId?: Record<string, ApiChain[]>;
   currentAccountId: string;
   isSensitiveDataHidden?: true;
   onSwitchAccount: (accountId: string) => void;
@@ -37,7 +37,7 @@ function AccountsGridView({
   activeTab,
   balancesByAccountId,
   settingsByAccountId,
-  addressLineChainsByAccountId,
+  visibleChainsByAccountId,
   currentAccountId,
   isSensitiveDataHidden,
   onSwitchAccount,
@@ -72,7 +72,7 @@ function AccountsGridView({
         isTestnet={isTestnet}
         accountId={accountId}
         byChain={byChain}
-        visibleChains={addressLineChainsByAccountId?.[accountId]}
+        visibleChains={visibleChainsByAccountId?.[accountId]}
         accountType={accountType}
         isActive={isActive}
         title={title}

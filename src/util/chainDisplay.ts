@@ -1,83 +1,23 @@
-import type { ApiChain, ApiStakingState } from '../api/types';
-import type { ChainDisplayConfiguration, UserToken } from '../global/types';
+import type { ApiChain } from '../api/types';
+import type { ChainDisplayConfiguration } from '../global/types';
 
-import { IS_GRAM_WALLET, TONCOIN } from '../config';
 import { getAllSupportedVisibleChains } from './chain';
 import { unique } from './iteratees';
-import { getFullStakingBalance } from './staking';
 
 export const DEFAULT_CHAIN_DISPLAY_CONFIGURATION: ChainDisplayConfiguration = { displayMode: 'value' };
 
 /**
- * The chains the app shows automatically, until the user changes the list themselves.
+ * The chains the app shows automatically, until the user changes the list themselves: every chain the
+ * account holds.
  *
- * If the wallet already holds funds, the app shows the chains those funds are in. If the wallet is empty,
- * the app shows every supported chain - otherwise the user would have nowhere to receive their first funds.
- *
- * When the wallet holds funds but none of them are in the account's own chains, only the first chain is shown,
- * matching `automaticallyVisibleChains` on iOS.
+ * Upstream narrowed this to the funded chains once a wallet held anything, which suited a wallet of a
+ * dozen chains. With two it hid half the app, and any airdropped token was enough to do it: a single
+ * unsolicited BEP-20 took the ION address off the card.
  */
-export function getDefaultVisibleChains(accountChains: ApiChain[], chainsWithBalance: ReadonlySet<ApiChain>) {
-  const availableChains = unique(accountChains);
+export function getDefaultVisibleChains(accountChains: ApiChain[]) {
+  const supportedChains = getAllSupportedVisibleChains();
 
-  if (!chainsWithBalance.size) {
-    const supportedChains = getAllSupportedVisibleChains();
-
-    return new Set(availableChains.filter((chain) => supportedChains.has(chain)));
-  }
-
-  const fundedChains = availableChains.filter((chain) => chainsWithBalance.has(chain));
-
-  return new Set(fundedChains.length ? fundedChains : availableChains.slice(0, 1));
-}
-
-/** Chains holding a non-zero amount of any token, staked balances included */
-export function getChainsWithBalance(tokens?: UserToken[], stakingStates?: ApiStakingState[]) {
-  const result = new Set<ApiChain>();
-  if (!tokens?.length) return result;
-
-  const chainBySlug = new Map(tokens.map((token) => [token.slug, token.chain]));
-
-  for (const token of tokens) {
-    if (token.amount > 0n) {
-      result.add(token.chain);
-    }
-  }
-
-  for (const stakingState of stakingStates ?? []) {
-    const chain = chainBySlug.get(stakingState.tokenSlug);
-    if (chain && getFullStakingBalance(stakingState) > 0n) {
-      result.add(chain);
-    }
-  }
-
-  return result;
-}
-
-/**
- * The chains whose addresses the account's address line shows: the visible chains narrowed for Gram Wallet.
- * While a Gram Wallet account's shown token list holds tokens on TON alone (or none at all), the line collapses
- * to the TON address, matching Air (`MAccount.addressLineChains` on iOS, `WMultichainAddressLabel` on Android).
- * Display-only: the address menu, the Receive screen and the share link keep every visible chain.
- * An undefined `hasOnlyTonTokens` means the token list is not known yet, so nothing is hidden.
- */
-export function getAddressLineChains(
-  chains: ApiChain[],
-  hasOnlyTonTokens?: boolean,
-  isGramWallet = IS_GRAM_WALLET,
-): ApiChain[] {
-  if (!isGramWallet || !hasOnlyTonTokens || !chains.includes(TONCOIN.chain)) {
-    return chains;
-  }
-
-  return [TONCOIN.chain];
-}
-
-/** Whether every shown token belongs to the TON chain; undefined while the token list is not known yet */
-export function getHasOnlyTonTokens(tokens?: UserToken[]) {
-  if (!tokens) return undefined;
-
-  return !tokens.some(({ isDisabled, chain }) => !isDisabled && chain !== TONCOIN.chain);
+  return new Set(unique(accountChains).filter((chain) => supportedChains.has(chain)));
 }
 
 export function getIsChainVisible(

@@ -70,7 +70,7 @@ export async function signTransfer(
     chain,
     payload: {
       signature,
-      signedTx: signedTx as any,
+      signedTx,
     },
   }];
 }

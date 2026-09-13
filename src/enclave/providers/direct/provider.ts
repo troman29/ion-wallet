@@ -1,4 +1,4 @@
-import { IS_TELEGRAM_APP } from '../../../config';
+import { IS_CAPACITOR, IS_TELEGRAM_APP } from '../../../config';
 import { CHANNEL_NAME } from '../../config';
 import { createPostMessageInterface } from '../../../util/createPostMessageInterface';
 import { IS_ELECTRON } from '../../../util/windowEnvironment';
@@ -15,9 +15,12 @@ void enclaveApi.setupStorage(idbStorage);
 void (async () => {
   const { default: BiometricAuthClass } = IS_TELEGRAM_APP
     ? await import('../../auth/TelegramAuth')
-    : (IS_ELECTRON
-      ? await import('../../auth/ElectronAuth')
-      : await import('../../auth/WebAuthnAuth')
+    : (IS_CAPACITOR
+      ? await import('../../auth/CapacitorBiometricAuth')
+      : (IS_ELECTRON
+        ? await import('../../auth/ElectronAuth')
+        : await import('../../auth/WebAuthnAuth')
+      )
     );
 
   void enclaveApi.setupBiometricAuthClass(BiometricAuthClass);

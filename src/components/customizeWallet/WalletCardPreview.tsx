@@ -5,6 +5,7 @@ import React, {
 import type { ApiBaseCurrency, ApiCurrencyRates, ApiNft } from '../../api/types';
 import type { Account, UserToken } from '../../global/types';
 
+import { APP_NAME } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import { calculateFullBalance } from '../../util/calculateFullBalance';
 import { getShortCurrencySymbol } from '../../util/formatNumber';
@@ -53,7 +54,7 @@ function WalletCardPreview({
     return calculateFullBalance(tokens, undefined, currencyRates[baseCurrency]);
   }, [tokens, currencyRates, baseCurrency]);
 
-  const accountTitle = account?.title || 'My Wallet';
+  const accountTitle = account?.title || APP_NAME;
 
   const handleCardChange = useLastCallback((hasGradient: boolean, className?: string) => {
     setCustomCardClassName(className);

@@ -49,7 +49,7 @@ export function useAmountInputState(input: AmountInputStateInput): AmountInputSt
       return;
     }
 
-    vibrate();
+    void vibrate();
     switchCurrency(false);
     onAmountChange(maxAmount, true);
   });
@@ -59,7 +59,7 @@ export function useAmountInputState(input: AmountInputStateInput): AmountInputSt
       return;
     }
 
-    vibrate();
+    void vibrate();
     switchCurrency(!isBaseCurrency);
   });
 

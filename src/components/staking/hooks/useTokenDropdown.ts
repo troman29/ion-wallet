@@ -5,7 +5,6 @@ import type { AmountInputToken } from '../../ui/AmountInput';
 
 import { calculateTokenPrice } from '../../../util/calculatePrice';
 import {
-  filterStakingStatesByTonStrategy,
   getIsActiveStakingState,
   getIsNewStakeAllowed,
 } from '../../../util/staking';
@@ -13,7 +12,6 @@ import {
 interface Options {
   tokenBySlug?: Record<string, ApiTokenWithPrice>;
   states?: ApiStakingState[];
-  shouldUseNominators?: boolean;
   selectedStakingId?: string;
   isViewMode?: boolean;
   // Keeps active positions of tokens closed for new stakes selectable (e.g. to navigate to them), even when not
@@ -24,7 +22,7 @@ interface Options {
 }
 
 export function useTokenDropdown({
-  tokenBySlug, states, shouldUseNominators, selectedStakingId, isViewMode, shouldKeepActiveBlockedStates,
+  tokenBySlug, states, selectedStakingId, isViewMode, shouldKeepActiveBlockedStates,
   baseCurrency, currencyRates,
 }: Options) {
   const selectableTokens = useMemo<AmountInputToken[]>(() => {
@@ -33,7 +31,7 @@ export function useTokenDropdown({
     }
 
     let stakingTokens = getStakingTokens(
-      tokenBySlug, states, shouldUseNominators, selectedStakingId, shouldKeepActiveBlockedStates,
+      tokenBySlug, states, selectedStakingId, shouldKeepActiveBlockedStates,
     );
 
     if (isViewMode) {
@@ -47,7 +45,7 @@ export function useTokenDropdown({
 
     return result;
   }, [
-    tokenBySlug, states, shouldUseNominators, isViewMode, selectedStakingId, shouldKeepActiveBlockedStates,
+    tokenBySlug, states, isViewMode, selectedStakingId, shouldKeepActiveBlockedStates,
     baseCurrency, currencyRates,
   ]);
 
@@ -62,11 +60,10 @@ export function useTokenDropdown({
 export function getStakingTokens(
   tokenBySlug: Record<string, ApiTokenWithPrice>,
   states: ApiStakingState[],
-  shouldUseNominators?: boolean,
   selectedStakingId?: string,
   shouldKeepActiveBlockedStates?: boolean,
 ) {
-  return filterStakingStatesByTonStrategy(states, shouldUseNominators)
+  return states
     .filter((state) => tokenBySlug[state.tokenSlug]
       && (getIsNewStakeAllowed(state.tokenSlug)
         || state.id === selectedStakingId

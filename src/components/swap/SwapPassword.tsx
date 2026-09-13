@@ -1,6 +1,7 @@
 import React, { memo, type TeactNode } from '../../lib/teact/teact';
 import { getActions } from '../../global';
 
+import { IS_CAPACITOR } from '../../config';
 import { getDoesUsePinPad } from '../../util/biometrics';
 
 import useHistoryBack from '../../hooks/useHistoryBack';
@@ -41,6 +42,7 @@ function SwapPassword({
       <PasswordForm
         isActive={isActive}
         isLoading={isLoading}
+        withCloseButton={IS_CAPACITOR}
         error={error}
         operationType="swap"
         submitLabel={lang('Swap')}

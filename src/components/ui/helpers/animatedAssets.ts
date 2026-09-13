@@ -4,8 +4,6 @@ import iconAgentDark from '../../../assets/lottie/agent_dark.tgs';
 import iconAgentLight from '../../../assets/lottie/agent_light.tgs';
 import iconAgentSolidDark from '../../../assets/lottie/agent_solid_dark.tgs';
 import iconAgentSolidLight from '../../../assets/lottie/agent_solid_light.tgs';
-import iconBuyDark from '../../../assets/lottie/buy_dark.tgs';
-import iconBuyLight from '../../../assets/lottie/buy_light.tgs';
 import iconClockDark from '../../../assets/lottie/clock_dark.tgs';
 import iconClockDarkBlue from '../../../assets/lottie/clock_dark_blue.tgs';
 import iconClockDarkGray from '../../../assets/lottie/clock_dark_gray.tgs';
@@ -42,8 +40,6 @@ import iconExploreDark from '../../../assets/lottie/explore_dark.tgs';
 import iconExploreLight from '../../../assets/lottie/explore_light.tgs';
 import iconExploreSolidDark from '../../../assets/lottie/explore_solid_dark.tgs';
 import iconExploreSolidLight from '../../../assets/lottie/explore_solid_light.tgs';
-import iconSellDark from '../../../assets/lottie/sell_dark.tgs';
-import iconSellLight from '../../../assets/lottie/sell_light.tgs';
 import iconSendDark from '../../../assets/lottie/send_dark.tgs';
 import iconSendLight from '../../../assets/lottie/send_light.tgs';
 import iconSettingsDark from '../../../assets/lottie/settings_dark.tgs';
@@ -62,8 +58,6 @@ import iconAgentPreviewDark from '../../../assets/lottiePreview/agent_dark.png';
 import iconAgentPreviewLight from '../../../assets/lottiePreview/agent_light.png';
 import iconAgentSolidPreviewDark from '../../../assets/lottiePreview/agent_solid_dark.png';
 import iconAgentSolidPreviewLight from '../../../assets/lottiePreview/agent_solid_light.png';
-import iconBuyPreviewDark from '../../../assets/lottiePreview/buy_dark.png';
-import iconBuyPreviewLight from '../../../assets/lottiePreview/buy_light.png';
 import iconClockPreviewDark from '../../../assets/lottiePreview/clock_dark.svg';
 import iconClockPreviewDarkBlue from '../../../assets/lottiePreview/clock_dark_blue.svg';
 import iconClockPreviewDarkGray from '../../../assets/lottiePreview/clock_dark_gray.svg';
@@ -100,8 +94,6 @@ import iconExplorePreviewDark from '../../../assets/lottiePreview/explore_dark.p
 import iconExplorePreviewLight from '../../../assets/lottiePreview/explore_light.png';
 import iconExploreSolidPreviewDark from '../../../assets/lottiePreview/explore_solid_dark.png';
 import iconExploreSolidPreviewLight from '../../../assets/lottiePreview/explore_solid_light.png';
-import iconSellPreviewDark from '../../../assets/lottiePreview/sell_dark.png';
-import iconSellPreviewLight from '../../../assets/lottiePreview/sell_light.png';
 import iconSendPreviewDark from '../../../assets/lottiePreview/send_dark.png';
 import iconSendPreviewLight from '../../../assets/lottiePreview/send_light.png';
 import iconSettingsPreviewDark from '../../../assets/lottiePreview/settings_dark.png';
@@ -144,7 +136,6 @@ export const ANIMATED_STICKERS_PATHS = {
     iconAdd: iconAddLight,
     iconAgent: iconAgentLight,
     iconAgentSolid: iconAgentSolidLight,
-    iconBuy: iconBuyLight,
     iconClock: iconClockLight,
     iconClockBlue: iconClockLightBlue,
     iconClockGray: iconClockLightGray,
@@ -157,7 +148,6 @@ export const ANIMATED_STICKERS_PATHS = {
     iconEarnPurple: iconEarnLightPurple,
     iconExplore: iconExploreLight,
     iconExploreSolid: iconExploreSolidLight,
-    iconSell: iconSellLight,
     iconSend: iconSendLight,
     iconSettings: iconSettingsLight,
     iconSettingsSolid: iconSettingsSolidLight,
@@ -168,7 +158,6 @@ export const ANIMATED_STICKERS_PATHS = {
       iconAdd: iconAddPreviewLight,
       iconAgent: iconAgentPreviewLight,
       iconAgentSolid: iconAgentSolidPreviewLight,
-      iconBuy: iconBuyPreviewLight,
       iconClock: iconClockPreviewLight,
       iconClockBlue: iconClockPreviewLightBlue,
       iconClockGray: iconClockPreviewLightGray,
@@ -181,7 +170,6 @@ export const ANIMATED_STICKERS_PATHS = {
       iconEarnPurple: iconEarnPreviewLightPurple,
       iconExplore: iconExplorePreviewLight,
       iconExploreSolid: iconExploreSolidPreviewLight,
-      iconSell: iconSellPreviewLight,
       iconSend: iconSendPreviewLight,
       iconSettings: iconSettingsPreviewLight,
       iconSettingsSolid: iconSettingsSolidPreviewLight,
@@ -194,7 +182,6 @@ export const ANIMATED_STICKERS_PATHS = {
     iconAdd: iconAddDark,
     iconAgent: iconAgentDark,
     iconAgentSolid: iconAgentSolidDark,
-    iconBuy: iconBuyDark,
     iconClock: iconClockDark,
     iconClockBlue: iconClockDarkBlue,
     iconClockGray: iconClockDarkGray,
@@ -207,7 +194,6 @@ export const ANIMATED_STICKERS_PATHS = {
     iconEarnPurple: iconEarnDarkPurple,
     iconExplore: iconExploreDark,
     iconExploreSolid: iconExploreSolidDark,
-    iconSell: iconSellDark,
     iconSend: iconSendDark,
     iconSettings: iconSettingsDark,
     iconSettingsSolid: iconSettingsSolidDark,
@@ -218,7 +204,6 @@ export const ANIMATED_STICKERS_PATHS = {
       iconAdd: iconAddPreviewDark,
       iconAgent: iconAgentPreviewDark,
       iconAgentSolid: iconAgentSolidPreviewDark,
-      iconBuy: iconBuyPreviewDark,
       iconClock: iconClockPreviewDark,
       iconClockBlue: iconClockPreviewDarkBlue,
       iconClockGray: iconClockPreviewDarkGray,
@@ -231,7 +216,6 @@ export const ANIMATED_STICKERS_PATHS = {
       iconEarnPurple: iconEarnPreviewDarkPurple,
       iconExplore: iconExplorePreviewDark,
       iconExploreSolid: iconExploreSolidPreviewDark,
-      iconSell: iconSellPreviewDark,
       iconSend: iconSendPreviewDark,
       iconSettings: iconSettingsPreviewDark,
       iconSettingsSolid: iconSettingsSolidPreviewDark,

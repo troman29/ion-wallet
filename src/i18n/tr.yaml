@@ -13,12 +13,12 @@ $2fa_security: Telegram ile 2FA
 2FA with Telegram: Telegram ile 2FA
 Confirm operations in Telegram as a second step.: İşlemleri ikinci adım olarak Telegram’da onaylayın.
 Confirm with: Şununla onayla
-Add an extra layer of security for your wallet in TON network.: TON ağındaki cüzdanınız için ekstra bir güvenlik katmanı ekleyin.
+Add an extra layer of security for your wallet in TON network.: ION ağındaki cüzdanınız için ekstra bir güvenlik katmanı ekleyin.
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: Transferleri ve önemli işlemleri şifrenizle imzalayın, ardından Telegram’da onaylayın.
 This helps protect your funds even if your recovery phrase or keys are compromised.: Bu, kurtarma ifadeniz veya anahtarlarınız ele geçirilse bile fonlarınızı korumaya yardımcı olur.
 "Connection Fee:": "Bağlantı Ücreti:"
 Connect Telegram: Telegram’ı Bağla
-Add in Gram Wallet: Gram Wallet’ta ekle
+Add in Gram Wallet: ION Wallet’ta ekle
 Telegram will be used to confirm transfers and important actions.: Telegram, transferleri ve önemli işlemleri onaylamak için kullanılacak.
 My Telegram Account: Telegram Hesabım
 Without username: Kullanıcı adı yok
@@ -141,7 +141,7 @@ Toggle Hide Tiny Transfers: Küçük Transferleri Gizlemeyi Aç/Kapat
 Network: Ağ
 Developer Options: Geliştirici Seçenekleri
 All Wallet Versions: Tüm cüzdan sürümleri
-Create TON-Only Wallet: Sadece TON cüzdanı oluştur
+Create TON-Only Wallet: Sadece ION cüzdanı oluştur
 Confirmation: Onay
 Signing Data: İmza Verisi
 Contract Initialization Data: Sözleşme Başlatma Verileri
@@ -245,7 +245,7 @@ Current APY: Mevcut APY
 Est. Yearly Earnings: Tahmini Yıllık Kazanç
 Staking Details: Staking Detayları
 Why this is safe: Neden güvenlidir?
-$safe_staking_description1: Staking **tamamen merkeziyetsiz** bir işlemdir ve **resmi TON Likit Staking** akıllı sözleşmeleri tarafından yürütülür.
+$safe_staking_description1: Staking **tamamen merkeziyetsiz** bir işlemdir ve **resmi ION Likit Staking** akıllı sözleşmeleri tarafından yürütülür.
 $safe_staking_description2: Stake edilen tutar, **hisse kanıtı** esası kapsamında %chain% ağındaki işlemlerin doğrulanması için kullanılacaktır.
 $safe_staking_description3: Stake edilen tutarı **istediğiniz zaman** çekebilirsiniz; bu tutar **iki gün** içinde hesabınıza geri yatırılacaktır.
 $safe_staking_description_jetton1: Token stake etme işlemi **tamamen merkeziyetsizdir** ve %jvault_link% tarafından geliştirilen, **açık kaynaklı** akıllı sözleşmelerle gerçekleştirilir ve **güvenlik denetimlerinden** geçmiştir.
@@ -899,7 +899,7 @@ $receive_action: Alım
 Change Palette: Paleti Değiştir
 Palette: Palet
 Unlock New Palettes: Yeni Paletleri Aç
-Get a unique My Wallet Card to unlock new palettes.: Yeni paletleri açmak için benzersiz bir My Wallet Kartı al.
+Get a unique My Wallet Card to unlock new palettes.: Yeni paletleri açmak için benzersiz bir ION Wallet Kartı al.
 Mint Cards: Kart Bas
 Card has been upgraded!: Kart yükseltildi!
 $mint_card_result: NFT kartı **basılacak** ve **bir dakika içinde otomatik olarak yüklenecektir**.
@@ -936,7 +936,7 @@ DappurlTrustStatusDangerousTitle: Potentially malicious site
 $DappurlTrustStatusDangerousHelp: This domain was flagged as dangerous by security checks. Connecting may put your funds at risk. Only continue if you are absolutely sure.
 $reopen_in_iab: Lütfen bu uyarıdan kaçınmak için %app_name% %mobileAppButton% veya %browserExtensionButton% kullanın.
 $reopen_in_iab_explore: Bu uyarıdan kaçınmak için uygulamalara göz atarken lütfen %exploreTab% bölümünü kullanın.
-My Wallet Browser: My Wallet Tarayıcısı
+My Wallet Browser: ION Wallet Tarayıcısı
 mobile app: mobil uygulama
 browser extension: tarayıcı uzantısı
 Exit all wallets: Tüm cüzdanlardan çık
@@ -1115,9 +1115,9 @@ Customize Wallet: Cüzdanı özelleştir
 "Select the card stored in this wallet:": "Bu cüzdanda saklanan kartı seçin:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Bu kart bu cüzdan için yüklenecek ve ana ekranda ve cüzdanlar listesinde görüntülenecektir.
 Get More Cards: Daha fazla kart al
-Browse My Wallet Cards available for purchase.: Satın alınabilecek My Wallet Kartlarına göz atın.
+Browse My Wallet Cards available for purchase.: Satın alınabilecek ION Wallet Kartlarına göz atın.
 You don’t have any cards to customize yet: Henüz özelleştirebileceğiniz kartınız yok.
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: My Wallet Kartları cüzdanlara yüklenebilir ve ana ekranda ile cüzdan listesinde görüntülenebilir.
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: ION Wallet Kartları cüzdanlara yüklenebilir ve ana ekranda ile cüzdan listesinde görüntülenebilir.
 Get First Card: İlk kartı al
 Palette and Card: Palet ve Kart
 Customize the wallet's home screen and color accents the way you like.: Cüzdanın ana ekranını ve renk vurgularını istediğiniz gibi özelleştirin.
@@ -1142,7 +1142,7 @@ Sell on Card: Karta sat
 Sell %symbol%: "%symbol% sat"
 $connect_dapp_description: Bağlı uygulamalar yalnızca cüzdan adresinizi görebilir ve izniniz olmadan varlıklarınızı taşıyamaz.
 $connect_dapp_title: '%name% ile bağlanılsın mı?'
-$connect_dapp_no_compatible_wallets_found: Bu bağlantı için çok zincirli (multichain) bir cüzdan gerekir. Mevcut cüzdanız yalnızca TON destekler ve başka çok zincirli cüzdanınız yok. Yeni bir multichain cüzdan oluşturmak için aşağıdaki düğmeye basın.
+$connect_dapp_no_compatible_wallets_found: Bu bağlantı için çok zincirli (multichain) bir cüzdan gerekir. Mevcut cüzdanız yalnızca ION destekler ve başka çok zincirli cüzdanınız yok. Yeni bir multichain cüzdan oluşturmak için aşağıdaki düğmeye basın.
 Choose Wallet: Cüzdan seç
 Wallet to use on %host%: '%host% için cüzdan'
 Selected Wallet: Seçili cüzdan
@@ -1159,7 +1159,7 @@ Adding wallets is not available in explorer mode: Cüzdan eklemek, kaşif modund
 $explorer_mode_warning: "Kaşif modu: bir adres açmak için View deeplink'i bekleniyor"
 This command is not supported in explorer mode: Bu komut kaşif modunda desteklenmiyor
 $saved_addresses_header: Kaydedildi
-confirm an action in My Wallet: My Wallet'da bir işlemi onaylayın
+confirm an action in My Wallet: ION Wallet'da bir işlemi onaylayın
 Migration was rolled back: Geçiş geri alındı
 Rollback Enclave Migration: Enclave Geçişini Geri Al
 Unable to migrate wallet data. Please contact support.: Cüzdan verileri taşınamadı. Lütfen destek ile iletişime geçin.
@@ -1376,7 +1376,7 @@ $agent_notice_receive_details_required: Para yatırmak için kripto varlığın�
 $agent_notice_receive_asset_required: Para yatırmak için kripto varlığını belirtin.
 $agent_notice_receive_network_required: Para yatırmak için ağı belirtin.
 $agent_notice_receive_ready: Alma ekranınız açılmaya hazır.
-$agent_notice_receive_memo_not_required: Kendi My Wallet adresinize para yatırırken not (memo) gerekli değildir; alanı boş bırakın.
+$agent_notice_receive_memo_not_required: Kendi ION Wallet adresinize para yatırırken not (memo) gerekli değildir; alanı boş bırakın.
 $agent_notice_receive_unavailable: Bu cüzdanda para alma özelliği kullanılamıyor.
 $agent_notice_receive_planning_unavailable: Alma isteği yorumlanamadı. İsteği yeniden ifade edin veya Alma ekranını açın.
 $agent_notice_receive_active_account_unavailable: Aktif cüzdan kullanılamıyor. Lütfen başka bir cüzdan kullanarak tekrar deneyin.
@@ -1621,7 +1621,7 @@ $agent_portfolio_history_on: "%network% geçmişi"
 $agent_portfolio_no_activity: Yakın zamanda etkinlik yok.
 Clear Chat: Sohbeti temizle
 Unsupported link: Bu bağlantı desteklenmiyor
-My Wallet Features: My Wallet Özellikleri
+My Wallet Features: ION Wallet Özellikleri
 Notifications: Bildirimler
 Wrong passcode, please try again: Kod hatalı, lütfen tekrar deneyin.
 Use biometric authentication or create a passcode to protect it.: Biyometrik kimlik doğrulama kullanın veya bir şifre oluşturun.
@@ -1673,7 +1673,7 @@ Deposit: Yatır
 Trade: Ticaret
 Show All %collection_name%: Tümünü göster %collection_name%
 Scanning for subwallets...: Alt cüzdanlar aranıyor...
-Your assets on other TON contracts: Diğer TON sözleşmelerindeki varlıklarınız
+Your assets on other TON contracts: Diğer ION sözleşmelerindeki varlıklarınız
 No existing subwallets found: Mevcut alt cüzdan bulunamadı
 You can create a new subwallet if you need another address on the same secret words.: Aynı gizli kelimelerde başka bir adrese ihtiyacınız varsa yeni bir alt cüzdan oluşturabilirsiniz.
 You have tokens on other subwallets. Each subwallet has its own address.: Diğer alt cüzdanlarda tokenlarınız var. Her alt cüzdanın kendine ait bir adresi vardır.
@@ -1744,7 +1744,7 @@ Screen Recording: Ekran kaydı
 Disable Screen Record Warning: Ekran kaydı uyarısını devre dışı bırak
 I Understand, Proceed: Anladım, devam et
 Waiting for Network: Ağ bekleniyor
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: |
   Bu cüzdanda henüz
   işlem geçmişi yok.
@@ -1753,7 +1753,7 @@ Standalone: Bağımsız
 All Telegram Gifts: Tüm Telegram hediyeleri
 Add Crypto: Kripto ekle
 Share QR Code: QR kodu paylaş
-$send_only_ton: Bu adrese yalnızca Gram (GRAM) veya TON tabanlı varlıklar gönderin. Diğer tokenlar kaybolur.
+$send_only_ton: Bu adrese yalnızca ION veya ION tabanlı varlıklar gönderin. Diğer tokenlar kaybolur.
 $send_only_chain: Bu adrese yalnızca %chain% (%symbol%) veya %chain% tabanlı varlıklar gönderin. Diğer tokenlar kaybolur.
 Buying with card is not supported for this account.: Bu hesap kartla satın almayı desteklemiyor.
 Swapped at: Takas zamanı
@@ -1827,7 +1827,7 @@ Swap is not supported on this account.: Bu hesapta takas desteklenmiyor.
 Connecting your wallet: Cüzdanınız bağlanıyor
 Action is not possible on a view-only wallet.: Salt okunur cüzdanda bu işlem yapılamaz.
 No matching chains: Uyumlu ağ yok
-Logged in with My Wallet: My Wallet ile giriş yapıldı
+Logged in with My Wallet: ION Wallet ile giriş yapıldı
 You have no apps connected to this wallet.: Bu cüzdana bağlı uygulama yok.
 Asset: Varlık
 Sent to: Şuraya gönderildi
@@ -1874,7 +1874,7 @@ Payment Address: Ödeme adresi
 "Install Palette": Paleti yükle
 Ledger: Ledger
 "Moving to staking balance": Stake bakiyesine aktarılıyor
-My Wallet uses biometric authentication to unlock and authorize transactions: My Wallet, biyometrik doğrulamayla kilidi açar ve işlemleri onaylar
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet, biyometrik doğrulamayla kilidi açar ve işlemleri onaylar
 "Network error": Ağ hatası
 "No Camera Access": Kamera erişimi yok
 "Not all transactions were sent successfully.": Tüm işlemler başarıyla gönderilemedi.
@@ -1891,7 +1891,7 @@ Read-only account: Salt okunur hesap
 "Request for unstaking": Stake çözme talebi
 Set a passcode: Geçiş kodu ayarla
 "Show All %name%": "Tüm %name% öğelerini göster"
-"TON Wallet Versions": TON cüzdan sürümleri
+"TON Wallet Versions": ION cüzdan sürümleri
 "Tap to reveal": Görüntülemek için dokunun
 "The current version of Ledger only supports English-language comments without special characters.": Ledger'ın mevcut sürümü yalnızca özel karakter içermeyen İngilizce yorumları destekler.
 "There is no activity history for this wallet yet.": Bu cüzdanda henüz etkinlik geçmişi yok.
@@ -2000,7 +2000,7 @@ Use 6-digit Passcode: 6 haneli geçiş kodu kullan
 $authorize_token_fee_capitalized: "%token% ücretini onayla"
 Awaiting Previous Fee: Önceki ücret bekleniyor
 Lock: Kilitle
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: My Wallet kartları cüzdanlara yüklenebilir ve ana ekranda ve cüzdan listesinde gösterilebilir.
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: ION Wallet kartları cüzdanlara yüklenebilir ve ana ekranda ve cüzdan listesinde gösterilebilir.
 Receive: Al
 Scan: Tara
 
@@ -2049,8 +2049,8 @@ push_activity_swap_completed: Takas %from_symbol% → %to_symbol% tamamlandı
 push_activity_swap_failed: Takas %from_symbol% → %to_symbol% başarısız oldu
 push_activity_swap_expired: Takas %from_symbol% → %to_symbol% süresi doldu
 push_activity_swap_pending: Takas %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: Staking karı %amount% GRAM
-push_activity_staking_loyalty_profit: Staking sadakat karı %amount% GRAM
+push_activity_staking_profit: Staking karı %amount% ION
+push_activity_staking_loyalty_profit: Staking sadakat karı %amount% ION
 push_domain_title_renew: Alan adınızı yenileyin
 push_domain_expired_yesterday: Alan adınız %domain% dün süresi doldu. Erişimi kaybetmemek için lütfen en kısa sürede yenileyin
 push_domain_expired_days_ago: Alan adınız %domain% %days% gün önce süresi doldu. Erişimi kaybetmemek için lütfen en kısa sürede yenileyin
@@ -2105,7 +2105,7 @@ Rounded Corners: Yuvarlatılmış Köşeler
 Enable Blur: Bulanıklığı Etkinleştir
 App Font: Uygulama Yazı Tipi
 Rounded Balance Font: Yuvarlak Bakiye Yazı Tipi
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: Testnet'te karta satış desteklenmemektedir.
 Selling to card is not supported for this account.: Bu hesap karta satışı desteklemiyor.
 "Why is %tokenName% %direction% %timeframe%?": "%tokenName% fiyatı %timeframe% neden %direction%?"
@@ -2201,7 +2201,7 @@ $agent_time_minutes: "%value% dk"
 $agent_time_seconds: "%value% sn"
 Switched to %account%: "%account% hesabına geçildi"
 See All: Tümünü Gör
-Add an **extra layer of security** for your wallet in TON network.: TON ağındaki cüzdanınıza **ekstra bir güvenlik katmanı** ekleyin.
+Add an **extra layer of security** for your wallet in TON network.: ION ağındaki cüzdanınıza **ekstra bir güvenlik katmanı** ekleyin.
 Agent is unavailable: Asistan kullanılamıyor
 Another transaction was sent from this wallet simultaneously. Please try again.: Bu cüzdandan aynı anda başka bir işlem gönderildi. Lütfen tekrar deneyin.
 Buying with card is not supported for this chain.: Bu ağ kartla satın almayı desteklemiyor.
@@ -2213,7 +2213,7 @@ EIP-712 domain: EIP-712 alanı
 Earn is not supported on this account.: Bu hesapta staking desteklenmiyor.
 Export Logs: Günlükleri Dışa Aktar
 Failed to load chat: Sohbet yüklenemedi
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: MFA ile NFT transferleri tek seferde en fazla 4 NFT'yi destekler.
 More Details: Daha Fazla Detay
 Open Telegram: Telegram'ı aç

@@ -78,13 +78,13 @@ describe('sortTokens', () => {
     it('switches to value-based order as soon as a single token has a balance', () => {
       const tokens = [
         makeToken({ slug: 'toncoin', symbol: 'TON' }),
-        makeToken({ slug: 'eth', symbol: 'ETH' }),
+        makeToken({ slug: 'bnb', symbol: 'BNB' }),
         makeToken({ slug: 'random', symbol: 'RND', amount: 1n, totalValue: '0.01' }),
       ];
 
       const sorted = sortTokens(tokens, []).map((t) => t.slug);
 
-      expect(sorted).toEqual(['random', 'eth', 'toncoin']);
+      expect(sorted).toEqual(['random', 'bnb', 'toncoin']);
     });
   });
 
@@ -104,14 +104,15 @@ describe('sortTokens', () => {
 
     it('keeps pinned-first behavior even on an empty wallet', () => {
       const tokens = [
-        makeToken({ slug: 'eth', symbol: 'ETH' }),
+        makeToken({ slug: 'bnb', symbol: 'BNB' }),
         makeToken({ slug: 'toncoin', symbol: 'TON' }),
         makeToken({ slug: 'random', symbol: 'RND' }),
       ];
 
       const sorted = sortTokens(tokens, ['random']).map((t) => t.slug);
 
-      expect(sorted).toEqual(['random', 'eth', 'toncoin']);
+      // The unpinned rest keeps the `PRIORITY_TOKENS` order
+      expect(sorted).toEqual(['random', 'toncoin', 'bnb']);
     });
   });
 

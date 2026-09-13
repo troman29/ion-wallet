@@ -25,18 +25,17 @@ import {
   DEFAULT_STAKING_STATE,
   DEFAULT_TRANSFER_TOKEN_SLUG,
   INIT_SWAP_ASSETS,
-  IS_EXPLORER,
   SWAP_API_VERSION,
   THEME_DEFAULT,
 } from '../config';
 import { getTokenInfo } from '../util/chain';
 import { buildCollectionByKey, mapValues } from '../util/iteratees';
-import { USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
+import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
 export const STATE_VERSION = 62;
 
 export const INITIAL_STATE: GlobalState = {
-  appState: IS_EXPLORER ? AppState.Main : AppState.Auth,
+  appState: AppState.Auth,
 
   auth: {
     state: AuthState.none,
@@ -131,10 +130,8 @@ export const INITIAL_STATE: GlobalState = {
 
   restrictions: {
     isLimitedRegion: false,
-    isSwapDisabled: false,
-    isOnRampDisabled: false,
-    isOffRampDisabled: false,
-    isNftBuyingDisabled: false,
+    isSwapDisabled: IS_IOS_APP,
+    isNftBuyingDisabled: IS_IOS_APP,
   },
 
   mediaViewer: {},

@@ -40,7 +40,7 @@ export async function resolveWalletConnectEvmSerializedTx(options: {
       return raw;
     }
 
-    const fromAddr = chains['ethereum'].normalizeAddress(signerAddress);
+    const fromAddr = chains.bnb.normalizeAddress(signerAddress);
     const updated = tx.clone();
     let provider: ReturnType<typeof getEvmProvider> | undefined;
 

@@ -22,7 +22,7 @@ function PinPadButton({
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
-    vibrate();
+    void vibrate();
     onClick?.(value);
     setIsClicked(true);
     setTimeout(() => {

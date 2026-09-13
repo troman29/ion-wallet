@@ -1,5 +1,4 @@
 pluginManagement {
-  includeBuild('build-logic')
   repositories {
     google()
     mavenCentral()
@@ -11,49 +10,7 @@ plugins {
   id 'org.gradle.toolchains.foojay-resolver-convention' version '0.10.0'
 }
 include ':app'
+include ':capacitor-cordova-android-plugins'
+project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
 
-def airSubModulePath = settings.ext.find('airSubModulePath')
-
-def subModules = [
-  "WalletNative",
-  "Icons",
-  "UIComponents",
-  "UICreateWallet",
-  "UISwap",
-  "WalletContext",
-  "WalletCore",
-  "WalletSDK",
-  "UISettings",
-  "UIPasscode",
-  "UIHome",
-  "UIPortfolio",
-  "UIAssets",
-  "UIBrowser",
-  "UITransaction",
-  "UIAgent",
-  "UIMarket",
-  "OverScroll",
-  "UISend",
-  "UIInAppBrowser",
-  "AirAsFramework",
-  "UIStake",
-  "QRScan",
-  "UIReceive",
-  "UITonConnect",
-  "UIWalletConnectPay",
-  "Ledger",
-  "UIWidgets",
-  "UIWidgetsConfigurations",
-  "WalletBaseContext",
-  "NativeEnclave",
-]
-include(airSubModulePath)
-project(airSubModulePath).projectDir = file('air/SubModules')
-
-include("$airSubModulePath:vkryl:core")
-include("$airSubModulePath:vkryl:android")
-
-subModules.each { moduleName ->
-  include "${airSubModulePath}:${moduleName}"
-  project("${airSubModulePath}:${moduleName}").name = moduleName
-}
+apply from: 'capacitor.settings.gradle'

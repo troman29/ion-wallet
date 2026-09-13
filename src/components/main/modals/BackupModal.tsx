@@ -3,7 +3,7 @@ import React, {
 } from '../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../global';
 
-import { MNEMONIC_COUNT } from '../../../config';
+import { IS_CAPACITOR, MNEMONIC_COUNT } from '../../../config';
 import { selectMnemonicForCheck } from '../../../global/actions/api/auth';
 import { selectCurrentAccountId, selectCurrentAccountState } from '../../../global/selectors';
 import { getDoesUsePinPad } from '../../../util/biometrics';
@@ -75,7 +75,7 @@ function BackupModal({
     if (!mnemonicRef.current) {
       setError('Failed to fetch recovery phrase.');
       setIsLoading(false);
-      vibrateOnError();
+      void vibrateOnError();
       return;
     }
     if (getDoesUsePinPad()) {
@@ -139,6 +139,7 @@ function BackupModal({
               isActive={isActive}
               isLoading={isLoading}
               error={error}
+              withCloseButton={IS_CAPACITOR}
               submitLabel={lang('$back_up_auth')}
               cancelLabel={lang('Cancel')}
               noAutoConfirm

@@ -16,10 +16,6 @@ jest.mock('./tonConnectBridgeApi', () => ({
   buildTonConnectBridgeApi: jest.fn(),
 }));
 
-jest.mock('./solanaConnectBridgeApi', () => ({
-  buildSolanaConnectBridgeApi: jest.fn(),
-}));
-
 jest.mock('./evmConnectBridgeApi', () => ({
   buildEvmConnectBridgeApi: jest.fn(() => ({})),
 }));
