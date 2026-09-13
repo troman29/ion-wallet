@@ -14,12 +14,12 @@ import type { AutolockValueType, LangCode, LangItem } from './global/types';
 
 export const APP_ENV = process.env.APP_ENV || 'production';
 
-export const APP_NAME = process.env.APP_NAME || 'My Wallet';
+export const APP_NAME = process.env.APP_NAME || 'ION Wallet';
 export const APP_VERSION = process.env.APP_VERSION!;
 export const APP_COMMIT_HASH = process.env.APP_COMMIT_HASH!;
 export const APP_ENV_MARKER = APP_ENV === 'staging' ? 'Beta' : APP_ENV === 'development' ? 'Dev' : undefined;
-export const EXTENSION_NAME = 'My Wallet • Crypto & Web3';
-export const EXTENSION_DESCRIPTION = 'Self-custodial wallet for TON and BNB. '
+export const EXTENSION_NAME = 'ION Wallet • Crypto & Web3';
+export const EXTENSION_DESCRIPTION = 'Self-custodial wallet for ION and BNB. '
   + 'Swap, stake, manage NFTs and explore dapps.';
 
 export const DEBUG = APP_ENV !== 'production' && APP_ENV !== 'perf' && APP_ENV !== 'test';
@@ -339,8 +339,8 @@ export const TON_DNS_RENEWAL_WARNING_DAYS = 14;
 export const TON_DNS_RENEWAL_NFT_WARNING_DAYS = 30;
 
 export const TONCOIN = {
-  name: 'Gram',
-  symbol: 'GRAM',
+  name: 'ION',
+  symbol: 'ION',
   slug: 'toncoin',
   decimals: 9,
   chain: 'ton',
@@ -378,7 +378,7 @@ export const TON_USDT_MAINNET = {
   decimals: 6,
   tokenAddress: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
   image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
-  label: 'TON',
+  label: 'ION',
   priceUsd: 1,
 } as const;
 
@@ -519,9 +519,9 @@ export const CURRENCIES: Record<
     fallbackRate: '0.00000866',
   },
   TON: {
-    name: 'Gram',
+    name: 'ION',
     decimals: 9,
-    shortSymbol: 'GRAM',
+    shortSymbol: 'ION',
     shortSymbolPosition: 'end',
     fallbackRate: '0.31360000',
   },

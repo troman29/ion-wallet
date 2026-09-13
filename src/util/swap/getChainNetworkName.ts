@@ -6,7 +6,7 @@ const NETWORK_NAMES_EXCEPTIONS: Record<string, string> = {
   ethereum_classic: 'Ethereum Classic',
   bitcoin_cash: 'Bitcoin Cash',
   binance_dex: 'Binance Dex',
-  ton: 'TON',
+  ton: 'ION',
   bitcoin: 'Bitcoin',
   ethereum: 'Ethereum',
   solana: 'Solana',

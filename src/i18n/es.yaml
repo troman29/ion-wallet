@@ -13,12 +13,12 @@ $2fa_security: 2FA con Telegram
 2FA with Telegram: 2FA con Telegram
 Confirm operations in Telegram as a second step.: Confirma las operaciones en Telegram como segundo paso.
 Confirm with: Confirmar con
-Add an extra layer of security for your wallet in TON network.: Añade una capa adicional de seguridad para tu monedero en la red TON.
+Add an extra layer of security for your wallet in TON network.: Añade una capa adicional de seguridad para tu monedero en la red ION.
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: Firma transferencias y acciones importantes con tu código de acceso y luego confírmalas en Telegram.
 This helps protect your funds even if your recovery phrase or keys are compromised.: Esto ayuda a proteger tus fondos incluso si tu frase de recuperación o tus claves se ven comprometidas.
 "Connection Fee:": "Comisión de conexión:"
 Connect Telegram: Conectar Telegram
-Add in Gram Wallet: Añadir en Gram Wallet
+Add in Gram Wallet: Añadir en ION Wallet
 Telegram will be used to confirm transfers and important actions.: Telegram se usará para confirmar transferencias y acciones importantes.
 My Telegram Account: Mi cuenta de Telegram
 Without username: Sin nombre de usuario
@@ -142,7 +142,7 @@ Toggle Hide Tiny Transfers: Alternar ocultar transacciones pequeñas
 Network: Red
 Developer Options: Opciones de desarrollador
 All Wallet Versions: Todas las versiones de wallet
-Create TON-Only Wallet: Crear wallet solo de TON
+Create TON-Only Wallet: Crear wallet solo de ION
 Confirmation: Confirmar
 Signing Data: Datos de Firma
 $signature_warning: Firmar datos personalizados es muy peligroso. Úsalo solo si confías en su origen.
@@ -245,7 +245,7 @@ Current APY: APY actual
 Est. Yearly Earnings: Ganancia est. por año
 Staking Details: Detalles del staking
 Why this is safe: Por qué esto es seguro
-$safe_staking_description1: El staking es **totalmente descentralizado** y operado por los **TON Liquid Staking smart contracts**.
+$safe_staking_description1: El staking es **totalmente descentralizado** y operado por los **ION Liquid Staking smart contracts**.
 $safe_staking_description2: La participación depositada se utilizará para la validación de la red %chain% como parte de su esencia de **prueba de participación**.
 $safe_staking_description3: Puede retirar su apuesta en **cualquier momento** y se depositará de nuevo en su cuenta dentro de **dos días**.
 $safe_staking_description_jetton1: El staking de tokens es **completamente descentralizado** y operado por contratos inteligentes de **código abierto** desarrollados por %jvault_link% y que han pasado **auditorías de seguridad**.
@@ -902,7 +902,7 @@ $receive_action: Recibir
 Change Palette: Cambiar paleta
 Palette: Paleta
 Unlock New Palettes: Desbloquear nuevas paletas
-Get a unique My Wallet Card to unlock new palettes.: Obtén una tarjeta única de My Wallet para desbloquear nuevas paletas.
+Get a unique My Wallet Card to unlock new palettes.: Obtén una tarjeta única de ION Wallet para desbloquear nuevas paletas.
 Mint Cards: Crear tarjetas
 Card has been upgraded!: ¡La tarjeta ha sido mejorada!
 $mint_card_result: La tarjeta NFT será **creada** y **instalada automáticamente** en un minuto.
@@ -939,7 +939,7 @@ DappurlTrustStatusDangerousTitle: Potentially malicious site
 $DappurlTrustStatusDangerousHelp: This domain was flagged as dangerous by security checks. Connecting may put your funds at risk. Only continue if you are absolutely sure.
 $reopen_in_iab: Por favor, use %app_name% %mobileAppButton% o %browserExtensionButton% para evitar esta advertencia.
 $reopen_in_iab_explore: Use la sección %exploreTab% al navegar por aplicaciones para evitar esta advertencia.
-My Wallet Browser: Navegador My Wallet
+My Wallet Browser: Navegador ION Wallet
 mobile app: aplicación móvil
 browser extension: extensión del navegador
 Exit all wallets: Cerrar todas las billeteras
@@ -1118,9 +1118,9 @@ Customize Wallet: Personalizar billetera
 "Select the card stored in this wallet:": "Selecciona la tarjeta almacenada en esta billetera:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Esta tarjeta se instalará para esta billetera y se mostrará en la pantalla principal y en la lista de billeteras.
 Get More Cards: Obtener más tarjetas
-Browse My Wallet Cards available for purchase.: Explora las tarjetas My Wallet disponibles para comprar.
+Browse My Wallet Cards available for purchase.: Explora las tarjetas ION Wallet disponibles para comprar.
 You don’t have any cards to customize yet: Aún no tienes tarjetas para personalizar.
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: Las tarjetas My Wallet pueden instalarse para las billeteras y mostrarse en la pantalla principal y en la lista de billeteras.
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: Las tarjetas ION Wallet pueden instalarse para las billeteras y mostrarse en la pantalla principal y en la lista de billeteras.
 Get First Card: Obtener primera tarjeta
 Palette and Card: Paleta y tarjeta
 Customize the wallet's home screen and color accents the way you like.: Personaliza la pantalla principal y los acentos de color de la billetera a tu gusto.
@@ -1145,7 +1145,7 @@ Sell on Card: Vender con tarjeta
 Sell %symbol%: Vender %symbol%
 $connect_dapp_description: Las aplicaciones conectadas solo pueden ver la dirección de tu billetera y no podrán mover tus activos sin tu permiso.
 $connect_dapp_title: ¿Conectar con %name%?
-$connect_dapp_no_compatible_wallets_found: Esta conexión requiere una billetera multichain. Tu billetera actual solo admite TON y no tienes otras billeteras multichain. Usa el botón de abajo para crear una nueva billetera multichain.
+$connect_dapp_no_compatible_wallets_found: Esta conexión requiere una billetera multichain. Tu billetera actual solo admite ION y no tienes otras billeteras multichain. Usa el botón de abajo para crear una nueva billetera multichain.
 Choose Wallet: Elegir billetera
 Wallet to use on %host%: Billetera para %host%
 Selected Wallet: Billetera seleccionada
@@ -1162,7 +1162,7 @@ Adding wallets is not available in explorer mode: Agregar billeteras no está di
 $explorer_mode_warning: "Modo explorador: esperando un enlace profundo de View para abrir una dirección"
 This command is not supported in explorer mode: Este comando no es compatible en modo explorador
 $saved_addresses_header: Guardado
-confirm an action in My Wallet: confirmar una acción en My Wallet
+confirm an action in My Wallet: confirmar una acción en ION Wallet
 Migration was rolled back: La migración fue revertida
 Rollback Enclave Migration: Revertir migración de enclave
 Unable to migrate wallet data. Please contact support.: No se pudieron migrar los datos de la billetera. Por favor, contacte al soporte.
@@ -1379,7 +1379,7 @@ $agent_notice_receive_details_required: Especificar el activo cripto y red para 
 $agent_notice_receive_asset_required: Especifica el activo cripto para el depósito.
 $agent_notice_receive_network_required: Especifica la red para el depósito.
 $agent_notice_receive_ready: Tu pantalla de recepción está lista para abrirse.
-$agent_notice_receive_memo_not_required: No se requiere un memo al financiar tu propia dirección de My Wallet — deja el campo vacío.
+$agent_notice_receive_memo_not_required: No se requiere un memo al financiar tu propia dirección de ION Wallet — deja el campo vacío.
 $agent_notice_receive_unavailable: Recepción no está disponible para esta cartera.
 $agent_notice_receive_planning_unavailable: La solicitud de recepción no pudo interpretarse. Reformularla o abrir Recibir.
 $agent_notice_receive_active_account_unavailable: La cartera activa no está disponible. Cambia de cartera e inténtalo de nuevo.
@@ -1624,7 +1624,7 @@ $agent_portfolio_history_on: Historial en %network%
 $agent_portfolio_no_activity: Sin actividad reciente.
 Clear Chat: Borrar chat
 Unsupported link: Este enlace no es compatible
-My Wallet Features: Características de My Wallet
+My Wallet Features: Características de ION Wallet
 Notifications: Notificaciones
 Enter Passcode: Introducir código
 Wrong passcode, please try again: Código incorrecto, por favor inténtelo de nuevo.
@@ -1676,7 +1676,7 @@ Deposit: Depositar
 Trade: Operar
 Show All %collection_name%: Mostrar todo %collection_name%
 Scanning for subwallets...: Buscando subcarteras...
-Your assets on other TON contracts: Sus activos en otros contratos TON
+Your assets on other TON contracts: Sus activos en otros contratos ION
 No existing subwallets found: No se encontraron subcarteras existentes
 You can create a new subwallet if you need another address on the same secret words.: Puede crear una nueva subcartera si necesita otra dirección con las mismas palabras secretas.
 You have tokens on other subwallets. Each subwallet has its own address.: Tienes tokens en otras subcarteras. Cada subcartera tiene su propia dirección.
@@ -1750,7 +1750,7 @@ Screen Recording: Grabación de pantalla
 Disable Screen Record Warning: Desactivar advertencia de grabación de pantalla
 I Understand, Proceed: Entiendo, continuar
 Waiting for Network: Esperando la red
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: |
   Aún no hay historial
   de actividades en esta cartera.
@@ -1759,7 +1759,7 @@ Standalone: Independiente
 All Telegram Gifts: Todos los regalos de Telegram
 Add Crypto: Añadir cripto
 Share QR Code: Compartir código QR
-$send_only_ton: Envía solo Gram (GRAM) o activos de la red TON a esta dirección. Enviar otros tokens ocasionará su pérdida.
+$send_only_ton: Envía solo ION o activos de la red ION a esta dirección. Enviar otros tokens ocasionará su pérdida.
 $send_only_chain: Envía solo %chain% (%symbol%) o activos de la red %chain% a esta dirección. Enviar otros tokens ocasionará su pérdida.
 Buying with card is not supported for this account.: Esta cuenta no admite compras con tarjeta.
 Swapped at: Intercambiado a las
@@ -1833,7 +1833,7 @@ Swap is not supported on this account.: Esta cuenta no admite intercambios.
 Connecting your wallet: Conectando tu cartera
 Action is not possible on a view-only wallet.: Esta acción no es posible en una cartera de solo lectura.
 No matching chains: No hay redes compatibles
-Logged in with My Wallet: Sesión iniciada con My Wallet
+Logged in with My Wallet: Sesión iniciada con ION Wallet
 You have no apps connected to this wallet.: No tienes apps conectadas a esta cartera.
 Asset: Activo
 Sent to: Enviado a
@@ -1880,7 +1880,7 @@ Payment Address: Dirección de pago
 "Install Palette": Instalar paleta
 Ledger: Ledger
 "Moving to staking balance": Moviendo al saldo de staking
-My Wallet uses biometric authentication to unlock and authorize transactions: My Wallet usa autenticación biométrica para desbloquear y autorizar transacciones
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet usa autenticación biométrica para desbloquear y autorizar transacciones
 "Network error": Error de red
 "No Camera Access": Sin acceso a la cámara
 "Not all transactions were sent successfully.": No todas las transacciones se enviaron correctamente.
@@ -1897,7 +1897,7 @@ Read-only account: Cuenta de solo lectura
 "Request for unstaking": Solicitud de retiro de staking
 Set a passcode: Configurar un código
 "Show All %name%": "Mostrar todos los %name%"
-"TON Wallet Versions": Versiones de la cartera TON
+"TON Wallet Versions": Versiones de la cartera ION
 "Tap to reveal": Toca para mostrar
 "The current version of Ledger only supports English-language comments without special characters.": La versión actual de Ledger solo admite comentarios en inglés sin caracteres especiales.
 "There is no activity history for this wallet yet.": Aún no hay historial de actividad para esta cartera.
@@ -2006,7 +2006,7 @@ Use 6-digit Passcode: Usar código de 6 dígitos
 $authorize_token_fee_capitalized: Autorizar comisión de %token%
 Awaiting Previous Fee: Esperando la comisión anterior
 Lock: Bloquear
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: Las tarjetas de My Wallet pueden instalarse en las carteras y mostrarse en la pantalla principal y en la lista de carteras.
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: Las tarjetas de ION Wallet pueden instalarse en las carteras y mostrarse en la pantalla principal y en la lista de carteras.
 Receive: Recibir
 Scan: Escanear
 
@@ -2055,8 +2055,8 @@ push_activity_swap_completed: Intercambiado %from_symbol% → %to_symbol%
 push_activity_swap_failed: Intercambio %from_symbol% → %to_symbol% fallido
 push_activity_swap_expired: Intercambio %from_symbol% → %to_symbol% caducado
 push_activity_swap_pending: Intercambio %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: Recompensa de staking %amount% GRAM
-push_activity_staking_loyalty_profit: Recompensa de lealtad de staking %amount% GRAM
+push_activity_staking_profit: Recompensa de staking %amount% ION
+push_activity_staking_loyalty_profit: Recompensa de lealtad de staking %amount% ION
 push_domain_title_renew: Renueva tu dominio
 push_domain_expired_yesterday: Tu dominio %domain% venció ayer. Renuévalo lo antes posible para evitar perder el acceso
 push_domain_expired_days_ago: Tu dominio %domain% venció hace %days% días. Renuévalo lo antes posible para evitar perder el acceso
@@ -2111,7 +2111,7 @@ Rounded Corners: Esquinas redondeadas
 Enable Blur: Activar desenfoque
 App Font: Fuente de la aplicación
 Rounded Balance Font: Fuente redondeada para el saldo
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: La venta con tarjeta no es compatible con Testnet.
 Selling to card is not supported for this account.: Esta cuenta no admite ventas con tarjeta.
 "Why is %tokenName% %direction% %timeframe%?": "¿Por qué ha %direction% el precio de %tokenName% %timeframe%?"
@@ -2207,7 +2207,7 @@ $agent_time_minutes: "%value% min"
 $agent_time_seconds: "%value% s"
 Switched to %account%: Has cambiado a %account%
 See All: Ver todo
-Add an **extra layer of security** for your wallet in TON network.: Añade una **capa adicional de seguridad** para tu monedero en la red TON.
+Add an **extra layer of security** for your wallet in TON network.: Añade una **capa adicional de seguridad** para tu monedero en la red ION.
 Agent is unavailable: El Agente no está disponible
 Another transaction was sent from this wallet simultaneously. Please try again.: Se envió otra transacción desde este monedero al mismo tiempo. Inténtalo de nuevo.
 Buying with card is not supported for this chain.: Esta red no admite compras con tarjeta.
@@ -2219,7 +2219,7 @@ EIP-712 domain: Dominio EIP-712
 Earn is not supported on this account.: Esta cuenta no admite staking.
 Export Logs: Exportar registros
 Failed to load chat: No se pudo cargar el chat
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: Las transferencias de NFT con MFA admiten hasta 4 NFT a la vez.
 More Details: Más detalles
 Open Telegram: Abrir Telegram

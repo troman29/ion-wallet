@@ -9,12 +9,12 @@ On the count of three...: عند العد لثلاثة...
 $back_up_auth: النسخ الاحتياطي
 $back_up_security: النسخ الاحتياطي
 Confirm with: تأكيد مع
-Add an extra layer of security for your wallet in TON network.: أضف طبقة إضافية من الأمان لمحفظتك في شبكة TON.
+Add an extra layer of security for your wallet in TON network.: أضف طبقة إضافية من الأمان لمحفظتك في شبكة ION.
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: قم بتسجيل عمليات النقل والإجراءات المهمة باستخدام رمز المرور الخاص بك، ثم قم بتأكيدها في Telegram.
 This helps protect your funds even if your recovery phrase or keys are compromised.: وهذا يساعد على حماية أموالك حتى لو تعرضت عبارة الاسترداد أو المفاتيح الخاصة بك للاختراق.
 "Connection Fee:": "رسوم الاتصال:"
 Connect Telegram: قم بتوصيل Telegram
-Add in Gram Wallet: أضف في Gram Wallet
+Add in Gram Wallet: أضف في ION Wallet
 Telegram will be used to confirm transfers and important actions.: سيتم استخدام Telegram لتأكيد عمليات النقل والإجراءات المهمة.
 My Telegram Account: حساب Telegram الخاص بي
 Without username: بدون اسم المستخدم
@@ -137,7 +137,7 @@ Toggle Hide Tiny Transfers: تبديل إخفاء عمليات النقل الص
 Network: شبكة
 Developer Options: خيارات المطور
 All Wallet Versions: جميع إصدارات المحفظة
-Create TON-Only Wallet: إنشاء محفظة TON فقط
+Create TON-Only Wallet: إنشاء محفظة ION فقط
 Confirmation: تأكيد
 Signing Data: بيانات التوقيع
 Contract Initialization Data: بيانات تهيئة العقد
@@ -242,7 +242,7 @@ Current APY: أبي الحالي
 Est. Yearly Earnings: "\u200FEST. الأرباح السنوية"
 Staking Details: تفاصيل التوقيع المساحي
 Why this is safe: لماذا هذا آمن
-$safe_staking_description1: الستاكينغ **لامركزي بالكامل** ويتم تشغيله بواسطة العقود الذكية **TON Liquid Scking** الرسمية.
+$safe_staking_description1: الستاكينغ **لامركزي بالكامل** ويتم تشغيله بواسطة العقود الذكية **ION Liquid Scking** الرسمية.
 $safe_staking_description2: سيتم استخدام الحصة المودعة للتحقق من صحة شبكة %chain% كجزء من جوهر **إثبات الحصة**.
 $safe_staking_description3: يمكنك سحب حصتك في **أي وقت** وسيتم إيداعها مرة أخرى في حسابك خلال **يومين**.
 $safe_staking_description_jetton1: إن تخزين الرموز المميزة **لامركزي بالكامل** ويتم تشغيله بواسطة العقود الذكية **مفتوحة المصدر** التي طورتها %jvault_link% واجتازت **عمليات التدقيق الأمني**.
@@ -882,7 +882,7 @@ $receive_action: يستلم
 Change Palette: تغيير لوحة
 Palette: لوحة
 Unlock New Palettes: فتح لوحات جديدة
-Get a unique My Wallet Card to unlock new palettes.: احصل على بطاقة My Wallet الفريدة لفتح لوحات جديدة.
+Get a unique My Wallet Card to unlock new palettes.: احصل على بطاقة ION Wallet الفريدة لفتح لوحات جديدة.
 Mint Cards: بطاقات النعناع
 Card has been upgraded!: تمت ترقية البطاقة!
 $mint_card_result: سيتم **سك** بطاقة NFT و **تثبيتها تلقائيًا** خلال دقيقة واحدة.
@@ -919,7 +919,7 @@ DappurlTrustStatusDangerousTitle: موقع ضار محتمل
 $DappurlTrustStatusDangerousHelp: تم وضع علامة على هذا النطاق على أنه خطير من خلال عمليات التحقق الأمني. الاتصال قد يعرض أموالك للخطر. استمر فقط إذا كنت متأكدًا تمامًا.
 $reopen_in_iab: من فضلك، استخدم %app_name% %mobileAppButton% أو %browserExtensionButton% لتجنب هذا التحذير.
 $reopen_in_iab_explore: يرجى استخدام قسم %exploreTab% عند تصفح التطبيقات لتجنب هذا التحذير.
-My Wallet Browser: متصفح My Wallet
+My Wallet Browser: متصفح ION Wallet
 mobile app: تطبيق جوال
 browser extension: امتداد المتصفح
 Exit all wallets: الخروج من جميع المحافظ
@@ -1101,9 +1101,9 @@ Customize Wallet: تخصيص المحفظة
 "Select the card stored in this wallet:": "حدد البطاقة المخزنة في هذه المحفظة:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: سيتم تثبيت هذه البطاقة لهذه المحفظة وسيتم عرضها على الشاشة الرئيسية وفي قائمة المحافظ.
 Get More Cards: احصل على المزيد من البطاقات
-Browse My Wallet Cards available for purchase.: تصفح بطاقات My Wallet المتاحة للشراء.
+Browse My Wallet Cards available for purchase.: تصفح بطاقات ION Wallet المتاحة للشراء.
 You don’t have any cards to customize yet: ليس لديك أي بطاقات لتخصيصها بعد
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: يمكن تثبيت بطاقات My Wallet للمحافظ وعرضها على الشاشة الرئيسية وفي قائمة المحفظة.
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: يمكن تثبيت بطاقات ION Wallet للمحافظ وعرضها على الشاشة الرئيسية وفي قائمة المحفظة.
 Get First Card: احصل على البطاقة الأولى
 Palette and Card: لوحة وبطاقة
 Customize the wallet's home screen and color accents the way you like.: قم بتخصيص الشاشة الرئيسية للمحفظة ولون اللمسات بالطريقة التي تريدها.
@@ -1138,7 +1138,7 @@ Adding wallets is not available in explorer mode: إضافة المحافظ غي
 $explorer_mode_warning: "وضع المستكشف: انتظار رابط عرض عميق لفتح عنوان"
 This command is not supported in explorer mode: هذا الأمر غير مدعوم في وضع المستكشف
 $saved_addresses_header: أنقذ
-confirm an action in My Wallet: تأكيد الإجراء في My Wallet
+confirm an action in My Wallet: تأكيد الإجراء في ION Wallet
 Timed out waiting for account to be ready: انتهت المهلة في انتظار أن يصبح الحساب جاهزًا
 $connected_apps:
   otherValue: "%count% متصل"
@@ -1334,7 +1334,7 @@ $agent_notice_receive_details_required: حدد الأصل الرقمي والش�
 $agent_notice_receive_asset_required: حدد الأصل الرقمي للإيداع.
 $agent_notice_receive_network_required: حدد الشبكة للإيداع.
 $agent_notice_receive_ready: شاشة الاستلام جاهزة للفتح.
-$agent_notice_receive_memo_not_required: المذكرة غير مطلوبة عند تمويل عنوان My Wallet الخاص بك — اترك الحقل فارغًا.
+$agent_notice_receive_memo_not_required: المذكرة غير مطلوبة عند تمويل عنوان ION Wallet الخاص بك — اترك الحقل فارغًا.
 $agent_notice_receive_unavailable: الاستلام غير متاح لهذه المحفظة.
 $agent_notice_receive_planning_unavailable: تعذر تفسير طلب الاستلام. أعد صياغته أو افتح الاستلام.
 $agent_notice_receive_active_account_unavailable: المحفظة النشطة غير متوفرة. غيّر المحفظة وحاول مرة أخرى.
@@ -1579,7 +1579,7 @@ $agent_portfolio_history_on: السجل على شبكة %network%
 $agent_portfolio_no_activity: لا يوجد نشاط حديث.
 Clear Chat: مسح الدردشة
 Unsupported link: رابط غير معتمد
-My Wallet Features: ميزات My Wallet
+My Wallet Features: ميزات ION Wallet
 Notifications: إشعارات
 Wrong passcode, please try again: رمز المرور خاطئ، يرجى المحاولة مرة أخرى
 Use biometric authentication or create a passcode to protect it.: استخدم المصادقة البيومترية أو قم بإنشاء رمز مرور لحمايتها.
@@ -1624,7 +1624,7 @@ Show All Collectibles: عرض جميع المقتنيات
 Show All Actions: عرض جميع الإجراءات
 Show All %collection_name%: إظهار الكل %collection_name%
 Scanning for subwallets...: جارٍ البحث عن المحافظ الفرعية...
-Your assets on other TON contracts: الأصول الخاصة بك على عقود TON الأخرى
+Your assets on other TON contracts: الأصول الخاصة بك على عقود ION الأخرى
 No existing subwallets found: لم يتم العثور على محافظ فرعية موجودة
 You can create a new subwallet if you need another address on the same secret words.: يمكنك إنشاء محفظة فرعية جديدة إذا كنت بحاجة إلى عنوان آخر بنفس عبارات الاسترداد.
 You have tokens on other subwallets. Each subwallet has its own address.: لديك الرموز المميزة على المحافظ الفرعية الأخرى. كل محفظة فرعية لها عنوانها الخاص.
@@ -1694,14 +1694,14 @@ Screen Recording: تسجيل الشاشة
 Disable Screen Record Warning: تعطيل تحذير تسجيل الشاشة
 I Understand, Proceed: أنا أفهم، تابع
 Waiting for Network: في انتظار الشبكة
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: لا يوجد سجل نشاط في هذه المحفظة حتى الآن.
 Standalone: مستقل
 "Enter wallet name:": "أدخل اسم المحفظة:"
 All Telegram Gifts: جميع هدايا Telegram
 Add Crypto: أضف التشفير
 Share QR Code: مشاركة رمز الاستجابة السريعة
-$send_only_ton: أرسل فقط الأصول المستندة إلى Gram (GRAM) أو TON إلى هذا العنوان. إرسال الرموز الأخرى سيؤدي إلى الخسارة.
+$send_only_ton: أرسل فقط الأصول المستندة إلى ION أو ION إلى هذا العنوان. إرسال الرموز الأخرى سيؤدي إلى الخسارة.
 $send_only_chain: أرسل فقط الأصول المستندة إلى %chain% (%symbol%) أو %chain% إلى هذا العنوان. إرسال الرموز الأخرى سيؤدي إلى الخسارة.
 Buying with card is not supported for this account.: الشراء باستخدام البطاقة غير مدعوم لهذا الحساب.
 Swapped at: تم المبادلة عند
@@ -1771,7 +1771,7 @@ Swap is not supported on this account.: المبادلة غير مدعومة ف�
 Connecting your wallet: ربط محفظتك
 Action is not possible on a view-only wallet.: الإجراء غير ممكن على محفظة العرض فقط.
 No matching chains: لا توجد شبكات متوافقة
-Logged in with My Wallet: تم تسجيل الدخول باستخدام My Wallet
+Logged in with My Wallet: تم تسجيل الدخول باستخدام ION Wallet
 You have no apps connected to this wallet.: ليس لديك أي تطبيقات متصلة بهذه المحفظة.
 Asset: أصل
 Sent to: أرسلت إلى
@@ -1817,7 +1817,7 @@ Import failed: فشل الاستيراد
 Install Palette: تثبيت لوحة
 Ledger: Ledger
 Moving to staking balance: الانتقال إلى التوازن المساحي
-My Wallet uses biometric authentication to unlock and authorize transactions: يستخدم My Wallet المصادقة البيومترية لفتح المعاملات والترخيص بها
+My Wallet uses biometric authentication to unlock and authorize transactions: يستخدم ION Wallet المصادقة البيومترية لفتح المعاملات والترخيص بها
 Network error: خطأ في الشبكة
 No Camera Access: لا يوجد وصول للكاميرا
 Not all transactions were sent successfully.: لم يتم إرسال كافة المعاملات بنجاح.
@@ -1834,7 +1834,7 @@ Read-only account: حساب للقراءة فقط
 Request for unstaking: طلب التفكيك
 Set a passcode: قم بتعيين رمز مرور
 "Show All %name%": إظهار الكل %name%
-TON Wallet Versions: إصدارات المحفظة TON
+TON Wallet Versions: إصدارات المحفظة ION
 Tap to reveal: انقر للكشف
 The current version of Ledger only supports English-language comments without special characters.: الإصدار الحالي من Ledger يدعم فقط التعليقات باللغة الإنجليزية بدون أحرف خاصة.
 There is no activity history for this wallet yet.: لا يوجد سجل نشاط لهذه المحفظة حتى الآن.
@@ -1848,7 +1848,7 @@ Bluetooth access is needed to connect Ledger.: يلزم الوصول إلى ال
 Address not resolved: لم يتم حل العنوان
 Sending more than one NFT isn't supported by Ledger: لا يدعم Ledger إرسال أكثر من NFT
 Updating…: جارٍ التحديث…
-This is how the TON Blockchain works.: هذه هي الطريقة التي تعمل بها سلسلة TON Blockchain.
+This is how the TON Blockchain works.: هذه هي الطريقة التي تعمل بها سلسلة ION Blockchain.
 Waiting for network…: في انتظار الشبكة...
 Wallet is Locked: المحفظة مقفلة
 Warning: تحذير
@@ -1943,7 +1943,7 @@ Use 6-digit Passcode: استخدم رمز المرور المكون من 6 أر�
 $authorize_token_fee_capitalized: تفويض رسوم %token%
 Awaiting Previous Fee: في انتظار الرسوم السابقة
 Lock: قفل
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: يمكن تثبيت بطاقات My Wallet للمحافظ وعرضها على الشاشة الرئيسية وفي قائمة المحفظة.
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: يمكن تثبيت بطاقات ION Wallet للمحافظ وعرضها على الشاشة الرئيسية وفي قائمة المحفظة.
 Receive: يستلم
 Scan: مسح
 $web_permission_prompt: هل تسمح لـ %origin% باستخدام %permissions% الخاص بك؟
@@ -1983,8 +1983,8 @@ push_activity_swap_completed: تم تبديل %from_symbol% → %to_symbol%
 push_activity_swap_failed: تبديل %from_symbol% → فشل %to_symbol%
 push_activity_swap_expired: مبادلة %from_symbol% → انتهت صلاحية %to_symbol%
 push_activity_swap_pending: مبادلة %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: تكديس الأرباح %amount% GRAM
-push_activity_staking_loyalty_profit: تكديس أرباح الولاء %amount% GRAM
+push_activity_staking_profit: تكديس الأرباح %amount% ION
+push_activity_staking_loyalty_profit: تكديس أرباح الولاء %amount% ION
 push_domain_title_renew: تجديد المجال الخاص بك
 push_domain_expired_yesterday: انتهت صلاحية نطاقك %domain% أمس. يرجى تجديده في أقرب وقت ممكن لتجنب فقدان الوصول
 push_domain_expired_days_ago: انتهت صلاحية نطاقك %domain% منذ أيام %days%. يرجى تجديده في أقرب وقت ممكن لتجنب فقدان الوصول
@@ -2069,11 +2069,11 @@ Rounded Corners: زوايا مستديرة
 Enable Blur: تفعيل التمويه
 App Font: خط التطبيق
 Rounded Balance Font: خط الرصيد المستدير
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: البيع على البطاقة غير مدعوم في Testnet.
 Selling to card is not supported for this account.: البيع على البطاقة غير مدعوم لهذا الحساب.
 Copy Wallet Link: نسخ رابط المحفظة
-$connect_dapp_no_compatible_wallets_found: يتطلب هذا الاتصال محفظة متعددة السلاسل. محفظتك الحالية تدعم TON فقط، وليس لديك محافظ أخرى متعددة السلاسل. استخدم الزر أدناه لإنشاء محفظة جديدة متعددة السلاسل.
+$connect_dapp_no_compatible_wallets_found: يتطلب هذا الاتصال محفظة متعددة السلاسل. محفظتك الحالية تدعم ION فقط، وليس لديك محافظ أخرى متعددة السلاسل. استخدم الزر أدناه لإنشاء محفظة جديدة متعددة السلاسل.
 Create Multichain Wallet: إنشاء محفظة متعددة السلاسل
 push_domain_expired_days_ago_number:
   zeroValue: انتهت صلاحية نطاقك %domain% منذ %days% يوم. يرجى تجديده في أقرب وقت ممكن لتجنب فقدان الوصول
@@ -2200,7 +2200,7 @@ $agent_time_minutes: "%value% د"
 $agent_time_seconds: "%value% ث"
 Switched to %account%: تم التبديل إلى %account%
 See All: عرض الكل
-Add an **extra layer of security** for your wallet in TON network.: أضف **طبقة إضافية من الأمان** لمحفظتك على شبكة TON.
+Add an **extra layer of security** for your wallet in TON network.: أضف **طبقة إضافية من الأمان** لمحفظتك على شبكة ION.
 Agent is unavailable: الوكيل غير متاح
 Another transaction was sent from this wallet simultaneously. Please try again.: تم إرسال معاملة أخرى من هذه المحفظة في الوقت نفسه. يرجى المحاولة مرة أخرى.
 Buying with card is not supported for this chain.: الشراء باستخدام البطاقة غير مدعوم لهذه الشبكة.
@@ -2212,7 +2212,7 @@ EIP-712 domain: نطاق EIP-712
 Earn is not supported on this account.: الستاكينغ غير مدعوم في هذا الحساب.
 Export Logs: تصدير السجلات
 Failed to load chat: تعذر تحميل الدردشة
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: تدعم عمليات نقل NFT باستخدام MFA ما يصل إلى 4 NFTs في المرة الواحدة.
 More Details: مزيد من التفاصيل
 Open Telegram: فتح Telegram

@@ -55,10 +55,6 @@ android {
       applicationId "org.mytonwallet.app"
       getIsDefault().set(true)
     }
-    gram {
-      dimension "brand"
-      applicationId "io.gramwallet.app"
-    }
     prod {
       dimension "env"
     }
@@ -113,12 +109,6 @@ dependencies {
   testImplementation libs.kotlin.reflect
   androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
   androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-  // Gram flavor: thin-client (model downloads on demand via Play Services).
-  // mytonwallet flavor uses bundled MLKit pulled in via :capacitor-mlkit-barcode-scanning,
-  // which also brings camera-camera2 transitively.
-  gramImplementation "com.google.android.gms:play-services-mlkit-barcode-scanning:$playServicesMlkitBarcodeScanningVersion"
-  gramImplementation "com.google.android.gms:play-services-base:$playServicesBaseVersion"
-  gramImplementation "androidx.camera:camera-camera2:$cameraCamera2Version"
   implementation platform('com.google.firebase:firebase-bom:33.5.1')
   implementation 'com.google.firebase:firebase-messaging'
 
@@ -149,7 +139,5 @@ dependencies {
 }
 
 // Cordova ext-vars script (`cdvMinSdkVersion`, `cordovaConfig`, …) is required
-// by the `:capacitor-cordova-android-plugins` Gradle module's evaluation. It
-// emits no dependencies on its own, so applying it always is harmless even in
-// the gram build (which doesn't depend on cordova-android-plugins).
+// by the `:capacitor-cordova-android-plugins` Gradle module's evaluation.
 apply from: '../capacitor-cordova-android-plugins/cordova.variables.gradle'

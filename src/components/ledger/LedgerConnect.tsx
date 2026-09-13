@@ -11,7 +11,7 @@ import { HardwareConnectState } from '../../global/types';
 
 import { IS_CAPACITOR } from '../../config';
 import buildClassName from '../../util/buildClassName';
-import { getChainTitle } from '../../util/chain';
+import { getLedgerAppName } from '../../util/chain';
 import { closeLedgerTab } from '../../util/ledger/tab';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { IS_ANDROID, IS_IOS, IS_IOS_APP, IS_LEDGER_EXTENSION_TAB } from '../../util/windowEnvironment';
@@ -362,7 +362,7 @@ function LedgerConnect({
               className={buildClassName(styles.textIcon, isChainAppConnected ? 'icon-accept' : 'icon-dot')}
               aria-hidden
             />
-            {lang('Unlock it and open the %chain% App', { chain: getChainTitle(chain) })}
+            {lang('Unlock it and open the %chain% App', { chain: getLedgerAppName(chain) })}
           </span>
         </div>
 

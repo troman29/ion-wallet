@@ -13,12 +13,12 @@ $2fa_security: 2FA ด้วย Telegram
 2FA with Telegram: 2FA ด้วย Telegram
 Confirm operations in Telegram as a second step.: ยืนยันการดำเนินการใน Telegram เป็นขั้นตอนที่สอง.
 Confirm with: ยืนยันด้วย
-Add an extra layer of security for your wallet in TON network.: เพิ่มชั้นความปลอดภัยพิเศษให้วอลเล็ตของคุณบนเครือข่าย TON.
+Add an extra layer of security for your wallet in TON network.: เพิ่มชั้นความปลอดภัยพิเศษให้วอลเล็ตของคุณบนเครือข่าย ION.
 Sign transfers and important actions with your passcode, then confirm them in Telegram.: ลงนามการโอนและการดำเนินการสำคัญด้วยรหัสผ่าน จากนั้นยืนยันใน Telegram.
 This helps protect your funds even if your recovery phrase or keys are compromised.: วิธีนี้ช่วยปกป้องเงินของคุณ แม้ว่าวลีกู้คืนหรือคีย์จะถูกบุกรุก.
 "Connection Fee:": "ค่าธรรมเนียมการเชื่อมต่อ:"
 Connect Telegram: เชื่อมต่อ Telegram
-Add in Gram Wallet: เพิ่มใน Gram Wallet
+Add in Gram Wallet: เพิ่มใน ION Wallet
 Telegram will be used to confirm transfers and important actions.: Telegram จะถูกใช้เพื่อยืนยันการโอนและการดำเนินการสำคัญ.
 My Telegram Account: บัญชี Telegram ของฉัน
 Without username: ไม่มีชื่อผู้ใช้
@@ -141,7 +141,7 @@ Toggle Hide Tiny Transfers: เปิด/ปิด ซ่อนรายกา�
 Network: เครือข่าย
 Developer Options: ตัวเลือกสำหรับผู้พัฒนา
 All Wallet Versions: เวอร์ชันกระเป๋าเงินทั้งหมด
-Create TON-Only Wallet: สร้างกระเป๋าเงิน TON เท่านั้น
+Create TON-Only Wallet: สร้างกระเป๋าเงิน ION เท่านั้น
 Confirmation: การยืนยัน
 Signing Data: ข้อมูลการลงนาม
 Contract Initialization Data: ข้อมูลการเริ่มต้นสัญญา
@@ -244,7 +244,7 @@ Current APY: APY ปัจจุบัน
 Est. Yearly Earnings: รายได้โดยประมาณต่อปี
 Staking Details: รายละเอียดการ Staking
 Why this is safe: ทำไมสิ่งนี้ถึงปลอดถัย
-$safe_staking_description1: การสเต็กนั้นทำอยู่บน **เครือข่ายกระจายศูนย์** และดำเนินการโดยสมาร์ทคอนแทรคใน **สัญญาของ TON ที่เป็นทางการ**.
+$safe_staking_description1: การสเต็กนั้นทำอยู่บน **เครือข่ายกระจายศูนย์** และดำเนินการโดยสมาร์ทคอนแทรคใน **สัญญาของ ION ที่เป็นทางการ**.
 $safe_staking_description2: ทรัพย์สินที่ได้รับจากการสเต็กจะถูกใช้เพื่อเป็นตัวชี้แจงสำหรับการทำรายการในเครือข่ายกระจายศูนย์ของ %chain% สิ่งเป็นส่วนหนึ่งของหลักการ **proof-of-stake**.
 $safe_staking_description3: คุณสามารถถอนการสเต็กได้ **ตลอดเวลา** และเมื่อคุณต้องการถอนทรัพย์สินจากการสเต็ก ทรัพย์สินจะถูกโอนเงินกลับมาที่บัญชีของคุณภายใน **สองวัน**.
 $safe_staking_description_jetton1: การสเตกโทเค็นเป็น **การกระจายอำนาจอย่างสมบูรณ์** และดำเนินการโดยสมาร์ทคอนแทรค **โอเพ่นซอร์ส** ที่พัฒนาโดย %jvault_link% และผ่านการ **ตรวจสอบความปลอดภัย**.
@@ -899,7 +899,7 @@ $receive_action: การรับ
 Change Palette: เปลี่ยนพาเลต
 Palette: พาเลต
 Unlock New Palettes: ปลดล็อกพาเลตใหม่
-Get a unique My Wallet Card to unlock new palettes.: รับบัตร My Wallet สุดพิเศษเพื่อปลดล็อกพาเลตใหม่
+Get a unique My Wallet Card to unlock new palettes.: รับบัตร ION Wallet สุดพิเศษเพื่อปลดล็อกพาเลตใหม่
 Mint Cards: สร้างบัตร
 Card has been upgraded!: บัตรได้รับการอัปเกรดแล้ว!
 $mint_card_result: บัตร NFT จะถูก **สร้าง** และ **ติดตั้งโดยอัตโนมัติ** ภายในหนึ่งนาที
@@ -936,7 +936,7 @@ DappurlTrustStatusDangerousTitle: Potentially malicious site
 $DappurlTrustStatusDangerousHelp: This domain was flagged as dangerous by security checks. Connecting may put your funds at risk. Only continue if you are absolutely sure.
 $reopen_in_iab: กรุณาใช้ %app_name% %mobileAppButton% หรือ %browserExtensionButton% เพื่อหลีกเลี่ยงคำเตือนนี้
 $reopen_in_iab_explore: โปรดใช้ส่วน %exploreTab% เมื่อเรียกดูแอปเพื่อหลีกเลี่ยงคำเตือนนี้
-My Wallet Browser: เบราว์เซอร์ My Wallet
+My Wallet Browser: เบราว์เซอร์ ION Wallet
 mobile app: แอปมือถือ
 browser extension: ส่วนขยายเบราว์เซอร์
 Exit all wallets: ออกจากกระเป๋าทั้งหมด
@@ -1109,9 +1109,9 @@ Customize Wallet: ปรับแต่งกระเป๋าเงิน
 "Select the card stored in this wallet:": "เลือกการ์ดที่เก็บไว้ในกระเป๋าเงินนี้:"
 This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: การ์ดนี้จะถูกติดตั้งให้กับกระเป๋าเงินนี้และจะแสดงบนหน้าหลักและในรายการกระเป๋าเงิน
 Get More Cards: รับการ์ดเพิ่มเติม
-Browse My Wallet Cards available for purchase.: เรียกดูการ์ด My Wallet ที่มีให้ซื้อ
+Browse My Wallet Cards available for purchase.: เรียกดูการ์ด ION Wallet ที่มีให้ซื้อ
 You don’t have any cards to customize yet: คุณยังไม่มีการ์ดให้ปรับแต่ง
-My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: การ์ด My Wallet สามารถติดตั้งให้กับกระเป๋าเงินและแสดงบนหน้าหลักและในรายการกระเป๋าเงินได้
+My Wallet Cards can be installed for wallets and displayed on the home screen and in the wallet list.: การ์ด ION Wallet สามารถติดตั้งให้กับกระเป๋าเงินและแสดงบนหน้าหลักและในรายการกระเป๋าเงินได้
 Get First Card: รับการ์ดแรก
 Palette and Card: พาเลตและการ์ด
 Customize the wallet's home screen and color accents the way you like.: ปรับแต่งหน้าหลักและโทนสีของกระเป๋าเงินในแบบที่คุณต้องการ
@@ -1136,7 +1136,7 @@ Sell on Card: ขายเข้าบัตร
 Sell %symbol%: ขาย %symbol%
 $connect_dapp_description: แอปที่เชื่อมต่อจะเห็นได้เฉพาะที่อยู่กระเป๋าเงินของคุณ และไม่สามารถย้ายสินทรัพย์ของคุณได้หากไม่ได้รับอนุญาต
 $connect_dapp_title: เชื่อมต่อกับ %name%?
-$connect_dapp_no_compatible_wallets_found: การเชื่อมต่อนี้ต้องใช้กระเป๋าเงินแบบมัลติเชน กระเป๋าเงินปัจจุบันของคุณรองรับเฉพาะ TON และคุณไม่มีกระเป๋าเงินแบบมัลติเชนอื่น แตะปุ่มด้านล่างเพื่อสร้างกระเป๋าเงินแบบมัลติเชนใหม่
+$connect_dapp_no_compatible_wallets_found: การเชื่อมต่อนี้ต้องใช้กระเป๋าเงินแบบมัลติเชน กระเป๋าเงินปัจจุบันของคุณรองรับเฉพาะ ION และคุณไม่มีกระเป๋าเงินแบบมัลติเชนอื่น แตะปุ่มด้านล่างเพื่อสร้างกระเป๋าเงินแบบมัลติเชนใหม่
 Choose Wallet: เลือกกระเป๋าเงิน
 Wallet to use on %host%: กระเป๋าเงินสำหรับ %host%
 Selected Wallet: กระเป๋าเงินที่เลือก
@@ -1153,7 +1153,7 @@ Adding wallets is not available in explorer mode: การเพิ่มวอ
 $explorer_mode_warning: "โหมดสำรวจ: กำลังรอลิงก์ลึก View เพื่อเปิดที่อยู่"
 This command is not supported in explorer mode: คำสั่งนี้ไม่รองรับในโหมดสำรวจ
 $saved_addresses_header: บันทึกแล้ว
-confirm an action in My Wallet: ยืนยันการดำเนินการใน My Wallet
+confirm an action in My Wallet: ยืนยันการดำเนินการใน ION Wallet
 Migration was rolled back: การโยกย้ายถูกย้อนกลับ
 Rollback Enclave Migration: ย้อนกลับการโยกย้ายเอนคลีฟ
 Unable to migrate wallet data. Please contact support.: ไม่สามารถโยกย้ายข้อมูลวอลเล็ตได้ กรุณาติดต่อฝ่ายสนับสนุน
@@ -1370,7 +1370,7 @@ $agent_notice_receive_details_required: ระบุสินทรัพย์�
 $agent_notice_receive_asset_required: ระบุสินทรัพย์คริปโตสำหรับการฝาก
 $agent_notice_receive_network_required: ระบุเครือข่ายสำหรับการฝาก
 $agent_notice_receive_ready: หน้ารับพร้อมเปิดแล้ว
-$agent_notice_receive_memo_not_required: ไม่จำเป็นต้องกรอก Memo เมื่อเติมเงินเข้าบัญชี My Wallet ของคุณเอง — เว้นช่องว่างไว้
+$agent_notice_receive_memo_not_required: ไม่จำเป็นต้องกรอก Memo เมื่อเติมเงินเข้าบัญชี ION Wallet ของคุณเอง — เว้นช่องว่างไว้
 $agent_notice_receive_unavailable: กระเป๋าเงินนี้ไม่รองรับการรับสินทรัพย์
 $agent_notice_receive_planning_unavailable: ไม่สามารถตีความคำขอรับสินทรัพย์ได้ โปรดเรียบเรียงใหม่หรือเปิดหน้ารับ
 $agent_notice_receive_active_account_unavailable: กระเป๋าเงินที่ใช้งานอยู่ไม่สามารถใช้งานได้ โปรดเปลี่ยนกระเป๋าเงินแล้วลองใหม่อีกครั้ง
@@ -1615,7 +1615,7 @@ $agent_portfolio_history_on: ประวัติบนเครือข่า
 $agent_portfolio_no_activity: ไม่มีการเคลื่อนไหวล่าสุด
 Clear Chat: ล้างแชท
 Unsupported link: ลิงก์นี้ไม่รองรับ
-My Wallet Features: ฟีเจอร์ My Wallet
+My Wallet Features: ฟีเจอร์ ION Wallet
 Notifications: การแจ้งเตือน
 Wrong passcode, please try again: รหัสไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง
 Use biometric authentication or create a passcode to protect it.: ใช้การยืนยันตัวตนด้วยชีวมาตรหรือสร้างรหัสผ่านเพื่อป้องกัน
@@ -1667,7 +1667,7 @@ Deposit: ฝากเงิน
 Trade: เทรด
 Show All %collection_name%: แสดงทั้งหมด %collection_name%
 Scanning for subwallets...: กำลังสแกนหาวอลเล็ตย่อย...
-Your assets on other TON contracts: สินทรัพย์ของคุณบนสัญญา TON อื่น
+Your assets on other TON contracts: สินทรัพย์ของคุณบนสัญญา ION อื่น
 No existing subwallets found: ไม่พบวอลเล็ตย่อยที่มีอยู่
 You can create a new subwallet if you need another address on the same secret words.: คุณสามารถสร้างวอลเล็ตย่อยใหม่ได้หากต้องการที่อยู่อื่นบนคำลับเดียวกัน
 You have tokens on other subwallets. Each subwallet has its own address.: คุณมีโทเค็นในวอลเล็ตย่อยอื่น แต่ละวอลเล็ตย่อยมีที่อยู่ของตัวเอง
@@ -1737,7 +1737,7 @@ Screen Recording: การบันทึกหน้าจอ
 Disable Screen Record Warning: ปิดคำเตือนการบันทึกหน้าจอ
 I Understand, Proceed: เข้าใจแล้ว ดำเนินการต่อ
 Waiting for Network: กำลังรอสัญญาณเครือข่าย
-My Wallet: My Wallet
+My Wallet: ION Wallet
 $no_activity_history: |
   กระเป๋านี้ยังไม่มี
   ประวัติการทำรายการ
@@ -1746,7 +1746,7 @@ Standalone: แยกเดี่ยว
 All Telegram Gifts: ของขวัญ Telegram ทั้งหมด
 Add Crypto: เพิ่มคริปโต
 Share QR Code: แชร์ QR โค้ด
-$send_only_ton: ส่ง Gram (GRAM) หรือสินทรัพย์บน TON เท่านั้นไปยังที่อยู่นี้ การส่งโทเคนอื่นจะทำให้สูญหาย
+$send_only_ton: ส่ง ION หรือสินทรัพย์บน ION เท่านั้นไปยังที่อยู่นี้ การส่งโทเคนอื่นจะทำให้สูญหาย
 $send_only_chain: ส่ง %chain% (%symbol%) หรือสินทรัพย์บน %chain% เท่านั้นไปยังที่อยู่นี้ การส่งโทเคนอื่นจะทำให้สูญหาย
 Buying with card is not supported for this account.: บัญชีนี้ไม่รองรับการซื้อด้วยบัตร
 Swapped at: แลกเปลี่ยนเมื่อ
@@ -1820,7 +1820,7 @@ Swap is not supported on this account.: บัญชีนี้ไม่รอ�
 Connecting your wallet: กำลังเชื่อมต่อกระเป๋าของคุณ
 Action is not possible on a view-only wallet.: ไม่สามารถทำรายการนี้ในกระเป๋าแบบดูข้อมูลเท่านั้น
 No matching chains: ไม่มีเครือข่ายที่รองรับ
-Logged in with My Wallet: เข้าสู่ระบบด้วย My Wallet
+Logged in with My Wallet: เข้าสู่ระบบด้วย ION Wallet
 You have no apps connected to this wallet.: ยังไม่มีแอปที่เชื่อมกับกระเป๋านี้
 Asset: สินทรัพย์
 Sent to: ส่งไปยัง
@@ -1867,7 +1867,7 @@ Payment Address: ที่อยู่ชำระเงิน
 "Install Palette": ติดตั้งพาเลต
 Ledger: Ledger
 "Moving to staking balance": กำลังย้ายไปยังยอดสเตก
-My Wallet uses biometric authentication to unlock and authorize transactions: My Wallet ใช้การยืนยันตัวตนด้วยชีวมิติเพื่อปลดล็อกและอนุมัติธุรกรรม
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet ใช้การยืนยันตัวตนด้วยชีวมิติเพื่อปลดล็อกและอนุมัติธุรกรรม
 "Network error": ข้อผิดพลาดของเครือข่าย
 "No Camera Access": ไม่มีสิทธิ์ใช้กล้อง
 "Not all transactions were sent successfully.": ธุรกรรมบางรายการส่งไม่สำเร็จ
@@ -1884,7 +1884,7 @@ Read-only account: บัญชีสำหรับดูอย่างเด�
 "Request for unstaking": คำขอถอนสเตก
 Set a passcode: ตั้งรหัสปลดล็อก
 "Show All %name%": "แสดง %name% ทั้งหมด"
-"TON Wallet Versions": เวอร์ชันกระเป๋า TON
+"TON Wallet Versions": เวอร์ชันกระเป๋า ION
 "Tap to reveal": แตะเพื่อแสดง
 "The current version of Ledger only supports English-language comments without special characters.": Ledger เวอร์ชันปัจจุบันรองรับเฉพาะข้อความภาษาอังกฤษที่ไม่มีอักขระพิเศษ
 "There is no activity history for this wallet yet.": กระเป๋านี้ยังไม่มีประวัติการใช้งาน
@@ -1993,7 +1993,7 @@ Use 6-digit Passcode: ใช้รหัส 6 หลัก
 $authorize_token_fee_capitalized: อนุมัติค่าธรรมเนียม %token%
 Awaiting Previous Fee: กำลังรอค่าธรรมเนียมก่อนหน้า
 Lock: ล็อก
-My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: การ์ด My Wallet สามารถติดตั้งสำหรับกระเป๋าและแสดงบนหน้าจอหลักรวมถึงรายการกระเป๋า
+My Wallet Cards can be installed for wallets and displayed on the home screen an in the wallet list.: การ์ด ION Wallet สามารถติดตั้งสำหรับกระเป๋าและแสดงบนหน้าจอหลักรวมถึงรายการกระเป๋า
 Receive: รับ
 Scan: สแกน
 
@@ -2042,8 +2042,8 @@ push_activity_swap_completed: สลับ %from_symbol% → %to_symbol% สำ�
 push_activity_swap_failed: สลับ %from_symbol% → %to_symbol% ล้มเหลว
 push_activity_swap_expired: สลับ %from_symbol% → %to_symbol% หมดอายุ
 push_activity_swap_pending: สลับ %from_symbol% → %to_symbol% %status%
-push_activity_staking_profit: กำไรจากการสเตก %amount% GRAM
-push_activity_staking_loyalty_profit: กำไรจากความภักดีในการสเตก %amount% GRAM
+push_activity_staking_profit: กำไรจากการสเตก %amount% ION
+push_activity_staking_loyalty_profit: กำไรจากความภักดีในการสเตก %amount% ION
 push_domain_title_renew: ต่ออายุโดเมนของคุณ
 push_domain_expired_yesterday: โดเมน %domain% ของคุณหมดอายุเมื่อวานนี้ โปรดต่ออายุโดยเร็วที่สุดเพื่อหลีกเลี่ยงการสูญเสียการเข้าถึง
 push_domain_expired_days_ago: โดเมน %domain% ของคุณหมดอายุมาแล้ว %days% วัน โปรดต่ออายุโดยเร็วที่สุดเพื่อหลีกเลี่ยงการสูญเสียการเข้าถึง
@@ -2098,7 +2098,7 @@ Rounded Corners: มุมโค้งมน
 Enable Blur: เปิดใช้งานเอฟเฟกต์เบลอ
 App Font: แบบอักษรแอป
 Rounded Balance Font: แบบอักษรยอดคงเหลือแบบโค้งมน
-My Wallet Cards NFT: My Wallet Cards NFT
+My Wallet Cards NFT: ION Wallet Cards NFT
 Selling to card is not supported in Testnet.: การขายเข้าบัตรยังไม่รองรับบน Testnet.
 Selling to card is not supported for this account.: บัญชีนี้ไม่รองรับการขายเข้าบัตร
 "Why is %tokenName% %direction% %timeframe%?": "ทำไมราคา %tokenName% ถึง%direction%%timeframe%?"
@@ -2195,7 +2195,7 @@ $agent_time_minutes: "%value% นาที"
 $agent_time_seconds: "%value% วินาที"
 Switched to %account%: สลับไปยัง %account% แล้ว
 See All: ดูทั้งหมด
-Add an **extra layer of security** for your wallet in TON network.: เพิ่ม **ชั้นความปลอดภัยพิเศษ** ให้วอลเล็ตของคุณบนเครือข่าย TON
+Add an **extra layer of security** for your wallet in TON network.: เพิ่ม **ชั้นความปลอดภัยพิเศษ** ให้วอลเล็ตของคุณบนเครือข่าย ION
 Agent is unavailable: ผู้ช่วยไม่พร้อมใช้งาน
 Another transaction was sent from this wallet simultaneously. Please try again.: มีการส่งธุรกรรมอื่นจากวอลเล็ตนี้พร้อมกัน โปรดลองอีกครั้ง
 Buying with card is not supported for this chain.: เครือข่ายนี้ไม่รองรับการซื้อด้วยบัตร
@@ -2207,7 +2207,7 @@ EIP-712 domain: โดเมน EIP-712
 Earn is not supported on this account.: บัญชีนี้ไม่รองรับการสเตก
 Export Logs: ส่งออกบันทึก
 Failed to load chat: โหลดแชทไม่สำเร็จ
-Gram: Gram
+Gram: ION
 MFA NFT transfers support up to 4 NFTs at a time.: การโอน NFT ด้วย MFA รองรับ NFT สูงสุด 4 รายการต่อครั้ง
 More Details: รายละเอียดเพิ่มเติม
 Open Telegram: เปิด Telegram

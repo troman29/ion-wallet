@@ -75,6 +75,12 @@ export interface ChainConfig {
   canTransferFullNativeBalance: boolean;
   /** Whether Ledger support is implemented for this chain */
   isLedgerSupported: boolean;
+  /**
+   * The name of the Ledger app the user has to open, when it differs from the chain title.
+   * ION is a TON fork and signs through Ledger's TON app, so telling the user to open an
+   * "ION App" would send them looking for one that does not exist.
+   */
+  ledgerAppName?: string;
   /** Whether the chain supports multiWallet (e.g. Solana derivations or TON versions) */
   isSubwalletsSupported: boolean;
   /** The default derivation path for the chain */
@@ -168,7 +174,7 @@ export const CHAIN_DISPLAY_ORDER: ApiChain[] = [
 
 const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
   ton: {
-    title: 'TON',
+    title: 'ION',
     isDnsSupported: true,
     isOnchainSwapSupported: true,
     canSwapByBuyAmount: true,
@@ -176,6 +182,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     isEncryptedCommentSupported: true,
     canTransferFullNativeBalance: true,
     isLedgerSupported: true,
+    ledgerAppName: 'TON',
     isSubwalletsSupported: true,
     defaultDerivationPath: TON_BIP39_PATH,
     isNftSupported: true,
@@ -404,6 +411,13 @@ export function getIsEvmChain(chain: ApiChain): chain is EVMChain {
 /** Returns the chains supported by the given account in the proper order for showing in the UI */
 export function getOrderedAccountChains(byChain: Partial<Record<ApiChain, unknown>>) {
   return getDisplayOrderedChains().filter((chain) => chain in byChain);
+}
+
+/** The Ledger app to open for a chain: its own name where it has one, the chain title otherwise */
+export function getLedgerAppName(chain: ApiChain) {
+  const config = getChainConfig(chain);
+
+  return config.ledgerAppName ?? config.title;
 }
 
 export function getChainsSupportingLedger(): ApiChain[] {
