@@ -86,6 +86,7 @@
 - [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
   - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
   - Перед Android-релизом утвердить и заменить либо удалить все публичные ссылки из `mobile/android/app/src/ionwallet/res/values/strings.xml`: website, blog, terms, privacy policy, share/install, help и help/scam, desktop download и direct APK. Они сейчас указывают на временные `wallet.ice.io` и `help.wallet.ice.io`.
+  - Перед Android-релизом установить настоящий `mobile/android/app/src/ionwallet/google-services.json` из ION Firebase Console и проверить соответствие `io.ice.wallet`, release signing certificate и Firebase-проекту ION Wallet.
   - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.
   - Зарегистрировать и проверить ION Wallet в ION Connect и WalletConnect, включая metadata, package IDs, deep links, icon и policy URL.
   - Создать и оформить App Store Connect и Google Play Console приложения: signing, privacy/data disclosure, store listing, screenshots, support/policy URLs и тестовые каналы.
