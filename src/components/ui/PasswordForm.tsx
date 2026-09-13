@@ -5,9 +5,10 @@ import { getActions, getGlobal, withGlobal } from '../../global';
 import type { MigrationErrorPresentation } from '../../global/types';
 
 import {
+  APP_WEBSITE_HOST,
+  APP_WEBSITE_URL,
   AUTO_CONFIRM_DURATION_MINUTES,
   PIN_LENGTH,
-  SUPPORT_USERNAME,
   WRONG_ATTEMPTS_BEFORE_LOG_OUT_SUGGESTION,
 } from '../../config';
 import {
@@ -118,8 +119,8 @@ function useMigrationFailureDialog(operationType?: OperationType) {
       title: titleKey,
       message: getTranslation(messageKey, {
         support_link: (
-          <a href={`https://t.me/${SUPPORT_USERNAME}`} target="_blank" rel="noreferrer">
-            @{SUPPORT_USERNAME}
+          <a href={APP_WEBSITE_URL} target="_blank" rel="noreferrer">
+            {APP_WEBSITE_HOST}
           </a>
         ),
         error_code: errorCode,

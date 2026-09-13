@@ -46,7 +46,7 @@ Connect Ledger hardware wallets, hide balances, personalize interface, send mult
 
 - 📲 **Get the app**: [get.wallet.ice.io](https://get.wallet.ice.io/)
 - 📚 **Help Center**: [help.wallet.ice.io](https://help.wallet.ice.io)
-- 🛟 **24/7 Support**: [t.me/mysupport](https://t.me/mysupport)
+- 🛟 **Support**: [wallet.ice.io](https://wallet.ice.io)
 - 📰 **Blog & updates**: [wallet.ice.io](https://wallet.ice.io)
 
 ---

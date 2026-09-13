@@ -6,8 +6,6 @@ import {
   EMPTY_HASH_VALUE,
   IFRAME_WHITELIST,
   MW_CARDS_BASE_URL,
-  MW_NEWS_CHANNEL_NAME,
-  MW_TIPS_CHANNEL_NAME,
   MY_WALLET_BLOG,
   SELF_UNIVERSAL_HOST_URL,
 } from '../config';
@@ -269,14 +267,6 @@ export function getCardNftImageUrl(nft: ApiNft, format: 'svg' | 'webp' = 'svg'):
 
 export function getBlogUrl(lang: LangCode): string {
   return MY_WALLET_BLOG[lang] || MY_WALLET_BLOG.en!;
-}
-
-export function getTelegramNewsChannelUrl(lang: LangCode): string {
-  return `https://t.me/${MW_NEWS_CHANNEL_NAME[lang] ?? MW_NEWS_CHANNEL_NAME.en}`;
-}
-
-export function getTelegramTipsChannelUrl(lang: LangCode): string {
-  return `https://t.me/${MW_TIPS_CHANNEL_NAME[lang] ?? MW_TIPS_CHANNEL_NAME.en}`;
 }
 
 export function getViewTransactionUrl(chain: ApiChain, txId: string, isTestnet?: boolean): string {

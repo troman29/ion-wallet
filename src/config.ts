@@ -166,15 +166,6 @@ export const SHORT_FRACTION_DIGITS = 2;
 
 export const MAX_PUSH_NOTIFICATIONS_ACCOUNT_COUNT = 3;
 
-export const SUPPORT_USERNAME = 'mysupport';
-export const MW_NEWS_CHANNEL_NAME: Partial<Record<LangCode, string>> = {
-  en: 'IONWalletEng',
-  ru: 'IONWalletRus',
-};
-export const MW_TIPS_CHANNEL_NAME: Partial<Record<LangCode, string>> = {
-  en: 'IONWalletTips',
-  ru: 'IONWalletTipsRu',
-};
 export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
   getgems: 'Getgems',
   fragment: 'Fragment',

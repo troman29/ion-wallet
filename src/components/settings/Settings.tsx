@@ -16,7 +16,6 @@ import {
   IS_EXTENSION,
   LANG_LIST,
   PROXY_HOSTS,
-  SUPPORT_USERNAME,
   TONCOIN,
 } from '../../config';
 import { getHelpCenterUrl } from '../../global/helpers/getHelpCenterUrl';
@@ -39,7 +38,6 @@ import { MEMO_EMPTY_ARRAY } from '../../util/memo';
 import { openUrl } from '../../util/openUrl';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { captureControlledSwipe } from '../../util/swipeController';
-import { getTelegramTipsChannelUrl } from '../../util/url';
 import {
   IS_DAPP_SUPPORTED,
   IS_ELECTRON,
@@ -98,8 +96,6 @@ import installMobileImg from '../../assets/settings/settings_install-mobile.svg'
 import languageImg from '../../assets/settings/settings_language.svg';
 import notifications from '../../assets/settings/settings_notifications.svg';
 import securityImg from '../../assets/settings/settings_security.svg';
-import supportImg from '../../assets/settings/settings_support.svg';
-import tipsImg from '../../assets/settings/settings_tips.svg';
 import tonLinksImg from '../../assets/settings/settings_ton-links.svg';
 import tonProxyImg from '../../assets/settings/settings_ton-proxy.svg';
 import tonWallets from '../../assets/settings/settings_ton-wallets.svg';
@@ -119,7 +115,6 @@ type StateProps = {
   currentVersion?: ApiTonWalletVersion;
   versions?: ApiWalletWithVersionInfo[];
   isCopyStorageEnabled?: boolean;
-  supportAccountsCount?: number;
   arePushNotificationsAvailable?: boolean;
   isNftBuyingDisabled?: boolean;
   isViewMode: boolean;
@@ -131,7 +126,6 @@ type StateProps = {
 };
 
 const AMOUNT_OF_CLICKS_FOR_DEVELOPERS_MODE = 5;
-const SUPPORT_ACCOUNTS_COUNT_DEFAULT = 1;
 
 function Settings({
   settings: {
@@ -153,7 +147,6 @@ function Settings({
   currentVersion,
   versions,
   isCopyStorageEnabled,
-  supportAccountsCount = SUPPORT_ACCOUNTS_COUNT_DEFAULT,
   arePushNotificationsAvailable,
   isNftBuyingDisabled,
   isViewMode,
@@ -188,7 +181,6 @@ function Settings({
   const { isScrolled, handleScroll: handleContentScroll } = useScrolledState();
 
   const activeLang = useMemo(() => LANG_LIST.find((l) => l.langCode === langCode), [langCode]);
-  const featuresTitle = lang('%app_name% Features', { app_name: APP_NAME }) as string;
 
   const shortBaseSymbol = getShortCurrencySymbol(baseCurrency);
 
@@ -569,22 +561,6 @@ function Settings({
           </p>
 
           <div className={styles.block}>
-            {supportAccountsCount > 0 && (
-              <a
-                href={`https://t.me/${SUPPORT_USERNAME}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buildClassName(styles.item, styles.itemMenu)}
-              >
-                <img className={styles.menuIcon} src={supportImg} alt={lang('Ask a Question')} />
-                <span className={styles.itemTitle}>{lang('Ask a Question')}</span>
-
-                <div className={styles.itemInfo}>
-                  @{SUPPORT_USERNAME}
-                  <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-                </div>
-              </a>
-            )}
             <a
               href={getHelpCenterUrl(langCode, 'home')}
               target="_blank"
@@ -593,17 +569,6 @@ function Settings({
             >
               <img className={styles.menuIcon} src={helpcenterImg} alt={lang('Help Center')} />
               <span className={styles.itemTitle}>{lang('Help Center')}</span>
-
-              <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-            </a>
-            <a
-              href={getTelegramTipsChannelUrl(langCode)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buildClassName(styles.item, styles.itemMenu)}
-            >
-              <img className={styles.menuIcon} src={tipsImg} alt={featuresTitle} />
-              <span className={styles.itemTitle}>{featuresTitle}</span>
 
               <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
             </a>
@@ -844,7 +809,7 @@ function Settings({
 
 export default memo(withGlobal<OwnProps>((global): StateProps => {
   const hasPassword = selectHasPassword(global);
-  const { isCopyStorageEnabled, supportAccountsCount = 1, isNftBuyingDisabled } = global.restrictions;
+  const { isCopyStorageEnabled, isNftBuyingDisabled } = global.restrictions;
 
   const { currentVersion, byId: versionsById } = global.walletVersions ?? {};
   const currentAccountId = selectCurrentAccountId(global);
@@ -862,7 +827,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     currentVersion,
     versions,
     isCopyStorageEnabled,
-    supportAccountsCount,
     isNftBuyingDisabled,
     arePushNotificationsAvailable: global.pushNotifications.isAvailable,
     isViewMode: selectIsCurrentAccountViewMode(global),
