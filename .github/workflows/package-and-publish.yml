@@ -12,25 +12,21 @@ on:
   workflow_dispatch:
     inputs:
       android_variant:
-        description: Android app variant to release
+        description: Release the Android app
         required: true
         type: choice
         default: both
         options:
           - both
           - none
-          - mytonwallet
-          - gram
       ios_variant:
-        description: iOS app variant to release
+        description: Release the iOS app
         required: true
         type: choice
         default: both
         options:
           - both
           - none
-          - mytonwallet
-          - gram
       android_rollout:
         description: "Android rollout: a fraction between 0 and 1, or `full` for everyone at once"
         required: false
@@ -55,20 +51,18 @@ concurrency:
 
 env:
   # Base of downloadable artifact filenames (dmg/exe/AppImage/apk). The user-visible
-  # app name is NOT set here - src/config.ts derives it per flavor ('My Wallet',
-  # 'Gram Wallet', 'TON Wallet'), and the TonConnect protocol identity stays
-  # 'MyTonWallet' via the mapping in src/util/tonConnectEnvironment.ts.
+  # app name is NOT set here - it comes from `APP_NAME` in src/config.ts, and the
+  # TonConnect protocol identity stays 'MyTonWallet' via the mapping in
+  # src/util/tonConnectEnvironment.ts.
   # Must match `artifactName` in src/electron/config.yml (pinned by config.test.ts).
   ARTIFACT_NAME_BASE: MyWallet
   PROXY_HOSTS: ${{ vars.PROXY_HOSTS }}
-  STAKING_POOLS: ${{ vars.STAKING_POOLS }}
   PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
   SWAP_FEE_ADDRESS: ${{ vars.SWAP_FEE_ADDRESS }}
   DIESEL_ADDRESS: ${{ vars.DIESEL_ADDRESS }}
   WALLET_CONNECT_PROJECT_ID: ${{ vars.WALLET_CONNECT_PROJECT_ID }}
   WALLET_CONNECT_PAY_APP_ID: ${{ vars.WALLET_CONNECT_PAY_APP_ID }}
-  AGENT_API_URL: ${{ vars.AGENT_API_URL }}
 
 jobs:
   detect-changes:
@@ -115,14 +109,8 @@ jobs:
                 ANDROID_SELECTED=false
                 echo 'android-variants=[]' >> "$GITHUB_OUTPUT"
                 ;;
-              mytonwallet)
-                echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
-                ;;
-              gram)
-                echo 'android-variants=["gram"]' >> "$GITHUB_OUTPUT"
-                ;;
               *)
-                echo 'android-variants=["mytonwallet","gram"]' >> "$GITHUB_OUTPUT"
+                echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
                 ;;
             esac
             case "${{ inputs.ios_variant }}" in
@@ -130,14 +118,8 @@ jobs:
                 IOS_SELECTED=false
                 echo 'ios-variants=[]' >> "$GITHUB_OUTPUT"
                 ;;
-              mytonwallet)
-                echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
-                ;;
-              gram)
-                echo 'ios-variants=["gram"]' >> "$GITHUB_OUTPUT"
-                ;;
               *)
-                echo 'ios-variants=["mytonwallet","gram"]' >> "$GITHUB_OUTPUT"
+                echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
                 ;;
             esac
 
@@ -163,8 +145,8 @@ jobs:
             echo "android-only=false" >> "$GITHUB_OUTPUT"
             echo "ios-only=false" >> "$GITHUB_OUTPUT"
             echo "electron-changed=true" >> "$GITHUB_OUTPUT"
-            echo 'android-variants=["mytonwallet","gram"]' >> "$GITHUB_OUTPUT"
-            echo 'ios-variants=["mytonwallet","gram"]' >> "$GITHUB_OUTPUT"
+            echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
+            echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
             echo "Production release — building automatic platform variants"
             exit 0
           fi
@@ -200,8 +182,8 @@ jobs:
           echo "android-only=$ANDROID_ONLY" >> "$GITHUB_OUTPUT"
           echo "ios-only=$IOS_ONLY" >> "$GITHUB_OUTPUT"
           echo "electron-changed=$ELECTRON_CHANGED" >> "$GITHUB_OUTPUT"
-          echo 'android-variants=["mytonwallet","gram"]' >> "$GITHUB_OUTPUT"
-          echo 'ios-variants=["mytonwallet","gram"]' >> "$GITHUB_OUTPUT"
+          echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
+          echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
           echo "Changed files:"
           echo "$CHANGED"
           echo "android-only=$ANDROID_ONLY, ios-only=$IOS_ONLY, electron-changed=$ELECTRON_CHANGED"
@@ -671,9 +653,7 @@ jobs:
           npx web-ext-submit --source-dir=$UNZIP_DIR
           echo "APP_NAME=\"${APP_NAME}\"
           APP_COMMIT_HASH=${{ github.sha }}
-          PROXY_HOSTS=\"${PROXY_HOSTS}\"
-          AGENT_API_URL=\"${AGENT_API_URL}\"
-          STAKING_POOLS=\"${STAKING_POOLS}\"" >.env
+          PROXY_HOSTS=\"${PROXY_HOSTS}\"" >.env
           bash deploy/firefox_pack_sources.sh
           node deploy/firefoxPatchVersion.js
 
@@ -768,11 +748,6 @@ jobs:
               echo "ANDROID_PACKAGE_NAME=org.mytonwallet.app" >> "$GITHUB_ENV"
               echo "ANDROID_ARTIFACT_NAME=${{ env.ARTIFACT_NAME_BASE }}.apk" >> "$GITHUB_ENV"
               ;;
-            gram)
-              echo "ANDROID_APP_NAME=Gram Wallet" >> "$GITHUB_ENV"
-              echo "ANDROID_PACKAGE_NAME=io.gramwallet.app" >> "$GITHUB_ENV"
-              echo "ANDROID_ARTIFACT_NAME=GramWallet.apk" >> "$GITHUB_ENV"
-              ;;
             *)
               echo "::error::Unknown APP_VARIANT: $APP_VARIANT"
               exit 1
@@ -844,12 +819,12 @@ jobs:
             bundle exec fastlane release
           fi
 
-      # Fastlane leaves the Gradle and Kotlin daemons resident with a 4 GB heap each, and the next step
-      # runs two more unminified webpack builds on the same 7 GB runner. That overlap is what killed the
-      # gram job on every run since 2026-08-29: the runner is shot down mid-webpack, so setup-gradle's
-      # Post step never runs, so the Gradle cache is never refreshed, so the next run compiles cold, holds
-      # even more heap and dies the same way. Reclaiming the JVM memory here breaks that loop; the
-      # following step starts a fresh daemon in a few seconds and reads the same on-disk build cache.
+      # Fastlane leaves the Gradle daemon resident with a 4 GB heap, and the next step runs two more
+      # unminified webpack builds on the same 7 GB runner. That overlap used to shoot the runner down
+      # mid-webpack, so setup-gradle's Post step never ran, so the Gradle cache was never refreshed, so
+      # the next run compiled cold, held even more heap and died the same way. Reclaiming the JVM memory
+      # here breaks that loop; the following step starts a fresh daemon in a few seconds and reads the
+      # same on-disk build cache.
       - name: Stop the JVM daemons before the second web build
         run: |
           (cd mobile/android && ./gradlew --stop) || true
@@ -910,7 +885,6 @@ jobs:
       - name: Configure iOS variant
         env:
           IOS_TESTFLIGHT_GROUP: ${{ vars.IOS_TESTFLIGHT_GROUP }}
-          IOS_GRAM_TESTFLIGHT_GROUP: ${{ vars.IOS_GRAM_TESTFLIGHT_GROUP }}
         run: |
           case "$APP_VARIANT" in
             mytonwallet)
@@ -923,17 +897,6 @@ jobs:
               echo "IOS_NOTIFICATION_SCHEME=MyTonWalletNotificationServiceExtension" >> "$GITHUB_ENV"
               echo "IOS_PLIST_PATH=../../App/App/Resources/MyTonWallet/Info.plist" >> "$GITHUB_ENV"
               echo "IOS_TESTFLIGHT_GROUP=${IOS_TESTFLIGHT_GROUP:-MTW external group}" >> "$GITHUB_ENV"
-              ;;
-            gram)
-              echo "IOS_APP_NAME=Gram Wallet" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER=io.gramwallet.app" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER_WIDGET=io.gramwallet.app.widget" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER_NOTIFICATION=io.gramwallet.app.notification-service" >> "$GITHUB_ENV"
-              echo "IOS_SCHEME=GramWallet" >> "$GITHUB_ENV"
-              echo "IOS_WIDGET_SCHEME=GramWalletWidgetExtension" >> "$GITHUB_ENV"
-              echo "IOS_NOTIFICATION_SCHEME=GramWalletNotificationServiceExtension" >> "$GITHUB_ENV"
-              echo "IOS_PLIST_PATH=../../App/App/Resources/GramWallet/Info.plist" >> "$GITHUB_ENV"
-              echo "IOS_TESTFLIGHT_GROUP=${IOS_GRAM_TESTFLIGHT_GROUP:-Gram Wallet external group}" >> "$GITHUB_ENV"
               ;;
             *)
               echo "::error::Unknown APP_VARIANT: $APP_VARIANT"
@@ -950,13 +913,7 @@ jobs:
         run: |
           defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
 
-          if [ "$APP_VARIANT" = "gram" ]; then
-            if [ -z "$PUBLISH_REPO" ]; then
-              APP_ENV=staging npm run mobile:build:sdk
-            else
-              APP_ENV=production npm run mobile:build:sdk
-            fi
-          elif [ -z "$PUBLISH_REPO" ]; then
+          if [ -z "$PUBLISH_REPO" ]; then
             npm run mobile:build:staging
           else
             npm run mobile:build:production
@@ -976,11 +933,6 @@ jobs:
           IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
           IOS_PROVISION_PROFILE_WIDGET_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_WIDGET_BASE64 }}
           IOS_PROVISION_PROFILE_NOTIFICATION_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_NOTIFICATION_BASE64 }}
-          IOS_GRAM_CERTIFICATE_BASE64: ${{ secrets.IOS_GRAM_CERTIFICATE_BASE64 }}
-          IOS_GRAM_CERTIFICATE_PASSWORD: ${{ secrets.IOS_GRAM_CERTIFICATE_PASSWORD }}
-          IOS_GRAM_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_GRAM_PROVISION_PROFILE_BASE64 }}
-          IOS_GRAM_PROVISION_PROFILE_WIDGET_BASE64: ${{ secrets.IOS_GRAM_PROVISION_PROFILE_WIDGET_BASE64 }}
-          IOS_GRAM_PROVISION_PROFILE_NOTIFICATION_BASE64: ${{ secrets.IOS_GRAM_PROVISION_PROFILE_NOTIFICATION_BASE64 }}
           IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
         run: |
           set -euo pipefail
@@ -990,14 +942,6 @@ jobs:
           PROVISION_PROFILE_BASE64="$IOS_PROVISION_PROFILE_BASE64"
           PROVISION_PROFILE_WIDGET_BASE64="$IOS_PROVISION_PROFILE_WIDGET_BASE64"
           PROVISION_PROFILE_NOTIFICATION_BASE64="$IOS_PROVISION_PROFILE_NOTIFICATION_BASE64"
-
-          if [ "$APP_VARIANT" = "gram" ]; then
-            CERTIFICATE_BASE64="${IOS_GRAM_CERTIFICATE_BASE64:-$IOS_CERTIFICATE_BASE64}"
-            CERTIFICATE_PASSWORD="${IOS_GRAM_CERTIFICATE_PASSWORD:-$IOS_CERTIFICATE_PASSWORD}"
-            PROVISION_PROFILE_BASE64="$IOS_GRAM_PROVISION_PROFILE_BASE64"
-            PROVISION_PROFILE_WIDGET_BASE64="$IOS_GRAM_PROVISION_PROFILE_WIDGET_BASE64"
-            PROVISION_PROFILE_NOTIFICATION_BASE64="$IOS_GRAM_PROVISION_PROFILE_NOTIFICATION_BASE64"
-          fi
 
           if [ -z "$CERTIFICATE_BASE64" ]; then
             echo "::error::Missing iOS distribution certificate for $APP_VARIANT"
@@ -1059,13 +1003,9 @@ jobs:
       - name: "iOS: Package and publish"
         env:
           IOS_AUTH_KEY_BASE64: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-          IOS_GRAM_AUTH_KEY_BASE64: ${{ secrets.IOS_GRAM_AUTH_KEY_BASE64 }}
           IOS_AUTH_KEY_ID: ${{ vars.IOS_AUTH_KEY_ID }}
           IOS_AUTH_KEY_ISSUER_ID: ${{ vars.IOS_AUTH_KEY_ISSUER_ID }}
-          IOS_GRAM_AUTH_KEY_ID: ${{ vars.IOS_GRAM_AUTH_KEY_ID }}
-          IOS_GRAM_AUTH_KEY_ISSUER_ID: ${{ vars.IOS_GRAM_AUTH_KEY_ISSUER_ID }}
           IOS_METADATA_PATH: ${{ vars.IOS_METADATA_PATH }}
-          IOS_GRAM_METADATA_PATH: ${{ vars.IOS_GRAM_METADATA_PATH }}
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 300
         run: |
           set -euo pipefail
@@ -1083,13 +1023,6 @@ jobs:
           ASC_KEY_ID="${IOS_AUTH_KEY_ID:-}"
           ASC_ISSUER_ID="${IOS_AUTH_KEY_ISSUER_ID:-}"
           METADATA_PATH="${IOS_METADATA_PATH:-}"
-
-          if [ "$APP_VARIANT" = "gram" ]; then
-            AUTH_KEY_BASE64="${IOS_GRAM_AUTH_KEY_BASE64:-$IOS_AUTH_KEY_BASE64}"
-            ASC_KEY_ID="${IOS_GRAM_AUTH_KEY_ID:-$ASC_KEY_ID}"
-            ASC_ISSUER_ID="${IOS_GRAM_AUTH_KEY_ISSUER_ID:-$ASC_ISSUER_ID}"
-            METADATA_PATH="${IOS_GRAM_METADATA_PATH:-$METADATA_PATH}"
-          fi
 
           if [ -z "$AUTH_KEY_BASE64" ]; then
             echo "::error::Missing App Store Connect auth key for $APP_VARIANT"

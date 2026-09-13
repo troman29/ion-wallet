@@ -1,34 +1,21 @@
-import type { StoredDappsState } from '../dappProtocols/storage';
-import type { ApiDbSseConnection } from '../db';
-import type { StorageKey } from '../storages/types';
 import type {
   ApiActivity,
   ApiLocalTransactionParams,
-  ApiTonWallet,
   ApiTransactionActivity,
   OnApiUpdate,
 } from '../types';
 
-import { IS_CAPACITOR, IS_EXTENSION, MAIN_ACCOUNT_ID } from '../../config';
-import { parseAccountId } from '../../util/account';
 import { buildLocalTxId } from '../../util/activities';
-import { areDeepEqual } from '../../util/areDeepEqual';
-import { assert } from '../../util/assert';
 import { logDebugError } from '../../util/logs';
-import { getEnvironment } from '../environment';
-import * as migrations from '../migrations';
 import { storage } from '../storages';
-import capacitorStorage from '../storages/capacitorStorage';
-import idbStorage from '../storages/idb';
 import {
   checkHasScamLink,
   checkHasTelegramBotMention,
   getKnownAddresses,
   getScamMarkers,
 } from './addresses';
-import { hexToBytes } from './utils';
 
-const actualStateVersion = 23;
+const ACTUAL_STATE_VERSION = 23;
 
 export function buildLocalTransaction(
   params: ApiLocalTransactionParams,
@@ -94,9 +81,9 @@ export function isUpdaterAlive(onUpdate: OnApiUpdate) {
   return currentOnUpdate === onUpdate;
 }
 
-export async function tryMigrateStorage(onUpdate: OnApiUpdate, accountIds?: string[]) {
+export async function tryMigrateStorage(onUpdate: OnApiUpdate) {
   try {
-    return await migrateStorage(onUpdate, accountIds);
+    return await migrateStorage();
   } catch (err) {
     logDebugError('Migration error', err);
     onUpdate?.({
@@ -106,393 +93,17 @@ export async function tryMigrateStorage(onUpdate: OnApiUpdate, accountIds?: stri
   }
 }
 
-export async function migrateStorage(onUpdate: OnApiUpdate, accountIds?: string[]) {
-  let version = Number(await storage.getItem('stateVersion', true));
+/**
+ * The hook every future storage migration hangs off: it compares the stored `stateVersion` with the one
+ * this build expects and stamps it when they differ. There is nothing to migrate yet — this app has no
+ * released version whose storage would need converting — so the body is only that bookkeeping.
+ */
+export async function migrateStorage() {
+  const version = Number(await storage.getItem('stateVersion', true));
 
-  if (version === actualStateVersion) {
+  if (version === ACTUAL_STATE_VERSION) {
     return;
   }
 
-  /* eslint-disable @typescript-eslint/no-require-imports */
-  // Legacy TON storage-migration utilities, loaded via guarded `require` so that a `NO_TON` build (which has
-  // no legacy TON storage to migrate) drops `chains/ton` entirely via dead-code elimination.
-  const ton = (process.env.NO_TON !== '1'
-    ? require('../chains/ton')
-    : undefined) as typeof import('../chains/ton');
-  const { toBase64Address } = (process.env.NO_TON !== '1'
-    ? require('../chains/ton/util/tonCore')
-    : {}) as typeof import('../chains/ton/util/tonCore');
-  /* eslint-enable @typescript-eslint/no-require-imports */
-
-  if (IS_CAPACITOR && !version) {
-    if (await storage.getItem('accounts' as StorageKey, true)) {
-      // Fix broken version
-      version = 10;
-    } else {
-      // Prepare for migration to secure storage
-      const idbVersion = await idbStorage.getItem('stateVersion');
-      if (idbVersion) {
-        version = Number(idbVersion);
-      }
-    }
-  }
-
-  // Migration to chrome.storage
-  if (IS_EXTENSION && !version && !(await storage.getItem('addresses' as StorageKey))) {
-    version = await idbStorage.getItem('stateVersion');
-
-    if (version) {
-      // Switching from IndexedDB to `chrome.storage.local`
-      const idbData = await idbStorage.getAll!();
-      await storage.setMany!(idbData);
-    }
-  }
-
-  if (!version) {
-    await storage.setItem('stateVersion', actualStateVersion);
-    return;
-  }
-
-  // First version (v1)
-  if (!version) {
-    // Support multi-accounts
-    const mnemonicEncrypted = await storage.getItem('mnemonicEncrypted' as StorageKey);
-    if (mnemonicEncrypted) {
-      await storage.setItem(
-        'mnemonicsEncrypted' as StorageKey,
-        JSON.stringify({
-          [MAIN_ACCOUNT_ID]: mnemonicEncrypted,
-        }),
-      );
-      await storage.removeItem('mnemonicEncrypted' as StorageKey);
-    }
-
-    // Change accountId format ('0' -> '0-ton', '1-ton-mainnet' -> '1-ton')
-    if (!mnemonicEncrypted) {
-      for (const field of ['mnemonicsEncrypted', 'addresses', 'publicKeys'] as unknown as StorageKey[]) {
-        const raw = await storage.getItem(field);
-        if (!raw) continue;
-
-        const oldItem = JSON.parse(raw);
-
-        const newItem = Object.entries(oldItem).reduce((prevValue, [accountId, data]) => {
-          const [id, chain = 'ton'] = accountId.split('-');
-          const internalAccountId = [id, chain].join('-');
-          prevValue[internalAccountId] = data;
-          return prevValue;
-        }, {} as any);
-
-        await storage.setItem(field, JSON.stringify(newItem));
-      }
-    }
-
-    version = 1;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 1) {
-    const addresses = (await storage.getItem('addresses' as StorageKey)) as string | undefined;
-    if (addresses && addresses.includes('-undefined')) {
-      for (const field of ['mnemonicsEncrypted', 'addresses', 'publicKeys'] as unknown as StorageKey[]) {
-        const newValue = ((await storage.getItem(field)) as string).replace('-undefined', '-ton');
-        await storage.setItem(field, newValue);
-      }
-    }
-
-    version = 2;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version >= 2 && version <= 4) {
-    for (const key of ['addresses', 'mnemonicsEncrypted', 'publicKeys', 'dapps'] as StorageKey[]) {
-      const rawData = await storage.getItem(key);
-      if (typeof rawData === 'string') {
-        await storage.setItem(key, JSON.parse(rawData));
-      }
-    }
-
-    version = 5;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 5) {
-    const dapps = await storage.getItem('dapps') as StoredDappsState;
-    if (dapps) {
-      for (const accountDapps of Object.values(dapps)) {
-        for (const dapp of Object.values(accountDapps as Record<string, any>)) {
-          dapp.connectedAt = 1;
-        }
-      }
-      await storage.setItem('dapps', dapps);
-    }
-
-    version = 6;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 6) {
-    for (const key of ['addresses', 'mnemonicsEncrypted', 'publicKeys', 'accounts', 'dapps'] as StorageKey[]) {
-      let data = (await storage.getItem(key)) as AnyLiteral;
-      if (!data) continue;
-
-      data = Object.entries(data).reduce((byAccountId, [internalAccountId, accountData]) => {
-        const parsed = parseAccountId(internalAccountId);
-        const mainnetAccountId = buildOldAccountId({ ...parsed, network: 'mainnet' });
-        const testnetAccountId = buildOldAccountId({ ...parsed, network: 'testnet' });
-        return {
-          ...byAccountId,
-          [mainnetAccountId]: accountData,
-          [testnetAccountId]: accountData,
-        };
-      }, {} as AnyLiteral);
-
-      await storage.setItem(key, data);
-    }
-
-    version = 7;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 7) {
-    const addresses = (await storage.getItem('addresses' as StorageKey)) as Record<string, string> | undefined;
-
-    if (addresses) {
-      const publicKeys = (await storage.getItem('publicKeys' as StorageKey)) as Record<string, string>;
-      const accounts = ((await storage.getItem('accounts')) ?? {}) as Record<string, ApiTonWallet>;
-
-      for (const [accountId, oldAddress] of Object.entries(addresses)) {
-        const newAddress = toBase64Address(oldAddress, false);
-
-        accounts[accountId] = {
-          ...accounts[accountId],
-          address: newAddress,
-          publicKey: publicKeys[accountId],
-        };
-
-        onUpdate({
-          type: 'updateAccount',
-          accountId,
-          chain: 'ton',
-          address: newAddress,
-        });
-      }
-
-      await storage.setItem('accounts', accounts);
-
-      await storage.removeItem('addresses' as StorageKey);
-      await storage.removeItem('publicKeys' as StorageKey);
-    }
-
-    version = 8;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 8) {
-    if (getEnvironment().isSseSupported) {
-      const dapps = await storage.getItem('dapps') as StoredDappsState;
-
-      if (dapps) {
-        const items: ApiDbSseConnection[] = [];
-
-        for (const accountDapps of Object.values(dapps)) {
-          for (const dapp of Object.values(accountDapps as Record<string, any>)) {
-            if (dapp.sse?.appClientId) {
-              items.push({ clientId: dapp.sse?.appClientId });
-            }
-          }
-        }
-      }
-    }
-
-    version = 9;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 9) {
-    if (IS_CAPACITOR) {
-      const data = await idbStorage.getAll!();
-
-      for (const [key, value] of Object.entries(data)) {
-        await capacitorStorage.setItem(key as StorageKey, value);
-        const newValue = await capacitorStorage.getItem(key as StorageKey, true);
-
-        if (!areDeepEqual(value, newValue)) {
-          throw new Error('Migration error!');
-        }
-      }
-      await idbStorage.clear();
-    }
-
-    version = 10;
-    await storage.setItem('stateVersion', version);
-  }
-
-  let isIosKeychainModeMigrated = false;
-  if (getEnvironment().isIosApp && version >= 10 && version <= 13) {
-    await iosBackupAndMigrateKeychainMode();
-    isIosKeychainModeMigrated = true;
-  }
-
-  if (version === 10 || version === 11 || version === 12) {
-    const accounts:
-      | Record<
-        string,
-        {
-          publicKey: string;
-          address: string;
-          version?: string;
-        }
-      >
-      | undefined = await storage.getItem('accounts', true);
-
-    if (accounts) {
-      for (const account of Object.values(accounts)) {
-        const { publicKey, address, version: walletVersion } = account;
-
-        if (walletVersion || !publicKey) continue;
-
-        const publicKeyBytes = hexToBytes(publicKey);
-        const walletInfo = ton.pickWalletByAddress('mainnet', publicKeyBytes, address);
-
-        account.version = walletInfo.version;
-      }
-
-      await storage.setItem('accounts', accounts);
-    }
-
-    version = 13;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 13) {
-    const accounts:
-      | Record<
-        string,
-        {
-          publicKey: string;
-          address: string;
-          version?: string;
-        }
-      >
-      | undefined = await storage.getItem('accounts', true);
-
-    if (accounts) {
-      for (const [accountId, account] of Object.entries(accounts)) {
-        const { network } = parseAccountId(accountId);
-        if (network === 'testnet') {
-          account.address = toBase64Address(account.address, false, network);
-
-          onUpdate({
-            type: 'updateAccount',
-            accountId,
-            chain: 'ton',
-            address: account.address,
-          });
-        }
-      }
-
-      version = 14;
-      await storage.setItem('accounts', accounts);
-    }
-  }
-
-  if (version === 14 || version === 15) {
-    if (getEnvironment().isIosApp && !isIosKeychainModeMigrated) {
-      await iosBackupAndMigrateKeychainMode();
-    }
-
-    version = 16;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 16) {
-    await migrations.migration16.start();
-
-    version = 17;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 17) {
-    await migrations.migration17.start();
-
-    version = 18;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 18) {
-    await migrations.migration18.start(accountIds);
-
-    version = 19;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 19) {
-    await migrations.migration19.start();
-
-    version = 20;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 20) {
-    await migrations.migration20.start();
-
-    version = 21;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 21) {
-    await migrations.migration21.start();
-
-    version = 22;
-    await storage.setItem('stateVersion', version);
-  }
-
-  if (version === 22) {
-    // Step 22 stamped the derivation version of Solana wallets; the chain is gone, so
-    // only the version bump is left.
-    version = 23;
-    await storage.setItem('stateVersion', version);
-  }
-  // Should update `STATE_VERSION_KEY` in `WSecureStorage.kt` whenever a new migration is added here
-}
-
-function buildOldAccountId(account: { id: number; network: string }) {
-  const { id, network } = account;
-  return `${id}-ton-${network}`;
-}
-
-async function iosBackupAndMigrateKeychainMode() {
-  const keys = await capacitorStorage.getKeys();
-
-  if (keys?.length) {
-    const items: [string, any][] = [];
-
-    for (const key of keys) {
-      if (key.startsWith('backup_')) {
-        continue;
-      }
-
-      const backupKey = `backup_${key}` as StorageKey;
-      const value = await capacitorStorage.getItem(key as StorageKey, true);
-
-      assert(value !== undefined, 'Empty value!');
-      await capacitorStorage.setItem(backupKey, value);
-      const backupValue = await capacitorStorage.getItem(backupKey);
-      assert(areDeepEqual(value, backupValue), 'Data has not been saved!');
-
-      items.push([key, value]);
-    }
-
-    for (const [key, value] of items) {
-      let shouldRewrite = false;
-      await capacitorStorage.setItem(key as StorageKey, value).catch(() => {
-        shouldRewrite = true;
-      });
-
-      if (shouldRewrite) {
-        await capacitorStorage.removeItem(key as StorageKey);
-        await capacitorStorage.setItem(key as StorageKey, value);
-      }
-    }
-  }
+  await storage.setItem('stateVersion', ACTUAL_STATE_VERSION);
 }

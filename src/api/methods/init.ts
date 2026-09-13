@@ -27,7 +27,7 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
 
   await withStorage(runtimeStorage, async () => {
     await initClientId();
-    await tryMigrateStorage(onUpdate, args.accountIds);
+    await tryMigrateStorage(onUpdate);
   });
 
   methods.initAccounts(onUpdate);

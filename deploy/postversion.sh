@@ -7,6 +7,7 @@ DEFAULT_CHANGELOG="Bug fixes and performance improvements"
 
 printf '%s' "$VERSION" > public/version.txt
 
+mkdir -p changelogs
 printf '%s\n' "$DEFAULT_CHANGELOG" > "changelogs/$VERSION.txt"
 git add "changelogs/$VERSION.txt"
 

@@ -440,7 +440,6 @@ export default function createConfig(
         EVM_MAINNET_RPC_URL: '',
         EVM_TESTNET_RPC_URL: '',
         PROXY_HOSTS: '',
-        STAKING_POOLS: '',
         LIQUID_POOL: '',
         LIQUID_JETTON: '',
         IS_PACKAGED_ELECTRON: 'false',
