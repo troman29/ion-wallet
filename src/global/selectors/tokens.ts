@@ -8,8 +8,6 @@ import type {
 import type { Account, AccountSettings, AccountState, GlobalState, UserToken } from '../types';
 
 import {
-  MYCOIN_MAINNET,
-  MYCOIN_TESTNET,
   PRICELESS_TOKEN_HASHES,
   TINY_TRANSFER_MAX_COST,
   TONCOIN,
@@ -200,11 +198,6 @@ export function selectTokenInfoUserTokens(global: GlobalState) {
     global.settings.baseCurrency,
     global.currencyRates,
   );
-}
-
-export function selectMycoin(global: GlobalState) {
-  const { isTestnet } = global.settings;
-  return selectToken(global, isTestnet ? MYCOIN_TESTNET.slug : MYCOIN_MAINNET.slug);
 }
 
 export function selectTokenByMinterAddress(global: GlobalState, minter: string) {

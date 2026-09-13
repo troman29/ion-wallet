@@ -1629,7 +1629,6 @@ export interface ActionPayloads {
   openLoadingOverlay: undefined;
   closeLoadingOverlay: undefined;
 
-  loadMycoin: undefined;
   openVestingModal: undefined;
   closeVestingModal: undefined;
   startClaimingVesting: undefined;

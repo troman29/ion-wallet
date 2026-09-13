@@ -487,29 +487,10 @@ export const ROBINHOOD = {
   label: 'Robinhood',
 } as const;
 
-export const MYCOIN_MAINNET = {
-  name: 'My Wallet Coin',
-  symbol: 'MY',
-  slug: 'ton-eqcfvnlrbn',
-  decimals: 9,
-  chain: 'ton',
-  minterAddress: 'EQCFVNlRb-NHHDQfv3Q9xvDXBLJlay855_xREsq5ZDX6KN-w',
-  image: 'https://mytonwallet.io/logo-256-blue.png',
-} as const;
-
-export const MYCOIN_TESTNET = {
-  ...MYCOIN_MAINNET,
-  slug: 'ton-kqawlxpebw',
-  minterAddress: 'kQAWlxpEbwhCDFX9gp824ee2xVBhAh5VRSGWfbNFDddAbQoQ',
-  image: undefined,
-} as const;
-
 export const STAKED_TON_SLUG = 'ton-eqcqc6ehrj';
-export const STAKED_MYCOIN_SLUG = 'ton-eqcbzvsfwq';
-export const MYCOIN_STAKING_POOL = 'EQC3roTiRRsoLzfYVK7yVVoIZjTEqAjQU3ju7aQ7HWTVL5o5';
 
 // Tokens that do not accept new stakes; existing positions stay fully withdrawable
-export const NEW_STAKE_DISABLED_TOKEN_SLUGS: ReadonlySet<string> = new Set([MYCOIN_MAINNET.slug, MYCOIN_TESTNET.slug]);
+export const NEW_STAKE_DISABLED_TOKEN_SLUGS: ReadonlySet<string> = new Set();
 
 export const ETHENA_STAKING_VAULT = 'EQChGuD1u0e7KUWHH5FaYh_ygcLXhsdG2nSHPXHW8qqnpZXW';
 export const ETHENA_STAKING_MIN_AMOUNT = 1_000_000; // 1 USDe
@@ -733,7 +714,6 @@ export const TOKEN_CUSTOM_STYLES: Partial<Record<string, {
 export const ALL_STAKING_POOLS = [
   LIQUID_POOL,
   ...DEFAULT_STAKING_POOLS,
-  MYCOIN_STAKING_POOL,
   ETHENA_STAKING_VAULT,
   TON_TSUSDE.tokenAddress,
 ];
@@ -923,7 +903,6 @@ export const PRICELESS_TOKEN_HASHES = new Set([
 
 export const STAKED_TOKEN_SLUGS = new Set([
   STAKED_TON_SLUG,
-  STAKED_MYCOIN_SLUG,
   TON_TSUSDE.slug,
 ]);
 

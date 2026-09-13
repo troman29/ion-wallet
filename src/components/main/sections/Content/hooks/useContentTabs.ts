@@ -38,7 +38,6 @@ interface OwnProps {
   currentCollection?: ApiNftCollection;
   currentTokenSlug?: string;
   states?: ApiStakingState[];
-  hasVesting: boolean;
   alwaysHiddenSlugs?: string[];
   tokensCount: number;
   isPortrait: boolean;
@@ -57,7 +56,6 @@ export default function useContentTabs({
   currentCollection,
   currentTokenSlug,
   states,
-  hasVesting,
   alwaysHiddenSlugs,
   tokensCount,
   isPortrait,
@@ -130,7 +128,7 @@ export default function useContentTabs({
     }
   }, [currentCollection, nftCollectionNameByKey, closeNftCollection]);
 
-  const totalTokensAmount = tokensCount + (hasVesting ? 1 : 0) + numberOfStaking;
+  const totalTokensAmount = tokensCount + numberOfStaking;
   const shouldShowSeparateAssetsPanel = isPortrait && totalTokensAmount <= PORTRAIT_MIN_ASSETS_TAB_VIEW;
 
   const [mainContentTabsCount, tabs] = useMemo(() => {

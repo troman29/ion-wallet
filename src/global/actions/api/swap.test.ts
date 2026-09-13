@@ -2,7 +2,7 @@ import type { GlobalState } from '../../types';
 import type { SwapEstimateResult } from './swap';
 import { SwapInputSource, SwapState } from '../../types';
 
-import { MYCOIN_MAINNET, TONCOIN, TRX } from '../../../config';
+import { TON_USDE, TONCOIN, TRX } from '../../../config';
 import { getGlobal, setGlobal } from '../../index';
 import { clearCurrentSwap, updateCurrentSwap } from '../../reducers';
 import { buildSwapBuildRequest, estimateSwapConcurrently, shouldBlockUnsupportedNearIntentsMemo } from './swap';
@@ -177,17 +177,17 @@ describe('buildSwapBuildRequest', () => {
       swapTokenInfo: {
         bySlug: {
           [TONCOIN.slug]: { slug: TONCOIN.slug, chain: 'ton', decimals: TONCOIN.decimals },
-          [MYCOIN_MAINNET.slug]: {
-            slug: MYCOIN_MAINNET.slug,
+          [TON_USDE.slug]: {
+            slug: TON_USDE.slug,
             chain: 'ton',
-            decimals: MYCOIN_MAINNET.decimals,
-            tokenAddress: MYCOIN_MAINNET.minterAddress,
+            decimals: TON_USDE.decimals,
+            tokenAddress: TON_USDE.tokenAddress,
           },
         },
       },
       currentSwap: {
         tokenInSlug: TONCOIN.slug,
-        tokenOutSlug: MYCOIN_MAINNET.slug,
+        tokenOutSlug: TON_USDE.slug,
         amountIn: '10',
         amountOutMin: '900',
         slippage: 5,

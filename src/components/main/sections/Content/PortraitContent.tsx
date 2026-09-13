@@ -18,7 +18,6 @@ import buildClassName from '../../../../util/buildClassName';
 import { IS_TOUCH_ENV, REM, STICKY_CARD_INTERSECTION_THRESHOLD } from '../../../../util/windowEnvironment';
 import windowSize from '../../../../util/windowSize';
 import { calcSafeAreaTop } from '../../helpers/calcSafeAreaTop';
-import { calcVestingAmountByStatus } from '../../helpers/calcVestingAmountByStatus';
 import { getScrollableContainer } from '../../helpers/scrollableContainer';
 
 import useElementVisibility from '../../../../hooks/useElementVisibility';
@@ -58,7 +57,6 @@ interface StateProps {
   whitelistedNftAddresses?: string[];
   areUnverifiedNftsHidden?: boolean;
   states?: ApiStakingState[];
-  hasVesting: boolean;
   alwaysHiddenSlugs?: string[];
   activityReturnContentTab?: ContentTab;
   selectedNftsToHide?: {
@@ -81,7 +79,6 @@ function PortraitContent({
   areUnverifiedNftsHidden,
   selectedNftsToHide,
   states,
-  hasVesting,
   alwaysHiddenSlugs,
   activeContentTab,
   activityReturnContentTab,
@@ -120,7 +117,6 @@ function PortraitContent({
     currentCollection,
     currentTokenSlug,
     states,
-    hasVesting,
     alwaysHiddenSlugs,
     tokensCount,
     isPortrait: true,
@@ -297,7 +293,6 @@ export default memo(
         blacklistedNftAddresses,
         whitelistedNftAddresses,
         selectedNftsToHide,
-        vesting,
         nfts: {
           byAddress: nfts,
           currentCollection,
@@ -309,10 +304,6 @@ export default memo(
 
       const tokens = selectCurrentAccountTokens(global);
       const tokensCount = accountId ? selectEnabledTokensCountMemoizedFor(accountId)(tokens) : 0;
-      const vestingInfo = vesting?.info;
-      const hasVesting = Boolean(
-        vestingInfo?.length && calcVestingAmountByStatus(vestingInfo, ['frozen', 'ready']) !== '0',
-      );
       const states = accountId ? selectAccountStakingStates(global, accountId) : undefined;
       const alwaysHiddenSlugs = selectCurrentAccountSettings(global)?.alwaysHiddenSlugs;
 
@@ -330,7 +321,6 @@ export default memo(
         areUnverifiedNftsHidden: global.settings.areUnverifiedNftsHidden,
         selectedNftsToHide,
         states,
-        hasVesting,
         alwaysHiddenSlugs,
         currentSiteCategoryId,
         collectionTabs,

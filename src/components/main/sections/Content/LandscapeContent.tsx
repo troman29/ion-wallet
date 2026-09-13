@@ -18,7 +18,6 @@ import {
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import { IS_TOUCH_ENV } from '../../../../util/windowEnvironment';
-import { calcVestingAmountByStatus } from '../../helpers/calcVestingAmountByStatus';
 
 import useHistoryBack from '../../../../hooks/useHistoryBack';
 import useLang from '../../../../hooks/useLang';
@@ -62,7 +61,6 @@ interface StateProps {
   whitelistedNftAddresses?: string[];
   areUnverifiedNftsHidden?: boolean;
   states?: ApiStakingState[];
-  hasVesting: boolean;
   alwaysHiddenSlugs?: string[];
   activityReturnContentTab?: ContentTab;
   selectedNftsToHide?: {
@@ -84,7 +82,6 @@ function LandscapeContent({
   areUnverifiedNftsHidden,
   selectedNftsToHide,
   states,
-  hasVesting,
   alwaysHiddenSlugs,
   activeContentTab,
   activityReturnContentTab,
@@ -122,7 +119,6 @@ function LandscapeContent({
     currentCollection,
     currentTokenSlug,
     states,
-    hasVesting,
     alwaysHiddenSlugs,
     tokensCount,
     isPortrait: false,
@@ -313,7 +309,6 @@ export default memo(
         blacklistedNftAddresses,
         whitelistedNftAddresses,
         selectedNftsToHide,
-        vesting,
         nfts: {
           byAddress: nfts,
           currentCollection,
@@ -325,10 +320,6 @@ export default memo(
 
       const tokens = selectCurrentAccountTokens(global);
       const tokensCount = accountId ? selectEnabledTokensCountMemoizedFor(accountId)(tokens) : 0;
-      const vestingInfo = vesting?.info;
-      const hasVesting = Boolean(
-        vestingInfo?.length && calcVestingAmountByStatus(vestingInfo, ['frozen', 'ready']) !== '0',
-      );
       const states = accountId ? selectAccountStakingStates(global, accountId) : undefined;
       const alwaysHiddenSlugs = selectCurrentAccountSettings(global)?.alwaysHiddenSlugs;
 
@@ -346,7 +337,6 @@ export default memo(
         areUnverifiedNftsHidden: global.settings.areUnverifiedNftsHidden,
         selectedNftsToHide,
         states,
-        hasVesting,
         alwaysHiddenSlugs,
         currentSiteCategoryId,
         collectionTabs,

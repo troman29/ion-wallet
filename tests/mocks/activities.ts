@@ -1,13 +1,13 @@
 import type { ApiSwapActivity, ApiTransactionActivity } from '../../src/api/types';
 
-import { MYCOIN_MAINNET, TON_USDT_MAINNET, TONCOIN, TRC20_USDT_MAINNET, TRX } from '../../src/config';
+import { TON_USDE, TON_USDT_MAINNET, TONCOIN, TRC20_USDT_MAINNET, TRX } from '../../src/config';
 import { buildTxId } from '../../src/util/activities';
 import { random, randomBase64, sample } from '../../src/util/random';
 
 const slugs = [
   TONCOIN.slug,
   TRX.slug,
-  MYCOIN_MAINNET.slug,
+  TON_USDE.slug,
   TON_USDT_MAINNET.slug,
   TRC20_USDT_MAINNET.slug,
 ];

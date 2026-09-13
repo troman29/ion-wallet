@@ -44,8 +44,6 @@ import StakingInfoModal from '../staking/StakingInfoModal';
 import UnstakeModal from '../staking/UnstakeModal';
 import Transition from '../ui/Transition';
 import UpdateAvailable from '../ui/UpdateAvailable';
-import VestingModal from '../vesting/VestingModal';
-import VestingPasswordModal from '../vesting/VestingPasswordModal';
 import MainSkeleton from './MainSkeleton';
 import AccountSelectorModal from './modals/accountSelector/AccountSelectorModal';
 import PromotionModal from './modals/PromotionModal';
@@ -238,8 +236,6 @@ function Main({
       <InvoiceModal />
       <UnstakeModal />
       <StakingClaimModal />
-      <VestingModal />
-      <VestingPasswordModal />
       <RenewDomainModal />
       <LinkingDomainModal />
       <PromotionModal />

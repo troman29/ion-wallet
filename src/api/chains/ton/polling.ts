@@ -6,7 +6,6 @@ import type {
   ApiNftUpdate,
   ApiStakingState,
   ApiTonWallet,
-  ApiVestingInfo,
   ApiWalletWithVersionInfo,
   OnApiUpdate,
   OnUpdatingStatusChange,
@@ -23,7 +22,7 @@ import { pause, throttle } from '../../../util/schedulers';
 import { shouldEmitNftFullLoadFinal } from './util/nft-polling-guards';
 import { fetchStoredAccount, fetchStoredWallet, updateStoredWallet } from '../../common/accounts';
 import { getLastPageTraceBoundaryId } from '../../common/activities/reconciler/pagination';
-import { getBackendConfigCache, getStakingCommonCache } from '../../common/cache';
+import { getStakingCommonCache } from '../../common/cache';
 import { getConcurrencyLimiter } from '../../common/polling/setupInactiveChainPolling';
 import {
   activeWalletTiming,
@@ -47,7 +46,6 @@ import { getNftUpdates, streamAllAccountNfts } from './nfts';
 import { RichActivityStream } from './richActivityStream';
 import { importUnknownTokens } from './tokens';
 import { ActivityStream } from './toncenter';
-import { fetchVestings } from './vesting';
 import { fetchBalances, getWalletInfo, getWalletVersionInfos, isAddressInitialized } from './wallet';
 
 const POLL_DELAY_AFTER_SOCKET = 3 * SEC;
@@ -56,7 +54,6 @@ const DOMAIN_INTERVAL = { focused: MINUTE, notFocused: 5 * MINUTE };
 const INITIALIZATION_INTERVAL = { focused: MINUTE, notFocused: 5 * MINUTE };
 const STAKING_INTERVAL = { focused: 30 * SEC, notFocused: 2 * MINUTE };
 const VERSIONS_INTERVAL = { focused: 5 * MINUTE, notFocused: 15 * MINUTE };
-const VESTING_INTERVAL = { focused: 10 * SEC, notFocused: MINUTE };
 const TON_DNS_INTERVAL = { focused: 15 * SEC, notFocused: 2 * MINUTE };
 
 const NFT_FULL_INTERVAL = { focused: MINUTE, notFocused: 5 * MINUTE };
@@ -91,7 +88,6 @@ export function setupActivePolling(
   const stopWalletVersionPolling = setupWalletVersionsPolling(accountId, onUpdate);
   const stopTonDnsPolling = setupTonDnsPolling(accountId, nftPolling.firstFullLoadPromise, onUpdate);
   const stopStakingPolling = setupStakingPolling(accountId, balancePolling.getBalances, onUpdate);
-  const stopVestingPolling = setupVestingPolling(accountId, onUpdate);
 
   async function handleWalletUpdate() {
     // The TON balance updates in `getWalletInfo` several seconds after an activity arrive from the Toncenter socket.
@@ -113,7 +109,6 @@ export function setupActivePolling(
     stopWalletVersionPolling();
     stopTonDnsPolling();
     stopStakingPolling();
-    stopVestingPolling();
   };
 }
 
@@ -570,40 +565,6 @@ function setupTonDnsPolling(
       } catch (err) {
         logDebugError('setupTonDnsPolling', err);
       }
-    },
-  }).stop;
-}
-
-function setupVestingPolling(accountId: string, onUpdate: OnApiUpdate) {
-  let lastVestingInfo: ApiVestingInfo[] | undefined;
-
-  return pollingLoop({
-    period: VESTING_INTERVAL,
-    async prepare() {
-      const { isVestingEnabled } = await getBackendConfigCache();
-      return isVestingEnabled;
-    },
-    async poll(isEnabled) {
-      if (!isEnabled) {
-        return 'stop';
-      }
-
-      try {
-        const vestingInfo = await fetchVestings(accountId);
-
-        if (!areDeepEqual(lastVestingInfo, vestingInfo)) {
-          lastVestingInfo = vestingInfo;
-          onUpdate({
-            type: 'updateVesting',
-            accountId,
-            vestingInfo,
-          });
-        }
-      } catch (err) {
-        logDebugError('setupVestingPolling', err);
-      }
-
-      return undefined;
     },
   }).stop;
 }

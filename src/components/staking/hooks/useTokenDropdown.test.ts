@@ -1,15 +1,23 @@
 import type { ApiStakingState, ApiTokenWithPrice } from '../../../api/types';
 
-import { MYCOIN_MAINNET, TONCOIN } from '../../../config';
+import { TONCOIN } from '../../../config';
 import { getStakingTokens } from './useTokenDropdown';
 
+// The shipped blocked-token list is empty, so the mechanism needs a slug of its own to be exercised
+const BLOCKED_SLUG = 'ton-blocked-jetton';
+
+jest.mock('../../../util/staking', () => ({
+  ...jest.requireActual('../../../util/staking'),
+  getIsNewStakeAllowed: (tokenSlug?: string) => tokenSlug !== BLOCKED_SLUG,
+}));
+
 const tokenBySlug = {
-  [MYCOIN_MAINNET.slug]: { slug: MYCOIN_MAINNET.slug } as ApiTokenWithPrice,
+  [BLOCKED_SLUG]: { slug: BLOCKED_SLUG } as ApiTokenWithPrice,
   [TONCOIN.slug]: { slug: TONCOIN.slug } as ApiTokenWithPrice,
 };
 
 const activeMyState = {
-  id: 'my-1', type: 'jetton', tokenSlug: MYCOIN_MAINNET.slug, balance: 1n,
+  id: 'my-1', type: 'jetton', tokenSlug: BLOCKED_SLUG, balance: 1n,
 } as unknown as ApiStakingState;
 const tonState = {
   id: 'ton-1', type: 'liquid', tokenSlug: TONCOIN.slug, balance: 0n,

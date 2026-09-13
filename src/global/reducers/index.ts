@@ -6,7 +6,6 @@ export * from './activities';
 export * from './nfts';
 export * from './swap';
 export * from './transfer';
-export * from './vesting';
 export * from './domains';
 export * from './hardware';
 export * from './walletConnectPay';

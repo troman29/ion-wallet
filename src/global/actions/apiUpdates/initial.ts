@@ -38,15 +38,12 @@ import {
   updateStakingDefault,
   updateSwapTokens,
   updateTokens,
-  updateVesting,
-  updateVestingInfo,
 } from '../../reducers';
 import {
   selectAccount,
   selectAccountNftByAddress,
   selectAccountSettings,
   selectAccountState,
-  selectVestingPartsReadyToUnfreeze,
 } from '../../selectors';
 
 // Accumulates new My Wallet Cards across multi-batch streaming rounds.
@@ -437,18 +434,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       if (!global.isIncorrectTimeNotificationReceived) {
         actions.showIncorrectTimeError();
       }
-      break;
-    }
-
-    case 'updateVesting': {
-      const { accountId, vestingInfo } = update;
-      const unfreezeRequestedIds = selectVestingPartsReadyToUnfreeze(global, accountId);
-      global = updateVestingInfo(global, accountId, vestingInfo);
-      const newUnfreezeRequestedIds = selectVestingPartsReadyToUnfreeze(global, accountId);
-      if (!areDeepEqual(unfreezeRequestedIds, newUnfreezeRequestedIds)) {
-        global = updateVesting(global, accountId, { unfreezeRequestedIds: undefined });
-      }
-      setGlobal(global);
       break;
     }
 

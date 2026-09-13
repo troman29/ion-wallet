@@ -4,13 +4,21 @@ import type { ApiStakingState } from '../../../api/types';
 import type { GlobalState } from '../../types';
 import { StakingState } from '../../types';
 
-import { MYCOIN_MAINNET, TONCOIN } from '../../../config';
+import { TONCOIN } from '../../../config';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
 
 jest.mock('../../index', () => ({
   addActionHandler: jest.fn(),
   getGlobal: jest.fn(),
   setGlobal: jest.fn(),
+}));
+
+// The shipped list is empty, so the blocking mechanism needs a slug of its own to be exercised
+const BLOCKED_SLUG = 'ton-blocked-jetton';
+
+jest.mock('../../../util/staking', () => ({
+  ...jest.requireActual('../../../util/staking'),
+  getIsNewStakeAllowed: (tokenSlug?: string) => tokenSlug !== BLOCKED_SLUG,
 }));
 
 type ActionHandler = (global: GlobalState, actions: AnyLiteral, payload?: AnyLiteral) => unknown;
@@ -21,7 +29,7 @@ function getHandler(name: string): ActionHandler {
 }
 
 const MY_STATE = {
-  id: 'my-1', type: 'jetton', tokenSlug: MYCOIN_MAINNET.slug, balance: 1n,
+  id: 'my-1', type: 'jetton', tokenSlug: BLOCKED_SLUG, balance: 1n,
 } as unknown as ApiStakingState;
 const TON_STATE = {
   id: 'ton-1', type: 'liquid', tokenSlug: TONCOIN.slug, balance: 0n,
@@ -70,7 +78,7 @@ describe('startStaking action', () => {
   }
 
   it('rejects a new stake for an explicitly blocked token', () => {
-    const result = run(makeGlobal('ton-1'), { tokenSlug: MYCOIN_MAINNET.slug });
+    const result = run(makeGlobal('ton-1'), { tokenSlug: BLOCKED_SLUG });
     expect(result.currentStaking.state).not.toBe(StakingState.StakeInitial);
   });
 
@@ -111,7 +119,7 @@ describe('startStaking action', () => {
   it('rejects a mismatched product and asset pair', () => {
     const result = run(makeGlobal('ton-1'), {
       stakingId: 'ton-1',
-      tokenSlug: MYCOIN_MAINNET.slug,
+      tokenSlug: BLOCKED_SLUG,
       initialAmount: 1n,
     });
 
