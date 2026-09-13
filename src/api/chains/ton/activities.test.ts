@@ -2,7 +2,6 @@ import type { ApiNetwork, ApiSwapActivity, ApiTransactionActivity } from '../../
 import type { TracesResponse } from './toncenter/traces';
 import type { AddressBook, AnyAction, NftCollectionMetadata, NftItemMetadata } from './toncenter/types';
 
-import { TON_TSUSDE } from '../../../config';
 import { makeMockSwapActivity, makeMockTransactionActivity } from '../../../../tests/mocks';
 import * as addressHelpers from '../../common/addresses';
 import { parseActionsToActivities } from './toncenter/actions';
@@ -343,56 +342,6 @@ describe('parseActionsToActivities', () => {
 
     expect(activity).not.toHaveProperty('metadata.name');
   });
-
-  it('clears stale domain metadata when the tsUSDe mint workaround overrides the counterparty', () => {
-    const walletAddress = 'UQB-anbTtZhmf-KztXAQVWyrlUBC04Ah60ao_ar9rthihczy';
-    const addressBook: AddressBook = {
-      '0:7E6A76D3B598667FE2B3B57010556CAB954042D38021EB46A8FDAAFDAED86285': {
-        user_friendly: walletAddress,
-        domain: 'wallet-domain.ton',
-      },
-      '0:D0E545323C7ACB7102653C073377F7E3C67F122EB94D430A250739F109D4A57D': {
-        user_friendly: TON_TSUSDE.tokenAddress,
-        domain: '',
-      },
-    };
-    const action = {
-      type: 'jetton_mint',
-      action_id: 'tsusde-mint-action-id',
-      trace_id: 'tsusde-mint-trace-id',
-      start_lt: '79110006000014',
-      end_lt: '79110006000014',
-      start_utime: 1779626381,
-      end_utime: 1779626381,
-      transactions: ['tsusde-mint-transaction-hash'],
-      success: true,
-      trace_end_lt: '79110006000015',
-      trace_end_utime: 1779626381,
-      trace_mc_seqno_end: 47440947,
-      trace_external_hash: 'tsusde-mint-external-hash',
-      details: {
-        asset: '0:D0E545323C7ACB7102653C073377F7E3C67F122EB94D430A250739F109D4A57D',
-        receiver: '0:7E6A76D3B598667FE2B3B57010556CAB954042D38021EB46A8FDAAFDAED86285',
-        receiver_jetton_wallet: '0:7E6A76D3B598667FE2B3B57010556CAB954042D38021EB46A8FDAAFDAED86285',
-        amount: '1000000',
-        ton_amount: '0',
-      },
-    } satisfies AnyAction;
-
-    const [activity] = parseActionsToActivities([action], {
-      network: 'mainnet',
-      walletAddress,
-      addressBook,
-      metadata: {},
-      nftSuperCollectionsByCollectionAddress: {},
-    });
-
-    expect(activity).toMatchObject({
-      kind: 'transaction',
-      type: 'unstakeRequest',
-    });
-    expect(activity).not.toHaveProperty('metadata.name');
-  });
 });
 
 // The Toncenter action schema spells an absent field as `null`
@@ -569,7 +518,7 @@ describe('parseToncenterNft', () => {
 
   it('keeps the lottie animation', () => {
     const nft = parseNftFromTransfer({
-      extra: { _image_medium: PROXIED_MEDIUM, lottie: 'https://nft.fragment.com/gift/astralshard-4227.lottie.json' },
+      extra: { _image_medium: PROXIED_MEDIUM, lottie: 'https://example.com/astralshard-4227.lottie.json' },
     });
 
     expect(nft?.metadata.lottie).toContain('astralshard-4227');

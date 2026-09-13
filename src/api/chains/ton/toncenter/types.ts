@@ -156,7 +156,7 @@ export type NftTransfersResponse = {
 
 export type StakingProvider = 'tonstakers' | 'nominators' | (string & {});
 export type DexSlug = 'stonfi' | 'stonfi_v2' | 'dedust';
-export type MarketplaceSlug = 'fragment' | 'getgems';
+export type MarketplaceSlug = 'getgems';
 export type AnyTokenMetadata = NftCollectionMetadata | NftItemMetadata | JettonMasterMetadata;
 
 export type TonTransferAction = BaseAction & {

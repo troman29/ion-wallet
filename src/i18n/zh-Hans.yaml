@@ -264,7 +264,6 @@ Amount to unstake: 解除质押的数量
 Confirm Unstaking: 确认解除质押
 $unstaking_when_receive: 您将在 %time% 内收到解除质押的代币。
 $unstaking_when_receive_with_amount: 您将于 %time% 后收到未质押的 %amount%。
-$unstaking_when_receive_with_amount_ethena: "%amount% 将在 %time% 后可用于提款。"
 $unstake_insufficient_balance: 您需要有 %balance% 在您的主账户中以进行解除质押的操作。
 at %annual_yield%: 在%annual_yield%
 Est. %annual_yield%: 预估 %annual_yield%
@@ -934,12 +933,8 @@ mobile app: 移动应用
 browser extension: 浏览器扩展
 Exit all wallets: 退出所有钱包
 Can't confirm?: 无法登录？
-$safe_staking_ethena_description1: 质押完全去中心化，由**Ethena官方**审计的流动性质押**智能合约**运营。
-$safe_staking_ethena_description2: 质押的USDe将用于Ethena的**交易和投资策略**，自动透明地产生收益。
-$safe_staking_ethena_description3: 您可随时**提取存款**及累计利息——根据Ethena标准提款周期，资金将在**7天**后返还至您的主账户。
 Unstake %amount%: 解除质押 %amount%
 Request Unstaking: 申请取消质押
-$unstaking_when_receive_ethena: 您将在 **7 天** 后收到已解除质押的存款。
 Confirm Upgrading: 确认升级
 How does it work?: 它是如何运作的？
 Multisend: 批量发送

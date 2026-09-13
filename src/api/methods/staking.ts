@@ -1,6 +1,5 @@
 import type {
   ApiChain,
-  ApiEthenaStakingState,
   ApiJettonStakingState,
   ApiStakingHistory,
   ApiStakingState,
@@ -138,15 +137,13 @@ export async function tryUpdateStakingCommonData() {
 export async function submitStakingClaimOrUnlock(
   accountId: string,
   enclaveToken: string | undefined,
-  state: ApiJettonStakingState | ApiEthenaStakingState,
+  state: ApiJettonStakingState,
   realFee?: bigint,
 ) {
   const { chain, staking } = resolveStaking(state);
   const { address: walletAddress } = await fetchStoredWallet(accountId, chain);
 
-  const result = state.type === 'ethena'
-    ? await staking.submitUnstakeEthenaLocked(accountId, enclaveToken, state)
-    : await staking.submitTokenStakingClaim(accountId, enclaveToken, state);
+  const result = await staking.submitTokenStakingClaim(accountId, enclaveToken, state);
 
   if ('error' in result) {
     return result;

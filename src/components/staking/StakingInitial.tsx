@@ -12,7 +12,6 @@ import {
   JVAULT_URL,
   TONCOIN,
 } from '../../config';
-import { getHelpCenterUrl } from '../../global/helpers/getHelpCenterUrl';
 import renderText from '../../global/helpers/renderText';
 import {
   selectAccountStakingState,
@@ -29,12 +28,10 @@ import { stopEvent } from '../../util/domEvents';
 import { getTonStakingFees } from '../../util/fee/getTonOperationFees';
 import { formatCurrency } from '../../util/formatNumber';
 import { vibrate } from '../../util/haptics';
-import { openUrl } from '../../util/openUrl';
 import { throttle } from '../../util/schedulers';
 import { getStakingMinAmount, getStakingTitle } from '../../util/staking';
 import { buildUserToken, getIsNativeToken, getNativeToken } from '../../util/tokens';
 import calcJettonStakingApr from '../../util/ton/calcJettonStakingApr';
-import { getHostnameFromUrl } from '../../util/url';
 
 import useFlag from '../../hooks/useFlag';
 import useLang from '../../hooks/useLang';
@@ -139,11 +136,6 @@ function StakingInitial({
       decimals,
     });
     annualYieldText = `${annualYield}%`;
-  } else if (stakingState?.type === 'ethena') {
-    const { annualYieldStandard, annualYieldVerified, isBoostAvailable } = stakingState;
-    annualYieldText = isBoostAvailable && annualYieldVerified !== undefined
-      ? `${annualYieldStandard}%–${annualYieldVerified}%`
-      : `${annualYieldStandard}%`;
   }
 
   const isNativeToken = getIsNativeToken(token?.slug);
@@ -196,11 +188,6 @@ function StakingInitial({
     selectedStakingId: stakingId,
     baseCurrency,
     currencyRates,
-  });
-
-  const handleHelpCenterClick = useLastCallback(() => {
-    const url = getHelpCenterUrl(lang.code, 'ethenaStaking');
-    void openUrl(url, { title: lang('Help Center'), subtitle: getHostnameFromUrl(url) });
   });
 
   useEffect(() => {
@@ -332,29 +319,10 @@ function StakingInitial({
     );
   }
 
-  function renderEthenaDescription() {
-    return (
-      <>
-        <p className={modalStyles.text}>
-          {renderText(lang('$safe_staking_ethena_description1'))}
-        </p>
-        <p className={modalStyles.text}>
-          {renderText(lang('$safe_staking_ethena_description2'))}
-        </p>
-        <p className={modalStyles.text}>
-          {renderText(lang('$safe_staking_ethena_description3'))}
-        </p>
-      </>
-    );
-  }
-
   function renderSafeDescription() {
     switch (stakingState!.type) {
       case 'jetton':
         return renderJettonDescription();
-
-      case 'ethena':
-        return renderEthenaDescription();
 
       default:
         return renderTonDescription();
@@ -372,11 +340,6 @@ function StakingInitial({
       >
         {!!stakingState && renderSafeDescription()}
         <div className={modalStyles.buttons}>
-          {stakingState!.type === 'ethena' && (
-            <Button onClick={handleHelpCenterClick}>
-              {lang('Help Center')}
-            </Button>
-          )}
           <Button onClick={closeSafeInfoModal}>{lang('Close')}</Button>
         </div>
       </Modal>

@@ -4,7 +4,6 @@ import type {
   ApiBackendStakingState,
   ApiBalanceBySlug,
   ApiCheckTransactionDraftResult,
-  ApiEthenaStakingState,
   ApiJettonStakingState,
   ApiLoyaltyType,
   ApiNetwork,
@@ -19,12 +18,8 @@ import type { TonTransferParams } from './types';
 import { ApiLiquidUnstakeMode, ApiTransactionDraftError } from '../../types';
 
 import {
-  DEBUG,
-  ETHENA_STAKING_VAULT,
   LIQUID_JETTON,
   LIQUID_POOL,
-  TON_TSUSDE,
-  TON_USDE,
   TONCOIN,
   UNSTAKE_TON_GRACE_PERIOD,
   VALIDATION_PERIOD_MS,
@@ -34,7 +29,6 @@ import { bigintDivideToNumber, bigintMultiplyToNumber } from '../../../util/bigi
 import { fromDecimal } from '../../../util/decimals';
 import { getDevSettings } from '../../../util/devSettings';
 import { explainApiTransferFee } from '../../../util/fee/transferFee';
-import { getIsActiveStakingState } from '../../../util/staking';
 import { getNativeToken } from '../../../util/tokens';
 import calcJettonStakingApr from '../../../util/ton/calcJettonStakingApr';
 import {
@@ -48,7 +42,6 @@ import {
   toBase64Address,
   unpackDicts,
 } from './util/tonCore';
-import { TsUSDeWallet } from './contracts/Ethena/TsUSDeWallet';
 import { StakeWallet } from './contracts/JettonStaking/StakeWallet';
 import { StakingPool } from './contracts/JettonStaking/StakingPool';
 import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/accounts';
@@ -92,16 +85,6 @@ export async function checkStakeDraft(accountId: string, amount: bigint, state: 
         amount,
         payload: StakingPool.stakePayload(period),
         forwardAmount: TON_GAS.stakeJettonsForward,
-      });
-      break;
-    }
-    case 'ethena': {
-      result = await checkTransactionDraft({
-        accountId,
-        toAddress: ETHENA_STAKING_VAULT,
-        tokenAddress: TON_USDE.tokenAddress,
-        amount,
-        forwardAmount: TON_GAS.stakeEthenaForward,
       });
       break;
     }
@@ -153,25 +136,6 @@ export async function checkUnstakeDraft(
       });
       break;
     }
-    case 'ethena': {
-      if (amount > state.balance) {
-        return { error: ApiTransactionDraftError.InsufficientBalance };
-      } else if (amount === state.balance) {
-        tokenAmount = state.tokenBalance;
-      } else {
-        const rate = network === 'testnet' ? 1 : commonData.ethena.rate;
-        tokenAmount = bigintDivideToNumber(amount, rate);
-      }
-
-      result = await checkTransactionDraft({
-        accountId,
-        toAddress: TON_TSUSDE.tokenAddress,
-        amount: tokenAmount,
-        tokenAddress: TON_TSUSDE.tokenAddress,
-        forwardAmount: TON_GAS.unstakeEthenaForward,
-      });
-      break;
-    }
   }
 
   return {
@@ -220,18 +184,6 @@ export async function submitStake(
       });
       break;
     }
-    case 'ethena': {
-      toAddress = ETHENA_STAKING_VAULT;
-      result = await submitGasfullTransfer({
-        accountId,
-        enclaveToken,
-        toAddress,
-        tokenAddress: TON_USDE.tokenAddress,
-        amount,
-        forwardAmount: TON_GAS.stakeEthenaForward,
-      });
-      break;
-    }
   }
 
   if ('error' in result) {
@@ -260,7 +212,7 @@ export async function submitUnstake(
 
   let result: ApiSubmitGasfullTransferResult | { error: string };
   let toAddress: string;
-  let tokenSlug: string = TONCOIN.slug;
+  const tokenSlug: string = TONCOIN.slug;
 
   switch (state.type) {
     case 'liquid': {
@@ -290,18 +242,6 @@ export async function submitUnstake(
         payload: buildJettonUnstakePayload(amount, true),
       });
       break;
-    }
-    case 'ethena': {
-      toAddress = TON_TSUSDE.tokenAddress;
-      tokenSlug = TON_TSUSDE.slug;
-      result = await submitGasfullTransfer({
-        accountId,
-        enclaveToken,
-        toAddress,
-        amount,
-        tokenAddress: TON_TSUSDE.tokenAddress,
-        forwardAmount: TON_GAS.unstakeEthenaForward,
-      });
     }
   }
 
@@ -379,12 +319,6 @@ export async function getStakingStates(
     if (slug in balances) {
       promises.push(buildJettonState(options, poolConfig));
     }
-  }
-
-  const hasEthenaBalance = TON_USDE.slug in balances || TON_TSUSDE.slug in balances;
-
-  if (hasEthenaBalance && (!commonData.ethena.isDisabled || DEBUG)) {
-    promises.push(buildEthenaState(options));
   }
 
   return [buildLiquidState(options), ...await Promise.all(promises)];
@@ -509,49 +443,6 @@ async function buildJettonState(
   return state;
 }
 
-async function buildEthenaState(options: StakingStateOptions): Promise<ApiEthenaStakingState> {
-  const {
-    network, balances, address: walletAddress,
-    commonData, commonData: { ethena: { apy, apyVerified } },
-    backendState: { ethena: { isVerified, isBoostAvailable } },
-  } = options;
-  const verifiedApy = apyVerified ?? apy;
-
-  const rate = network === 'testnet' ? 1 : commonData.ethena.rate;
-
-  const tonClient = getTonClient(network);
-  const tsUsdeWalletAddress = await resolveTokenWalletAddress(network, walletAddress, TON_TSUSDE.tokenAddress);
-  const tsUsdeWallet = tonClient.open(TsUSDeWallet.createFromAddress(Address.parse(tsUsdeWalletAddress)));
-  const { lockedUsdeBalance, unlockTime } = await tsUsdeWallet.getTimeLockData();
-
-  const tokenBalance = balances[TON_TSUSDE.slug] ?? 0n;
-  const balance = bigintMultiplyToNumber(tokenBalance, rate);
-
-  const state: ApiEthenaStakingState = {
-    id: 'ethena',
-    type: 'ethena',
-    tokenSlug: TON_USDE.slug,
-    yieldType: 'APY',
-    annualYield: isVerified && isBoostAvailable ? verifiedApy : apy,
-    annualYieldStandard: apy,
-    annualYieldVerified: isBoostAvailable ? verifiedApy : undefined,
-    balance,
-    pool: ETHENA_STAKING_VAULT,
-    tokenBalance,
-    unstakeRequestAmount: lockedUsdeBalance,
-    unlockTime: unlockTime && lockedUsdeBalance ? unlockTime * 1000 : undefined,
-    isBoostAvailable,
-    tsUsdeWalletAddress,
-  };
-
-  // If the user never passed verification and has no active USDe staking, we should optimistically show the high APY.
-  if (isBoostAvailable && isVerified === undefined && !getIsActiveStakingState(state)) {
-    state.annualYield = verifiedApy;
-  }
-
-  return state;
-}
-
 function getLiquidStakingTimeRange(commonData: ApiStakingCommonData) {
   const { prevRound, round: currentRound } = commonData;
   const now = Date.now();
@@ -613,44 +504,6 @@ export async function submitTokenStakingClaim(
       toAddress,
       amount,
       slug: TONCOIN.slug,
-    },
-  };
-}
-
-export async function submitUnstakeEthenaLocked(
-  accountId: string,
-  enclaveToken: string | undefined,
-  state: ApiEthenaStakingState,
-) {
-  const { address } = await fetchStoredWallet(accountId, 'ton');
-
-  const result = await submitGasfullTransfer({
-    accountId,
-    enclaveToken,
-    toAddress: state.tsUsdeWalletAddress,
-    amount: TON_GAS.unstakeEthenaLocked,
-    payload: TsUSDeWallet.transferTimelockedMessage({
-      jettonAmount: state.unstakeRequestAmount,
-      to: Address.parse(TON_TSUSDE.tokenAddress),
-      responseAddress: Address.parse(address),
-      forwardTonAmount: TON_GAS.unstakeEthenaLockedForward,
-    }),
-  });
-
-  if ('error' in result) {
-    return result;
-  }
-
-  return {
-    ...result,
-    localActivityParams: {
-      ...result.localActivityParams,
-      type: 'unstake' as const,
-      amount: state.unstakeRequestAmount,
-      isIncoming: true,
-      slug: TON_USDE.slug,
-      fromAddress: ETHENA_STAKING_VAULT,
-      toAddress: address,
     },
   };
 }

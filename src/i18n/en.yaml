@@ -262,7 +262,6 @@ Amount to unstake: Amount to unstake
 Confirm Unstaking: Confirm Unstaking
 $unstaking_when_receive: You will receive your unstaked deposit in %time%.
 $unstaking_when_receive_with_amount: You will receive your unstaked %amount% in %time%.
-$unstaking_when_receive_with_amount_ethena: You will be able to receive your unstaked %amount% in %time%.
 $unstake_insufficient_balance: You need to have %balance% on your main balance to proceed with unstaking.
 at %annual_yield%: at %annual_yield%
 Est. %annual_yield%: Est. %annual_yield%
@@ -941,12 +940,8 @@ mobile app: mobile app
 browser extension: browser extension
 Exit all wallets: Exit all wallets
 Can't confirm?: Can't confirm?
-$safe_staking_ethena_description1: Staking is fully decentralized and operated by **Ethena’s official** audited liquid staking **smart contracts**.
-$safe_staking_ethena_description2: The deposited USDe stake is used in Ethena’s **trading and investment strategies** to yield rewards automatically and transparently.
-$safe_staking_ethena_description3: You can **withdraw** your stake with rewards at any time, and it will be returned to your account **in 7 days**, according to Ethena’s standard withdrawal period.
 Unstake %amount%: Unstake %amount%
 Request Unstaking: Request Unstaking
-$unstaking_when_receive_ethena: You will be able to receive your unstaked deposit in **7 days**.
 Confirm Upgrading: Confirm Upgrading
 How does it work?: How does it work?
 Multisend: Multisend

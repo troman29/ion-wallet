@@ -43,13 +43,6 @@ export function getTonStakingFees(type?: ApiStakingType): {
         claim: getTonOperationFees('claimJettons'),
       };
     }
-    case 'ethena': {
-      return {
-        stake: getTonOperationFees('stakeEthena'),
-        unstake: getTonOperationFees('unstakeEthena'),
-        claim: getTonOperationFees('unstakeEthenaLocked'),
-      };
-    }
   }
 
   return {

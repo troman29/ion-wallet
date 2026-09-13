@@ -136,7 +136,6 @@ export interface ApiNftMetadata {
   attributes?: ApiNftAttribute[];
   lottie?: string;
   imageUrl?: string;
-  fragmentUrl?: string;
 }
 
 export type EvmNftInterface = 'ERC721' | 'ERC1155';
@@ -161,7 +160,6 @@ export interface ApiNft {
   collectionAddress?: string;
   isOnSale: boolean;
   isHidden?: boolean;
-  isOnFragment?: boolean;
   isScam?: boolean;
   /** Set when the collection matched no trust signal. Absent means the NFT is verified or was never checked (other chains) */
   isUnverified?: true;
@@ -240,21 +238,9 @@ export type ApiJettonStakingState = BaseStakingState & {
   poolWallets?: string[];
 };
 
-export type ApiEthenaStakingState = BaseStakingState & {
-  type: 'ethena';
-  tokenBalance: bigint;
-  tsUsdeWalletAddress: string;
-  unstakeRequestAmount: bigint;
-  unlockTime?: number;
-  isBoostAvailable?: boolean;
-  annualYieldStandard?: number;
-  annualYieldVerified?: number;
-};
-
 export type ApiYieldType = 'APY' | 'APR';
 export type ApiStakingState = ApiLiquidStakingState
-  | ApiJettonStakingState
-  | ApiEthenaStakingState;
+  | ApiJettonStakingState;
 export type ApiToncoinStakingState = ApiLiquidStakingState;
 
 export interface ApiBackendStakingState {
@@ -264,15 +250,6 @@ export interface ApiBackendStakingState {
   loyaltyType?: ApiLoyaltyType;
   loyaltyBalance?: bigint;
   stakedAt?: number;
-  ethena: {
-    /**
-     * - undefined — never passed the verification;
-     * - true — passed the verification and eligible for the boosted APY;
-     * - false — passed the verification and not eligible for the boosted APY;
-     */
-    isVerified?: boolean;
-    isBoostAvailable?: boolean;
-  };
   liquid?: {
     unstakeRequestAmount?: string;
   };
@@ -414,7 +391,7 @@ export type ApiCountryCode = 'AF' | 'AX' | 'AL' | 'DZ' | 'AS' | 'AD' | 'AO' | 'A
 /** Each string value can be either an address or a domain name */
 export type ApiImportAddressByChain = Partial<Record<ApiChain, string>>;
 
-export type ApiNftMarketplace = 'fragment' | 'getgems' | 'opensea';
+export type ApiNftMarketplace = 'getgems' | 'opensea';
 
 export type OnUpdatingStatusChange = (kind: ApiUpdatingStatus['kind'], isUpdating: boolean) => void;
 

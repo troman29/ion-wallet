@@ -1,6 +1,6 @@
 import type { ApiStakingState } from '../../api/types';
 
-import { TON_USDE, TONCOIN } from '../../config';
+import { TON_USDT_MAINNET, TONCOIN } from '../../config';
 import { getFullStakingBalance, getIsNewStakeAllowed } from '.';
 
 describe('getIsNewStakeAllowed', () => {
@@ -56,7 +56,7 @@ describe('getFullStakingBalance', () => {
     const state = {
       type: 'jetton',
       id: 'jetton',
-      tokenSlug: TON_USDE.slug,
+      tokenSlug: TON_USDT_MAINNET.slug,
       pool: 'EQCaSTAKE',
       balance: 1_000n,
       unclaimedRewards: 25n,

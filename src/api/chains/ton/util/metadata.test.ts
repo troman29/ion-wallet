@@ -1,8 +1,4 @@
-import {
-  NFT_FRAGMENT_COLLECTIONS,
-  NOTCOIN_VOUCHERS_ADDRESS,
-  TON_DNS_ZONES,
-} from '../../../../config';
+import { TON_DNS_ZONES } from '../../../../config';
 import { checkIsTrustedCollection, getHasTrustedCollections } from '../../../common/addresses';
 import { getIsNftUnverified } from './metadata';
 
@@ -37,14 +33,6 @@ describe('getIsNftUnverified', () => {
 
   it('skips a collection trusted by the backend', () => {
     expect(getIsNftUnverified({ collectionAddress: TRUSTED_COLLECTION })).toBeUndefined();
-  });
-
-  it('skips a Fragment NFT', () => {
-    expect(getIsNftUnverified({ collectionAddress: NFT_FRAGMENT_COLLECTIONS[0], isOnFragment: true })).toBeUndefined();
-  });
-
-  it('skips Notcoin vouchers', () => {
-    expect(getIsNftUnverified({ collectionAddress: NOTCOIN_VOUCHERS_ADDRESS })).toBeUndefined();
   });
 
   it.each(TON_DNS_ZONES.map(({ collectionName, resolver }) => [collectionName, resolver]))(

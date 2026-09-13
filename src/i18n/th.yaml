@@ -266,7 +266,6 @@ Amount to unstake: จำนวนที่ถอนจากการสเต�
 Confirm Unstaking: ยืนยันการถอนการสเต็ก
 $unstaking_when_receive: คุณจะได้รับทรัพย์สินจากการสเต็กใน %time%.
 $unstaking_when_receive_with_amount: คุณจะได้รับ %amount% ที่ไม่ได้ล็อกในอีก %time%
-$unstaking_when_receive_with_amount_ethena: "%amount% จะสามารถถอนได้ใน %time%."
 $unstake_insufficient_balance: คุณต้องมี %balance% ในบัญชีสำหรับการดำเนินการถอนการสเต็ก.
 at %annual_yield%: ที่ %annual_yield%
 Est. %annual_yield%: ประมาณ %annual_yield%
@@ -939,12 +938,8 @@ mobile app: แอปมือถือ
 browser extension: ส่วนขยายเบราว์เซอร์
 Exit all wallets: ออกจากกระเป๋าทั้งหมด
 Can't confirm?: เข้าระบบไม่ได้?
-$safe_staking_ethena_description1: การ staking เป็นแบบกระจายศูนย์อย่างสมบูรณ์และดำเนินการโดย **สัญญาอัจฉริยะ** ของ Ethena ที่ผ่านการตรวจสอบแล้ว
-$safe_staking_ethena_description2: USDe ที่ฝากไว้จะถูกใช้ใน **กลยุทธ์การซื้อขายและการลงทุน** ของ Ethena เพื่อสร้างรางวัลโดยอัตโนมัติและโปร่งใส
-$safe_staking_ethena_description3: คุณสามารถ**ถอนเงินฝาก**พร้อมดอกเบี้ยที่ค้างรับได้ทุกเวลา เงินจะถูกโอนกลับเข้าบัญชีหลักของคุณภายใน **7 วัน** ตามระยะเวลาถอนมาตรฐานของ Ethena
 Unstake %amount%: เลิกเดิมพัน %amount%
 Request Unstaking: ขอถอนการวางเดิมพัน
-$unstaking_when_receive_ethena: คุณจะสามารถรับเงินฝากที่ยกเลิกการวางเดิมพันได้ในอีก **7 วัน**
 Confirm Upgrading: ยืนยันการอัปเกรด
 How does it work?: ทำงานอย่างไร?
 Multisend: ส่งหลายรายการ

@@ -264,7 +264,6 @@ Amount to unstake: المبلغ المراد فكه
 Confirm Unstaking: تأكيد عدم الثبات
 $unstaking_when_receive: سوف تتلقى وديعتك غير المستحقة في %time%.
 $unstaking_when_receive_with_amount: سوف تتلقى %amount% غير المقيد في %time%.
-$unstaking_when_receive_with_amount_ethena: ستتمكن من استلام %amount% غير المقيد في %time%.
 $unstake_insufficient_balance: يجب أن يكون لديك %balance% في رصيدك الرئيسي حتى تتمكن من متابعة عملية الإزالة.
 at %annual_yield%: في %annual_yield%
 Est. %annual_yield%: EST. %annual_yield%
@@ -922,12 +921,8 @@ mobile app: تطبيق جوال
 browser extension: امتداد المتصفح
 Exit all wallets: الخروج من جميع المحافظ
 Can't confirm?: لا يمكن تأكيد؟
-$safe_staking_ethena_description1: الستاكينغ لامركزي بالكامل وتديره **عقود Ethena الرسمية** للتخزين السائل **المدققة**.
-$safe_staking_ethena_description2: يتم استخدام حصة USDe المودعة في **استراتيجيات التداول والاستثمار** الخاصة بـ Ethena للحصول على مكافآت تلقائيًا وبشفافية.
-$safe_staking_ethena_description3: يمكنك **سحب** حصتك مع المكافآت في أي وقت، وسيتم إعادتها إلى حسابك **في 7 أيام**، وفقًا لفترة السحب القياسية في Ethena.
 Unstake %amount%: إلغاء تثبيت %amount%
 Request Unstaking: طلب غير ثابت
-$unstaking_when_receive_ethena: ستتمكن من استلام إيداعك بعد إلغاء الستاكينغ خلال **7 أيام**.
 Confirm Upgrading: تأكيد الترقية
 How does it work?: كيف يعمل؟
 Multisend: إرسال متعدد

@@ -21,7 +21,7 @@ import {
 import useLang from '../../../hooks/useLang';
 import useLastCallback from '../../../hooks/useLastCallback';
 
-export type NftMenuHandler = 'send' | 'tondns' | 'fragment' | 'marketplace' | 'explorer' | 'collection' | 'hide'
+export type NftMenuHandler = 'send' | 'tondns' | 'marketplace' | 'explorer' | 'collection' | 'hide'
   | 'unhide' | 'not_scam' | 'burn' | 'select' | 'renew' | 'linkDomain' | 'shareLink';
 
 const ON_SALE_ITEM: DropdownItem<NftMenuHandler> = {
@@ -39,11 +39,6 @@ const SEND_ITEM: DropdownItem<NftMenuHandler> = {
   name: 'Send',
   value: 'send',
   withDelimiter: true,
-};
-const FRAGMENT_ITEM: DropdownItem<NftMenuHandler> = {
-  name: 'Fragment',
-  value: 'fragment',
-  fontIcon: 'external',
 };
 const getMarketplaceItem = (chain: ApiChain): DropdownItem<NftMenuHandler> => ({
   name: getMarketplaceName(chain),
@@ -187,22 +182,6 @@ export default function useNftMenu({
         break;
       }
 
-      case 'fragment': {
-        let url: string;
-        const { collectionName, name, metadata: { fragmentUrl } } = nft!;
-
-        if (fragmentUrl) {
-          url = fragmentUrl;
-        } else if (collectionName?.toLowerCase().includes('numbers')) {
-          url = `https://fragment.com/number/${name?.replace(/[^0-9]/g, '')}`;
-        } else {
-          url = `https://fragment.com/username/${encodeURIComponent(name?.substring(1) || '')}`;
-        }
-
-        void openUrl(url, { isExternal });
-        break;
-      }
-
       case 'collection': {
         openNftCollection({ chain: nft!.chain, address: nft!.collectionAddress! }, { forceOnHeavyAnimation: true });
         closeOverlays();
@@ -262,14 +241,13 @@ export default function useNftMenu({
     if (!nft) return [];
 
     const {
-      collectionAddress, isOnSale, isOnFragment, isScam,
+      collectionAddress, isOnSale, isScam,
     } = nft;
     const isDotTon = isDotTonDomainNft(nft);
     const isRenewable = isRenewableDnsNft(nft);
     const isLinkable = isLinkableDnsNft(nft);
 
     return compact([
-      isOnFragment && FRAGMENT_ITEM,
       !isViewMode && (isOnSale ? ON_SALE_ITEM : SEND_ITEM),
       !isViewMode && isLinkable && !isOnSale && (linkedAddress ? CHANGE_LINKED_ADDRESS : LINK_TO_ADDRESS),
       isDotTon && !isViewMode && TON_DOMAIN_ITEM,

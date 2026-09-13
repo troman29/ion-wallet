@@ -10,7 +10,6 @@ import type { Theme, UserToken } from '../../global/types';
 
 import {
   ANIMATED_STICKER_TINY_ICON_PX,
-  ETHENA_ELIGIBILITY_CHECK_URL,
   SHORT_FRACTION_DIGITS,
   TONCOIN,
 } from '../../config';
@@ -27,7 +26,6 @@ import buildClassName from '../../util/buildClassName';
 import { formatRelativeHumanDateTime } from '../../util/dateFormat';
 import { toBig, toDecimal } from '../../util/decimals';
 import { formatCurrency } from '../../util/formatNumber';
-import { openUrl } from '../../util/openUrl';
 import { getIsNewStakeAllowed, getStakingStateStatus, getUnstakeTime } from '../../util/staking';
 import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
 
@@ -106,9 +104,7 @@ function StakingInfoContent({
     balance: amount,
     annualYield = 0,
     unstakeRequestAmount,
-    type: stakingType,
   } = stakingState ?? {};
-  const isEthenaBoostAvailable = stakingState?.type === 'ethena' && stakingState.isBoostAvailable;
 
   const unstakeTime = getUnstakeTime(stakingState);
   const canBeClaimed = stakingState ? getStakingStateStatus(stakingState) === 'readyToClaim' : undefined;
@@ -184,10 +180,6 @@ function StakingInfoContent({
       .toString();
   }
 
-  const handleCheckEligibility = useLastCallback(() => {
-    void openUrl(ETHENA_ELIGIBILITY_CHECK_URL);
-  });
-
   const [selectedToken, selectableTokens] = useTokenDropdown({
     tokenBySlug,
     states,
@@ -202,11 +194,7 @@ function StakingInfoContent({
     let text: string | TeactNode[] | undefined;
 
     if (unstakeTime) {
-      let textKey = '$unstaking_when_receive_with_amount';
-
-      if (stakingType === 'ethena') {
-        textKey = '$unstaking_when_receive_with_amount_ethena';
-      }
+      const textKey = '$unstaking_when_receive_with_amount';
 
       text = lang(textKey, {
         time: (
@@ -356,7 +344,7 @@ function StakingInfoContent({
             />
 
           </RichNumberField>
-          {unstakeRequestAmount && unstakeRequestAmount > 0n && stakingType !== 'ethena'
+          {unstakeRequestAmount && unstakeRequestAmount > 0n
             ? renderUnstakeDescription()
             : (
               <>
@@ -371,12 +359,10 @@ function StakingInfoContent({
                   suffix={symbol}
                   className={styles.stakingBalance}
                 />
-                {stakingType === 'ethena' && !canBeClaimed && !!unstakeRequestAmount && renderUnstakeDescription()}
                 {!isViewMode && (
                   <div
                     className={buildClassName(
                       styles.stakingInfoButtons,
-                      stakingType === 'ethena' && styles.stakingInfoButtonsAdaptiveWidth,
                       !!unclaimedRewards && styles.stakingInfoButtonsWithMargin,
                     )}
                   >
@@ -390,13 +376,13 @@ function StakingInfoContent({
                         {lang('Stake More')}
                       </Button>
                     )}
-                    {(stakingType !== 'ethena' || !canBeClaimed) && (
+                    {!canBeClaimed && (
                       <Button
                         className={styles.stakingInfoButton}
                         isDisabled={isLoading}
                         onClick={handleUnstakeClick}
                       >
-                        {lang(stakingType === 'ethena' ? 'Request Unstaking' : 'Unstake')}
+                        {lang('Unstake')}
                       </Button>
                     )}
                     {canBeClaimed && (
@@ -413,11 +399,6 @@ function StakingInfoContent({
                       </Button>
                     )}
                   </div>
-                )}
-                {!isViewMode && isEthenaBoostAvailable && (
-                  <Button isText className={styles.checkEligibilityButton} onClick={handleCheckEligibility}>
-                    {lang('Check eligibility for max APY')}
-                  </Button>
                 )}
                 {!!unclaimedRewards && renderRewards()}
               </>

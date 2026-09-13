@@ -20,8 +20,6 @@ import {
 import {
   DEBUG,
   LIQUID_JETTON,
-  NFT_FRAGMENT_COLLECTIONS,
-  NOTCOIN_VOUCHERS_ADDRESS,
   TON_DNS_ZONES,
 } from '../../../../config';
 import { fetchJsonWithProxy, getProxiedLottieUrl } from '../../../../util/fetch';
@@ -59,7 +57,6 @@ const OFFCHAIN_CONTENT_PREFIX = 0x01;
 const SNAKE_PREFIX = 0x00;
 
 const VERIFIED_TON_COLLECTIONS = new Set<string>([
-  NOTCOIN_VOUCHERS_ADDRESS,
   ...TON_DNS_ZONES.map(({ resolver }) => resolver),
 ]);
 
@@ -617,8 +614,6 @@ export function parseTonapiioNft(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
     const isScam = hasScamLink || description === 'SCAM' || trust === 'blacklist';
     const isHidden = renderType === 'hidden' || isScam;
-    const isOnFragment = !!collection && NFT_FRAGMENT_COLLECTIONS.includes(collection.address);
-
     const metadata = {
       ...(Array.isArray(attributes) && {
         // `nft.metadata.attributes[number].value` is almost always `string`, but can also be an object (https://tonscan.org/nft/EQAglL_g6q2AhMK_BT9jN1F-8jBlv2pOI30vRkPluU9kcXgV)
@@ -639,12 +634,11 @@ export function parseTonapiioNft(
       isOnSale: Boolean(sale),
       isHidden,
       isScam,
-      isUnverified: getIsNftUnverified({ collectionAddress, isOnFragment }),
+      isUnverified: getIsNftUnverified({ collectionAddress }),
       description,
       ...(collection && {
         collectionAddress,
         collectionName: collection.name,
-        isOnFragment,
       }),
       metadata,
     });
@@ -661,14 +655,11 @@ export function parseTonapiioNft(
  */
 export function getIsNftUnverified(options: {
   collectionAddress?: string;
-  isOnFragment?: boolean;
 }): true | undefined {
-  const { collectionAddress, isOnFragment } = options;
+  const { collectionAddress } = options;
 
   // Until the backend list arrives every collection looks unverified, so the filter stays off
   if (!getHasTrustedCollections()) return undefined;
-
-  if (isOnFragment) return undefined;
 
   if (collectionAddress
     && (VERIFIED_TON_COLLECTIONS.has(collectionAddress) || checkIsTrustedCollection(collectionAddress))) {

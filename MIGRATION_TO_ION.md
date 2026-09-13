@@ -57,6 +57,10 @@
 - [x] **Проверить Giveaway.**
   - Поиск по `src`, `mobile` и `public` не находит оставшегося Giveaway-кода; `app_giveaway_url` удалён из Android ресурсов.
 
+- [x] **Удалить TON-специфичные интеграции Fragment, Notcoin vouchers и Ethena.**
+  - Удалены Fragment collections, NFT-меню, marketplace-метаданные и тестовые trace fixtures; Notcoin voucher exchange/burn flow; Ethena USDe/tsUSDe staking, контракты, backend-модели, activity parsing, интерфейс и локализации.
+  - Обычные NFT, общий burn NFT, liquid staking и jetton staking сохранены.
+
 - [ ] **Проверить iOS Capacitor-проект.**
   - Удалены Air package products, `AirWidgetExtension`, Air-only target и ссылки на удалённые файлы.
   - Проверить открытие проекта, `cap sync ios`, сборку и запуск на симуляторе или устройстве.

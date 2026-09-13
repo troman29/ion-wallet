@@ -1,4 +1,4 @@
-import type { ApiEthenaStakingState, ApiJettonStakingState } from '../../../api/types';
+import type { ApiJettonStakingState } from '../../../api/types';
 import { StakingState } from '../../types';
 
 import { getDoesUsePinPad } from '../../../util/biometrics';
@@ -415,8 +415,7 @@ addActionHandler('submitStakingClaim', withEnclaveSessionRelease(async (global, 
 
   global = getGlobal();
 
-  const stakingState = selectAccountStakingState(global, accountId) as ApiEthenaStakingState | ApiJettonStakingState;
-  const isEthenaStaking = stakingState.type === 'ethena';
+  const stakingState = selectAccountStakingState(global, accountId) as ApiJettonStakingState;
 
   const result = await callApi(
     'submitStakingClaimOrUnlock',
@@ -432,7 +431,7 @@ addActionHandler('submitStakingClaim', withEnclaveSessionRelease(async (global, 
 
   global = getGlobal();
   global = updateCurrentStaking(global, {
-    state: isEthenaStaking ? StakingState.ClaimComplete : StakingState.None,
+    state: StakingState.None,
   });
   setGlobal(global);
 }));

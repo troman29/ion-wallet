@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from '../../lib/teact/teact';
 import { getActions, withGlobal } from '../../global';
 
-import type { ApiEthenaStakingState, ApiJettonStakingState } from '../../api/types';
+import type { ApiJettonStakingState } from '../../api/types';
 import type { UserToken } from '../../global/types';
 import { StakingState } from '../../global/types';
 
@@ -46,7 +46,7 @@ import stakingStyles from './Staking.module.scss';
 import styles from './StakingClaimModal.module.scss';
 
 interface StateProps {
-  stakingState?: ApiJettonStakingState | ApiEthenaStakingState;
+  stakingState?: ApiJettonStakingState;
   isOpen?: boolean;
   tokens?: UserToken[];
   isLoading?: boolean;
@@ -95,9 +95,7 @@ function StakingClaimModal({
     tokenSlug,
   } = stakingState ?? {};
 
-  const rewardAmount = stakingState && 'unclaimedRewards' in stakingState
-    ? stakingState.unclaimedRewards
-    : stakingState?.unstakeRequestAmount ?? 0n;
+  const rewardAmount = stakingState?.unclaimedRewards ?? 0n;
 
   const lang = useLang();
 
@@ -108,7 +106,7 @@ function StakingClaimModal({
   const { gas: networkFee, real: realNetworkFee } = getTonStakingFees(stakingState?.type).claim!;
   const isNativeEnough = nativeBalance > networkFee;
   const { renderingKey, nextKey, updateNextKey } = useModalTransitionKeys(state, Boolean(isOpen));
-  const confirmTitle = lang(stakingState?.type === 'ethena' ? 'Confirm Unstaking' : 'Confirm Rewards Claim');
+  const confirmTitle = lang('Confirm Rewards Claim');
 
   const handleAuthorize = useLastCallback((enclaveToken: string) => {
     if (!isNativeEnough) return;
@@ -295,7 +293,7 @@ export default memo(withGlobal((global): StateProps => {
 
   const stakingState = accountId ? selectAccountStakingState(global, accountId) : undefined;
   const tokens = selectCurrentAccountTokens(global);
-  const canBeClaimed = stakingState?.type === 'jetton' || stakingState?.type === 'ethena';
+  const canBeClaimed = stakingState?.type === 'jetton';
 
   return {
     stakingState: canBeClaimed ? stakingState : undefined,

@@ -270,7 +270,6 @@ Amount to unstake: Сумма к выводу
 Confirm Unstaking: Подтвердить вывод
 $unstaking_when_receive: Депозит будет выведен через %time%.
 $unstaking_when_receive_with_amount: "%amount% будут выведены через %time%."
-$unstaking_when_receive_with_amount_ethena: "%amount% будут доступны к выводу через %time%."
 $unstake_insufficient_balance: Вам необходимо иметь %balance% на вашем основном балансе, чтобы отправить заявку на вывод депозита.
 at %annual_yield%: при %annual_yield%
 Staked: Стейкинг
@@ -953,12 +952,8 @@ mobile app: мобильное приложение
 browser extension: расширение браузера
 Exit all wallets: Выйти из всех кошельков
 Can't confirm?: Не удаётся войти?
-$safe_staking_ethena_description1: Стейкинг полностью **децентрализован** и управляется официальными, прошедшими аудит **смарт-контрактами от Ethena**.
-$safe_staking_ethena_description2: Ваш депозит в USDe используется в **торговых и инвестиционных стратегиях** Ethena, автоматически и прозрачно принося доход.
-$safe_staking_ethena_description3: Вы можете **вывести депозит** вместе с начисленными процентами в любой момент — средства вернутся на ваш основной счёт через **7 дней**, согласно стандартному периоду вывода Ethena.
 Unstake %amount%: Вывести %amount%
 Request Unstaking: Запросить вывод
-$unstaking_when_receive_ethena: Вы сможете получить свой депозит через **7 дней**.
 Confirm Upgrading: Подтвердить улучшение
 How does it work?: Как это работает?
 Multisend: Мультиотправка

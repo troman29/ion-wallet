@@ -2,9 +2,7 @@ import React, { memo } from '../../lib/teact/teact';
 
 import type { ApiNft } from '../../api/types';
 
-import {
-  BURN_ADDRESS, BURN_CHUNK_DURATION_APPROX_SEC, NFT_BATCH_SIZE, NOTCOIN_EXCHANGERS,
-} from '../../config';
+import { BURN_ADDRESS, BURN_CHUNK_DURATION_APPROX_SEC, NFT_BATCH_SIZE } from '../../config';
 
 import useLang from '../../hooks/useLang';
 
@@ -34,10 +32,9 @@ function TransferMultiNftProcess({
 
   const isInProgress = sentNftsCount < nfts.length;
   const isBurning = toAddress === BURN_ADDRESS;
-  const isNotcoinBurning = toAddress === NOTCOIN_EXCHANGERS[0];
 
   const title = isInProgress ? lang(
-    `${(isBurning || isNotcoinBurning) ? 'Burning' : 'Sending'}: %n% of %m% NFTs...`,
+    `${isBurning ? 'Burning' : 'Sending'}: %n% of %m% NFTs...`,
     { n: sentNftsCount, m: nfts.length },
   ) : lang('Sent');
   const duration = (Math.ceil(nfts.length / NFT_BATCH_SIZE) * BURN_CHUNK_DURATION_APPROX_SEC) / 60;
