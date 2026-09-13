@@ -1,7 +1,6 @@
 import React, { memo, type TeactNode } from '../../lib/teact/teact';
 import { getActions } from '../../global';
 
-import { STARS_SYMBOL } from '../../config';
 import { getDoesUsePinPad } from '../../util/biometrics';
 
 import useHistoryBack from '../../hooks/useHistoryBack';
@@ -19,11 +18,10 @@ interface OwnProps {
   extraAuthUsages?: number;
   onAuthorize: (enclaveToken: string) => void;
   onCancel: NoneToVoidFunction;
-  isGaslessWithStars?: boolean;
 }
 
 function TransferPassword({
-  isActive, isLoading, isBurning, error, children, extraAuthUsages, onAuthorize, onCancel, isGaslessWithStars,
+  isActive, isLoading, isBurning, error, children, extraAuthUsages, onAuthorize, onCancel,
 }: OwnProps) {
   const {
     cancelTransfer,
@@ -38,9 +36,7 @@ function TransferPassword({
   });
 
   const title = isBurning ? 'Confirm Burning' : 'Confirm Sending';
-  const submitLabel = isGaslessWithStars
-    ? lang('Pay fee with %stars_symbol%', { stars_symbol: STARS_SYMBOL })
-    : lang('Confirm');
+  const submitLabel = lang('Confirm');
 
   return (
     <>

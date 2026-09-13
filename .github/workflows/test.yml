@@ -32,7 +32,7 @@ jobs:
       - name: Check Agent V2 contracts
         run: node dev/checkAgentV2Contract.mjs
 
-      # The standalone Air SDK sets `NO_EXTRA_FEATURES=1` to exclude guarded extra features from the bundle
+      # The standalone SDK sets `NO_EXTRA_FEATURES=1` to exclude guarded extra features from the bundle
       - name: Build the standalone SDK bundle
         run: npm run sdk:build:slim
 

@@ -257,16 +257,11 @@
     border-radius: var(--border-radius-default);
 
     @include mixins.respond-below(xs) {
-      :global(.is-telegram-app) &,
       :global(.is-android) & {
         border-start-start-radius: 0;
         border-start-end-radius: 0;
       }
 
-      :global(html.is-mobile-telegram-app.is-fullscreen) & {
-        margin-top: calc(-1 * var(--tg-content-safe-area-inset-top));
-        padding-top: var(--tg-content-safe-area-inset-top);
-      }
     }
   }
 
@@ -302,10 +297,6 @@
 @include mixins.respond-below(xs) {
   .stakingInfoNoHistory {
     border-radius: var(--border-radius-default) var(--border-radius-default) 0 0;
-
-    :global(.is-telegram-app) & {
-      border-radius: 0;
-    }
 
     @supports (padding-bottom: max(1rem, var(--safe-area-bottom))) {
       padding-bottom: max(1rem, var(--safe-area-bottom))
@@ -347,7 +338,6 @@
       border-radius: var(--border-radius-default);
     }
 
-    :global(.is-telegram-app) &,
     :global(.is-android) & {
       border-radius: 0;
     }

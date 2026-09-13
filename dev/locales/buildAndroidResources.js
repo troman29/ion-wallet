@@ -9,7 +9,6 @@ const I18N_DIR = path.resolve(ROOT_DIR, 'src/i18n');
 const APP_RES_DIR = path.resolve(ROOT_DIR, 'mobile/android/app/src/main/res');
 const APP_RES_SHARED_DIR = path.resolve(ROOT_DIR, 'mobile/android/app/src/main/res-shared');
 const APP_I18N_ASSETS_DIR = path.resolve(ROOT_DIR, 'mobile/android/app/src/main/assets/public/i18n');
-const NATIVE_ENCLAVE_RES_DIR = path.resolve(ROOT_DIR, 'mobile/android/air/SubModules/NativeEnclave/src/main/res');
 
 const DEFAULT_LOCALE = 'en';
 // Overrides for the strings the Capacitor bridge shows in its WebView permission prompt
@@ -209,7 +208,7 @@ function writeEnclaveStrings(locales, perLocale) {
   }
 
   for (const locale of locales) {
-    const localeDir = path.resolve(NATIVE_ENCLAVE_RES_DIR, resolveQualifier(locale));
+    const localeDir = path.resolve(APP_RES_DIR, resolveQualifier(locale));
     ensureDir(localeDir);
     fs.writeFileSync(
       path.resolve(localeDir, 'enclave_strings.xml'),
@@ -228,7 +227,7 @@ function main() {
   writeEnclaveStrings(locales, perLocale);
 
   console.log(
-    `Generated Android locales_config.xml, i18n JSON assets, web permission and Enclave strings `
+    `Generated Android locales_config.xml, i18n JSON assets, web permission and biometric strings `
     + `for ${locales.length} locales.`,
   );
 }

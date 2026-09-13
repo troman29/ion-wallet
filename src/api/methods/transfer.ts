@@ -5,7 +5,6 @@ import type {
   ApiCheckTransactionDraftResult,
   ApiLocalTransactionParams,
   ApiSubmitGasfullTransferResult,
-  ApiSubmitGaslessTransferResult,
   ApiSubmitTransferOptions,
   ApiTransferPayload,
   OnApiUpdate,
@@ -20,7 +19,6 @@ import { fetchStoredAddress } from '../common/accounts';
 import { buildLocalTransaction } from '../common/helpers';
 import { bytesToBase64 } from '../common/utils';
 import { FAKE_TX_ID } from '../constants';
-import { requireMfaMethods } from './optional';
 import { buildTokenSlug } from './tokens';
 
 let onUpdate: OnApiUpdate;
@@ -44,7 +42,6 @@ function buildDraftCacheKey(chain: ApiChain, options: ApiCheckTransactionDraftOp
     amount,
     payload,
     stateInit,
-    allowGasless,
   } = options;
 
   return JSON.stringify({
@@ -55,7 +52,6 @@ function buildDraftCacheKey(chain: ApiChain, options: ApiCheckTransactionDraftOp
     amount: amount?.toString(),
     payload: normalizePayloadForKey(payload),
     stateInit,
-    allowGasless,
   });
 }
 
@@ -156,15 +152,8 @@ export async function checkTransactionDraft(
 export async function submitTransfer(
   chain: ApiChain,
   options: ApiSubmitTransferOptions,
-): Promise<{ activityId?: string; mfaRequestHash?: string } | { error: string }> {
-  const {
-    realFee,
-    isGasless,
-    dieselAmount = 0n,
-    isGaslessWithStars,
-    gaslessTransaction,
-    ...commonOptions
-  } = options;
+): Promise<{ activityId?: string } | { error: string }> {
+  const { realFee, ...commonOptions } = options;
   const {
     accountId,
     toAddress,
@@ -175,23 +164,8 @@ export async function submitTransfer(
 
   const fromAddress = await fetchStoredAddress(accountId, chain);
 
-  let result: ApiSubmitGasfullTransferResult | ApiSubmitGaslessTransferResult | { error: string };
-
-  if (isGasless) {
-    if (tokenAddress === undefined) {
-      throw new Error('tokenAddress is required for gasless transfer');
-    }
-
-    result = await chains[chain].submitGaslessTransfer({
-      ...commonOptions,
-      tokenAddress,
-      dieselAmount,
-      isGaslessWithStars,
-      gaslessTransaction,
-    });
-  } else {
-    result = await chains[chain].submitGasfullTransfer(commonOptions);
-  }
+  const result: ApiSubmitGasfullTransferResult | { error: string } = await chains[chain]
+    .submitGasfullTransfer(commonOptions);
 
   if ('error' in result) {
     return result;
@@ -201,24 +175,6 @@ export async function submitTransfer(
     ? buildTokenSlug(chain, tokenAddress)
     : getNativeToken(chain).slug;
   const comment = payload?.type === 'comment' && !payload.shouldEncrypt ? payload.text : undefined;
-
-  if (result.mfaRequest) {
-    const { publishSignedMfaRequest, registerMfaConfirmationHandler } = requireMfaMethods();
-    const mfaResult = await publishSignedMfaRequest(accountId, chain, result.mfaRequest);
-    registerMfaConfirmationHandler(mfaResult.mfaRequestHash, (txHash) => {
-      createLocalTransactions(accountId, chain, [{
-        id: txHash,
-        amount,
-        fromAddress,
-        toAddress,
-        comment,
-        fee: realFee ?? 0n,
-        slug,
-        externalMsgHashNorm: txHash,
-      }]);
-    });
-    return mfaResult;
-  }
 
   const [localActivity] = createLocalTransactions(accountId, chain, [{
     ...result.localActivityParams,
@@ -230,10 +186,6 @@ export async function submitTransfer(
     fee: realFee ?? 0n,
     slug,
   }]);
-
-  if ('paymentLink' in result && result.paymentLink) {
-    onUpdate({ type: 'openUrl', url: result.paymentLink, isExternal: true });
-  }
 
   return {
     activityId: localActivity.id,
@@ -266,10 +218,6 @@ export function createLocalTransactions(
   }
 
   return localTransactions;
-}
-
-export function fetchEstimateDiesel(accountId: string, chain: ApiChain, tokenAddress: string) {
-  return chains[chain].fetchEstimateDiesel(accountId, tokenAddress);
 }
 
 /**

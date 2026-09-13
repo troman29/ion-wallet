@@ -35,17 +35,17 @@ def capacitor_pods
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end
 
-target 'MyTonWallet' do
+target 'IONWallet' do
   capacitor_pods
   pod 'FirebaseMessaging', '11.15.0'
 end
 
-target 'MyTonWallet_NoExtensions' do
+target 'IONWallet_NoExtensions' do
   capacitor_pods
   pod 'FirebaseMessaging', '11.15.0'
 end
 
-target 'MyTonWallet_Preview' do
+target 'IONWallet_Preview' do
   capacitor_pods
   pod 'FirebaseMessaging', '11.15.0'
 end

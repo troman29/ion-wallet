@@ -25,7 +25,7 @@ jest.mock('./address', () => ({
 
 jest.mock('./transfer', () => ({
   checkMultiTransactionDraft: jest.fn(),
-  submitMultiTransferWithMfa: jest.fn(),
+  submitMultiTransfer: jest.fn(),
 }));
 
 jest.mock('./util/metadata', () => ({

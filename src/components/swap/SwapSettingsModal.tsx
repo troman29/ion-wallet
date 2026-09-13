@@ -3,7 +3,6 @@ import React, { memo, useMemo, useState } from '../../lib/teact/teact';
 import { getActions, withGlobal } from '../../global';
 
 import type { ApiSwapAsset } from '../../api/types';
-import type { DieselStatus } from '../../global/types';
 import { SwapType } from '../../global/types';
 
 import {
@@ -48,8 +47,6 @@ interface StateProps {
   slippage: number;
   priceImpact?: number;
   amountOutMin?: string;
-  dieselStatus?: DieselStatus;
-  dieselFee?: string;
   nativeTokenInBalance?: bigint;
 }
 
@@ -70,8 +67,6 @@ function SwapSettingsContent({
   networkFee,
   realNetworkFee,
   amountOutMin,
-  dieselStatus,
-  dieselFee,
   nativeTokenInBalance,
   showFullNetworkFee,
   onNetworkFeeClick,
@@ -107,11 +102,9 @@ function SwapSettingsContent({
       tokenInSlug: tokenIn?.slug,
       networkFee,
       realNetworkFee,
-      dieselStatus,
-      dieselFee,
       nativeTokenInBalance,
     }),
-    [swapType, tokenIn, networkFee, realNetworkFee, dieselStatus, dieselFee, nativeTokenInBalance],
+    [swapType, tokenIn, networkFee, realNetworkFee, nativeTokenInBalance],
   );
 
   function renderSlippageValues() {
@@ -302,8 +295,6 @@ const SwapSettings = memo(
       slippage,
       priceImpact,
       amountOutMin,
-      dieselStatus,
-      dieselFee,
     } = global.currentSwap;
 
     const nativeToken = tokenInSlug ? findNativeToken(getChainBySlug(tokenInSlug)) : undefined;
@@ -320,8 +311,6 @@ const SwapSettings = memo(
       slippage,
       priceImpact,
       amountOutMin,
-      dieselStatus,
-      dieselFee,
       nativeTokenInBalance,
     };
   })(SwapSettingsContent),

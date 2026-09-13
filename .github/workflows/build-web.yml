@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-      # Release branches carry the candidate testers actually install, so the web and TMA bundles
-      # are built from them too rather than only from master.
+      # Release branches carry the candidate testers actually install, so the web bundle
+      # is built from them too rather than only from master.
       - 'release/**'
   workflow_dispatch:
 
@@ -17,7 +17,6 @@ env:
   PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
   SWAP_FEE_ADDRESS: ${{ vars.SWAP_FEE_ADDRESS }}
-  DIESEL_ADDRESS: ${{ vars.DIESEL_ADDRESS }}
 
 jobs:
   build-web:
@@ -43,29 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.PUBLISH_REPO && 'mytonwallet.app' || 'beta.mytonwallet.app' }}
-          path: dist
-
-  build-tma:
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Prepare the Node environment
-        uses: mytonwallet-org/shared-actions/prepare_node@master
-        with:
-          node-version: ${{ vars.NODE_VERSION }}
-
-      - name: Build
-        run: |
-          if [ -z "$PUBLISH_REPO" ]; then
-            npm run telegram:build:staging
-          else
-            npm run telegram:build:production
-          fi
-
-      - name: Upload site artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ vars.PUBLISH_REPO && 'tma.mytonwallet.io' || 'tma-beta.mytonwallet.io' }}
           path: dist

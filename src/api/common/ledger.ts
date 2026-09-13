@@ -11,9 +11,7 @@ import { ApiHardwareError } from '../types';
 import { callWindow } from '../../util/windowProvider/connector';
 
 /**
- * Serialization format differs between web/capacitor and native apps:
- *  - Native (AIR) apps: Use hex format (expected by native Ledger library implementations)
- *  - Web/Capacitor apps: Use base64 format (more efficient for browser message passing)
+ * Web and Capacitor Ledger transports use base64 for efficient browser message passing.
  */
 const serializationFormat = 'base64';
 

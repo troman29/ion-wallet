@@ -7,7 +7,6 @@ import type {
   ApiNftUpdate,
   ApiSubmitNftTransferResult,
 } from '../../types';
-import { ApiTransactionDraftError } from '../../types';
 
 import {
   BURN_ADDRESS,
@@ -15,7 +14,6 @@ import {
   NOTCOIN_EXCHANGERS,
   NOTCOIN_FORWARD_TON_AMOUNT,
   NOTCOIN_VOUCHERS_ADDRESS,
-  TELEGRAM_GIFTS_SUPER_COLLECTION,
 } from '../../../config';
 import { parseAccountId } from '../../../util/account';
 import { bigintMultiplyToNumber } from '../../../util/bigint';
@@ -39,7 +37,7 @@ import {
   NFT_TRANSFER_REAL_AMOUNT,
   NftOpCode,
 } from './constants';
-import { checkMultiTransactionDraft, checkToAddress, submitMultiTransferWithMfa } from './transfer';
+import { checkMultiTransactionDraft, checkToAddress, submitMultiTransfer } from './transfer';
 import { isActiveSmartContract } from './wallet';
 
 const NFT_TRANSFER_BATCH_SIZE = 100;
@@ -52,9 +50,6 @@ export async function getAccountNfts(accountId: string, options?: {
   const { network } = parseAccountId(accountId);
   const { address } = await fetchStoredWallet(accountId, 'ton');
   const nftSuperCollectionsByCollectionAddress = await getNftSuperCollectionsByCollectionAddress();
-
-  // The super collection is an abstraction of ours, so it has no address the indexer would accept
-  if (options?.collectionAddress === TELEGRAM_GIFTS_SUPER_COLLECTION) return [];
 
   if (options?.offset !== undefined || options?.limit !== undefined) {
     const response = await fetchNftItems(network, { ownerAddress: address, ...options });
@@ -209,13 +204,6 @@ export async function checkNftTransferDraft(options: {
     isNftBurn: Boolean(isNftBurn),
   });
 
-  if (account.byChain.ton.mfa && nfts.length > NFT_BATCH_SIZE) {
-    return {
-      ...result,
-      error: ApiTransactionDraftError.MfaNftBatchLimit,
-    };
-  }
-
   const checkResult = await checkMultiTransactionDraft(accountId, messages);
 
   let fee: bigint | undefined;
@@ -278,15 +266,9 @@ export async function submitNftTransfers(options: {
     toAddress,
     nftsCount: nfts.length,
     hasComment: Boolean(comment),
-    hasStoredMfa: Boolean(account.byChain.ton.mfa),
-    mfaAddress: account.byChain.ton.mfa?.address,
   });
 
-  if (account.byChain.ton.mfa && nfts.length > NFT_BATCH_SIZE) {
-    return { error: ApiTransactionDraftError.MfaNftBatchLimit };
-  }
-
-  const sentTx = await submitMultiTransferWithMfa({
+  const sentTx = await submitMultiTransfer({
     accountId,
     signer: getSigner(accountId, account, enclaveToken),
     messages,
@@ -299,23 +281,8 @@ export async function submitNftTransfers(options: {
       fromAddress,
       toAddress,
       nftsCount: nfts.length,
-      hasStoredMfa: Boolean(account.byChain.ton.mfa),
-      mfaAddress: account.byChain.ton.mfa?.address,
     });
     return sentTx;
-  }
-
-  if ('mfaRequest' in sentTx) {
-    logDebug('submitNftTransfers', 'Returning MFA request for NFT transfer', {
-      accountId,
-      fromAddress,
-      nftsCount: nfts.length,
-      mfaAddress: account.byChain.ton.mfa?.address,
-    });
-
-    return {
-      mfaRequest: sentTx.mfaRequest,
-    };
   }
 
   return {

@@ -24,7 +24,6 @@ import type {
   ApiDappTransfer,
   ApiDerivation,
   ApiEmulationResult,
-  ApiFetchEstimateDieselResult,
   ApiGroupedWalletVariant,
   ApiHistoryList,
   ApiImportAddressByChain,
@@ -233,17 +232,8 @@ export enum TransferState {
   Password,
   ConnectHardware,
   ConfirmHardware,
-  ConfirmMfa,
   Complete,
   SelectAccount,
-}
-
-export enum RemoveMfaState {
-  None,
-  Confirm,
-  Password,
-  ConfirmMfa,
-  Complete,
 }
 
 export const enum TransactionInfoState {
@@ -279,7 +269,6 @@ export enum DomainRenewalState {
   Password,
   ConnectHardware,
   ConfirmHardware,
-  ConfirmMfa,
   Complete,
 }
 
@@ -289,7 +278,6 @@ export enum DomainLinkingState {
   Password,
   ConnectHardware,
   ConfirmHardware,
-  ConfirmMfa,
   Complete,
 }
 
@@ -299,7 +287,6 @@ export enum SwapState {
   Blockchain,
   Password,
   WaitTokens,
-  ConfirmMfa,
   Complete,
   SelectTokenFrom,
   SelectTokenTo,
@@ -346,20 +333,17 @@ export enum StakingState {
   StakePassword,
   StakeConnectHardware,
   StakeConfirmHardware,
-  StakeConfirmMfa,
   StakeComplete,
 
   UnstakeInitial,
   UnstakePassword,
   UnstakeConnectHardware,
   UnstakeConfirmHardware,
-  UnstakeConfirmMfa,
   UnstakeComplete,
 
   ClaimPassword,
   ClaimConnectHardware,
   ClaimConfirmHardware,
-  ClaimConfirmMfa,
   ClaimComplete,
 
   StakeSelectAccount,
@@ -455,8 +439,6 @@ export type TokenDetailsState = {
   hasError?: true;
 };
 
-export type DieselStatus = 'not-available' | 'not-authorized' | 'pending-previous' | 'available' | 'stars-fee';
-
 export type AccountType = 'mnemonic' | 'hardware' | 'view';
 
 export interface AccountChain {
@@ -466,14 +448,6 @@ export interface AccountChain {
   derivation?: ApiDerivation;
   /** Is set only in hardware accounts */
   ledgerIndex?: number;
-  mfa?: {
-    address: string;
-    user?: {
-      name: string;
-      username?: string;
-      avatarUrl?: string;
-    };
-  };
 }
 
 export interface Account {
@@ -531,7 +505,6 @@ export interface AccountState {
     dnsExpiration?: Record<string, number>;
     linkedAddressByAddress?: Record<string, string>;
     collectionTabs?: ApiNftCollection[];
-    wasTelegramGiftsAutoAdded?: boolean;
     isLoadedByAddress?: Record<string, true>;
     isFullLoadingByChain?: Partial<Record<ApiChain, boolean>>;
     /** Collection address -> last loaded timestamp for cache TTL */
@@ -587,7 +560,6 @@ export interface AccountState {
   stakingHistory?: ApiStakingHistory;
   browserHistory?: string[];
 
-  isDieselAuthorizationStarted?: boolean;
   isLongUnstakeRequested?: boolean;
   receiveModalChain?: ApiChain;
   invoiceTokenSlug?: string;
@@ -741,20 +713,15 @@ export type GlobalState = {
     nfts?: ApiNft[];
     sentNftsCount?: number;
     isMemoRequired?: boolean;
-    // Every time this field value changes, the `amount` value should be actualized using `preserveMaxTransferAmount`
-    diesel?: ApiFetchEstimateDieselResult;
-    isGasless?: boolean;
-    isGaslessWithStars?: boolean;
     scamWarningType?: ScamWarningType;
     isTransferReadonly?: boolean;
     isNftBurn?: boolean;
     /**
-     * Normalized explanation of the fee and gasless parameters for the current draft, ready for UI consumption.
+     * Normalized explanation of the fee for the current draft, ready for UI consumption.
      * Calculated on the API layer inside chain-specific `checkTransactionDraft`.
      * Every time this field value changes, the `amount` value should be actualized using `preserveMaxTransferAmount`.
      */
     explainedFee?: ExplainedTransferFee;
-    mfaRequestHash?: string;
   };
 
   currentSwap: {
@@ -769,7 +736,6 @@ export type GlobalState = {
     amountOutMin?: string;
     priceImpact?: number;
     activityId?: string;
-    mfaRequestHash?: string;
     error?: string;
     errorType?: SwapErrorType;
     isLoading?: boolean;
@@ -795,7 +761,6 @@ export type GlobalState = {
       fromMin?: string;
       fromMax?: string;
     };
-    dieselStatus?: DieselStatus;
     dexLabel?: ApiSwapDexLabel;
     dexRouterLabel?: ApiSwapDexRouterLabel;
     routes?: ApiSwapRoute[][];
@@ -812,7 +777,6 @@ export type GlobalState = {
     swapFeePercent?: number;
     ourFee?: string;
     ourFeePercent?: number;
-    dieselFee?: string;
   };
 
   currentSignature?: {
@@ -849,7 +813,6 @@ export type GlobalState = {
     shouldHideTransfers?: boolean;
     // Deal with solana b58/b64 issues based on requested method
     isLegacyOutput?: boolean;
-    mfaRequestHash?: string;
   };
 
   currentDappSignData: {
@@ -914,7 +877,6 @@ export type GlobalState = {
     // There's only one commission because the transaction has no change
     realFee?: bigint;
     txId?: string;
-    mfaRequestHash?: string;
   };
 
   currentDomainLinking: {
@@ -927,7 +889,6 @@ export type GlobalState = {
     walletAddressName?: string;
     resolvedWalletAddress?: string;
     txId?: string;
-    mfaRequestHash?: string;
   };
 
   dappConnectRequest?: {
@@ -956,7 +917,6 @@ export type GlobalState = {
     tokenAmount?: bigint;
     fee?: bigint;
     error?: string;
-    mfaRequestHash?: string;
   };
 
   stakingDefault: ApiStakingState;
@@ -1032,21 +992,6 @@ export type GlobalState = {
     isSensitiveDataHidden?: true;
     orderedAccountIds?: string[];
     selectedExplorerIds?: Partial<Record<ApiChain, string>>;
-    installMfa?: {
-      requestId: string;
-      user?: {
-        id: string;
-        name: string;
-        username?: string;
-        avatarUrl?: string;
-      };
-      error?: string;
-    };
-
-    removeMfa?: {
-      requestId: string;
-      error?: string;
-    };
   };
 
   dialogs: DialogType[];
@@ -1129,7 +1074,6 @@ export type GlobalState = {
   isAppLockActive?: boolean;
   isManualLockActive?: boolean;
   appLockHideBiometrics?: boolean;
-  // The app is open in fullscreen mode in Telegram MiniApp on mobile
   isFullscreen?: boolean;
 };
 
@@ -1257,16 +1201,13 @@ export interface ActionPayloads {
     comment?: string;
     shouldEncrypt?: boolean;
     nfts?: ApiNft[];
-    isGasless?: boolean;
     isBase64Data?: boolean;
     binPayload?: string;
-    isGaslessWithStars?: boolean;
     stateInit?: string;
     isNftBurn?: boolean;
   };
   submitTransferConfirm: undefined;
   submitTransfer: { enclaveToken?: string } | undefined;
-  updateMfaRequestStatus: undefined;
   clearTransferError: undefined;
   cancelTransfer: { shouldReset?: boolean } | undefined;
   switchTransferAccount: { accountId: string };
@@ -1300,8 +1241,6 @@ export interface ActionPayloads {
   clearAccountLoading: undefined;
   setIsAccountLoading: { isLoading: true | undefined };
   verifyHardwareAddress: { chain: ApiChain };
-  authorizeDiesel: undefined;
-  fetchTransferDieselState: { tokenSlug: string };
   setIsAuthLoading: { isLoading: true | undefined };
 
   fetchPastActivities: { accountId?: string; slug?: string; shouldLoadWithBudget?: boolean };
@@ -1414,7 +1353,6 @@ export interface ActionPayloads {
   submitStakingClaim: { enclaveToken?: string } | undefined;
   cancelStakingClaim: undefined;
   openStakingInfoOrStart: undefined;
-  updateStakingMfaRequestStatus: undefined;
   switchStakingAccount: { accountId: string; mode: 'stake' | 'unstake' | 'claim' };
 
   // Settings
@@ -1468,19 +1406,6 @@ export interface ActionPayloads {
   openSettingsHardwareWallet: undefined;
   apiUpdateWalletVersions: ApiUpdateWalletVersions;
 
-  // tg2fa
-  startMfaRecoveryProcess: { enclaveToken?: string };
-
-  createInstallMfaRequest: undefined;
-  updateInstallMfaRequest: undefined;
-  clearMfaRequests: undefined;
-  clearInstallMfaError: undefined;
-  submitInstallMfa: { enclaveToken?: string };
-
-  updateRemoveMfaRequest: undefined;
-  submitRemoveMfa: { enclaveToken?: string };
-  clearRemoveMfaError: undefined;
-
   // Account Settings
   setCardBackgroundNft: { nft: ApiNft; accountId?: string };
   clearCardBackgroundNft: undefined;
@@ -1523,7 +1448,6 @@ export interface ActionPayloads {
   deleteDapp: { url: string; uniqueId: string };
   loadExploreSites: { isLandscape: boolean; langCode: LangCode | undefined };
   updateDappLastOpenedAt: { url: string };
-  updateDappMfaRequestStatus: undefined;
 
   addSiteToBrowserHistory: { url: string };
   removeSiteFromBrowserHistory: { url: string };
@@ -1562,7 +1486,6 @@ export interface ActionPayloads {
   setSwapScreen: { state: SwapState };
   clearSwapError: undefined;
   submitSwapCex: { enclaveToken: string };
-  updateSwapMfaRequestStatus: undefined;
   setSwapCexAddress: { toAddress: string };
   addSwapToken: { token: UserSwapToken };
   toggleSwapSettingsModal: { isOpen: boolean };
@@ -1646,7 +1569,6 @@ export interface ActionPayloads {
   submitDomainsRenewal: { enclaveToken?: string } | undefined;
   clearDomainsRenewalError: undefined;
   cancelDomainsRenewal: undefined;
-  updateDomainsRenewalMfaRequestStatus: undefined;
 
   openDomainLinkingModal: { address: string };
   startDomainLinking: undefined;
@@ -1654,7 +1576,6 @@ export interface ActionPayloads {
   submitDomainLinking: { enclaveToken?: string } | undefined;
   clearDomainLinkingError: undefined;
   cancelDomainLinking: undefined;
-  updateDomainLinkingMfaRequestStatus: undefined;
 
   checkLinkingAddress: { address?: string };
   setDomainLinkingWalletAddress: { address?: string };

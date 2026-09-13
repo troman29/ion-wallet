@@ -10,14 +10,6 @@
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 
-export function requireMfaMethods() {
-  if (process.env.NO_EXTRA_FEATURES !== '1') {
-    return require('./mfa') as typeof import('./mfa');
-  }
-
-  throw new Error('MFA is not supported in this build');
-}
-
 export function requireSwapMethods() {
   if (process.env.NO_EXTRA_FEATURES !== '1') {
     return require('./swap') as typeof import('./swap');

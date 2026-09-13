@@ -1,23 +1,16 @@
-import { Address, beginCell, Cell, internal, SendMode, storeMessageRelaxed } from '@ton/core';
-import { WalletContractV5R1 } from '@ton/ton/dist/wallets/WalletContractV5R1';
+import { Cell, internal, SendMode } from '@ton/core';
 
-import type { DieselStatus } from '../../../global/types';
 import type { DappProtocolType } from '../../dappProtocols';
 import type {
   ApiAccountWithChain,
   ApiAnyDisplayError,
   ApiCheckTransactionDraftOptions,
   ApiCheckTransactionDraftResult,
-  ApiFetchEstimateDieselResult,
-  ApiMfa,
   ApiNetwork,
   ApiParsedPayload,
   ApiSignedTransfer,
   ApiSubmitGasfullTransferOptions,
   ApiSubmitGasfullTransferResult,
-  ApiSubmitGaslessTransferOptions,
-  ApiSubmitGaslessTransferResult,
-  ApiToken,
   ApiWalletInfo,
 } from '../../types';
 import type {
@@ -25,25 +18,20 @@ import type {
   ApiCheckMultiTransactionDraftResult,
   ApiEmulationWithFallbackResult,
   ApiSubmitMultiTransferResult,
-  ApiSubmitSingleFATransferResult,
   PreparedTransactionToSign,
   TonTransferParams,
 } from './types';
-import type { SignedMfaRequest, Signer } from './util/signer';
+import type { Signer } from './util/signer';
 import type { TonWallet } from './util/tonCore';
 import { ApiTransactionDraftError, ApiTransactionError } from '../../types';
-import { ApiCommonError } from '../../types';
 
-import { DEFAULT_FEE, DIESEL_ADDRESS, STON_PTON_ADDRESS } from '../../../config';
+import { STON_PTON_ADDRESS } from '../../../config';
 import { raceWithAbortSignal, throwIfAborted } from '../../../util/abortSignal';
 import { parseAccountId } from '../../../util/account';
 import { bigintMultiplyToNumber } from '../../../util/bigint';
-import { fromDecimal, toDecimal } from '../../../util/decimals';
-import { getToncoinAmountForTransfer } from '../../../util/fee/getTonOperationFees';
-import { explainApiTransferFee, getDieselTokenAmount, isDieselAvailable } from '../../../util/fee/transferFee';
+import { explainApiTransferFee } from '../../../util/fee/transferFee';
 import { omit, pick, split } from '../../../util/iteratees';
 import { logDebug, logDebugError } from '../../../util/logs';
-import { randomBytes } from '../../../util/random';
 import { getNativeToken } from '../../../util/tokens';
 import { getMaxMessagesInTransaction } from '../../../util/ton/transfer';
 import { parsePayloadSlice } from './util/metadata';
@@ -52,7 +40,6 @@ import { sendExternal } from './util/sendExternal';
 import { getSigner } from './util/signer';
 import {
   commentToBytes,
-  getOurFeePayload,
   getTonClient,
   getWalletPublicKey,
   isExpiredTransactionError,
@@ -62,12 +49,8 @@ import {
   parseAddress,
   parseBase64,
   parseStateInitCell,
-  toBase64Address,
 } from './util/tonCore';
-import { getMfaExtensionSeqno, getMfaFees, resolveMfaExtensionAddress } from './contracts/util';
 import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/accounts';
-import { callBackendGet } from '../../common/backend';
-import { DIESEL_NOT_AVAILABLE } from '../../common/other';
 import { withoutTransferConcurrency } from '../../common/preventTransferConcurrency';
 import { getTokenByAddress } from '../../common/tokens';
 import { MINUTE, SEC } from '../../constants';
@@ -75,13 +58,13 @@ import { ApiServerError, handleServerError } from '../../errors';
 import { checkHasTransaction, fetchHasTransaction } from './activities';
 import { resolveAddress } from './address';
 import { ATTEMPTS, FEE_FACTOR, LEDGER_VESTING_SUBWALLET_ID, TRANSFER_TIMEOUT_SEC } from './constants';
-import { emulateExternalMessage, emulateTransaction } from './emulation';
+import { emulateTransaction } from './emulation';
 import {
   buildTokenTransfer,
   calculateTokenBalanceWithMintless,
   getTokenBalanceWithMintless,
 } from './tokens';
-import { getContractInfo, getTonWallet, getWalletBalance, getWalletInfo, getWalletSeqno } from './wallet';
+import { getContractInfo, getTonWallet, getWalletInfo, getWalletSeqno } from './wallet';
 
 /** Transaction options only available in TON */
 type CustomTransactionOptions<T> = Omit<T, 'payload'> & {
@@ -93,52 +76,6 @@ const WAIT_TRANSFER_TIMEOUT = MINUTE;
 const WAIT_PAUSE = SEC;
 
 const WALLET_INFO_CACHE_TTL = 5 * SEC;
-
-async function getMfaExtensionSeqnoWithFallback(
-  network: ApiNetwork,
-  walletAddress: Address,
-  storedExtensionAddress: string,
-  signal?: AbortSignal,
-) {
-  try {
-    return await getMfaExtensionSeqno(network, storedExtensionAddress, signal);
-  } catch (err) {
-    throwIfAborted(signal);
-    const resolved = await resolveMfaExtensionAddress(network, walletAddress, signal);
-    if (!resolved) throw err;
-
-    try {
-      if (!Address.parse(storedExtensionAddress).equals(Address.parse(resolved))) {
-        return await getMfaExtensionSeqno(network, resolved, signal);
-      }
-    } catch {
-      // Ignore parsing issues and try resolved address anyway.
-    }
-
-    return await getMfaExtensionSeqno(network, resolved);
-  }
-}
-
-async function getRequiredMfaExtensionSeqno(
-  network: ApiNetwork,
-  wallet: TonWallet,
-  mfa: ApiMfa | undefined,
-  logPrefix: string,
-  signal?: AbortSignal,
-) {
-  if (!mfa) return undefined;
-
-  try {
-    return await getMfaExtensionSeqnoWithFallback(network, wallet.address, mfa.address, signal);
-  } catch (err) {
-    throwIfAborted(signal);
-    logDebugError(logPrefix, 'Failed to get MFA extension seqno', err);
-    throw err;
-  }
-}
-
-const MAX_BALANCE_WITH_CHECK_DIESEL = 100000000n; // 0.1 TON
-const PENDING_DIESEL_TIMEOUT_SEC = 15 * 60; // 15 min
 
 type WalletInfoCacheEntry = {
   info: ApiWalletInfo;
@@ -214,7 +151,6 @@ export async function checkTransactionDraft(
     payload: rawPayload,
     stateInit: stateInitString,
     forwardAmount,
-    allowGasless,
   } = options;
   let { toAddress } = options;
 
@@ -319,14 +255,6 @@ export async function checkTransactionDraft(
 
     const isFullTonTransfer = !tokenAddress && toncoinBalance === amount;
 
-    const mfaExtensionSeqno = await getRequiredMfaExtensionSeqno(
-      network,
-      wallet,
-      account.byChain.ton.mfa,
-      'checkTransactionDraft',
-      signal,
-    );
-
     const signingOptions = {
       account,
       accountId,
@@ -344,20 +272,7 @@ export async function checkTransactionDraft(
       doPayFeeFromAmount: isFullTonTransfer,
     };
 
-    let legacyWalletTransaction: Cell | undefined;
-    if (mfaExtensionSeqno !== undefined) {
-      const legacySigningResult = await signTransaction({ ...signingOptions, allowLegacyMfaSigning: true });
-      if ('error' in legacySigningResult) {
-        return {
-          ...result,
-          error: legacySigningResult.error,
-        };
-      }
-
-      legacyWalletTransaction = legacySigningResult.transaction;
-    }
-
-    const signingResult = await signTransaction({ ...signingOptions, mfaExtensionSeqno });
+    const signingResult = await signTransaction(signingOptions);
     if ('error' in signingResult) {
       return {
         ...result,
@@ -365,60 +280,26 @@ export async function checkTransactionDraft(
       };
     }
 
-    const mfaFee = signingResult.mfaRequest ? signingResult.mfaFee ?? 0n : 0n;
-
     const emulation = applyFeeFactorToEmulationResult(
-      signingResult.mfaRequest && legacyWalletTransaction && account.byChain.ton.mfa
-        ? await emulateMfaRequestWithFallback(
-          network,
-          wallet,
-          isWalletInitialized,
-          account.byChain.ton.mfa.address,
-          signingResult.mfaRequest,
-          legacyWalletTransaction,
-          signal,
-        )
-        : await emulateTransactionWithFallback(
-          network,
-          wallet,
-          signingResult.transaction,
-          isWalletInitialized,
-          signal,
-        ),
+      await emulateTransactionWithFallback(
+        network,
+        wallet,
+        signingResult.transaction,
+        isWalletInitialized,
+        signal,
+      ),
     );
 
     // todo: Use `received` from the emulation to calculate the real fee. Check what happens when the receiver is the same wallet.
     const { networkFee } = emulation;
     fee += networkFee;
     realFee += networkFee;
-    result.diesel = DIESEL_NOT_AVAILABLE;
-
-    const effectiveToncoinBalance = toncoinBalance + mfaFee;
-    const shouldAllowGasless = allowGasless && !account.byChain.ton.mfa;
-
     let isEnoughBalance: boolean;
 
     if (!tokenAddress) {
-      isEnoughBalance = effectiveToncoinBalance >= fee + (isFullTonTransfer ? 0n : amount);
+      isEnoughBalance = toncoinBalance >= fee + (isFullTonTransfer ? 0n : amount);
     } else {
-      const canTransferGasfully = effectiveToncoinBalance >= fee;
-
-      if (shouldAllowGasless) {
-        result.diesel = await getDiesel({
-          accountId,
-          tokenAddress,
-          canTransferGasfully,
-          toncoinBalance: effectiveToncoinBalance,
-          tokenBalance: balance,
-          signal,
-        });
-      }
-
-      if (isDieselAvailable(result.diesel)) {
-        isEnoughBalance = amount + getDieselTokenAmount(result.diesel) <= balance;
-      } else {
-        isEnoughBalance = canTransferGasfully && amount <= balance;
-      }
+      isEnoughBalance = toncoinBalance >= fee && amount <= balance;
     }
 
     const tokenSlug = tokenAddress
@@ -428,7 +309,6 @@ export async function checkTransactionDraft(
     result.explainedFee = explainApiTransferFee({
       fee,
       realFee,
-      diesel: result.diesel,
       tokenSlug,
     });
 
@@ -443,24 +323,6 @@ export async function checkTransactionDraft(
       ...result,
     };
   }
-}
-
-function estimateDiesel(
-  address: string,
-  tokenAddress: string,
-  toncoinAmount: string,
-  isW5?: boolean,
-  isStars?: boolean,
-  signal?: AbortSignal,
-) {
-  return callBackendGet<{
-    status: DieselStatus;
-    // The amount is defined only when the status is "available" or "stars-fee": https://github.com/mytonwallet-org/mytonwallet-backend/blob/44c1bf43fb776286152db8901b45fe8341752e35/src/endpoints/diesel.ts#L163
-    amount?: string;
-    pendingCreatedAt?: string;
-  }>('/diesel/estimate', {
-    address, tokenAddress, toncoinAmount, isW5, isStars,
-  }, undefined, signal);
 }
 
 export async function checkToAddress(network: ApiNetwork, toAddress: string, signal?: AbortSignal) {
@@ -554,13 +416,6 @@ export async function submitGasfullTransfer(
         const { seqno, balance: toncoinBalance, isInitialized } = walletInfo;
         const isFullTonTransfer = !tokenAddress && toncoinBalance === amount;
 
-        const mfaExtensionSeqno = await getRequiredMfaExtensionSeqno(
-          network,
-          wallet,
-          account.byChain.ton.mfa,
-          'submitTransfer',
-        );
-
         const signingResult = await signTransaction({
           account,
           accountId,
@@ -576,14 +431,9 @@ export async function submitGasfullTransfer(
           seqno,
           signer,
           doPayFeeFromAmount: isFullTonTransfer,
-          mfaExtensionSeqno,
         });
         if ('error' in signingResult) return signingResult;
-        const { transaction, mfaRequest } = signingResult;
-
-        if (mfaRequest) {
-          return { mfaRequest };
-        }
+        const { transaction } = signingResult;
 
         if (!noFeeCheck) {
           if (fee !== undefined) {
@@ -614,7 +464,6 @@ export async function submitGasfullTransfer(
           client,
           wallet,
           transaction,
-          undefined,
           isInitialized,
         );
 
@@ -643,89 +492,6 @@ export async function submitGasfullTransfer(
     });
   } catch (err: any) {
     logDebugError('submitTransfer', err);
-
-    return { error: resolveTransactionError(err) };
-  }
-}
-
-export async function submitGaslessTransfer(
-  options: CustomTransactionOptions<ApiSubmitGaslessTransferOptions>,
-): Promise<ApiSubmitGaslessTransferResult | { error: string }> {
-  try {
-    const {
-      toAddress,
-      amount,
-      accountId,
-      enclaveToken,
-      tokenAddress,
-      payload: rawPayload,
-      forwardAmount,
-      noFeeCheck,
-      dieselAmount,
-      isGaslessWithStars,
-    } = options;
-
-    const { network } = parseAccountId(accountId);
-
-    const account = await fetchStoredChainAccount(accountId, 'ton');
-    const { address: fromAddress, version } = account.byChain.ton;
-    const signer = getSigner(accountId, account, enclaveToken);
-
-    const payloadResult = await convertPayloadToCell(rawPayload, network, toAddress, signer);
-    if ('error' in payloadResult) return payloadResult;
-    const { cell: payload, encryptedComment } = payloadResult;
-
-    const messages: TonTransferParams[] = [
-      await buildTokenTransfer({
-        network,
-        tokenAddress,
-        fromAddress,
-        toAddress,
-        amount,
-        payload,
-        forwardAmount,
-        isLedger: account.type === 'ledger',
-      }),
-    ];
-
-    if (!isGaslessWithStars) {
-      messages.push(
-        await buildTokenTransfer({
-          network,
-          tokenAddress,
-          fromAddress,
-          toAddress: DIESEL_ADDRESS,
-          amount: dieselAmount,
-          shouldSkipMintless: true,
-          payload: getOurFeePayload(),
-          isLedger: account.type === 'ledger',
-        }),
-      );
-    }
-
-    const result = await submitMultiTransfer({
-      accountId,
-      signer,
-      messages,
-      isGasless: true,
-      noFeeCheck,
-    });
-    if ('error' in result) return result;
-    if ('mfaRequest' in result) return { error: ApiCommonError.Unexpected };
-
-    return {
-      txId: result.msgHashNormalized,
-      msgHashForCexSwap: result.msgHash,
-      localActivityParams: {
-        externalMsgHashNorm: result.msgHashNormalized,
-        encryptedComment,
-        extra: {
-          withW5Gasless: version === 'W5',
-        },
-      },
-    };
-  } catch (err) {
-    logDebugError('submitTransferWithDiesel', err);
 
     return { error: resolveTransactionError(err) };
   }
@@ -801,7 +567,6 @@ export function resolveTransactionError(error: any): ApiAnyDisplayError | string
 export async function checkMultiTransactionDraft(
   accountId: string,
   messages: TonTransferParams[],
-  isGasless?: boolean,
 ): Promise<ApiCheckMultiTransactionDraftResult> {
   let totalAmount: bigint = 0n;
 
@@ -837,50 +602,23 @@ export async function checkMultiTransactionDraft(
     const { seqno, balance } = walletInfo;
 
     const signer = getSigner(accountId, account, undefined, true);
-    const mfaExtensionSeqno = await getRequiredMfaExtensionSeqno(
-      network,
-      wallet,
-      account.byChain.ton.mfa,
-      'checkMultiTransactionDraft',
-    );
-
     const signingOptions = { accountId, account, messages, seqno, signer };
 
-    let legacyWalletTransaction: Cell | undefined;
-    if (mfaExtensionSeqno !== undefined) {
-      const legacySigningResult = await signTransaction({ ...signingOptions, allowLegacyMfaSigning: true });
-      if ('error' in legacySigningResult) return legacySigningResult;
-      legacyWalletTransaction = legacySigningResult.transaction;
-    }
-
-    const signingResult = await signTransaction({ ...signingOptions, mfaExtensionSeqno });
+    const signingResult = await signTransaction(signingOptions);
     if ('error' in signingResult) return signingResult;
 
-    const mfaFee = signingResult.mfaRequest ? signingResult.mfaFee ?? 0n : 0n;
-
     const emulation = applyFeeFactorToEmulationResult(
-      signingResult.mfaRequest && legacyWalletTransaction && account.byChain.ton.mfa
-        ? await emulateMfaRequestWithFallback(
-          network,
-          wallet,
-          walletInfo.isInitialized,
-          account.byChain.ton.mfa.address,
-          signingResult.mfaRequest,
-          legacyWalletTransaction,
-        )
-        : await emulateTransactionWithFallback(
-          network,
-          wallet,
-          signingResult.transaction,
-          walletInfo.isInitialized,
-        ),
+      await emulateTransactionWithFallback(
+        network,
+        wallet,
+        signingResult.transaction,
+        walletInfo.isInitialized,
+      ),
     );
     const result = { emulation, parsedPayloads };
 
-    // TODO Should `totalAmount` be `0` for `isGasless`?
     // Check for insufficient balance (both tokens and TON) and return error
-    const effectiveBalance = balance + mfaFee;
-    const hasInsufficientTonBalance = !isGasless && effectiveBalance < totalAmount + result.emulation.networkFee;
+    const hasInsufficientTonBalance = balance < totalAmount + result.emulation.networkFee;
 
     if (hasInsufficientTokenBalance || hasInsufficientTonBalance) {
       return { ...result, error: ApiTransactionDraftError.InsufficientBalance };
@@ -985,8 +723,6 @@ async function isTokenBalanceInsufficient(
   return { hasInsufficientTokenBalance: false, parsedPayloads };
 }
 
-export type GaslessType = 'diesel' | 'w5';
-
 interface SubmitMultiTransferOptions {
   accountId: string;
   /**
@@ -997,24 +733,18 @@ interface SubmitMultiTransferOptions {
   signer: Signer;
   messages: TonTransferParams[];
   expireAt?: number;
-  isGasless?: boolean;
   noFeeCheck?: boolean;
 }
 
-type ApiSubmitMultiTransferWithMfaResult = ApiSubmitMultiTransferResult | {
-  mfaRequest: SignedMfaRequest;
-};
-
 async function submitMultiTransferInternal(
   {
-    accountId, signer, messages, expireAt, isGasless, noFeeCheck,
+    accountId, signer, messages, expireAt, noFeeCheck,
   }: SubmitMultiTransferOptions,
-  options?: { allowMfaRequest?: boolean },
-): Promise<ApiSubmitMultiTransferWithMfaResult> {
+): Promise<ApiSubmitMultiTransferResult> {
   const { network } = parseAccountId(accountId);
 
   const account = await fetchStoredChainAccount(accountId, 'ton');
-  const { address: fromAddress, version } = account.byChain.ton;
+  const { address: fromAddress } = account.byChain.ton;
 
   try {
     const wallet = getTonWallet(account.byChain.ton);
@@ -1033,57 +763,18 @@ async function submitMultiTransferInternal(
         const walletInfo = cachedWalletInfo ?? await getWalletInfo(network, wallet);
         const { seqno, balance, isInitialized: walletIsInitialized } = walletInfo;
 
-        const mfaExtensionSeqno = await getRequiredMfaExtensionSeqno(
-          network,
-          wallet,
-          account.byChain.ton.mfa,
-          'submitMultiTransfer',
-        );
-
-        const gaslessType = isGasless ? version === 'W5' ? 'w5' : 'diesel' : undefined;
-        const withW5Gasless = gaslessType === 'w5';
-
         const signingResult = await signTransaction({
           account,
           accountId,
           messages,
-          expireAt: withW5Gasless
-            ? Math.round(Date.now() / 1000) + PENDING_DIESEL_TIMEOUT_SEC
-            : expireAt,
+          expireAt,
           seqno,
           signer,
-          shouldBeInternal: withW5Gasless,
-          mfaExtensionSeqno,
         });
         if ('error' in signingResult) return signingResult;
-        const { transaction, mfaRequest } = signingResult;
+        const { transaction } = signingResult;
 
-        if (mfaRequest) {
-          logDebug('submitMultiTransfer', 'MFA confirmation is required for multi-transfer', {
-            accountId,
-            fromAddress,
-            messagesCount: messages.length,
-            mfaAddress: account.byChain.ton.mfa?.address,
-          });
-
-          if (options?.allowMfaRequest) {
-            return { mfaRequest };
-          }
-
-          // eslint-disable-next-line no-console
-          console.error(
-            '[submitMultiTransfer] MFA confirmation is required, but multi-transfer flow has no MFA handoff',
-            {
-              accountId,
-              fromAddress,
-              messagesCount: messages.length,
-              mfaAddress: account.byChain.ton.mfa?.address,
-            },
-          );
-          return { error: ApiCommonError.Unexpected };
-        }
-
-        if (!noFeeCheck && !isGasless) {
+        if (!noFeeCheck) {
           const { networkFee } = await emulateTransactionWithFallback(
             network,
             wallet,
@@ -1096,26 +787,21 @@ async function submitMultiTransferInternal(
         }
 
         const client = getTonClient(network);
-        const { msgHash, boc, paymentLink, msgHashNormalized } = await sendExternal(
+        const { msgHash, boc, msgHashNormalized } = await sendExternal(
           client,
           wallet,
           transaction,
-          gaslessType,
           walletIsInitialized,
         );
 
-        if (!isGasless) {
-          finalizeInBackground(async () => {
-            try {
-              await waitForWalletSeqnoChange(network, fromAddress, seqno);
-            } finally {
-              clearTransferInFlight(network, fromAddress);
-            }
-          });
-          clearInBackground = true;
-        } else {
-          // TODO: Wait for gasless transfer
-        }
+        finalizeInBackground(async () => {
+          try {
+            await waitForWalletSeqnoChange(network, fromAddress, seqno);
+          } finally {
+            clearTransferInFlight(network, fromAddress);
+          }
+        });
+        clearInBackground = true;
 
         const clearedMessages = messages.map((message) => {
           if (typeof message.payload !== 'string' && typeof message.payload !== 'undefined') {
@@ -1131,8 +817,6 @@ async function submitMultiTransferInternal(
           boc,
           msgHash,
           msgHashNormalized,
-          paymentLink,
-          withW5Gasless,
         };
       } finally {
         if (!clearInBackground) {
@@ -1151,24 +835,11 @@ async function submitMultiTransferInternal(
 //  2) renew multiple domains in a single function call,
 //  3) simplify the implementation of swapping with Ledger
 export async function submitMultiTransfer({
-  accountId, signer, messages, expireAt, isGasless, noFeeCheck,
-}: SubmitMultiTransferOptions): Promise<ApiSubmitSingleFATransferResult | { error: ApiAnyDisplayError }> {
-  const result = await submitMultiTransferInternal({
-    accountId, signer, messages, expireAt, isGasless, noFeeCheck,
+  accountId, signer, messages, expireAt, noFeeCheck,
+}: SubmitMultiTransferOptions): Promise<ApiSubmitMultiTransferResult> {
+  return submitMultiTransferInternal({
+    accountId, signer, messages, expireAt, noFeeCheck,
   });
-
-  return 'mfaRequest' in result ? { error: ApiCommonError.Unexpected } : result as ApiSubmitSingleFATransferResult;
-}
-
-export async function submitMultiTransferWithMfa({
-  accountId, signer, messages, expireAt, isGasless, noFeeCheck,
-}: SubmitMultiTransferOptions): Promise<ApiSubmitMultiTransferWithMfaResult> {
-  return submitMultiTransferInternal(
-    {
-      accountId, signer, messages, expireAt, isGasless, noFeeCheck,
-    },
-    { allowMfaRequest: true },
-  );
 }
 
 export async function signTransfers(
@@ -1181,7 +852,6 @@ export async function signTransfers(
   isTonConnect?: boolean,
 ): Promise<
   | ApiSignedTransfer<DappProtocolType.TonConnect>[]
-  | { mfaRequest: SignedMfaRequest }
   | { error: ApiAnyDisplayError }
   > {
   const account = await fetchStoredChainAccount(accountId, 'ton');
@@ -1191,14 +861,6 @@ export async function signTransfers(
   // mismatches. This is not fully reliable, because the signed transactions are sent by a separate API method, but it
   // works in most cases.
   await withoutTransferConcurrency(network, account.byChain.ton.address, () => {});
-
-  const wallet = getTonWallet(account.byChain.ton);
-  const mfaExtensionSeqno = await getRequiredMfaExtensionSeqno(
-    network,
-    wallet,
-    account.byChain.ton.mfa,
-    'signTransfers',
-  );
 
   const seqno = await getWalletSeqno(
     network,
@@ -1212,18 +874,9 @@ export async function signTransfers(
     ledgerVestingAddress ? LEDGER_VESTING_SUBWALLET_ID : undefined,
   );
   const signedTransactions = await signTransactions({
-    account, accountId, expireAt, messages, seqno, signer, isTonConnect, mfaExtensionSeqno,
+    account, accountId, expireAt, messages, seqno, signer, isTonConnect,
   });
   if ('error' in signedTransactions) return signedTransactions;
-
-  const mfaRequest = signedTransactions[0]?.mfaRequest;
-  if (mfaRequest) {
-    if (signedTransactions.length !== 1) {
-      return { error: ApiCommonError.Unexpected };
-    }
-
-    return { mfaRequest };
-  }
 
   return signedTransactions.map(({ seqno, transaction }) => ({
     chain: 'ton',
@@ -1246,10 +899,6 @@ interface SignTransactionOptions {
   /** If true, will sign the transaction as an internal message instead of external. Not supported by Ledger. */
   shouldBeInternal?: boolean;
   isTonConnect?: boolean;
-  /** If value given, will sign the transactions for MFA Extension instead of Wallet. Not supported by Ledger. */
-  mfaExtensionSeqno?: number;
-  /** Used only for emulating the legacy wallet transaction before submitting it through the MFA extension. */
-  allowLegacyMfaSigning?: boolean;
 }
 
 async function signTransaction(options: SignTransactionOptions) {
@@ -1273,8 +922,6 @@ async function signTransaction(options: SignTransactionOptions) {
 type SignedTransactions = {
   seqno: number;
   transaction: Cell;
-  mfaRequest?: SignedMfaRequest;
-  mfaFee?: bigint;
 };
 
 async function signTransactions(
@@ -1289,8 +936,6 @@ async function signTransactions(
     shouldBeInternal,
     allowOnlyOneTransaction,
     isTonConnect,
-    mfaExtensionSeqno,
-    allowLegacyMfaSigning,
   }: SignTransactionOptions & { allowOnlyOneTransaction?: boolean },
 ): Promise<SignedTransactions[] | { error: any }> {
   const messagesPerTransaction = getMaxMessagesInTransaction(account);
@@ -1324,24 +969,6 @@ async function signTransactions(
   // All the transactions are passed to a single `signer.signTransactions` call, because it checks the transactions
   // before signing. See the `signTransactions` description for more details.
 
-  if (mfaExtensionSeqno !== undefined) {
-    const wallet = getTonWallet(account.byChain.ton);
-    const fees = await getMfaFeesFromTransactions(parseAccountId(accountId).network, transactionsToSign, wallet);
-    const signedRequest = await signer.signMfaTransactions(transactionsToSign, mfaExtensionSeqno, fees);
-    if ('error' in signedRequest) return signedRequest;
-
-    return signedRequest.map((opts, index) => ({
-      seqno: transactionsToSign[index].seqno,
-      mfaRequest: opts,
-      transaction: opts.transaction,
-      mfaFee: fees[index],
-    }));
-  }
-
-  if (account.byChain.ton.mfa && !allowLegacyMfaSigning) {
-    throw new Error('MFA extension seqno is required');
-  }
-
   const signedTransactions = await signer.signTransactions(transactionsToSign, isTonConnect);
   if ('error' in signedTransactions) return signedTransactions;
 
@@ -1358,51 +985,6 @@ async function waitForWalletSeqnoChange(network: ApiNetwork, address: string, se
     waitMs: WAIT_TRANSFER_TIMEOUT,
     pauseMs: WAIT_PAUSE,
   });
-}
-
-async function emulateMfaRequestWithFallback(
-  network: ApiNetwork,
-  wallet: TonWallet,
-  walletIsInitialized: boolean | undefined,
-  mfaExtensionAddress: string,
-  mfaRequest: SignedMfaRequest,
-  legacyWalletTransaction: Cell,
-  signal?: AbortSignal,
-): Promise<ApiEmulationWithFallbackResult> {
-  try {
-    const authDate = Math.floor(Date.now() / 1000);
-    const seedSignature = Buffer.from(randomBytes(64));
-
-    const body = beginCell()
-      .storeRef(beginCell().storeBuffer(seedSignature).endCell())
-      .storeStringRefTail(String(authDate))
-      .storeSlice(mfaRequest.payload.beginParse())
-      .storeBuffer(mfaRequest.signature)
-      .endCell();
-
-    const walletAddress = toBase64Address(wallet.address, false, network);
-    const emulation = await emulateExternalMessage(
-      network,
-      walletAddress,
-      Address.parse(mfaExtensionAddress),
-      body,
-      undefined,
-      signal,
-    );
-    return { isFallback: false, ...emulation };
-  } catch (err) {
-    throwIfAborted(signal);
-    logDebugError('Failed to emulate an MFA transaction', err);
-  }
-
-  const fallback = await emulateTransactionWithFallback(
-    network,
-    wallet,
-    legacyWalletTransaction,
-    walletIsInitialized,
-    signal,
-  );
-  return { ...fallback, isFallback: true };
 }
 
 async function emulateTransactionWithFallback(
@@ -1466,7 +1048,6 @@ export async function sendSignedTransactions(
             client,
             wallet,
             Cell.fromBase64(base64),
-            undefined,
             walletIsInitialized,
           );
           sentTransactions.push({ boc, msgHashNormalized });
@@ -1504,115 +1085,6 @@ export async function sendSignedTransactions(
       }
     }
   });
-}
-
-export function fetchEstimateDiesel(
-  accountId: string, tokenAddress: string,
-): Promise<ApiFetchEstimateDieselResult> {
-  return getDiesel({
-    accountId,
-    tokenAddress,
-    // We pass `false` because `fetchEstimateDiesel` assumes that the transfer is gasless anyway
-    canTransferGasfully: false,
-  });
-}
-
-/**
- * Decides whether the transfer must be gasless and fetches the diesel estimate from the backend.
- */
-async function getDiesel({
-  accountId,
-  tokenAddress,
-  canTransferGasfully,
-  toncoinBalance,
-  tokenBalance,
-  signal,
-}: {
-  accountId: string;
-  tokenAddress: string;
-  canTransferGasfully: boolean;
-  // The below fields allow to avoid network requests if you already have these data
-  toncoinBalance?: bigint;
-  tokenBalance?: bigint;
-  signal?: AbortSignal;
-}): Promise<ApiFetchEstimateDieselResult> {
-  const { network } = parseAccountId(accountId);
-  if (network !== 'mainnet') return DIESEL_NOT_AVAILABLE;
-
-  const storedTonWallet = await fetchStoredWallet(accountId, 'ton');
-  const wallet = getTonWallet(storedTonWallet);
-
-  const token = getTokenByAddress(tokenAddress)!;
-  if (!token.isGaslessEnabled && !token.isStarsEnabled) return DIESEL_NOT_AVAILABLE;
-
-  const { address, version } = storedTonWallet;
-  toncoinBalance ??= await getWalletBalance(network, wallet, signal);
-  const fee = getDieselToncoinFee(token);
-  const toncoinNeeded = fee.amount - toncoinBalance;
-
-  if (toncoinBalance >= MAX_BALANCE_WITH_CHECK_DIESEL || toncoinNeeded <= 0n) return DIESEL_NOT_AVAILABLE;
-
-  const rawDiesel = await estimateDiesel(
-    address,
-    tokenAddress,
-    toDecimal(toncoinNeeded),
-    version === 'W5',
-    fee.isStars,
-    signal,
-  );
-  const diesel: ApiFetchEstimateDieselResult = {
-    status: rawDiesel.status,
-    amount: rawDiesel.amount === undefined
-      ? undefined
-      : fromDecimal(rawDiesel.amount, rawDiesel.status === 'stars-fee' ? 0 : token.decimals),
-    nativeAmount: toncoinNeeded,
-    remainingFee: toncoinBalance,
-    realFee: fee.realFee,
-  };
-
-  const tokenAmount = getDieselTokenAmount(diesel);
-  if (tokenAmount === 0n) {
-    return diesel;
-  }
-
-  tokenBalance ??= await raceWithAbortSignal(
-    () => getTokenBalanceWithMintless(network, address, tokenAddress),
-    signal,
-  );
-  const canPayDiesel = tokenBalance >= tokenAmount;
-  const isAwaitingNotExpiredPrevious = Boolean(
-    rawDiesel.pendingCreatedAt
-    && Date.now() - new Date(rawDiesel.pendingCreatedAt).getTime() < PENDING_DIESEL_TIMEOUT_SEC * SEC,
-  );
-
-  // When both TON and diesel are insufficient, we want to show the TON fee
-  const shouldBeGasless = (!canTransferGasfully && canPayDiesel) || isAwaitingNotExpiredPrevious;
-  return shouldBeGasless ? diesel : DIESEL_NOT_AVAILABLE;
-}
-
-/**
- * Guesses the total TON fee (including the gas attached to the transaction) that will be spent on a diesel transfer.
- *
- * `amount` is what will be taken from the wallet;
- * `realFee` is approximately what will be actually spent (the rest will return in the excess);
- * `isStars` tells whether the fee is estimated considering that the diesel will be paid in stars.
- */
-function getDieselToncoinFee(token: ApiToken) {
-  const isStars = !token.isGaslessEnabled && token.isStarsEnabled;
-  let { amount, realAmount: realFee } = getToncoinAmountForTransfer(token, false);
-
-  // Multiplying by 2 because the diesel transfer has 2 transactions:
-  // - for the transfer itself,
-  // - for sending the diesel to the My Wallet.
-  if (!isStars) {
-    amount *= 2n;
-    realFee *= 2n;
-  }
-
-  amount += DEFAULT_FEE;
-  realFee += DEFAULT_FEE;
-
-  return { amount, realFee, isStars };
 }
 
 export function applyFeeFactorToEmulationResult(
@@ -1658,39 +1130,4 @@ function makePreparedTransactionToSign(
     timeout: expireAt,
     hints: messages[0].hints, // Currently hints are used only by Ledger, which has only 1 message per transaction
   };
-}
-
-function prepareMfaMessages(transactions: PreparedTransactionToSign[], wallet: TonWallet) {
-  if (!(wallet instanceof WalletContractV5R1)) throw new Error('Unsupported');
-
-  return transactions.map((transaction, index) => {
-    const message = internal(
-      {
-        to: wallet.address,
-        value: 0n,
-        body: wallet.createRequest({
-          authType: 'extension',
-          seqno: transaction.seqno,
-          actions: transaction.messages.map((message) => ({
-            type: 'sendMsg',
-            outMsg: message,
-            mode: transaction.sendMode,
-          })),
-        }),
-      },
-    );
-
-    return beginCell().store(storeMessageRelaxed(message)).endCell();
-  });
-}
-
-async function getMfaFeesFromTransactions(
-  network: ApiNetwork,
-  transactions: PreparedTransactionToSign[],
-  wallet: TonWallet,
-) {
-  const preparedMessages = prepareMfaMessages(transactions, wallet);
-  return await Promise.all(
-    preparedMessages.map((msg, idx) => getMfaFees(network, msg, transactions[idx].messages.length, 0)),
-  );
 }

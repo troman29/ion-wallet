@@ -33,5 +33,5 @@ export function getChainFromAddress(
 export function isTonsiteAddress(address: string) {
   address = address.trim().toLowerCase();
 
-  return address.startsWith('tonsite://') || address.startsWith('ton://');
+  return address.startsWith('tonsite://') || address.startsWith('ion://');
 }

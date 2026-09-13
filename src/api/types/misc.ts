@@ -47,7 +47,6 @@ export interface ApiToken {
   keywords?: string[];
   cmcSlug?: string;
   color?: string;
-  isGaslessEnabled?: boolean;
   isStarsEnabled?: boolean;
   isTiny?: boolean;
   customPayloadApiUrl?: string;
@@ -171,7 +170,6 @@ export interface ApiNft {
   isOnSale: boolean;
   isHidden?: boolean;
   isOnFragment?: boolean;
-  isTelegramGift?: boolean;
   isScam?: boolean;
   /** Set when the collection matched no trust signal. Absent means the NFT is verified or was never checked (other chains) */
   isUnverified?: true;

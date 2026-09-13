@@ -306,7 +306,7 @@ $many_transactions:
   manyValue: "%count% переказів"
 Total Amount: Загальна сума
 $unstaking_short: Зняти
-Handle ton:// links: Обробляти посилання ton://
+Handle ion:// links: Обробляти посилання ion://
 Back up wallet to have full access to it: Зробіть резервну копію гаманця, щоб мати до нього повний доступ
 Consider More Secure Version: Підвищіть безпеку гаманця
 Install our native app or browser extension.: Встановіть наш додаток або браузерне розширення.
@@ -1041,7 +1041,6 @@ No additional data.: Немає додаткових даних.
 $in_currency: в %currency%
 Rename Wallet: Перейменувати гаманець
 You can rename this wallet for easier identification.: Ви можете перейменувати цей гаманець для зручної ідентифікації.
-Telegram Gifts: Подарунки Telegram
 Collectibles: Колекції
 Bluetooth unavailable: Bluetooth недоступний
 $bluetooth_enable_guide: Увімкніть Bluetooth у налаштуваннях пристрою та дозвольте програмі доступ до Bluetooth.
@@ -1059,7 +1058,6 @@ Multisig Wallet Detected: Виявлено мультисиг-гаманець
 $multisig_warning_text: "**Вивести кошти** з цього гаманця через %app_name% **неможливо**. Переконайтеся, що він справді ваш — інакше це може бути шахрайство. %multisig_warning_link%"
 $multisig_warning_link: Натисніть, щоб дізнатися більше
 Multisig sending disabled: Неможливо з мультисигу
-$try_new_air_version: Спробуйте нативний додаток — легший, швидший і створений для вашого пристрою. Ви можете повернутися будь-коли.
 $accept_terms_with_link: Я погоджуюсь %link%
 use the wallet responsibly: використовувати гаманець відповідально
 "%app_name% Resources": Ресурси %app_name%
@@ -1774,7 +1772,6 @@ $no_activity_history: |
   поки що порожня.
 Standalone: Окремий
 "Enter wallet name:": "Введіть назву гаманця:"
-All Telegram Gifts: Усі подарунки Telegram
 Add Crypto: Додати криптовалюту
 Share QR Code: Поділитися QR-кодом
 $send_only_ton: Надсилайте на цю адресу лише ION або активи мережі ION. Надсилання інших токенів призведе до їх втрати.
@@ -2252,7 +2249,6 @@ Earn is not supported on this account.: Стейкінг не підтримує
 Export Logs: Експортувати логи
 Failed to load chat: Не вдалося завантажити чат
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: Перекази NFT з MFA підтримують до 4 NFT одночасно.
 More Details: Докладніше
 Open Telegram: Відкрити Telegram
 Open addresses: Відкриває адреси

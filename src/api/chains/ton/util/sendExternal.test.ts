@@ -17,7 +17,7 @@ describe('sendExternal', () => {
     } as TonWallet;
     const message = beginCell().storeUint(0, 32).endCell();
 
-    await sendExternal(client, wallet, message, undefined, true);
+    await sendExternal(client, wallet, message, true);
 
     expect(client.sendFile).toHaveBeenCalledTimes(1);
   });

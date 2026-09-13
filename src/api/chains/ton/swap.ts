@@ -18,12 +18,11 @@ import type {
 } from '../../types/swap';
 import type { TonTransferParams } from './types';
 
-import { DIESEL_ADDRESS, SWAP_FEE_ADDRESS } from '../../../config';
+import { SWAP_FEE_ADDRESS } from '../../../config';
 import { Big } from '../../../lib/big.js';
 import { parseAccountId } from '../../../util/account';
 import { assert as originalAssert } from '../../../util/assert';
 import { fromDecimal } from '../../../util/decimals';
-import { omitUndefined } from '../../../util/iteratees';
 import { getMaxMessagesInTransaction, isTokenTransferPayload } from '../../../util/ton/transfer';
 import { parsePayloadSlice } from './util/metadata';
 import { getSigner } from './util/signer';
@@ -33,7 +32,7 @@ import { patchSwapItem } from '../../common/swap';
 import { getTokenByAddress } from '../../common/tokens';
 import { callHook } from '../../hooks';
 import { insertMintlessPayload } from './tokens';
-import { checkMultiTransactionDraft, submitMultiTransferWithMfa } from './transfer';
+import { checkMultiTransactionDraft, submitMultiTransfer } from './transfer';
 import { getContractInfo } from './wallet';
 
 async function getContractInfos(network: ApiNetwork, addresses: string[]) {
@@ -47,7 +46,7 @@ async function getContractInfos(network: ApiNetwork, addresses: string[]) {
   return result;
 }
 
-const FEE_ADDRESSES = [SWAP_FEE_ADDRESS, DIESEL_ADDRESS];
+const FEE_ADDRESSES = [SWAP_FEE_ADDRESS];
 const MAX_NETWORK_FEE = 3600000000n; // 3.6 TON = 0.3 TON * 3 * 4 - when 4 splits with 3 hops per split on Stonfi
 const MAX_SPLITS = 4; // Backend configuration
 
@@ -58,7 +57,7 @@ export async function validateDexSwapTransfers(
   transfers: TonTransferParams[],
   account: ApiAccountWithChain<'ton'>,
 ) {
-  const hasFeeTransfer = Big(request.ourFee ?? 0).gt(0) || Big(request.dieselFee ?? 0).gt(0);
+  const hasFeeTransfer = Big(request.ourFee ?? 0).gt(0);
   const feeTransfer = hasFeeTransfer ? transfers.at(-1) : undefined;
   const mainTransfers = feeTransfer ? transfers.slice(0, -1) : transfers;
   const maxMessages = getMaxMessagesInTransaction(account);
@@ -178,7 +177,7 @@ export async function buildOnchainSwapTransfer(
     const account = await fetchStoredChainAccount(accountId, 'ton');
     await validateDexSwapTransfers(network, address, request, transferList, account);
 
-    const result = await checkMultiTransactionDraft(accountId, transferList, request.shouldTryDiesel);
+    const result = await checkMultiTransactionDraft(accountId, transferList);
 
     if ('error' in result) {
       await patchSwapItem({
@@ -205,7 +204,6 @@ export async function submitOnchainSwapTransfer(
     enclaveToken,
     transfers,
     historyItem,
-    isGasless,
     authToken,
     localSwap,
     swapId,
@@ -217,18 +215,14 @@ export async function submitOnchainSwapTransfer(
 
   const wallet = await fetchStoredWallet(accountId, 'ton');
   const account = await fetchStoredChainAccount(accountId, 'ton');
-  const hasMfa = Boolean(account.byChain.ton.mfa);
 
   const { address } = wallet;
 
-  // For MFA wallets, the local activity is created only after the request is confirmed
-  if (!hasMfa) {
-    onUpdate({
-      type: 'newLocalActivities',
-      accountId,
-      activities: [localSwap],
-    });
-  }
+  onUpdate({
+    type: 'newLocalActivities',
+    accountId,
+    activities: [localSwap],
+  });
 
   try {
     const transferList = parseSwapTransfers(transfers);
@@ -237,22 +231,18 @@ export async function submitOnchainSwapTransfer(
       transferList[0] = await insertMintlessPayload('mainnet', address, historyItem.from, transferList[0]);
     }
 
-    const result = await submitMultiTransferWithMfa({
+    const result = await submitMultiTransfer({
       accountId,
       signer: getSigner(accountId, account, enclaveToken),
       messages: transferList,
-      isGasless,
     });
 
     if ('error' in result) {
-      if (!hasMfa) {
-        // Update local activity to show error state
-        onUpdate({
-          type: 'newLocalActivities',
-          accountId,
-          activities: [{ ...localSwap, status: 'failed' }],
-        });
-      }
+      onUpdate({
+        type: 'newLocalActivities',
+        accountId,
+        activities: [{ ...localSwap, status: 'failed' }],
+      });
 
       await patchSwapItem({
         address, swapId, authToken, error: result.error,
@@ -261,19 +251,12 @@ export async function submitOnchainSwapTransfer(
       return result;
     }
 
-    if ('mfaRequest' in result) {
-      return { mfaRequest: result.mfaRequest };
-    }
-
     delete result.messages[0].stateInit;
 
     const updatedSwap: ApiSwapActivity = {
       ...localSwap,
       externalMsgHashNorm: result.msgHashNormalized,
-      extra: omitUndefined({
-        ...localSwap.extra,
-        withW5Gasless: result.withW5Gasless,
-      }),
+      extra: localSwap.extra,
     };
 
     onUpdate({
@@ -293,13 +276,11 @@ export async function submitOnchainSwapTransfer(
       submittedHashes: [result.msgHash, result.msgHashNormalized],
     };
   } catch (err: any) {
-    if (!hasMfa) {
-      onUpdate({
-        type: 'newLocalActivities',
-        accountId,
-        activities: [{ ...localSwap, status: 'failed' }],
-      });
-    }
+    onUpdate({
+      type: 'newLocalActivities',
+      accountId,
+      activities: [{ ...localSwap, status: 'failed' }],
+    });
 
     await patchSwapItem({
       address, swapId, authToken, error: errorToString(err),

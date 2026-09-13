@@ -48,7 +48,6 @@ import {
   LIQUID_POOL,
   MW_CARDS_COLLECTION,
   NFT_FRAGMENT_COLLECTIONS,
-  NFT_FRAGMENT_GIFT_IMAGE_TO_URL_REGEX,
   STON_PTON_ADDRESS,
   TON_TSUSDE,
   TON_USDE,
@@ -63,7 +62,7 @@ import { fixIpfsUrl, getProxiedLottieUrl } from '../../../../util/fetch';
 import { omitUndefined } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
 import safeExec from '../../../../util/safeExec';
-import { buildMwCardsNftMetadata, getIsFragmentGift, getIsNftUnverified, readComment } from '../util/metadata';
+import { buildMwCardsNftMetadata, getIsNftUnverified, readComment } from '../util/metadata';
 import { toBase64Address } from '../util/tonCore';
 import {
   checkHasScamLink,
@@ -1050,8 +1049,7 @@ export function parseToncenterNft(
     const isScam = (isScamByModeration ?? collectionMetadata?.is_scam) || hasScamLink;
     const isNsfw = isNsfwByModeration ?? collectionMetadata?.is_nsfw;
     const isHidden = extra?.render_type === 'hidden' || isScam;
-    const isFragmentGift = getIsFragmentGift(nftSuperCollectionsByCollectionAddress, collectionAddress);
-    const isOnFragment = isFragmentGift || NFT_FRAGMENT_COLLECTIONS.includes(rawCollectionAddress!);
+    const isOnFragment = NFT_FRAGMENT_COLLECTIONS.includes(rawCollectionAddress!);
     const isMwCard = collectionAddress === MW_CARDS_COLLECTION;
     // A non-string `value` breaks the UI, and the MyTonWallet card traits are read as strings too
     const attributes = Array.isArray(extra?.attributes)
@@ -1084,10 +1082,6 @@ export function parseToncenterNft(
       metadata: {
         ...(attributes && { attributes }),
         ...(lottie && { lottie }),
-        // The URL is derived from the image URL, so a gift without an image simply has no link
-        ...(isFragmentGift && image && {
-          fragmentUrl: image.replace(NFT_FRAGMENT_GIFT_IMAGE_TO_URL_REGEX, 'https://$1'),
-        }),
         // `id` must be set to `index + 1`. Unlike TonApi where this field is preformatted,
         // we need to manually adjust it here due to data source differences.
         ...(isMwCard && buildMwCardsNftMetadata({ id: nftIndex + 1, image, attributes })),
@@ -1096,7 +1090,6 @@ export function parseToncenterNft(
         collectionAddress,
         collectionName: collectionMetadata?.name,
         isOnFragment,
-        isTelegramGift: isFragmentGift,
       }),
     });
 

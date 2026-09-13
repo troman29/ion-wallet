@@ -8,8 +8,6 @@ import { ApiCommonError } from '../../types';
 
 import { getSigner } from './util/signer';
 import { fetchStoredChainAccount } from '../../common/accounts';
-import { fetchStoredWallet } from '../../common/accounts';
-import { createMfaRequest } from '../../common/mfa';
 import { getTokenBySlug } from '../../common/tokens';
 import { signTransfers } from './transfer';
 
@@ -59,19 +57,6 @@ export async function signDappTransfers(
     vestingAddress,
     true,
   );
-
-  if (result && typeof result === 'object' && 'mfaRequest' in result) {
-    const { address } = await fetchStoredWallet(accountId, 'ton');
-    const { payload, signature } = result.mfaRequest;
-
-    const { reqId } = await createMfaRequest({
-      walletAddress: address,
-      payload: payload.toBoc(),
-      signature,
-    });
-
-    return { mfaRequestHash: reqId };
-  }
 
   return result;
 }

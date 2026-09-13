@@ -11,7 +11,6 @@ import {
   APP_ENV,
   APP_VERSION,
   IS_EXTENSION,
-  IS_TELEGRAM_APP,
   SHOULD_CLEANUP_LEGACY_AUTH,
 } from '../../config';
 import { selectCurrentAccountId, selectIsMultichainAccount, selectSeasonalThemeOverride } from '../../global/selectors';
@@ -76,10 +75,8 @@ const SEASONAL_THEME_OVERRIDE_OPTIONS: DropdownItem<SeasonalThemeOverrideOption>
   name: 'Valentine',
 }];
 
-// iOS allows downloading files even in TMA, however, in other platforms,
-// downloading files from `blob:https://` schemes is limited by Telegram itself.
-// Also, file downloading is limited in extensions.
-const CAN_DOWNLOAD_LOGS = IS_IOS || !(IS_EXTENSION || IS_TELEGRAM_APP);
+// File downloading is limited in extensions.
+const CAN_DOWNLOAD_LOGS = IS_IOS || !IS_EXTENSION;
 
 function SettingsDeveloperOptions({
   isOpen,

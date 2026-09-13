@@ -3,7 +3,7 @@ import type { DeviceInfo, Feature } from '@tonconnect/protocol';
 import type { ApiAccountWithChain } from '../api/types';
 
 import {
-  APP_NAME, IS_EXTENSION, IS_TELEGRAM_APP, TONCONNECT_PROTOCOL_VERSION,
+  APP_NAME, IS_EXTENSION, TONCONNECT_PROTOCOL_VERSION,
 } from '../config';
 import packageJson from '../../package.json';
 import { W5_MAX_MESSAGES } from '../api/chains/ton/constants';
@@ -52,7 +52,7 @@ function getPlatform(): DevicePlatform {
 
   let devicePlatform: DevicePlatform | undefined;
 
-  if (IS_EXTENSION || IS_TELEGRAM_APP) {
+  if (IS_EXTENSION) {
     devicePlatform = 'browser';
   } else if (/Android/.test(userAgent)) {
     devicePlatform = 'android';

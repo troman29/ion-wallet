@@ -1,0 +1,13 @@
+diff --git a/node_modules/capacitor-native-settings/android/build.gradle b/node_modules/capacitor-native-settings/android/build.gradle
+index 2021b5b..09d5a64 100644
+--- a/node_modules/capacitor-native-settings/android/build.gradle
++++ b/node_modules/capacitor-native-settings/android/build.gradle
+@@ -33,7 +33,7 @@ android {
+     buildTypes {
+         release {
+             minifyEnabled = false
+-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+         }
+     }
+     lintOptions {

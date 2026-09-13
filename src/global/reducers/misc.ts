@@ -364,32 +364,6 @@ export function updateSettings(global: GlobalState, settingsUpdate: Partial<Glob
   } as GlobalState;
 }
 
-export function updateInstallMfa(global: GlobalState, mfaUpdate: Partial<GlobalState['settings']['installMfa']>) {
-  return {
-    ...global,
-    settings: {
-      ...global.settings,
-      installMfa: {
-        ...global.settings.installMfa,
-        ...mfaUpdate,
-      },
-    },
-  } as GlobalState;
-}
-
-export function updateRemoveMfa(global: GlobalState, mfaUpdate: Partial<GlobalState['settings']['removeMfa']>) {
-  return {
-    ...global,
-    settings: {
-      ...global.settings,
-      removeMfa: {
-        ...global.settings.removeMfa,
-        ...mfaUpdate,
-      },
-    },
-  } as GlobalState;
-}
-
 export type OpenableSection = 'settings' | 'explore';
 
 // Settings and Explore are mutually exclusive full-screen sections.

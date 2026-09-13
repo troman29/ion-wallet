@@ -267,7 +267,7 @@ export function shouldShowTransactionAnnualYield(transaction: ApiTransaction) {
 }
 
 export function getIsActivityWithHash(activity: ApiTransactionActivity) {
-  return !getIsTxIdLocal(activity.id) || !activity.extra?.withW5Gasless;
+  return !getIsTxIdLocal(activity.id);
 }
 
 export function getIsActivityPending(activity: ApiActivity) {

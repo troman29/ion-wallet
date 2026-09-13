@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="enclave_use_biometrics">استفاده از بیومتریک</string>
-    <string name="enclave_enter_passcode_or_use_biometrics">رمز عبور را وارد کنید یا از اثر انگشت استفاده کنید</string>
-    <string name="enclave_use_pin">استفاده از PIN</string>
-    <string name="enclave_cancel">لغو</string>
-</resources>

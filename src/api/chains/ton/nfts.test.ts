@@ -116,13 +116,6 @@ describe('getAccountNfts', () => {
     expect(mockedFetchNftItems).toHaveBeenCalledTimes(1);
   });
 
-  it('skips the request for the Telegram gifts super collection', async () => {
-    const nfts = await getAccountNfts(ACCOUNT_ID, { collectionAddress: 'super:telegram-gifts' });
-
-    expect(mockedFetchNftItems).not.toHaveBeenCalled();
-    expect(nfts).toEqual([]);
-  });
-
   it('reads `on_sale` from the item', async () => {
     mockedFetchNftItems.mockResolvedValueOnce(makeResponse([makeItem(RAW_NFT_ADDRESS, { on_sale: true })]));
 

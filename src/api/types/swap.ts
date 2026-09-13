@@ -1,4 +1,3 @@
-import type { SignedMfaRequest } from '../chains/ton/util/signer';
 import type { ApiSwapActivity } from './activities';
 import type {
   ApiSwapBuildTransactionRequest,
@@ -30,7 +29,6 @@ export type ApiSubmitOnchainSwapTransferOptions = {
   transfers?: ApiSwapTransfer[];
   transaction?: string;
   historyItem: ApiSwapHistoryItem;
-  isGasless?: boolean;
   authToken: string;
   localSwap: ApiSwapActivity;
   swapId: string;
@@ -40,5 +38,4 @@ export type ApiSubmitOnchainSwapTransferOptions = {
 
 export type ApiSubmitOnchainSwapTransferResult =
   | { activityId: string; submittedHashes: string[] }
-  | { mfaRequest: SignedMfaRequest }
   | { error: string };

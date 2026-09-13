@@ -12,7 +12,6 @@ export function updateCurrentTransferByCheckResult(global: GlobalState, result: 
     ...pick(result, [
       'isScam',
       'isMemoRequired',
-      'diesel',
       'isToAddressNew',
       'resolvedAddress',
       'explainedFee',

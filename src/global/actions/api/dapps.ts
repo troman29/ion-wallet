@@ -174,21 +174,6 @@ addActionHandler('submitDappTransfer', withEnclaveSessionRelease(async (global, 
     return;
   }
 
-  if (signedTransactions && typeof signedTransactions === 'object' && 'mfaRequestHash' in signedTransactions) {
-    global = getGlobal();
-    global = updateCurrentDappTransfer(global, {
-      state: TransferState.ConfirmMfa,
-      isLoading: false,
-      mfaRequestHash: signedTransactions.mfaRequestHash,
-    });
-    setGlobal(global);
-
-    await callApi('confirmDappRequestSendTransaction', promiseId, {
-      mfaRequestHash: signedTransactions.mfaRequestHash,
-    });
-    return;
-  }
-
   await callApi('confirmDappRequestSendTransaction', promiseId, signedTransactions);
 }));
 
@@ -457,16 +442,4 @@ addActionHandler('loadExploreSites', async (global, _, { isLandscape, langCode =
 
   global = { ...global, exploreData };
   setGlobal(global);
-});
-
-addActionHandler('updateDappMfaRequestStatus', async (global) => {
-  const hash = global.currentDappTransfer.mfaRequestHash;
-  if (!hash) return;
-  const result = await callApi('fetchMfaRequest', hash);
-
-  if (result?.isConfirmed) {
-    global = getGlobal();
-    global = updateCurrentDappTransfer(global, { state: TransferState.Complete });
-    setGlobal(global);
-  }
 });

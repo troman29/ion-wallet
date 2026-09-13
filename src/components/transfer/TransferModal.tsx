@@ -34,7 +34,6 @@ import Modal from '../ui/Modal';
 import Transition from '../ui/Transition';
 import TransferComplete from './TransferComplete';
 import TransferConfirm from './TransferConfirm';
-import TransferConfirmMfa from './TransferConfirmMfa';
 import TransferInitial from './TransferInitial';
 import TransferMultiNftProcess from './TransferMultiNftProcess';
 import TransferPassword from './TransferPassword';
@@ -62,7 +61,6 @@ function TransferModal({
     tokenSlug,
     nfts,
     sentNftsCount,
-    diesel,
     isNftBurn,
   },
   currentAccountId,
@@ -172,7 +170,6 @@ function TransferModal({
             extraAuthUsages={extraNftBatchCount}
             onAuthorize={handleTransferSubmit}
             onCancel={handleClose}
-            isGaslessWithStars={diesel?.status === 'stars-fee'}
           >
             <TransactionBanner
               tokenIn={selectedToken}
@@ -228,25 +225,6 @@ function TransferModal({
             toAddress={renderedToAddress}
             onClose={handleClose}
           />
-        );
-      case TransferState.ConfirmMfa:
-        return (
-          <TransferConfirmMfa
-            isActive={isActive}
-            onClose={handleClose}
-          >
-            <TransactionBanner
-              tokenIn={selectedToken}
-              imageUrl={nfts?.[0]?.thumbnail}
-              withNftPlaceholder={isNftTransfer}
-              withChainIcon
-              text={isNftTransfer
-                ? (nfts.length > 1 ? lang('%amount% NFTs', nfts.length, 'i') : nfts[0]?.name || 'NFT')
-                : formatCurrency(toDecimal(amount!, decimals), symbol)}
-              className={!getDoesUsePinPad() ? styles.transactionBanner : undefined}
-              secondText={shortenAddress(toAddress!)}
-            />
-          </TransferConfirmMfa>
         );
     }
   }

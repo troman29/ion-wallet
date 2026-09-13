@@ -1,0 +1,42 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :capacitor-dialog:dependencies --write-locks
+androidx.activity:activity:1.8.0=debugCompileClasspath
+androidx.annotation:annotation-experimental:1.4.0=debugCompileClasspath
+androidx.annotation:annotation-jvm:1.6.0=debugCompileClasspath
+androidx.annotation:annotation:1.6.0=debugCompileClasspath
+androidx.appcompat:appcompat-resources:1.7.1=debugCompileClasspath
+androidx.appcompat:appcompat:1.7.1=debugCompileClasspath
+androidx.arch.core:core-common:2.2.0=debugCompileClasspath
+androidx.arch.core:core-runtime:2.1.0=debugCompileClasspath
+androidx.collection:collection:1.1.0=debugCompileClasspath
+androidx.core:core-ktx:1.2.0=debugCompileClasspath
+androidx.core:core:1.13.0=debugCompileClasspath
+androidx.cursoradapter:cursoradapter:1.0.0=debugCompileClasspath
+androidx.customview:customview:1.0.0=debugCompileClasspath
+androidx.drawerlayout:drawerlayout:1.0.0=debugCompileClasspath
+androidx.fragment:fragment:1.5.4=debugCompileClasspath
+androidx.interpolator:interpolator:1.0.0=debugCompileClasspath
+androidx.lifecycle:lifecycle-common:2.6.2=debugCompileClasspath
+androidx.lifecycle:lifecycle-livedata-core:2.6.2=debugCompileClasspath
+androidx.lifecycle:lifecycle-livedata:2.6.2=debugCompileClasspath
+androidx.lifecycle:lifecycle-runtime:2.6.2=debugCompileClasspath
+androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2=debugCompileClasspath
+androidx.lifecycle:lifecycle-viewmodel:2.6.2=debugCompileClasspath
+androidx.loader:loader:1.0.0=debugCompileClasspath
+androidx.savedstate:savedstate:1.2.1=debugCompileClasspath
+androidx.vectordrawable:vectordrawable-animated:1.1.0=debugCompileClasspath
+androidx.vectordrawable:vectordrawable:1.1.0=debugCompileClasspath
+androidx.versionedparcelable:versionedparcelable:1.1.1=debugCompileClasspath
+androidx.viewpager:viewpager:1.0.0=debugCompileClasspath
+org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22=debugCompileClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21=debugCompileClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21=debugCompileClasspath
+org.jetbrains.kotlin:kotlin-stdlib:1.8.22=debugCompileClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4=debugCompileClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4=debugCompileClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4=debugCompileClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4=debugCompileClasspath
+org.jetbrains:annotations:13.0=debugCompileClasspath
+empty=androidApis,androidJdkImage,debugAnnotationProcessorClasspath

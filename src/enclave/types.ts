@@ -2,7 +2,6 @@ import type { AuthType } from '../global/types';
 import type CapacitorBiometricAuth from './auth/CapacitorBiometricAuth';
 import type ElectronAuth from './auth/ElectronAuth';
 import type PasscodeAuth from './auth/PasscodeAuth';
-import type TelegramAuth from './auth/TelegramAuth';
 import type WebAuthnAuth from './auth/WebAuthnAuth';
 
 export type StorageKey = (
@@ -24,14 +23,12 @@ export type AnyAuth =
   | CapacitorBiometricAuth
   | ElectronAuth
   | PasscodeAuth
-  | TelegramAuth
   | WebAuthnAuth;
 
 export type AnyAuthClass =
   | typeof CapacitorBiometricAuth
   | typeof ElectronAuth
   | typeof PasscodeAuth
-  | typeof TelegramAuth
   | typeof WebAuthnAuth;
 
 export type AnyBiometricAuthClass = Exclude<AnyAuthClass, PasscodeAuth>;

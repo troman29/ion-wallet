@@ -1,5 +1,5 @@
 {
-  "name": "mytonwallet",
+  "name": "ion-wallet",
   "version": "26.9.0",
   "description": "The most feature-rich web wallet and browser extension for TON – with support of multi-accounts, tokens (jettons), NFT, TON DNS, TON Sites, TON Proxy, and TON Magic.",
   "main": "index.js",
@@ -25,11 +25,6 @@
     "electron:package": "npm run electron:build && rm -rf dist-electron && electron-builder build --win --mac --linux --config src/electron/config.yml",
     "electron:package:staging": "ENV=staging npm run electron:package -- -p never",
     "electron:release:production": "ENV=production npm run electron:package -- -p always",
-    "telegram:dev": "cross-env IS_TELEGRAM_APP=1 npm run dev",
-    "telegram:build": "IS_TELEGRAM_APP=1 npm run build",
-    "telegram:build:dev": "cross-env APP_ENV=development npm run telegram:build",
-    "telegram:build:staging": "cross-env APP_ENV=staging npm run telegram:build",
-    "telegram:build:production": "npm run telegram:build",
     "mobile:build": "npm run i18n:build:android && cross-env IS_CAPACITOR=1 npm run build && cap sync ${CAP_PLATFORM} --deployment && cross-env IS_CAPACITOR=1 node ./dev/prepareIosIconFont.mjs",
     "mobile:build:dev": "cross-env APP_ENV=development npm run mobile:build",
     "mobile:build:staging": "cross-env APP_ENV=staging npm run mobile:build",
@@ -42,6 +37,7 @@
     "test": "cross-env APP_ENV=test jest --verbose",
     "test:record": "playwright codegen localhost:1235",
     "prepare": "husky",
+    "postinstall": "patch-package",
     "statoscope:build": "cross-env IS_STATOSCOPE=1 webpack",
     "analyze:bundle": "node dev/analyzeBundleSize.mjs",
     "statoscope:validate-diff": "statoscope validate --input input.json --reference reference.json",
@@ -50,10 +46,7 @@
     "i18n:build:default": "node ./dev/locales/buildDefault.js",
     "i18n:build:android": "node ./dev/locales/buildAndroidResources.js",
     "i18n:update": "node ./dev/locales/updateLocales.js",
-    "i18n:find-missing": "node ./dev/locales/findMissingKeys.js",
-    "mfa:build": "IS_TELEGRAM_APP=1 webpack --config webpack-mfa.config.ts && bash ./deploy/copy_to_dist.sh dist-mfa src/mfa/public",
-    "mfa:build:dev": "APP_ENV=development IS_TELEGRAM_APP=1 webpack --mode development --config webpack-mfa.config.ts",
-    "mfa:dev": "APP_ENV=development IS_TELEGRAM_APP=1 webpack serve --mode development --config webpack-mfa.config.ts"
+    "i18n:find-missing": "node ./dev/locales/findMissingKeys.js"
   },
   "engines": {
     "node": "^22.6 || ^24",
@@ -68,26 +61,20 @@
     "*.{ts,tsx,js}": "eslint --fix",
     "*.{css,scss}": "stylelint --fix"
   },
-  "author": "MyTonWallet",
+  "author": "ION Wallet",
   "license": "GPL-3.0-or-later",
   "protocols": [
     {
       "name": "Ton",
       "schemes": [
-        "ton"
+        "ion"
       ]
     },
     {
       "name": "TonConnect",
       "schemes": [
         "tc",
-        "mytonwallet-tc"
-      ]
-    },
-    {
-      "name": "My Wallet",
-      "schemes": [
-        "mtw"
+        "ion-tc"
       ]
     }
   ],
@@ -106,7 +93,6 @@
     "@statoscope/webpack-plugin": "5.29.0",
     "@stylistic/stylelint-plugin": "3.1.2",
     "@tonconnect/protocol": "2.3.0-beta.0",
-    "@twa-dev/types": "8.0.2",
     "@twbs/fantasticon": "3.1.0",
     "@types/chrome": "0.0.323",
     "@types/jest": "30.0.0",
@@ -149,6 +135,7 @@
     "js-yaml": "4.1.1",
     "lint-staged": "16.0.0",
     "mini-css-extract-plugin": "2.9.2",
+    "patch-package": "^8.0.1",
     "postcss": "8.5.3",
     "postcss-loader": "8.1.1",
     "postcss-modules": "6.0.1",

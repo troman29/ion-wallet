@@ -12,7 +12,6 @@ import buildClassName from '../../util/buildClassName';
 import captureEscKeyListener from '../../util/captureEscKeyListener';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { captureControlledSwipe } from '../../util/swipeController';
-import useTelegramMiniAppSwipeToClose from '../../util/telegram/hooks/useTelegramMiniAppSwipeToClose';
 import { IS_ANDROID_APP, IS_IOS_APP, IS_TOUCH_ENV } from '../../util/windowEnvironment';
 import { SEC } from '../../api/constants';
 import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
@@ -106,7 +105,6 @@ function Explore({
 
   const { renderingKey } = useModalTransitionKeys(currentSiteCategoryId || 0, !!isActive);
   const prevSiteCategoryIdRef = useStateRef(usePrevious2(renderingKey));
-  const { disableSwipeToClose, enableSwipeToClose } = useTelegramMiniAppSwipeToClose(isActive);
 
   useEffect(
     () => (renderingKey ? captureEscKeyListener(closeSiteCategory) : undefined),
@@ -125,16 +123,12 @@ function Explore({
     return captureControlledSwipe(transitionRef.current!, {
       onSwipeRightStart: () => {
         closeSiteCategory();
-
-        disableSwipeToClose();
       },
       onCancel: () => {
         openSiteCategory({ id: prevSiteCategoryIdRef.current! });
-
-        enableSwipeToClose();
       },
     });
-  }, [disableSwipeToClose, enableSwipeToClose, filteredSites?.length, prevSiteCategoryIdRef]);
+  }, [filteredSites?.length, prevSiteCategoryIdRef]);
 
   useAutoScroll({
     containerRef: featuredContainerRef,

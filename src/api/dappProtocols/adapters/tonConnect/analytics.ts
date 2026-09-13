@@ -113,7 +113,7 @@ export function toTonConnectRequestType(method: string): TonConnectRequestType |
 }
 
 // Terminal user-decision events: at most one accepted-or-declined/rejected should be recorded per flow.
-// A failed password/MFA/signing attempt keeps the confirm UI open, so a flow can fire `*-accepted` and then,
+// A failed password or signing attempt keeps the confirm UI open, so a flow can fire `*-accepted` and then,
 // once the user gives up and cancels, `*-declined`/`*-rejected` for the same `promiseId`. Keeping only the first
 // decision keeps the accept/decline funnel consistent across platforms (web, Electron, iOS and Android all route
 // their UI events through here), instead of relying on a per-platform guard.

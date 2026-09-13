@@ -4,7 +4,6 @@ import { buildCollectionByKey, extractKey } from '../../util/iteratees';
 import { getNativeToken } from '../../util/tokens';
 import chains from '../chains';
 import { doesAccountHaveChain, fetchStoredAccount, fetchStoredWallet } from '../common/accounts';
-import { requireMfaMethods } from './optional';
 import { createLocalTransactions } from './transfer';
 
 async function getDnsChain(accountId: string): Promise<ApiChain> {
@@ -34,7 +33,6 @@ export async function submitDnsRenewal(
   const nftByAddress = buildCollectionByKey(nfts, 'address');
   const results: (
     { activityIds: string[] }
-    | { mfaRequestHash: string }
     | { error: string }
   )[] = [];
 
@@ -44,10 +42,6 @@ export async function submitDnsRenewal(
     if ('error' in result) {
       results.push(result);
       continue;
-    }
-
-    if ('mfaRequest' in result) {
-      return [await requireMfaMethods().publishSignedMfaRequest(accountId, chain, result.mfaRequest)];
     }
 
     const localActivities = createLocalTransactions(accountId, chain, addresses.map((address) => {
@@ -92,10 +86,6 @@ export async function submitDnsChangeWallet(
 
   if ('error' in result) {
     return result;
-  }
-
-  if ('mfaRequest' in result) {
-    return requireMfaMethods().publishSignedMfaRequest(accountId, chain, result.mfaRequest);
   }
 
   const [activity] = createLocalTransactions(accountId, chain, [{

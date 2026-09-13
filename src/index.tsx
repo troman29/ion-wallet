@@ -7,9 +7,7 @@ import React from './lib/teact/teact';
 import TeactDOM from './lib/teact/teact-dom';
 import { getActions, getGlobal } from './global';
 
-import {
-  DEBUG, IS_CAPACITOR, IS_TELEGRAM_APP, STRICTERDOM_ENABLED,
-} from './config';
+import { DEBUG, IS_CAPACITOR, STRICTERDOM_ENABLED } from './config';
 import { requestMutation } from './lib/fasterdom/fasterdom';
 import { enableStrict } from './lib/fasterdom/stricterdom';
 import { betterView } from './util/betterView';
@@ -18,7 +16,6 @@ import { initElectron } from './util/electron';
 import { initFocusScrollController } from './util/focusScroll';
 import { forceLoadFonts } from './util/fonts';
 import { logDebug, logSelfXssWarnings } from './util/logs';
-import { initTelegramApp } from './util/telegram';
 import {
   IS_ELECTRON, IS_IOS_APP, IS_LEDGER_EXTENSION_TAB,
 } from './util/windowEnvironment';
@@ -42,10 +39,6 @@ if (IS_CAPACITOR) {
 
 if (IS_ELECTRON) {
   void initElectron();
-}
-
-if (IS_TELEGRAM_APP) {
-  void initTelegramApp();
 }
 
 initFocusScrollController();

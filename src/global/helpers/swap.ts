@@ -3,7 +3,6 @@ import { SwapInputSource, SwapState } from '../types';
 
 export function shouldAvoidSwapEstimation(global: GlobalState) {
   // For a better UX, we should leave the fees and the other swap data intact during swap confirmation (for example,
-  // to avoid switching from/to gasless mode).
   // `isEstimating` forces estimation, because by design it means that there was a swap parameter change that
   // invalidates the current swap estimation.
   return !global.currentSwap.isEstimating && (
@@ -74,7 +73,6 @@ export function getSwapEstimateResetParams(global: GlobalState) {
     priceImpact: 0,
     errorType: undefined,
     limits: undefined,
-    dieselStatus: undefined,
     dexLabel: undefined,
     dexRouterLabel: undefined,
     routes: undefined,
@@ -90,6 +88,5 @@ export function getSwapEstimateResetParams(global: GlobalState) {
     swapFeePercent: undefined,
     ourFee: undefined,
     ourFeePercent: undefined,
-    dieselFee: undefined,
   } satisfies Partial<GlobalState['currentSwap']>;
 }

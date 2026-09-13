@@ -13,7 +13,6 @@ import chains from '../chains';
 import { doesAccountHaveChain, fetchStoredAccount, fetchStoredWallet } from '../common/accounts';
 import { callBackendGet } from '../common/backend';
 import { setStakingCommonCache } from '../common/cache';
-import { publishSignedMfaRequest } from './mfa';
 import { createLocalTransactions } from './transfer';
 
 export function initStaking() {}
@@ -64,10 +63,6 @@ export async function submitStake(
     return result;
   }
 
-  if (result.mfaRequest) {
-    return publishSignedMfaRequest(accountId, chain, result.mfaRequest);
-  }
-
   if (!result.txId) {
     return { error: ApiCommonError.Unexpected };
   }
@@ -100,10 +95,6 @@ export async function submitUnstake(
   const result = await staking.submitUnstake(accountId, enclaveToken, tokenAmount, state);
   if ('error' in result) {
     return result;
-  }
-
-  if (result.mfaRequest) {
-    return publishSignedMfaRequest(accountId, chain, result.mfaRequest);
   }
 
   if (!result.txId) {
@@ -159,10 +150,6 @@ export async function submitStakingClaimOrUnlock(
 
   if ('error' in result) {
     return result;
-  }
-
-  if (result.mfaRequest) {
-    return publishSignedMfaRequest(accountId, chain, result.mfaRequest);
   }
 
   if (!result.txId) {

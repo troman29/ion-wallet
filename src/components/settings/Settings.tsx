@@ -39,7 +39,6 @@ import { MEMO_EMPTY_ARRAY } from '../../util/memo';
 import { openUrl } from '../../util/openUrl';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { captureControlledSwipe } from '../../util/swipeController';
-import useTelegramMiniAppSwipeToClose from '../../util/telegram/hooks/useTelegramMiniAppSwipeToClose';
 import { getTelegramTipsChannelUrl } from '../../util/url';
 import {
   IS_DAPP_SUPPORTED,
@@ -177,7 +176,6 @@ function Settings({
 
   const transitionRef = useRef<HTMLDivElement>();
   const currentWalletRef = useRef<HTMLDivElement>();
-  const { disableSwipeToClose, enableSwipeToClose } = useTelegramMiniAppSwipeToClose(isOpen);
   const [clicksAmount, setClicksAmount] = useState<number>(isTestnet ? AMOUNT_OF_CLICKS_FOR_DEVELOPERS_MODE : 0);
   const prevRenderingKeyRef = useStateRef(usePrevious2(renderingKey));
 
@@ -226,7 +224,6 @@ function Settings({
   useHistoryBack({
     isActive: isActive && isInitialScreen,
     onBack: handleCloseSettings,
-    shouldIgnoreForTelegram: isInsideModal,
   });
 
   useHideBottomBar(isOpen && !isInitialScreen);
@@ -385,16 +382,12 @@ function Settings({
     return captureControlledSwipe(transitionRef.current!, {
       onSwipeRightStart: () => {
         handleBackOrCloseAction();
-
-        disableSwipeToClose();
       },
       onCancel: () => {
         setSettingsState({ state: prevRenderingKeyRef.current! });
-
-        enableSwipeToClose();
       },
     });
-  }, [disableSwipeToClose, enableSwipeToClose, prevRenderingKeyRef]);
+  }, [prevRenderingKeyRef]);
 
   function renderHandleDeeplinkButton() {
     return (

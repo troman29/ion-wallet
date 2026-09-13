@@ -7,7 +7,6 @@
  */
 export * from './exploreSites';
 export * from './legacyAuth';
-export * from './mfa';
 export * from './notifications';
 export * from './staking';
 export * from './swap';

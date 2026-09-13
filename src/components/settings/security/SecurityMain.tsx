@@ -15,7 +15,6 @@ import {
   getIsTouchIdAvailable,
 } from '../../../util/biometrics';
 import buildClassName from '../../../util/buildClassName';
-import { getIsTelegramBiometricsRestricted } from '../../../util/telegram';
 import { CAN_AUTHENTICATE_WITH_BIOMETRIC_ONLY, IS_ELECTRON, IS_IOS } from '../../../util/windowEnvironment';
 
 import useLang from '../../../hooks/useLang';
@@ -30,7 +29,6 @@ import Switcher from '../../ui/Switcher';
 
 import styles from '../Settings.module.scss';
 
-import mfaImg from '../../../assets/settings/settings_2fa.svg';
 import backupImg from '../../../assets/settings/settings_backup.svg';
 import biometricsImg from '../../../assets/settings/settings_biometrics.svg';
 import faceIdImg from '../../../assets/settings/settings_face-id.svg';
@@ -44,11 +42,9 @@ interface OwnProps {
   isAllowSuspiciousActions?: boolean;
   isAutoUpdateEnabled: boolean;
   shouldShowBackup: boolean;
-  isMfaVisible?: boolean;
   onBackClick: NoneToVoidFunction;
   onChangePasswordClick: NoneToVoidFunction;
   onOpenBackupWallet: NoneToVoidFunction;
-  onOpenMfa?: NoneToVoidFunction;
   onBiometricAuthToggle: NoneToVoidFunction;
   onAppLockToggle: NoneToVoidFunction;
   onAutolockChange: (value: AutolockValueType) => void;
@@ -66,11 +62,9 @@ function SecurityMain({
   isAllowSuspiciousActions,
   isAutoUpdateEnabled,
   shouldShowBackup,
-  isMfaVisible,
   onBackClick,
   onChangePasswordClick,
   onOpenBackupWallet,
-  onOpenMfa,
   onBiometricAuthToggle,
   onAppLockToggle,
   onAutolockChange,
@@ -99,13 +93,7 @@ function SecurityMain({
     ? 'To avoid entering the passcode every time, you can use biometrics.'
     : 'To avoid entering the password every time, you can use biometrics.');
 
-  const handleBiometricToggle = useLastCallback(async () => {
-    if (getIsTelegramBiometricsRestricted()) {
-      const { getTelegramApp } = await import('../../../util/telegram');
-      getTelegramApp()?.BiometricManager.openSettings();
-      return;
-    }
-
+  const handleBiometricToggle = useLastCallback(() => {
     onBiometricAuthToggle();
   });
 
@@ -142,7 +130,7 @@ function SecurityMain({
           </div>
         )}
 
-        {(isBiometricsAvailable || IS_IOS || getIsTelegramBiometricsRestricted()) && (
+        {(isBiometricsAvailable || IS_IOS) && (
           <>
             <div className={buildClassName(styles.block, styles.settingsBlockWithDescription)}>
               <div className={styles.item} onClick={handleBiometricToggle}>
@@ -177,24 +165,6 @@ function SecurityMain({
                 : 'The password will be changed for all your wallets.')
             }
             </p>
-          </>
-        )}
-
-        {isMfaVisible && (
-          <>
-            <div className={buildClassName(styles.block, styles.settingsBlockWithDescription)}>
-              <div className={buildClassName(styles.item)} onClick={onOpenMfa}>
-                <img className={styles.menuIcon} src={mfaImg} alt={lang('2FA with Telegram')} />
-
-                <span className={styles.textWithBadge}>
-                  {lang('2FA with Telegram')}
-                  <span className={styles.badge}>TON</span>
-                </span>
-
-                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-              </div>
-            </div>
-            <p className={styles.blockDescription}>{lang('Confirm operations in Telegram as a second step.')}</p>
           </>
         )}
 

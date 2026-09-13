@@ -1,6 +1,5 @@
-import { NativeBiometric } from '@capgo/capacitor-native-biometric';
-
 import { APP_NAME, NATIVE_BIOMETRICS_SERVER, NATIVE_BIOMETRICS_USERNAME } from '../../config';
+import { NativeBiometric } from '../../util/capacitor/nativeBiometric';
 import { base64FromBuffer, bufferFromBase64 } from '../../util/casting';
 import { randomBytes } from '../../util/random';
 

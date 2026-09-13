@@ -297,7 +297,7 @@ Payload: 有效载荷
 $many_transactions: "%count% 笔转账"
 Total Amount: 总金额
 $unstaking_short: 解除质押
-Handle ton:// links: 处理 ton:// 链接
+Handle ion:// links: 处理 ion:// 链接
 Back up wallet to have full access to it: 备份钱包以完全访问它
 Consider More Secure Version: 提高钱包安全性
 Install our native app or browser extension.: 通过安装浏览器扩展程序或本机应用程序
@@ -1019,7 +1019,6 @@ No additional data.: 无附加数据。
 $in_currency: 以 %currency%
 Rename Wallet: 重命名钱包
 You can rename this wallet for easier identification.: 您可以重命名该钱包以便于识别。
-Telegram Gifts: Telegram 礼物
 Collectibles: 收藏品
 Bluetooth unavailable: 蓝牙不可用
 $bluetooth_enable_guide: 请在设备设置中开启蓝牙并允许应用访问蓝牙。
@@ -1037,7 +1036,6 @@ Multisig Wallet Detected: 检测到多重签名钱包
 $multisig_warning_text: 通过 %app_name% **提取资金**是**不可能的**。请确认这真的是您的钱包——否则可能是诈骗。%multisig_warning_link%
 $multisig_warning_link: 点击了解更多
 Multisig sending disabled: 无法从多签发送
-$try_new_air_version: 尝试原生应用体验 — 更轻量、更快速，专为您的设备打造。您可以随时切换回来。
 $accept_terms_with_link: 我同意 %link%
 use the wallet responsibly: 负责任地使用钱包
 "%app_name% Resources": "%app_name% 资源"
@@ -1743,7 +1741,6 @@ $no_activity_history: |
   任何交易记录。
 Standalone: 独立模式
 "Enter wallet name:": "输入钱包名称："
-All Telegram Gifts: 所有 Telegram 礼物
 Add Crypto: 充值加密货币
 Share QR Code: 分享二维码
 $send_only_ton: 仅向此地址发送 ION 或 ION 网络资产。发送其他代币会导致丢失。
@@ -2209,7 +2206,6 @@ Earn is not supported on this account.: 此账户不支持质押。
 Export Logs: 导出日志
 Failed to load chat: 无法加载聊天
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: MFA NFT 转移一次最多支持 4 个 NFT。
 More Details: 更多详情
 Open Telegram: 打开 Telegram
 Open addresses: 打开地址列表

@@ -35,7 +35,6 @@ import Transition from '../ui/Transition';
 import SwapBlockchain from './SwapBlockchain';
 import SwapComplete from './SwapComplete';
 import SwapInitial from './SwapInitial';
-import SwapMfaConfirm from './SwapMfaConfirm';
 import SwapPassword from './SwapPassword';
 import SwapWaitTokens from './SwapWaitTokens';
 
@@ -303,20 +302,6 @@ function SwapModal({
           >
             {renderSwapShortInfo()}
           </SwapPassword>
-        );
-      case SwapState.ConfirmMfa:
-        return (
-          <SwapMfaConfirm
-            isActive={isActive}
-            onClose={handleModalCloseWithReset}
-          >
-            {renderSwapShortInfo(
-              renderedTransactionTokenIn,
-              renderedTransactionTokenOut,
-              renderedTransactionAmountIn,
-              renderedTransactionAmountOut,
-            )}
-          </SwapMfaConfirm>
         );
       case SwapState.Complete: {
         return (

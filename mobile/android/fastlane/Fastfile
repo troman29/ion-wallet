@@ -36,21 +36,14 @@ def android_path(relative)
   File.expand_path(relative, $android_dir)
 end
 
-$variant = env_value('APP_VARIANT', 'mytonwallet').downcase
+$variant = env_value('APP_VARIANT', 'ionwallet').downcase
 $variant_config = {
-  'mytonwallet' => {
-    package_name: 'org.mytonwallet.app',
+  'ionwallet' => {
+    package_name: 'io.ice.wallet',
     firebase_app_id: '1:155616896352:android:2d448728d65b6d277eaa05',
-    beta_gradle_task: 'assembleMytonwalletBetaRelease',
-    release_gradle_task: 'bundleMytonwalletProdRelease',
-    direct_gradle_task: 'assembleMytonwalletProdRelease',
-  },
-  'gram' => {
-    package_name: 'io.gramwallet.app',
-    firebase_app_id: '1:155616896352:android:539fe0c1f3fc36fa7eaa05',
-    beta_gradle_task: 'assembleGramBetaRelease',
-    release_gradle_task: 'bundleGramProdRelease',
-    direct_gradle_task: 'assembleGramProdRelease',
+    beta_gradle_task: 'assembleIonwalletBetaRelease',
+    release_gradle_task: 'bundleIonwalletProdRelease',
+    direct_gradle_task: 'assembleIonwalletProdRelease',
   },
 }
 

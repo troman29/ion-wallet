@@ -1,4 +1,4 @@
-import { IS_CAPACITOR, IS_TELEGRAM_APP } from '../config';
+import { IS_CAPACITOR } from '../config';
 import { requestMutation } from '../lib/fasterdom/fasterdom';
 import { applyStyles } from './animation';
 import { SECOND } from './dateFormat';
@@ -6,7 +6,7 @@ import safeExec from './safeExec';
 import { throttle } from './schedulers';
 import { IS_ANDROID, IS_IOS } from './windowEnvironment';
 
-const WINDOW_RESIZE_THROTTLE_MS = IS_TELEGRAM_APP ? 25 : 250;
+const WINDOW_RESIZE_THROTTLE_MS = 250;
 const WINDOW_ORIENTATION_CHANGE_THROTTLE_MS = IS_IOS ? 350 : 250;
 const SAFE_AREA_INITIALIZATION_DELAY = SECOND;
 
@@ -107,7 +107,7 @@ export function onVirtualKeyboardClose(cb: NoneToVoidFunction) {
 }
 
 function patchVh() {
-  if (!(IS_IOS || IS_ANDROID) || IS_CAPACITOR || (IS_IOS && IS_TELEGRAM_APP)) return;
+  if (!(IS_IOS || IS_ANDROID) || IS_CAPACITOR) return;
 
   const height = window.innerHeight;
 

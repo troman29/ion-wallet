@@ -1,8 +1,6 @@
 import { useEffect } from '../lib/teact/teact';
 
-import { IS_TELEGRAM_APP } from '../config';
 import { createSignal } from '../util/signals';
-import { getTelegramAppAsync } from '../util/telegram';
 import useLastCallback from './useLastCallback';
 
 const [getIsInBackgroundLocal, setIsInBackground] = createSignal(!document.hasFocus());
@@ -16,16 +14,8 @@ function handleFocus() {
   setIsInBackground(false);
 }
 
-if (IS_TELEGRAM_APP) {
-  void getTelegramAppAsync().then((telegramApp) => {
-    telegramApp!.onEvent('activated', handleFocus);
-    telegramApp!.onEvent('deactivated', handleBlur);
-    setIsInBackground(!telegramApp?.isActive);
-  });
-} else {
-  window.addEventListener('blur', handleBlur);
-  window.addEventListener('focus', handleFocus);
-}
+window.addEventListener('blur', handleBlur);
+window.addEventListener('focus', handleFocus);
 
 export default function useBackgroundMode(
   onBlur?: AnyToVoidFunction,

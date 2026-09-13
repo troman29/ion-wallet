@@ -160,7 +160,7 @@ function splitTraceToOutputs(
         return fromAddress === walletAddress && !isIncoming;
       });
 
-      // In gasless operations, we need to skip transactions before our wallet
+      // The trace can contain transactions before our wallet.
       if (!isWalletTransactionFound) {
         _traceDetail.children.forEach(processTrace);
         return;

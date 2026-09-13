@@ -2,7 +2,6 @@ import type { URLOpenListenerEvent } from '@capacitor/app';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { BiometryType, NativeBiometric } from '@capgo/capacitor-native-biometric';
 import type { SafeAreaInsets } from 'capacitor-plugin-safe-area';
 import { SafeArea } from 'capacitor-plugin-safe-area';
 import { getGlobal } from '../../global';
@@ -14,6 +13,7 @@ import { processDeeplink } from '../deeplink';
 import { logDebug } from '../logs';
 import { IS_IOS } from '../windowEnvironment';
 import * as storageMethods from '../windowProvider/methods';
+import { BiometryType, NativeBiometric } from './nativeBiometric';
 import { initNotificationsWithGlobal } from './notifications';
 import { getCapacitorPlatform, setCapacitorPlatform } from './platform';
 

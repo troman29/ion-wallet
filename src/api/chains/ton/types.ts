@@ -11,7 +11,6 @@ import type {
 } from '../../types';
 import type { ContractType } from './constants';
 import type { AddressBook, AnyAction, TraceDetail } from './toncenter/types';
-import type { SignedMfaRequest } from './util/signer';
 
 export type ApiTonWalletVersion = 'simpleR1'
   | 'simpleR2'
@@ -130,17 +129,9 @@ export type ApiSubmitSingleFATransferResult = {
   boc: string;
   msgHash: string;
   msgHashNormalized: string;
-  paymentLink?: string;
-  withW5Gasless?: boolean;
 };
 
-export type ApiSubmitMultiTransferResult =
-  | ApiSubmitSingleFATransferResult
-  | {
-    mfaRequest: SignedMfaRequest;
-  } | {
-    error: string;
-  };
+export type ApiSubmitMultiTransferResult = ApiSubmitSingleFATransferResult | { error: string };
 
 export type ApiEmulationWithFallbackResult = (
   { isFallback: false } & ApiEmulationResult |

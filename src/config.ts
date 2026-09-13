@@ -40,13 +40,12 @@ export const IS_PACKAGED_ELECTRON = process.env.IS_PACKAGED_ELECTRON === '1';
 export const IS_CAPACITOR = process.env.IS_CAPACITOR === '1';
 export const IS_ANDROID_DIRECT = process.env.IS_ANDROID_DIRECT === '1';
 export const IS_ANDROID = IS_ANDROID_DIRECT || process.env.CAP_PLATFORM === 'android';
-export const IS_TELEGRAM_APP = process.env.IS_TELEGRAM_APP === '1';
 export const IS_HEADLESS = process.env.IS_HEADLESS === '1';
 
 export const ELECTRON_HOST_URL = 'https://dumb-host';
 export const INACTIVE_MARKER = '[Inactive]';
-export const PRODUCTION_URL = 'https://web.mywallet.io';
-export const BETA_URL = 'https://beta.mywallet.io';
+export const PRODUCTION_URL = 'https://wallet.ice.io';
+export const BETA_URL = 'https://beta.wallet.ice.io';
 // Beta desktop auto-update feed base. This is BOTH the staging gate poll base and the value baked
 // into app-update.yml by the generic electron-builder provider - the two must agree.
 export const BETA_UPDATE_URL = 'https://s3.mywallet.io/public/desktop-beta';
@@ -59,11 +58,11 @@ export const LEGACY_APP_HOSTS = ['mytonwallet.app'];
 // the wallet context (addresses included) and open it in the in-app iframe browser - where the site renders blank
 // under `X-Frame-Options: Deny`. `utm_source` attributes the migrated traffic.
 export const NEW_APP_URL = `${PRODUCTION_URL}?utm_source=legacy_web`;
-export const APP_INSTALL_URL = 'https://get.mywallet.io/';
+export const APP_INSTALL_URL = 'https://wallet.ice.io/download';
 export const APP_REPO_URL = 'https://github.com/mytonwallet-org/mytonwallet';
-export const SELF_UNIVERSAL_HOST_URL = 'https://my.tt';
-export const APP_WEBSITE_URL = 'https://mywallet.io';
-export const APP_ICON_URL = 'https://mywallet.io/icon-512x512.png';
+export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
+export const APP_WEBSITE_URL = 'https://wallet.ice.io';
+export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
 
 // GitHub workflow uses an empty string as the default value if it's not in repository variables, so we cannot define a default value here
 export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
@@ -71,7 +70,6 @@ export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
 export const BOT_USERNAME = process.env.BOT_USERNAME || 'MyTonWalletBot';
 
 export const SWAP_FEE_ADDRESS = process.env.SWAP_FEE_ADDRESS || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
-export const DIESEL_ADDRESS = process.env.DIESEL_ADDRESS || 'UQC9lQOaEHC6YASiJJ2NrKEOlITMMQmc8j0_iZEHy-4sl3tG';
 
 export const STRICTERDOM_ENABLED = DEBUG && !IS_PACKAGED_ELECTRON;
 
@@ -81,7 +79,7 @@ export const PIN_LENGTH = 4;
 
 /** If true, legacy auth data (mnemonicEncrypted, authConfig) will be removed after migration to Enclave */
 export const SHOULD_CLEANUP_LEGACY_AUTH = false;
-export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in My Wallet';
+export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in ION Wallet';
 // Keychain and Keystore address the stored secret by this pair, so changing either orphans
 // the credentials already saved on the device
 export const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';
@@ -302,7 +300,7 @@ export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
  * reads this flag.
  *
  * What stays is a plain wallet: accounts, transfers, tokens, activities, NFTs, domains and TON Connect.
- * Swap, staking, MFA, WalletConnect, the explore catalogue, portfolio history, push notifications, legacy
+ * Swap, staking, WalletConnect, the explore catalogue, portfolio history, push notifications, legacy
  * (pre-Enclave) auth, the Agent, encrypted comments and the receive-screen backgrounds all go — their
  * methods leave the dispatch table and their modules leave the bundle.
  *
@@ -330,9 +328,6 @@ export const NFT_FRAGMENT_COLLECTIONS = [
   '0:0e41dc1dc3c9067ed24248580e12b3359818d83dee0304fabcf80845eafafdb2', // Anonymous Telegram Numbers
   '0:80d78a35f955a14b679faa887ff4cd5bfc0f43b4a4eea2a7e6927f3701b273c2', // Telegram Usernames
 ];
-export const NFT_FRAGMENT_GIFT_IMAGE_TO_URL_REGEX = /^https?:\/\/nft\.(fragment\.com\/gift\/[\w-]+-\d+)\.\w+$/i;
-export const TELEGRAM_GIFTS_SUPER_COLLECTION = 'super:telegram-gifts';
-
 export const MW_CARDS_COLLECTION = 'EQCQE2L9hfwx1V8sgmF9keraHx1rNK9VmgR1ctVvINBGykyM';
 
 export const TON_DNS_RENEWAL_WARNING_DAYS = 14;
@@ -738,8 +733,3 @@ export const UNKNOWN_TOKEN = {
 } as const;
 
 export const DEFAULT_CHAIN: ApiChain = 'ton';
-
-export const MFA_BOT_URL = process.env.MFA_BOT_URL || 'https://t.me/tgmfabot/auth';
-export const MFA_API_BASE_URL = process.env.MFA_API_BASE_URL || 'https://mfa-server.mytonwallet.org';
-export const MFA_MASTER_ADDRESS = 'UQCIoyc951J4hQwboW1-Gbt0kK0z920N2y8GbNXqCzWqe2ds';
-export const MFA_EXTENSION_CODE_HASH = '701eede652337f699550cc51cb15263259aae6fc6eba976237945f142dda982d';

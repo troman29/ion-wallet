@@ -308,7 +308,7 @@ $many_transactions:
   otherValue: تحويلات %count%
 Total Amount: المبلغ الإجمالي
 $unstaking_short: غير مؤكد
-Handle ton:// links: "التعامل مع طن: // الروابط"
+Handle ion:// links: "التعامل مع طن: // الروابط"
 Back up wallet to have full access to it: قم بعمل نسخة احتياطية من المحفظة للوصول إليها بشكل كامل
 Consider More Secure Version: فكر في إصدار أكثر أمانًا
 Install our native app or browser extension.: قم بتثبيت تطبيقنا الأصلي أو امتداد المتصفح.
@@ -1011,7 +1011,6 @@ No additional data.: لا توجد بيانات إضافية.
 $in_currency: في %currency%
 Rename Wallet: إعادة تسمية المحفظة
 You can rename this wallet for easier identification.: يمكنك إعادة تسمية هذه المحفظة لتسهيل التعرف عليها.
-Telegram Gifts: هدايا Telegram
 Collectibles: المقتنيات
 Bluetooth unavailable: البلوتوث غير متوفر
 $bluetooth_enable_guide: قم بتشغيل Bluetooth في إعدادات الجهاز واسمح للتطبيق بالوصول إلى Bluetooth.
@@ -1029,7 +1028,6 @@ Multisig Wallet Detected: تم اكتشاف محفظة Multisig
 $multisig_warning_text: تتطلب هذه المحفظة توقيعات متعددة لإجراء التحويلات. **لا يمكنك سحب** أي أموال هنا باستخدام %app_name%. تأكد من أنها ملكك، وإلا فقد تكون جزءًا من عملية احتيال. %multisig_warning_link%
 $multisig_warning_link: انقر لمعرفة المزيد
 Multisig sending disabled: تم تعطيل إرسال Multisig
-$try_new_air_version: جرّب تجربة التطبيق الأصلي، فهو أخف وأسرع ومصمم لجهازك. يمكنك التبديل مرة أخرى في أي وقت.
 $accept_terms_with_link: أنا أوافق على %link%
 use the wallet responsibly: استخدم المحفظة بمسؤولية
 "%app_name% Resources": موارد %app_name%
@@ -1698,7 +1696,6 @@ My Wallet: ION Wallet
 $no_activity_history: لا يوجد سجل نشاط في هذه المحفظة حتى الآن.
 Standalone: مستقل
 "Enter wallet name:": "أدخل اسم المحفظة:"
-All Telegram Gifts: جميع هدايا Telegram
 Add Crypto: أضف التشفير
 Share QR Code: مشاركة رمز الاستجابة السريعة
 $send_only_ton: أرسل فقط الأصول المستندة إلى ION أو ION إلى هذا العنوان. إرسال الرموز الأخرى سيؤدي إلى الخسارة.
@@ -2213,7 +2210,6 @@ Earn is not supported on this account.: الستاكينغ غير مدعوم ف�
 Export Logs: تصدير السجلات
 Failed to load chat: تعذر تحميل الدردشة
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: تدعم عمليات نقل NFT باستخدام MFA ما يصل إلى 4 NFTs في المرة الواحدة.
 More Details: مزيد من التفاصيل
 Open Telegram: فتح Telegram
 Open addresses: يفتح العناوين

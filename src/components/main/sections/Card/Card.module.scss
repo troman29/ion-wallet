@@ -26,8 +26,7 @@ $signSizeDiff: 0.375rem;
   margin: 0 auto;
   padding-top: v.$cardAspectRatioPortrait;
 
-  :global(html.is-electron) &,
-  :global(html.is-mobile-telegram-app.with-safe-area-top) & {
+  :global(html.is-electron) & {
     margin-top: 0;
   }
 

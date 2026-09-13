@@ -65,7 +65,7 @@ export function generateAccountTitle(params: {
   const walletTypeConfig: Record<AccountType, { prefix: string; count: string | number }> = {
     view: { prefix: 'Wallet', count: walletCounts.view + 1 },
     hardware: { prefix: 'Ledger', count: `#${walletCounts.hardware + 1}` },
-    // Other brands fall back to the plain noun, the way Air names wallets outside My Wallet
+    // Other brands fall back to the application name.
     mnemonic: { prefix: APP_NAME, count: walletCounts.mnemonic + 1 },
   };
 

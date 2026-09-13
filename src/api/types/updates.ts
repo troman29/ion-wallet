@@ -32,7 +32,6 @@ import type {
   ApiTokenWithPrice,
   ApiWalletWithVersionInfo,
 } from './misc';
-import type { ApiTonWallet } from './storage';
 import type { ApiCheckTransactionDraftResult } from './transfer';
 
 export type ApiUpdateBalances = {
@@ -370,7 +369,6 @@ export type ApiUpdateAccount = {
   domain?: string | false;
   isMultisig?: boolean;
   derivation?: ApiDerivation;
-  mfa?: ApiTonWallet['mfa'] | false;
 };
 
 export type ApiUpdateConfig = {

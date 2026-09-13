@@ -27,10 +27,8 @@ import { isTonsiteAddress, isValidAddressOrDomain } from '../../util/isValidAddr
 import { shortenAddress } from '../../util/shortenAddress';
 import { getHostnameFromUrl } from '../../util/url';
 import {
-  getIsMobileTelegramApp,
   IS_ANDROID,
   IS_CLIPBOARDS_SUPPORTED,
-  IS_IOS,
 } from '../../util/windowEnvironment';
 
 import useDebouncedValue from '../../hooks/useDebouncedValue';
@@ -259,11 +257,6 @@ function AddressInput({
   });
 
   const handleQrScanClick = useLastCallback(() => {
-    if (IS_IOS && getIsMobileTelegramApp()) {
-      alert('Scanning is temporarily not available');
-      return;
-    }
-
     requestOpenQrScanner();
     onClose();
   });

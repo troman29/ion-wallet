@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="enclave_use_biometrics">ใช้ Biometrics</string>
-    <string name="enclave_enter_passcode_or_use_biometrics">ใส่รหัสผ่านหรือใช้ลายนิ้วมือ</string>
-    <string name="enclave_use_pin">ใช้รหัส PIN</string>
-    <string name="enclave_cancel">ยกเลิก</string>
-</resources>

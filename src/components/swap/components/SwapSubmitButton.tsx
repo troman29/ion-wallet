@@ -1,6 +1,6 @@
 import React, { memo, useRef } from '../../../lib/teact/teact';
 
-import type { DieselStatus, UserSwapToken } from '../../../global/types';
+import type { UserSwapToken } from '../../../global/types';
 import { SwapErrorType, SwapType } from '../../../global/types';
 
 import { ANIMATION_END_DELAY } from '../../../config';
@@ -27,7 +27,6 @@ interface OwnProps {
   isSending?: boolean;
   isNotEnoughNative?: boolean;
   nativeToken?: UserSwapToken;
-  dieselStatus?: DieselStatus;
   isPriceImpactError?: boolean;
   canSubmit?: boolean;
   errorType?: SwapErrorType;
@@ -49,7 +48,6 @@ function SwapSubmitButton({
   isSending,
   isNotEnoughNative,
   nativeToken,
-  dieselStatus,
   isPriceImpactError,
   canSubmit,
   errorType,
@@ -86,13 +84,7 @@ function SwapSubmitButton({
     if (isErrorExist) {
       text = errorMsgByType[errorType] as string;
     } else if (tokenIn?.tokenAddress && isNotEnoughNative) {
-      if (dieselStatus === 'not-available') {
-        text = lang('Not Enough %symbol%', { symbol: nativeToken?.symbol }) as string;
-      } else if (dieselStatus === 'pending-previous') {
-        text = lang('Awaiting Previous Fee');
-      } else if (dieselStatus === 'not-authorized') {
-        text = lang('$authorize_token_fee_capitalized', { token: tokenIn?.symbol }) as string;
-      }
+      text = lang('Not Enough %symbol%', { symbol: nativeToken?.symbol }) as string;
     }
   }
 
@@ -101,11 +93,7 @@ function SwapSubmitButton({
   const shouldShowError = !isEstimating && (
     isPriceImpactError
     || isErrorExist
-    || (nativeToken && isNotEnoughNative && (
-      !dieselStatus
-      || dieselStatus === 'not-available'
-      || dieselStatus === 'pending-previous'
-    ))
+    || (nativeToken && isNotEnoughNative)
   );
 
   const isDestructive = isTouched && shouldShowError;

@@ -32,7 +32,6 @@ import { formatCurrency } from '../../util/formatNumber';
 import { getIsViewAccountDisabled } from '../../util/isViewAccount';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { getIsLongUnstake, getUnstakeTime } from '../../util/staking';
-import { getIsMobileTelegramApp } from '../../util/windowEnvironment';
 import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
 
 import useAppTheme from '../../hooks/useAppTheme';
@@ -46,7 +45,6 @@ import { useAmountInputState } from '../ui/hooks/useAmountInputState';
 
 import AccountSwitcherPill from '../common/AccountSwitcherPill';
 import AccountSwitcherSlide from '../common/AccountSwitcherSlide';
-import MfaConfirm from '../common/MfaConfirm';
 import TransactionBanner from '../common/TransactionBanner';
 import TransferResult from '../common/TransferResult';
 import LedgerConfirmOperation from '../ledger/LedgerConfirmOperation';
@@ -80,7 +78,6 @@ const IS_OPEN_STATES = new Set([
   StakingState.UnstakePassword,
   StakingState.UnstakeConnectHardware,
   StakingState.UnstakeConfirmHardware,
-  StakingState.UnstakeConfirmMfa,
   StakingState.UnstakeComplete,
   StakingState.UnstakeSelectAccount,
 ]);
@@ -96,7 +93,6 @@ function UnstakeModal({
   baseCurrency,
   theme,
   amount,
-  mfaRequestHash,
   stakingState,
   isSensitiveDataHidden,
   accountId,
@@ -110,7 +106,6 @@ function UnstakeModal({
     submitStakingInitial,
     submitStaking,
     fetchStakingHistory,
-    updateStakingMfaRequestStatus,
     switchStakingAccount,
   } = getActions();
 
@@ -175,12 +170,6 @@ function UnstakeModal({
   });
 
   useInterval(refreshUnstakeDate, UPDATE_UNSTAKE_DATE_INTERVAL_MS);
-  useInterval(() => {
-    if (state === StakingState.UnstakeConfirmMfa && mfaRequestHash) {
-      updateStakingMfaRequestStatus();
-    }
-  }, state === StakingState.UnstakeConfirmMfa ? 1000 : undefined);
-
   const handleBackClick = useLastCallback(() => {
     if (state === StakingState.UnstakePassword) {
       setStakingScreen({ state: StakingState.UnstakeInitial });
@@ -408,7 +397,7 @@ function UnstakeModal({
   }
 
   function renderComplete(isActive: boolean) {
-    const title = getIsMobileTelegramApp() || isLongUnstake
+    const title = isLongUnstake
       ? lang('Unstake Requested')
       : lang('Unstaked');
 
@@ -464,17 +453,6 @@ function UnstakeModal({
             onClose={cancelStaking}
             onTryAgain={handleLedgerConnect}
           />
-        );
-
-      case StakingState.UnstakeConfirmMfa:
-        return (
-          <>
-            <ModalHeader onClose={cancelStaking} />
-            <MfaConfirm
-              onClose={cancelStaking}
-              mfaRequestHash={mfaRequestHash}
-            />
-          </>
         );
 
       case StakingState.UnstakeComplete:

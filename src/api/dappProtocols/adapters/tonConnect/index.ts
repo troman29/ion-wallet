@@ -82,10 +82,8 @@ import { extractKey, pick } from '../../../../util/iteratees';
 import { logDebug, logDebugError } from '../../../../util/logs';
 import { generateUuidV7 } from '../../../../util/random';
 import safeExec from '../../../../util/safeExec';
-import { pause } from '../../../../util/schedulers';
 import { getMaxMessagesInTransaction } from '../../../../util/ton/transfer';
 import { tonConnectGetDeviceInfo } from '../../../../util/tonConnectEnvironment';
-import { fetchExternalMessageBocByHashNormalized } from '../../../chains/ton/toncenter/messages';
 import { checkMultiTransactionDraft, sendSignedTransactions } from '../../../chains/ton/transfer';
 import { parsePayloadBase64 } from '../../../chains/ton/util/metadata';
 import { getIsRawAddress, getWalletPublicKey, toBase64Address, toRawAddress } from '../../../chains/ton/util/tonCore';
@@ -100,7 +98,6 @@ import {
 import { getKnownAddressInfo } from '../../../common/addresses';
 import { createDappPromise } from '../../../common/dappPromises';
 import { isUpdaterAlive } from '../../../common/helpers';
-import { getMfaRequest } from '../../../common/mfa';
 import { bytesToHex, hexToBytes } from '../../../common/utils';
 import { ApiServerError, ApiUserRejectsError } from '../../../errors';
 import { callHook } from '../../../hooks';
@@ -155,51 +152,10 @@ const NONCE_SIZE = 24;
 const MAX_CONFIRM_DURATION = 60 * 1000;
 const SHOULD_SHOW_LOADER_ON_SSE_START = IS_CAPACITOR;
 
-const MFA_POLL_INTERVAL_START_MS = 1000;
-const MFA_POLL_INTERVAL_MAX_MS = 5000;
-const MFA_CONFIRMATION_TIMEOUT_MS = 4 * 60 * 1000;
-
 type SseDapp = {
   accountId: string;
   url: string;
 } & ApiSseOptions;
-
-async function waitForMfaAndGetSentTransactions(options: {
-  accountId: string;
-  network: ApiNetwork;
-  mfaRequestHash: string;
-}): Promise<Array<{ boc: string; msgHashNormalized: string }>> {
-  const { accountId, network, mfaRequestHash } = options;
-
-  const startedAt = Date.now();
-  let pollInterval = MFA_POLL_INTERVAL_START_MS;
-
-  while (Date.now() - startedAt < MFA_CONFIRMATION_TIMEOUT_MS) {
-    const request = await getMfaRequest({ hash: mfaRequestHash }).catch(() => undefined);
-
-    const txHashNormalized = request?.isConfirmed ? request.txHash : '';
-    if (txHashNormalized) {
-      const message = await fetchExternalMessageBocByHashNormalized({
-        network,
-        msgHashNormalized: txHashNormalized,
-      }).catch(() => undefined);
-
-      if (message?.boc) {
-        return [{
-          boc: message.boc,
-          msgHashNormalized: txHashNormalized,
-        }];
-      }
-    }
-
-    // Keep polling until the mini-app submits the message and the indexer can fetch it.
-    await pause(pollInterval);
-    pollInterval = Math.min(Math.round(pollInterval * 1.25), MFA_POLL_INTERVAL_MAX_MS);
-  }
-
-  logDebug('tonConnect:mfa confirmation timeout', { accountId, mfaRequestHash });
-  throw new BadRequestError('MFA confirmation timeout');
-}
 
 /**
  * TON Connect protocol adapter.
@@ -669,13 +625,7 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
         throw new BadRequestError('The confirmation timeout has expired');
       }
 
-      const sentTransactions = Array.isArray(signedTransactions)
-        ? await sendSignedTransactions(accountId, signedTransactions)
-        : await waitForMfaAndGetSentTransactions({
-          accountId,
-          network,
-          mfaRequestHash: signedTransactions.mfaRequestHash,
-        });
+      const sentTransactions = await sendSignedTransactions(accountId, signedTransactions);
 
       if ('error' in sentTransactions) {
         throw new UnknownError(sentTransactions.error, sentTransactions.error);
@@ -685,7 +635,7 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
         throw new UnknownError('Failed transfers');
       }
 
-      if (Array.isArray(signedTransactions) && sentTransactions.length < signedTransactions.length) {
+      if (sentTransactions.length < signedTransactions.length) {
         this.onUpdate({
           type: 'showError',
           error: ApiTransactionError.PartialTransactionFailure,

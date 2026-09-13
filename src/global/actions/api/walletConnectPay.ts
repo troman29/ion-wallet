@@ -281,10 +281,6 @@ addActionHandler('submitWalletConnectPaySignTransaction', withEnclaveSessionRele
     return;
   }
 
-  if (signedTransactions && typeof signedTransactions === 'object' && 'mfaRequestHash' in signedTransactions) {
-    return;
-  }
-
   await callApi('confirmWalletConnectPaySignTransaction', promiseId, signedTransactions);
 }));
 
@@ -366,14 +362,6 @@ addActionHandler('submitWalletConnectPaySignData', withEnclaveSessionRelease(asy
   );
 
   if (!handleDappSignatureResult(signedApproveTransactions, updateCurrentWalletConnectPay)) {
-    return;
-  }
-
-  if (
-    signedApproveTransactions
-    && typeof signedApproveTransactions === 'object'
-    && 'mfaRequestHash' in signedApproveTransactions
-  ) {
     return;
   }
 

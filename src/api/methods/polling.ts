@@ -50,11 +50,7 @@ import {
 } from '../common/tokens';
 import { MINUTE, SEC } from '../constants';
 import { storage } from '../storages';
-import {
-  requireMfaMethods,
-  requireStakingMethods,
-  requireSwapMethods,
-} from './optional';
+import { requireStakingMethods, requireSwapMethods } from './optional';
 import { resolveDataPreloadPromise } from './preload';
 
 const BACKEND_INTERVAL = 30 * SEC;
@@ -62,7 +58,6 @@ const LONG_BACKEND_INTERVAL = MINUTE;
 const INCORRECT_TIME_DIFF = 30 * SEC;
 
 const ACCOUNT_CONFIG_INTERVAL = { focused: MINUTE, notFocused: 10 * MINUTE };
-const MFA_INTERVAL = MINUTE;
 
 /** Lets the balances of the several polled wallets arrive before the details of their new tokens are requested */
 const TOKEN_DETAILS_THROTTLE = 3 * SEC;
@@ -269,7 +264,6 @@ export async function setActivePollingAccount(
 
     const stopPollingFns = [
       canPollAccountConfig(account) ? setupAccountConfigPolling(accountId, account).stop : undefined,
-      !NO_EXTRA_FEATURES && doesAccountHaveChain(account, 'ton') ? setupMfaPolling(accountId).stop : undefined,
 
       ...(Object.keys(chains) as (keyof typeof chains)[]).map((chain) => {
         if (doesAccountHaveChain(account, chain)) {
@@ -359,19 +353,6 @@ function setupAccountConfigPolling(accountId: string, account: ApiAccountAny) {
         }
       } catch (err) {
         logDebugError('setupBackendAccountPolling', err);
-      }
-    },
-  });
-}
-
-function setupMfaPolling(accountId: string) {
-  return pollingLoop({
-    period: MFA_INTERVAL,
-    async poll() {
-      try {
-        await requireMfaMethods().refreshMfaStateAndNotify(accountId);
-      } catch (err) {
-        logDebugError('setupMfaPolling', err);
       }
     },
   });
@@ -481,7 +462,6 @@ function createInactiveAccountsPollingManager() {
     if (stopByAccount[accountId]) return;
 
     const stopFns = [
-      !NO_EXTRA_FEATURES && doesAccountHaveChain(account, 'ton') ? setupMfaPolling(accountId).stop : undefined,
       ...(Object.keys(chains) as (keyof typeof chains)[]).map((chain) => {
         if (doesAccountHaveChain(account, chain)) {
           return chains[chain].setupInactivePolling(accountId, account, onUpdate);

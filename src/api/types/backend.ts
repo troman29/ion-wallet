@@ -1,4 +1,3 @@
-import type { DieselStatus } from '../../global/types';
 import type { StakingPoolConfig } from '../chains/ton/contracts/JettonStaking/StakingPool';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
 import type { ApiChain, ApiCountryCode, ApiLoyaltyType, ApiTokenWithPrice } from './misc';
@@ -70,7 +69,6 @@ export type ApiSwapEstimateRequest = {
   fromAddress?: string;
   toAddress?: string;
   cexLabel?: ApiSwapCexLabel;
-  shouldTryDiesel?: boolean;
   swapVersion?: 1 | 2;
   toncoinBalance?: string;
   walletVersion?: ApiTonWalletVersion;
@@ -113,7 +111,6 @@ export type ApiSwapEstimateVariant = {
   swapFee: string;
   swapFeePercent: number;
   ourFee: string;
-  dieselFee?: string;
 };
 
 export type ApiSwapDexEstimateResponse = {
@@ -124,12 +121,10 @@ export type ApiSwapDexEstimateResponse = {
   toAmount: string;
   slippage?: number;
   fromAddress?: string;
-  shouldTryDiesel?: boolean;
   toMinAmount: string;
   impact: number;
   dexLabel?: ApiSwapDexLabel;
   dexRouterLabel?: ApiSwapDexRouterLabel;
-  dieselStatus: DieselStatus;
   other?: ApiSwapEstimateVariant[]; // Only in V2
   routes?: ApiSwapRoute[][]; // Only in V3
   // Fees
@@ -139,7 +134,6 @@ export type ApiSwapDexEstimateResponse = {
   swapFeePercent: number;
   ourFee: string;
   ourFeePercent: number;
-  dieselFee?: string;
 };
 
 export type ApiSwapCexEstimateResponse = {
@@ -177,8 +171,6 @@ export type ApiSwapBuildTransactionRequest = {
   /** Which side of the trade the user fixed, so a finished swap can still be told which one it was. */
   swapMode?: 'exact_in' | 'exact_out';
   networkFee?: string;
-  shouldTryDiesel?: boolean;
-  dieselFee?: string;
   walletVersion?: ApiTonWalletVersion;
   routes?: ApiSwapRoute[][];
   /** TON address that owns/authenticates the backend swap history row; backend auth token is checked for it. */
@@ -205,7 +197,6 @@ export type ApiSwapBuildTransferResponse = {
   chain: ApiChain;
   id: string;
   transfers?: ApiSwapTransfer[];
-  withDiesel?: boolean;
   // Solana specific
   transaction?: string;
 };
@@ -436,7 +427,6 @@ export type ApiVestingInfo = {
 
 export type ApiAccountConfig = {
   activePromotion?: ApiPromotion;
-  isMfaEnabled?: boolean;
 };
 
 export type ApiSwapVersion = 2 | 3;

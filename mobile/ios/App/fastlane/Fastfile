@@ -30,33 +30,14 @@ def build_meta_line(version)
   parts.join(' · ')
 end
 
-$variant = env_value('APP_VARIANT', 'mytonwallet').downcase
+$variant = env_value('APP_VARIANT', 'ionwallet').downcase
 $variant_config = {
-  'mytonwallet' => {
-    app_identifier: 'org.mytonwallet.app',
-    app_identifier_widget: 'org.mytonwallet.app.AirWidget',
-    app_identifier_notification: 'org.mytonwallet.app.notification-service',
-    profile_name: 'MyTonWallet Production profile',
-    profile_name_widget: 'MyTonWallet Production profile - Widget',
-    profile_name_notification: 'MyTonWallet Production profile - NSE',
-    scheme: 'MyTonWallet',
-    scheme_widget: 'AirWidgetExtension',
-    scheme_notification: 'MyTonWalletNotificationServiceExtension',
-    plist_path: '../../App/App/Resources/MyTonWallet/Info.plist',
-    testflight_group: 'MTW external group',
-  },
-  'gram' => {
-    app_identifier: 'io.gramwallet.app',
-    app_identifier_widget: 'io.gramwallet.app.widget',
-    app_identifier_notification: 'io.gramwallet.app.notification-service',
-    profile_name: 'Gram Wallet Production profile',
-    profile_name_widget: 'Gram Wallet Production profile - Widget',
-    profile_name_notification: 'Gram Wallet Production profile – NSE',
-    scheme: 'GramWallet',
-    scheme_widget: 'GramWalletWidgetExtension',
-    scheme_notification: 'GramWalletNotificationServiceExtension',
-    plist_path: '../../App/App/Resources/GramWallet/Info.plist',
-    testflight_group: 'Gram Wallet external group',
+  'ionwallet' => {
+    app_identifier: 'io.ice.wallet',
+    profile_name: 'ION Wallet Production profile',
+    scheme: 'IONWallet',
+    plist_path: '../../App/App/Resources/IONWallet/Info.plist',
+    testflight_group: 'ION Wallet external group',
   },
 }
 
@@ -86,9 +67,9 @@ puts "$variant: #{$variant}"
 puts "$app_identifier: #{$app_identifier}"
 puts "$profile_name: #{$profile_name}"
 puts "$scheme: #{$scheme}"
-puts "$app_identifier_widget: #{$app_identifier_widget}"
-puts "$profile_name_widget: #{$profile_name_widget}"
-puts "$scheme_widget: #{$scheme_widget}"
+puts "$app_identifier_widget: #{$app_identifier_widget}" if $app_identifier_widget
+puts "$profile_name_widget: #{$profile_name_widget}" if $profile_name_widget
+puts "$scheme_widget: #{$scheme_widget}" if $scheme_widget
 puts "$app_identifier_notification: #{$app_identifier_notification}"
 puts "$profile_name_notification: #{$profile_name_notification}"
 puts "$scheme_notification: #{$scheme_notification}"
@@ -253,15 +234,17 @@ platform :ios do
       code_sign_identity: "iPhone Distribution"
     )
 
-    update_code_signing_settings(
-      path: "App.xcodeproj",
-      use_automatic_signing: false,
-      profile_name: $profile_name_widget,
-      sdk: "iphoneos*",
-      team_id: $team_id,
-      targets: [$scheme_widget],
-      code_sign_identity: "iPhone Distribution"
-    )
+    if $scheme_widget
+      update_code_signing_settings(
+        path: "App.xcodeproj",
+        use_automatic_signing: false,
+        profile_name: $profile_name_widget,
+        sdk: "iphoneos*",
+        team_id: $team_id,
+        targets: [$scheme_widget],
+        code_sign_identity: "iPhone Distribution"
+      )
+    end
 
     update_code_signing_settings(
       path: "App.xcodeproj",
@@ -284,7 +267,7 @@ platform :ios do
       export_options: {
         provisioningProfiles: {
           $app_identifier => $profile_name,
-          $app_identifier_widget => $profile_name_widget,
+          **($app_identifier_widget ? { $app_identifier_widget => $profile_name_widget } : {}),
           $app_identifier_notification => $profile_name_notification,
         }
       },
@@ -334,7 +317,7 @@ platform :ios do
       export_options: {
         provisioningProfiles: {
           $app_identifier => $profile_name,
-          $app_identifier_widget => $profile_name_widget,
+          **($app_identifier_widget ? { $app_identifier_widget => $profile_name_widget } : {}),
           $app_identifier_notification => $profile_name_notification,
         }
       },

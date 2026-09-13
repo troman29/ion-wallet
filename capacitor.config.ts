@@ -2,11 +2,8 @@ import type { CapacitorConfig } from '@capacitor/cli';
 import type { KeyboardResize } from '@capacitor/keyboard';
 
 const { APP_ENV = 'production' } = process.env;
-const IS_GRAM_WALLET = ['1', 'true', 'yes'].includes(
-  (process.env.IS_GRAM_WALLET ?? '').toLowerCase(),
-);
-const APP_ID = IS_GRAM_WALLET ? 'org.mytonwallet.gram' : 'org.mytonwallet.app';
-const APP_NAME = IS_GRAM_WALLET ? 'GramWallet' : 'My Wallet';
+const APP_ID = 'io.ice.wallet';
+const APP_NAME = 'ION Wallet';
 
 const COMMON_PLUGINS = [
   '@capacitor-community/bluetooth-le',
@@ -24,7 +21,6 @@ const COMMON_PLUGINS = [
   '@capgo/capacitor-native-biometric',
   '@capgo/native-audio',
   '@mauricewegner/capacitor-navigation-bar',
-  '@mytonwallet/air-app-launcher',
   '@mytonwallet/capacitor-usb-hid',
   'capacitor-native-settings',
   'capacitor-plugin-safe-area',
@@ -38,7 +34,7 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   server: {
     androidScheme: 'https',
-    hostname: 'mytonwallet.local',
+    hostname: 'wallet.ice.io',
   },
   android: {
     path: 'mobile/android',
@@ -48,7 +44,7 @@ const config: CapacitorConfig = {
   ios: {
     path: 'mobile/ios',
     includePlugins: COMMON_PLUGINS,
-    scheme: 'MyTonWallet',
+    scheme: 'ionwallet',
     webContentsDebuggingEnabled: APP_ENV !== 'production',
   },
   plugins: {

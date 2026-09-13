@@ -18,7 +18,6 @@ import {
   type ApiNft,
   type ApiNftAttribute,
   type ApiNftMetadata,
-  type ApiNftSuperCollection,
   type ApiParsedPayload,
   ApiTokenImportError,
 } from '../../../types';
@@ -28,9 +27,7 @@ import {
   LIQUID_JETTON,
   MW_CARDS_COLLECTION,
   NFT_FRAGMENT_COLLECTIONS,
-  NFT_FRAGMENT_GIFT_IMAGE_TO_URL_REGEX,
   NOTCOIN_VOUCHERS_ADDRESS,
-  TELEGRAM_GIFTS_SUPER_COLLECTION,
   TON_DNS_ZONES,
 } from '../../../../config';
 import { fetchJsonWithProxy, getProxiedLottieUrl } from '../../../../util/fetch';
@@ -626,7 +623,7 @@ export function buildMwCardsNftMetadata(metadata: {
 export function parseTonapiioNft(
   network: ApiNetwork,
   rawNft: NftItem,
-  nftSuperCollectionsByCollectionAddress: Record<string, ApiNftSuperCollection>,
+  _nftSuperCollectionsByCollectionAddress: Record<string, unknown>,
 ): ApiNft | undefined {
   if (!rawNft.metadata) {
     return undefined;
@@ -645,7 +642,7 @@ export function parseTonapiioNft(
     } = rawNft;
 
     const {
-      name, image, description, render_type: renderType, attributes, lottie,
+      name, description, render_type: renderType, attributes, lottie,
     } = rawMetadata as {
       name?: string;
       image?: string;
@@ -674,17 +671,15 @@ export function parseTonapiioNft(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
     const isScam = hasScamLink || description === 'SCAM' || trust === 'blacklist';
     const isHidden = renderType === 'hidden' || isScam;
-    const isFragmentGift = getIsFragmentGift(nftSuperCollectionsByCollectionAddress, collectionAddress);
-    const isOnFragment = isFragmentGift || (!!collection && NFT_FRAGMENT_COLLECTIONS.includes(collection.address));
+    const isOnFragment = !!collection && NFT_FRAGMENT_COLLECTIONS.includes(collection.address);
 
     const metadata = {
       ...(Array.isArray(attributes) && {
-        // `nft.metadata.attributes[number].value` is almost always `string`, but can also be an object, which breaks on Air (https://tonscan.org/nft/EQAglL_g6q2AhMK_BT9jN1F-8jBlv2pOI30vRkPluU9kcXgV)
+        // `nft.metadata.attributes[number].value` is almost always `string`, but can also be an object (https://tonscan.org/nft/EQAglL_g6q2AhMK_BT9jN1F-8jBlv2pOI30vRkPluU9kcXgV)
         attributes: attributes.filter((a) => typeof a.value === 'string'),
       }),
       ...(isWhitelisted && lottie && { lottie: getProxiedLottieUrl(lottie) }),
       ...(collectionAddress === MW_CARDS_COLLECTION && buildMwCardsNftMetadata(rawMetadata)),
-      ...(isFragmentGift && { fragmentUrl: image!.replace(NFT_FRAGMENT_GIFT_IMAGE_TO_URL_REGEX, 'https://$1') }),
     };
 
     return omitUndefined<ApiNft>({
@@ -705,7 +700,6 @@ export function parseTonapiioNft(
         collectionAddress,
         collectionName: collection.name,
         isOnFragment,
-        isTelegramGift: isFragmentGift,
       }),
       metadata,
     });
@@ -713,15 +707,6 @@ export function parseTonapiioNft(
     logDebugError('buildNft', err);
     return undefined;
   }
-}
-
-export function getIsFragmentGift(
-  nftSuperCollectionsByCollectionAddress: Record<string, ApiNftSuperCollection>,
-  collectionAddress?: string,
-) {
-  return collectionAddress
-    ? nftSuperCollectionsByCollectionAddress[collectionAddress]?.id === TELEGRAM_GIFTS_SUPER_COLLECTION
-    : false;
 }
 
 /**

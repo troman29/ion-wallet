@@ -16,7 +16,7 @@ import { getNftSuperCollectionsByCollectionAddress } from '../../common/addresse
 import { callBackendGet } from '../../common/backend';
 import { resolveAddressByDomain } from './address';
 import { TON_GAS } from './constants';
-import { checkMultiTransactionDraft, submitMultiTransferWithMfa } from './transfer';
+import { checkMultiTransactionDraft, submitMultiTransfer } from './transfer';
 
 const LINKED_ADDRESS_VERIFICATION_CONCURRENCY = 3;
 const linkedAddressVerificationQueue = createTaskQueue(LINKED_ADDRESS_VERIFICATION_CONCURRENCY);
@@ -59,7 +59,7 @@ export async function* submitDnsRenewal(
 
     yield {
       addresses: nftBatch,
-      result: await submitMultiTransferWithMfa({ accountId, signer, messages }),
+      result: await submitMultiTransfer({ accountId, signer, messages }),
     };
   }
 }
@@ -82,7 +82,7 @@ export async function submitDnsChangeWallet(
 ) {
   const account = await fetchStoredChainAccount(accountId, 'ton');
 
-  return submitMultiTransferWithMfa({
+  return submitMultiTransfer({
     accountId,
     signer: getSigner(accountId, account, enclaveToken),
     messages: [makeChangeMessage(nftAddress, address)],

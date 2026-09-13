@@ -92,13 +92,11 @@ function SwapInitial({
     inputSource,
     limits,
     isLoading,
-    dieselStatus,
     currentCexLabel,
     currentCexProviderName,
     currentCexTermsOfUseUrl,
     currentCexPrivacyPolicyUrl,
     currentCexAmlKycPolicyUrl,
-    dieselFee,
     maxAmountFromBackend,
   },
   tokens,
@@ -118,7 +116,6 @@ function SwapInitial({
     estimateSwap,
     setSwapScreen,
     setSwapCexAddress,
-    authorizeDiesel,
     showToast,
   } = getActions();
   const lang = useLang();
@@ -159,11 +156,9 @@ function SwapInitial({
       tokenInSlug,
       networkFee,
       realNetworkFee,
-      dieselStatus,
-      dieselFee,
       nativeTokenInBalance,
     }),
-    [swapType, tokenInSlug, networkFee, realNetworkFee, dieselStatus, dieselFee, nativeTokenInBalance],
+    [swapType, tokenInSlug, networkFee, realNetworkFee, nativeTokenInBalance],
   );
 
   const maxAmountFromBackendBigint = maxAmountFromBackend && tokenIn
@@ -194,13 +189,10 @@ function SwapInitial({
     : 0n;
   const isEnoughNative = nativeTokenInBalance >= networkFeeBigint;
 
-  const isDieselNotAuthorized = explainedFee.isGasless && dieselStatus === 'not-authorized';
-
-  const canSubmit = isDieselNotAuthorized || (
+  const canSubmit = (
     (amountInBigint ?? 0n) > 0n
     && (amountOutBigint ?? 0n) > 0n
     && isEnoughBalance
-    && (!explainedFee.isGasless || dieselStatus === 'available' || dieselStatus === 'stars-fee')
     && !isEstimating
     && errorType === undefined
   );
@@ -211,8 +203,7 @@ function SwapInitial({
     : amountOut?.toString();
   const isAmountGreaterThanBalance = balanceIn !== undefined && amountInBigint !== undefined
     && amountInBigint > balanceIn;
-  const hasInsufficientFeeError = isEnoughBalance === false && !isAmountGreaterThanBalance
-    && dieselStatus !== 'not-authorized' && dieselStatus !== 'pending-previous';
+  const hasInsufficientFeeError = isEnoughBalance === false && !isAmountGreaterThanBalance;
 
   const isPriceImpactError = priceImpact >= MAX_PRICE_IMPACT_VALUE;
   const isCrosschain = swapType !== SwapType.OnChain;
@@ -350,11 +341,6 @@ function SwapInitial({
     stopEvent(e);
 
     if (!canSubmit) {
-      return;
-    }
-
-    if (isDieselNotAuthorized) {
-      authorizeDiesel();
       return;
     }
 
@@ -568,7 +554,6 @@ function SwapInitial({
             isEstimating={isEstimating}
             isNotEnoughNative={!isEnoughNative}
             nativeToken={nativeUserTokenIn}
-            dieselStatus={dieselStatus}
             isSending={isLoading}
             isPriceImpactError={isPriceImpactError}
             canSubmit={canSubmit}

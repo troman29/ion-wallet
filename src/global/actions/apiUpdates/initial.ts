@@ -6,7 +6,6 @@ import {
   MW_CARDS_COLLECTION,
   STAKING_SLUG_PREFIX,
   SWAP_API_VERSION,
-  TELEGRAM_GIFTS_SUPER_COLLECTION,
 } from '../../../config';
 import { parseAccountId } from '../../../util/account';
 import { buildCollectionByKey, omitUndefined, unique } from '../../../util/iteratees';
@@ -228,17 +227,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         }
       });
 
-      const hasTelegramGifts = update.nfts.some((nft) => nft.isTelegramGift);
-      if (hasTelegramGifts) {
-        actions.addCollectionTab({
-          collection: {
-            address: TELEGRAM_GIFTS_SUPER_COLLECTION,
-            chain: 'ton',
-          },
-          isAuto: true,
-        });
-      }
-
       setGlobal(global);
 
       // On the round's final batch: rebuild `ownedSet` from current ownership, then auto-install
@@ -316,7 +304,7 @@ addActionHandler('apiUpdate', (global, actions, update) => {
 
     case 'updateAccount': {
       const {
-        accountId, chain, domain, address, isMultisig, derivation, mfa,
+        accountId, chain, domain, address, isMultisig, derivation,
       } = update;
       const account = selectAccount(global, accountId);
       if (!account) {
@@ -355,9 +343,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       }
       if (derivation !== undefined) {
         chainUpdate.derivation = derivation;
-      }
-      if (mfa !== undefined) {
-        chainUpdate.mfa = mfa || undefined;
       }
       global = updateAccountChain(global, accountId, chain, chainUpdate);
       setGlobal(global);

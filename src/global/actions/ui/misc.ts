@@ -16,7 +16,6 @@ import {
   ANIMATION_LEVEL_MIN,
   APP_VERSION,
   BETA_URL,
-  BOT_USERNAME,
   DEBUG,
   IS_PRODUCTION,
   PRODUCTION_URL,
@@ -33,10 +32,7 @@ import { vibrate, vibrateOnSuccess } from '../../../util/haptics';
 import { omit } from '../../../util/iteratees';
 import { getTranslation } from '../../../util/langProvider';
 import { logDebugError } from '../../../util/logs';
-import { openUrl } from '../../../util/openUrl';
-import { getTelegramApp } from '../../../util/telegram';
 import {
-  getIsMobileTelegramApp,
   IS_ANDROID_APP,
   IS_ELECTRON,
 } from '../../../util/windowEnvironment';
@@ -531,16 +527,6 @@ addActionHandler('requestConfetti', (global) => {
 });
 
 addActionHandler('requestOpenQrScanner', async (global, actions) => {
-  if (getIsMobileTelegramApp()) {
-    const webApp = getTelegramApp();
-    webApp?.showScanQrPopup({}, (data) => {
-      void vibrateOnSuccess();
-      webApp.closeScanQrPopup();
-      actions.handleQrCode({ data });
-    });
-    return;
-  }
-
   let currentQrScan: GlobalState['currentQrScan'];
   if (global.currentTransfer.state === TransferState.Initial) {
     currentQrScan = { currentTransfer: global.currentTransfer };
@@ -723,13 +709,6 @@ addActionHandler('clearAccountLoading', (global) => {
 
 addActionHandler('setIsAccountLoading', (global, actions, { isLoading }) => {
   setGlobal(updateAccounts(global, { isLoading }));
-});
-
-addActionHandler('authorizeDiesel', (global) => {
-  const address = selectCurrentAccount(global)!.byChain.ton?.address;
-  if (!address) throw new Error('TON address missing');
-  setGlobal(updateCurrentAccountState(global, { isDieselAuthorizationStarted: true }));
-  void openUrl(`https://t.me/${BOT_USERNAME}?start=auth-${address}`);
 });
 
 addActionHandler('closeAnyModal', () => {

@@ -126,7 +126,7 @@ describe('parseTonDeeplink', () => {
   it.each([
     {
       name: 'parse TON transfer with binary payload',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&bin=${TEST_BIN_PAYLOAD}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -136,7 +136,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'return error for expired transfer link',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&exp=${EXPIRED_TIMESTAMP}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&exp=${EXPIRED_TIMESTAMP}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -146,7 +146,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse transfer to DNS domain name',
-      url: `ton://transfer/${TEST_DNS_NAME}?amount=1`,
+      url: `ion://transfer/${TEST_DNS_NAME}?amount=1`,
       expected: {
         toAddress: TEST_DNS_NAME,
         tokenSlug: TONCOIN.slug,
@@ -155,7 +155,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse jetton token transfer',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&jetton=${TON_USDT_MAINNET.tokenAddress}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&jetton=${TON_USDT_MAINNET.tokenAddress}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TON_USDT_MAINNET.slug,
@@ -165,7 +165,7 @@ describe('parseTonDeeplink', () => {
     {
       name: 'parse jetton transfer with binary payload',
       url:
-        `ton://transfer/${TEST_TON_ADDRESS}?amount=1&jetton=${TON_USDT_MAINNET.tokenAddress}&bin=${TEST_BIN_PAYLOAD}`,
+        `ion://transfer/${TEST_TON_ADDRESS}?amount=1&jetton=${TON_USDT_MAINNET.tokenAddress}&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TON_USDT_MAINNET.slug,
@@ -175,7 +175,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse transfer with valid expiration timestamp',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&exp=${VALID_TIMESTAMP}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&exp=${VALID_TIMESTAMP}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -184,7 +184,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse transfer with state initialization data',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -194,7 +194,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse jetton transfer with text comment',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&jetton=${TON_USDT_MAINNET.tokenAddress}&text=${TEST_COMMENT}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&jetton=${TON_USDT_MAINNET.tokenAddress}&text=${TEST_COMMENT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TON_USDT_MAINNET.slug,
@@ -204,7 +204,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse TON transfer with text comment',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -214,7 +214,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse transfer with state initialization and binary payload',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}&bin=${TEST_BIN_PAYLOAD}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -225,7 +225,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'parse transfer with state initialization and text comment',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}&text=${TEST_COMMENT}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}&text=${TEST_COMMENT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -236,7 +236,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'return error when both text and binary parameters are provided',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}&bin=${TEST_BIN_PAYLOAD}`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
         tokenSlug: TONCOIN.slug,
@@ -248,7 +248,7 @@ describe('parseTonDeeplink', () => {
     },
     {
       name: 'return error when unsupported parameters are provided',
-      url: `ton://transfer/${TEST_TON_ADDRESS}?amount=1&unsupported=value&another=param`,
+      url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&unsupported=value&another=param`,
       expected: {
         error: '$unsupported_deeplink_parameter',
       },
@@ -291,8 +291,8 @@ describe('processSelfDeeplink', () => {
   });
 
   describe('Swap command', () => {
-    it('should start swap with default parameters using mtw:// protocol', async () => {
-      const result = await processSelfDeeplink('mtw://swap');
+    it('should start swap with default parameters using ion:// protocol', async () => {
+      const result = await processSelfDeeplink('ion://swap');
 
       expect(result).toBe(true);
       expect(mockActions.startSwap).toHaveBeenCalledWith({
@@ -303,7 +303,7 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.showError).not.toHaveBeenCalled();
     });
 
-    it('should start swap with custom parameters using https://my.tt protocol', async () => {
+    it('should start swap with custom parameters using https://wallet.ice.io protocol', async () => {
       mockGlobal.swapTokenInfo = {
         bySlug: {
           'ton-usdt': { slug: 'ton-usdt' } as any,
@@ -311,7 +311,7 @@ describe('processSelfDeeplink', () => {
         },
       };
 
-      const result = await processSelfDeeplink('https://my.tt/swap?in=ton-usdt&out=toncoin&amount=50');
+      const result = await processSelfDeeplink('https://wallet.ice.io/swap?in=ton-usdt&out=toncoin&amount=50');
 
       expect(result).toBe(true);
       expect(mockActions.showError).not.toHaveBeenCalled();
@@ -330,7 +330,7 @@ describe('processSelfDeeplink', () => {
         },
       };
 
-      const result = await processSelfDeeplink('mtw://swap?in=unknown-token&out=ton-usdt');
+      const result = await processSelfDeeplink('ion://swap?in=unknown-token&out=ton-usdt');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -351,7 +351,7 @@ describe('processSelfDeeplink', () => {
         },
       };
 
-      const result = await processSelfDeeplink('mtw://swap?in=unknown-token&out=toncoin');
+      const result = await processSelfDeeplink('ion://swap?in=unknown-token&out=toncoin');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -372,7 +372,7 @@ describe('processSelfDeeplink', () => {
         },
       };
 
-      const result = await processSelfDeeplink(`mtw://swap?in=toncoin&out=unknown-token`);
+      const result = await processSelfDeeplink(`ion://swap?in=toncoin&out=unknown-token`);
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -393,7 +393,7 @@ describe('processSelfDeeplink', () => {
         },
       };
 
-      const result = await processSelfDeeplink('mtw://swap?in=unknown-in&out=unknown-out');
+      const result = await processSelfDeeplink('ion://swap?in=unknown-in&out=unknown-out');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -409,7 +409,7 @@ describe('processSelfDeeplink', () => {
     it('should show error when swap is requested in testnet', async () => {
       mockGlobal.settings.isTestnet = true;
 
-      const result = await processSelfDeeplink('mtw://swap');
+      const result = await processSelfDeeplink('ion://swap');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -421,7 +421,7 @@ describe('processSelfDeeplink', () => {
     it('should show error when swap is requested with Ledger account', async () => {
       mockGlobal.accounts!.byId['test-account-id'].type = 'hardware';
 
-      const result = await processSelfDeeplink('mtw://swap');
+      const result = await processSelfDeeplink('ion://swap');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -433,7 +433,7 @@ describe('processSelfDeeplink', () => {
 
   describe('Buy with crypto command', () => {
     it('should start swap for buying with default parameters', async () => {
-      const result = await processSelfDeeplink('mtw://buy-with-crypto');
+      const result = await processSelfDeeplink('ion://buy-with-crypto');
       const { nativeToken, buySwap: defaultBuySwap } = getChainConfig('ton');
 
       expect(result).toBe(true);
@@ -460,7 +460,7 @@ describe('processSelfDeeplink', () => {
     it('should show error when buy-with-crypto is requested in testnet', async () => {
       mockGlobal.settings.isTestnet = true;
 
-      const result = await processSelfDeeplink('mtw://buy-with-crypto');
+      const result = await processSelfDeeplink('ion://buy-with-crypto');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -471,14 +471,14 @@ describe('processSelfDeeplink', () => {
 
   describe('Stake command', () => {
     it('should start staking', async () => {
-      const result = await processSelfDeeplink('mtw://stake');
+      const result = await processSelfDeeplink('ion://stake');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalled();
     });
 
     it('should preserve the exact staking product, asset, and decimal amount', async () => {
-      const result = await processSelfDeeplink('mtw://stake?product=liquid&asset=toncoin&amount=10');
+      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=toncoin&amount=10');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalledWith({
@@ -489,7 +489,7 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should preserve an all-balance staking instruction', async () => {
-      const result = await processSelfDeeplink('mtw://stake?product=liquid&asset=toncoin&amount=all');
+      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=toncoin&amount=all');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalledWith({
@@ -500,7 +500,7 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should reject a partial or invalid exact staking target', async () => {
-      const result = await processSelfDeeplink('mtw://stake?product=liquid&asset=toncoin&amount=0');
+      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=toncoin&amount=0');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({ error: '$unsupported_deeplink_parameter' });
@@ -510,7 +510,7 @@ describe('processSelfDeeplink', () => {
     it('should show error when staking is requested in testnet', async () => {
       mockGlobal.settings.isTestnet = true;
 
-      const result = await processSelfDeeplink('https://my.tt/stake');
+      const result = await processSelfDeeplink('https://wallet.ice.io/stake');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -522,23 +522,23 @@ describe('processSelfDeeplink', () => {
 
   describe('Checkin command', () => {
     it('should open checkin URL without referral code', async () => {
-      const result = await processSelfDeeplink('mtw://r/');
+      const result = await processSelfDeeplink('ion://r/');
 
       expect(result).toBe(true);
-      expect(openUrl).toHaveBeenCalledWith('https://checkin.mytonwallet.org');
+      expect(openUrl).toHaveBeenCalledWith('https://wallet.ice.io/checkin');
     });
 
     it('should open checkin URL with referral code', async () => {
-      const result = await processSelfDeeplink('https://my.tt/r/ABC123');
+      const result = await processSelfDeeplink('https://wallet.ice.io/r/ABC123');
 
       expect(result).toBe(true);
-      expect(openUrl).toHaveBeenCalledWith('https://checkin.mytonwallet.org?r=ABC123');
+      expect(openUrl).toHaveBeenCalledWith('https://wallet.ice.io/checkin?r=ABC123');
     });
   });
 
   describe('Receive command', () => {
     it('should open receive modal', async () => {
-      const result = await processSelfDeeplink('mtw://receive');
+      const result = await processSelfDeeplink('ion://receive');
 
       expect(result).toBe(true);
       expect(mockActions.openReceiveModal).toHaveBeenCalled();
@@ -547,7 +547,7 @@ describe('processSelfDeeplink', () => {
 
   describe('Explore command', () => {
     it('should open explore tab', async () => {
-      const result = await processSelfDeeplink('mtw://explore');
+      const result = await processSelfDeeplink('ion://explore');
 
       expect(result).toBe(true);
       expect(mockActions.closeSettings).toHaveBeenCalled();
@@ -571,7 +571,7 @@ describe('processSelfDeeplink', () => {
         ],
       };
 
-      const result = await processSelfDeeplink('https://my.tt/explore/example.com');
+      const result = await processSelfDeeplink('https://wallet.ice.io/explore/example.com');
 
       expect(result).toBe(true);
       expect(mockActions.openExplore).toHaveBeenCalled();
@@ -581,7 +581,7 @@ describe('processSelfDeeplink', () => {
 
   describe('View command', () => {
     it('should open temporary view account with single address', async () => {
-      const result = await processSelfDeeplink(`mtw://view/?ton=${TEST_TON_ADDRESS}`);
+      const result = await processSelfDeeplink(`ion://view/?ton=${TEST_TON_ADDRESS}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTemporaryViewAccount).toHaveBeenCalledWith({
@@ -592,7 +592,8 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should open temporary view account with multiple addresses', async () => {
-      const result = await processSelfDeeplink(`https://my.tt/view/?ton=${TEST_TON_ADDRESS}&bnb=${TEST_EVM_ADDRESS}`);
+      const url = `https://wallet.ice.io/view/?ton=${TEST_TON_ADDRESS}&bnb=${TEST_EVM_ADDRESS}`;
+      const result = await processSelfDeeplink(url);
 
       expect(result).toBe(true);
       expect(mockActions.openTemporaryViewAccount).toHaveBeenCalled();
@@ -602,7 +603,8 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should open temporary view account with evm address expanded to all EVM chains', async () => {
-      const result = await processSelfDeeplink(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&ton=${TEST_TON_ADDRESS}`);
+      const url = `https://wallet.ice.io/view/?evm=${TEST_EVM_ADDRESS}&ton=${TEST_TON_ADDRESS}`;
+      const result = await processSelfDeeplink(url);
 
       expect(result).toBe(true);
       expect(mockActions.openTemporaryViewAccount).toHaveBeenCalled();
@@ -614,7 +616,8 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should prefer explicit EVM chain address over generic evm address', async () => {
-      const result = await processSelfDeeplink(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&bnb=${TEST_BNB_ADDRESS}`);
+      const url = `https://wallet.ice.io/view/?evm=${TEST_EVM_ADDRESS}&bnb=${TEST_BNB_ADDRESS}`;
+      const result = await processSelfDeeplink(url);
 
       expect(result).toBe(true);
       expect(mockActions.openTemporaryViewAccount).toHaveBeenCalled();
@@ -623,7 +626,7 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should show error when no valid addresses provided', async () => {
-      const result = await processSelfDeeplink('mtw://view/');
+      const result = await processSelfDeeplink('ion://view/');
 
       expect(result).toBe(false);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -632,7 +635,7 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should show error when all provided addresses are invalid', async () => {
-      const result = await processSelfDeeplink('mtw://view/?ton=invalid-address');
+      const result = await processSelfDeeplink('ion://view/?ton=invalid-address');
 
       expect(result).toBe(false);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -641,7 +644,7 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should decode URI-encoded addresses', async () => {
-      const encodedUrl = `https://my.tt/view/?ton=${encodeURIComponent(TEST_TON_ADDRESS)}`;
+      const encodedUrl = `https://wallet.ice.io/view/?ton=${encodeURIComponent(TEST_TON_ADDRESS)}`;
       const result = await processSelfDeeplink(encodedUrl);
 
       expect(result).toBe(true);
@@ -655,7 +658,7 @@ describe('processSelfDeeplink', () => {
 
   describe('Transfer command', () => {
     it('should process transfer deeplink', async () => {
-      const result = await processSelfDeeplink(`mtw://transfer/${TEST_TON_ADDRESS}?amount=1`);
+      const result = await processSelfDeeplink(`ion://transfer/${TEST_TON_ADDRESS}?amount=1`);
 
       expect(result).toBe(true);
       expect(mockActions.startTransfer).toHaveBeenCalledWith(
@@ -667,8 +670,9 @@ describe('processSelfDeeplink', () => {
       );
     });
 
-    it('should process transfer with https://my.tt protocol', async () => {
-      const result = await processSelfDeeplink(`https://my.tt/transfer/${TEST_TON_ADDRESS}?amount=5&text=Hello`);
+    it('should process transfer with https://wallet.ice.io protocol', async () => {
+      const url = `https://wallet.ice.io/transfer/${TEST_TON_ADDRESS}?amount=5&text=Hello`;
+      const result = await processSelfDeeplink(url);
 
       expect(result).toBe(true);
       expect(mockActions.startTransfer).toHaveBeenCalledWith(
@@ -685,7 +689,7 @@ describe('processSelfDeeplink', () => {
   describe('In-app browser source boundary', () => {
     it('should not start offramp transfer from in-app browser self deeplink', async () => {
       await processDeeplink(
-        `mtw://offramp?depositWalletAddress=${TEST_TON_ADDRESS}&baseCurrencyCode=ton&baseCurrencyAmount=1`,
+        `ion://offramp?depositWalletAddress=${TEST_TON_ADDRESS}&baseCurrencyCode=ton&baseCurrencyAmount=1`,
         true,
       );
 
@@ -694,7 +698,7 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should still process regular transfer deeplinks from in-app browser', async () => {
-      await processDeeplink(`ton://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}`, true);
+      await processDeeplink(`ion://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}`, true);
 
       expect(mockActions.startTransfer).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -708,18 +712,9 @@ describe('processSelfDeeplink', () => {
     });
   });
 
-  describe('Air command', () => {
-    it('should return false when not in Capacitor environment', async () => {
-      // IS_CAPACITOR is false by default in tests
-      const result = await processSelfDeeplink('mtw://air');
-
-      expect(result).toBe(false);
-    });
-  });
-
   describe('Invalid deeplinks', () => {
     it('should return false for unknown commands', async () => {
-      const result = await processSelfDeeplink('mtw://unknown-command');
+      const result = await processSelfDeeplink('ion://unknown-command');
 
       expect(result).toBe(false);
     });
@@ -735,22 +730,22 @@ describe('processSelfDeeplink', () => {
         throw new Error('Test error');
       });
 
-      const result = await processSelfDeeplink('mtw://swap');
+      const result = await processSelfDeeplink('ion://swap');
 
       expect(result).toBe(false);
     });
   });
 
   describe('Protocol variations', () => {
-    it('should handle mtw:// protocol', async () => {
-      const result = await processSelfDeeplink('mtw://stake');
+    it('should handle ion:// protocol', async () => {
+      const result = await processSelfDeeplink('ion://stake');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalled();
     });
 
-    it('should handle https://my.tt protocol', async () => {
-      const result = await processSelfDeeplink('https://my.tt/stake');
+    it('should handle https://wallet.ice.io protocol', async () => {
+      const result = await processSelfDeeplink('https://wallet.ice.io/stake');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalled();
@@ -806,7 +801,7 @@ describe('processSelfDeeplink Transaction command', () => {
   describe('TON transaction links', () => {
     it('should open transaction info for valid TON transaction', async () => {
       const txId = '+YqE7Rejq4CIwK+2UyEgdnSdPwyaYV23wFJd9T6cTxw=';
-      const result = await processSelfDeeplink(`mtw://tx/ton/${txId}`);
+      const result = await processSelfDeeplink(`ion://tx/ton/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -819,7 +814,7 @@ describe('processSelfDeeplink Transaction command', () => {
     it('should decode URL-encoded transaction ID', async () => {
       const txId = '+YqE7Rejq4CIwK+2UyEgdnSdPwyaYV23wFJd9T6cTxw=';
       const encodedTxId = encodeURIComponent(txId);
-      const result = await processSelfDeeplink(`https://my.tt/tx/ton/${encodedTxId}`);
+      const result = await processSelfDeeplink(`https://wallet.ice.io/tx/ton/${encodedTxId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -831,7 +826,7 @@ describe('processSelfDeeplink Transaction command', () => {
 
     it('should handle transaction with special characters in ID', async () => {
       const txId = 'CAm70iims+RRf4Xe7r7jIWJd9Jk03AzFmUOntM/aK7U=';
-      const result = await processSelfDeeplink(`mtw://tx/ton/${txId}`);
+      const result = await processSelfDeeplink(`ion://tx/ton/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -849,7 +844,7 @@ describe('processSelfDeeplink Transaction command', () => {
         return undefined;
       });
 
-      const result = await processSelfDeeplink('mtw://tx/ton/nonexistent-tx-id');
+      const result = await processSelfDeeplink('ion://tx/ton/nonexistent-tx-id');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({ error: '$transaction_not_found' });
@@ -860,7 +855,7 @@ describe('processSelfDeeplink Transaction command', () => {
   describe('BNB transaction links', () => {
     it('should open transaction info for valid BNB transaction', async () => {
       const txId = '0xa73f1e0711d6b75ea547791dda39655de1264c8bd92bc57a2710fc49651a988c';
-      const result = await processSelfDeeplink(`mtw://tx/bnb/${txId}`);
+      const result = await processSelfDeeplink(`ion://tx/bnb/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -870,9 +865,9 @@ describe('processSelfDeeplink Transaction command', () => {
       });
     });
 
-    it('should handle BNB transaction with https://my.tt protocol', async () => {
+    it('should handle BNB transaction with https://wallet.ice.io protocol', async () => {
       const txId = '0xe4ef5753570a58e06ee3585bb4027820cadf1e97e3b29a22871961d0c0ac6275';
-      const result = await processSelfDeeplink(`https://my.tt/tx/bnb/${txId}`);
+      const result = await processSelfDeeplink(`https://wallet.ice.io/tx/bnb/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -885,7 +880,7 @@ describe('processSelfDeeplink Transaction command', () => {
 
   describe('Invalid transaction links', () => {
     it('should return false for invalid chain and show error', async () => {
-      const result = await processSelfDeeplink('mtw://tx/banana/zzz');
+      const result = await processSelfDeeplink('ion://tx/banana/zzz');
 
       expect(result).toBe(false);
       expect(mockActions.openTransactionInfo).not.toHaveBeenCalled();
@@ -893,21 +888,21 @@ describe('processSelfDeeplink Transaction command', () => {
     });
 
     it('should return false for missing txId', async () => {
-      const result = await processSelfDeeplink('mtw://tx/ton');
+      const result = await processSelfDeeplink('ion://tx/ton');
 
       expect(result).toBe(false);
       expect(mockActions.openTransactionInfo).not.toHaveBeenCalled();
     });
 
     it('should return false for missing chain', async () => {
-      const result = await processSelfDeeplink('mtw://tx');
+      const result = await processSelfDeeplink('ion://tx');
 
       expect(result).toBe(false);
       expect(mockActions.openTransactionInfo).not.toHaveBeenCalled();
     });
 
     it('should return false for empty txId', async () => {
-      const result = await processSelfDeeplink('mtw://tx/ton/');
+      const result = await processSelfDeeplink('ion://tx/ton/');
 
       expect(result).toBe(false);
       expect(mockActions.openTransactionInfo).not.toHaveBeenCalled();
@@ -915,9 +910,9 @@ describe('processSelfDeeplink Transaction command', () => {
   });
 
   describe('Protocol variations', () => {
-    it('should handle mtw:// protocol', async () => {
+    it('should handle ion:// protocol', async () => {
       const txId = 'testTxId123';
-      const result = await processSelfDeeplink(`mtw://tx/ton/${txId}`);
+      const result = await processSelfDeeplink(`ion://tx/ton/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -927,9 +922,9 @@ describe('processSelfDeeplink Transaction command', () => {
       });
     });
 
-    it('should handle https://my.tt protocol', async () => {
+    it('should handle https://wallet.ice.io protocol', async () => {
       const txId = 'testTxId456';
-      const result = await processSelfDeeplink(`https://my.tt/tx/ton/${txId}`);
+      const result = await processSelfDeeplink(`https://wallet.ice.io/tx/ton/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
@@ -957,37 +952,37 @@ describe('getDeeplinkFromLocation', () => {
       name: 'handle swap command with query params',
       pathname: '/swap',
       search: '?in=toncoin&out=ton-usdt&amount=100',
-      expected: 'mtw://swap?in=toncoin&out=ton-usdt&amount=100',
+      expected: 'ion://swap?in=toncoin&out=ton-usdt&amount=100',
     },
     {
       name: 'handle transfer command with address',
       pathname: `/transfer/${TEST_TON_ADDRESS}`,
       search: '?amount=1&text=Hello',
-      expected: `mtw://transfer/${TEST_TON_ADDRESS}?amount=1&text=Hello`,
+      expected: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&text=Hello`,
     },
     {
       name: 'handle root path with search params only',
       pathname: '/',
       search: '?foo=bar',
-      expected: 'mtw://?foo=bar',
+      expected: 'ion://?foo=bar',
     },
     {
       name: 'handle tx command with chain and txId',
       pathname: '/tx/ton/testTxId123',
       search: '',
-      expected: 'mtw://tx/ton/testTxId123',
+      expected: 'ion://tx/ton/testTxId123',
     },
     {
       name: 'handle view command with addresses',
       pathname: '/view/',
       search: `?ton=${TEST_TON_ADDRESS}`,
-      expected: `mtw://view/?ton=${TEST_TON_ADDRESS}`,
+      expected: `ion://view/?ton=${TEST_TON_ADDRESS}`,
     },
     {
       name: 'handle receive command',
       pathname: '/receive',
       search: '',
-      expected: 'mtw://receive',
+      expected: 'ion://receive',
     },
   ])('should $name', ({ pathname, search, expected }) => {
     mockLocation(pathname, search);
@@ -1047,14 +1042,14 @@ describe('View-only mode deeplink blocking', () => {
 
   describe('processSelfDeeplink blocks signing commands', () => {
     it.each([
-      { name: 'Swap', url: 'mtw://swap' },
-      { name: 'BuyWithCrypto', url: 'mtw://buy-with-crypto' },
-      { name: 'BuyWithCard', url: 'mtw://buy-with-card' },
-      { name: 'SellOnCard', url: 'mtw://sell-on-card' },
-      { name: 'Stake', url: 'mtw://stake' },
-      { name: 'Transfer', url: `mtw://transfer/${TEST_TON_ADDRESS}?amount=1` },
-      { name: 'Offramp', url: 'mtw://offramp?depositWalletAddress=addr&baseCurrencyCode=ton' },
-      { name: 'Receive', url: 'mtw://receive' },
+      { name: 'Swap', url: 'ion://swap' },
+      { name: 'BuyWithCrypto', url: 'ion://buy-with-crypto' },
+      { name: 'BuyWithCard', url: 'ion://buy-with-card' },
+      { name: 'SellOnCard', url: 'ion://sell-on-card' },
+      { name: 'Stake', url: 'ion://stake' },
+      { name: 'Transfer', url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1` },
+      { name: 'Offramp', url: 'ion://offramp?depositWalletAddress=addr&baseCurrencyCode=ton' },
+      { name: 'Receive', url: 'ion://receive' },
     ])('should block $name in view-only mode', async ({ url }) => {
       const result = await processSelfDeeplink(url);
 
@@ -1065,20 +1060,20 @@ describe('View-only mode deeplink blocking', () => {
     });
 
     it('should not call startSwap in view-only mode', async () => {
-      await processSelfDeeplink('mtw://swap');
+      await processSelfDeeplink('ion://swap');
       expect(mockActions.startSwap).not.toHaveBeenCalled();
     });
 
     it('should not call addSavedAddress for offramp in view-only mode', async () => {
-      await processSelfDeeplink('mtw://offramp?depositWalletAddress=addr&baseCurrencyCode=ton');
+      await processSelfDeeplink('ion://offramp?depositWalletAddress=addr&baseCurrencyCode=ton');
       expect(mockActions.addSavedAddress).not.toHaveBeenCalled();
       expect(mockActions.startTransfer).not.toHaveBeenCalled();
     });
   });
 
   describe('processDeeplink blocks transfer protocols', () => {
-    it('should block ton:// transfer in view-only mode', async () => {
-      const result = await processDeeplink(`ton://transfer/${TEST_TON_ADDRESS}?amount=1`);
+    it('should block ion:// transfer in view-only mode', async () => {
+      const result = await processDeeplink(`ion://transfer/${TEST_TON_ADDRESS}?amount=1`);
 
       expect(result).toBe(false);
       expect(mockActions.showError).toHaveBeenCalledWith({
@@ -1087,8 +1082,8 @@ describe('View-only mode deeplink blocking', () => {
       expect(mockActions.startTransfer).not.toHaveBeenCalled();
     });
 
-    it('should block ton://transfer widget shortcut in view-only mode', async () => {
-      const result = await processDeeplink('ton://transfer');
+    it('should block ion://transfer widget shortcut in view-only mode', async () => {
+      const result = await processDeeplink('ion://transfer');
 
       expect(result).toBe(false);
       expect(mockActions.showError).toHaveBeenCalledWith({

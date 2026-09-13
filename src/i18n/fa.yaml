@@ -306,7 +306,7 @@ $many_transactions:
   otherValue: "%count% انتقال"
 Total Amount: مبلغ کل
 $unstaking_short: در حال برداشت استیک
-Handle ton:// links: مدیریت لینک‌های ton://
+Handle ion:// links: مدیریت لینک‌های ion://
 Back up wallet to have full access to it: برای دسترسی کامل به کیف پول، از آن پشتیبان بگیرید
 Consider More Secure Version: نسخه امن‌تر را در نظر بگیرید
 Install our native app or browser extension.: اپلیکیشن بومی یا افزونه مرورگر ما را نصب کنید.
@@ -1030,7 +1030,6 @@ No additional data.: داده اضافی وجود ندارد.
 $in_currency: به %currency%
 Rename Wallet: تغییر نام کیف پول
 You can rename this wallet for easier identification.: می‌توانید این کیف پول را برای شناسایی آسان‌تر تغییر نام دهید.
-Telegram Gifts: هدایای تلگرام
 Collectibles: کالکتیبل‌ها
 Bluetooth unavailable: بلوتوث در دسترس نیست
 $bluetooth_enable_guide: بلوتوث را در تنظیمات دستگاه روشن کنید و به اپلیکیشن اجازه دسترسی به بلوتوث را بدهید.
@@ -1048,7 +1047,6 @@ Multisig Wallet Detected: کیف پول چندامضایی شناسایی شد
 $multisig_warning_text: این کیف پول برای انجام انتقال‌ها به چند امضا نیاز دارد. شما **نمی‌توانید** هیچ دارایی را در اینجا با استفاده از %app_name% **برداشت** کنید. مطمئن شوید که متعلق به شماست — در غیر این صورت، ممکن است بخشی از یک کلاهبرداری باشد. %multisig_warning_link%
 $multisig_warning_link: برای اطلاعات بیشتر ضربه بزنید
 Multisig sending disabled: ارسال چندامضایی غیرفعال است
-$try_new_air_version: تجربه اپلیکیشن بومی را امتحان کنید — سبک‌تر، سریع‌تر و ساخته‌شده برای دستگاه شما. هر زمان بخواهید می‌توانید بازگردید.
 $accept_terms_with_link: من با %link% موافقم
 use the wallet responsibly: مسئولانه از کیف پول استفاده کنید
 "%app_name% Resources": "منابع %app_name%"
@@ -1738,7 +1736,6 @@ $no_activity_history: |
   هنوز هیچ تاریخچه فعالیتی در این کیف پول وجود ندارد.
 Standalone: مستقل
 "Enter wallet name:": "نام کیف پول را وارد کنید:"
-All Telegram Gifts: همه هدایای تلگرام
 Add Crypto: افزودن کریپتو
 Share QR Code: اشتراک‌گذاری کد QR
 $send_only_ton: تنها ION یا دارایی‌های مبتنی بر ION را به این آدرس ارسال کنید. ارسال توکن‌های دیگر منجر به از دست رفتن آن‌ها خواهد شد.
@@ -2206,7 +2203,6 @@ Earn is not supported on this account.: استیکینگ در این حساب پ
 Export Logs: خروجی گرفتن از گزارش‌ها
 Failed to load chat: بارگذاری گفتگو ناموفق بود
 Gram: ION
-MFA NFT transfers support up to 4 NFTs at a time.: انتقال‌های NFT با MFA حداکثر ۴ NFT را به‌طور همزمان پشتیبانی می‌کنند.
 More Details: جزئیات بیشتر
 Open Telegram: باز کردن تلگرام
 Open addresses: آدرس‌ها را باز می‌کند

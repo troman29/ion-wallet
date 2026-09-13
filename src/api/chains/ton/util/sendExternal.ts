@@ -1,18 +1,13 @@
 import type { Cell, Message } from '@ton/core';
 import { beginCell, external, storeMessage } from '@ton/core';
 
-import type { GaslessType } from '../transfer';
 import type { TonClient } from './TonClient';
 import type { TonWallet } from './tonCore';
-
-import { dieselSendBoc } from './diesel';
-import { dieselW5SendRequest } from './w5diesel';
 
 export async function sendExternal(
   client: TonClient,
   wallet: TonWallet,
   message: Cell,
-  gaslessType?: GaslessType,
   isWalletInitialized?: boolean,
 ) {
   const {
@@ -44,29 +39,16 @@ export async function sendExternal(
     .store(storeMessage(ext))
     .endCell();
 
-  const isW5Gasless = gaslessType === 'w5';
-
   const msgHash = cell.hash().toString('base64');
   const msgHashNormalized = getExternalMsgHashNormalized(ext);
-  const bodyMessageHash = message.hash().toString('base64');
   const boc = cell.toBoc().toString('base64');
 
-  let paymentLink;
-  if (isW5Gasless) {
-    const result = await dieselW5SendRequest(boc);
-    paymentLink = result.paymentLink;
-  } else if (gaslessType === 'diesel') {
-    const result = await dieselSendBoc(boc);
-    paymentLink = result.paymentLink;
-  } else {
-    await client.sendFile(boc);
-  }
+  await client.sendFile(boc);
 
   return {
     boc,
-    msgHash: isW5Gasless ? bodyMessageHash : msgHash,
+    msgHash,
     msgHashNormalized,
-    paymentLink,
   };
 }
 
