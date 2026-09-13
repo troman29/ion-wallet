@@ -2,7 +2,6 @@ import './dev/loadEnv';
 import 'webpack-dev-server';
 
 import WatchFilePlugin from '@mytonwallet/webpack-watch-file-plugin';
-import StatoscopeWebpackPlugin from '@statoscope/webpack-plugin';
 // @ts-ignore
 import PreloadWebpackPlugin from '@vue/preload-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -65,9 +64,7 @@ if (JSON.stringify([...fallbackRtlCodes].sort()) !== JSON.stringify([...langList
 
 const destinationDir = path.resolve(__dirname, 'dist');
 const appCommitHash = APP_COMMIT_HASH || new GitRevisionPlugin().commithash();
-const isStatoscopeBuild = process.env.IS_STATOSCOPE === '1'; // "Statoscope build" is a special mode where all the entries are used. It is used for comprehensive code size comparison in PRs.
 const isWebApp = !(IS_EXTENSION || IS_PACKAGED_ELECTRON || IS_HEADLESS || IS_CAPACITOR);
-const canUseStatoscope = isStatoscopeBuild || isWebApp;
 const cspConnectSrcExtra = APP_ENV === 'development'
   ? `http://localhost:3000 ${process.env.CSP_CONNECT_SRC_EXTRA_URL}`
   : '';
@@ -177,13 +174,6 @@ function getBuildInfo() {
 
 const defaultI18nFilename = path.resolve(__dirname, './src/i18n/en.json');
 
-const statoscopeStatsFilename = 'statoscope-build-statistics.json';
-const statoscopeStatsFileToCompare = process.env.STATOSCOPE_STATS_TO_COMPARE;
-// If a compared stat file name is the same as the main stats file name, the Statoscope UI doesn't show it.
-if (path.basename(statoscopeStatsFileToCompare || '') === statoscopeStatsFilename) {
-  throw new Error(`The STATOSCOPE_STATS_TO_COMPARE file name mustn't be ${statoscopeStatsFilename}`);
-}
-
 export default function createConfig(
   _: any,
   { mode = 'production' }: { mode: 'none' | 'development' | 'production' },
@@ -211,7 +201,7 @@ export default function createConfig(
 
     entry: {
       main: './src/index.tsx',
-      ...((IS_EXTENSION || isStatoscopeBuild) && {
+      ...(IS_EXTENSION && {
         extensionServiceWorker: {
           import: './src/extension/serviceWorker.ts',
           // Extension service worker isn't allowed to load code dynamically. This option inlines all dynamic imports.
@@ -528,40 +518,10 @@ export default function createConfig(
           });
         },
       },
-      ...(canUseStatoscope ? [new StatoscopeWebpackPlugin({
-        statsOptions: {
-          context: __dirname,
-        },
-        saveReportTo: path.join(destinationDir, 'statoscope-report.html'),
-        saveStatsTo: path.join(destinationDir, statoscopeStatsFilename),
-        normalizeStats: true,
-        open: false,
-        extensions: [new WebpackContextExtension()],
-        ...(statoscopeStatsFileToCompare ? { additionalStats: [statoscopeStatsFileToCompare] } : undefined),
-      })] : []),
     ],
 
     devtool: IS_EXTENSION ? 'cheap-source-map' : APP_ENV === 'production' && !isWebApp ? undefined : 'source-map',
   };
-}
-
-class WebpackContextExtension {
-  context: string;
-
-  constructor() {
-    this.context = '';
-  }
-
-  handleCompiler(compiler: Compiler) {
-    this.context = compiler.context;
-  }
-
-  getExtension() {
-    return {
-      descriptor: { name: 'custom-webpack-extension-context', version: '1.0.0' },
-      payload: { context: this.context },
-    };
-  }
 }
 
 /**
