@@ -32,7 +32,7 @@ function spawnWriter(args: string[]) {
 
 describe('node-file storage cross-process concurrency', () => {
   it('should preserve updates from concurrent processes writing different logical keys', async () => {
-    const storageDir = await mkdtemp(join(tmpdir(), 'mywallet-nodefile-lock-'));
+    const storageDir = await mkdtemp(join(tmpdir(), 'ionwallet-nodefile-lock-'));
     const storagePath = join(storageDir, 'storage.json');
     const startPath = join(storageDir, 'start');
     const readyAPath = join(storageDir, 'ready-a');
@@ -86,7 +86,7 @@ describe('node-file storage cross-process concurrency', () => {
   });
 
   it('should preserve concurrent same-key account updates across processes', async () => {
-    const storageDir = await mkdtemp(join(tmpdir(), 'mywallet-nodefile-same-key-'));
+    const storageDir = await mkdtemp(join(tmpdir(), 'ionwallet-nodefile-same-key-'));
     const storagePath = join(storageDir, 'storage.json');
     const startPath = join(storageDir, 'start');
     const readyAPath = join(storageDir, 'ready-a');

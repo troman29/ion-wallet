@@ -8,16 +8,16 @@
 
 ## Текущее состояние
 
-Рабочая ветка: `ion/restore-capacitor`. В ней 21 коммит поверх `master`.
+Рабочая ветка: `ion/restore-capacitor`. Статус фиксируется вместе с каждым блоком миграции.
 
 | Область | Статус | Что сделано |
 | --- | --- | --- |
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
 | Лишние продукты | ✅ | Удалены Portfolio, Multisend, MyTonWallet Cards, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. |
 | Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
-| Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs и основные deep link-схемы в ION Wallet. |
+| Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, TonConnect/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
-| ION API | ◐ | В предпросмотре подключён ION RPC v2. Полноценного совместимого v3 indexer пока нет. |
+| ION API и инфраструктура | ◐ | Runtime URL переведены на `wallet.ice.io`; в предпросмотре подключён ION RPC v2. Полноценного совместимого v3 indexer пока нет. Firebase использует безопасную заглушку до получения настоящих ключей. |
 | Agent | ◐ | Основная функция удалена, но остались следы в локализациях, CI, стилях, иконках и комментариях. |
 | iOS-проект | ◐ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install` и `cap sync ios` проходят. Осталось проверить сборку на симуляторе или устройстве. |
 
@@ -73,9 +73,11 @@
   - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
   - Для собственного TonConnect-канала используется `ion-tc://`; public links используют `wallet.ice.io`.
-- [ ] Завершить замену внешней инфраструктуры MyTonWallet.
-  - Сейчас RPC/indexer, Firebase project, npm scopes и GitHub fork-зависимости ещё содержат прежние имена, потому что это действующие внешние сервисы и зависимости.
-  - Перед релизом нужны ION Firebase-конфигурации, доменные записи/`apple-app-site-association` и `assetlinks.json` для `wallet.ice.io`, а также ION-замены backend endpoints.
+- [ ] Завершить замену внешней инфраструктуры.
+  - Runtime RPC, API, static, TonConnect bridge и public URL используют `wallet.ice.io`; переменные окружения позволяют задать реальные endpoint-ы до выпуска.
+  - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.
+  - GitHub forks и npm scopes старого проекта пока сохранены только как закреплённые источники зависимостей; их нельзя переименовывать, пока не созданы эквивалентные ION forks.
+  - Нужны доменные записи/`apple-app-site-association` и `assetlinks.json` для `wallet.ice.io`, а также рабочие ION backend endpoint-ы.
 - [ ] Проверить BNB bridge/swap-путь для ION между ION/TON и BNB Chain.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Закоммитить и перенести в репозиторий nginx-конфигурацию предпросмотра `wallet.lab.windbit.dev`, если она остаётся частью инфраструктуры проекта.
@@ -93,7 +95,7 @@
 
 - Предпросмотр на Home Lab уже умеет проксировать ION RPC v2. В нём также устранены утечка basic-auth заголовка в upstream и ошибочный SPA fallback для отсутствующих API.
 - У ION пока нет совместимого v3 indexer. Без решения этого вопроса история операций не может считаться готовой.
-- Android Capacitor был синхронизирован ранее. Для iOS синхронизация проходит до `pod install`, который на Home Lab не проверялся из-за отсутствия CocoaPods.
+- Android: `:app:assembleIonwalletProdDebug` проходит с Firebase-заглушкой. iOS: `cap sync ios --deployment` и `pod install` проходят; полноценная Xcode-сборка всё ещё требует установленный iOS runtime или подключённое устройство.
 - В текущем checkout нет файла `AGENTS.md`. Запрошенная зачистка Agent относится к остаткам функциональности в коде и CI, перечисленным выше.
 
 ## Как обновлять план

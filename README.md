@@ -19,9 +19,6 @@ Keep Ethereum, Solana, Hyperliquid, TON, TRON, Base, BNB Chain, Polygon, Avalanc
 **⚡ Instant transfers**  
 Transfers and swaps feel almost instant across supported chains, so you can send crypto and other assets in less than a second in typical conditions.
 
-**🤖 Built-in smart Agent**  
-Talk to Agent in natural language to send assets, swap, stake, open Explore, and jump to token pages. It is non-custodial by design: you always review and confirm every action.
-
 **💳 Easy on-ramp and off-ramp**  
 Buy crypto with a bank card and withdraw back to card where supported, via providers like MoonPay.
 
@@ -35,7 +32,7 @@ Follow your portfolio and net worth over time in the base fiat currency you choo
 Stake TON and other supported assets, including options like USDe, directly in the wallet.
 
 **🛡️ Industry-leading security**  
-**ION Wallet** uses advanced security practices audited by CertiK. We also run a [bug bounty on CertiK SkyShield](https://skyshield.certik.com/bounties/mytonwallet) with **$100K** in reserved funds and rewards of up to **$5,000**. The program has been live since **March 23, 2024**, and no vulnerabilities have been found to date.
+**ION Wallet** uses advanced security practices audited by CertiK. We also run a [bug bounty on CertiK SkyShield](https://wallet.ice.io) with **$100K** in reserved funds and rewards of up to **$5,000**. The program has been live since **March 23, 2024**, and no vulnerabilities have been found to date.
 
 **🧰 Hundreds of handy features**  
 Connect Ledger hardware wallets, hide balances, personalize interface, send multiple transfers at once, view other wallets, use AI plugins for OpenClaw, ChatGPT, and Claude, and much more.
@@ -62,8 +59,8 @@ Connect Ledger hardware wallets, hide balances, personalize interface, send mult
 - 🧩 [Local Setup](#local-setup)
 - 🚀 [Dev Mode](#dev-mode)
 - 🐧 [Linux](#linux-desktop-troubleshooting)
-- 🖥️ [Electron](https://github.com/mytonwallet-org/mytonwallet/blob/master/docs/electron.md)
-- 🔐 [Verifying GPG Signatures](https://github.com/mytonwallet-org/mytonwallet/blob/master/docs/gpg-check.md)
+- 🖥️ [Electron](docs/electron.md)
+- 🔐 [Verifying GPG Signatures](docs/gpg-check.md)
 - ❤️ [Support Us](#support-us)
 
 ## Requirements

@@ -144,7 +144,7 @@ function SettingsDeveloperOptions({
       showToast({ message: lang('Logs Copied'), icon: 'icon-copy' });
       onClose();
     } else {
-      const brandPrefix = 'mytonwallet';
+      const brandPrefix = 'ionwallet';
       const filename = `${brandPrefix}_logs_${new Date().toISOString()}.json`;
       await shareFile(filename, logsString, 'application/json');
     }

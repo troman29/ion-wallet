@@ -1,4 +1,4 @@
-package org.mytonwallet.plugins.nativedialog;
+package io.ice.wallet.plugins.nativedialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.JSObject;

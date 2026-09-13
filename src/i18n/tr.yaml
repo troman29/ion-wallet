@@ -1234,7 +1234,6 @@ $agent_consent_subtitle: Cüzdan yardımı, token bilgileri ve desteklenen işle
 $agent_consent_feature_answers: "%app_name%, tokenlar ve cüzdan etkinliği hakkında yanıtlar alın."
 $agent_consent_feature_actions: Gönderme, alma ve staking gibi desteklenen işlemleri hazırlayın.
 $agent_consent_feature_context: Yanıtların ilgili varlıklara ve adreslere referans verebilmesi için cüzdan bağlamını kullanın.
-$agent_consent_disclosure_text: Asistana İzin Ver düğmesine dokunarak %app_name% uygulamasının Asistan mesajlarınızı ve ilgili cüzdan bağlamınızı %app_name% Agent (agent.mywallet.io) ile üçüncü taraf AI sağlayıcımız Anthropic Claude API'ye isteklerinizi işlemek üzere göndermesine izin verirsiniz. Cüzdan bağlamı cüzdan adreslerini, bakiyeleri, tokenları, etkinliği ve istenen işlem ayrıntılarını içerebilir. Veriler yalnızca Asistan yanıtları sağlamak ve istediğiniz işlemleri hazırlamak için kullanılır.
 $agent_consent_search_disclosure_text: Web aramalarında Serper'a yalnızca arama sorguları gönderilebilir; cüzdan bağlamı ve sohbet geçmişi gönderilmez.
 $agent_consent_debug_reset_button: Asistan onay durumunu sıfırla
 $agent_consent_debug_reset_footer: Asistan sekmesi açıldığında Asistan onay ekranını tekrar gösterir.

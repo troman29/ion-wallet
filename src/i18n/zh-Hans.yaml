@@ -1228,7 +1228,6 @@ $agent_consent_subtitle: 向助手询问钱包帮助、代币信息和支持的�
 $agent_consent_feature_answers: 获取有关 %app_name%、代币和钱包活动的答案。
 $agent_consent_feature_actions: 准备支持的操作，例如发送、接收和质押。
 $agent_consent_feature_context: 使用钱包上下文，让答案可以引用相关资产和地址。
-$agent_consent_disclosure_text: 点按“允许助手”即表示你允许 %app_name% 将你的助手消息和相关钱包上下文发送给 %app_name% Agent (agent.mywallet.io) 以及我们的第三方 AI 提供商 Anthropic Claude API，以处理你的请求。钱包上下文可能包括钱包地址、余额、代币、活动和请求操作详情。数据仅用于提供助手回复并准备你请求的操作。
 $agent_consent_search_disclosure_text: 进行网页搜索时，只有搜索查询可能会发送给 Serper；钱包上下文和聊天记录不会发送。
 $agent_consent_debug_reset_button: 重置助手同意状态
 $agent_consent_debug_reset_footer: 下次打开助手标签页时再次显示助手同意屏幕。

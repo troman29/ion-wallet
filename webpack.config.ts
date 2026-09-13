@@ -102,9 +102,8 @@ const cspConnectSrcHosts = Array.from(new Set([
 
 const cspImageSrcHosts = [
   MW_STATIC_BASE_URL,
-  'https://imgproxy.mytonwallet.org',
-  'https://dns-image.mytonwallet.org',
-  'https://mytonwallet.s3.eu-central-1.amazonaws.com',
+  'https://imgproxy.wallet.ice.io',
+  'https://dns-image.wallet.ice.io',
   'https://cache.tonapi.io', // Deprecated
   'https://c.tonapi.io',
   'https://web-api.changelly.com',
@@ -118,7 +117,7 @@ const CSP = `
   script-src 'self' 'wasm-unsafe-eval' ${cspScriptSrcExtra};
   style-src 'self' https://fonts.googleapis.com/;
   img-src 'self' data: blob: https: ${cspImageSrcHosts};
-  media-src 'self' data: https://static.mytonwallet.org/;
+  media-src 'self' data: https://static.wallet.ice.io/;
   object-src 'none';
   base-uri 'none';
   font-src 'self' https://fonts.gstatic.com/;
@@ -396,7 +395,7 @@ export default function createConfig(
         csp: CSP,
         cache_key: GLOBAL_STATE_CACHE_KEY,
         title: APP_NAME,
-        homepage: 'https://mywallet.io',
+        homepage: 'https://wallet.ice.io',
         assets_prefix: '',
       }),
       new PreloadWebpackPlugin({
@@ -508,11 +507,12 @@ export default function createConfig(
             transform: (content: Buffer) => {
               const headers = content.toString().replace('{{CSP}}', `${CSP} ${cspFrameAncestors}`.trim());
 
-              // Consolidate the retiring mytonwallet.app brand host onto mywallet.io in search. The app
+              // Use wallet.ice.io as the canonical production host in search. The app
               // keeps serving on .app (installed PWAs and deeplinks pin it), so this is a canonical
-              // header rather than a redirect; the same site also answers on web(.beta).mywallet.io, which
-              // self-canonicalizes.
-              const canonical = APP_ENV === 'staging' ? 'https://web-beta.mywallet.io/' : 'https://web.mywallet.io/';
+              // header rather than a redirect; web hosts use their own canonical URLs.
+              const canonical = APP_ENV === 'staging'
+                ? 'https://web-beta.wallet.ice.io/'
+                : 'https://web.wallet.ice.io/';
               return headers.replace('{{CANONICAL}}', canonical);
             },
           },

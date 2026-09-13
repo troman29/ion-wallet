@@ -6,5 +6,5 @@ module.exports = ({ initialSize, bundleSize, validation, prNumber, diffReportUrl
 
 **🕵️ Validation errors:** ${validation.total > 0 ? validation.total : '✅'}
 
-Full Statoscope report could be found [here️](https://deploy-preview-${prNumber}--mytonwallet-e5kxpi8iga.netlify.app/statoscope-report.html) / [diff](${diffReportUrl})
+Full Statoscope report could be found [here️](https://deploy-preview-${prNumber}--ionwallet-e5kxpi8iga.netlify.app/statoscope-report.html) / [diff](${diffReportUrl})
 `;

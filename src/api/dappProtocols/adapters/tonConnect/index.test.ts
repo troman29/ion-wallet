@@ -135,7 +135,7 @@ describe('TonConnectAdapter.connect', () => {
     });
     mockTonConnectGetDeviceInfo.mockReturnValue({
       platform: 'browser',
-      appName: 'MyTonWallet',
+      appName: 'IONWallet',
     });
     mockGetWalletStateInit.mockImplementation((wallet) => ({
       toBoc: () => Buffer.from(`state:${wallet.address}`),

@@ -44,7 +44,7 @@ describe('getIsNftUnverified', () => {
     expect(getIsNftUnverified({ collectionAddress: NFT_FRAGMENT_COLLECTIONS[0], isOnFragment: true })).toBeUndefined();
   });
 
-  it('skips MyTonWallet cards', () => {
+  it('skips IONWallet cards', () => {
     expect(getIsNftUnverified({ collectionAddress: MW_CARDS_COLLECTION })).toBeUndefined();
   });
 

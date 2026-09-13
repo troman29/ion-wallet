@@ -1237,7 +1237,6 @@ $agent_consent_subtitle: Pide ayuda al Agente sobre la billetera, información d
 $agent_consent_feature_answers: Obtén respuestas sobre %app_name%, tokens y actividad de la billetera.
 $agent_consent_feature_actions: Prepara acciones compatibles como enviar, recibir y hacer staking.
 $agent_consent_feature_context: Usa el contexto de la billetera para que las respuestas puedan hacer referencia a activos y direcciones relevantes.
-$agent_consent_disclosure_text: Al tocar Permitir al Agente, permites que %app_name% envíe tus mensajes del Agente y el contexto relevante de la billetera a %app_name% Agent (agent.mywallet.io) y a Anthropic Claude API, nuestro proveedor externo de IA, para procesar tus solicitudes. El contexto de la billetera puede incluir direcciones de billetera, saldos, tokens, actividad y detalles de las acciones solicitadas. Los datos se usan solo para proporcionar respuestas del Agente y preparar las acciones que solicites.
 $agent_consent_search_disclosure_text: Para las búsquedas web, solo se pueden enviar consultas de búsqueda a Serper; no se envían el contexto de la billetera ni el historial del chat.
 $agent_consent_debug_reset_button: Restablecer estado de consentimiento del Agente
 $agent_consent_debug_reset_footer: Muestra de nuevo la pantalla de consentimiento del Agente al abrir la pestaña Agente.

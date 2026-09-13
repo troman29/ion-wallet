@@ -603,8 +603,8 @@ describe('parseToncenterNft', () => {
     expect(nft?.metadata.attributes).toBeUndefined();
   });
 
-  it('serves MyTonWallet cards from our own CDN, since Toncenter cannot proxy them', () => {
-    const CARD_IMAGE = 'https://static.mytonwallet.org/cards/v4/preview/178-02a4c.jpg';
+  it('serves IONWallet cards from our own CDN, since Toncenter cannot proxy them', () => {
+    const CARD_IMAGE = 'https://static.wallet.ice.io/cards/v4/preview/178-02a4c.jpg';
     const nft = parseNftFromTransfer(
       { image: CARD_IMAGE, extra: { _image_medium: PROXIED_MEDIUM } },
       RAW_MW_CARDS_COLLECTION,
@@ -661,7 +661,7 @@ describe('parseToncenterNft', () => {
       expect(nft).toMatchObject({
         name: 'mywallet.ton',
         collectionName: 'TON DNS Domains',
-        image: 'https://dns-image.mytonwallet.org/img?d=mywallet',
+        image: 'https://dns-image.wallet.ice.io/img?d=mywallet',
       });
     });
 
@@ -991,7 +991,7 @@ describe('parseTrace + calculateActivityDetails', () => {
 });
 
 /**
- * `traceResponse` is the JSON from the https://toncenter.mytonwallet.org/api/v3/traces?... response body
+ * `traceResponse` is the JSON from the https://toncenter.wallet.ice.io/api/v3/traces?... response body
  */
 function parseTraceResponse(network: ApiNetwork, walletAddress: string, traceResponse: TracesResponse) {
   return parseTrace({

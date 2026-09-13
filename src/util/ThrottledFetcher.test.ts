@@ -38,7 +38,7 @@ describe('ThrottledFetcher', () => {
         },
       } as unknown as Response);
 
-    const url = 'https://toncenter-testnet.mytonwallet.org/api/v2/jsonRPC';
+    const url = 'https://toncenter-testnet.wallet.ice.io/api/v2/jsonRPC';
 
     await fetchWithThrottledProvider(url, { method: 'POST' });
 

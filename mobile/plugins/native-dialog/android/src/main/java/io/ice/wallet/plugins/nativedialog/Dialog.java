@@ -1,4 +1,4 @@
-package org.mytonwallet.plugins.nativedialog;
+package io.ice.wallet.plugins.nativedialog;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -228,7 +228,7 @@ jobs:
       - name: Point staging electron-builder at the beta feed
         if: env.PUBLISH_REPO == ''
         run: |
-          yq -i '.publish = {"provider":"generic","url":"https://s3.mywallet.io/public/desktop-beta"} | .mac.artifactName = "IONWallet-${version}-${arch}.${ext}"' src/electron/config.yml
+          yq -i '.publish = {"provider":"generic","url":"https://s3.wallet.ice.io/public/desktop-beta"} | .mac.artifactName = "IONWallet-${version}-${arch}.${ext}"' src/electron/config.yml
           echo "Effective staging publish/artifactName:"
           yq '.publish, .mac.artifactName' src/electron/config.yml
 
@@ -864,7 +864,7 @@ jobs:
     needs: detect-changes
     runs-on: macos-26
     environment: production
-    # The mytonwallet variant takes 30+ minutes on slow runners; v26.7.1 needed 3 attempts against a 30-minute cap
+    # The ionwallet variant takes 30+ minutes on slow runners; v26.7.1 needed 3 attempts against a 30-minute cap
     timeout-minutes: 45
     if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' || (startsWith(github.ref, 'refs/heads/release/') && vars.PUBLISH_REPO == '')) && needs.detect-changes.outputs.android-only != 'true' && needs.detect-changes.outputs.ios-variants != '[]'
     strategy:

@@ -1,7 +1,7 @@
 import nacl from 'tweetnacl';
 
-// `MyTonWallet` is here for backward compatibility reasons
-export const BACKEND_AUTH_SIGN_MESSAGE = new TextEncoder().encode('MyTonWallet_AuthToken_n6i0k4w8pb');
+// A distinct ION Wallet namespace prevents signatures from being reused by the previous backend.
+export const BACKEND_AUTH_SIGN_MESSAGE = new TextEncoder().encode('IONWallet_AuthToken_n6i0k4w8pb');
 
 /**
  * Builds the backend auth token: the wallet key's Ed25519 signature over a constant message.

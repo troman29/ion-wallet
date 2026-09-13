@@ -4,7 +4,6 @@ import { withGlobal } from '../../global';
 import {
   APP_INSTALL_URL,
   APP_NAME,
-  APP_REPO_URL,
   IS_ANDROID_DIRECT,
   IS_FIREFOX_EXTENSION,
 } from '../../config';
@@ -67,8 +66,8 @@ export default memo(withGlobal((global): StateProps => ({
 function getUrl(appVersion?: string) {
   if (IS_ANDROID_DIRECT) {
     return appVersion
-      ? `${APP_REPO_URL}/releases/download/v${encodeURIComponent(appVersion || '')}/${encodeURIComponent(APP_NAME)}.apk`
-      : 'https://github.com/mytonwallet-org/mytonwallet/releases/latest';
+      ? `${APP_INSTALL_URL}IONWallet-${encodeURIComponent(appVersion)}.apk`
+      : `${APP_INSTALL_URL}android`;
   }
 
   if (IS_ANDROID_APP) {

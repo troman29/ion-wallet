@@ -23,7 +23,7 @@ if [ "$IS_GRAM_WALLET" = "1" ]; then
    # retention keys on brand alone; platform axes must not gate it, or a Gram build off the else-branch would
    # strip its own gramWallet/ dir that runtime code (QR logo, manifest) needs.
    FILES_TO_REMOVE+=("apple-touch-icon.png" "browserconfig.xml" "favicon.ico" "icon*" "logo.svg" "mstile*" "site.webmanifest" "assets/ui/about.txt")
-   sed -i.bak 's#https://get.mytonwallet.io#https://get.gramwallet.io#' "$DESTINATION/_redirects" && rm -f "$DESTINATION/_redirects.bak"
+   sed -i.bak 's#https://get.wallet.ice.io#https://get.gramwallet.io#' "$DESTINATION/_redirects" && rm -f "$DESTINATION/_redirects.bak"
 else
    FILES_TO_REMOVE+=("gramWallet*" "gram_wallet*" "assets/")
 fi

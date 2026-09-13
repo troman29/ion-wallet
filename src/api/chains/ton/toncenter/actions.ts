@@ -1051,7 +1051,7 @@ export function parseToncenterNft(
     const isHidden = extra?.render_type === 'hidden' || isScam;
     const isOnFragment = NFT_FRAGMENT_COLLECTIONS.includes(rawCollectionAddress!);
     const isMwCard = collectionAddress === MW_CARDS_COLLECTION;
-    // A non-string `value` breaks the UI, and the MyTonWallet card traits are read as strings too
+    // A non-string `value` breaks the UI, and the IONWallet card traits are read as strings too
     const attributes = Array.isArray(extra?.attributes)
       ? extra.attributes.filter((attribute): attribute is ApiNftAttribute => typeof attribute?.value === 'string')
       : undefined;

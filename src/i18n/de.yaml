@@ -1239,7 +1239,6 @@ $agent_consent_subtitle: Fragen Sie Agent nach Wallet-Hilfe, Token-Informationen
 $agent_consent_feature_answers: Erhalten Sie Antworten zu %app_name%, Token und Wallet-Aktivitäten.
 $agent_consent_feature_actions: Bereiten Sie unterstützte Aktionen wie Senden, Empfangen und Staking vor.
 $agent_consent_feature_context: Verwenden Sie Wallet-Kontext, damit Antworten relevante Assets und Adressen berücksichtigen können.
-$agent_consent_disclosure_text: Wenn Sie auf „Agent erlauben“ tippen, erlauben Sie %app_name%, Ihre Agent-Nachrichten und relevanten Wallet-Kontext an %app_name% Agent (agent.mywallet.io) und die Anthropic Claude API, unseren externen KI-Anbieter, zu senden, um Ihre Anfragen zu verarbeiten. Der Wallet-Kontext kann Wallet-Adressen, Guthaben, Token, Aktivität und Details zu angeforderten Aktionen enthalten. Daten werden nur verwendet, um Agent-Antworten bereitzustellen und von Ihnen angeforderte Aktionen vorzubereiten.
 $agent_consent_search_disclosure_text: Bei Websuchen können nur Suchanfragen an Serper gesendet werden; Wallet-Kontext und Chatverlauf werden nicht gesendet.
 $agent_consent_debug_reset_button: Agent-Zustimmung zurücksetzen
 $agent_consent_debug_reset_footer: Zeigt den Agent-Zustimmungsbildschirm beim Öffnen des Agent-Tabs erneut an.

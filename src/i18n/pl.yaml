@@ -1257,7 +1257,6 @@ $agent_consent_subtitle: Zapytaj Agenta o pomoc z portfelem, informacje o tokena
 $agent_consent_feature_answers: Uzyskaj odpowiedzi dotyczące %app_name%, tokenów i aktywności portfela.
 $agent_consent_feature_actions: Przygotuj obsługiwane działania, takie jak wysyłanie, odbieranie i staking.
 $agent_consent_feature_context: Użyj kontekstu portfela, aby odpowiedzi mogły odnosić się do odpowiednich aktywów i adresów.
-$agent_consent_disclosure_text: Stukając Zezwól Agentowi, zezwalasz %app_name% na wysyłanie wiadomości Agenta i odpowiedniego kontekstu portfela do %app_name% Agent (agent.mywallet.io) oraz Anthropic Claude API, naszego zewnętrznego dostawcy AI, w celu przetwarzania Twoich żądań. Kontekst portfela może obejmować adresy portfela, salda, tokeny, aktywność i szczegóły żądanych działań. Dane są używane wyłącznie do dostarczania odpowiedzi Agenta i przygotowywania działań, o które prosisz.
 $agent_consent_search_disclosure_text: W przypadku wyszukiwania w internecie do Serper mogą być wysyłane wyłącznie zapytania; kontekst portfela i historia czatu nie są wysyłane.
 $agent_consent_debug_reset_button: Zresetuj zgodę dla Agenta
 $agent_consent_debug_reset_footer: Ponownie pokazuje ekran zgody dla Agenta podczas otwierania karty Agent.

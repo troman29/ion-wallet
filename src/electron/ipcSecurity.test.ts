@@ -2,7 +2,7 @@ jest.mock('./utils', () => ({
   checkIsWebContentsUrlAllowed: jest.fn(),
   mainWindow: {
     webContents: {
-      getURL: jest.fn(() => 'https://web.mywallet.io'),
+      getURL: jest.fn(() => 'https://web.wallet.ice.io'),
     },
   },
 }));
@@ -23,11 +23,11 @@ describe('ipcSecurity', () => {
     const isAllowed = checkIsIpcSenderAllowed({ sender: mainWindow.webContents } as any);
 
     expect(isAllowed).toBe(true);
-    expect(checkIsWebContentsUrlAllowedMock).toHaveBeenCalledWith('https://web.mywallet.io');
+    expect(checkIsWebContentsUrlAllowedMock).toHaveBeenCalledWith('https://web.wallet.ice.io');
   });
 
   it('rejects IPC from another sender before checking URL allowlist', () => {
-    const sender = { getURL: jest.fn(() => 'https://web.mywallet.io') };
+    const sender = { getURL: jest.fn(() => 'https://web.wallet.ice.io') };
 
     const isAllowed = checkIsIpcSenderAllowed({ sender } as any);
 
