@@ -319,6 +319,15 @@ export const LANG_LIST: LangItem[] = [{
 export const NO_TON = process.env.NO_TON === '1';
 export const NO_EVM = process.env.NO_EVM === '1';
 /**
+ * Drops the unconfirmed activities from the TON activity feed: the poller stops asking the indexer for
+ * them, so a transfer shows up only once it is finalized.
+ *
+ * The ION indexer serves no `/pendingActions` and has no update socket, which are the two sources of
+ * such activities; without this flag every poll spends a failing request on them. Clear it once the
+ * indexer gains either.
+ */
+export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
+/**
  * Standalone SDK builds, embedded by third-party apps that ship their own UI, so nothing in the UI layer
  * reads this flag.
  *
