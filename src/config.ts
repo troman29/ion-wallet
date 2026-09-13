@@ -227,8 +227,6 @@ export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {
   ru: 'https://mywallet.io/ru/blog/',
 };
 
-export const MULTISEND_DAPP_URL = process.env.MULTISEND_DAPP_URL || 'https://multisend.mywallet.io/';
-
 export const NFT_MARKETPLACE_URL = 'https://opensea.io/';
 export const NFT_MARKETPLACE_TITLE = NFT_MARKETPLACE_TITLES.opensea;
 export const TON_NFT_MARKETPLACE_URL = 'https://getgems.io/';

@@ -496,7 +496,6 @@ export default function createConfig(
         PROXY_API_BASE_URL: '',
         WALLET_CONNECT_PROJECT_ID: '',
         WALLET_CONNECT_PAY_APP_ID: '',
-        MULTISEND_DAPP_URL: '',
         MFA_BOT_URL: '',
         MFA_API_BASE_URL: '',
         MFA_MASTER_ADDRESS: '',
