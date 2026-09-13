@@ -46,8 +46,7 @@ describe('getOnRampBaselineCurrencies', () => {
 
   it('keeps RUB on TON only', () => {
     expect(getOnRampBaselineCurrencies('ton')).toEqual(['USD', 'EUR', 'RUB']);
-    expect(getOnRampBaselineCurrencies('tron')).toEqual(['USD', 'EUR']);
-    expect(getOnRampBaselineCurrencies('solana')).toEqual(['USD', 'EUR']);
+    expect(getOnRampBaselineCurrencies('bnb')).toEqual(['USD', 'EUR']);
   });
 });
 
@@ -58,8 +57,7 @@ describe('getOffRampBaselineCurrencies', () => {
 
   it('keeps RUB on TON only', () => {
     expect(getOffRampBaselineCurrencies('ton')).toEqual(['EUR', 'RUB']);
-    expect(getOffRampBaselineCurrencies('tron')).toEqual(['EUR']);
-    expect(getOffRampBaselineCurrencies('ethereum')).toEqual(['EUR']);
+    expect(getOffRampBaselineCurrencies('bnb')).toEqual(['EUR']);
   });
 });
 
@@ -127,9 +125,9 @@ describe('hasEffectiveRampCurrency', () => {
 // container re-render; the chain-specific variants have to be the same object every time
 describe('baseline currency references', () => {
   it('hands back one stable array per chain', () => {
-    expect(getOnRampBaselineCurrencies('tron')).toBe(getOnRampBaselineCurrencies('tron'));
+    expect(getOnRampBaselineCurrencies('bnb')).toBe(getOnRampBaselineCurrencies('bnb'));
     expect(getOnRampBaselineCurrencies('ton')).toBe(getOnRampBaselineCurrencies());
-    expect(getOffRampBaselineCurrencies('tron')).toBe(getOffRampBaselineCurrencies('ethereum'));
+    expect(getOffRampBaselineCurrencies('bnb')).toBe(getOffRampBaselineCurrencies('bnb'));
     expect(getOffRampBaselineCurrencies('ton')).toBe(getOffRampBaselineCurrencies());
   });
 });

@@ -1,4 +1,4 @@
-import type { ApiBalanceBySlug } from '../../types';
+import type { ApiBalanceBySlug, ApiChain } from '../../types';
 import type { StampedBalances } from '../../types';
 import type {
   AbstractWebsocketClient,
@@ -287,7 +287,7 @@ describe('BalanceStream freshness guard', () => {
    */
   function createSocketScenario(
     fetchBalancesCb: jest.Mock,
-    chain: 'ton' | 'polygon' = 'ton',
+    chain: ApiChain = 'ton',
     address = 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ',
   ): SocketScenario {
     let onBalanceUpdate: BalanceUpdateCallback | undefined;
@@ -364,25 +364,23 @@ describe('BalanceStream freshness guard', () => {
     stream.destroy();
   });
 
-  it('applies a socket delta on a non-standard EVM chain once the stream has its own balances', async () => {
+  it('applies a socket delta on an EVM chain once the stream has its own balances', async () => {
     jest.useFakeTimers();
 
-    // A polygon stream (standard chain: ethereum) that has completed its own poll. The
-    // cross-chain assets map is untouched, as for an account whose ethereum stream is inactive.
-    const firstPoll = Deferred.resolved<StampedBalances>({ balances: { pol: 100n } });
+    const firstPoll = Deferred.resolved<StampedBalances>({ balances: { bnb: 100n } });
     const fetchBalances = jest.fn().mockReturnValueOnce(firstPoll.promise);
 
     const { stream, deliverNativeSocketBalance, updateEvents } = createSocketScenario(
-      fetchBalances, 'polygon', '0x41835810168DEaf5B36c2F38c0fE24a87675Ae49',
+      fetchBalances, 'bnb', '0x41835810168DEaf5B36c2F38c0fE24a87675Ae49',
     );
     stream.start();
 
     await jest.advanceTimersByTimeAsync(1);
-    expect(updateEvents.at(-1)).toEqual({ balances: { pol: 100n }, source: 'poll' });
+    expect(updateEvents.at(-1)).toEqual({ balances: { bnb: 100n }, source: 'poll' });
 
     await deliverNativeSocketBalance(555n);
 
-    expect(updateEvents.at(-1)).toEqual({ balances: { pol: 555n }, source: 'socket' });
+    expect(updateEvents.at(-1)).toEqual({ balances: { bnb: 555n }, source: 'socket' });
 
     stream.destroy();
   });

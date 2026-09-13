@@ -140,7 +140,7 @@ describe('fetchAccountAssets in-flight coalescing', () => {
     mockedFetch.mockReturnValue(deferred.promise as unknown as Promise<Response>);
 
     const sendUpdateTokens = jest.fn();
-    const singleChain = fetchAccountAssets('ethereum', NETWORK, ADDRESS_A, sendUpdateTokens);
+    const singleChain = fetchAccountAssets('bnb', NETWORK, ADDRESS_A, sendUpdateTokens);
     const crossChain = fetchCrosschainAccountAssets(NETWORK, ADDRESS_A, sendUpdateTokens);
 
     deferred.resolve(positionsResponse(EMPTY_RESPONSE));

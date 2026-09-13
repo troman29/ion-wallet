@@ -19,7 +19,7 @@ function setNegVerdictCacheFlag(enabled: boolean) {
   setBackendConfigCache({ isNegVerdictCacheEnabled: enabled } as unknown as ApiBackendConfig);
 }
 
-const BASE = { chain: 'ethereum', network: 'mainnet', limit: 50 } as const;
+const BASE = { chain: 'bnb', network: 'mainnet', limit: 50 } as const;
 
 describe('fetchEvmTxs untrackable handling', () => {
   beforeEach(() => {

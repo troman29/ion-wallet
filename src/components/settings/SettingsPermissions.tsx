@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useMemo, useState } from '../../lib/teact/teact';
 import { withGlobal } from '../../global';
 
-import type { ApiChain } from '../../api/types';
 import type { ApiTonPlugin, ApiWalletPermission } from '../../api/types/misc';
 import type { Account } from '../../global/types';
 import type { TabWithProperties } from '../ui/TabList';
@@ -12,7 +11,7 @@ import {
   selectCurrentAccountId,
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
-import { getChainConfig, getChainTitle, getOrderedAccountChains } from '../../util/chain';
+import { getChainTitle, getIsEvmChain, getOrderedAccountChains } from '../../util/chain';
 import { toDecimal } from '../../util/decimals';
 import { formatCurrency } from '../../util/formatNumber';
 import { shortenAddress } from '../../util/shortenAddress';
@@ -37,8 +36,6 @@ import receiveStyles from '../receive/ReceiveModal.module.scss';
 import styles from './Settings.module.scss';
 import permStyles from './SettingsPermissions.module.scss';
 
-const EXCLUDED_CHAINS = new Set<ApiChain>(['solana', 'tron']);
-
 interface OwnProps {
   isActive: boolean;
   onBackClick: NoneToVoidFunction;
@@ -59,7 +56,7 @@ function SettingsPermissions({
 
   const permissionChains = useMemo(() => {
     if (!byChain) return [];
-    return getOrderedAccountChains(byChain).filter((chain) => !EXCLUDED_CHAINS.has(chain));
+    return getOrderedAccountChains(byChain);
   }, [byChain]);
 
   const tabs = useMemo<TabWithProperties[]>(() => permissionChains.map((chain, index) => ({
@@ -115,9 +112,7 @@ function SettingsPermissions({
   useEffect(() => {
     if (!accountId || !activeChain) return;
 
-    const chainStandard = getChainConfig(activeChain).chainStandard;
-
-    if (chainStandard === 'ethereum') {
+    if (getIsEvmChain(activeChain)) {
       setPermissions(undefined);
       setIsLoading(true);
       void callApi('fetchWalletPermissions', accountId, activeChain).then((result) => {
@@ -245,9 +240,7 @@ function SettingsPermissions({
   }
 
   function renderChainContent(isContentActive: boolean) {
-    const chainStandard = getChainConfig(activeChain).chainStandard;
-
-    if (chainStandard === 'ethereum') {
+    if (getIsEvmChain(activeChain)) {
       if (isLoading || permissions === undefined) {
         return renderLoadingState();
       }

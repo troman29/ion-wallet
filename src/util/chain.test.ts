@@ -7,7 +7,7 @@ describe('getIsSupportedChain', () => {
 
     try {
       expect(getIsSupportedChain('ton')).toBe(true);
-      expect(getIsSupportedChain('robinhood')).toBe(true);
+      expect(getIsSupportedChain('bnb')).toBe(true);
       expect(getIsSupportedChain('bitcoin')).toBe(false);
       expect(getIsSupportedChain('constructor')).toBe(false);
     } finally {

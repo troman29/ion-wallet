@@ -1,9 +1,9 @@
 import type { GlobalState } from '../types';
 
 import {
-  BASE,
-  ETH,
-  ETH_USDT_MAINNET,
+  BNB,
+  BSC_USDT_MAINNET,
+  TON_USDT_MAINNET,
   TONCOIN,
 } from '../../config';
 import { INITIAL_STATE } from '../initialState';
@@ -22,8 +22,7 @@ function buildGlobal(): GlobalState {
           type: 'mnemonic',
           byChain: {
             ton: { address: 'ton-address' },
-            ethereum: { address: '0x0000000000000000000000000000000000000000' },
-            base: { address: '0x0000000000000000000000000000000000000000' },
+            bnb: { address: '0x0000000000000000000000000000000000000000' },
           },
         },
       },
@@ -33,7 +32,7 @@ function buildGlobal(): GlobalState {
         balances: {
           bySlug: {
             [TONCOIN.slug]: 1_000_000_000n,
-            [ETH.slug]: 2_000_000_000_000_000_000n,
+            [BNB.slug]: 2_000_000_000_000_000_000n,
           },
         },
       },
@@ -41,9 +40,9 @@ function buildGlobal(): GlobalState {
     tokenInfo: {
       bySlug: {
         [TONCOIN.slug]: { ...TONCOIN, priceUsd: 5, percentChange24h: 0 },
-        [ETH.slug]: { ...ETH, priceUsd: 3000, percentChange24h: 100 },
-        [BASE.slug]: { ...BASE, priceUsd: 3000, percentChange24h: 100 },
-        [ETH_USDT_MAINNET.slug]: { ...ETH_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
+        [BNB.slug]: { ...BNB, priceUsd: 3000, percentChange24h: 100 },
+        [BSC_USDT_MAINNET.slug]: { ...BSC_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
+        [TON_USDT_MAINNET.slug]: { ...TON_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
       },
     },
     swapTokenInfo: {
@@ -62,15 +61,15 @@ describe('selectTokenInfoUserTokens', () => {
 
     expect(Object.keys(tokensBySlug)).toEqual(expect.arrayContaining([
       TONCOIN.slug,
-      ETH.slug,
-      BASE.slug,
-      ETH_USDT_MAINNET.slug,
+      BNB.slug,
+      BSC_USDT_MAINNET.slug,
+      TON_USDT_MAINNET.slug,
     ]));
-    expect(tokensBySlug[BASE.slug].chain).toBe('base');
-    expect(tokensBySlug[BASE.slug].amount).toBe(0n);
-    expect(tokensBySlug[ETH.slug].amount).toBe(2_000_000_000_000_000_000n);
-    expect(tokensBySlug[ETH.slug].price).toBe(3000);
-    expect(tokensBySlug[ETH.slug].change24h).toBe(1);
+    expect(tokensBySlug[BSC_USDT_MAINNET.slug].chain).toBe('bnb');
+    expect(tokensBySlug[BSC_USDT_MAINNET.slug].amount).toBe(0n);
+    expect(tokensBySlug[BNB.slug].amount).toBe(2_000_000_000_000_000_000n);
+    expect(tokensBySlug[BNB.slug].price).toBe(3000);
+    expect(tokensBySlug[BNB.slug].change24h).toBe(1);
   });
 
   it('memoizes the list across unrelated global changes', () => {

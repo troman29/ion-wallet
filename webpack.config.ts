@@ -501,8 +501,6 @@ export default function createConfig(
         MFA_MASTER_ADDRESS: '',
         MFA_EXTENSION_CODE_HASH: '',
         NO_TON: '0',
-        NO_TRON: '0',
-        NO_SOLANA: '0',
         NO_EVM: '0',
         NO_EXTRA_FEATURES: '0',
         NO_LEDGER: '0',

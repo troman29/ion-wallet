@@ -1,9 +1,6 @@
 import type { ApiNetwork } from '../api/types';
 import type { Account } from '../global/types';
-import {
-  EVM_CHAIN_IDS,
-  SOLANA_CHAIN_IDS,
-} from '../api/dappProtocols/adapters/walletConnect/types';
+import { EVM_CHAIN_IDS } from '../api/dappProtocols/adapters/walletConnect/types';
 
 import isViewAccount from './isViewAccount';
 
@@ -28,17 +25,9 @@ export function doesAccountSupportWalletConnectPay(account: Account, network: Ap
     return false;
   }
 
-  for (const entry of Object.values(EVM_CHAIN_IDS)) {
-    if (entry.network === network && account.byChain[entry.chain]?.address) {
-      return true;
-    }
-  }
-
-  if (!account.byChain.solana?.address) {
-    return false;
-  }
-
-  return Object.values(SOLANA_CHAIN_IDS).some((entry) => entry.network === network);
+  return Object.values(EVM_CHAIN_IDS).some(
+    (entry) => entry.network === network && Boolean(account.byChain[entry.chain]?.address),
+  );
 }
 
 /** WalletConnect Pay collect pages allow embedding only from https parents (`frame-ancestors https:`). */

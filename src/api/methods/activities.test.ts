@@ -168,17 +168,17 @@ describe('fetchPastActivities', () => {
   it('uses the cross-chain activity source for account-wide EVM history', async () => {
     fetchStoredAccount.mockResolvedValue({
       type: 'mnemonic',
-      byChain: { ethereum: { address: '0x-test', publicKey: '00' } },
+      byChain: { bnb: { address: '0x-test', publicKey: '00' } },
     });
 
     await fetchPastActivities('0-mainnet', 50);
 
-    expect(chains.ethereum.crosschain.fetchCrossChainActivitySlice).toHaveBeenCalledWith({
+    expect(chains.bnb.crosschain.fetchCrossChainActivitySlice).toHaveBeenCalledWith({
       accountId: '0-mainnet',
       limit: 50,
       toTimestamp: undefined,
     });
-    expect(chains.ethereum.fetchActivitySlice).not.toHaveBeenCalled();
+    expect(chains.bnb.fetchActivitySlice).not.toHaveBeenCalled();
   });
 
   it('uses the chain-specific activity source for token history', async () => {

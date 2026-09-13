@@ -1,5 +1,4 @@
 import type { NftItem } from 'tonapi-sdk-js';
-import type { Base58EncodedBytes } from '@solana/kit';
 
 import type { LangCode } from '../../global/types';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
@@ -10,17 +9,8 @@ import type { ApiParsedPayload } from './payload';
 import type { ApiSseOptions, ApiWalletByChain } from './storage';
 import type { ApiUpdatingStatus } from './updates';
 
-export type EVMChain =
-  'ethereum'
-  | 'base'
-  | 'bnb'
-  | 'polygon'
-  | 'arbitrum'
-  | 'monad'
-  | 'avalanche'
-  | 'hyperliquid'
-  | 'robinhood';
-export type ApiChain = 'ton' | 'tron' | 'solana' | EVMChain;
+export type EVMChain = 'bnb';
+export type ApiChain = 'ton' | EVMChain;
 export type ApiNetwork = 'mainnet' | 'testnet';
 export type ApiLedgerDriver = 'HID' | 'USB';
 export type ApiTokenType = 'lp_token' | 'legacy_token' | 'token_2022';
@@ -346,7 +336,8 @@ export interface ApiSignedTransfer<T extends DappProtocolType = any> {
     seqno: number;
   } : {
     signature: string;
-    signedTx: Base58EncodedBytes;
+    /** The serialized signed transaction, in the chain's own encoding (hex for EVM) */
+    signedTx: string;
   };
 }
 

@@ -2,12 +2,10 @@ import type { ApiBaseCurrency, ApiChain } from '../../api/types';
 import type { GlobalState } from '../types';
 
 import {
-  SOLANA,
-  SOLANA_USDT_MAINNET,
+  BNB,
+  BSC_USDT_MAINNET,
   TON_USDT_MAINNET,
   TONCOIN,
-  TRC20_USDT_MAINNET,
-  TRX,
 } from '../../config';
 import { CHAIN_ORDER, getChainConfig } from '../../util/chain';
 import { INITIAL_STATE } from '../initialState';
@@ -20,16 +18,13 @@ import {
 
 const ACCOUNT_ID = 'test-account';
 const TON_ADDRESS = 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S';
-const TRON_ADDRESS = 'TBvwz11CKdgBymTtF7Q6UfhGWQyEqNrodT';
-const SOL_ADDRESS = '35YT7tt9edJbroEKaC3T3XY4cLNWKtVzmyTEfW8LHPEA';
+const BNB_ADDRESS = '0x9429C8Af1089efD542b313156Af2DFA35c7e0a81';
 
 const TOKEN_INFO: Record<string, object> = {
   [TONCOIN.slug]: { ...TONCOIN, priceUsd: 5, percentChange24h: 0 },
   [TON_USDT_MAINNET.slug]: { ...TON_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
-  [TRX.slug]: { ...TRX, priceUsd: 0.1, percentChange24h: 0 },
-  [TRC20_USDT_MAINNET.slug]: { ...TRC20_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
-  [SOLANA.slug]: { ...SOLANA, priceUsd: 150, percentChange24h: 0 },
-  [SOLANA_USDT_MAINNET.slug]: { ...SOLANA_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
+  [BNB.slug]: { ...BNB, priceUsd: 600, percentChange24h: 0 },
+  [BSC_USDT_MAINNET.slug]: { ...BSC_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
 };
 
 /**
@@ -47,8 +42,7 @@ function buildGlobal(
   for (const slug of Object.keys(balances)) {
     const info = TOKEN_INFO[slug] as any;
     if (info?.chain === 'ton') byChain.ton = { address: TON_ADDRESS };
-    if (info?.chain === 'tron') byChain.tron = { address: TRON_ADDRESS };
-    if (info?.chain === 'solana') byChain.solana = { address: SOL_ADDRESS };
+    if (info?.chain === 'bnb') byChain.bnb = { address: BNB_ADDRESS };
   }
 
   const tokenInfoBySlug = Object.fromEntries(
@@ -96,55 +90,35 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
     it('returns the current token when the address belongs to the current chain (TON → TON)', () => {
       const global = buildGlobal(TONCOIN.slug, TON_ADDRESS, {
         [TONCOIN.slug]: 1_000_000_000n,
-        [TRX.slug]: 1_000_000n,
+        [BNB.slug]: 1_000_000_000_000_000_000n,
       });
 
       expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
     });
 
-    it('returns the current token when the address belongs to the current chain (TRON → TRON)', () => {
-      const global = buildGlobal(TRX.slug, TRON_ADDRESS, {
-        [TRX.slug]: 1_000_000n,
+    it('returns the current token when the address belongs to the current chain (BNB → BNB)', () => {
+      const global = buildGlobal(BNB.slug, BNB_ADDRESS, {
+        [BNB.slug]: 1_000_000_000_000_000_000n,
         [TONCOIN.slug]: 1_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TRX.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BNB.slug);
     });
   });
 
-  describe('chain switching from TON', () => {
-    it('selects TRX when pasting a TRON address while Toncoin is current', () => {
-      const global = buildGlobal(TONCOIN.slug, TRON_ADDRESS, {
+  describe('chain switching', () => {
+    it('selects BNB when pasting a BNB address while Toncoin is current', () => {
+      const global = buildGlobal(TONCOIN.slug, BNB_ADDRESS, {
         [TONCOIN.slug]: 1_000_000_000n,
-        [TRX.slug]: 1_000_000n,
+        [BNB.slug]: 1_000_000_000_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TRX.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BNB.slug);
     });
 
-    it('selects SOL when pasting a Solana address while Toncoin is current', () => {
-      const global = buildGlobal(TONCOIN.slug, SOL_ADDRESS, {
-        [TONCOIN.slug]: 1_000_000_000n,
-        [SOLANA.slug]: 1_000_000_000n,
-      });
-
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(SOLANA.slug);
-    });
-  });
-
-  describe('chain switching from Solana (Bug 1: TRON address overlaps Solana regex)', () => {
-    it('selects TRX when pasting a TRON address while SOL is current', () => {
-      const global = buildGlobal(SOLANA.slug, TRON_ADDRESS, {
-        [SOLANA.slug]: 1_000_000_000n,
-        [TRX.slug]: 1_000_000n,
-      });
-
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TRX.slug);
-    });
-
-    it('selects Toncoin when pasting a TON address while SOL is current', () => {
-      const global = buildGlobal(SOLANA.slug, TON_ADDRESS, {
-        [SOLANA.slug]: 1_000_000_000n,
+    it('selects Toncoin when pasting a TON address while BNB is current', () => {
+      const global = buildGlobal(BNB.slug, TON_ADDRESS, {
+        [BNB.slug]: 1_000_000_000_000_000_000n,
         [TONCOIN.slug]: 1_000_000_000n,
       });
 
@@ -153,9 +127,9 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
   });
 
   describe('native → native token preference', () => {
-    it('prefers Toncoin (native) over TON USDT when TRX is current', () => {
-      const global = buildGlobal(TRX.slug, TON_ADDRESS, {
-        [TRX.slug]: 1_000_000n,
+    it('prefers Toncoin (native) over TON USDT when BNB is current', () => {
+      const global = buildGlobal(BNB.slug, TON_ADDRESS, {
+        [BNB.slug]: 1_000_000_000_000_000_000n,
         [TONCOIN.slug]: 100_000_000n,
         [TON_USDT_MAINNET.slug]: 1_000_000_000n,
       });
@@ -163,55 +137,35 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
       expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
     });
 
-    it('prefers Toncoin (native) over TON USDT when SOL is current', () => {
-      const global = buildGlobal(SOLANA.slug, TON_ADDRESS, {
-        [SOLANA.slug]: 1_000_000_000n,
-        [TONCOIN.slug]: 100_000_000n,
-        [TON_USDT_MAINNET.slug]: 1_000_000_000n,
-      });
-
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
-    });
-
-    it('prefers TRX (native) over TRON USDT when Toncoin is current', () => {
-      const global = buildGlobal(TONCOIN.slug, TRON_ADDRESS, {
+    it('prefers BNB (native) over BSC USDT when Toncoin is current', () => {
+      const global = buildGlobal(TONCOIN.slug, BNB_ADDRESS, {
         [TONCOIN.slug]: 1_000_000_000n,
-        [TRX.slug]: 1_000_000n,
-        [TRC20_USDT_MAINNET.slug]: 1_000_000_000n,
+        [BNB.slug]: 1_000_000_000_000_000_000n,
+        [BSC_USDT_MAINNET.slug]: 1_000_000_000_000_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TRX.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BNB.slug);
     });
   });
 
-  describe('USDT cross-chain preference (Bug 2)', () => {
-    it('prefers TRON USDT over TRX when TON USDT is current', () => {
-      const global = buildGlobal(TON_USDT_MAINNET.slug, TRON_ADDRESS, {
+  describe('USDT cross-chain preference', () => {
+    it('prefers BSC USDT over BNB when TON USDT is current', () => {
+      const global = buildGlobal(TON_USDT_MAINNET.slug, BNB_ADDRESS, {
         [TON_USDT_MAINNET.slug]: 1_000_000n,
-        [TRC20_USDT_MAINNET.slug]: 1_000_000n,
-        [TRX.slug]: 1_000_000_000n,
+        [BSC_USDT_MAINNET.slug]: 1_000_000n,
+        [BNB.slug]: 1_000_000_000_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TRC20_USDT_MAINNET.slug);
-    });
-
-    it('prefers Solana USDT over SOL when TON USDT is current', () => {
-      const global = buildGlobal(TON_USDT_MAINNET.slug, SOL_ADDRESS, {
-        [TON_USDT_MAINNET.slug]: 1_000_000n,
-        [SOLANA_USDT_MAINNET.slug]: 1_000_000n,
-        [SOLANA.slug]: 1_000_000_000n,
-      });
-
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(SOLANA_USDT_MAINNET.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BSC_USDT_MAINNET.slug);
     });
 
     it('falls back to the max-balance token when the target chain has no USDT in the account', () => {
-      const global = buildGlobal(TON_USDT_MAINNET.slug, SOL_ADDRESS, {
+      const global = buildGlobal(TON_USDT_MAINNET.slug, BNB_ADDRESS, {
         [TON_USDT_MAINNET.slug]: 1_000_000n,
-        [SOLANA.slug]: 1_000_000_000n,
+        [BNB.slug]: 1_000_000_000_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(SOLANA.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BNB.slug);
     });
   });
 });
@@ -248,14 +202,14 @@ describe('ramp availability by allowed currencies', () => {
   it('hides the off-ramp outside TON when RUB is the only allowed currency', () => {
     const global = buildRestrictedGlobal(['RUB']);
 
-    expect(selectIsOffRampAllowed(global, 'tron')).toBe(false);
+    expect(selectIsOffRampAllowed(global, 'bnb')).toBe(false);
     expect(selectIsOffRampAllowed(global, 'ton')).toBe(true);
   });
 
-  it('hides the on-ramp on Tron when RUB is the only allowed currency', () => {
+  it('hides the on-ramp outside TON when RUB is the only allowed currency', () => {
     const global = buildRestrictedGlobal(['RUB']);
 
-    expect(selectIsOnRampAllowed(global, 'tron')).toBe(false);
+    expect(selectIsOnRampAllowed(global, 'bnb')).toBe(false);
     expect(selectIsOnRampAllowed(global, 'ton')).toBe(true);
   });
 
@@ -270,16 +224,9 @@ describe('ramp availability by allowed currencies', () => {
   }
 
   describe('selectDefaultOnRampChain', () => {
-    it('skips a leading chain the ramp does not serve', () => {
-      expect(selectDefaultOnRampChain(buildAccountGlobal(['hyperliquid', 'robinhood']))).toBe('robinhood');
-    });
-
-    it('keeps the account order among the chains it does serve', () => {
-      expect(selectDefaultOnRampChain(buildAccountGlobal(['solana', 'ton']))).toBe('ton');
-    });
-
-    it('answers nothing when the account has nothing to buy on', () => {
-      expect(selectDefaultOnRampChain(buildAccountGlobal(['hyperliquid']))).toBeUndefined();
+    it('answers in the app chain order, not in the order the account stores its chains', () => {
+      expect(selectDefaultOnRampChain(buildAccountGlobal(['bnb', 'ton']))).toBe('ton');
+      expect(selectDefaultOnRampChain(buildAccountGlobal(['bnb']))).toBe('bnb');
     });
 
     // The Buy button reads this and nothing else, so an answer the ramp then refuses would be a button

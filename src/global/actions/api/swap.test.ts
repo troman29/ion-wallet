@@ -2,7 +2,7 @@ import type { GlobalState } from '../../types';
 import type { SwapEstimateResult } from './swap';
 import { SwapInputSource, SwapState } from '../../types';
 
-import { TON_USDE, TONCOIN, TRX } from '../../../config';
+import { BNB, TON_USDE, TONCOIN } from '../../../config';
 import { getGlobal, setGlobal } from '../../index';
 import { clearCurrentSwap, updateCurrentSwap } from '../../reducers';
 import { buildSwapBuildRequest, estimateSwapConcurrently, shouldBlockUnsupportedNearIntentsMemo } from './swap';
@@ -51,13 +51,13 @@ describe('estimateSwapConcurrently', () => {
     + ' if the form input changes during estimation', async () => {
     const input1 = {
       tokenInSlug: TONCOIN.slug,
-      tokenOutSlug: TRX.slug,
+      tokenOutSlug: BNB.slug,
       amountIn: '1',
       inputSource: SwapInputSource.In,
     } satisfies Partial<GlobalState['currentSwap']>;
     const input2 = {
       ...input1,
-      tokenInSlug: TRX.slug,
+      tokenInSlug: BNB.slug,
       tokenOutSlug: TONCOIN.slug,
     } satisfies Partial<GlobalState['currentSwap']>;
 
@@ -151,18 +151,16 @@ describe('estimateSwapConcurrently', () => {
 
 describe('shouldBlockUnsupportedNearIntentsMemo', () => {
   it('blocks Near Intents memo deposits for EVM-like source chains', () => {
-    expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'base', 'memo')).toBe(true);
-    expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'ethereum', 'memo')).toBe(true);
+    expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'bnb', 'memo')).toBe(true);
   });
 
   it('allows Near Intents memo deposits only for memo-capable wallet transfer chains', () => {
     expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'ton', 'memo')).toBe(false);
-    expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'solana', 'memo')).toBe(false);
   });
 
   it('does not block memo-less Near Intents or non-Near CEX results', () => {
-    expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'base')).toBe(false);
-    expect(shouldBlockUnsupportedNearIntentsMemo('changelly', 'base', 'memo')).toBe(false);
+    expect(shouldBlockUnsupportedNearIntentsMemo('near-intents', 'bnb')).toBe(false);
+    expect(shouldBlockUnsupportedNearIntentsMemo('changelly', 'bnb', 'memo')).toBe(false);
   });
 });
 

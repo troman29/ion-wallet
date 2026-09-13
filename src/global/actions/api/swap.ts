@@ -499,7 +499,7 @@ export function shouldBlockUnsupportedNearIntentsMemo(
 }
 
 function canAutoSubmitCexMemo(chain: string) {
-  return chain === 'ton' || chain === 'solana';
+  return chain === 'ton';
 }
 
 addActionHandler('updateSwapMfaRequestStatus', async (global) => {

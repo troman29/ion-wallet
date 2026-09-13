@@ -4,14 +4,13 @@ import type { GlobalState } from '../../global/types';
 import { ContentTab } from '../../global/types';
 
 import {
+  BNB,
+  BSC_USDT_MAINNET,
   DEFAULT_SWAP_AMOUNT,
   DEFAULT_SWAP_FIRST_TOKEN_SLUG,
   DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   TON_USDT_MAINNET,
   TONCOIN,
-  TRC20_USDT_MAINNET,
-  TRC20_USDT_TESTNET,
-  TRX,
 } from '../../config';
 import { INITIAL_STATE } from '../../global/initialState';
 import { callApi } from '../../api';
@@ -41,15 +40,13 @@ jest.mock('../renderPromise', () => ({
 
 // Test constants
 const TEST_TON_ADDRESS = 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S';
-const TEST_TRON_ADDRESS = 'TBvwz11CKdgBymTtF7Q6UfhGWQyEqNrodT';
 const TEST_EVM_ADDRESS = '0x9429C8Af1089efD542b313156Af2DFA35c7e0a81';
-const TEST_BASE_ADDRESS = '0x0000000000000000000000000000000000000001';
+const TEST_BNB_ADDRESS = '0x0000000000000000000000000000000000000001';
 const TEST_DNS_NAME = 'testmywallet.ton';
 const TEST_BIN_PAYLOAD = 'te6ccgEBAQEANwAAaV0r640BleSq4Ql3m5OrdlSApYTNRMdDGUFXwTpwZ1oe1G8cPlS_Zym8CwoAdO4mWSned-Fg';
 const TEST_STATE_INIT = 'te6ccgEBAgEACwACATQBAQAI_____w\\=\\=';
 const TEST_COMMENT = 'My Wallet';
 const TEST_AMOUNT = 1n;
-const TEST_TRON_AMOUNT_77 = 77000000n; // 77 TRX in smallest units (6 decimals)
 
 // Test timestamps
 const EXPIRED_TIMESTAMP = 946684800; // 1 January 2000 (definitely in the past)
@@ -69,8 +66,8 @@ const createMockGlobalState = (): GlobalState => {
             ton: {
               address: 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S',
             },
-            tron: {
-              address: TEST_TRON_ADDRESS,
+            bnb: {
+              address: TEST_EVM_ADDRESS,
             },
           },
         },
@@ -88,18 +85,13 @@ const createMockGlobalState = (): GlobalState => {
           priceUsd: 1,
           percentChange24h: 1,
         },
-        [TRX.slug]: {
-          ...TRX,
+        [BNB.slug]: {
+          ...BNB,
           priceUsd: 1,
           percentChange24h: 1,
         },
-        [TRC20_USDT_MAINNET.slug]: {
-          ...TRC20_USDT_MAINNET,
-          priceUsd: 1,
-          percentChange24h: 1,
-        },
-        [TRC20_USDT_TESTNET.slug]: {
-          ...TRC20_USDT_TESTNET,
+        [BSC_USDT_MAINNET.slug]: {
+          ...BSC_USDT_MAINNET,
           priceUsd: 1,
           percentChange24h: 1,
         },
@@ -111,8 +103,8 @@ const createMockGlobalState = (): GlobalState => {
           bySlug: {
             [TONCOIN.slug]: 1000000000n, // 1 TON
             [TON_USDT_MAINNET.slug]: 1000000n, // 1 USDT
-            [TRX.slug]: 1000000n, // 1 TRX
-            [TRC20_USDT_MAINNET.slug]: 1000000n, // 1 USDT TRC20
+            [BNB.slug]: 1000000000000000000n, // 1 BNB
+            [BSC_USDT_MAINNET.slug]: 1000000000000000000n, // 1 USDT BEP-20
           },
         },
         nfts: {
@@ -644,13 +636,13 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should open temporary view account with multiple addresses', async () => {
-      const result = await processSelfDeeplink(`https://my.tt/view/?ton=${TEST_TON_ADDRESS}&tron=${TEST_TRON_ADDRESS}`);
+      const result = await processSelfDeeplink(`https://my.tt/view/?ton=${TEST_TON_ADDRESS}&bnb=${TEST_EVM_ADDRESS}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTemporaryViewAccount).toHaveBeenCalled();
       const callArg = mockActions.openTemporaryViewAccount.mock.calls[0][0];
       expect(callArg.addressByChain.ton).toBeDefined();
-      expect(callArg.addressByChain.tron).toBeDefined();
+      expect(callArg.addressByChain.bnb).toBeDefined();
     });
 
     it('should open temporary view account with evm address expanded to all EVM chains', async () => {
@@ -666,13 +658,12 @@ describe('processSelfDeeplink', () => {
     });
 
     it('should prefer explicit EVM chain address over generic evm address', async () => {
-      const result = await processSelfDeeplink(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&base=${TEST_BASE_ADDRESS}`);
+      const result = await processSelfDeeplink(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&bnb=${TEST_BNB_ADDRESS}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTemporaryViewAccount).toHaveBeenCalled();
       const callArg = mockActions.openTemporaryViewAccount.mock.calls[0][0];
-      expect(callArg.addressByChain.ethereum).toBe(TEST_EVM_ADDRESS);
-      expect(callArg.addressByChain.base).toBe(TEST_BASE_ADDRESS);
+      expect(callArg.addressByChain.bnb).toBe(TEST_BNB_ADDRESS);
     });
 
     it('should show error when no valid addresses provided', async () => {
@@ -825,221 +816,6 @@ describe('processSelfDeeplink', () => {
   });
 });
 
-describe('processDeeplink TRON deeplinks', () => {
-  let mockActions: Record<string, jest.Mock>;
-  let mockGlobal: GlobalState;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    mockActions = {
-      startSwap: jest.fn(),
-      showError: jest.fn(),
-      openOnRampWidgetModal: jest.fn(),
-      openOffRampWidgetModal: jest.fn(),
-      startStaking: jest.fn(),
-      openReceiveModal: jest.fn(),
-      closeSettings: jest.fn(),
-      openExplore: jest.fn(),
-      setActiveContentTab: jest.fn(),
-      openTemporaryViewAccount: jest.fn(),
-      startTransfer: jest.fn(),
-    };
-
-    mockGlobal = createMockGlobalState();
-
-    (getActions as jest.Mock).mockReturnValue(mockActions);
-    (getGlobal as jest.Mock).mockReturnValue(mockGlobal);
-  });
-
-  describe('TRON (tron:) deeplinks', () => {
-    it.each([
-      {
-        name: 'parse TRX transfer with amount',
-        url: `tron:${TEST_TRON_ADDRESS}?amount=77`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRX.slug,
-          amount: TEST_TRON_AMOUNT_77,
-        },
-      },
-      {
-        name: 'parse TRX transfer without amount',
-        url: `tron:${TEST_TRON_ADDRESS}`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRX.slug,
-        },
-      },
-      {
-        name: 'parse TRX transfer with zero amount',
-        url: `tron:${TEST_TRON_ADDRESS}?amount=0`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRX.slug,
-          amount: 0n,
-        },
-      },
-      {
-        name: 'parse TRX transfer with decimal amount',
-        url: `tron:${TEST_TRON_ADDRESS}?amount=1.5`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRX.slug,
-          amount: 1500000n, // 1.5 TRX
-        },
-      },
-    ])('$name', async ({ url, expected }) => {
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).not.toHaveBeenCalled();
-
-      const expectedMatcher: Record<string, unknown> = {
-        toAddress: expected.toAddress,
-        tokenSlug: expected.tokenSlug,
-      };
-
-      if ('amount' in expected) {
-        expectedMatcher.amount = expected.amount;
-      }
-
-      expect(mockActions.startTransfer).toHaveBeenCalledWith(
-        expect.objectContaining(expectedMatcher),
-      );
-    });
-
-    it('should handle invalid TRON address', async () => {
-      const url = 'tron:invalid-address?amount=1';
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).not.toHaveBeenCalled();
-      expect(mockActions.startTransfer).toHaveBeenCalledWith(
-        expect.objectContaining({
-          tokenSlug: TRX.slug,
-          amount: 1000000n,
-        }),
-      );
-    });
-
-    it('should process TON deeplink correctly (not a TRON URL)', async () => {
-      const url = `ton://transfer/${TEST_TON_ADDRESS}?amount=1`;
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true); // TON deeplinks are processed successfully
-      expect(mockActions.startTransfer).toHaveBeenCalledWith(
-        expect.objectContaining({
-          toAddress: TEST_TON_ADDRESS,
-          tokenSlug: TONCOIN.slug,
-          amount: TEST_AMOUNT,
-        }),
-      );
-    });
-  });
-
-  describe('Tether (tether:) deeplinks', () => {
-    it.each([
-      {
-        name: 'parse USDT TRC20 transfer with amount (mainnet)',
-        url: `tether:${TEST_TRON_ADDRESS}?amount=100`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRC20_USDT_MAINNET.slug,
-          amount: 100000000n, // 100 USDT
-        },
-      },
-      {
-        name: 'parse USDT TRC20 transfer without amount (mainnet)',
-        url: `tether:${TEST_TRON_ADDRESS}`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRC20_USDT_MAINNET.slug,
-        },
-      },
-      {
-        name: 'parse USDT TRC20 transfer with decimal amount (mainnet)',
-        url: `tether:${TEST_TRON_ADDRESS}?amount=50.5`,
-        expected: {
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRC20_USDT_MAINNET.slug,
-          amount: 50500000n, // 50.5 USDT
-        },
-      },
-    ])('$name', async ({ url, expected }) => {
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).not.toHaveBeenCalled();
-
-      const expectedMatcher: Record<string, unknown> = {
-        toAddress: expected.toAddress,
-        tokenSlug: expected.tokenSlug,
-      };
-
-      if ('amount' in expected) {
-        expectedMatcher.amount = expected.amount;
-      }
-
-      expect(mockActions.startTransfer).toHaveBeenCalledWith(
-        expect.objectContaining(expectedMatcher),
-      );
-    });
-
-    it('should use testnet USDT when isTestnet is true', async () => {
-      mockGlobal.settings.isTestnet = true;
-      const url = `tether:${TEST_TRON_ADDRESS}?amount=10`;
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).not.toHaveBeenCalled();
-      expect(mockActions.startTransfer).toHaveBeenCalledWith(
-        expect.objectContaining({
-          toAddress: TEST_TRON_ADDRESS,
-          tokenSlug: TRC20_USDT_TESTNET.slug,
-          amount: 10000000n,
-        }),
-      );
-    });
-
-    it('should show error for unsupported parameters', async () => {
-      const url = `tether:${TEST_TRON_ADDRESS}?amount=1&label=test`;
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.startTransfer).not.toHaveBeenCalled();
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$unsupported_deeplink_parameter',
-      });
-    });
-
-    it('should show error for unsupported parameters in tron: deeplink', async () => {
-      const url = `tron:${TEST_TRON_ADDRESS}?amount=1&unsupported=value`;
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.startTransfer).not.toHaveBeenCalled();
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$unsupported_deeplink_parameter',
-      });
-    });
-
-    it('should handle invalid TRON address', async () => {
-      const url = 'tether:invalid-address?amount=1';
-      const result = await processDeeplink(url);
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).not.toHaveBeenCalled();
-      expect(mockActions.startTransfer).toHaveBeenCalledWith(
-        expect.objectContaining({
-          tokenSlug: TRC20_USDT_MAINNET.slug,
-          amount: 1000000n,
-        }),
-      );
-    });
-  });
-});
-
 describe('processSelfDeeplink Transaction command', () => {
   let mockActions: Record<string, jest.Mock>;
   let mockGlobal: GlobalState;
@@ -1125,27 +901,27 @@ describe('processSelfDeeplink Transaction command', () => {
     });
   });
 
-  describe('TRON transaction links', () => {
-    it('should open transaction info for valid TRON transaction', async () => {
-      const txId = 'a73f1e0711d6b75ea547791dda39655de1264c8bd92bc57a2710fc49651a988c';
-      const result = await processSelfDeeplink(`mtw://tx/tron/${txId}`);
+  describe('BNB transaction links', () => {
+    it('should open transaction info for valid BNB transaction', async () => {
+      const txId = '0xa73f1e0711d6b75ea547791dda39655de1264c8bd92bc57a2710fc49651a988c';
+      const result = await processSelfDeeplink(`mtw://tx/bnb/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
         txId,
-        chain: 'tron',
+        chain: 'bnb',
         activities: mockActivities,
       });
     });
 
-    it('should handle TRON transaction with https://my.tt protocol', async () => {
-      const txId = 'e4ef5753570a58e06ee3585bb4027820cadf1e97e3b29a22871961d0c0ac6275';
-      const result = await processSelfDeeplink(`https://my.tt/tx/tron/${txId}`);
+    it('should handle BNB transaction with https://my.tt protocol', async () => {
+      const txId = '0xe4ef5753570a58e06ee3585bb4027820cadf1e97e3b29a22871961d0c0ac6275';
+      const result = await processSelfDeeplink(`https://my.tt/tx/bnb/${txId}`);
 
       expect(result).toBe(true);
       expect(mockActions.openTransactionInfo).toHaveBeenCalledWith({
         txId,
-        chain: 'tron',
+        chain: 'bnb',
         activities: mockActivities,
       });
     });
@@ -1302,8 +1078,8 @@ describe('View-only mode deeplink blocking', () => {
               ton: {
                 address: TEST_TON_ADDRESS,
               },
-              tron: {
-                address: TEST_TRON_ADDRESS,
+              bnb: {
+                address: TEST_EVM_ADDRESS,
               },
             },
           },
@@ -1365,24 +1141,6 @@ describe('View-only mode deeplink blocking', () => {
         error: '$action_not_available_view_mode',
       });
       expect(mockActions.startTransfer).not.toHaveBeenCalled();
-    });
-
-    it('should block tron: transfer in view-only mode', async () => {
-      const result = await processDeeplink(`tron:${TEST_TRON_ADDRESS}?amount=77`);
-
-      expect(result).toBe(false);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$action_not_available_view_mode',
-      });
-    });
-
-    it('should block tether: transfer in view-only mode', async () => {
-      const result = await processDeeplink(`tether:${TEST_TRON_ADDRESS}?amount=10`);
-
-      expect(result).toBe(false);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$action_not_available_view_mode',
-      });
     });
   });
 

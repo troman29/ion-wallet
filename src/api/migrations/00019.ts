@@ -1,11 +1,11 @@
-import type { ApiAccountAny, ApiTonWallet, ApiTronWallet } from '../types';
+import type { ApiAccountAny, ApiEVMWallet, ApiTonWallet } from '../types';
 
 import { mapValues, omitUndefined } from '../../util/iteratees';
 import { storage } from '../storages';
 
 type OldAccount = Omit<ApiAccountAny, 'byChain'> & {
   ton?: ApiTonWallet & { type?: 'ton' };
-  tron?: ApiTronWallet & { type?: 'tron' };
+  tron?: ApiEVMWallet & { type?: 'tron' };
 };
 
 export async function start() {

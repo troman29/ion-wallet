@@ -1,9 +1,12 @@
 import { VirtualType } from '../lib/teact/teact';
 
+import type { ApiChain } from '../api/types';
 import type { Account } from '../global/types';
 
 import { getOrderedAccountChains } from './chain';
 import { formatAccountAddresses } from './formatAccountAddress';
+
+const BNB_ADDRESS = '0x9429C8Af1089efD542b313156Af2DFA35c7e0a81';
 
 function formatAllAccountAddresses(byChain: Account['byChain'], variant?: 'x-small' | 'small' | 'medium') {
   return formatAccountAddresses(byChain, getOrderedAccountChains(byChain), variant);
@@ -20,17 +23,17 @@ const singleChainTonDomainAccount: Account['byChain'] = {
     domain: 'mywalletverylong.ton',
   },
 };
-const singleChainTronAccount: Account['byChain'] = {
-  tron: {
-    address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+const singleChainBnbAccount: Account['byChain'] = {
+  bnb: {
+    address: BNB_ADDRESS,
   },
 };
 const multiChainAccount: Account['byChain'] = {
   ton: {
     address: 'UQA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2',
   },
-  tron: {
-    address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+  bnb: {
+    address: BNB_ADDRESS,
   },
 };
 const multiChainDomainAccount: Account['byChain'] = {
@@ -38,22 +41,28 @@ const multiChainDomainAccount: Account['byChain'] = {
     address: 'UQA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2',
     domain: 'wallet.ton',
   },
-  tron: {
-    address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+  bnb: {
+    address: BNB_ADDRESS,
   },
 };
+// `formatAccountAddresses` renders whatever chain list it is handed and never looks a chain up in
+// `CHAIN_CONFIG`, so the truncation cases below can hold more chains than the app supports. An app of
+// two chains has nothing to truncate, and the rule would go untested.
+const foreignChain = (name: string) => name as ApiChain;
+const FOUR_CHAINS = [foreignChain('alpha'), foreignChain('beta'), 'ton', 'bnb'] as ApiChain[];
+
 const fourChainAccount: Account['byChain'] = {
   ton: {
     address: 'UQA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S9T0U1V2',
   },
-  tron: {
-    address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+  bnb: {
+    address: BNB_ADDRESS,
   },
-  solana: {
-    address: 'So1aNAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  [foreignChain('alpha')]: {
+    address: '0xAlphaAddrXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
   },
-  ethereum: {
-    address: '0xEthereumAddrXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+  [foreignChain('beta')]: {
+    address: 'BetaAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   },
 };
 const shortSingleChainTonAccount: Account['byChain'] = {
@@ -80,10 +89,10 @@ describe('formatAccountAddresses', () => {
 
   describe('explicit chain list', () => {
     test('renders the given chains only, in the given order', () => {
-      const result = formatAccountAddresses(fourChainAccount, ['solana', 'ton']);
+      const result = formatAccountAddresses(fourChainAccount, [foreignChain('beta'), 'ton']);
 
       const icons = findElementsByTag(result, 'i');
-      expect(icons.map((icon) => icon.props.className)).toEqual(['icon-chain-solana', 'icon-chain-ton']);
+      expect(icons.map((icon) => icon.props.className)).toEqual(['icon-chain-beta', 'icon-chain-ton']);
     });
   });
 
@@ -116,34 +125,34 @@ describe('formatAccountAddresses', () => {
         expect(text).not.toContain('UQA');
       });
 
-      test('TRON chain with address', () => {
-        const result = formatAllAccountAddresses(singleChainTronAccount);
+      test('BNB chain with address', () => {
+        const result = formatAllAccountAddresses(singleChainBnbAccount);
 
         // Check icon class
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(1);
-        expect(icons[0].props.className).toBe('icon-chain-tron');
+        expect(icons[0].props.className).toBe('icon-chain-bnb');
 
         // Check address format (6 chars left, 6 chars right)
         const text = getTextContent(result);
-        expect(text).toEqual('TR7NHq···gjLj6t');
+        expect(text).toEqual('0x9429···7e0a81');
       });
     });
 
     describe('multi-chain account', () => {
-      test('TON and TRON with addresses only', () => {
+      test('TON and BNB with addresses only', () => {
         const result = formatAllAccountAddresses(multiChainAccount);
 
         // Check both icons
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(2);
         expect(icons[0].props.className).toBe('icon-chain-ton');
-        expect(icons[1].props.className).toBe('icon-chain-tron');
+        expect(icons[1].props.className).toBe('icon-chain-bnb');
 
         // Check address format for multichain (0 chars left, 6 chars right for addresses)
         const text = getTextContent(result);
         expect(text).toContain('···T0U1V2');
-        expect(text).toContain('···gjLj6t');
+        expect(text).toContain('···7e0a81');
 
         // Check comma separator for medium variant
         expect(text).toContain(', ');
@@ -156,8 +165,8 @@ describe('formatAccountAddresses', () => {
         const text = getTextContent(result);
         expect(text).toContain('wallet.ton');
 
-        // Check address format for TRON (0 chars left, 6 chars right)
-        expect(text).toContain('···gjLj6t');
+        // Check address format for BNB (0 chars left, 6 chars right)
+        expect(text).toContain('···7e0a81');
 
         // Check comma separator
         expect(text).toContain(', ');
@@ -214,29 +223,29 @@ describe('formatAccountAddresses', () => {
         expect(text).not.toContain('UQA');
       });
 
-      test('TRON chain with address', () => {
-        const result = formatAllAccountAddresses(singleChainTronAccount, 'x-small');
+      test('BNB chain with address', () => {
+        const result = formatAllAccountAddresses(singleChainBnbAccount, 'x-small');
 
         // Check icon class
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(1);
-        expect(icons[0].props.className).toBe('icon-chain-tron');
+        expect(icons[0].props.className).toBe('icon-chain-bnb');
 
         // Check address format (0 chars left, 4 chars right)
         const text = getTextContent(result);
-        expect(text).toEqual('···Lj6t');
+        expect(text).toEqual('···0a81');
       });
     });
 
     describe('multi-chain account', () => {
-      test('TON and TRON with addresses only', () => {
+      test('TON and BNB with addresses only', () => {
         const result = formatAllAccountAddresses(multiChainAccount, 'x-small');
 
         // Check both icons are present
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(2);
         expect(icons[0].props.className).toBe('icon-chain-ton');
-        expect(icons[1].props.className).toBe('icon-chain-tron');
+        expect(icons[1].props.className).toBe('icon-chain-bnb');
 
         const text = getTextContent(result);
 
@@ -254,18 +263,18 @@ describe('formatAccountAddresses', () => {
         // Only the first chain (TON) shows domain text; TRON is icon-only
         const text = getTextContent(result);
         expect(text).toContain('w···.ton');
-        expect(text).not.toContain('Lj6t');
+        expect(text).not.toContain('0a81');
       });
 
       test('account with 4 chains shows only first 3', () => {
-        const result = formatAllAccountAddresses(fourChainAccount, 'x-small');
+        const result = formatAccountAddresses(fourChainAccount, FOUR_CHAINS, 'x-small');
 
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(3);
-        expect(icons[0].props.className).toBe('icon-chain-ethereum');
-        expect(icons[1].props.className).toBe('icon-chain-solana');
+        expect(icons[0].props.className).toBe('icon-chain-alpha');
+        expect(icons[1].props.className).toBe('icon-chain-beta');
         expect(icons[2].props.className).toBe('icon-chain-ton');
-        expect(icons.some((icon) => icon.props.className === 'icon-chain-tron')).toBe(false);
+        expect(icons.some((icon) => icon.props.className === 'icon-chain-bnb')).toBe(false);
       });
     });
 
@@ -320,22 +329,22 @@ describe('formatAccountAddresses', () => {
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(2);
         expect(icons[0].props.className).toBe('icon-chain-ton');
-        expect(icons[1].props.className).toBe('icon-chain-tron');
+        expect(icons[1].props.className).toBe('icon-chain-bnb');
 
         // Both addresses use small sizing (0 left, 4 right)
         const text = getTextContent(result);
         expect(text).toContain('···U1V2');
-        expect(text).toContain('···Lj6t');
+        expect(text).toContain('···0a81');
         expect(text).toContain(', ');
       });
 
       test('four chains: first 3 icons, only first 2 with address', () => {
-        const result = formatAllAccountAddresses(fourChainAccount, 'small');
+        const result = formatAccountAddresses(fourChainAccount, FOUR_CHAINS, 'small');
 
         const icons = findElementsByTag(result, 'i');
         expect(icons).toHaveLength(3);
-        expect(icons[0].props.className).toBe('icon-chain-ethereum');
-        expect(icons[1].props.className).toBe('icon-chain-solana');
+        expect(icons[0].props.className).toBe('icon-chain-alpha');
+        expect(icons[1].props.className).toBe('icon-chain-beta');
         expect(icons[2].props.className).toBe('icon-chain-ton');
 
         // Only the first two chains render an address; the third is icon-only

@@ -20,17 +20,7 @@ const WALLET_CONNECT_EVM_AUTH_METHODS = [
   'wallet_getCapabilities',
 ] as const;
 
-const WALLET_CONNECT_SOLANA_AUTH_METHODS = [
-  'solana_signMessage',
-  'solana_signTransaction',
-  'solana_signAllTransactions',
-  'solana_signAndSendTransaction',
-] as const;
-
-export const WALLET_CONNECT_SUPPORTED_AUTH_METHODS = [
-  ...WALLET_CONNECT_EVM_AUTH_METHODS,
-  ...WALLET_CONNECT_SOLANA_AUTH_METHODS,
-];
+export const WALLET_CONNECT_SUPPORTED_AUTH_METHODS = [...WALLET_CONNECT_EVM_AUTH_METHODS];
 
 /** Reverse lookup: (EVM chain, network) → CAIP-2 `eip155:*` id used in WalletConnect. */
 export function getEip155Caip2ForEvmChain(chain: EVMChain, network: ApiNetwork): string | undefined {
@@ -149,15 +139,7 @@ export function hexToEip155Caip2(hex: string): string {
 }
 
 function getWalletConnectAuthMethodsForNamespace(namespace: string): string[] {
-  if (namespace === 'eip155') {
-    return [...WALLET_CONNECT_EVM_AUTH_METHODS];
-  }
-
-  if (namespace === 'solana') {
-    return [...WALLET_CONNECT_SOLANA_AUTH_METHODS];
-  }
-
-  return [];
+  return namespace === 'eip155' ? [...WALLET_CONNECT_EVM_AUTH_METHODS] : [];
 }
 
 function chainsToRequiredNamespaces(chains: string[]): ProposalTypes.RequiredNamespaces {

@@ -3,8 +3,7 @@
  *
  * Implements DappProtocolAdapter for WalletConnect v2 protocol
  * and adaptation for injected protocols (StandardWallet, EIP-6963).
- * Provides connectivity for EVM chains (Ethereum, Polygon, etc.),
- * Solana, and other WalletConnect-supported blockchains.
+ * Provides connectivity for EVM chains.
  *
  * Key responsibilities:
  * - Initialize WalletKit SDK
@@ -469,7 +468,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
           data: message,
           topic,
           isSessionAuthenticate: true,
-          isEthSign: true,
         },
       },
     );
@@ -686,89 +684,13 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         }
         break;
       }
-      case 'solana_signTransaction': {
-        const response = await this.requestTransactionSign(
-          id,
-          namespace.chain,
-          topic,
-          byTopic.dapp.url,
-          request.params.transaction,
-        );
-
-        if (!response.success) {
-          return;
-        }
-
-        await this.walletKit.respondSessionRequest({
-          topic,
-          response: {
-            id,
-            jsonrpc: '2.0',
-            result: { signature: response.result.result },
-          },
-        });
-        break;
-      }
-      case 'solana_signAndSendTransaction': {
-        const message: DappTransactionRequest<typeof this.protocolType> = {
-          id: String(id),
-          chain: namespace.chain,
-          payload: {
-            topic,
-            data: request.params.transaction,
-          },
-        };
-
-        const response = await this.sendTransaction({ url: byTopic.dapp.url }, message);
-
-        if (!response?.success) {
-          return;
-        }
-
-        await this.walletKit.respondSessionRequest({
-          topic,
-          response: {
-            id,
-            jsonrpc: '2.0',
-            result: { signature: response.result.result },
-          },
-        });
-        break;
-      }
-      case 'solana_signAllTransactions': {
-        const response = await this.requestTransactionSign(
-          id,
-          namespace.chain,
-          topic,
-          byTopic.dapp.url,
-          request.params.transactions,
-          true,
-        );
-
-        if (!response.success) {
-          return;
-        }
-
-        const signedTransactions = response.result.results ?? [response.result.result];
-
-        await this.walletKit.respondSessionRequest({
-          topic,
-          response: {
-            id,
-            jsonrpc: '2.0',
-            result: { transactions: signedTransactions },
-          },
-        });
-        break;
-      }
-
       case 'personal_sign': {
         const [messageHex, from] = request.params as PersonalSignParams;
 
         const account = await fetchStoredChainAccount(byTopic.accountId, namespace.chain);
         const walletAddress = account.byChain[namespace.chain].address;
 
-        if (chains['ethereum'].normalizeAddress(from) !== walletAddress) {
+        if (chains.bnb.normalizeAddress(from) !== walletAddress) {
           await this.walletKit.respondSessionRequest({
             topic,
             response: {
@@ -789,7 +711,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
           payload: {
             topic,
             data: messageHex,
-            isEthSign: true,
           },
         };
 
@@ -803,7 +724,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         const account = await fetchStoredChainAccount(byTopic.accountId, namespace.chain);
         const walletAddress = account.byChain[namespace.chain].address;
 
-        if (chains['ethereum'].normalizeAddress(from) !== walletAddress) {
+        if (chains.bnb.normalizeAddress(from) !== walletAddress) {
           await this.walletKit.respondSessionRequest({
             topic,
             response: {
@@ -824,7 +745,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
           payload: {
             topic,
             data: dataHex,
-            isEthSign: true,
           },
         };
 
@@ -839,7 +759,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         const account = await fetchStoredChainAccount(byTopic.accountId, namespace.chain);
         const walletAddress = account.byChain[namespace.chain].address;
 
-        if (chains['ethereum'].normalizeAddress(from) !== walletAddress) {
+        if (chains.bnb.normalizeAddress(from) !== walletAddress) {
           await this.walletKit.respondSessionRequest({
             topic,
             response: {
@@ -877,23 +797,9 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
           payload: {
             topic,
             eip712,
-            isEthSign: true,
           },
         };
 
-        await this.signData({ url: byTopic.dapp.url }, message);
-        break;
-      }
-
-      case 'solana_signMessage': {
-        const message: DappSignDataRequest<typeof this.protocolType> = {
-          id: String(id),
-          chain: namespace.chain,
-          payload: {
-            topic,
-            data: request.params.message,
-          },
-        };
         await this.signData({ url: byTopic.dapp.url }, message);
         break;
       }
@@ -1407,10 +1313,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
     logDebug('walletConnect:disconnect:enter', {
       host: safeHost(request.url),
       requestId: message.requestId,
-      // Heuristic, not a contract: solanaConnectBridgeApi resets its counter to 0 before
-      // sending disconnect, while the EVM bridge increments from a counter that starts at 0
-      // (so its first disconnect is '1'). Breaks if either bridge's id scheme changes.
-      source: message.requestId === '0' ? 'solana-standard' : 'evm-or-other',
     });
 
     try {
@@ -1512,7 +1414,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
 
       let serializedTxForPreview: string;
 
-      if (message.chain !== 'solana' && !txBatch) {
+      if (!txBatch) {
         const caip2 = getEip155Caip2ForEvmChain(message.chain as EVMChain, network);
 
         if (!caip2) {
@@ -1532,16 +1434,8 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
           caip2,
           signerAddress: accountAddress,
         });
-      } else if (txBatch) {
-        serializedTxForPreview = txBatch[0];
       } else {
-        const raw = message.payload.data;
-
-        if (typeof raw !== 'string') {
-          throw new Error('Invalid transaction data');
-        }
-
-        serializedTxForPreview = raw;
+        serializedTxForPreview = txBatch[0];
       }
 
       await this.openExtensionPopup(true);
@@ -1736,7 +1630,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       logDebug('walletConnect:signData:enter', {
         host: safeHost(dapp.url),
         chain: message.chain,
-        isEthSign: message.payload.isEthSign,
         hasEip712: !!message.payload.eip712,
         hasTopic: !!message.payload.topic,
       });
@@ -1772,7 +1665,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       logDebug('walletConnect:signData:request', {
         host: safeHost(dapp.url),
         chain: message.chain,
-        isEthSign: !!message.payload.isEthSign,
         eip712Domain: message.payload.eip712?.domain?.name,
         eip712PrimaryType: message.payload.eip712?.primaryType,
         msgId: message.id,
@@ -1806,16 +1698,11 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       });
 
       if (message.payload.topic && !message.payload.isSessionAuthenticate) {
-        // EVM personal_sign/eth_sign/eth_signTypedData* expect a plain signature hex string.
-        // Solana signMessage expects { signature }.
-        const signatureResult = message.payload.isEthSign
-          ? result.result.signature
-          : { signature: result.result.signature };
-
         const response = {
           id: Number(message.id),
           jsonrpc: '2.0',
-          result: signatureResult,
+          // personal_sign, eth_sign and eth_signTypedData* all answer with a plain signature hex string.
+          result: result.result.signature,
         };
 
         await this.walletKit.respondSessionRequest({ topic: message.payload.topic, response });
@@ -2234,8 +2121,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
     switch (namespace) {
       case 'eip155':
         return this.signPayEvmAction(chainEntry.chain, method, parsedParams);
-      case 'solana':
-        return this.signPaySolanaAction(method, parsedParams);
       default:
         throw new Error(`Unsupported Pay namespace: ${namespace}`);
     }
@@ -2314,27 +2199,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
 
       default:
         throw new Error(`Unsupported Pay EVM RPC method: ${method}`);
-    }
-  }
-
-  private async signPaySolanaAction(
-    method: string,
-    parsedParams: unknown,
-  ) {
-    switch (method) {
-      case 'solana_signTransaction': {
-        const paramsList = parsedParams as Array<{ transaction: string }>;
-        const transaction = paramsList[0]?.transaction;
-
-        if (!transaction) {
-          throw new Error('Invalid params: missing transaction');
-        }
-
-        return this.processPaySolanaTransaction(transaction);
-      }
-
-      default:
-        throw new Error(`Unsupported Pay Solana RPC method: ${method}`);
     }
   }
 
@@ -2466,7 +2330,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       case 'eth_signTypedData_v4': {
         const [from, typedRaw] = params as EthSignTypedDataParams;
 
-        if (chains['ethereum'].normalizeAddress(from) !== walletAddress) {
+        if (chains.bnb.normalizeAddress(from) !== walletAddress) {
           throw new ApiUserRejectsError('Unauthorized signer address');
         }
 
@@ -2488,7 +2352,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       case 'personal_sign': {
         const [messageHex, from] = params as PersonalSignParams;
 
-        if (chains['ethereum'].normalizeAddress(from) !== walletAddress) {
+        if (chains.bnb.normalizeAddress(from) !== walletAddress) {
           throw new ApiUserRejectsError('Unauthorized signer address');
         }
 
@@ -2501,7 +2365,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       case 'eth_sign': {
         const [from, dataHex] = params as EthSignParams;
 
-        if (chains['ethereum'].normalizeAddress(from) !== walletAddress) {
+        if (chains.bnb.normalizeAddress(from) !== walletAddress) {
           throw new ApiUserRejectsError('Unauthorized signer address');
         }
 
@@ -2668,70 +2532,6 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
     } catch (err) {
       logDebugError('walletConnect:processPayTransaction', err);
       this.onUpdate({ type: 'walletConnectPayCloseLoading' });
-      throw err;
-    }
-  }
-
-  private async processPaySolanaTransaction(
-    transaction: string,
-  ): Promise<string> {
-    const ctx = this.activePayContext;
-
-    if (!ctx) {
-      throw new Error('walletConnect:processPaySolanaTransaction: no active pay context');
-    }
-
-    const { accountId, merchant } = ctx;
-    const chain: ApiChain = 'solana';
-    const account = await fetchStoredChainAccount(accountId, chain);
-    const walletAddress = account.byChain[chain].address;
-    const { network } = parseAccountId(accountId);
-
-    try {
-      await this.openExtensionPopup(true);
-
-      this.onUpdate({
-        type: 'walletConnectPayLoading',
-        accountId,
-      });
-
-      const { transfers, emulation } = await this.chainDappSupports[chain]!.parseTransactionForPreview!(
-        transaction,
-        walletAddress,
-        network,
-      );
-
-      const { promiseId, promise } = createDappPromise();
-
-      this.onUpdate({
-        type: 'walletConnectPaySignTransaction',
-        promiseId,
-        accountId,
-        merchant,
-        operationChain: chain,
-        transactions: transfers,
-        emulation,
-        paymentInfo: ctx.paymentInfo,
-        paymentOption: ctx.paymentOption,
-        validUntil: Math.floor(Date.now() / 1000 + 60 * 5),
-        isSignOnly: true,
-        isLegacyOutput: false,
-        shouldHideTransfers: true,
-      });
-
-      const signedTransactions: Parameters<
-        typeof confirmDappRequestSendTransaction<typeof this.protocolType>
-      >[1] = await promise;
-
-      if (!Array.isArray(signedTransactions)) {
-        throw new Error('MFA confirmation is not supported for WalletConnect Pay transactions');
-      }
-
-      return signedTransactions[0].payload.signedTx;
-    } catch (err) {
-      logDebugError('walletConnect:processPaySolanaTransaction', err);
-      this.onUpdate({ type: 'walletConnectPayCloseLoading' });
-
       throw err;
     }
   }

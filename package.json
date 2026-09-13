@@ -211,7 +211,6 @@
     "@mauricewegner/capacitor-navigation-bar": "github:mytonwallet-org/capacitor-navigation-bar#0c4908be7c880eb2894055a5af6fcb8bf264d6e1",
     "@mytonwallet/capacitor-usb-hid": "github:mytonwallet-org/capacitor-usb-hid#28d10b296777280f7cb0735cc3fd02a4f03568ab",
     "@reown/walletkit": "1.5.5",
-    "@solana/kit": "5.1.0",
     "@ton-community/ton-ledger": "7.4.0-pre.0",
     "@ton/core": "0.60.1",
     "@ton/ton": "15.2.1",
@@ -236,7 +235,6 @@
     "snarkjs": "0.7.6",
     "stream-browserify": "3.0.0",
     "tonweb-mnemonic": "1.0.1",
-    "tronweb": "6.0.0",
     "tweetnacl": "1.0.3",
     "webextension-polyfill": "0.12.0"
   },

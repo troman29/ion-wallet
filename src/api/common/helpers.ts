@@ -453,8 +453,8 @@ export async function migrateStorage(onUpdate: OnApiUpdate, accountIds?: string[
   }
 
   if (version === 22) {
-    await migrations.migration22.start();
-
+    // Step 22 stamped the derivation version of Solana wallets; the chain is gone, so
+    // only the version bump is left.
     version = 23;
     await storage.setItem('stateVersion', version);
   }

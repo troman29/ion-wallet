@@ -24,7 +24,7 @@ function buildGlobal(): GlobalState {
           type: 'mnemonic',
           byChain: {
             ton: { address: 'ton-address' },
-            solana: { address: 'solana-address' },
+            bnb: { address: 'bnb-address' },
           },
         },
       },
@@ -60,15 +60,15 @@ describe('addInitialActivities', () => {
   it('keeps exhausted one-item histories from different chains', () => {
     let global = buildGlobal();
     const tonActivity = makeActivity('ton-100', 'toncoin', 100);
-    const solanaActivity = makeActivity('sol-200', 'sol', 200);
+    const bnbActivity = makeActivity('bnb-200', 'bnb', 200);
 
     global = addInitialActivities(global, ACCOUNT_ID, [tonActivity], {}, 'ton', false);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toBeUndefined();
 
-    global = addInitialActivities(global, ACCOUNT_ID, [solanaActivity], {}, 'solana', false);
+    global = addInitialActivities(global, ACCOUNT_ID, [bnbActivity], {}, 'bnb', false);
 
-    expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toEqual(['sol-200', 'ton-100']);
+    expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toEqual(['bnb-200', 'ton-100']);
     expect(global.byAccountId[ACCOUNT_ID].activities?.isMainHistoryEndReached).toBe(true);
   });
 
@@ -80,13 +80,13 @@ describe('addInitialActivities', () => {
       makeActivity('ton-1000', 'toncoin', 1000),
       makeActivity('ton-900', 'toncoin', 900),
     ];
-    const solanaActivity = makeActivity('sol-800', 'sol', 800);
+    const bnbActivity = makeActivity('bnb-800', 'bnb', 800);
 
     global = addInitialActivities(global, ACCOUNT_ID, tonActivities, {}, 'ton', true);
-    global = addInitialActivities(global, ACCOUNT_ID, [solanaActivity], {}, 'solana', false);
+    global = addInitialActivities(global, ACCOUNT_ID, [bnbActivity], {}, 'bnb', false);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain)
-      .toEqual(['ton-1000', 'ton-900', 'sol-800']);
+      .toEqual(['ton-1000', 'ton-900', 'bnb-800']);
     expect(global.byAccountId[ACCOUNT_ID].activities?.isMainHistoryEndReached).toBeUndefined();
   });
 
@@ -95,13 +95,13 @@ describe('addInitialActivities', () => {
     // from any other paginating chain might still be unloaded.
     let global = buildGlobal();
     const tonActivity = makeActivity('ton-1000', 'toncoin', 1000);
-    const solanaActivities = [
-      makeActivity('sol-950', 'sol', 950),
-      makeActivity('sol-800', 'sol', 800),
+    const bnbActivities = [
+      makeActivity('bnb-950', 'bnb', 950),
+      makeActivity('bnb-800', 'bnb', 800),
     ];
 
     global = addInitialActivities(global, ACCOUNT_ID, [tonActivity], {}, 'ton', true);
-    global = addInitialActivities(global, ACCOUNT_ID, solanaActivities, {}, 'solana', true);
+    global = addInitialActivities(global, ACCOUNT_ID, bnbActivities, {}, 'bnb', true);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toEqual(['ton-1000']);
   });
@@ -114,12 +114,12 @@ describe('addInitialActivities', () => {
     let global = buildGlobal();
 
     global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'ton', false);
-    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'solana', undefined);
+    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'bnb', undefined);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toEqual([]);
     expect(global.byAccountId[ACCOUNT_ID].activities?.isMainHistoryEndReached).toBeUndefined();
 
-    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'solana', false);
+    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'bnb', false);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.isMainHistoryEndReached).toBe(true);
   });
@@ -128,17 +128,17 @@ describe('addInitialActivities', () => {
     let global = buildGlobal();
 
     global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'ton', false);
-    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'solana', false);
+    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'bnb', false);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.isMainHistoryEndReached).toBe(true);
 
     const prevGlobal = global;
     // A failed re-emit (no `mainHistoryHasMore`) must not degrade the reached state
-    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'solana', undefined);
+    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'bnb', undefined);
     expect(global).toBe(prevGlobal);
 
     // A repeated successful empty emit carries no new information either
-    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'solana', false);
+    global = addInitialActivities(global, ACCOUNT_ID, [], {}, 'bnb', false);
     expect(global).toBe(prevGlobal);
   });
 });
@@ -149,13 +149,13 @@ describe('addPastActivities main feed', () => {
     // collapses (here: when main-feed pagination signals all chains are exhausted).
     let global = buildGlobal();
     const tonActivity = makeActivity('ton-1000', 'toncoin', 1000);
-    const solanaActivities = [
-      makeActivity('sol-950', 'sol', 950),
-      makeActivity('sol-800', 'sol', 800),
+    const bnbActivities = [
+      makeActivity('bnb-950', 'bnb', 950),
+      makeActivity('bnb-800', 'bnb', 800),
     ];
 
     global = addInitialActivities(global, ACCOUNT_ID, [tonActivity], {}, 'ton', true);
-    global = addInitialActivities(global, ACCOUNT_ID, solanaActivities, {}, 'solana', true);
+    global = addInitialActivities(global, ACCOUNT_ID, bnbActivities, {}, 'bnb', true);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toEqual(['ton-1000']);
 
@@ -164,7 +164,7 @@ describe('addPastActivities main feed', () => {
     global = addPastActivities(global, ACCOUNT_ID, undefined, morePastTon, true);
 
     expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain)
-      .toEqual(['ton-1000', 'sol-950', 'sol-800', 'ton-700']);
+      .toEqual(['ton-1000', 'bnb-950', 'bnb-800', 'ton-700']);
     expect(global.byAccountId[ACCOUNT_ID].activities?.isMainHistoryEndReached).toBe(true);
   });
 });

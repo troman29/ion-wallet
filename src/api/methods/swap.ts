@@ -188,10 +188,9 @@ export async function fetchSwaps(
   const perIdResults = await Promise.all(items.map(async ({ id, chain: chainHint }) => {
     const backendId = id.replace('swap:', '');
 
-    // Fast path: caller knows the originating chain. Solana swap history is stored under the TON owner address.
+    // Fast path: caller knows the originating chain.
     if (chainHint) {
-      const historyChain = chainHint === 'solana' ? 'ton' : chainHint;
-      const address = walletByChain[historyChain]?.address;
+      const address = walletByChain[chainHint]?.address;
       if (!address) {
         return { id };
       }

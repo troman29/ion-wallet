@@ -317,8 +317,6 @@ export const LANG_LIST: LangItem[] = [{
 // `EnvironmentPlugin`, so it both drives Webpack dead-code elimination (drops code + npm deps) and is
 // readable at runtime to silence behaviour/network for anything still bundled.
 export const NO_TON = process.env.NO_TON === '1';
-export const NO_TRON = process.env.NO_TRON === '1';
-export const NO_SOLANA = process.env.NO_SOLANA === '1';
 export const NO_EVM = process.env.NO_EVM === '1';
 /**
  * Standalone SDK builds, embedded by third-party apps that ship their own UI, so nothing in the UI layer
@@ -371,97 +369,12 @@ export const TONCOIN = {
   priceUsd: 1.5,
 } as const;
 
-export const TRX = {
-  name: 'TRON',
-  symbol: 'TRX',
-  slug: 'trx',
-  decimals: 6,
-  chain: 'tron',
-  cmcSlug: 'tron',
-} as const;
-
-export const SOLANA = {
-  name: 'Solana',
-  symbol: 'SOL',
-  slug: 'sol',
-  decimals: 9,
-  chain: 'solana',
-  cmcSlug: 'solana',
-} as const;
-
-export const ETH = {
-  name: 'Ethereum',
-  symbol: 'ETH',
-  slug: 'eth',
-  decimals: 18,
-  chain: 'ethereum',
-} as const;
-
-export const BASE = {
-  name: 'Base',
-  symbol: 'ETH',
-  slug: 'base',
-  decimals: 18,
-  chain: 'base',
-  label: 'Base',
-} as const;
-
 export const BNB = {
   name: 'BNB',
   symbol: 'BNB',
   slug: 'bnb',
   decimals: 18,
   chain: 'bnb',
-} as const;
-
-export const POLYGON = {
-  name: 'Polygon',
-  symbol: 'POL',
-  slug: 'pol',
-  decimals: 18,
-  chain: 'polygon',
-} as const;
-
-export const ARBITRUM = {
-  name: 'Arbitrum',
-  symbol: 'ETH',
-  slug: 'arb',
-  decimals: 18,
-  chain: 'arbitrum',
-  label: 'Arbitrum',
-} as const;
-
-export const MONAD = {
-  name: 'Monad',
-  symbol: 'MON',
-  slug: 'mon',
-  decimals: 18,
-  chain: 'monad',
-} as const;
-
-export const AVALANCHE = {
-  name: 'Avalanche',
-  symbol: 'AVAX',
-  slug: 'ava',
-  decimals: 18,
-  chain: 'avalanche',
-} as const;
-
-export const HYPERLIQUID = {
-  name: 'Hyperliquid',
-  symbol: 'HYPE',
-  slug: 'hyperliquid',
-  decimals: 18,
-  chain: 'hyperliquid',
-} as const;
-
-export const ROBINHOOD = {
-  name: 'Robinhood',
-  symbol: 'ETH',
-  slug: 'robinhood',
-  decimals: 18,
-  chain: 'robinhood',
-  label: 'Robinhood',
 } as const;
 
 export const STAKED_TON_SLUG = 'ton-eqcqc6ehrj';
@@ -477,22 +390,6 @@ export const STON_PTON_ADDRESS = 'EQCM3B12QK1e4yZSf8GtBRT0aLMNyEsBc_DhVfRRtOEffL
 export const STON_PTON_SLUG = 'ton-eqcm3b12qk';
 
 export const DNS_IMAGE_GEN_URL = 'https://dns-image.mytonwallet.org/img?d=';
-
-export const TRC20_USDT_MAINNET = {
-  name: 'Tether USD',
-  symbol: 'USDT',
-  decimals: 6,
-  chain: 'tron',
-  slug: 'tron-tr7nhqjekq',
-  tokenAddress: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
-  label: 'TRC-20',
-} as const;
-
-export const TRC20_USDT_TESTNET = {
-  ...TRC20_USDT_MAINNET,
-  slug: 'tron-tg3xxyexbk',
-  tokenAddress: 'TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs',
-};
 
 export const TON_USDT_MAINNET = {
   name: 'Tether USD',
@@ -534,90 +431,6 @@ export const TON_TSUSDE = {
   image: 'https://cache.tonapi.io/imgproxy/vGZJ7erwsWPo7DpVG_V7ygNn7VGs0szZXcNLHB_l0ms/rs:fill:200:200:1/g:no/aHR0cHM6Ly9tZXRhZGF0YS5sYXllcnplcm8tYXBpLmNvbS9hc3NldHMvdHNVU0RlLnBuZw.webp',
 } as const;
 
-export const SOLANA_USDT_MAINNET = {
-  name: 'Tether USD',
-  symbol: 'USDT',
-  decimals: 6,
-  chain: 'solana',
-  slug: 'solana-es9vmfrzac',
-  tokenAddress: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
-  label: 'SOL',
-  image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
-  priceUsd: 1,
-} as const;
-
-export const SOLANA_USDC_MAINNET = {
-  name: 'USD Coin',
-  symbol: 'USDC',
-  decimals: 6,
-  chain: 'solana',
-  slug: 'solana-epjfwdd5au',
-  tokenAddress: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-  label: 'SOL',
-  image: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png',
-  priceUsd: 1,
-} as const;
-
-export const ETH_USDT_MAINNET = {
-  name: 'Tether USD',
-  symbol: 'USDT',
-  decimals: 6,
-  chain: 'ethereum',
-  slug: 'ethereum-0xdac17f95',
-  tokenAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-  label: 'ERC-20',
-  image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
-  priceUsd: 1,
-} as const;
-
-export const ETH_USDC_MAINNET = {
-  name: 'USD Coin',
-  symbol: 'USDC',
-  decimals: 6,
-  chain: 'ethereum',
-  slug: 'ethereum-0xa0b86991',
-  tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  label: 'ERC-20',
-  image: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png',
-  priceUsd: 1,
-} as const;
-
-export const BASE_USDT_MAINNET = {
-  name: 'Tether USD',
-  symbol: 'USDT',
-  decimals: 6,
-  chain: 'base',
-  slug: 'base-0xfde4c96c',
-  tokenAddress: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
-  label: 'ERC-20',
-  image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
-  priceUsd: 1,
-} as const;
-
-export const BASE_USDC_MAINNET = {
-  name: 'USD Coin',
-  symbol: 'USDC',
-  decimals: 6,
-  chain: 'base',
-  slug: 'base-0x833589fc',
-  tokenAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-  label: 'ERC-20',
-  image: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png',
-  priceUsd: 1,
-} as const;
-
-export const ARBITRUM_USDC_MAINNET = {
-  name: 'USD Coin',
-  symbol: 'USDC',
-  decimals: 6,
-  chain: 'arbitrum',
-  slug: 'arbitrum-0xaf88d065',
-  tokenAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-  label: 'ERC-20',
-  image: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png',
-  priceUsd: 1,
-} as const;
-
 export const BSC_USDT_MAINNET = {
   name: 'Tether USD',
   symbol: 'USDT',
@@ -630,30 +443,6 @@ export const BSC_USDT_MAINNET = {
   priceUsd: 1,
 } as const;
 
-export const AVALANCHE_USDT_MAINNET = {
-  name: 'Tether USD',
-  symbol: 'USDT',
-  decimals: 6,
-  chain: 'avalanche',
-  slug: 'avalanche-0x9702230a',
-  tokenAddress: '0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7',
-  label: 'ERC-20',
-  image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
-  priceUsd: 1,
-} as const;
-
-export const HYPERLIQUID_USDC_MAINNET = {
-  name: 'USD Coin',
-  symbol: 'USDC',
-  decimals: 6,
-  chain: 'hyperliquid',
-  slug: 'hyperliquid-0xb88339cb',
-  tokenAddress: '0xb88339CB7199b77E23DB6E890353E22632Ba630f',
-  label: 'ERC-20',
-  image: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png',
-  priceUsd: 1,
-} as const;
-
 /** The properties not returned by the backend, and therefore not stored in token objects */
 export const TOKEN_CUSTOM_STYLES: Partial<Record<string, {
   fontIcon?: string;
@@ -663,24 +452,8 @@ export const TOKEN_CUSTOM_STYLES: Partial<Record<string, {
     fontIcon: 'icon-chain-ton',
     cardColor: 'blue',
   },
-  [TRX.slug]: {
-    fontIcon: 'icon-chain-tron',
-    cardColor: 'red',
-  },
-  [SOLANA.slug]: {
-    fontIcon: 'icon-chain-solana',
-    cardColor: 'purple',
-  },
-  [ETH.slug]: {
-    fontIcon: 'icon-chain-ethereum',
-    cardColor: 'purple',
-  },
-  [BASE.slug]: {
-    fontIcon: 'icon-chain-base',
-    cardColor: 'blue',
-  },
-  [ROBINHOOD.slug]: {
-    fontIcon: 'icon-chain-robinhood',
+  [BNB.slug]: {
+    fontIcon: 'icon-chain-bnb',
     cardColor: 'green',
   },
   [STAKED_TON_SLUG]: {
@@ -696,18 +469,8 @@ export const ALL_STAKING_POOLS = [
 
 // Native tokens in the UI display order (see CHAIN_DISPLAY_ORDER). Drives the empty-wallet token order.
 export const PRIORITY_TOKENS = [
-  ETH,
-  SOLANA,
-  HYPERLIQUID,
   TONCOIN,
-  TRX,
   BNB,
-  BASE,
-  ROBINHOOD,
-  MONAD,
-  ARBITRUM,
-  POLYGON,
-  AVALANCHE,
 ] as ApiToken[];
 
 export const INIT_SWAP_ASSETS: Record<'in' | 'out', ApiSwapAsset> = {

@@ -26,21 +26,6 @@ jest.mock('tonweb-mnemonic', () => ({
   generateMnemonic: jest.fn(() => ([])),
 }));
 
-jest.mock('../src/api/chains/solana/wallet', () => {
-  const actual = jest.requireActual('../src/api/chains/solana/wallet');
-  const { ApiServerError: ApiServerErrorActual } = jest.requireActual('../src/api/errors');
-
-  return {
-    ...actual,
-    getWalletBalance: jest.fn(() => {
-      throw new ApiServerErrorActual('offline');
-    }),
-    getWalletLastTransaction: jest.fn(() => {
-      throw new ApiServerErrorActual('offline');
-    }),
-  };
-});
-
 jest.mock('../src/api/chains/evm/wallet', () => {
   const actual = jest.requireActual('../src/api/chains/evm/wallet');
   const { ApiServerError: ApiServerErrorActual } = jest.requireActual('../src/api/errors');
@@ -58,8 +43,6 @@ jest.mock('../src/api/chains/evm/wallet', () => {
 
 import { getWalletFromBip39Mnemonic as getEvmWalletFromBip39Mnemonic } from '../src/api/chains/evm/auth';
 import { getWalletBalance as getEvmWalletBalance } from '../src/api/chains/evm/wallet';
-import { getWalletFromBip39Mnemonic as getSolanaWalletFromBip39Mnemonic } from '../src/api/chains/solana/auth';
-import { getWalletBalance as getSolanaWalletBalance } from '../src/api/chains/solana/wallet';
 import { getWalletFromBip39Mnemonic, getWalletFromMnemonic, getWalletFromPrivateKey } from '../src/api/chains/ton/auth';
 
 describe('Offline wallet import fallbacks', () => {
@@ -87,26 +70,8 @@ describe('Offline wallet import fallbacks', () => {
     expect(wallets[0].derivation?.index).toBe(0);
   });
 
-  test('Solana: getWalletFromBip39Mnemonic falls back to default derivation when RPC fails', async () => {
-    const wallets = await getSolanaWalletFromBip39Mnemonic('mainnet' as ApiNetwork, mnemonicBip39);
-    expect(wallets.length).toBeGreaterThan(0);
-    expect(wallets[0].address).toBeTruthy();
-    expect(wallets[0].derivation?.index).toBe(0);
-  });
-
-  test('Solana: getWalletFromBip39Mnemonic falls back on non-ApiServerError RPC failures', async () => {
-    (getSolanaWalletBalance as jest.Mock).mockImplementationOnce(() => {
-      throw new TypeError('Failed to fetch');
-    });
-
-    const wallets = await getSolanaWalletFromBip39Mnemonic('mainnet' as ApiNetwork, mnemonicBip39);
-    expect(wallets.length).toBeGreaterThan(0);
-    expect(wallets[0].address).toBeTruthy();
-    expect(wallets[0].derivation?.index).toBe(0);
-  });
-
   test('EVM: getWalletFromBip39Mnemonic falls back to default derivation when RPC fails', async () => {
-    const wallets = await getEvmWalletFromBip39Mnemonic('ethereum', 'mainnet' as ApiNetwork, mnemonicBip39);
+    const wallets = await getEvmWalletFromBip39Mnemonic('bnb', 'mainnet' as ApiNetwork, mnemonicBip39);
     expect(wallets.length).toBeGreaterThan(0);
     expect(wallets[0].address).toBeTruthy();
     expect(wallets[0].derivation?.index).toBe(0);
@@ -117,7 +82,7 @@ describe('Offline wallet import fallbacks', () => {
       throw new TypeError('Failed to fetch');
     });
 
-    const wallets = await getEvmWalletFromBip39Mnemonic('ethereum', 'mainnet' as ApiNetwork, mnemonicBip39);
+    const wallets = await getEvmWalletFromBip39Mnemonic('bnb', 'mainnet' as ApiNetwork, mnemonicBip39);
     expect(wallets.length).toBeGreaterThan(0);
     expect(wallets[0].address).toBeTruthy();
     expect(wallets[0].derivation?.index).toBe(0);

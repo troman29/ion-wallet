@@ -689,28 +689,6 @@ function isGroupedVariantSameAsCurrentAccount(
   return true;
 }
 
-async function maybeMigrateSolanaDerivation(
-  accountId: string,
-  account: ApiBip39Account,
-  pageGroups: ApiGroupedWalletVariant[],
-) {
-  const solanaAccount = account.byChain.solana;
-  if (!solanaAccount?.address || solanaAccount.derivation) return;
-
-  for (const group of pageGroups) {
-    const sol = group.byChain.solana;
-    if (!sol?.hasDerivation || sol.wallet.address !== solanaAccount.address) continue;
-    const { path, index, label } = sol.wallet.derivation ?? {};
-    if (path === undefined || typeof index !== 'number') continue;
-
-    await updateStoredWallet(accountId, 'solana', {
-      derivation: { path, index, ...(label !== undefined && { label }) },
-    });
-
-    break;
-  }
-}
-
 export async function getWalletVariants(
   accountId: string,
   page: number,
@@ -833,10 +811,6 @@ export async function getWalletVariants(
 
   if (onUpdate) {
     sendUpdateTokens(onUpdate);
-  }
-
-  if (page === 0) {
-    await maybeMigrateSolanaDerivation(accountId, account, pageGroups);
   }
 
   return pageGroups;

@@ -14,25 +14,11 @@ export const EVM_DERIVATION_PATHS = {
 } as const;
 
 export function getApiChainByZerionChain(chain: string): EVMChain {
-  switch (chain) {
-    case 'binance-smart-chain':
-      return 'bnb';
-    case 'hyperevm':
-      return 'hyperliquid';
-    default:
-      return chain as EVMChain;
-  }
+  return chain === 'binance-smart-chain' ? 'bnb' : chain as EVMChain;
 }
 
 export function getZerionChainByApiChain(chain: EVMChain): string {
-  switch (chain) {
-    case 'bnb':
-      return 'binance-smart-chain';
-    case 'hyperliquid':
-      return 'hyperevm';
-    default:
-      return chain;
-  }
+  return chain === 'bnb' ? 'binance-smart-chain' : chain;
 }
 
 export const EVM_MAX_NUMBER = 2n ** 256n - 1n;

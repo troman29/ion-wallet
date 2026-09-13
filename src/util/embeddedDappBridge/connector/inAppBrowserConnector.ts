@@ -6,7 +6,6 @@ import {
 } from '../../../config';
 import { registerEvmInjectedWallet } from '../../injectedConnector/evmConnector';
 import { INJECTED_ICON } from '../../injectedConnector/injectedIcon';
-import { registerSolanaInjectedWallet } from '../../injectedConnector/solanaConnector';
 import { tonConnectGetDeviceInfo } from '../../tonConnectEnvironment';
 import { initConnectorString } from './connector';
 
@@ -23,7 +22,6 @@ export function buildInAppBrowserBridgeConnectorCode() {
   },
   '${APP_NAME}',
   '${INJECTED_ICON}',
-  ${registerSolanaInjectedWallet.toString()},
   ${registerEvmInjectedWallet.toString()}
 );
 `;

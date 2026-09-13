@@ -100,7 +100,7 @@ export function fetchCrosschainAccountAssets(
   sendUpdateTokens: NoneToVoidFunction,
   options?: { signal?: AbortSignal },
 ) {
-  return fetchAccountAssets('ethereum', network, address, sendUpdateTokens, {
+  return fetchAccountAssets('bnb', network, address, sendUpdateTokens, {
     isCrossChain: true,
     ...(options?.signal && { signal: options.signal }),
   });
@@ -444,7 +444,6 @@ export const getIsWalletActive = withCacheAsync(
               'erc721',
               'erc1155',
               'external',
-              chain === 'ethereum' ? 'internal' : undefined,
               'erc20',
               'specialnft',
             ]),

@@ -1,45 +1,24 @@
-import type { ApiChain, ApiDerivationSpec, ApiNetwork, ApiToken, ApiTokenWithPrice } from '../api/types';
+import type { ApiChain, ApiDerivationSpec, ApiNetwork, ApiToken, ApiTokenWithPrice, EVMChain } from '../api/types';
 
 import {
-  ARBITRUM,
-  ARBITRUM_USDC_MAINNET,
-  AVALANCHE,
-  AVALANCHE_USDT_MAINNET,
-  BASE,
-  BASE_USDC_MAINNET,
-  BASE_USDT_MAINNET,
   BNB,
   BSC_USDT_MAINNET,
   DEBUG,
-  ETH,
-  ETH_USDC_MAINNET,
-  ETH_USDT_MAINNET,
-  HYPERLIQUID,
-  HYPERLIQUID_USDC_MAINNET,
   IS_GRAM_WALLET,
-  MONAD,
-  POLYGON,
-  ROBINHOOD,
-  SOLANA,
-  SOLANA_USDC_MAINNET,
-  SOLANA_USDT_MAINNET,
   TON_TSUSDE,
   TON_USDE,
   TON_USDT_MAINNET,
   TON_USDT_TESTNET,
   TONCOIN,
-  TRC20_USDT_MAINNET,
-  TRC20_USDT_TESTNET,
-  TRX,
 } from '../config';
 import { EVM_DERIVATION_PATHS } from '../api/chains/evm/constants';
-import { SOLANA_DERIVATION_PATHS } from '../api/chains/solana/constants';
-import { SOLANA_DERIVATION_SPEC, SOLANA_DERIVATION_VERSION } from '../api/chains/solana/derivationConstants';
 import { TON_BIP39_PATH } from '../api/chains/ton/derivationConstants';
-import { TRON_BIP39_PATH } from '../api/chains/tron/constants';
 import formatTonTransferUrl from './ton/formatTransferUrl';
 import { buildCollectionByKey, compact } from './iteratees';
 import withCache from './withCache';
+
+// The EVM family is represented by BNB: it is the only EVM chain here, so it is also its own hub.
+const EVM_CHAIN_STANDARD: ApiChain = 'bnb';
 
 export type ExplorerLink = {
   url: string;
@@ -77,7 +56,11 @@ export interface MarketplaceConfig extends BaseExplorerConfig {
 export interface ChainConfig {
   /** The blockchain title to show in the UI */
   title: string;
-  /** The standard of the chain, e.g. `ethereum` for EVM chains */
+  /**
+   * The chain that stands for the whole family this chain belongs to: the aggregated cross-chain
+   * requests (balances, activities) are addressed to it, and the other chains of the family read
+   * their share out of its answer. A chain that is a family of its own leaves this unset.
+   */
   chainStandard?: ApiChain;
   /** Whether the chain supports domain names that resolve to regular addresses */
   isDnsSupported: boolean;
@@ -175,40 +158,19 @@ export interface ChainConfig {
 }
 
 // Address-matching precedence order (NOT the display order — see `CHAIN_DISPLAY_ORDER` below).
-// A pasted address is matched against chains in this order and the first match wins, so the chain with the more
-// specific address regex must come first: e.g. a TRON address also matches Solana's regex, so `tron` must precede
-// `solana`; and all EVM chains share the same regex, so the first EVM chain (`ethereum`) is the default match.
+// A pasted address is matched against chains in this order and the first match wins, so a chain whose
+// regex is a subset of another's has to come first.
 export const CHAIN_ORDER: ApiChain[] = [
   'ton',
-  'tron',
-  'solana',
-  'ethereum',
-  'base',
   'bnb',
-  'polygon',
-  'arbitrum',
-  'monad',
-  'avalanche',
-  'hyperliquid',
-  'robinhood',
 ];
 
 // Display order for chains everywhere in the UI. Independent of `CHAIN_ORDER`,
 // which is constrained by address-matching correctness.
 // Must contain the same chains as `CHAIN_ORDER`.
 export const CHAIN_DISPLAY_ORDER: ApiChain[] = [
-  'ethereum',
-  'solana',
-  'hyperliquid',
   'ton',
-  'tron',
   'bnb',
-  'base',
-  'robinhood',
-  'monad',
-  'arbitrum',
-  'polygon',
-  'avalanche',
 ];
 
 const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
@@ -237,7 +199,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     doesSupportPushNotifications: true,
     feeCheckAddress: 'UQBE5NzPPnfb6KAy7Rba2yQiuUnihrfcFw96T-p5JtZjAl_c',
     buySwap: {
-      tokenInSlug: TRC20_USDT_MAINNET.slug,
+      tokenInSlug: BSC_USDT_MAINNET.slug,
       amountIn: '100',
     },
     usdtSlug: {
@@ -301,284 +263,9 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     isNetWorthSupported: true,
     formatTransferUrl: formatTonTransferUrl,
   },
-  tron: {
-    title: 'TRON',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: TRON_BIP39_PATH,
-    isNftSupported: false,
-    addressRegex: /^T[1-9A-HJ-NP-Za-km-z]{33}$/,
-    addressPrefixRegex: /^T[1-9A-HJ-NP-Za-km-z]{0,33}$/,
-    nativeToken: TRX,
-    displayColor: '#E65850',
-    doesBackendSocketSupport: true,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: true,
-    doesSupportPushNotifications: false,
-    feeCheckAddress: 'TW2LXSebZ7Br1zHaiA2W1zRojDkDwjGmpw',
-    buySwap: {
-      tokenInSlug: TON_USDT_MAINNET.slug,
-      amountIn: '50',
-    },
-    usdtSlug: {
-      mainnet: TRC20_USDT_MAINNET.slug,
-      testnet: TRC20_USDT_TESTNET.slug,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [TRX.slug],
-      testnet: [TRX.slug],
-    },
-    crosschainSwapSlugs: [TRX.slug, TRC20_USDT_MAINNET.slug],
-    tokenInfo: [
-      TRX,
-      TRC20_USDT_MAINNET,
-      TRC20_USDT_TESTNET,
-    ],
-    explorers: [
-      {
-        id: 'tronscan',
-        name: 'Tronscan',
-        baseUrl: {
-          mainnet: 'https://tronscan.org/#/',
-          testnet: 'https://shasta.tronscan.org/#/',
-        },
-        address: '{base}address/{address}',
-        token: '{base}token20/{address}',
-        transaction: '{base}transaction/{hash}',
-        doConvertHashFromBase64: false,
-      },
-    ],
-    marketplaces: [],
-    isNetWorthSupported: false,
-  },
-  solana: {
-    title: 'Solana',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: true,
-    canSwapByBuyAmount: false,
-    isTransferPayloadSupported: true,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: SOLANA_DERIVATION_PATHS.phantom,
-    isNftSupported: true,
-    addressRegex: /^[1-9A-HJ-NP-Za-km-z]{32,44}$/,
-    addressPrefixRegex: /^[1-9A-HJ-NP-Za-km-z]{0,44}$/,
-    nativeToken: SOLANA,
-    displayColor: '#864BFF',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '35YT7tt9edJbroEKaC3T3XY4cLNWKtVzmyTEfW8LHPEA',
-    buySwap: {
-      tokenInSlug: SOLANA_USDT_MAINNET.slug,
-      amountIn: '100',
-    },
-    usdtSlug: {
-      mainnet: SOLANA_USDT_MAINNET.slug,
-      testnet: undefined,
-    },
-    usdcSlug: {
-      mainnet: SOLANA_USDC_MAINNET.slug,
-      testnet: undefined,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [SOLANA.slug],
-      testnet: [SOLANA.slug],
-    },
-    crosschainSwapSlugs: [SOLANA.slug, SOLANA_USDT_MAINNET.slug],
-    tokenInfo: [
-      SOLANA,
-      SOLANA_USDT_MAINNET,
-      SOLANA_USDC_MAINNET,
-    ],
-    explorers: [{
-      id: 'solscan',
-      name: 'Solscan',
-      baseUrl: {
-        mainnet: 'https://solscan.io/',
-        testnet: {
-          url: 'https://solscan.io/',
-          param: '?cluster=devnet',
-        },
-      },
-      address: '{base}account/{address}',
-      token: '{base}token/{address}',
-      transaction: '{base}tx/{hash}',
-      nft: '{base}token/{address}',
-      // Сollections on solana are grouping by master token address
-      nftCollection: '{base}token/{address}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'magicEden',
-      name: 'Magic Eden',
-      baseUrl: {
-        mainnet: 'https://magiceden.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item-details/{address}',
-    }],
-    nftBatchLimit: 500,
-    nftBatchPauseMs: 1000,
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    derivation: {
-      spec: SOLANA_DERIVATION_SPEC,
-      version: SOLANA_DERIVATION_VERSION,
-    },
-  },
-  ethereum: {
-    title: 'Ethereum',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: ETH,
-    displayColor: '#627EEA',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: TON_USDT_MAINNET.slug,
-      amountIn: '50',
-    },
-    usdtSlug: {
-      mainnet: ETH_USDT_MAINNET.slug,
-      testnet: ETH_USDT_MAINNET.slug,
-    },
-    usdcSlug: {
-      mainnet: ETH_USDC_MAINNET.slug,
-      testnet: undefined,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [ETH.slug],
-      testnet: [ETH.slug],
-    },
-    crosschainSwapSlugs: [ETH.slug, ETH_USDT_MAINNET.slug],
-    tokenInfo: [
-      ETH,
-      ETH_USDT_MAINNET,
-      ETH_USDC_MAINNET,
-    ],
-    explorers: [{
-      id: 'etherscan',
-      name: 'Etherscan',
-      baseUrl: {
-        mainnet: 'https://etherscan.io/',
-        testnet: 'https://sepolia.etherscan.io/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: true,
-  },
-  base: {
-    title: 'Base',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: BASE,
-    displayColor: '#0052FF',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: TON_USDT_MAINNET.slug,
-      amountIn: '50',
-    },
-    usdtSlug: {
-      mainnet: BASE_USDT_MAINNET.slug,
-      testnet: BASE_USDT_MAINNET.slug,
-    },
-    usdcSlug: {
-      mainnet: BASE_USDC_MAINNET.slug,
-      testnet: undefined,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [BASE.slug],
-      testnet: [BASE.slug],
-    },
-    crosschainSwapSlugs: [BASE.slug],
-    tokenInfo: [BASE, BASE_USDT_MAINNET, BASE_USDC_MAINNET],
-    explorers: [{
-      id: 'basescan',
-      name: 'BaseScan',
-      baseUrl: {
-        mainnet: 'https://basescan.org/',
-        testnet: 'https://sepolia.basescan.org/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: true,
-  },
   bnb: {
     title: 'BNB',
-    chainStandard: 'ethereum',
+    chainStandard: 'bnb',
     isDnsSupported: false,
     canBuyWithCardInRussia: false,
     isOnRampSupported: true,
@@ -633,386 +320,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     isNetWorthSupported: false,
     doesSupportPushNotifications: false,
     isNftSupported: true,
-  },
-  polygon: {
-    title: 'Polygon',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: POLYGON,
-    displayColor: '#8247E5',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: POLYGON.slug,
-      amountIn: '100',
-    },
-    usdtSlug: {
-      mainnet: '',
-      testnet: '',
-    },
-    defaultEnabledSlugs: {
-      mainnet: [POLYGON.slug],
-      testnet: [POLYGON.slug],
-    },
-    crosschainSwapSlugs: [POLYGON.slug],
-    tokenInfo: [POLYGON],
-    explorers: [{
-      id: 'polygonscan',
-      name: 'Polygonscan',
-      baseUrl: {
-        mainnet: 'https://polygonscan.com/',
-        testnet: 'https://testnet.polygonscan.com/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: true,
-  },
-  arbitrum: {
-    title: 'Arbitrum',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: ARBITRUM,
-    displayColor: '#28A0F0',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: ARBITRUM_USDC_MAINNET.slug,
-      amountIn: '50',
-    },
-    usdtSlug: {
-      mainnet: '',
-      testnet: '',
-    },
-    usdcSlug: {
-      mainnet: ARBITRUM_USDC_MAINNET.slug,
-      testnet: undefined,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [ARBITRUM.slug],
-      testnet: [ARBITRUM.slug],
-    },
-    crosschainSwapSlugs: [ARBITRUM.slug],
-    tokenInfo: [ARBITRUM, ARBITRUM_USDC_MAINNET],
-    explorers: [{
-      id: 'arbiscan',
-      name: 'Arbiscan',
-      baseUrl: {
-        mainnet: 'https://arbiscan.io/',
-        testnet: 'https://sepolia.arbiscan.io/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: true,
-  },
-  monad: {
-    title: 'Monad',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: MONAD,
-    displayColor: '#5F51AA',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: MONAD.slug,
-      amountIn: '10',
-    },
-    usdtSlug: {
-      mainnet: '',
-      testnet: '',
-    },
-    defaultEnabledSlugs: {
-      mainnet: [MONAD.slug],
-      testnet: [MONAD.slug],
-    },
-    crosschainSwapSlugs: [MONAD.slug],
-    tokenInfo: [MONAD],
-    explorers: [{
-      id: 'monadscan',
-      name: 'Monadscan',
-      baseUrl: {
-        mainnet: 'https://monadscan.com/',
-        testnet: 'https://testnet.monadscan.com/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: false,
-  },
-  avalanche: {
-    title: 'Avalanche',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: AVALANCHE,
-    displayColor: '#A32F22',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: AVALANCHE.slug,
-      amountIn: '0.1',
-    },
-    usdtSlug: {
-      mainnet: AVALANCHE_USDT_MAINNET.slug,
-      testnet: AVALANCHE_USDT_MAINNET.slug,
-    },
-    defaultEnabledSlugs: {
-      testnet: [AVALANCHE.slug],
-      mainnet: [AVALANCHE.slug],
-    },
-    crosschainSwapSlugs: [AVALANCHE.slug],
-    tokenInfo: [AVALANCHE, AVALANCHE_USDT_MAINNET],
-    explorers: [{
-      id: 'snowtrace',
-      name: 'Snowtrace',
-      baseUrl: {
-        mainnet: 'https://snowtrace.io/',
-        testnet: 'https://testnet.snowtrace.io/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: false,
-  },
-  hyperliquid: {
-    title: 'Hyperliquid',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: false,
-    isOffRampSupported: false,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: HYPERLIQUID,
-    displayColor: '#00AF98',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: TON_USDT_MAINNET.slug,
-      amountIn: '50',
-    },
-    usdtSlug: {
-      mainnet: undefined,
-      testnet: undefined,
-    },
-    usdcSlug: {
-      mainnet: HYPERLIQUID_USDC_MAINNET.slug,
-      testnet: undefined,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [HYPERLIQUID.slug],
-      testnet: [HYPERLIQUID.slug],
-    },
-    crosschainSwapSlugs: [HYPERLIQUID.slug, HYPERLIQUID_USDC_MAINNET.slug],
-    tokenInfo: [HYPERLIQUID, HYPERLIQUID_USDC_MAINNET],
-    explorers: [{
-      id: 'hyperevmscan',
-      name: 'Hyperevmscan',
-      baseUrl: {
-        mainnet: 'https://hyperevmscan.io/',
-        testnet: 'https://hyperevmscan.io/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: false,
-  },
-  robinhood: {
-    title: 'Robinhood',
-    chainStandard: 'ethereum',
-    isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
-    isOnchainSwapSupported: false,
-    isTransferPayloadSupported: false,
-    isEncryptedCommentSupported: false,
-    canTransferFullNativeBalance: false,
-    isLedgerSupported: false,
-    isSubwalletsSupported: true,
-    defaultDerivationPath: EVM_DERIVATION_PATHS.default,
-    addressRegex: /^0x[a-fA-F0-9]{40}$/,
-    addressPrefixRegex: /^0x[a-fA-F0-9]{0,40}$/,
-    nativeToken: ROBINHOOD,
-    displayColor: '#CCFF00',
-    doesBackendSocketSupport: false,
-    canImportTokens: false,
-    shouldShowScamWarningIfNotEnoughGas: false,
-    feeCheckAddress: '0x0000000000000000000000000000000000000000',
-    buySwap: {
-      tokenInSlug: TON_USDT_MAINNET.slug,
-      amountIn: '50',
-    },
-    usdtSlug: {
-      mainnet: undefined,
-      testnet: undefined,
-    },
-    defaultEnabledSlugs: {
-      mainnet: [ROBINHOOD.slug],
-      testnet: [ROBINHOOD.slug],
-    },
-    crosschainSwapSlugs: [ROBINHOOD.slug],
-    tokenInfo: [ROBINHOOD],
-    explorers: [{
-      id: 'robinscan',
-      name: 'Robinscan',
-      baseUrl: {
-        mainnet: 'https://robinscan.io/',
-        testnet: 'https://robinscan.io/',
-      },
-      address: '{base}address/{address}',
-      token: '{base}token/{address}',
-      nft: '{base}nft/{address}',
-      transaction: '{base}tx/{hash}',
-      doConvertHashFromBase64: false,
-    }],
-    marketplaces: [{
-      id: 'openSea',
-      name: 'OpenSea',
-      baseUrl: {
-        mainnet: 'https://opensea.io/',
-        testnet: '', // No testnet support
-      },
-      nft: '{base}item/{chain}/{address}',
-    }],
-    isNetWorthSupported: false,
-    doesSupportPushNotifications: false,
-    isNftSupported: false,
   },
 };
 
@@ -1100,7 +407,11 @@ export function getChainsByStandard(chainStandard: ApiChain) {
 }
 
 export function getEvmChains() {
-  return getChainsByStandard('ethereum');
+  return getChainsByStandard(EVM_CHAIN_STANDARD);
+}
+
+export function getIsEvmChain(chain: ApiChain): chain is EVMChain {
+  return getChainConfig(chain).chainStandard === EVM_CHAIN_STANDARD;
 }
 
 /** Returns the chains supported by the given account in the proper order for showing in the UI */
