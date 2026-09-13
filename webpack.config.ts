@@ -39,8 +39,6 @@ import {
   SSE_BRIDGE_URL,
   SUBPROJECT_URL_MASK,
   TON_CONNECT_ANALYTICS_URL,
-  TONAPIIO_MAINNET_URL,
-  TONAPIIO_TESTNET_URL,
   TONCENTER_MAINNET_URL,
   TONCENTER_TESTNET_URL,
   WALLET_CONNECT_BRIDGE_PATTERNS,
@@ -84,8 +82,6 @@ const cspConnectSrcHosts = Array.from(new Set([
   TONCENTER_MAINNET_URL.replace(/^http(s?):/, 'ws$1:'),
   TONCENTER_TESTNET_URL,
   TONCENTER_TESTNET_URL.replace(/^http(s?):/, 'ws$1:'),
-  TONAPIIO_MAINNET_URL,
-  TONAPIIO_TESTNET_URL,
   WALLET_CONNECT_BRIDGE_PATTERNS,
   ...WALLET_CONNECT_PAY_CONNECT_ORIGINS,
   EVM_MAINNET_RPC_URL,
@@ -101,8 +97,6 @@ const cspImageSrcHosts = [
   MW_STATIC_BASE_URL,
   'https://imgproxy.wallet.ice.io',
   'https://dns-image.wallet.ice.io',
-  'https://cache.tonapi.io', // Deprecated
-  'https://c.tonapi.io',
   'https://web-api.changelly.com',
 ].join(' ');
 
@@ -418,8 +412,6 @@ export default function createConfig(
         TONCENTER_MAINNET_KEY: '',
         TONCENTER_TESTNET_URL: '',
         TONCENTER_TESTNET_KEY: '',
-        TONAPIIO_MAINNET_URL: '',
-        TONAPIIO_TESTNET_URL: '',
         BRILLIANT_API_BASE_URL: '',
         EVM_MAINNET_RPC_URL: '',
         EVM_TESTNET_RPC_URL: '',

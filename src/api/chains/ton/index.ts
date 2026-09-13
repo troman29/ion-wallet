@@ -119,7 +119,6 @@ if (process.env.NO_EXTRA_FEATURES !== '1') {
     submitStake: staking.submitStake,
     submitUnstake: staking.submitUnstake,
     submitTokenStakingClaim: staking.submitTokenStakingClaim,
-    submitUnstakeEthenaLocked: staking.submitUnstakeEthenaLocked,
     getCommonData: staking.getStakingCommonData,
   };
 }

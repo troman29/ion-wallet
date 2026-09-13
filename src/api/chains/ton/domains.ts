@@ -7,13 +7,12 @@ import { split } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
 import { createTaskQueue } from '../../../util/schedulers';
 import { getMaxMessagesInTransaction } from '../../../util/ton/transfer';
-import { parseTonapiioNft } from './util/metadata';
 import { getSigner } from './util/signer';
 import { getDnsItemDomain, toBase64Address } from './util/tonCore';
 import { DnsItem } from './contracts/DnsItem';
 import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/accounts';
-import { getNftSuperCollectionsByCollectionAddress } from '../../common/addresses';
 import { callBackendGet } from '../../common/backend';
+import { fetchNftByAddress } from './toncenter/nfts';
 import { resolveAddressByDomain } from './address';
 import { TON_GAS } from './constants';
 import { checkMultiTransactionDraft, submitMultiTransfer } from './transfer';
@@ -109,14 +108,12 @@ export async function fetchDomains(accountId: string) {
   const { network } = parseAccountId(accountId);
   const { address } = await fetchStoredWallet(accountId, 'ton');
   const data = await callBackendGet<Record<string, ApiDomainData>>('/dns/getDomains', { address });
-  const nftSuperCollectionsByCollectionAddress = await getNftSuperCollectionsByCollectionAddress();
-
   const expirationByAddress: Record<string, number> = {};
   const linkedAddressByAddress: Record<string, string> = {};
   const nfts: Record<string, ApiNft> = {};
 
   await Promise.all(Object.keys(data).map(async (nftAddress) => {
-    const { lastFillUpTime, linkedAddress, nft: rawNft } = data[nftAddress];
+    const { lastFillUpTime, linkedAddress } = data[nftAddress];
     expirationByAddress[nftAddress] = new Date(lastFillUpTime).getTime() + YEAR;
     if (linkedAddress) {
       const verifiedLinkedAddress = await linkedAddressVerificationQueue.run(
@@ -127,7 +124,7 @@ export async function fetchDomains(accountId: string) {
         linkedAddressByAddress[nftAddress] = verifiedLinkedAddress;
       }
     }
-    const nft = parseTonapiioNft(network, rawNft, nftSuperCollectionsByCollectionAddress);
+    const nft = await fetchNftByAddress(network, nftAddress);
     if (nft) {
       nfts[nftAddress] = nft;
     }

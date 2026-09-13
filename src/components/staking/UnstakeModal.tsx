@@ -14,7 +14,6 @@ import {
   TONCOIN,
   VALIDATION_PERIOD_MS,
 } from '../../config';
-import renderText from '../../global/helpers/renderText';
 import {
   selectAccountStakingState,
   selectCurrentAccount,
@@ -110,7 +109,6 @@ function UnstakeModal({
   } = getActions();
 
   const {
-    type: stakingType,
     tokenSlug,
     balance: stakingBalance,
   } = stakingState ?? {};
@@ -271,13 +269,11 @@ function UnstakeModal({
   }, [instantAvailable, isInsufficientBalance, isNativeEnough, lang, nativeToken?.symbol, networkFee, realFee, token]);
 
   function renderUnstakeTimer() {
-    const unstakeDateText = stakingType === 'ethena'
-      ? renderText(lang('$unstaking_when_receive_ethena'))
-      : lang('$unstaking_when_receive', {
-        time: (
-          <strong>{formatRelativeHumanDateTime(lang.code, unstakeDate)}</strong>
-        ),
-      });
+    const unstakeDateText = lang('$unstaking_when_receive', {
+      time: (
+        <strong>{formatRelativeHumanDateTime(lang.code, unstakeDate)}</strong>
+      ),
+    });
 
     return (
       <div className={buildClassName(styles.unstakeTime)}>

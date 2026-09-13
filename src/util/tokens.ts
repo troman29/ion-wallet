@@ -9,12 +9,10 @@ import {
   STAKED_TOKEN_SLUGS,
   STAKED_TON_SLUG,
   STAKING_SLUG_PREFIX,
-  TON_USDE,
 } from '../config';
 import { findChainConfig, getChainConfig, getSupportedChains } from './chain';
 import { pick } from './iteratees';
 
-const ETHENA_STAKING_SLUG = `${STAKING_SLUG_PREFIX}${TON_USDE.slug}`;
 const RWA_STOCK_KEYWORD = 'rwa';
 const XSTOCKS_NAME_REGEX = /\s+xStock$/;
 const SHIFT_NAME_REGEX = /^Shift\s+/;
@@ -72,12 +70,7 @@ export function getTokenName(
     return tokenName;
   }
 
-  switch (token.slug) {
-    case ETHENA_STAKING_SLUG:
-      return lang('%token% Staking', { token: 'Ethena' })[0] as string;
-    default:
-      return lang('%token% Staking', { token: tokenName })[0] as string;
-  }
+  return lang('%token% Staking', { token: tokenName })[0] as string;
 }
 
 export function getChainBySlug(slug: string) {

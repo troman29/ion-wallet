@@ -57,6 +57,10 @@
 - [x] **Проверить Giveaway.**
   - Поиск по `src`, `mobile` и `public` не находит оставшегося Giveaway-кода; `app_giveaway_url` удалён из Android ресурсов.
 
+- [x] **Удалить TON-специфичные интеграции Fragment, Notcoin vouchers и Ethena.**
+  - Удалены Fragment collections, NFT-меню, marketplace-метаданные и тестовые trace fixtures; Notcoin voucher exchange/burn flow; Ethena USDe/tsUSDe staking, контракты, backend-модели, activity parsing, интерфейс и локализации.
+  - Обычные NFT, общий burn NFT, liquid staking и jetton staking сохранены.
+
 - [ ] **Проверить iOS Capacitor-проект.**
   - Удалены Air package products, `AirWidgetExtension`, Air-only target и ссылки на удалённые файлы.
   - Проверить открытие проекта, `cap sync ios`, сборку и запуск на симуляторе или устройстве.
@@ -95,6 +99,19 @@
 - [ ] Утвердить и заменить все иконки, logo, splash и store assets по [реестру ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
 - [ ] Поддерживать README без унаследованных непроверенных маркетинговых заявлений; добавить публичные ссылки только после их публикации.
 - [ ] Проверить BNB bridge/swap-путь для ION между ION/TON и BNB Chain.
+- [ ] Подготовить Electron publish-конфигурацию к выпуску.
+  - В `src/electron/config.yml` установить generic publish URL `https://s3.wallet.ice.io/public/desktop-beta` и versioned artifact name `IONWallet-${version}-${arch}.${ext}`.
+  - Одновременно сверить update feed, `package-and-publish.yml` и публичную desktop download-страницу, чтобы имена файлов и URL совпадали.
+- [ ] Заменить `TON_DNS_ZONES` на единственную утверждённую ION DNS-зону.
+  - Получить suffix, resolver, название коллекции и правила renewal/linking для ION DNS, затем убрать TON-специфичные зоны из `src/config.ts`.
+  - Проверить валидацию доменов, receive/send, NFT metadata и экран управления доменом с новой зоной.
+- [ ] Проверить все жёстко заданные TON-адреса, token slug'и и идентификаторы коллекций.
+  - Для каждого runtime-значения подтвердить ION-аналог; если аналога нет, удалить связанную функцию либо временно отключить её безопасной заглушкой до получения утверждённого значения.
+  - В частности, `STON_PTON_ADDRESS` и `STON_PTON_SLUG` участвуют в обработке встроенных swap-транзакций и не могут остаться без решения: заменить на контракт ION-провайдера или убрать эту специальную ветку вместе с интеграцией.
+  - Отдельно отличать такие runtime-константы от тестовых fixtures: фикстуры сохраняются только там, где проверяют поддерживаемую ION-функцию.
+- [ ] Завершить переход публичного моста с TON Connect на ION Gateway после утверждения схемы и регистрации протокола.
+  - Сейчас extension публикует один мост под `window.ionwallet.ionconnect` и временным совместимым alias `window.ionwallet.tonconnect`.
+  - После фикса окончательных URI-схем, manifest/registry-записей и требований ION Gateway заменить или удалить legacy alias, старые bridge identifiers и пользовательские упоминания TON Connect.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Закоммитить и перенести в репозиторий nginx-конфигурацию предпросмотра `wallet.lab.windbit.dev`, если она остаётся частью инфраструктуры проекта.
 

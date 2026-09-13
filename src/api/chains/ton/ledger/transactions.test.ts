@@ -5,7 +5,7 @@ import nacl from 'tweetnacl';
 
 import type { ApiTonWalletVersion, PreparedTransactionToSign, TokenTransferBodyParams } from '../types';
 
-import { DEFAULT_WALLET_VERSION, TON_TSUSDE } from '../../../../config';
+import { DEFAULT_WALLET_VERSION } from '../../../../config';
 import { logDebug, logDebugError } from '../../../../util/logs';
 import { randomBytes } from '../../../../util/random';
 import { encryptMessageComment } from '../util/encryption';
@@ -22,10 +22,9 @@ import {
   resolveTokenAddress,
 } from '../util/tonCore';
 import { DnsItem } from '../contracts/DnsItem';
-import { TsUSDeWallet } from '../contracts/Ethena/TsUSDeWallet';
 import { mockTonAddresses, mockTonBounceableAddresses } from '../../../../../tests/mocks';
 import { expectAddress, expectCell } from '../../../../../tests/util/matchers';
-import { NFT_TRANSFER_FORWARD_AMOUNT, TON_GAS } from '../constants';
+import { NFT_TRANSFER_FORWARD_AMOUNT } from '../constants';
 import { buildNftTransferPayload } from '../nfts';
 import {
   lacksBlindSigningError,
@@ -486,16 +485,6 @@ describe('tonPayloadToLedgerPayload', () => {
 
     'jetton claim': {
       tonPayload: buildJettonClaimPayload(mockTonAddresses.slice(0, 2)),
-      ledgerPayload: 'unsafe',
-    },
-
-    'Ethena staking unlock': {
-      tonPayload: TsUSDeWallet.transferTimelockedMessage({
-        jettonAmount: 123_000n,
-        to: Address.parse(TON_TSUSDE.tokenAddress),
-        responseAddress: Address.parse(mockTonAddresses[0]),
-        forwardTonAmount: TON_GAS.unstakeEthenaLockedForward,
-      }),
       ledgerPayload: 'unsafe',
     },
 

@@ -54,7 +54,6 @@ export interface ChainStakingSupport {
   submitStake: typeof tonStaking.submitStake;
   submitUnstake: typeof tonStaking.submitUnstake;
   submitTokenStakingClaim: typeof tonStaking.submitTokenStakingClaim;
-  submitUnstakeEthenaLocked: typeof tonStaking.submitUnstakeEthenaLocked;
   getCommonData: typeof tonStaking.getStakingCommonData;
 }
 

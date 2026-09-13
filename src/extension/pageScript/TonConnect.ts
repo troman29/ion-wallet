@@ -29,6 +29,8 @@ import { transformTonConnectMessageToUnified } from '../../api/dappProtocols/ada
 declare global {
   interface Window {
     ionwallet: {
+      ionconnect: TonConnect;
+      // Kept temporarily for dApps that still discover the legacy TON Connect bridge.
       tonconnect: TonConnect;
     };
   }
@@ -262,6 +264,7 @@ export function initTonConnect(apiConnector: Connector) {
   const tonConnect = new TonConnect(apiConnector);
 
   window[TONCONNECT_WALLET_JSBRIDGE_KEY] = {
+    ionconnect: tonConnect,
     tonconnect: tonConnect,
   };
 

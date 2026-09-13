@@ -44,12 +44,8 @@ import type {
 import {
   BURN_ADDRESS,
   DNS_IMAGE_GEN_URL,
-  ETHENA_STAKING_VAULT,
   LIQUID_POOL,
-  NFT_FRAGMENT_COLLECTIONS,
   STON_PTON_ADDRESS,
-  TON_TSUSDE,
-  TON_USDE,
   TONCOIN,
 } from '../../../../config';
 import { buildTxId, parseTxId } from '../../../../util/activities';
@@ -404,7 +400,7 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
   } = action;
 
   const common = parseCommonFields(action, options, sender, receiver, amount);
-  const { isIncoming, toAddress, fromAddress } = common;
+  const { isIncoming, toAddress } = common;
 
   const comment = (!isEncrypted && details.comment) || undefined;
   const encryptedComment = (isEncrypted && details.comment) || undefined;
@@ -415,12 +411,6 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
   let type: ApiTransactionType;
   if (toAddress === BURN_ADDRESS) {
     type = 'burn';
-  } else if (tokenAddress === TON_USDE.tokenAddress) {
-    if (fromAddress === ETHENA_STAKING_VAULT) {
-      type = 'unstake';
-    } else if (toAddress === ETHENA_STAKING_VAULT) {
-      type = 'stake';
-    }
   }
 
   const activity: ApiTransactionActivity = {
@@ -456,32 +446,12 @@ function parseJettonMint(action: JettonMintAction, options: ParseOptions): Parse
   const tokenAddress = addressBook[details.asset].user_friendly;
   const slug = buildTokenSlug('ton', tokenAddress);
 
-  let commonFields: ReturnType<typeof parseCommonFields>;
-  let type: ApiTransactionType = 'mint';
-
-  if (
-    tokenAddress === TON_TSUSDE.tokenAddress
-    && action.end_lt !== action.trace_end_lt
-  ) {
-    // TODO After fix on Toncenter's side, move it to transfer parsing (currently it's mistakenly detected as mint)
-    type = 'unstakeRequest';
-    const { metadata: _metadata, ...commonFieldsWithoutMetadata } = parseCommonFields(
-      action, options, receiver, receiver, 0,
-    );
-    commonFields = {
-      ...commonFieldsWithoutMetadata,
-      toAddress: ETHENA_STAKING_VAULT,
-      isIncoming: false,
-      normalizedAddress: ETHENA_STAKING_VAULT,
-    };
-  } else {
-    commonFields = parseCommonFields(action, options, jettonWalletRaw, receiver, amount);
-  }
+  const commonFields = parseCommonFields(action, options, jettonWalletRaw, receiver, amount);
 
   const activity: ApiTransactionActivity = {
     ...commonFields,
     slug,
-    type,
+    type: 'mint',
   };
 
   return {
@@ -1048,7 +1018,6 @@ export function parseToncenterNft(
     const isScam = (isScamByModeration ?? collectionMetadata?.is_scam) || hasScamLink;
     const isNsfw = isNsfwByModeration ?? collectionMetadata?.is_nsfw;
     const isHidden = extra?.render_type === 'hidden' || isScam;
-    const isOnFragment = NFT_FRAGMENT_COLLECTIONS.includes(rawCollectionAddress!);
     // A non-string `value` breaks the UI.
     const attributes = Array.isArray(extra?.attributes)
       ? extra.attributes.filter((attribute): attribute is ApiNftAttribute => typeof attribute?.value === 'string')
@@ -1073,7 +1042,7 @@ export function parseToncenterNft(
       isHidden,
       isScam,
       isNsfw,
-      isUnverified: getIsNftUnverified({ collectionAddress, isOnFragment }),
+      isUnverified: getIsNftUnverified({ collectionAddress }),
       metadata: {
         ...(attributes && { attributes }),
         ...(lottie && { lottie }),
@@ -1081,7 +1050,6 @@ export function parseToncenterNft(
       ...(collectionAddress && {
         collectionAddress,
         collectionName: collectionMetadata?.name,
-        isOnFragment,
       }),
     });
 

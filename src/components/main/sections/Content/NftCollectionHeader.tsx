@@ -5,10 +5,7 @@ import type { ApiChain, ApiNft, ApiNftCollection } from '../../../../api/types';
 import type { IAnchorPosition } from '../../../../global/types';
 import type { DropdownItem } from '../../../ui/Dropdown';
 
-import {
-  NFT_FRAGMENT_COLLECTIONS,
-  RENEWABLE_TON_DNS_COLLECTIONS,
-} from '../../../../config';
+import { RENEWABLE_TON_DNS_COLLECTIONS } from '../../../../config';
 import { selectCurrentAccountState, selectIsCurrentAccountViewMode } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import captureEscKeyListener from '../../../../util/captureEscKeyListener';
@@ -32,7 +29,7 @@ import DropdownMenu from '../../../ui/DropdownMenu';
 
 import styles from './NftCollectionHeader.module.scss';
 
-type MenuHandler = 'sendAll' | 'fragment' | 'marketplace' | 'explorer' | 'hideAll' | 'burnAll' | 'selectAll'
+type MenuHandler = 'sendAll' | 'marketplace' | 'explorer' | 'hideAll' | 'burnAll' | 'selectAll'
   | 'removeTab' | 'addTab' | 'renew';
 
 interface OwnProps {
@@ -102,11 +99,6 @@ function NftCollectionHeader({
       !isViewMode && {
         name: 'Send All',
         value: 'sendAll',
-      } satisfies DropdownItem<MenuHandler>,
-      collectionNfts?.[0]?.isOnFragment && {
-        name: 'Fragment',
-        value: 'fragment',
-        fontIcon: 'external',
       } satisfies DropdownItem<MenuHandler>,
       getMarketplaceNftCollectionUrl(collection.chain, collection.address) && {
         name: getMarketplaceName(collection.chain, collection.address),
@@ -192,19 +184,6 @@ function NftCollectionHeader({
         );
         if (url) {
           void openUrl(url);
-        }
-
-        break;
-      }
-
-      case 'fragment': {
-        if (collection.address === NFT_FRAGMENT_COLLECTIONS[0]) {
-          void openUrl('https://fragment.com/numbers');
-        } else if (collection.address === NFT_FRAGMENT_COLLECTIONS[1]) {
-          void openUrl('https://fragment.com');
-        } else {
-          const collectionSlug = collectionName.toLowerCase().replace(/\W/g, '').replace(/s$/, '');
-          void openUrl(`https://fragment.com/gifts/${collectionSlug}`);
         }
 
         break;

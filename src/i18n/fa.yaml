@@ -262,7 +262,6 @@ Amount to unstake: مقدار برای برداشت استیک
 Confirm Unstaking: تأیید برداشت استیک
 $unstaking_when_receive: شما سپرده برداشت‌شده خود را در %time% دریافت خواهید کرد.
 $unstaking_when_receive_with_amount: شما %amount% برداشت‌شده خود را در %time% دریافت خواهید کرد.
-$unstaking_when_receive_with_amount_ethena: شما قادر خواهید بود %amount% برداشت‌شده خود را در %time% دریافت کنید.
 $unstake_insufficient_balance: برای ادامه برداشت استیک باید %balance% در موجودی اصلی خود داشته باشید.
 at %annual_yield%: با %annual_yield%
 Est. %annual_yield%: تخمینی %annual_yield%
@@ -941,12 +940,8 @@ mobile app: اپلیکیشن موبایل
 browser extension: افزونه مرورگر
 Exit all wallets: خروج از همه کیف پول‌ها
 Can't confirm?: نمی‌توانید تأیید کنید؟
-$safe_staking_ethena_description1: استیکینگ کاملاً غیرمتمرکز است و توسط قراردادهای هوشمند **استیکینگ نقدی رسمی Ethena** که ممیزی شده‌اند، اداره می‌شود.
-$safe_staking_ethena_description2: استیک USDe واریزشده در **استراتژی‌های معاملاتی و سرمایه‌گذاری** Ethena برای کسب پاداش به‌صورت خودکار و شفاف استفاده می‌شود.
-$safe_staking_ethena_description3: می‌توانید استیک خود را به همراه پاداش‌ها در هر زمان **برداشت** کنید و طبق دوره برداشت استاندارد Ethena، **ظرف ۷ روز** به حساب شما بازگردانده خواهد شد.
 Unstake %amount%: برداشت استیک %amount%
 Request Unstaking: درخواست برداشت استیک
-$unstaking_when_receive_ethena: شما قادر خواهید بود سپرده برداشت‌شده خود را **ظرف ۷ روز** دریافت کنید.
 Confirm Upgrading: تأیید ارتقا
 How does it work?: چگونه کار می‌کند؟
 Multisend: ارسال گروهی

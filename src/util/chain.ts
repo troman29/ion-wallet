@@ -5,8 +5,6 @@ import {
   BSC_USDT_MAINNET,
   DEBUG,
   ION_BNB_MAINNET,
-  TON_TSUSDE,
-  TON_USDE,
   TON_USDT_MAINNET,
   TON_USDT_TESTNET,
   TONCOIN,
@@ -219,8 +217,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       TONCOIN,
       TON_USDT_MAINNET,
       TON_USDT_TESTNET,
-      TON_USDE,
-      TON_TSUSDE,
     ],
     explorers: [
       {

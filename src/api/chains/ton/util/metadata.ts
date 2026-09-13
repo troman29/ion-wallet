@@ -1,4 +1,3 @@
-import type { NftItem } from 'tonapi-sdk-js';
 import type { DictionaryValue } from '@ton/core';
 import { BitReader } from '@ton/core/dist/boc/BitReader';
 import { BitString } from '@ton/core/dist/boc/BitString';
@@ -12,7 +11,6 @@ import {
   type ApiActivity,
   type ApiAnyDisplayError,
   type ApiNetwork,
-  type ApiNft,
   type ApiParsedPayload,
   ApiTokenImportError,
 } from '../../../types';
@@ -20,15 +18,12 @@ import {
 import {
   DEBUG,
   LIQUID_JETTON,
-  NFT_FRAGMENT_COLLECTIONS,
-  NOTCOIN_VOUCHERS_ADDRESS,
   TON_DNS_ZONES,
 } from '../../../../config';
-import { fetchJsonWithProxy, getProxiedLottieUrl } from '../../../../util/fetch';
-import { omitUndefined, pick, range } from '../../../../util/iteratees';
+import { fetchJsonWithProxy } from '../../../../util/fetch';
+import { pick, range } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
 import {
-  checkHasScamLink,
   checkIsTrustedCollection,
   getHasTrustedCollections,
 } from '../../../common/addresses';
@@ -59,7 +54,6 @@ const OFFCHAIN_CONTENT_PREFIX = 0x01;
 const SNAKE_PREFIX = 0x00;
 
 const VERIFIED_TON_COLLECTIONS = new Set<string>([
-  NOTCOIN_VOUCHERS_ADDRESS,
   ...TON_DNS_ZONES.map(({ resolver }) => resolver),
 ]);
 
@@ -566,94 +560,6 @@ export function readSnakeBytes(slice: Slice) {
   return buffer;
 }
 
-export function parseTonapiioNft(
-  network: ApiNetwork,
-  rawNft: NftItem,
-  _nftSuperCollectionsByCollectionAddress: Record<string, unknown>,
-): ApiNft | undefined {
-  if (!rawNft.metadata) {
-    return undefined;
-  }
-
-  try {
-    const {
-      address,
-      index,
-      collection,
-      metadata: rawMetadata,
-      previews,
-      sale,
-      trust,
-      owner,
-    } = rawNft;
-
-    const {
-      name, description, render_type: renderType, attributes, lottie,
-    } = rawMetadata as {
-      name?: string;
-      image?: string;
-      description?: string;
-      render_type?: string;
-      attributes?: {
-        trait_type: string;
-        value: any;
-      }[];
-      lottie?: string;
-    };
-
-    const collectionAddress = collection && toBase64Address(collection.address, true, network);
-    let hasScamLink = false;
-
-    if (!collectionAddress || !checkIsTrustedCollection(collectionAddress)) {
-      for (const text of [name, description].filter(Boolean)) {
-        if (checkHasScamLink(text)) {
-          hasScamLink = true;
-        }
-      }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-    const isWhitelisted = trust === 'whitelist';
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-    const isScam = hasScamLink || description === 'SCAM' || trust === 'blacklist';
-    const isHidden = renderType === 'hidden' || isScam;
-    const isOnFragment = !!collection && NFT_FRAGMENT_COLLECTIONS.includes(collection.address);
-
-    const metadata = {
-      ...(Array.isArray(attributes) && {
-        // `nft.metadata.attributes[number].value` is almost always `string`, but can also be an object (https://tonscan.org/nft/EQAglL_g6q2AhMK_BT9jN1F-8jBlv2pOI30vRkPluU9kcXgV)
-        attributes: attributes.filter((a) => typeof a.value === 'string'),
-      }),
-      ...(isWhitelisted && lottie && { lottie: getProxiedLottieUrl(lottie) }),
-    };
-
-    return omitUndefined<ApiNft>({
-      chain: 'ton',
-      interface: 'default',
-      index,
-      name,
-      ownerAddress: owner ? toBase64Address(owner.address, false, network) : undefined,
-      address: toBase64Address(address, true, network),
-      image: previews?.find((x) => x.resolution === '1500x1500')?.url,
-      thumbnail: previews?.find((x) => x.resolution === '500x500')?.url,
-      isOnSale: Boolean(sale),
-      isHidden,
-      isScam,
-      isUnverified: getIsNftUnverified({ collectionAddress, isOnFragment }),
-      description,
-      ...(collection && {
-        collectionAddress,
-        collectionName: collection.name,
-        isOnFragment,
-      }),
-      metadata,
-    });
-  } catch (err) {
-    logDebugError('buildNft', err);
-    return undefined;
-  }
-}
-
 /**
  * Returns `true` when the collection matched no trust signal, and `undefined` otherwise, so that `omitUndefined`
  * leaves verified NFTs unchanged. Both TON parsers must pass the same inputs here: an NFT built from an activity
@@ -661,14 +567,11 @@ export function parseTonapiioNft(
  */
 export function getIsNftUnverified(options: {
   collectionAddress?: string;
-  isOnFragment?: boolean;
 }): true | undefined {
-  const { collectionAddress, isOnFragment } = options;
+  const { collectionAddress } = options;
 
   // Until the backend list arrives every collection looks unverified, so the filter stays off
   if (!getHasTrustedCollections()) return undefined;
-
-  if (isOnFragment) return undefined;
 
   if (collectionAddress
     && (VERIFIED_TON_COLLECTIONS.has(collectionAddress) || checkIsTrustedCollection(collectionAddress))) {

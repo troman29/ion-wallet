@@ -356,20 +356,6 @@ $gapSize: 0.5rem;
   inset-inline-end: 0.5rem;
 }
 
-.notcoinVoucherButton {
-  margin: 0.75rem auto;
-  background-color: black !important;
-  transition: opacity 250ms ease;
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-.notcoinVoucherIcon {
-  margin-inline-end: 0.5rem;
-}
-
 .chainIcon {
   vertical-align: -0.125rem;
 }

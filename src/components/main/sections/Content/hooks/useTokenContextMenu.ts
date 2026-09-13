@@ -97,8 +97,8 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
         fontIcon: 'menu-send',
         value: 'stakeMore',
       } satisfies DropdownItem<MenuHandler>,
-      (stakingState?.type !== 'ethena' || !canBeClaimed) && {
-        name: stakingState?.type === 'ethena' ? 'Request Unstaking' : 'Unstake',
+      {
+        name: 'Unstake',
         fontIcon: 'menu-receive',
         value: 'unstake',
       } satisfies DropdownItem<MenuHandler>,
@@ -130,7 +130,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
     return compact(result.concat(mandatoryItems));
   }, [
     canBeClaimed, hasUnclaimedRewards, isStakingAvailable, isStakeMoreAllowed, isSwapDisabled, isViewMode,
-    stakingId, stakingState?.type, isServiceToken, isPinned,
+    stakingId, isServiceToken, isPinned,
   ]);
 
   const handleMenuItemSelect = useLastCallback((value: MenuHandler) => {

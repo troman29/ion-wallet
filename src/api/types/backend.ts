@@ -365,12 +365,6 @@ export type ApiStakingCommonResponse = {
     unlock: number;
   };
   jettonPools: Omit<ApiStakingJettonPool, 'poolConfig'>[];
-  ethena: {
-    apy: number;
-    apyVerified?: number;
-    rate: number;
-    isDisabled?: boolean;
-  };
 };
 
 /** Note: all timestamps are in Unix milliseconds */

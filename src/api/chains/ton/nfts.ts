@@ -11,9 +11,6 @@ import type {
 import {
   BURN_ADDRESS,
   NFT_BATCH_SIZE,
-  NOTCOIN_EXCHANGERS,
-  NOTCOIN_FORWARD_TON_AMOUNT,
-  NOTCOIN_VOUCHERS_ADDRESS,
 } from '../../../config';
 import { parseAccountId } from '../../../util/account';
 import { bigintMultiplyToNumber } from '../../../util/bigint';
@@ -176,13 +173,7 @@ export async function checkNftTransferDraft(options: {
   const account = await fetchStoredChainAccount(accountId, 'ton');
   const { address: fromAddress } = account.byChain.ton;
 
-  const isNotcoinVouchers = nfts.some((n) => n.collectionAddress === NOTCOIN_VOUCHERS_ADDRESS);
-
-  toAddress = isNftBurn
-    ? isNotcoinVouchers
-      ? NOTCOIN_EXCHANGERS[0]
-      : BURN_ADDRESS
-    : toAddress;
+  toAddress = isNftBurn ? BURN_ADDRESS : toAddress;
 
   const result: ApiCheckTransactionDraftResult = await checkToAddress(network, toAddress);
   if ('error' in result) {
@@ -245,13 +236,7 @@ export async function submitNftTransfers(options: {
 
   let { toAddress } = options;
 
-  const isNotcoinVouchers = nfts.some((n) => n.collectionAddress === NOTCOIN_VOUCHERS_ADDRESS);
-
-  toAddress = isNftBurn
-    ? isNotcoinVouchers
-      ? NOTCOIN_EXCHANGERS[0]
-      : BURN_ADDRESS
-    : toAddress;
+  toAddress = isNftBurn ? BURN_ADDRESS : toAddress;
 
   const account = await fetchStoredChainAccount(accountId, 'ton');
   const { address: fromAddress } = account.byChain.ton;
@@ -298,40 +283,13 @@ function buildNftTransferMessage(
   comment?: string,
   isLedger?: boolean,
 ) {
-  const isNotcoinBurn = nft.collectionAddress === NOTCOIN_VOUCHERS_ADDRESS
-    && (toAddress === BURN_ADDRESS || NOTCOIN_EXCHANGERS.includes(toAddress as any));
-  const payload = isNotcoinBurn
-    ? buildNotcoinVoucherExchange(fromAddress, nft.address, nft.index, isLedger)
-    : buildNftTransferPayload({ fromAddress, toAddress, payload: comment, isLedger });
+  const payload = buildNftTransferPayload({ fromAddress, toAddress, payload: comment, isLedger });
 
   return {
     payload,
     amount: NFT_TRANSFER_AMOUNT,
     toAddress: nft.address,
   };
-}
-
-function buildNotcoinVoucherExchange(
-  fromAddress: string,
-  nftAddress: string,
-  nftIndex: number,
-  isLedger?: boolean,
-) {
-  const first4Bits = Address.parse(nftAddress).hash.readUint8() >> 4;
-  const toAddress = NOTCOIN_EXCHANGERS[first4Bits];
-
-  const payload = new Builder()
-    .storeUint(0x5fec6642, 32)
-    .storeUint(nftIndex, 64)
-    .endCell();
-
-  return buildNftTransferPayload({
-    fromAddress,
-    toAddress,
-    payload,
-    forwardAmount: NOTCOIN_FORWARD_TON_AMOUNT,
-    isLedger,
-  });
 }
 
 interface NftTransferPayloadParams {

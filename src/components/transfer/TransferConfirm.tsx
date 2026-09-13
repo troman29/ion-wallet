@@ -11,7 +11,6 @@ import {
   BURN_ADDRESS,
   BURN_CHUNK_DURATION_APPROX_SEC,
   NFT_BATCH_SIZE,
-  NOTCOIN_EXCHANGERS,
 } from '../../config';
 import renderText from '../../global/helpers/renderText';
 import { selectCurrentAccountId, selectNetworkAccounts } from '../../global/selectors';
@@ -101,7 +100,6 @@ function TransferConfirm({
   }), [accounts, chain, currentAccountId, savedAddresses, toAddress]);
   const addressName = localAddressName || toAddressName;
   const isBurning = resolvedAddress === BURN_ADDRESS || isNftBurn;
-  const isNotcoinBurning = resolvedAddress === NOTCOIN_EXCHANGERS[0];
 
   useHistoryBack({
     isActive,
@@ -205,7 +203,7 @@ function TransferConfirm({
   }
 
   function getSubmitBtnText() {
-    if (isBurning || isNotcoinBurning) {
+    if (isBurning) {
       return lang(isNftTransfer ? ((nfts?.length ?? 0) > 1 ? 'Burn Collectibles' : 'Burn NFT') : 'Burn');
     }
     return lang('Confirm');
@@ -254,7 +252,7 @@ function TransferConfirm({
         {renderAmountWithFee()}
         {renderComment()}
 
-        {nfts && (isBurning || (isNotcoinBurning && nfts?.length > 1)) && (
+        {nfts && isBurning && (
           <div className={styles.burnWarning}>
             {(
               nfts?.length === 1 ? (
