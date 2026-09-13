@@ -4,6 +4,7 @@ import { getActions, withGlobal } from '../../global';
 import type { GlobalState } from '../../global/types';
 import { SignDataState } from '../../global/types';
 
+import { IS_CAPACITOR } from '../../config';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
 import { pick } from '../../util/iteratees';
@@ -69,6 +70,7 @@ function DappSignDataModal({
           isActive={isActive}
           isLoading={isLoading}
           error={error}
+          withCloseButton={IS_CAPACITOR}
           submitLabel={lang('Sign')}
           cancelLabel={lang('Back')}
           noAutoConfirm

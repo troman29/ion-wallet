@@ -94,7 +94,7 @@ function ManageTransferPage({ isActive, onBack, onSubmit, onDelete, editingTrans
     if (!canSubmit) return;
 
     setIsSubmitting(true);
-    vibrate();
+    void vibrate();
 
     try {
       const validationResult = await validateAndProcessTransfer({
@@ -125,7 +125,7 @@ function ManageTransferPage({ isActive, onBack, onSubmit, onDelete, editingTrans
 
   const handleDelete = useLastCallback(() => {
     if (editingIndex !== undefined && onDelete) {
-      vibrate();
+      void vibrate();
       onDelete(editingIndex);
     }
   });

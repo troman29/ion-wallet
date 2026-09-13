@@ -39,7 +39,7 @@ function SentTabs({ className, isOffRampAllowed }: OwnProps & StateProps) {
   const lang = useLang();
 
   const handleMultisendOpen = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     void openUrl(MULTISEND_DAPP_URL, {
       title: getTranslation('Multisend'),
       subtitle: getHostnameFromUrl(MULTISEND_DAPP_URL),
@@ -48,7 +48,7 @@ function SentTabs({ className, isOffRampAllowed }: OwnProps & StateProps) {
 
   const handleSwitchTab = useLastCallback((index: TabContent) => {
     if (index === TabContent.Sell) {
-      vibrate();
+      void vibrate();
       cancelTransfer();
       openOffRampWidgetModal();
     }

@@ -10,6 +10,7 @@ import {
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
+import { IS_IOS_APP } from '../../util/windowEnvironment';
 
 import useAccountSwitcherScreen, { AccountSwitcherScreen } from '../../hooks/useAccountSwitcherScreen';
 import useLang from '../../hooks/useLang';
@@ -102,7 +103,7 @@ function ReceiveModal({
   return (
     <Modal
       isOpen={isOpen}
-      dialogClassName={styles.modalDialog}
+      dialogClassName={IS_IOS_APP ? styles.iosModalDialog : styles.modalDialog}
       onClose={closeReceiveModal}
       onCloseAnimationEnd={updateNextKey}
     >

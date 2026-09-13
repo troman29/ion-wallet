@@ -98,32 +98,32 @@ function TopActions({
   const handleBuyClick = useLastCallback(() => {
     if (!onRampChain) return;
 
-    vibrate();
+    void vibrate();
     openOnRampWidgetModal({ chain: onRampChain });
   });
 
   const handleDepositClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     openReceiveModal();
   });
 
   const handleTradeClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     startSwap();
   });
 
   const handleEarnClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     openStakingInfoOrStart();
   });
 
   const handleSellClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     openOffRampWidgetModal();
   });
 
   const handleSendClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     startTransfer();
   });
 

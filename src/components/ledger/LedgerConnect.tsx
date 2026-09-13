@@ -1,25 +1,31 @@
 import type { TeactNode } from '../../lib/teact/teact';
-import React, { memo, useEffect } from '../../lib/teact/teact';
+import React, {
+  memo, useEffect, useMemo, useState,
+} from '../../lib/teact/teact';
 import { getActions, withGlobal } from '../../global';
 
 import type { ApiChain } from '../../api/types';
 import type { Theme } from '../../global/types';
+import type { LedgerTransport } from '../../util/ledger/types';
 import { HardwareConnectState } from '../../global/types';
 
-import { IS_GRAM_WALLET } from '../../config';
+import { IS_CAPACITOR, IS_GRAM_WALLET } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import { getChainTitle } from '../../util/chain';
 import { closeLedgerTab } from '../../util/ledger/tab';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
-import { IS_ANDROID, IS_IOS, IS_LEDGER_EXTENSION_TAB } from '../../util/windowEnvironment';
+import { IS_ANDROID, IS_IOS, IS_IOS_APP, IS_LEDGER_EXTENSION_TAB } from '../../util/windowEnvironment';
 
 import useAppTheme from '../../hooks/useAppTheme';
 import { useDeviceScreen } from '../../hooks/useDeviceScreen';
+import useEffectWithPrevDeps from '../../hooks/useEffectWithPrevDeps';
 import useHistoryBack from '../../hooks/useHistoryBack';
 import useLang from '../../hooks/useLang';
 import useLastCallback from '../../hooks/useLastCallback';
+import useShowTransition from '../../hooks/useShowTransition';
 
 import Button from '../ui/Button';
+import Dropdown from '../ui/Dropdown';
 import Image from '../ui/Image';
 import ModalHeader from '../ui/ModalHeader';
 import Transition from '../ui/Transition';
@@ -32,8 +38,16 @@ import ledgerDesktopSrc from '../../assets/ledger/desktop.png';
 import ledgerDesktopDarkSrc from '../../assets/ledger/desktop-dark.png';
 import gramLedgerDesktopSrc from '../../assets/ledger/gram-desktop.png';
 import gramLedgerDesktopDarkSrc from '../../assets/ledger/gram-desktop-dark.png';
+import gramLedgerIosSrc from '../../assets/ledger/gram-ios.png';
+import gramLedgerIosDarkSrc from '../../assets/ledger/gram-ios-dark.png';
+import gramLedgerMobileBluetoothSrc from '../../assets/ledger/gram-mobile-bluetooth.png';
+import gramLedgerMobileBluetoothDarkSrc from '../../assets/ledger/gram-mobile-bluetooth-dark.png';
 import gramLedgerMobileUsbSrc from '../../assets/ledger/gram-mobile-usb.png';
 import gramLedgerMobileUsbDarkSrc from '../../assets/ledger/gram-mobile-usb-dark.png';
+import ledgerIosSrc from '../../assets/ledger/ios.png';
+import ledgerIosDarkSrc from '../../assets/ledger/ios-dark.png';
+import ledgerMobileBluetoothSrc from '../../assets/ledger/mobile-bluetooth.png';
+import ledgerMobileBluetoothDarkSrc from '../../assets/ledger/mobile-bluetooth-dark.png';
 import ledgerMobileUsbSrc from '../../assets/ledger/mobile-usb.png';
 import ledgerMobileUsbDarkSrc from '../../assets/ledger/mobile-usb-dark.png';
 
@@ -52,18 +66,27 @@ interface StateProps {
   chain: ApiChain;
   isLedgerConnected?: boolean;
   isChainAppConnected?: boolean;
-  isLedgerSupported?: boolean;
+  availableTransports?: LedgerTransport[];
+  lastUsedTransport?: LedgerTransport;
   currentTheme: Theme;
 }
 
 const NEXT_SLIDE_DELAY = 500;
+const TRANSPORT_NAMES: Record<LedgerTransport, string> = {
+  usb: 'USB',
+  bluetooth: 'Bluetooth',
+};
 const LEDGER_ICONS = {
   desktop: { light: ledgerDesktopSrc, dark: ledgerDesktopDarkSrc },
   mobileUsb: { light: ledgerMobileUsbSrc, dark: ledgerMobileUsbDarkSrc },
+  ios: { light: ledgerIosSrc, dark: ledgerIosDarkSrc },
+  mobileBluetooth: { light: ledgerMobileBluetoothSrc, dark: ledgerMobileBluetoothDarkSrc },
 };
 const GRAM_LEDGER_ICONS = {
   desktop: { light: gramLedgerDesktopSrc, dark: gramLedgerDesktopDarkSrc },
   mobileUsb: { light: gramLedgerMobileUsbSrc, dark: gramLedgerMobileUsbDarkSrc },
+  ios: { light: gramLedgerIosSrc, dark: gramLedgerIosDarkSrc },
+  mobileBluetooth: { light: gramLedgerMobileBluetoothSrc, dark: gramLedgerMobileBluetoothDarkSrc },
 };
 
 function LedgerConnect({
@@ -73,7 +96,8 @@ function LedgerConnect({
   chain,
   isLedgerConnected,
   isChainAppConnected,
-  isLedgerSupported,
+  availableTransports,
+  lastUsedTransport,
   currentTheme,
   className,
   onConnected,
@@ -85,6 +109,7 @@ function LedgerConnect({
 
   const lang = useLang();
   const { isPortrait } = useDeviceScreen();
+  const [selectedTransport, setSelectedTransport] = useState<LedgerTransport | undefined>(lastUsedTransport);
   const appTheme = useAppTheme(currentTheme);
 
   const isLedgerFailed = isLedgerConnected === false;
@@ -96,16 +121,45 @@ function LedgerConnect({
   const shouldCloseOnCancel = !onCancel;
   const noCancelButton = Boolean(onBackClick);
 
+  const renderingAvailableTransports = useMemo(() => {
+    return (availableTransports || []).map((transport) => ({
+      value: transport,
+      name: TRANSPORT_NAMES[transport],
+    }));
+  }, [availableTransports]);
+  const {
+    shouldRender: shouldRenderAvailableTransports,
+    ref: availableTransportsRef,
+  } = useShowTransition({
+    isOpen: Boolean(renderingAvailableTransports.length > 1 && selectedTransport),
+    withShouldRender: true,
+  });
+
   useHistoryBack({
     isActive,
     onBack: onCancel ?? onClose,
   });
 
   useEffect(() => {
+    if (selectedTransport) return;
+    if (availableTransports?.length) {
+      setSelectedTransport(availableTransports?.[0]);
+    } else if (IS_IOS_APP) {
+      setSelectedTransport('bluetooth');
+    }
+  }, [availableTransports, selectedTransport]);
+
+  useEffect(() => {
     if (!isActive) return;
 
     initializeHardwareWalletModal();
   }, [isActive]);
+
+  useEffectWithPrevDeps(([prevLastUsedTransport]) => {
+    if (lastUsedTransport && prevLastUsedTransport !== lastUsedTransport) {
+      setSelectedTransport(lastUsedTransport);
+    }
+  }, [lastUsedTransport]);
 
   const handleConnected = useLastCallback(() => {
     if (IS_LEDGER_EXTENSION_TAB) {
@@ -128,8 +182,27 @@ function LedgerConnect({
   });
 
   const handleSubmit = useLastCallback(() => {
-    initializeHardwareWalletConnection({ transport: 'usb' });
+    if (selectedTransport) {
+      initializeHardwareWalletConnection({ transport: selectedTransport });
+    }
   });
+
+  function renderAvailableTransports() {
+    return (
+      <div ref={availableTransportsRef} className={styles.dropdownBlock}>
+        <Dropdown
+          label={lang('Connection Type')}
+          items={renderingAvailableTransports}
+          selectedValue={selectedTransport}
+          theme="light"
+          arrow="chevron"
+          disabled={isConnecting}
+          className={buildClassName(styles.item, styles.item_small)}
+          onChange={setSelectedTransport}
+        />
+      </div>
+    );
+  }
 
   function renderButtons() {
     const isFailed = state === HardwareConnectState.Failed;
@@ -158,7 +231,7 @@ function LedgerConnect({
         <Button
           isPrimary
           isLoading={isConnecting}
-          isDisabled={isConnecting || isConnected || !isLedgerSupported}
+          isDisabled={isConnecting || isConnected || !availableTransports?.length}
           className={buildClassName(styles.button, noCancelButton && styles.buttonFullWidth)}
           onClick={handleSubmit}
         >
@@ -182,9 +255,20 @@ function LedgerConnect({
     const iconData = {
       desktop: isDarkTheme ? icons.desktop.dark : icons.desktop.light,
       mobileUsb: isDarkTheme ? icons.mobileUsb.dark : icons.mobileUsb.light,
+      ios: isDarkTheme ? icons.ios.dark : icons.ios.light,
+      mobileBluetooth: isDarkTheme ? icons.mobileBluetooth.dark : icons.mobileBluetooth.light,
     };
 
-    return IS_ANDROID ? iconData.mobileUsb : iconData.desktop;
+    if (!IS_CAPACITOR) {
+      // Ledger is only supported on iOS for Capacitor app
+      return IS_ANDROID ? iconData.mobileUsb : iconData.desktop;
+    }
+
+    if (IS_IOS) {
+      return iconData.ios;
+    }
+
+    return selectedTransport === 'bluetooth' ? iconData.mobileBluetooth : iconData.mobileUsb;
   }
 
   function renderScreen(handleClose: NoneToVoidFunction, children: TeactNode) {
@@ -211,7 +295,7 @@ function LedgerConnect({
           )}
         >
           <Transition
-            activeKey={0}
+            activeKey={!IS_CAPACITOR ? 0 : (selectedTransport !== 'bluetooth' ? 1 : 2)}
             name="semiFade"
             className={buildClassName(styles.iconBlock, (isPortrait || IS_IOS) && styles.mobile)}
             slideClassName={isStatic ? styles.iconBlockSlideStatic : styles.iconBlockSlide}
@@ -296,6 +380,7 @@ function LedgerConnect({
           </span>
         </div>
 
+        {shouldRenderAvailableTransports && renderAvailableTransports()}
         {renderButtons()}
       </>
     ));
@@ -328,6 +413,7 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     isLedgerConnected,
     isChainAppConnected,
     availableTransports,
+    lastUsedTransport,
   } = global.hardware;
 
   return {
@@ -335,7 +421,8 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     chain,
     isLedgerConnected,
     isChainAppConnected,
-    isLedgerSupported: Boolean(availableTransports?.length),
+    availableTransports,
+    lastUsedTransport,
     currentTheme: global.settings.theme,
   };
 })(LedgerConnect));

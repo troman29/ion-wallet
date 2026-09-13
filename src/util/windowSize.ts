@@ -1,6 +1,8 @@
-import { IS_TELEGRAM_APP } from '../config';
+import { IS_CAPACITOR, IS_TELEGRAM_APP } from '../config';
 import { requestMutation } from '../lib/fasterdom/fasterdom';
+import { applyStyles } from './animation';
 import { SECOND } from './dateFormat';
+import safeExec from './safeExec';
 import { throttle } from './schedulers';
 import { IS_ANDROID, IS_IOS } from './windowEnvironment';
 
@@ -8,7 +10,10 @@ const WINDOW_RESIZE_THROTTLE_MS = IS_TELEGRAM_APP ? 25 : 250;
 const WINDOW_ORIENTATION_CHANGE_THROTTLE_MS = IS_IOS ? 350 : 250;
 const SAFE_AREA_INITIALIZATION_DELAY = SECOND;
 
+const { documentElement } = document;
 const initialHeight = window.innerHeight;
+const virtualKeyboardOpenListeners = new Set<NoneToVoidFunction>();
+const virtualKeyboardCloseListeners = new Set<NoneToVoidFunction>();
 
 let currentWindowSize = updateSizes();
 
@@ -20,6 +25,39 @@ if (!IS_IOS) {
   window.addEventListener('resize', throttle(() => {
     currentWindowSize = updateSizes();
   }, WINDOW_RESIZE_THROTTLE_MS, true));
+}
+
+if (IS_CAPACITOR) {
+  void import('@capacitor/keyboard')
+    .then(({ Keyboard }) => {
+      void Keyboard.addListener('keyboardWillShow', () => {
+        documentElement.classList.add('is-keyboard-open');
+      });
+
+      void Keyboard.addListener('keyboardDidShow', async (info) => {
+        // Due to a bug in Android, extra space is added to the bottom of the screen when the keyboard is opened only on iOS
+        // https://capacitorjs.com/docs/apis/keyboard#configuration (resizeOnFullScreen)
+        if (IS_IOS) {
+          await adjustBodyPaddingForKeyboard(info.keyboardHeight);
+        }
+
+        for (const cb of virtualKeyboardOpenListeners) {
+          safeExec(cb);
+        }
+      });
+
+      void Keyboard.addListener('keyboardWillHide', () => {
+        documentElement.classList.remove('is-keyboard-open');
+
+        if (IS_IOS) {
+          void adjustBodyPaddingForKeyboard(0);
+        }
+
+        for (const cb of virtualKeyboardCloseListeners) {
+          safeExec(cb);
+        }
+      });
+    });
 }
 
 if ('visualViewport' in window && (IS_IOS || IS_ANDROID)) {
@@ -56,13 +94,34 @@ export default {
   getIsKeyboardVisible: () => initialHeight > currentWindowSize.height,
 };
 
+// Registers a callback that will be fired each time the virtual keyboard is opened and the <body> size is adjusted
+export function onVirtualKeyboardOpen(cb: NoneToVoidFunction) {
+  virtualKeyboardOpenListeners.add(cb);
+  return () => virtualKeyboardOpenListeners.delete(cb);
+}
+
+// Registers a callback that will be fired each time the virtual keyboard starts hiding
+export function onVirtualKeyboardClose(cb: NoneToVoidFunction) {
+  virtualKeyboardCloseListeners.add(cb);
+  return () => virtualKeyboardCloseListeners.delete(cb);
+}
+
 function patchVh() {
-  if (!(IS_IOS || IS_ANDROID) || (IS_IOS && IS_TELEGRAM_APP)) return;
+  if (!(IS_IOS || IS_ANDROID) || IS_CAPACITOR || (IS_IOS && IS_TELEGRAM_APP)) return;
 
   const height = window.innerHeight;
 
   requestMutation(() => {
     document.documentElement.style.setProperty('--vh', IS_IOS ? '1dvh' : `${height * 0.01}px`);
+  });
+}
+
+function adjustBodyPaddingForKeyboard(keyboardHeight: number) {
+  return new Promise<void>((resolve) => {
+    requestMutation(() => {
+      applyStyles(document.body, { paddingBottom: keyboardHeight ? `${keyboardHeight}px` : '' });
+      resolve();
+    });
   });
 }
 

@@ -48,16 +48,19 @@ type InMessageData = {
   update: string;
 };
 
+type CordovaPostMessageTarget = { postMessage: AnyToVoidFunction };
 type Handler = (update: string) => void;
 
 /**
- * Allows calling functions, provided by the parent window, in this messenger.
+ * Allows calling functions, provided by another messenger (the parent window, or the Capacitor main view), in this messenger.
  * The other messenger must provide the functions using `createReverseIFrameInterface`.
+ *
+ * `PostMessageConnect` is not used here (as any other dependencies) because this needs to be easily stringified.
  */
 export function initConnector(
   bridgeKey: string,
   channel: string,
-  target: Window,
+  target: Window | CordovaPostMessageTarget,
   tonConnectProperties: TonConnectProperties,
   appName: string,
   icon: string,
@@ -293,7 +296,11 @@ export function initConnector(
       args,
     };
 
-    target.postMessage(messageData, '*');
+    if ('parent' in target) {
+      target.postMessage(messageData, '*');
+    } else {
+      target.postMessage(JSON.stringify(messageData));
+    }
 
     return promise as ApiMethodResponse<ApiMethodName>;
   }
@@ -968,3 +975,5 @@ export function initConnector(
     });
   }
 }
+
+export const initConnectorString = initConnector.toString();

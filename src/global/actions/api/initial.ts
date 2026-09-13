@@ -1,7 +1,9 @@
 import { DEFAULT_PRICE_CURRENCY, IS_EXTENSION } from '../../../config';
 import { getAgentOverride } from '../../../util/agent/agentProtocolVersion';
 import { logDebug } from '../../../util/logs';
-import { IS_ELECTRON } from '../../../util/windowEnvironment';
+import {
+  IS_ANDROID_APP, IS_ELECTRON, IS_IOS_APP,
+} from '../../../util/windowEnvironment';
 import { callApi, initApi } from '../../../api';
 import { removeTemporaryAccount } from '../../helpers/auth';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
@@ -14,8 +16,8 @@ addActionHandler('initApi', async (global, actions) => {
     : [];
   initApi(actions.apiUpdate, {
     isElectron: IS_ELECTRON,
-    isIosApp: false,
-    isAndroidApp: false,
+    isIosApp: IS_IOS_APP,
+    isAndroidApp: IS_ANDROID_APP,
     agentOverride: getAgentOverride(),
     langCode: global.settings.langCode,
     referrer: new URLSearchParams(window.location.search).get('r') ?? undefined,

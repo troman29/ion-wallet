@@ -234,7 +234,7 @@ function StakingInitial({
       return;
     }
 
-    vibrate();
+    void vibrate();
 
     submitStakingInitial({ amount });
   });

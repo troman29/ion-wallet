@@ -80,12 +80,12 @@ const AccountSelectorHeader = ({
   const renderingMenuItems = usePrevDuringAnimationSimple(menuItems);
 
   const handleMenuButtonClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     openMenu();
   });
 
   const handleMenuSelect = useLastCallback((handler: MenuHandler) => {
-    vibrate();
+    void vibrate();
     const state = MENU_HANDLER_TO_RENDERING_STATE[handler];
 
     if (state === AccountSelectorState.Reorder) {

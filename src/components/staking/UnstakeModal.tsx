@@ -10,6 +10,7 @@ import { StakingState } from '../../global/types';
 import {
   ANIMATED_STICKER_TINY_ICON_PX,
   DEFAULT_PRICE_CURRENCY,
+  IS_CAPACITOR,
   TONCOIN,
   VALIDATION_PERIOD_MS,
 } from '../../config';
@@ -392,6 +393,7 @@ function UnstakeModal({
         <PasswordForm
           isActive={isActive}
           isLoading={isLoading}
+          withCloseButton={IS_CAPACITOR}
           operationType="unstaking"
           error={error}
           placeholder={lang(placeholder)}

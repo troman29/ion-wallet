@@ -16,6 +16,7 @@ import { buildCollectionByKey, omitUndefined, unique } from '../../../util/itera
 import { openUrl } from '../../../util/openUrl';
 import { normalizeAllowedOnOffRampCurrencies } from '../../../util/ramp-currencies';
 import { getIsActiveStakingState } from '../../../util/staking';
+import { IS_IOS_APP } from '../../../util/windowEnvironment';
 import { omitAccounts } from '../../helpers/auth';
 import { pinMwCardsFirst } from '../../helpers/nfts';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
@@ -393,15 +394,16 @@ addActionHandler('apiUpdate', (global, actions, update) => {
 
       const normalizedRampCurrencies = normalizeAllowedOnOffRampCurrencies(allowedOnOffRampCurrencies);
       const previousRampCurrencies = global.restrictions.allowedOnOffRampCurrencies;
+      const shouldRestrictSwapsAndOnOffRamp = IS_IOS_APP && isLimitedRegion;
 
       global = updateRestrictions(global, {
         isLimitedRegion,
-        isSwapDisabled: false,
-        isOnRampDisabled: false,
-        isOffRampDisabled: false,
+        isSwapDisabled: shouldRestrictSwapsAndOnOffRamp,
+        isOnRampDisabled: shouldRestrictSwapsAndOnOffRamp,
+        isOffRampDisabled: shouldRestrictSwapsAndOnOffRamp,
         // The `restrictions` object is cached, so an excluded key will allow a stale value stored in an older build
         // to survive a shallow merge with a cached state
-        isNftBuyingDisabled: false,
+        isNftBuyingDisabled: shouldRestrictSwapsAndOnOffRamp,
         isCopyStorageEnabled,
         supportAccountsCount,
         countryCode,

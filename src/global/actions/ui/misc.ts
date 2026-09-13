@@ -1,22 +1,31 @@
+import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+
 import type { GlobalState } from '../../types';
 import {
   AppState,
   AuthState,
   ContentTab,
+  DomainLinkingState,
   SettingsState,
+  SwapState,
   TransactionInfoState,
+  TransferState,
 } from '../../types';
 
 import {
   ANIMATION_LEVEL_MIN,
   APP_VERSION,
+  BETA_URL,
   BOT_USERNAME,
   DEBUG,
+  IS_PRODUCTION,
+  PRODUCTION_URL,
 } from '../../../config';
 import { parseNotificationTxId } from '../../../util/activities';
 import { getDoesUsePinPad } from '../../../util/biometrics';
 import {
   openDeeplinkOrUrl,
+  parseDeeplinkTransferParams,
   processDeeplink,
 } from '../../../util/deeplink';
 import getIsAppUpdateNeeded from '../../../util/getIsAppUpdateNeeded';
@@ -28,6 +37,7 @@ import { openUrl } from '../../../util/openUrl';
 import { getTelegramApp } from '../../../util/telegram';
 import {
   getIsMobileTelegramApp,
+  IS_ANDROID_APP,
   IS_ELECTRON,
 } from '../../../util/windowEnvironment';
 import { callApi } from '../../../api';
@@ -39,11 +49,15 @@ import {
   clearIsPinAccepted,
   openSection,
   renameAccount,
+  setCurrentTransferAddress,
   setIsPinAccepted,
   updateAccounts,
   updateAuth,
   updateCurrentAccountState,
+  updateCurrentDomainLinking,
+  updateCurrentSwap,
   updateCurrentTransactionInfo,
+  updateCurrentTransfer,
   updateDappConnectRequest,
   updateSettings,
 } from '../../reducers';
@@ -61,7 +75,7 @@ import { switchAccount } from '../api/auth';
 
 import { closeModal } from '../../../components/ui/Modal';
 
-const APP_VERSION_URL = 'version.txt';
+const APP_VERSION_URL = IS_ANDROID_APP ? `${IS_PRODUCTION ? PRODUCTION_URL : BETA_URL}/version.txt` : 'version.txt';
 
 addActionHandler('showActivityInfo', (global, actions, { id }) => {
   return updateCurrentAccountState(global, { currentActivityId: id });
@@ -519,7 +533,7 @@ addActionHandler('requestConfetti', (global) => {
   };
 });
 
-addActionHandler('requestOpenQrScanner', (global, actions) => {
+addActionHandler('requestOpenQrScanner', async (global, actions) => {
   if (getIsMobileTelegramApp()) {
     const webApp = getTelegramApp();
     webApp?.showScanQrPopup({}, (data) => {
@@ -527,10 +541,77 @@ addActionHandler('requestOpenQrScanner', (global, actions) => {
       webApp.closeScanQrPopup();
       actions.handleQrCode({ data });
     });
+    return;
   }
+
+  let currentQrScan: GlobalState['currentQrScan'];
+  if (global.currentTransfer.state === TransferState.Initial) {
+    currentQrScan = { currentTransfer: global.currentTransfer };
+  } else if (global.currentSwap.state === SwapState.Blockchain) {
+    currentQrScan = { currentSwap: global.currentSwap };
+  } else if (global.currentDomainLinking.state === DomainLinkingState.Initial) {
+    currentQrScan = { currentDomainLinking: global.currentDomainLinking };
+  }
+
+  const { camera } = await BarcodeScanner.requestPermissions();
+  const isGranted = camera === 'granted' || camera === 'limited';
+  if (!isGranted) {
+    actions.showToast({
+      message: getTranslation('Permission denied. Please grant camera permission to use the QR code scanner.'),
+    });
+    return;
+  }
+
+  global = getGlobal();
+  global = {
+    ...global,
+    isQrScannerOpen: true,
+    currentQrScan,
+  };
+
+  setGlobal(global);
+});
+
+addActionHandler('closeQrScanner', (global) => {
+  return {
+    ...global,
+    isQrScannerOpen: undefined,
+    currentQrScan: undefined,
+  };
 });
 
 addActionHandler('handleQrCode', async (global, actions, { data }) => {
+  const { currentTransfer, currentSwap, currentDomainLinking } = global.currentQrScan || {};
+
+  if (currentTransfer) {
+    const transferParams = parseDeeplinkTransferParams(data, global);
+    if (transferParams) {
+      if ('error' in transferParams) {
+        actions.showError({ error: transferParams.error });
+        // Not returning on error is intentional
+      }
+      setGlobal(updateCurrentTransfer(global, {
+        ...currentTransfer,
+        ...omit(transferParams, ['error']),
+      }));
+    } else {
+      // Assuming that the QR code content is a plain wallet address
+      setGlobal(setCurrentTransferAddress(updateCurrentTransfer(global, currentTransfer), data));
+    }
+    return;
+  }
+
+  if (currentSwap || currentDomainLinking) {
+    const linkParams = parseDeeplinkTransferParams(data, global);
+    const toAddress = linkParams?.toAddress ?? data;
+    if (currentSwap) {
+      setGlobal(updateCurrentSwap(global, { ...currentSwap, toAddress }));
+    } else {
+      setGlobal(updateCurrentDomainLinking(global, { ...currentDomainLinking, walletAddress: toAddress }));
+    }
+    return;
+  }
+
   if (await processDeeplink(data)) {
     return;
   }
@@ -730,19 +811,19 @@ addActionHandler('closePortfolio', (global, actions) => {
 addActionHandler('openFullscreen', (global) => {
   setGlobal({ ...global, isFullscreen: true });
 
-  vibrate();
+  void vibrate();
 });
 
 addActionHandler('closeFullscreen', (global) => {
   setGlobal({ ...global, isFullscreen: undefined });
 
-  vibrate();
+  void vibrate();
 });
 
 addActionHandler('setIsSensitiveDataHidden', (global, actions, { isHidden }) => {
   setGlobal(updateSettings(global, { isSensitiveDataHidden: isHidden ? true : undefined }));
 
-  vibrate();
+  void vibrate();
 });
 
 addActionHandler('setIsAppLockActive', (global, actions, { isActive }) => {

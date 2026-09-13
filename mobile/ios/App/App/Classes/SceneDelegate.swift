@@ -11,6 +11,9 @@ import UIComponents
 import WalletCore
 import WalletContext
 import WidgetKit
+#if canImport(Capacitor)
+import Capacitor
+#endif
 
 private let log = Log("SceneDelegate")
 
@@ -18,6 +21,7 @@ private let log = Log("SceneDelegate")
 final class SceneDelegate: UIResponder, UISceneDelegate, UIWindowSceneDelegate {
     
     var window: WWindow?
+    var appSwitcher: AppSwitcher?
     private var backgroundCover: UIView?
     private var pendingShortcutItem: UIApplicationShortcutItem?
 
@@ -34,10 +38,11 @@ final class SceneDelegate: UIResponder, UISceneDelegate, UIWindowSceneDelegate {
         let window = WWindow(windowScene: windowScene)
         self.window = window
 
-        AirLauncher.launch(window: window)
+        appSwitcher = AppSwitcher(window: window)
+        appSwitcher?.startTheApp()
         window.makeKeyAndVisible()
         StartupTrace.mark("sceneDelegate.window.ready")
-        StartupTrace.mark("sceneDelegate.airLauncher.launched")
+        StartupTrace.mark("sceneDelegate.appSwitcher.started")
         
         if let shortcutItem = connectionOptions.shortcutItem {
             pendingShortcutItem = shortcutItem
@@ -76,18 +81,26 @@ final class SceneDelegate: UIResponder, UISceneDelegate, UIWindowSceneDelegate {
     }
     
     private func handleUrl(_ url: URL) {
-        AirLauncher.handle(url: url)
+        if isOnTheAir {
+            AirLauncher.handle(url: url)
+        } else {
+            #if canImport(Capacitor)
+            _ = ApplicationDelegateProxy.shared.application(UIApplication.shared, open: url)
+            #endif
+        }
     }
-
+    
     private func handleNotification(_ notificationResponse: UNNotificationResponse) {
-        AirLauncher.handle(notification: notificationResponse.notification)
+        if isOnTheAir {
+            AirLauncher.handle(notification: notificationResponse.notification)
+        }
     }
     
     func sceneDidEnterBackground(_ scene: UIScene) {
         log.info("sceneDidEnterBackground")
         LogStore.shared.syncronize()
         AirLauncher.setAppIsFocused(false)
-        if AutolockStore.shared.autolockOption != .never {
+        if isOnTheAir, AutolockStore.shared.autolockOption != .never {
             if let window, self.backgroundCover == nil {
                 let view = WBlurView()
                 view.translatesAutoresizingMaskIntoConstraints = false
@@ -129,6 +142,27 @@ final class SceneDelegate: UIResponder, UISceneDelegate, UIWindowSceneDelegate {
         }
     }
     
+    // MARK: App switcher
+    
+    private var isOnTheAir: Bool {
+        return AirLauncher.isOnTheAir
+    }
+
+    func switchToAir() {
+        log.info("switchToAir() isOnTheAir=\(isOnTheAir, .public)")
+        if isOnTheAir {
+            return
+        }
+        AirLauncher.isOnTheAir = true
+        appSwitcher?.startTheApp()
+    }
+    
+    func switchToCapacitor() {
+        log.info("switchToCapacitor() isOnTheAir=\(isOnTheAir, .public)")
+        AirLauncher.isOnTheAir = false
+        appSwitcher?.startTheApp()
+    }
+
     @discardableResult
     private func handleShortcutItem(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
         HomeScreenQuickAction.handle(shortcutItem)
@@ -136,5 +170,16 @@ final class SceneDelegate: UIResponder, UISceneDelegate, UIWindowSceneDelegate {
 
     private func summarize(_ connectionOptions: UIScene.ConnectionOptions) -> String {
         "urlContexts=\(connectionOptions.urlContexts.count) userActivities=\(connectionOptions.userActivities.count) notificationResponse=\(connectionOptions.notificationResponse != nil) shortcutItem=\(connectionOptions.shortcutItem != nil)"
+    }
+}
+
+extension UIApplication {
+    @MainActor var connectedSceneDelegate: SceneDelegate? {
+        for scene in connectedScenes {
+            if let scene = scene as? UIWindowScene, let delegate = scene.delegate as? SceneDelegate {
+                return delegate
+            }
+        }
+        return nil
     }
 }

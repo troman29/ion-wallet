@@ -1,6 +1,5 @@
+import type { CapacitorPlatform } from '../../util/capacitor/platform';
 import type { ApiChain } from './misc';
-
-export type NativePlatform = 'ios' | 'android';
 
 export interface ApiNotificationAddress {
   title?: string;
@@ -14,7 +13,7 @@ export interface ApiNotificationsAccountValue {
 
 export interface ApiSubscribeNotificationsProps {
   userToken: string;
-  platform: NativePlatform;
+  platform: CapacitorPlatform;
   langCode: string;
   addresses: ApiNotificationAddress[];
 }

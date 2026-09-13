@@ -6,11 +6,23 @@ const { convertI18nYamlToJson } = require('./convertI18nYamlToJson');
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
 const I18N_DIR = path.resolve(ROOT_DIR, 'src/i18n');
+const APP_RES_DIR = path.resolve(ROOT_DIR, 'mobile/android/app/src/main/res');
 const APP_RES_SHARED_DIR = path.resolve(ROOT_DIR, 'mobile/android/app/src/main/res-shared');
 const APP_I18N_ASSETS_DIR = path.resolve(ROOT_DIR, 'mobile/android/app/src/main/assets/public/i18n');
 const NATIVE_ENCLAVE_RES_DIR = path.resolve(ROOT_DIR, 'mobile/android/air/SubModules/NativeEnclave/src/main/res');
 
 const DEFAULT_LOCALE = 'en';
+// Overrides for the strings the Capacitor bridge shows in its WebView permission prompt
+const WEB_PERMISSION_KEYS = [
+  '$web_permission_prompt',
+  '$web_permission_allow',
+  '$web_permission_deny',
+  '$web_permission_camera',
+  '$web_permission_microphone',
+  '$web_permission_location',
+  '$web_permission_device_features',
+  '$web_permission_this_site',
+];
 const ENCLAVE_STRING_KEYS = [
   '$enclave_use_biometrics',
   '$enclave_enter_passcode_or_use_biometrics',
@@ -95,6 +107,62 @@ function escapeXml(value) {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, "\\'");
 }
 
+// The bridge numbers its placeholders, while the locale files name them
+function applyAndroidPlaceholderMapping(value) {
+  return value
+    .replace(/%origin%/g, '%1$s')
+    .replace(/%permissions%/g, '%2$s');
+}
+
+function renderWebPermissionXml(locale, localeMap, fallbackMap) {
+  const lines = ['<?xml version="1.0" encoding="utf-8"?>', '<resources>'];
+
+  for (const key of WEB_PERMISSION_KEYS) {
+    const resourceName = key.replace(/^\$/, '');
+    const rawValue = localeMap[key] ?? fallbackMap[key];
+    if (typeof rawValue !== 'string') {
+      throw new Error(`Missing key "${key}" for locale "${locale}" with no fallback in "${DEFAULT_LOCALE}"`);
+    }
+    lines.push(`    <string name="${resourceName}">${escapeXml(applyAndroidPlaceholderMapping(rawValue))}</string>`);
+  }
+
+  lines.push('</resources>', '');
+  return lines.join('\n');
+}
+
+// A locale dropped from the app leaves its file behind, and Android would keep serving it
+function removeStaleWebPermissionFiles(expectedFilePaths) {
+  const expected = new Set(expectedFilePaths);
+
+  for (const entry of fs.readdirSync(APP_RES_DIR, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !entry.name.startsWith('values')) continue;
+
+    const filePath = path.resolve(APP_RES_DIR, entry.name, 'web_permission_strings.xml');
+    if (fs.existsSync(filePath) && !expected.has(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+  }
+}
+
+function writeWebPermissionResources(locales, perLocale) {
+  const fallbackMap = perLocale[DEFAULT_LOCALE];
+  if (!fallbackMap) {
+    throw new Error(`Missing required default locale "${DEFAULT_LOCALE}"`);
+  }
+
+  const expectedFilePaths = [];
+  for (const locale of locales) {
+    const localeDir = path.resolve(APP_RES_DIR, resolveQualifier(locale));
+    const filePath = path.resolve(localeDir, 'web_permission_strings.xml');
+
+    ensureDir(localeDir);
+    fs.writeFileSync(filePath, renderWebPermissionXml(locale, perLocale[locale], fallbackMap), 'utf8');
+    expectedFilePaths.push(filePath);
+  }
+
+  removeStaleWebPermissionFiles(expectedFilePaths);
+}
+
 function renderStringsXml(locale, localeMap, fallbackMap) {
   const lines = ['<?xml version="1.0" encoding="utf-8"?>', '<resources>'];
 
@@ -156,9 +224,13 @@ function main() {
 
   writeLocalesConfig(locales);
   writeI18nJsonAssets(locales);
+  writeWebPermissionResources(locales, perLocale);
   writeEnclaveStrings(locales, perLocale);
 
-  console.log(`Generated Android locales_config.xml, i18n JSON assets and Enclave strings for ${locales.length} locales.`);
+  console.log(
+    `Generated Android locales_config.xml, i18n JSON assets, web permission and Enclave strings `
+    + `for ${locales.length} locales.`,
+  );
 }
 
 main();

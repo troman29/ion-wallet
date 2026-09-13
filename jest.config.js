@@ -5,6 +5,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|scss|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|tgs)$':
       '<rootDir>/tests/staticFileMock.js',
+    '@mauricewegner/capacitor-navigation-bar': '<rootDir>/tests/mocks/capacitorNavigationBar.js',
   },
   testPathIgnorePatterns: [
     '<rootDir>/tests/playwright/',
@@ -17,7 +18,7 @@ module.exports = {
     '<rootDir>/headless/',
     '<rootDir>/mobile/',
   ],
-  // Repo copies in local worktree directories duplicate workspace packages (e.g. @mytonwallet/air-app-launcher)
+  // Repo copies in local worktree directories duplicate workspace packages
   // and break jest-haste-map module resolution
   modulePathIgnorePatterns: [
     '<rootDir>/.claude/',
@@ -32,6 +33,6 @@ module.exports = {
     '\\.txt$': 'jest-raw-loader',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(axios)/)',
+    '/node_modules/(?!(axios|@capgo)/)',
   ],
 };

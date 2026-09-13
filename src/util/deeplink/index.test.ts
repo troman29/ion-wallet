@@ -772,7 +772,8 @@ describe('processSelfDeeplink', () => {
   });
 
   describe('Air command', () => {
-    it('should return false because the air command is no longer handled', async () => {
+    it('should return false when not in Capacitor environment', async () => {
+      // IS_CAPACITOR is false by default in tests
       const result = await processSelfDeeplink('mtw://air');
 
       expect(result).toBe(false);

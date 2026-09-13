@@ -43,7 +43,9 @@ export const IS_EXTENSION = process.env.IS_EXTENSION === '1';
 export const IS_FIREFOX_EXTENSION = process.env.IS_FIREFOX_EXTENSION === '1';
 export const IS_OPERA_EXTENSION = process.env.IS_OPERA_EXTENSION === '1';
 export const IS_PACKAGED_ELECTRON = process.env.IS_PACKAGED_ELECTRON === '1';
+export const IS_CAPACITOR = process.env.IS_CAPACITOR === '1';
 export const IS_ANDROID_DIRECT = process.env.IS_ANDROID_DIRECT === '1';
+export const IS_ANDROID = IS_ANDROID_DIRECT || process.env.CAP_PLATFORM === 'android';
 export const IS_AIR_APP = process.env.IS_AIR_APP === '1';
 export const IS_TELEGRAM_APP = process.env.IS_TELEGRAM_APP === '1';
 export const IS_EXPLORER = process.env.IS_EXPLORER === '1';
@@ -90,6 +92,10 @@ export const PIN_LENGTH = 4;
 /** If true, legacy auth data (mnemonicEncrypted, authConfig) will be removed after migration to Enclave */
 export const SHOULD_CLEANUP_LEGACY_AUTH = false;
 export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in My Wallet';
+// Keychain and Keystore address the stored secret by this pair, so changing either orphans
+// the credentials already saved on the device
+export const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';
+export const NATIVE_BIOMETRICS_SERVER = 'https://mytonwallet.app';
 
 export const MNEMONIC_COUNT = 24;
 export const MNEMONIC_COUNTS = [12, 24];

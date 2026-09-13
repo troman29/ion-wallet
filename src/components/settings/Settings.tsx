@@ -12,6 +12,7 @@ import {
   APP_ENV_MARKER, APP_INSTALL_URL,
   APP_NAME,
   APP_VERSION,
+  IS_CAPACITOR,
   IS_EXPLORER,
   IS_EXTENSION,
   LANG_LIST,
@@ -46,6 +47,7 @@ import { getTelegramTipsChannelUrl } from '../../util/url';
 import {
   IS_DAPP_SUPPORTED,
   IS_ELECTRON,
+  IS_IOS_APP,
   IS_TOUCH_ENV,
   IS_WEB,
 } from '../../util/windowEnvironment';
@@ -66,6 +68,7 @@ import LogOutModal from '../main/modals/LogOutModal';
 import Switcher from '../ui/Switcher';
 import Transition from '../ui/Transition';
 import SettingsAbout from './SettingsAbout';
+import SettingsAccountHeader from './SettingsAccountHeader';
 import SettingsAppearance from './SettingsAppearance';
 import SettingsAssets from './SettingsAssets';
 import SettingsChains from './SettingsChains';
@@ -79,6 +82,7 @@ import SettingsPermissions from './SettingsPermissions';
 import SettingsPushNotifications from './SettingsPushNotifications';
 import SettingsSecurity from './SettingsSecurity';
 import SettingsTokenList from './SettingsTokenList';
+import SettingsWallets from './wallets/SettingsWallets';
 import SettingsWalletVariants from './wallets/SettingsWalletVariants';
 import SettingsWalletVersions from './wallets/SettingsWalletVersions';
 
@@ -93,6 +97,7 @@ import disclaimerImg from '../../assets/settings/settings_disclaimer.svg';
 import exitImg from '../../assets/settings/settings_exit.svg';
 import helpcenterImg from '../../assets/settings/settings_helpcenter.svg';
 import installAppImg from '../../assets/settings/settings_install-app.svg';
+import installDesktopImg from '../../assets/settings/settings_install-desktop.svg';
 import installMobileImg from '../../assets/settings/settings_install-mobile.svg';
 import languageImg from '../../assets/settings/settings_language.svg';
 import mwCardsImg from '../../assets/settings/settings_mw-cards.svg';
@@ -177,6 +182,7 @@ function Settings({
   const { isPortrait } = useDeviceScreen();
 
   const transitionRef = useRef<HTMLDivElement>();
+  const currentWalletRef = useRef<HTMLDivElement>();
   const { disableSwipeToClose, enableSwipeToClose } = useTelegramMiniAppSwipeToClose(isOpen);
   const [clicksAmount, setClicksAmount] = useState<number>(isTestnet ? AMOUNT_OF_CLICKS_FOR_DEVELOPERS_MODE : 0);
   const prevRenderingKeyRef = useStateRef(usePrevious2(renderingKey));
@@ -319,6 +325,10 @@ function Settings({
     void openUrl(APP_INSTALL_URL, { isExternal: true });
   }
 
+  function handleClickInstallOnDesktop() {
+    void openUrl(`${APP_INSTALL_URL}desktop`, { isExternal: true });
+  }
+
   function handleClickInstallOnMobile() {
     void openUrl(`${APP_INSTALL_URL}mobile`, { isExternal: true });
   }
@@ -420,7 +430,15 @@ function Settings({
   function renderSettings() {
     return (
       <div className={styles.slide}>
-        {isPortrait && (
+        {IS_CAPACITOR && (
+          <SettingsAccountHeader
+            isViewMode={isViewMode}
+            isActive={isActive}
+            currentWalletRef={currentWalletRef}
+            onRemoveClick={openLogOutModal}
+          />
+        )}
+        {isPortrait && !IS_CAPACITOR && (
           <SettingsHeader title={lang('Settings')} className={styles.mobileHeader} isScrolled={isScrolled} />
         )}
 
@@ -429,10 +447,16 @@ function Settings({
             styles.content,
             styles.content_main,
             'custom-scroll',
-            !isPortrait && styles.content_noHeader,
+            !IS_CAPACITOR && !isPortrait && styles.content_noHeader,
           )}
-          onScroll={isPortrait ? handleContentScroll : undefined}
+          onScroll={isPortrait && !IS_CAPACITOR ? handleContentScroll : undefined}
         >
+          {isPortrait && IS_CAPACITOR && (
+            <SettingsWallets
+              currentWalletRef={currentWalletRef}
+              onAddAccount={handleCloseSettings}
+            />
+          )}
 
           {IS_WEB && (
             <div className={styles.block}>
@@ -651,6 +675,14 @@ function Settings({
                 <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
               </div>
             )}
+            {IS_CAPACITOR && (
+              <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallOnDesktop}>
+                <img className={styles.menuIcon} src={installDesktopImg} alt={lang('Install on Desktop')} />
+                <span className={styles.itemTitle}>{lang('Install on Desktop')}</span>
+
+                <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
+              </div>
+            )}
             {IS_ELECTRON && (
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallOnMobile}>
                 <img className={styles.menuIcon} src={installMobileImg} alt={lang('Install on Mobile')} />
@@ -673,10 +705,10 @@ function Settings({
                 <img
                   className={styles.menuIcon}
                   src={exitImg}
-                  alt={lang('Exit')}
+                  alt={IS_IOS_APP ? lang('Remove Wallet') : lang('Exit')}
                 />
                 <span className={styles.itemTitle}>
-                  {lang('Exit')}
+                  {IS_IOS_APP ? lang('Remove Wallet') : lang('Exit')}
                 </span>
                 <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
               </div>

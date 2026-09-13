@@ -1,12 +1,14 @@
 import { useEffect } from '../../../lib/teact/teact';
 
+import { IS_CAPACITOR } from '../../../config';
 import { requestMeasure } from '../../../lib/fasterdom/fasterdom';
+import { onVirtualKeyboardClose, onVirtualKeyboardOpen } from '../../../util/windowSize';
 
 import { useDeviceScreen } from '../../../hooks/useDeviceScreen';
 
 /**
  * Keeps scroll position pinned to the bottom when the virtual keyboard opens or closes.
- * Uses `visualViewport` resize events.
+ * Uses Capacitor keyboard events when available, falls back to `visualViewport` resize.
  */
 export default function useScrollResetOnResize(
   scrollRef: React.RefObject<HTMLDivElement | undefined>,
@@ -27,6 +29,16 @@ export default function useScrollResetOnResize(
           isAtBottomRef.current = true;
         }
       });
+    }
+
+    if (IS_CAPACITOR) {
+      const unsubOpen = onVirtualKeyboardOpen(snapToBottom);
+      const unsubClose = onVirtualKeyboardClose(snapToBottom);
+
+      return () => {
+        unsubOpen();
+        unsubClose();
+      };
     }
 
     const viewport = window.visualViewport;

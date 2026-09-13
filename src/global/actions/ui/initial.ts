@@ -7,6 +7,7 @@ import {
   DEFAULT_SWAP_FIRST_TOKEN_SLUG,
   DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   DEFAULT_TRANSFER_TOKEN_SLUG,
+  IS_CAPACITOR,
   IS_EXPLORER,
   IS_EXTENSION,
   IS_TELEGRAM_APP,
@@ -17,6 +18,7 @@ import {
 import { requestMutation } from '../../../lib/fasterdom/fasterdom';
 import { parseAccountId } from '../../../util/account';
 import { clearAgentChat } from '../../../util/agent/agentStorage';
+import { initCapacitorWithGlobal } from '../../../util/capacitor';
 import {
   getDeeplinkFromLocation,
   processDeeplink,
@@ -32,6 +34,7 @@ import { initTelegramWithGlobal } from '../../../util/telegram';
 import {
   getIsMobileTelegramApp,
   IS_ANDROID,
+  IS_ANDROID_APP,
   IS_ELECTRON,
   IS_FIREFOX,
   IS_IOS,
@@ -72,6 +75,9 @@ addActionHandler('init', (global, actions) => {
       documentElement.classList.add('is-ios', 'is-mobile');
     } else if (IS_ANDROID) {
       documentElement.classList.add('is-android', 'is-mobile');
+      if (IS_ANDROID_APP) {
+        documentElement.classList.add('is-android-app');
+      }
     } else if (IS_MAC_OS) {
       documentElement.classList.add('is-macos');
     } else if (IS_WINDOWS) {
@@ -118,16 +124,22 @@ addActionHandler('afterInit', (global, actions) => {
 
   switchTheme(theme);
   switchAnimationLevel(animationLevel);
-  setStatusBarStyle();
+  setStatusBarStyle({
+    forceDarkBackground: false,
+  });
   void setLanguage(langCode);
   clearPreviousLangpacks();
   processDeeplinkAfterInit();
 
-  if (IS_TELEGRAM_APP) {
-    initTelegramWithGlobal(global);
-  }
+  if (IS_CAPACITOR) {
+    void initCapacitorWithGlobal(!!global.authTypes?.includes('biometric'));
+  } else {
+    if (IS_TELEGRAM_APP) {
+      initTelegramWithGlobal(global);
+    }
 
-  document.addEventListener('click', initializeSounds, { once: true });
+    document.addEventListener('click', initializeSounds, { once: true });
+  }
 
   if (TEST_MNEMONIC) {
     void tryAutoImportTestMnemonic(actions);

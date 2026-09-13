@@ -55,25 +55,25 @@ function PortraitActions({
     : <span className={styles.name}>{lang('Send')}<span className={styles.divider}>/</span>{lang('Sell')}</span>;
 
   const handleStartSwap = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     startSwap();
   });
 
   const handleStartTransfer = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     startTransfer();
   });
 
   const handleAddBuyClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     openReceiveModal();
   });
 
   const handleEarnClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
 
     onEarnClick();
   });

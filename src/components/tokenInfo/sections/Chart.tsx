@@ -107,7 +107,7 @@ function Chart({
   }, [slug, period, isNetWorthMode]);
 
   useSyncEffect(([prevSelectedIndex]) => {
-    if (IS_IOS && prevSelectedIndex !== undefined) vibrate();
+    if (IS_IOS && prevSelectedIndex !== undefined) void vibrate();
   }, [selectedIndex]);
 
   const lastPoint = history?.length ? history[history.length - 1] : undefined;

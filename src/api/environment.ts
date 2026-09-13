@@ -9,7 +9,7 @@ import {
   AGENT_OVERRIDE,
   ELECTRON_TONCENTER_MAINNET_KEY,
   ELECTRON_TONCENTER_TESTNET_KEY,
-  IS_AIR_APP,
+  IS_CAPACITOR,
   IS_EXTENSION,
   TONCENTER_MAINNET_KEY,
   TONCENTER_TESTNET_KEY,
@@ -40,7 +40,7 @@ export function resolveIsAgentV2Enabled(
 function getAppOrigin(args: ApiInitArgs): string | undefined {
   if (args.isElectron) {
     return ELECTRON_ORIGIN;
-  } else if (IS_AIR_APP || IS_EXTENSION) {
+  } else if (IS_CAPACITOR || IS_EXTENSION) {
     return self?.origin;
   } else {
     return undefined;
@@ -55,7 +55,7 @@ export function setEnvironment(args: ApiInitArgs) {
     agentOverride,
     isAgentV2Enabled: resolveIsAgentV2Enabled(agentOverride, undefined, args.isAndroidApp),
     isDappSupported: true,
-    isSseSupported: args.isElectron || IS_AIR_APP,
+    isSseSupported: args.isElectron || IS_CAPACITOR,
     apiHeaders: appOrigin ? { 'X-App-Origin': appOrigin } : {},
     byNetwork: {
       mainnet: {

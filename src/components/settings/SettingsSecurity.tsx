@@ -7,6 +7,7 @@ import { BiometricsState } from '../../global/types';
 import {
   APP_ENV,
   DEFAULT_AUTOLOCK_OPTION,
+  IS_CAPACITOR,
   IS_GRAM_WALLET,
 } from '../../config';
 import {
@@ -417,7 +418,7 @@ function SettingsSecurity({
               isActive={isSlideActive && isActive}
               error={passwordError}
               pinPadTitle={pinPadTitle}
-              containerClassName={styles.passwordFormWithHeaderOffset}
+              containerClassName={IS_CAPACITOR ? styles.passwordFormContent : styles.passwordFormWithHeaderOffset}
               forceBiometricsInMain={isBiometricsTurnOn ? false : !isInsideModal}
               noBiometrics={isChangePasscode}
               operationType={isBiometricsTurnOn ? 'turnOnBiometrics' : undefined}

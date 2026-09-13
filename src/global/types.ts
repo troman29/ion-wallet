@@ -74,10 +74,10 @@ import type {
   ApiUpdateWalletVersions,
   ApiVestingInfo,
   ApiWalletWithVersionInfo,
-  NativePlatform,
 } from '../api/types';
 import type { AUTOLOCK_OPTIONS_LIST } from '../config';
 import type { LegacyAuthConfig } from '../enclave';
+import type { CapacitorPlatform } from '../util/capacitor/platform';
 import type { ExplainedTransferFee } from '../util/fee/transferFee';
 import type { LedgerTransport } from '../util/ledger/types';
 
@@ -125,7 +125,7 @@ export type AnimationLevel = 0 | 1 | 2;
 export type Theme = 'light' | 'dark' | 'system';
 export type AppTheme = 'dark' | 'light';
 export type AppLayout = 'portrait' | 'landscape';
-export type DialogAction = 'openReturnUrl';
+export type DialogAction = 'openBluetoothSettings' | 'openReturnUrl';
 export type ToastAction = 'openRenameWallet';
 
 export type DeveloperSettingsUndefinedOverride = '__undefined';
@@ -1148,6 +1148,7 @@ export type GlobalState = {
   isBackupWalletModalOpen?: boolean;
   isHardwareModalOpen?: boolean;
   isStakingInfoModalOpen?: boolean;
+  isQrScannerOpen?: boolean;
   isCustomizeWalletModalOpen?: boolean;
   customizeWalletReturnTo?: 'accountSelector' | 'settings';
   areSettingsOpen?: boolean;
@@ -1183,6 +1184,12 @@ export type GlobalState = {
     state?: MintCardState;
     error?: string;
     isLoading?: boolean;
+  };
+
+  currentQrScan?: {
+    currentTransfer?: GlobalState['currentTransfer'];
+    currentSwap?: GlobalState['currentSwap'];
+    currentDomainLinking?: GlobalState['currentDomainLinking'];
   };
 
   latestAppVersion?: string;
@@ -1221,7 +1228,7 @@ export type GlobalState = {
   pushNotifications: {
     isAvailable?: boolean;
     userToken?: string;
-    platform?: NativePlatform;
+    platform?: CapacitorPlatform;
     enabledAccounts: string[]; // Values - account ids
   };
 
@@ -1499,6 +1506,7 @@ export interface ActionPayloads {
   clearIsPinAccepted: undefined;
 
   requestOpenQrScanner: undefined;
+  closeQrScanner: undefined;
   handleQrCode: { data: string };
 
   // Staking
@@ -1753,7 +1761,7 @@ export interface ActionPayloads {
   tryAddNotificationAccount: { accountId: string };
   deleteNotificationAccount: { accountId: string; withAbort?: boolean };
   deleteAllNotificationAccounts: undefined | { accountIds: string[] };
-  registerNotifications: { userToken: string; platform: NativePlatform };
+  registerNotifications: { userToken: string; platform: CapacitorPlatform };
 
   openFullscreen: undefined;
   closeFullscreen: undefined;

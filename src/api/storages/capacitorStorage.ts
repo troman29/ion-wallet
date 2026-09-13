@@ -14,7 +14,7 @@ const storage: Storage & {
       return cache[key];
     }
 
-    const result = await callWindow('airStorageGetItem', key);
+    const result = await callWindow('capacitorStorageGetItem', key);
     const value = result ? JSON.parse(result, bigintReviver) : undefined;
 
     if (getEnvironment().isAndroidApp) {
@@ -29,7 +29,7 @@ const storage: Storage & {
   },
 
   async setItem(key: StorageKey, value: any) {
-    await callWindow('airStorageSetItem', key, JSON.stringify(value));
+    await callWindow('capacitorStorageSetItem', key, JSON.stringify(value));
 
     if (getEnvironment().isAndroidApp) {
       cache[key] = value;
@@ -37,7 +37,7 @@ const storage: Storage & {
   },
 
   async removeItem(key: StorageKey) {
-    await callWindow('airStorageRemoveItem', key);
+    await callWindow('capacitorStorageRemoveItem', key);
 
     if (getEnvironment().isAndroidApp) {
       delete cache[key];
@@ -45,7 +45,7 @@ const storage: Storage & {
   },
 
   async clear() {
-    await callWindow('airStorageClear');
+    await callWindow('capacitorStorageClear');
 
     if (getEnvironment().isAndroidApp) {
       cache = {};
@@ -53,7 +53,7 @@ const storage: Storage & {
   },
 
   async getKeys() {
-    const result = await callWindow('airStorageKeys');
+    const result = await callWindow('capacitorStorageKeys');
 
     return result?.value;
   },

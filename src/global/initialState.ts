@@ -31,7 +31,7 @@ import {
 } from '../config';
 import { getTokenInfo } from '../util/chain';
 import { buildCollectionByKey, mapValues } from '../util/iteratees';
-import { USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
+import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
 export const STATE_VERSION = 62;
 
@@ -131,10 +131,10 @@ export const INITIAL_STATE: GlobalState = {
 
   restrictions: {
     isLimitedRegion: false,
-    isSwapDisabled: false,
-    isOnRampDisabled: false,
-    isOffRampDisabled: false,
-    isNftBuyingDisabled: false,
+    isSwapDisabled: IS_IOS_APP,
+    isOnRampDisabled: IS_IOS_APP,
+    isOffRampDisabled: IS_IOS_APP,
+    isNftBuyingDisabled: IS_IOS_APP,
   },
 
   mediaViewer: {},

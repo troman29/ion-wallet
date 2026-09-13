@@ -30,12 +30,12 @@ export const SEND_CONTEXT_MENU_ITEMS_WITHOUT_SELL = SEND_CONTEXT_MENU_ITEMS
 export function handleSendMenuItemClick(value: MenuHandler) {
   switch (value) {
     case 'send':
-      vibrate();
+      void vibrate();
       getActions().startTransfer();
       break;
 
     case 'multisend':
-      vibrate();
+      void vibrate();
       void openUrl(MULTISEND_DAPP_URL, {
         title: getTranslation('Multisend'),
         subtitle: getHostnameFromUrl(MULTISEND_DAPP_URL),
@@ -43,7 +43,7 @@ export function handleSendMenuItemClick(value: MenuHandler) {
       break;
 
     case 'sell':
-      vibrate();
+      void vibrate();
       getActions().openOffRampWidgetModal();
       break;
   }

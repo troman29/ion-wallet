@@ -28,7 +28,7 @@ export function handleWalletMenuItemClick(
 ) {
   const { openWalletRenameModal, switchAccount, openCustomizeWalletModal } = getActions();
 
-  vibrate();
+  void vibrate();
 
   switch (value) {
     case 'rename':

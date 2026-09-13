@@ -296,7 +296,7 @@ function AccountSelectorModal({
   });
 
   const handleSwitchAccount = useLastCallback((accountId: string) => {
-    vibrate();
+    void vibrate();
     handleCloseAccountSelectorForced();
 
     if (accountId !== currentAccountId) {
@@ -373,7 +373,7 @@ function AccountSelectorModal({
   });
 
   const handleAddWalletClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     setPreviousViewMode(renderingKey);
 
     const selectedTabId = tabs[currentTabIndex]?.id ?? AccountTab.My;
@@ -395,7 +395,7 @@ function AccountSelectorModal({
   });
 
   const handleReorderDoneClick = useLastCallback(() => {
-    vibrate();
+    void vibrate();
     const previousMode = viewModeInitial === 'list'
       ? AccountSelectorState.List
       : AccountSelectorState.Cards;
@@ -403,12 +403,12 @@ function AccountSelectorModal({
   });
 
   const handleRenameClick = useLastCallback((accountId: string) => {
-    vibrate();
+    void vibrate();
     openWalletRenameModal({ accountId });
   });
 
   const handleLogOutClick = useLastCallback((accountId: string) => {
-    vibrate();
+    void vibrate();
     setLogOutAccountId(accountId);
     openLogOutModal();
   });

@@ -29,6 +29,7 @@ import {
   GLOBAL_STATE_CACHE_KEY,
   IFRAME_WHITELIST,
   IPFS_GATEWAY_BASE_URL,
+  IS_CAPACITOR,
   IS_EXPLORER,
   IS_EXTENSION,
   IS_FIREFOX_EXTENSION,
@@ -77,7 +78,7 @@ if (JSON.stringify([...fallbackRtlCodes].sort()) !== JSON.stringify([...langList
 const destinationDir = path.resolve(__dirname, 'dist');
 const appCommitHash = APP_COMMIT_HASH || new GitRevisionPlugin().commithash();
 const isStatoscopeBuild = process.env.IS_STATOSCOPE === '1'; // "Statoscope build" is a special mode where all the entries are used. It is used for comprehensive code size comparison in PRs.
-const isWebApp = !(IS_EXTENSION || IS_PACKAGED_ELECTRON || IS_HEADLESS);
+const isWebApp = !(IS_EXTENSION || IS_PACKAGED_ELECTRON || IS_HEADLESS || IS_CAPACITOR);
 const canUseStatoscope = isStatoscopeBuild || isWebApp;
 const cspConnectSrcExtra = APP_ENV === 'development'
   ? `http://localhost:3000 ${process.env.CSP_CONNECT_SRC_EXTRA_URL}`
@@ -235,6 +236,9 @@ export default function createConfig(
       usedExports: true,
       ...(APP_ENV === 'staging' && {
         chunkIds: 'named',
+      }),
+      ...(IS_CAPACITOR && {
+        splitChunks: false,
       }),
     },
 
@@ -485,6 +489,7 @@ export default function createConfig(
         BOT_USERNAME: '',
         IS_EXTENSION: '', // It's necessary to use an empty string, because it's used in bundle-time conditions
         IS_FIREFOX_EXTENSION: 'false',
+        IS_CAPACITOR: 'false',
         IS_AIR_APP: 'false',
         IS_GRAM_WALLET: 'false',
         IS_TELEGRAM_APP: 'false',

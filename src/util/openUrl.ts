@@ -1,9 +1,10 @@
+import { AppLauncher } from '@capacitor/app-launcher';
 import { getActions, getGlobal } from '../global';
 
-import { SUBPROJECT_URL_MASK } from '../config';
+import { IFRAME_WHITELIST, IS_CAPACITOR, SUBPROJECT_URL_MASK } from '../config';
 import { closeAllOverlays } from '../global/helpers/misc';
 import { selectCurrentAccount } from '../global/selectors';
-import { isInIframeWhitelist, isTelegramUrl } from './url';
+import { isTelegramUrl } from './url';
 
 const [, SUBPROJECT_HOST_ENDING] = SUBPROJECT_URL_MASK.split('*');
 
@@ -22,7 +23,7 @@ export async function openUrl(url: string, options?: OpenUrlOptions) {
   if (
     !options?.isExternal
     && url.startsWith('http')
-    && (isSubproject(url) || isInIframeWhitelist(url))
+    && (IS_CAPACITOR || isSubproject(url) || isInIframeWhitelist(url))
     && !isTelegramUrl(url)
   ) {
     if (!options?.shouldSkipOverlayClose) {
@@ -35,7 +36,10 @@ export async function openUrl(url: string, options?: OpenUrlOptions) {
       subtitle: options?.subtitle,
     });
   } else {
-    window.open(url, '_blank', 'noopener');
+    const couldOpenApp = IS_CAPACITOR && await openAppSafe(url);
+    if (!couldOpenApp) {
+      window.open(url, '_blank', 'noopener');
+    }
   }
 }
 
@@ -62,6 +66,10 @@ export function isSubproject(url: string) {
   return host.endsWith(SUBPROJECT_HOST_ENDING) || host.startsWith('localhost:432');
 }
 
+function isInIframeWhitelist(url: string) {
+  return IFRAME_WHITELIST.some((allowedOrigin) => url.startsWith(allowedOrigin.replace(/\*$/, '')));
+}
+
 export function handleUrlClick(
   e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   options?: OpenUrlOptions,
@@ -71,4 +79,12 @@ export function handleUrlClick(
     ...options,
     isExternal: e.shiftKey || e.ctrlKey || e.metaKey,
   });
+}
+
+async function openAppSafe(url: string) {
+  try {
+    return (await AppLauncher.openUrl({ url })).completed;
+  } catch (err) {
+    return false;
+  }
 }

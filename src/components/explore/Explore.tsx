@@ -13,10 +13,13 @@ import captureEscKeyListener from '../../util/captureEscKeyListener';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
 import { captureControlledSwipe } from '../../util/swipeController';
 import useTelegramMiniAppSwipeToClose from '../../util/telegram/hooks/useTelegramMiniAppSwipeToClose';
-import { IS_TOUCH_ENV } from '../../util/windowEnvironment';
+import { IS_ANDROID_APP, IS_IOS_APP, IS_TOUCH_ENV } from '../../util/windowEnvironment';
 import { SEC } from '../../api/constants';
 import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
-import { processSites } from './helpers/utils';
+import {
+  filterSites,
+  processSites,
+} from './helpers/utils';
 
 import useAutoScroll from '../../hooks/useAutoScroll';
 import { useDeviceScreen } from '../../hooks/useDeviceScreen';
@@ -47,6 +50,7 @@ interface StateProps {
   categories?: ApiSiteCategory[];
   sites?: ApiSite[];
   featuredTitle?: string;
+  shouldRestrict: boolean;
   currentSiteCategoryId?: number;
 }
 
@@ -62,6 +66,7 @@ function Explore({
   categories,
   sites: originalSites,
   featuredTitle,
+  shouldRestrict,
   currentSiteCategoryId,
 }: OwnProps & StateProps) {
   const {
@@ -108,10 +113,12 @@ function Explore({
     [closeSiteCategory, renderingKey],
   );
 
-  const { featuredSites, allSites } = useMemo(() => processSites(originalSites), [originalSites]);
+  const filteredSites = useMemo(() => filterSites(originalSites, shouldRestrict), [originalSites, shouldRestrict]);
+
+  const { featuredSites, allSites } = useMemo(() => processSites(filteredSites), [filteredSites]);
 
   useEffect(() => {
-    if (!IS_TOUCH_ENV || !originalSites?.length) {
+    if (!IS_TOUCH_ENV || !filteredSites?.length) {
       return undefined;
     }
 
@@ -127,7 +134,7 @@ function Explore({
         enableSwipeToClose();
       },
     });
-  }, [disableSwipeToClose, enableSwipeToClose, originalSites?.length, prevSiteCategoryIdRef]);
+  }, [disableSwipeToClose, enableSwipeToClose, filteredSites?.length, prevSiteCategoryIdRef]);
 
   useAutoScroll({
     containerRef: featuredContainerRef,
@@ -176,7 +183,7 @@ function Explore({
               className={buildClassName(styles.slide, 'custom-scroll')}
             >
               {!isPortrait && (
-                <ExploreSearch sites={originalSites} />
+                <ExploreSearch sites={filteredSites} />
               )}
               <DappFeed />
 
@@ -193,7 +200,7 @@ function Explore({
                 </>
               )}
             </div>
-            {isPortrait && <ExploreSearch sites={originalSites} />}
+            {isPortrait && <ExploreSearch sites={filteredSites} />}
           </div>
         );
 
@@ -213,7 +220,7 @@ function Explore({
     }
   }
 
-  if (originalSites === undefined) {
+  if (filteredSites === undefined) {
     return (
       <div className={buildClassName(styles.emptyList, styles.emptyListLoading)}>
         <Spinner />
@@ -221,7 +228,7 @@ function Explore({
     );
   }
 
-  if (originalSites.length === 0) {
+  if (filteredSites.length === 0) {
     return (
       <div className={styles.emptyList}>
         <AnimatedIconWithPreview
@@ -259,6 +266,7 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     sites,
     categories,
     featuredTitle,
+    shouldRestrict: global.restrictions.isLimitedRegion && (IS_IOS_APP || IS_ANDROID_APP),
     currentSiteCategoryId,
   };
 })(Explore));

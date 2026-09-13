@@ -21,6 +21,7 @@ import useShowTransition from '../../hooks/useShowTransition';
 import useThrottledCallback from '../../hooks/useThrottledCallback';
 import useWindowSize from '../../hooks/useWindowSize';
 
+import { getInAppBrowser } from '../ui/InAppBrowser';
 import { triggerPasswordFormHandleBiometrics } from '../ui/PasswordForm';
 import Transition from '../ui/Transition';
 import PasswordFormSlide from './PasswordFormSlide';
@@ -33,7 +34,7 @@ const INTERVAL_CHECK_PERIOD = 5000;
 const ACTIVATION_EVENT_NAMES = [
   'focus', // For Web
   'mousemove', // For Web
-  'touch', // For Mobile PWA
+  'touch', // For Capacitor
   'wheel',
   'keydown',
 ];
@@ -185,12 +186,13 @@ function AppLocked({
   const afterUnlockCallback = useLastCallback(() => {
     hideUi();
     setSlideForBiometricAuth(getDefaultSlideForBiometricAuth());
+    getInAppBrowser()?.show();
     clearIsPinAccepted();
     handleActivity();
     setIsManualLockActive({ isActive: undefined, shouldHideBiometrics: undefined });
     unfixSlide();
     setIsAppLockActive({ isActive: false });
-    vibrate();
+    void vibrate();
   });
 
   const autolockPeriod = useMemo(
@@ -216,6 +218,7 @@ function AppLocked({
     if (document.activeElement) {
       (document.activeElement as HTMLElement).blur();
     }
+    void getInAppBrowser()?.hide();
     setSlideForBiometricAuth(getDefaultSlideForBiometricAuth());
     setIsAppLockActive({ isActive: true });
   });

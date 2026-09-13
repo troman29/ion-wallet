@@ -2,19 +2,21 @@ import { getGlobal } from '../global';
 
 import type { Theme } from '../global/types';
 
-import { IS_TELEGRAM_APP } from '../config';
+import { IS_CAPACITOR, IS_TELEGRAM_APP } from '../config';
 import { requestMeasure } from '../lib/fasterdom/fasterdom';
+import { switchStatusBar } from './capacitor/switchStatusBar';
 import cssColorToHex from './cssColorToHex';
 import { getTelegramApp, getTelegramAppAsync } from './telegram';
 
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 let currentTheme: Theme;
+let forcedDarkStatusBarBackground: boolean | undefined;
 
-export default function switchTheme(theme: Theme) {
+export default function switchTheme(theme: Theme, isInModal?: boolean) {
   currentTheme = theme;
 
   setThemeValue();
-  setStatusBarStyle();
+  setStatusBarStyle({ isInModal });
   setThemeColor();
 }
 
@@ -45,20 +47,26 @@ function setThemeColor() {
   });
 }
 
-export function setStatusBarStyle() {
-  if (!IS_TELEGRAM_APP) return;
+export function setStatusBarStyle(options?: { forceDarkBackground?: boolean; isInModal?: boolean }) {
+  if (IS_TELEGRAM_APP) {
+    requestMeasure(() => {
+      const color = getComputedStyle(document.documentElement)
+        .getPropertyValue('--color-background-second');
+      if (!color) return;
 
-  requestMeasure(() => {
-    const color = getComputedStyle(document.documentElement)
-      .getPropertyValue('--color-background-second');
-    if (!color) return;
+      const hexColor = cssColorToHex(color) as `#${string}`;
 
-    const hexColor = cssColorToHex(color) as `#${string}`;
+      getTelegramApp()?.setHeaderColor(hexColor);
+      getTelegramApp()?.setBackgroundColor(hexColor);
+      getTelegramApp()?.setBottomBarColor(hexColor);
+    });
 
-    getTelegramApp()?.setHeaderColor(hexColor);
-    getTelegramApp()?.setBackgroundColor(hexColor);
-    getTelegramApp()?.setBottomBarColor(hexColor);
-  });
+    return;
+  }
+  if (!IS_CAPACITOR) return;
+
+  if (options?.forceDarkBackground !== undefined) forcedDarkStatusBarBackground = options.forceDarkBackground;
+  switchStatusBar(currentTheme, prefersDark.matches, forcedDarkStatusBarBackground, options?.isInModal);
 }
 
 prefersDark.addEventListener('change', handlePrefersColorSchemeChange);

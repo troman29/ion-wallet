@@ -3,49 +3,99 @@ import AirAsFramework
 import WalletContext
 import UIComponents
 import WalletCore
+import WebKit
 import FirebaseCore
 import FirebaseMessaging
-#if canImport(FirebaseCrashlytics)
-import FirebaseCrashlytics
+#if canImport(Capacitor)
+import Capacitor
+import MytonwalletAirAppLauncher
 #endif
 
 private let log = Log("AppDelegate")
+private let firstLaunchDateKey = "firstLaunchDate"
+private let firstLaunchVersionKey = "firstLaunchVersion"
+private let lastLaunchDateKey = "lastLaunchDate"
+private let lastLaunchVersionKey = "lastLaunchVersion"
 
-final class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate, MtwAppDelegateProtocol {
+    
+    #if canImport(Capacitor)
+    public let canSwitchToCapacitor = true
+    #else
+    public let canSwitchToCapacitor = false
+    #endif
+    
+    public var isFirstLaunch: Bool = false
+    
+    private var isOnTheAir: Bool {
+        return AirLauncher.isOnTheAir
+    }
 
+    private func clean(webView: WKWebView?) {
+        webView?.load(URLRequest(url: URL(string: "about:blank")!))
+        webView?.navigationDelegate = nil
+        webView?.uiDelegate = nil
+        webView?.removeFromSuperview()
+    }
+    
+    func switchToAir() {
+        cleanWebViews()
+        clearCapacitorLaunchUrlCache()
+        UIApplication.shared.connectedSceneDelegate?.switchToAir()
+    }
+    
+    func switchToCapacitor() {
+        UIApplication.shared.connectedSceneDelegate?.switchToCapacitor()
+    }
+    
+    private func cleanWebViews() {
+         #if canImport(Capacitor)
+        if let window = UIApplication.shared.connectedSceneDelegate?.window,
+           let capBridgeVC = window.rootViewController as? CAPBridgeViewController {
+            self.clean(webView: capBridgeVC.webView)
+        }
+        #endif
+    }
+
+    private func clearCapacitorLaunchUrlCache() {
+        #if canImport(Capacitor)
+        let applicationDelegateProxy = ApplicationDelegateProxy.shared
+        if applicationDelegateProxy.lastURL != nil {
+            _ = applicationDelegateProxy.application(UIApplication.shared, open: URL(string: "about:blank")!)
+        }
+        #endif
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         logAppStart()
         StartupTrace.reset(flow: "process-launch", origin: appStart)
         StartupTrace.beginInterval("startup.toHomeVisible")
         StartupTrace.beginInterval("startup.toHomeReady")
         StartupTrace.beginInterval("startup.toPresentUnlock")
-        StartupTrace.mark("appDelegate.didFinishLaunching.begin")
+        StartupTrace.mark("appDelegate.didFinishLaunching.begin", details: "isOnAir=\(isOnTheAir)")
         
         if application.isProtectedDataAvailable {
-            AirLauncher.recordLaunchMetadata()
+            let isFirstLaunch = UserDefaults.standard.object(forKey: firstLaunchDateKey) as? Date == nil
+            if isFirstLaunch {
+                log.info("firstLaunchDate key not found")
+                UserDefaults.standard.set(Date(), forKey: firstLaunchDateKey)
+                UserDefaults.standard.set(appVersion, forKey: firstLaunchVersionKey)
+                self.isFirstLaunch = true
+                let decision = AirLauncher.applyMissingFirstLaunchMarkerPolicy()
+                StartupTrace.mark("appDelegate.startupModeDecision", details: decision.traceDetails)
+            }
+            
+            UserDefaults.standard.set(Date(), forKey: lastLaunchDateKey)
+            UserDefaults.standard.set(appVersion, forKey: lastLaunchVersionKey)
         }
 
         StartupTrace.mark(
             "appDelegate.launchMetadata.ready",
-            details: "protectedData=\(application.isProtectedDataAvailable) firstLaunch=\(AirLauncher.isFirstLaunch)"
+            details: "protectedData=\(application.isProtectedDataAvailable) firstLaunch=\(isFirstLaunch)"
         )
         
         FirebaseApp.configure()
-        installCrashlyticsReporter()
         StartupTrace.mark("appDelegate.firebase.configure")
-
-        #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-testCrashlyticsFault") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                log.fault("Crashlytics test fault")
-            }
-        }
-        if ProcessInfo.processInfo.arguments.contains("-testCrashlyticsFatalCrash") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                fatalError("Crashlytics test fatal crash")
-            }
-        }
-        #endif
         
         guard application.isProtectedDataAvailable else {
             log.error("application.isProtectedDataAvailable = false")
@@ -58,9 +108,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func showDebugView() {
+        _showDebugView()
+    }
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        AirLauncher.handle(url: url)
-        return true
+        if isOnTheAir {
+            AirLauncher.handle(url: url)
+            return true
+        }
+        #if canImport(Capacitor)
+        return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
+        #else
+        fatalError()
+        #endif
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
@@ -78,24 +139,40 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the app was launched with an activity, including Universal Links.
         // Feel free to add additional processing here, but if you want the App API to support
         // tracking app url opens, make sure to keep this call
-        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-              let url = userActivity.webpageURL else {
-            return false
+        if isOnTheAir {
+            guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+                  let url = userActivity.webpageURL else {
+                return false
+            }
+            log.info("continue user activity url=\(url)")
+            AirLauncher.handle(url: url)
+            return true
         }
-        log.info("continue user activity url=\(url)")
-        AirLauncher.handle(url: url)
-        return true
+        
+        #if canImport(Capacitor)
+        return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
+        #else
+        fatalError()
+        #endif
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
         Messaging.messaging().token(completion: { (token, error) in
             if let error = error {
-                log.error("didFailToRegisterForRemoteNotifications \(error, .public)")
+                log.error("capacitorDidFailToRegisterForRemoteNotifications \(error, .public)")
+                #if canImport(Capacitor)
+                NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
+                #endif
             } else if let token = token {
-                log.info("didRegisterForRemoteNotifications")
-                Task { @MainActor in
-                    AirLauncher.didRegisterForPushNotifications(userToken: token)
+                log.info("capacitorDidRegisterForRemoteNotifications")
+                #if canImport(Capacitor)
+                NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: token)
+                #endif
+                if self.isOnTheAir {
+                    Task { @MainActor in
+                        AirLauncher.didRegisterForPushNotifications(userToken: token)
+                    }
                 }
             }
         })
@@ -103,9 +180,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         log.error("didFailToRegisterForRemoteNotificationsWithError \(error, .public)")
+        #if canImport(Capacitor)
+        NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
+        #endif
     }
     
 }
+
+#if canImport(Capacitor)
+extension AppDelegate: @preconcurrency MTWAirToggleDelegate {
+}
+#endif
+
 
 private func logAppStart() {
     let infoDict = Bundle.main.infoDictionary
@@ -118,29 +204,4 @@ private func logAppStart() {
 
 private var appVersion: String {
     Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
-}
-
-private func installCrashlyticsReporter() {
-    #if canImport(FirebaseCrashlytics)
-    Log.setFaultReporter { event in
-        let source = "\(event.fileID):\(event.line)"
-        let message = String(event.message.prefix(1_024))
-        let crashlytics = Crashlytics.crashlytics()
-        crashlytics.log("[\(event.category)] \(source) \(message)")
-        crashlytics.record(
-            error: NSError(
-                domain: "org.mytonwallet.air.log.fault",
-                code: 1,
-                userInfo: [
-                    NSLocalizedDescriptionKey: "\(event.category) fault at \(source)",
-                    "category": event.category,
-                    "file": event.fileID,
-                    "function": event.function,
-                    "line": event.line,
-                    "message": message,
-                ]
-            )
-        )
-    }
-    #endif
 }

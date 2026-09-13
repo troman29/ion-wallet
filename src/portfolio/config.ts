@@ -24,3 +24,5 @@ export const ANIMATION_LEVEL_MAX = 2;
 export const ANIMATION_LEVEL_DEFAULT = ANIMATION_LEVEL_MAX;
 
 export const THEME_DEFAULT = 'system';
+
+export const IS_CAPACITOR = false;

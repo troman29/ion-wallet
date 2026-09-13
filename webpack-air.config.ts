@@ -86,6 +86,7 @@ export default function createConfig(
         IS_HEADLESS: '',
         APP_VERSION: appVersion,
         PLATFORM_ENV: '',
+        IS_CAPACITOR: '1',
         IS_AIR_APP: '1',
         IS_ANDROID_DIRECT: '0',
         AGENT_OVERRIDE: 'v1',
