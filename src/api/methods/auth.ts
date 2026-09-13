@@ -435,19 +435,11 @@ export async function removeNetworkAccounts(network: ApiNetwork) {
 export async function resetAccounts() {
   removeAllPollingAccounts();
 
-  let agentV2Reset: Promise<void> | undefined;
-  if (process.env.NO_EXTRA_FEATURES !== '1') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { resetAgentV2 } = require('./agentV2Lifecycle') as typeof import('./agentV2Lifecycle');
-    agentV2Reset = resetAgentV2();
-  }
-
   await Promise.all([
     deactivateAllAccounts(),
     storage.removeItem('accounts'),
     getEnvironment().isDappSupported && removeAllDapps(),
     tokenRepository.clear(),
-    agentV2Reset,
   ]);
 }
 

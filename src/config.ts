@@ -13,8 +13,6 @@ import type {
 import type { TOKEN_CARD_COLORS } from './components/main/helpers/cardColors';
 import type { AutolockValueType, LangCode, LangItem } from './global/types';
 
-import { parseAgentOverride } from './util/agent/agentOverride';
-
 export const APP_ENV = process.env.APP_ENV || 'production';
 
 export const IS_GRAM_WALLET = process.env.IS_GRAM_WALLET === '1';
@@ -232,9 +230,6 @@ export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {
 export const MULTISEND_DAPP_URL = process.env.MULTISEND_DAPP_URL || 'https://multisend.mywallet.io/';
 export const PORTFOLIO_DAPP_URL = process.env.PORTFOLIO_DAPP_URL || 'https://portfolio.mywallet.io/';
 export const PORTFOLIO_API_URL = process.env.PORTFOLIO_API_URL || 'https://api-portfolio.mywallet.io/api';
-export const AGENT_API_URL = process.env.AGENT_API_URL || 'https://agent.mywallet.io/api';
-export const AGENT_OVERRIDE = parseAgentOverride(process.env.AGENT_OVERRIDE ?? 'v1');
-export const AGENT_V2_QUOTA_STATUS_ENABLED = process.env.AGENT_V2_QUOTA_STATUS_ENABLED === '1';
 
 export const NFT_MARKETPLACE_URL = 'https://opensea.io/';
 export const NFT_MARKETPLACE_TITLE = NFT_MARKETPLACE_TITLES.opensea;
@@ -794,7 +789,6 @@ export const ACTIVE_TAB_STORAGE_KEY = IS_GRAM_WALLET
 
 export const INDEXED_DB_NAME = IS_EXPLORER ? 'explorer-keyval-store' : 'keyval-store';
 export const INDEXED_DB_STORE_NAME = 'keyval';
-export const AGENT_WALLET_SENSITIVE_CACHE_DATABASE_NAME = 'mytonwallet-agent-v2-sensitive-cache';
 
 export const WINDOW_PROVIDER_CHANNEL = 'windowProvider';
 export const WINDOW_PROVIDER_PORT = `${IS_GRAM_WALLET ? 'GramWallet' : 'MyWallet'}_popup_reversed`;

@@ -51,7 +51,6 @@ export type StorageKey = 'accounts'
   // For TonConnect SSE
   | 'sseLastEventId'
   // For Agent
-  | 'agentMessages'
   | 'agentConversationId'
   | 'agentV2DeviceIdentity'
   | 'agentV2Consent'

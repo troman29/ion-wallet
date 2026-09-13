@@ -17,7 +17,6 @@ import {
 } from '../../../config';
 import { requestMutation } from '../../../lib/fasterdom/fasterdom';
 import { parseAccountId } from '../../../util/account';
-import { clearAgentChat } from '../../../util/agent/agentStorage';
 import { initCapacitorWithGlobal } from '../../../util/capacitor';
 import {
   getDeeplinkFromLocation,
@@ -181,8 +180,6 @@ addActionHandler('afterSignOut', async (global, actions, payload) => {
   if (payload?.shouldReset) {
     await enclave.reset();
     actions.resetApiSettings({ areAllDisabled: true });
-
-    void clearAgentChat();
   }
 });
 

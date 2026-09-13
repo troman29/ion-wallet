@@ -12,8 +12,6 @@ import {
 } from './config';
 import { requestMutation } from './lib/fasterdom/fasterdom';
 import { enableStrict } from './lib/fasterdom/stricterdom';
-import { initAgentProtocolVersion } from './util/agent/agentProtocolVersion';
-import { initAgentWriterPrompt } from './util/agent/agentWriterPromptState';
 import { betterView } from './util/betterView';
 import { fixIosAppStorage, initCapacitor, processCapacitorLaunchDeeplink } from './util/capacitor';
 import { initElectron } from './util/electron';
@@ -59,8 +57,6 @@ void (async () => {
 
   await window.electron?.restoreStorage?.();
 
-  initAgentProtocolVersion();
-  initAgentWriterPrompt();
   getActions().init();
 
   // Connecting to the API from remote tabs creates excessive polling in the API.

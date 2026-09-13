@@ -33,11 +33,3 @@ export function requireStakingMethods() {
 
   throw new Error('Staking is not supported in this build');
 }
-
-export function requireAgentV2Lifecycle() {
-  if (process.env.NO_EXTRA_FEATURES !== '1') {
-    return require('./agentV2Lifecycle') as typeof import('./agentV2Lifecycle');
-  }
-
-  throw new Error('Agent V2 is not supported in this build');
-}

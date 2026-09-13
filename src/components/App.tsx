@@ -37,8 +37,6 @@ import useInterval from '../hooks/useInterval';
 import useSyncEffect from '../hooks/useSyncEffect';
 import useTimeout from '../hooks/useTimeout';
 
-import Agent from './agent/AgentRuntime';
-import AgentV2HostContextBridgeRuntime from './agent/AgentV2HostContextBridgeRuntime';
 import AppEmpty from './AppEmpty';
 import AppInactive from './AppInactive';
 import AppLocked from './appLocked/AppLocked';
@@ -89,7 +87,6 @@ interface StateProps {
   isQrScannerOpen?: boolean;
   isHardwareModalOpen?: boolean;
   isCustomizeWalletModalOpen?: boolean;
-  isAgentOpen?: boolean;
   isExploreOpen?: boolean;
   isPortfolioOpen?: boolean;
   currentTokenSlug?: string;
@@ -101,7 +98,7 @@ interface StateProps {
 }
 
 const APP_STATES_WITH_BOTTOM_BAR = new Set([
-  AppState.Main, AppState.Agent, AppState.Settings, AppState.Explore, AppState.TokenInfo,
+  AppState.Main, AppState.Settings, AppState.Explore, AppState.TokenInfo,
 ]);
 const APP_UPDATE_INTERVAL = (IS_ELECTRON && !IS_LINUX) || IS_ANDROID_DIRECT
   ? 5 * MINUTE
@@ -118,7 +115,6 @@ function App({
   isHardwareModalOpen,
   isCustomizeWalletModalOpen,
   isQrScannerOpen,
-  isAgentOpen,
   isExploreOpen,
   isPortfolioOpen,
   currentTokenSlug,
@@ -143,7 +139,7 @@ function App({
   const [canPrerenderMain, prerenderMain] = useFlag();
 
   const renderingKey = resolveRenderingKey({
-    isInactive, areSettingsOpen, isAgentOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
+    isInactive, areSettingsOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
   });
   const withBottomBar = isPortrait && (!IS_EXPLORER || isAppReady) && APP_STATES_WITH_BOTTOM_BAR.has(renderingKey);
   // Screens sharing the bottom bar are sibling tabs, so they cross-fade into each other. The token
@@ -226,8 +222,6 @@ function App({
           </Transition>
         );
       }
-      case AppState.Agent:
-        return <Agent isActive={isActive} />;
       case AppState.Explore:
         return <Explore isActive={isActive} />;
       case AppState.Settings:
@@ -247,7 +241,6 @@ function App({
 
   return (
     <>
-      <AgentV2HostContextBridgeRuntime />
       {IS_ELECTRON && <ElectronHeader withTitle />}
 
       <Transition
@@ -318,7 +311,6 @@ export default memo(withGlobal((global): StateProps => {
     isBackupWalletModalOpen: global.isBackupWalletModalOpen,
     isHardwareModalOpen: global.isHardwareModalOpen,
     isCustomizeWalletModalOpen: global.isCustomizeWalletModalOpen,
-    isAgentOpen: global.isAgentOpen,
     isExploreOpen: global.isExploreOpen,
     isPortfolioOpen: global.isPortfolioOpen,
     currentTokenSlug: selectCurrentAccountState(global)?.currentTokenSlug,
@@ -332,11 +324,10 @@ export default memo(withGlobal((global): StateProps => {
 })(App));
 
 function resolveRenderingKey({
-  isInactive, areSettingsOpen, isAgentOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
+  isInactive, areSettingsOpen, isExploreOpen, isPortfolioOpen, currentTokenSlug, isPortrait, appState,
 }: {
   isInactive: boolean;
   areSettingsOpen?: boolean;
-  isAgentOpen?: boolean;
   isExploreOpen?: boolean;
   isPortfolioOpen?: boolean;
   currentTokenSlug?: string;
@@ -345,7 +336,6 @@ function resolveRenderingKey({
 }) {
   if (isInactive) return AppState.Inactive;
   if (areSettingsOpen && isPortrait) return AppState.Settings;
-  if (isAgentOpen && isPortrait) return AppState.Agent;
   if (isExploreOpen && isPortrait) return AppState.Explore;
   if (isPortfolioOpen && isPortrait) return AppState.Portfolio;
   // In landscape the token screen lives inside the main content, next to the wallet overview

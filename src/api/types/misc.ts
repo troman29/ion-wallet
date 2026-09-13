@@ -2,7 +2,6 @@ import type { NftItem } from 'tonapi-sdk-js';
 import type { Base58EncodedBytes } from '@solana/kit';
 
 import type { LangCode } from '../../global/types';
-import type { AgentOverride } from '../../util/agent/agentOverride';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
 import type { DappProtocolType } from '../dappProtocols';
 import type { ApiStorageConfig } from '../storages/types';
@@ -36,7 +35,6 @@ export interface ApiInitArgs {
   isElectron?: boolean;
   isIosApp?: boolean;
   isAndroidApp?: boolean;
-  agentOverride?: AgentOverride;
   langCode?: LangCode;
   referrer?: string;
   channel?: string;

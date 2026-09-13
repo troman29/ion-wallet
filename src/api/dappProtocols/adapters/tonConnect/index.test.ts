@@ -149,7 +149,7 @@ describe('TonConnectAdapter.connect', () => {
     await adapter.init({
       onUpdate,
       env: {
-        agentOverride: 'v1', isAgentV2Enabled: false, isSseSupported: false, byNetwork: { mainnet: {}, testnet: {} },
+        isSseSupported: false, byNetwork: { mainnet: {}, testnet: {} },
       },
       chainDappSupports: {},
     });

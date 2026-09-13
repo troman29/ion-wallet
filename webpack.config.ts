@@ -16,7 +16,6 @@ import { Compilation, EnvironmentPlugin, IgnorePlugin, ProvidePlugin, sources } 
 
 import { convertI18nYamlToJson } from './dev/locales/convertI18nYamlToJson';
 import {
-  AGENT_API_URL,
   APP_COMMIT_HASH,
   APP_ENV,
   APP_NAME,
@@ -118,7 +117,6 @@ const cspConnectSrcHosts = Array.from(new Set([
   SOLANA_TESTNET_API_URL,
   WALLET_CONNECT_BRIDGE_PATTERNS,
   ...WALLET_CONNECT_PAY_CONNECT_ORIGINS,
-  AGENT_API_URL ? new URL(AGENT_API_URL).origin : undefined,
   EVM_MAINNET_RPC_URL,
   EVM_TESTNET_RPC_URL,
   EVM_MAINNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
@@ -502,9 +500,6 @@ export default function createConfig(
         WALLET_CONNECT_PAY_APP_ID: '',
         MULTISEND_DAPP_URL: '',
         PORTFOLIO_DAPP_URL: '',
-        AGENT_API_URL: '',
-        AGENT_OVERRIDE: 'v1',
-        AGENT_V2_QUOTA_STATUS_ENABLED: '0',
         MFA_BOT_URL: '',
         MFA_API_BASE_URL: '',
         MFA_MASTER_ADDRESS: '',

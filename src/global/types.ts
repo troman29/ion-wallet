@@ -1,17 +1,5 @@
 import type { TeactNode } from '../lib/teact/teact';
 
-import type {
-  AgentActionProposal,
-  AgentMessageErrorV2,
-  AgentPersistedActionV2,
-  AgentPublicFollowUpV2,
-  AgentPublicInputContinuationV1,
-  AgentSemanticContentV1,
-} from '../api/agentV2/protocol/types';
-import type {
-  AgentV2ActionPresentation,
-  AgentV2WalletConversationControls,
-} from '../api/agentV2/types';
 import type { ApiTonWalletVersion } from '../api/chains/ton/types';
 import type { TonConnectProof } from '../api/dappProtocols/adapters';
 import type {
@@ -211,7 +199,6 @@ type SignOutLevel = 'account' | 'network' | 'all';
 export enum AppState {
   Auth,
   Main,
-  Agent,
   Explore,
   Portfolio,
   TokenInfo,
@@ -455,7 +442,6 @@ export enum ContentTab {
   Overview,
   Assets,
   Activity,
-  Agent,
   Explore,
   Nft,
   Settings,
@@ -548,32 +534,6 @@ export interface Account {
 export type AssetPairs = Record<string, {
   isReverseProhibited?: boolean;
 }>;
-
-export interface AgentMessage {
-  id: number;
-  text: string;
-  shouldCommitMarkdownTail?: boolean;
-  isOutgoing: boolean;
-  timestamp: number;
-  isTyping?: boolean;
-  isStreaming?: boolean;
-  semanticContent?: AgentSemanticContentV1;
-  walletControls?: AgentV2WalletConversationControls;
-  actions?: Array<AgentActionProposal | AgentPersistedActionV2>;
-  actionPresentations?: Record<string, AgentV2ActionPresentation>;
-  followups?: AgentPublicFollowUpV2[];
-  inputContinuations?: AgentPublicInputContinuationV1[];
-  error?: AgentMessageErrorV2;
-  isRetryAvailable?: boolean;
-}
-
-export interface AgentHint {
-  id: string;
-  langCode: LangCode;
-  title: string;
-  subtitle: string;
-  prompt: string;
-}
 
 export interface AccountState {
   balances?: {
@@ -1152,9 +1112,6 @@ export type GlobalState = {
   isCustomizeWalletModalOpen?: boolean;
   customizeWalletReturnTo?: 'accountSelector' | 'settings';
   areSettingsOpen?: boolean;
-  isAgentOpen?: boolean;
-  agentMeta?: { messageCount: number; lastTimestamp?: number };
-  agentHints?: AgentHint[];
   isExploreOpen?: boolean;
   isPortfolioOpen?: boolean;
   portfolioReturnTo?: 'settings';
@@ -1458,10 +1415,6 @@ export interface ActionPayloads {
   openNftAttributesModal: { nft: ApiNft; withOwner?: true };
   closeNftAttributesModal: undefined;
 
-  openAgent: undefined;
-  closeAgent: undefined;
-  setAgentMeta: { messageCount: number; lastTimestamp?: number };
-  setAgentHints: { hints: AgentHint[] };
   openExplore: undefined;
   closeExplore: undefined;
   openPortfolio: { returnTo?: 'settings' } | undefined;
@@ -1496,7 +1449,6 @@ export interface ActionPayloads {
 
   // BottomBar actions
   switchToWallet: undefined;
-  switchToAgent: undefined;
   switchToExplore: undefined;
   switchToSettings: undefined;
   switchToPortfolio: undefined;

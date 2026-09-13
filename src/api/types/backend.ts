@@ -1,5 +1,4 @@
 import type { DieselStatus } from '../../global/types';
-import type { AgentProtocolVersion } from '../../util/agent/agentOverride';
 import type { StakingPoolConfig } from '../chains/ton/contracts/JettonStaking/StakingPool';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
 import type { ApiChain, ApiCountryCode, ApiLoyaltyType, ApiMtwCardType, ApiTokenWithPrice } from './misc';
@@ -497,8 +496,6 @@ export type ApiBackendConfig = {
   swapVersion?: ApiSwapVersion;
   seasonalTheme?: 'newYear' | 'valentine';
   knowledgeBaseVersion?: string;
-  agentProtocolVersion?: AgentProtocolVersion;
-  preferredAgent?: 'local' | 'online' | 'hybrid';
   // Lower-case currency codes the on/off-ramp surfaces may offer; the client may only narrow its own baseline with it
   allowedOnOffRampCurrencies?: string[];
 };

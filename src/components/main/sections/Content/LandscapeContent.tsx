@@ -150,12 +150,11 @@ function LandscapeContent({
     },
   });
 
-  // Settings/Agent/Explore render on top of the landscape main area as full-screen overlay slides
+  // Settings and Explore render on top of the landscape main area as full-screen overlay slides
   // in `LandscapeLayout`'s outer `Transition`. While such an overlay is active we keep the inner
   // `Transition`'s key frozen (see `landscapeActiveKey` below) so the slide underneath does not
   // change during the open/close animation; once the overlay is gone the inner key updates normally.
   const isCoveredByLandscapeOverlay = activeContentTab === ContentTab.Settings
-    || activeContentTab === ContentTab.Agent
     || activeContentTab === ContentTab.Explore
     || activeContentTab === ContentTab.Portfolio;
 
@@ -177,10 +176,7 @@ function LandscapeContent({
 
   const landscapeRenderCount = mainContentTabsCount + visibleCollectionTabs.length + 1;
 
-  // Agent manages its own scroll container, so we skip it here
   const handleContentTransitionStop = useLastCallback(() => {
-    if (activeContentTab === ContentTab.Agent) return;
-
     requestMeasure(() => {
       // Every slide keeps its own scroll position, so the shown one is addressed by its key
       const scrollContainer = transitionRef.current?.querySelector<HTMLElement>(

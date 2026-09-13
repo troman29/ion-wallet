@@ -25,17 +25,16 @@ const ANIMATED_STICKER_SPEED = 2;
 
 interface StateProps {
   areSettingsOpen?: boolean;
-  isAgentOpen?: boolean;
   isExploreOpen?: boolean;
   theme: Theme;
   accentColorIndex?: number;
 }
 
 function LandscapeNavBar({
-  areSettingsOpen, isAgentOpen, isExploreOpen, theme, accentColorIndex,
+  areSettingsOpen, isExploreOpen, theme, accentColorIndex,
 }: StateProps) {
   const {
-    switchToWallet, switchToAgent, switchToExplore, switchToSettings,
+    switchToWallet, switchToExplore, switchToSettings,
     closeNftCollection, selectToken, setActiveContentTab,
   } = getActions();
 
@@ -44,7 +43,7 @@ function LandscapeNavBar({
   const stickerPaths = ANIMATED_STICKERS_PATHS[appTheme];
   const accentColor = accentColorIndex !== undefined ? ACCENT_COLORS[appTheme][accentColorIndex] : undefined;
 
-  const isWalletActive = !areSettingsOpen && !isAgentOpen && !isExploreOpen;
+  const isWalletActive = !areSettingsOpen && !isExploreOpen;
 
   const handleWalletClick = useLastCallback(() => {
     switchToWallet();
@@ -62,14 +61,6 @@ function LandscapeNavBar({
         previewUrl={isWalletActive ? stickerPaths.preview.iconWalletSolid : stickerPaths.preview.iconWallet}
         accentColor={accentColor}
         onClick={handleWalletClick}
-      />
-      <NavButton
-        isActive={isAgentOpen}
-        label={lang('Agent')}
-        tgsUrl={isAgentOpen ? stickerPaths.iconAgentSolid : stickerPaths.iconAgent}
-        previewUrl={isAgentOpen ? stickerPaths.preview.iconAgentSolid : stickerPaths.preview.iconAgent}
-        accentColor={accentColor}
-        onClick={switchToAgent}
       />
       <NavButton
         isActive={isExploreOpen}
@@ -93,11 +84,10 @@ function LandscapeNavBar({
 }
 
 export default memo(withGlobal((global): StateProps => {
-  const { areSettingsOpen, isAgentOpen, isExploreOpen } = global;
+  const { areSettingsOpen, isExploreOpen } = global;
 
   return {
     areSettingsOpen,
-    isAgentOpen,
     isExploreOpen,
     theme: global.settings.theme,
     accentColorIndex: selectCurrentAccountSettings(global)?.accentColorIndex,

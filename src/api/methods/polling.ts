@@ -14,7 +14,6 @@ import type {
 
 import { NO_EXTRA_FEATURES } from '../../config';
 import { parseAccountId } from '../../util/account';
-import { parseAgentProtocolVersion } from '../../util/agent/agentOverride';
 import { areDeepEqual } from '../../util/areDeepEqual';
 import { omit } from '../../util/iteratees';
 import { logDebugError } from '../../util/logs';
@@ -52,7 +51,6 @@ import {
 import { MINUTE, SEC } from '../constants';
 import { storage } from '../storages';
 import {
-  requireAgentV2Lifecycle,
   requireMfaMethods,
   requireStakingMethods,
   requireSwapMethods,
@@ -217,10 +215,7 @@ export async function tryUpdateConfig() {
     const rawConfig = await callBackendGet<ApiBackendConfig>('/utils/get-config');
     if (generation !== configUpdateGeneration) return;
 
-    const config = {
-      ...rawConfig,
-      agentProtocolVersion: parseAgentProtocolVersion(rawConfig.agentProtocolVersion),
-    };
+    const config = rawConfig;
     setBackendConfigCache(config);
 
     const {
@@ -233,8 +228,6 @@ export async function tryUpdateConfig() {
       seasonalTheme,
       isUpdateRequired: isAppUpdateRequired,
       knowledgeBaseVersion,
-      agentProtocolVersion,
-      preferredAgent,
       allowedOnOffRampCurrencies,
     } = config;
 
@@ -248,26 +241,8 @@ export async function tryUpdateConfig() {
       swapVersion,
       seasonalTheme,
       knowledgeBaseVersion,
-      agentProtocolVersion,
-      preferredAgent,
       allowedOnOffRampCurrencies,
     };
-
-    if (!NO_EXTRA_FEATURES) {
-      const lifecycle = requireAgentV2Lifecycle();
-      const reconciliation = lifecycle.reconcileAgentV2ProtocolVersion(agentProtocolVersion);
-      updateConfig.agentProtocolVersion = lifecycle.resolveAgentV2ProtocolVersionForRouting(agentProtocolVersion);
-      void reconciliation.then(() => {
-        if (generation !== configUpdateGeneration) return;
-
-        const reconciledVersion = lifecycle.resolveAgentV2ProtocolVersionForRouting(agentProtocolVersion);
-        if (reconciledVersion === updateConfig.agentProtocolVersion) return;
-        onUpdate({
-          ...updateConfig,
-          agentProtocolVersion: reconciledVersion,
-        });
-      }).catch((err) => logDebugError('reconcileAgentV2ProtocolVersion', err));
-    }
 
     onUpdate(updateConfig);
 
