@@ -1,5 +1,3 @@
-import { TONAPIIO_MAINNET_URL } from '../config';
-
 import {
   fetchWithThrottledProvider,
   getProviderFetchRetryPolicy,
@@ -58,43 +56,6 @@ describe('ThrottledFetcher', () => {
     await secondPromise;
   });
 
-  it('should honor Retry-After delays for subsequent tonapi requests', async () => {
-    const fetchMock = global.fetch as jest.Mock;
-    fetchMock
-      .mockResolvedValueOnce({
-        status: 429,
-        ok: false,
-        headers: {
-          get: (name: string) => (name === 'Retry-After' ? '1' : undefined),
-        },
-      } as unknown as Response)
-      .mockResolvedValueOnce({
-        status: 200,
-        ok: true,
-        headers: {
-          get: () => undefined,
-        },
-      } as unknown as Response);
-
-    const url = `${TONAPIIO_MAINNET_URL}/v2/accounts/EQDCH6vT0MFLki4LX3yGDLkTe6PJRJfNMwo3isyseTOSNKKC/nfts`;
-
-    await fetchWithThrottledProvider(url);
-
-    const secondPromise = fetchWithThrottledProvider(url);
-
-    // Drains microtasks without moving the clock: an unthrottled second request would fire here.
-    await jest.advanceTimersByTimeAsync(0);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-
-    await jest.advanceTimersByTimeAsync(999);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-
-    await jest.advanceTimersByTimeAsync(1);
-
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    await secondPromise;
-  });
-
   it('caps a provider Retry-After pause so one 429 cannot park the origin', async () => {
     const fetchMock = global.fetch as jest.Mock;
     fetchMock
@@ -113,7 +74,7 @@ describe('ThrottledFetcher', () => {
         },
       } as unknown as Response);
 
-    const url = `${TONAPIIO_MAINNET_URL}/v2/rates`;
+    const url = 'https://toncenter.wallet.ice.io/api/v3/rates';
     // A timeout above the cap: this test is about the pause itself, not about the caller deadline.
     await fetchWithThrottledProvider(url, undefined, 60000);
 
@@ -145,8 +106,8 @@ describe('ThrottledFetcher', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it('should apply the provider retry policy to tonapi origins', () => {
-    expect(getProviderFetchRetryPolicy(`${TONAPIIO_MAINNET_URL}/v2/rates`)).toEqual({
+  it('should apply the provider retry policy to Toncenter origins', () => {
+    expect(getProviderFetchRetryPolicy('https://toncenter.wallet.ice.io/api/v3/rates')).toEqual({
       retries: 6,
       fallbackRetryAfterMs: 5000,
     });

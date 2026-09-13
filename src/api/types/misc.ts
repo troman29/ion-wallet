@@ -1,5 +1,3 @@
-import type { NftItem } from 'tonapi-sdk-js';
-
 import type { LangCode } from '../../global/types';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
 import type { DappProtocolType } from '../dappProtocols';
@@ -190,7 +188,6 @@ export interface ApiDomainData {
   domain: string;
   linkedAddress?: string;
   lastFillUpTime: string;
-  nft: NftItem;
 }
 
 export type ApiHistoryList = Array<[number, number]>;

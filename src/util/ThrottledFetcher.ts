@@ -1,6 +1,4 @@
 import {
-  TONAPIIO_MAINNET_URL,
-  TONAPIIO_TESTNET_URL,
   TONCENTER_MAINNET_URL,
   TONCENTER_TESTNET_URL,
 } from '../config';
@@ -25,8 +23,6 @@ const MAX_PROVIDER_RETRY_AFTER_MS = 30000;
 const THROTTLED_PROVIDER_ORIGINS = new Set([
   new URL(TONCENTER_MAINNET_URL).origin,
   new URL(TONCENTER_TESTNET_URL).origin,
-  new URL(TONAPIIO_MAINNET_URL).origin,
-  new URL(TONAPIIO_TESTNET_URL).origin,
 ]);
 const throttledFetchers = new Map<string, ThrottledFetcher>();
 

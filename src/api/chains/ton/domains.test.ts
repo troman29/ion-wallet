@@ -3,11 +3,10 @@ import { Address } from '@ton/core';
 import type { ApiDomainData, ApiNft } from '../../types';
 
 import { logDebugError } from '../../../util/logs';
-import { parseTonapiioNft } from './util/metadata';
 import { getDnsItemDomain } from './util/tonCore';
 import { fetchStoredWallet } from '../../common/accounts';
-import { getNftSuperCollectionsByCollectionAddress } from '../../common/addresses';
 import { callBackendGet } from '../../common/backend';
+import { fetchNftByAddress } from './toncenter/nfts';
 import { resolveAddressByDomain } from './address';
 import { fetchDomains } from './domains';
 
@@ -28,10 +27,6 @@ jest.mock('./transfer', () => ({
   submitMultiTransfer: jest.fn(),
 }));
 
-jest.mock('./util/metadata', () => ({
-  parseTonapiioNft: jest.fn(),
-}));
-
 jest.mock('./util/tonCore', () => {
   const actual = jest.requireActual('./util/tonCore');
 
@@ -46,12 +41,12 @@ jest.mock('../../common/accounts', () => ({
   fetchStoredWallet: jest.fn(),
 }));
 
-jest.mock('../../common/addresses', () => ({
-  getNftSuperCollectionsByCollectionAddress: jest.fn(),
-}));
-
 jest.mock('../../common/backend', () => ({
   callBackendGet: jest.fn(),
+}));
+
+jest.mock('./toncenter/nfts', () => ({
+  fetchNftByAddress: jest.fn(),
 }));
 
 const ACCOUNT_ID = 'mainnet-0';
@@ -62,10 +57,9 @@ const OTHER_ADDRESS = 'EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ';
 
 const mockedCallBackendGet = jest.mocked(callBackendGet);
 const mockedFetchStoredWallet = jest.mocked(fetchStoredWallet);
-const mockedGetNftSuperCollectionsByCollectionAddress = jest.mocked(getNftSuperCollectionsByCollectionAddress);
 const mockedGetDnsItemDomain = jest.mocked(getDnsItemDomain);
 const mockedResolveAddressByDomain = jest.mocked(resolveAddressByDomain);
-const mockedParseTonapiioNft = jest.mocked(parseTonapiioNft);
+const mockedFetchNftByAddress = jest.mocked(fetchNftByAddress);
 const mockedLogDebugError = jest.mocked(logDebugError);
 
 describe('fetchDomains', () => {
@@ -75,8 +69,7 @@ describe('fetchDomains', () => {
     mockedFetchStoredWallet.mockResolvedValue(
       { address: WALLET_ADDRESS } as Awaited<ReturnType<typeof fetchStoredWallet>>,
     );
-    mockedGetNftSuperCollectionsByCollectionAddress.mockResolvedValue({});
-    mockedParseTonapiioNft.mockImplementation((_network, rawNft) => rawNft as unknown as ApiNft);
+    mockedFetchNftByAddress.mockResolvedValue(makeNft());
     mockedGetDnsItemDomain.mockResolvedValue('alice.ton');
     mockedResolveAddressByDomain.mockResolvedValue(LINKED_ADDRESS);
   });
@@ -169,7 +162,6 @@ function makeDomainData(options: { linkedAddress?: string } = {}) {
       domain: 'alice.ton',
       linkedAddress: options.linkedAddress,
       lastFillUpTime: '2026-01-01T00:00:00.000Z',
-      nft: makeNft(),
     },
   } as unknown as Record<string, ApiDomainData>;
 }

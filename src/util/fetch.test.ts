@@ -197,7 +197,7 @@ describe('fetchWithRetry negative-verdict cache', () => {
   it('does not cache non-evmapi origins even when enabled (scope is evmapi-only)', async () => {
     setNegVerdictCacheFlag(true);
     fetchMock.mockResolvedValue(mockResponse(400, { error: 'bad' }));
-    const nonEvmUrl = 'https://tonapiio.wallet.ice.io/v2/accounts/0xdead?x=1';
+    const nonEvmUrl = 'https://example.com/v2/accounts/0xdead?x=1';
 
     await expect(fetchWithRetry(nonEvmUrl)).rejects.toMatchObject({ statusCode: 400 });
     await expect(fetchWithRetry(nonEvmUrl)).rejects.toMatchObject({ statusCode: 400 });

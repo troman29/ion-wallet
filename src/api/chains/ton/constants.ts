@@ -3,8 +3,6 @@ import type { TonTransport } from '@ton-community/ton-ledger';
 import type { ApiTonWalletVersion, ContractInfo, ContractName } from './types';
 
 import {
-  TONAPIIO_MAINNET_URL,
-  TONAPIIO_TESTNET_URL,
   TONCENTER_MAINNET_URL,
   TONCENTER_TESTNET_URL,
 } from '../../../config';
@@ -15,13 +13,11 @@ export { TON_BIP39_PATH } from './derivationConstants';
 export const NETWORK_CONFIG = {
   mainnet: {
     toncenterUrl: TONCENTER_MAINNET_URL,
-    tonApiIoUrl: TONAPIIO_MAINNET_URL,
     // W5 wallet chain IDs for different subwallet variants
     chainId: -239,
   },
   testnet: {
     toncenterUrl: TONCENTER_TESTNET_URL,
-    tonApiIoUrl: TONAPIIO_TESTNET_URL,
     // W5 wallet chain IDs for different subwallet variants
     chainId: -3,
   },
