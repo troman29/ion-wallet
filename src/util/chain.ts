@@ -444,10 +444,8 @@ export const getTrustedUsdtSlugs = /* #__PURE__ */ withCache((): ReadonlySet<str
 });
 
 export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((network: ApiNetwork): ReadonlySet<string> => {
-  // The TON-forward Gram brand defaults to TON tokens even though it supports every chain, matching Air
-  // (`ApiToken.defaultSlugs`). It also spares the legacy wallet.ton.org accounts, whose TON-native mnemonic cannot
-  // derive foreign addresses, zero-balance rows they can never use: `updateBalances` (`global/reducers/misc.ts`)
-  // seeds every default slug and empty wallets render them all.
+  // `updateBalances` (`global/reducers/misc.ts`) seeds every default slug at zero, so an empty
+  // wallet renders them all and has somewhere to receive its first funds.
   const chainConfigs = Object.values(CHAIN_CONFIG);
 
   return new Set(
@@ -456,9 +454,8 @@ export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((network: ApiNet
 });
 
 /**
- * The chains a wallet that holds nothing shows: there are no balances to sort or filter by, so it offers everything
- * it supports to receive the first funds in. Keyed on the build like `getDefaultEnabledSlugs` - the Gram brand is
- * TON-forward, so its empty wallets list TON alone.
+ * The chains a wallet that holds nothing shows: there are no balances to sort or filter by, so it offers
+ * everything it supports to receive the first funds in.
  */
 export const getAllSupportedVisibleChains = /* #__PURE__ */ withCache((): ReadonlySet<ApiChain> => {
   return new Set(getSupportedChains());
