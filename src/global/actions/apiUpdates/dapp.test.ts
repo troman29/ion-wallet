@@ -50,7 +50,7 @@ describe('dapp api updates', () => {
 
   it('should preserve page deeplink source when processing popup updates', () => {
     const handler = getApiUpdateHandler();
-    const url = 'mtw://offramp?depositWalletAddress=UQAddress&baseCurrencyCode=ton';
+    const url = 'ion://offramp?depositWalletAddress=UQAddress&baseCurrencyCode=ton';
     const update: ApiUpdateProcessDeeplink = {
       type: 'processDeeplink',
       url,

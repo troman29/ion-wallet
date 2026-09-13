@@ -1,20 +1,20 @@
-# **My Wallet** · [mywallet.io](https://mywallet.io)
+# **ION Wallet** · [wallet.ice.io](https://wallet.ice.io)
 
 **All you need to enjoy crypto.** A safe, self-custodial **multichain wallet** for 11 blockchains, including [**Ethereum**](https://ethereum.org/), [**Solana**](https://solana.com/), [**Hyperliquid**](https://hyperliquid.xyz/), [**TON**](https://ton.org), [**TRON**](https://trondao.org/), [**Base**](https://base.org/), and more — native mobile (iOS & Android), desktop, web, and browser extension. One account, any device.
 
-<img src="https://mywallet.io/img/og-image.png" width="600" alt="My Wallet — All You Need to Enjoy Crypto" />
+<img src="https://wallet.ice.io/img/og-image.png" width="600" alt="ION Wallet — All You Need to Enjoy Crypto" />
 
-You keep full control: we **do not** have access to your funds, keys, or data. **My Wallet** is built for **speed** and **reliability**, with a minimal dependency footprint for maximum safety.
+You keep full control: we **do not** have access to your funds, keys, or data. **ION Wallet** is built for **speed** and **reliability**, with a minimal dependency footprint for maximum safety.
 
 ---
 
-## Why **My Wallet**?
+## Why **ION Wallet**?
 
 **🌐 One wallet for everything**  
 Keep Ethereum, Solana, Hyperliquid, TON, TRON, Base, BNB Chain, Polygon, Avalanche, Arbitrum, and Monad in one place. You can send, receive, and swap across chains without jumping between different apps.
 
 **📱 Use it wherever you are**  
-**My Wallet** works as a native mobile app, desktop app, web app, and browser extension for all major browsers, so your wallet is always within reach.
+**ION Wallet** works as a native mobile app, desktop app, web app, and browser extension for all major browsers, so your wallet is always within reach.
 
 **⚡ Instant transfers**  
 Transfers and swaps feel almost instant across supported chains, so you can send crypto and other assets in less than a second in typical conditions.
@@ -35,24 +35,22 @@ Follow your portfolio and net worth over time in the base fiat currency you choo
 Stake TON and other supported assets, including options like USDe, directly in the wallet.
 
 **🛡️ Industry-leading security**  
-**My Wallet** uses advanced security practices audited by CertiK. We also run a [bug bounty on CertiK SkyShield](https://skyshield.certik.com/bounties/mytonwallet) with **$100K** in reserved funds and rewards of up to **$5,000**. The program has been live since **March 23, 2024**, and no vulnerabilities have been found to date.
+**ION Wallet** uses advanced security practices audited by CertiK. We also run a [bug bounty on CertiK SkyShield](https://skyshield.certik.com/bounties/mytonwallet) with **$100K** in reserved funds and rewards of up to **$5,000**. The program has been live since **March 23, 2024**, and no vulnerabilities have been found to date.
 
 **🧰 Hundreds of handy features**  
 Connect Ledger hardware wallets, hide balances, personalize interface, send multiple transfers at once, view other wallets, use AI plugins for OpenClaw, ChatGPT, and Claude, and much more.
 
 **⭐ Trusted by millions**  
-**My Wallet** has a **4.8** rating on [Trustpilot](https://www.trustpilot.com/), strong App Store and Google Play rankings, and **9M+ users** worldwide.
+**ION Wallet** has a **4.8** rating on [Trustpilot](https://www.trustpilot.com/), strong App Store and Google Play rankings, and **9M+ users** worldwide.
 
 ---
 
 ## 🔗 Links
 
-- 📲 **Get the app**: [get.mywallet.io](https://get.mywallet.io/)
-- 📚 **Help Center**: [help.mywallet.io](https://help.mywallet.io)
+- 📲 **Get the app**: [get.wallet.ice.io](https://get.wallet.ice.io/)
+- 📚 **Help Center**: [help.wallet.ice.io](https://help.wallet.ice.io)
 - 🛟 **24/7 Support**: [t.me/mysupport](https://t.me/mysupport)
-- 💬 **Telegram**: [t.me/mytonwalleten](https://t.me/mytonwalleten)
-- 🐦 **X (Twitter)**: [x.com/mytonwallet_io](https://x.com/mytonwallet_io)
-- 📰 **Blog & updates**: [mywallet.io](https://mywallet.io)
+- 📰 **Blog & updates**: [wallet.ice.io](https://wallet.ice.io)
 
 ---
 
@@ -97,7 +95,7 @@ npm run dev
 
 Install the [FUSE 2 library](https://github.com/AppImage/AppImageKit/wiki/FUSE).
 
-**If the app does not appear in the system menu or does not process ton:// and TON Connect deeplinks:**
+**If the app does not appear in the system menu or does not process ion:// and TON Connect deeplinks:**
 
 Install [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) and install the AppImage file through it.
 

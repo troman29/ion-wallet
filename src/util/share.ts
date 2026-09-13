@@ -12,7 +12,7 @@ import { IS_ANDROID, IS_ANDROID_APP, IS_IOS, IS_IOS_APP, IS_TOUCH_ENV } from './
 
 export async function shareUrl(url: string, title?: string) {
   // Android Share supports only http/https/file URLs in `url` field.
-  // For custom schemes (e.g., ton://), pass via `text` to ensure the chooser opens.
+  // For custom schemes (e.g., ion://), pass via `text` to ensure the chooser opens.
   const isShareableUrl = /^(https?:|file:)/.test(url);
   const shareData = IS_ANDROID && !isShareableUrl
     ? { text: url, title }

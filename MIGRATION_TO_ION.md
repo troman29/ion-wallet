@@ -15,11 +15,11 @@
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
 | Лишние продукты | ✅ | Удалены Portfolio, Multisend, MyTonWallet Cards, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. |
 | Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
-| Бренды и Explorer | ✅ | Удалены Gram Wallet, Core/TON brand и отдельная Explorer-сборка; видимое имя изменено на ION Wallet. |
+| Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
 | ION API | ◐ | В предпросмотре подключён ION RPC v2. Полноценного совместимого v3 indexer пока нет. |
 | Agent | ◐ | Основная функция удалена, но остались следы в локализациях, CI, стилях, иконках и комментариях. |
-| iOS-проект | ◐ | Удалены Air-only targets, package products, схемы и CI-профиль. Осталось проверить сборку Capacitor-приложения на симуляторе или устройстве. |
+| iOS-проект | ◐ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install` и `cap sync ios` проходят. Осталось проверить сборку на симуляторе или устройстве. |
 
 ## Решения, которые уже приняты
 
@@ -66,8 +66,16 @@
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 
-- [ ] Проверить все оставшиеся названия, домены, ссылки, package/application identifiers и изображения MyTonWallet/TON.
-- [ ] Заменить параметры сети, endpoint-ы, обозреватели, deeplink-и и тексты на ION-эквиваленты.
+- [x] Переименовать основные пакеты, артефакты и нативные цели в **ION Wallet**.
+  - npm package: `ion-wallet`; Capacitor app ID: `io.ice.wallet`; Android flavor: `ionwallet`; iOS schemes: `IONWallet*`.
+  - Desktop-артефакты: `IONWallet-*`; Android direct APK: `IONWallet.apk`.
+  - Удалён iOS target и ресурсы Gram Wallet, включая widget extension.
+  - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
+- [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
+  - Для собственного TonConnect-канала используется `ion-tc://`; public links используют `wallet.ice.io`.
+- [ ] Завершить замену внешней инфраструктуры MyTonWallet.
+  - Сейчас RPC/indexer, Firebase project, npm scopes и GitHub fork-зависимости ещё содержат прежние имена, потому что это действующие внешние сервисы и зависимости.
+  - Перед релизом нужны ION Firebase-конфигурации, доменные записи/`apple-app-site-association` и `assetlinks.json` для `wallet.ice.io`, а также ION-замены backend endpoints.
 - [ ] Проверить BNB bridge/swap-путь для ION между ION/TON и BNB Chain.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Закоммитить и перенести в репозиторий nginx-конфигурацию предпросмотра `wallet.lab.windbit.dev`, если она остаётся частью инфраструктуры проекта.

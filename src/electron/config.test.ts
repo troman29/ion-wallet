@@ -30,7 +30,7 @@ describe('Electron bundle identity', () => {
   it('keeps the appId', () => {
     // Codesign identity, the NSIS registry GUID that locates the existing install directory, and the
     // bundle Squirrel.Mac looks for inside an update. Changing it means a second, parallel install.
-    expect(config.appId).toBe('io.mytonwallet.electron');
+    expect(config.appId).toBe('io.ice.wallet.electron');
   });
 
   it('keeps the artifact filenames in sync with the release workflow', () => {
@@ -38,6 +38,6 @@ describe('Electron bundle identity', () => {
     // workflow finds electron-builder output by these names: ARTIFACT_NAME_BASE in
     // package-and-publish.yml and the get.mywallet.io download page must move together with this.
     // eslint-disable-next-line no-template-curly-in-string
-    expect(config.artifactName).toBe('MyWallet-${arch}.${ext}');
+    expect(config.artifactName).toBe('IONWallet-${arch}.${ext}');
   });
 });

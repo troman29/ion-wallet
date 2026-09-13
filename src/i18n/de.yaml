@@ -304,7 +304,7 @@ $many_transactions:
   otherValue: "%count% Überweisungen"
 Total Amount: Gesamtbetrag
 $unstaking_short: Entstaken
-Handle ton:// links: Umgang mit ton://-Links
+Handle ion:// links: Umgang mit ion://-Links
 Back up wallet to have full access to it: Sichern Sie das Wallet, um vollen Zugriff darauf zu haben
 Consider More Secure Version: Berücksichtigen Sie eine sicherere Version
 Install our native app or browser extension.: Installieren Sie unsere native App oder Browser-Erweiterung.

@@ -1,6 +1,6 @@
 //
 //  MTWCapacitorVC.swift
-//  MyTonWallet
+//  IONWallet
 //
 //  Created by Sina on 10/15/24.
 //

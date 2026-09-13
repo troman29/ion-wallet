@@ -1,14 +1,14 @@
-productName: "My Wallet"
+productName: "ION Wallet"
 # Without this key electron-builder derives the copyright from package.json `author`, which is the
 # legacy brand and shows up in the macOS About panel.
-copyright: "Copyright © 2026 My Wallet Apps Ltd."
+copyright: "Copyright © 2026 ION Wallet Apps Ltd."
 # Pinned by config.test.ts: change ONLY together with ARTIFACT_NAME_BASE in
 # package-and-publish.yml (workflow artifact names must match electron-builder output) and the
 # get.mywallet.io download page. Renaming is safe for installed clients: the update feed
 # (latest*.yml) and the files it points at are generated together into the same release, so old
 # clients download whatever name the new feed declares.
-artifactName: "MyWallet-${arch}.${ext}"
-appId: "io.mytonwallet.electron"
+artifactName: "IONWallet-${arch}.${ext}"
+appId: "io.ice.wallet.electron"
 extraMetadata:
   main: "./dist/electron.js"
   # DO NOT RENAME. This is the sole source of `app.getName()`, which keys `app.getPath('userData')`
@@ -36,18 +36,16 @@ directories:
   buildResources: "./public"
   output: "./dist-electron"
 protocols:
-  - name: "Ton"
-    schemes: ["ton"]
+  - name: "ION Wallet"
+    schemes: ["ion"]
   - name: "TonConnect"
     schemes: ["tc"]
-  - name: "TonConnect My Wallet"
-    schemes: ["mytonwallet-tc"]
-  - name: "My Wallet"
-    schemes: ["mtw"]
+  - name: "ION Wallet Connect"
+    schemes: ["ion-tc"]
   - name: "WalletConnect"
     schemes: ["wc"]
-  - name: "WalletConnect My Wallet"
-    schemes: ["mywallet-wc"]
+  - name: "WalletConnect ION Wallet"
+    schemes: ["ion-wc"]
 publish:
   provider: "github"
   owner: "mytonwallet-org"
@@ -71,7 +69,7 @@ mac:
   icon: "public/icon-electron-macos.icns"
 
 dmg:
-  title: "My Wallet installer"
+  title: "ION Wallet installer"
   background: "public/background-electron-dmg.tiff"
   contents:
     - x: 148

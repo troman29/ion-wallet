@@ -306,7 +306,7 @@ $many_transactions:
   manyValue: "%count% переказів"
 Total Amount: Загальна сума
 $unstaking_short: Зняти
-Handle ton:// links: Обробляти посилання ton://
+Handle ion:// links: Обробляти посилання ion://
 Back up wallet to have full access to it: Зробіть резервну копію гаманця, щоб мати до нього повний доступ
 Consider More Secure Version: Підвищіть безпеку гаманця
 Install our native app or browser extension.: Встановіть наш додаток або браузерне розширення.

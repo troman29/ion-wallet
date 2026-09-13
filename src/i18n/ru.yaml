@@ -306,7 +306,7 @@ $many_transactions:
   manyValue: "%count% переводов"
 Total Amount: Общая сумма
 $unstaking_short: Вывод
-Handle ton:// links: Обрабатывать ссылки ton://
+Handle ion:// links: Обрабатывать ссылки ion://
 Back up wallet to have full access to it: Сделайте резервную копию кошелька, чтобы иметь к нему полный доступ
 Consider More Secure Version: Повысьте безопасность кошелька
 Install our native app or browser extension.: Установите наше приложение или браузерное расширение.

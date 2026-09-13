@@ -297,7 +297,7 @@ Payload: 有效載荷
 $many_transactions: "%count%筆轉賬"
 Total Amount: 總金額
 $unstaking_short: 解除質押
-Handle ton:// links: 處理 ton:// 鏈接
+Handle ion:// links: 處理 ion:// 鏈接
 Back up wallet to have full access to it: 備份錢包以完全訪問它
 Consider More Secure Version: 提高錢包安全性
 Install our native app or browser extension.: 通過安裝瀏覽器擴展程序或本機應用程序

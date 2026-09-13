@@ -44,8 +44,8 @@ export const IS_HEADLESS = process.env.IS_HEADLESS === '1';
 
 export const ELECTRON_HOST_URL = 'https://dumb-host';
 export const INACTIVE_MARKER = '[Inactive]';
-export const PRODUCTION_URL = 'https://web.mywallet.io';
-export const BETA_URL = 'https://beta.mywallet.io';
+export const PRODUCTION_URL = 'https://wallet.ice.io';
+export const BETA_URL = 'https://beta.wallet.ice.io';
 // Beta desktop auto-update feed base. This is BOTH the staging gate poll base and the value baked
 // into app-update.yml by the generic electron-builder provider - the two must agree.
 export const BETA_UPDATE_URL = 'https://s3.mywallet.io/public/desktop-beta';
@@ -58,11 +58,11 @@ export const LEGACY_APP_HOSTS = ['mytonwallet.app'];
 // the wallet context (addresses included) and open it in the in-app iframe browser - where the site renders blank
 // under `X-Frame-Options: Deny`. `utm_source` attributes the migrated traffic.
 export const NEW_APP_URL = `${PRODUCTION_URL}?utm_source=legacy_web`;
-export const APP_INSTALL_URL = 'https://get.mywallet.io/';
+export const APP_INSTALL_URL = 'https://wallet.ice.io/download';
 export const APP_REPO_URL = 'https://github.com/mytonwallet-org/mytonwallet';
-export const SELF_UNIVERSAL_HOST_URL = 'https://my.tt';
-export const APP_WEBSITE_URL = 'https://mywallet.io';
-export const APP_ICON_URL = 'https://mywallet.io/icon-512x512.png';
+export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
+export const APP_WEBSITE_URL = 'https://wallet.ice.io';
+export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
 
 // GitHub workflow uses an empty string as the default value if it's not in repository variables, so we cannot define a default value here
 export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
@@ -79,7 +79,7 @@ export const PIN_LENGTH = 4;
 
 /** If true, legacy auth data (mnemonicEncrypted, authConfig) will be removed after migration to Enclave */
 export const SHOULD_CLEANUP_LEGACY_AUTH = false;
-export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in My Wallet';
+export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in ION Wallet';
 // Keychain and Keystore address the stored secret by this pair, so changing either orphans
 // the credentials already saved on the device
 export const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';

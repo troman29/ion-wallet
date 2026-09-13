@@ -52,10 +52,10 @@ concurrency:
 env:
   # Base of downloadable artifact filenames (dmg/exe/AppImage/apk). The user-visible
   # app name is NOT set here - it comes from `APP_NAME` in src/config.ts, and the
-  # TonConnect protocol identity stays 'MyTonWallet' via the mapping in
+  # TonConnect protocol identity stays 'IONWallet' via the mapping in
   # src/util/tonConnectEnvironment.ts.
   # Must match `artifactName` in src/electron/config.yml (pinned by config.test.ts).
-  ARTIFACT_NAME_BASE: MyWallet
+  ARTIFACT_NAME_BASE: IONWallet
   PROXY_HOSTS: ${{ vars.PROXY_HOSTS }}
   PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
@@ -109,7 +109,7 @@ jobs:
                 echo 'android-variants=[]' >> "$GITHUB_OUTPUT"
                 ;;
               *)
-                echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
+                echo 'android-variants=["ionwallet"]' >> "$GITHUB_OUTPUT"
                 ;;
             esac
             case "${{ inputs.ios_variant }}" in
@@ -118,7 +118,7 @@ jobs:
                 echo 'ios-variants=[]' >> "$GITHUB_OUTPUT"
                 ;;
               *)
-                echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
+                echo 'ios-variants=["ionwallet"]' >> "$GITHUB_OUTPUT"
                 ;;
             esac
 
@@ -144,8 +144,8 @@ jobs:
             echo "android-only=false" >> "$GITHUB_OUTPUT"
             echo "ios-only=false" >> "$GITHUB_OUTPUT"
             echo "electron-changed=true" >> "$GITHUB_OUTPUT"
-            echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
-            echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
+            echo 'android-variants=["ionwallet"]' >> "$GITHUB_OUTPUT"
+            echo 'ios-variants=["ionwallet"]' >> "$GITHUB_OUTPUT"
             echo "Production release — building automatic platform variants"
             exit 0
           fi
@@ -181,8 +181,8 @@ jobs:
           echo "android-only=$ANDROID_ONLY" >> "$GITHUB_OUTPUT"
           echo "ios-only=$IOS_ONLY" >> "$GITHUB_OUTPUT"
           echo "electron-changed=$ELECTRON_CHANGED" >> "$GITHUB_OUTPUT"
-          echo 'android-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
-          echo 'ios-variants=["mytonwallet"]' >> "$GITHUB_OUTPUT"
+          echo 'android-variants=["ionwallet"]' >> "$GITHUB_OUTPUT"
+          echo 'ios-variants=["ionwallet"]' >> "$GITHUB_OUTPUT"
           echo "Changed files:"
           echo "$CHANGED"
           echo "android-only=$ANDROID_ONLY, ios-only=$IOS_ONLY, electron-changed=$ELECTRON_CHANGED"
@@ -228,7 +228,7 @@ jobs:
       - name: Point staging electron-builder at the beta feed
         if: env.PUBLISH_REPO == ''
         run: |
-          yq -i '.publish = {"provider":"generic","url":"https://s3.mywallet.io/public/desktop-beta"} | .mac.artifactName = "MyWallet-${version}-${arch}.${ext}"' src/electron/config.yml
+          yq -i '.publish = {"provider":"generic","url":"https://s3.mywallet.io/public/desktop-beta"} | .mac.artifactName = "IONWallet-${version}-${arch}.${ext}"' src/electron/config.yml
           echo "Effective staging publish/artifactName:"
           yq '.publish, .mac.artifactName' src/electron/config.yml
 
@@ -284,20 +284,20 @@ jobs:
           done
 
       # The mac dmgs are globbed by name here and re-globbed as `mac-*-dmg` by the beta publish job. The
-      # `*` matches both the production fixed name (MyWallet-x64.dmg) and the staging versioned one
-      # (MyWallet-<version>-x64.dmg); the default productName "My Wallet" has a space and would not.
+      # `*` matches both the production fixed name (IONWallet-x64.dmg) and the staging versioned one
+      # (IONWallet-<version>-x64.dmg); the default productName "ION Wallet" has a space and would not.
       - name: Upload macOS x64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac-x64-dmg
-          path: dist-electron/MyWallet-*x64.dmg
+          path: dist-electron/IONWallet-*x64.dmg
           if-no-files-found: error
 
       - name: Upload macOS arm64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac-arm64-dmg
-          path: dist-electron/MyWallet-*arm64.dmg
+          path: dist-electron/IONWallet-*arm64.dmg
           if-no-files-found: error
 
       - name: Upload mac feed for beta publish
@@ -306,8 +306,8 @@ jobs:
         with:
           name: mac-feed
           path: |
-            dist-electron/MyWallet-*.zip
-            dist-electron/MyWallet-*.zip.blockmap
+            dist-electron/IONWallet-*.zip
+            dist-electron/IONWallet-*.zip.blockmap
             dist-electron/latest-mac.yml
           if-no-files-found: error
 
@@ -434,9 +434,9 @@ jobs:
           # Order is load-bearing: payloads and manifest first, the gate (electronVersion.txt) LAST. The
           # client polls the gate every few minutes; raising it before its files are up sends a client that
           # polls in the gap to fetch a version the feed cannot serve yet.
-          mc cp feed/MyWallet-*.zip feed/MyWallet-*.zip.blockmap "$D/"
-          mc cp feed/MyWallet-*x64.dmg   "$D/MyWallet-x64.dmg"
-          mc cp feed/MyWallet-*arm64.dmg "$D/MyWallet-arm64.dmg"
+          mc cp feed/IONWallet-*.zip feed/IONWallet-*.zip.blockmap "$D/"
+          mc cp feed/IONWallet-*x64.dmg   "$D/IONWallet-x64.dmg"
+          mc cp feed/IONWallet-*arm64.dmg "$D/IONWallet-arm64.dmg"
           mc cp feed/latest-mac.yml "$D/latest-mac.yml"
           printf '%s' "${{ steps.guard.outputs.build_ver }}" | mc pipe "$D/electronVersion.txt"
       - name: Prune old beta payloads
@@ -445,7 +445,7 @@ jobs:
           set -euo pipefail
           D=s3/public/desktop-beta
           for arch in x64 arm64; do
-            mc ls "$D/" | awk '{print $NF}' | grep -E "^MyWallet-.*-${arch}\.zip$" | sort -V | head -n -3 | while read -r f; do
+            mc ls "$D/" | awk '{print $NF}' | grep -E "^IONWallet-.*-${arch}\.zip$" | sort -V | head -n -3 | while read -r f; do
               mc rm "$D/$f" "$D/$f.blockmap" || true
             done
           done
@@ -742,9 +742,9 @@ jobs:
       - name: Configure Android variant
         run: |
           case "$APP_VARIANT" in
-            mytonwallet)
-              echo "ANDROID_APP_NAME=MyTonWallet" >> "$GITHUB_ENV"
-              echo "ANDROID_PACKAGE_NAME=org.mytonwallet.app" >> "$GITHUB_ENV"
+            ionwallet)
+              echo "ANDROID_APP_NAME=ION Wallet" >> "$GITHUB_ENV"
+              echo "ANDROID_PACKAGE_NAME=io.ice.wallet" >> "$GITHUB_ENV"
               echo "ANDROID_ARTIFACT_NAME=${{ env.ARTIFACT_NAME_BASE }}.apk" >> "$GITHUB_ENV"
               ;;
             *)
@@ -886,13 +886,11 @@ jobs:
           IOS_TESTFLIGHT_GROUP: ${{ vars.IOS_TESTFLIGHT_GROUP }}
         run: |
           case "$APP_VARIANT" in
-            mytonwallet)
-              echo "IOS_APP_NAME=MyTonWallet" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER=org.mytonwallet.app" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER_NOTIFICATION=org.mytonwallet.app.notification-service" >> "$GITHUB_ENV"
-              echo "IOS_SCHEME=MyTonWallet" >> "$GITHUB_ENV"
-              echo "IOS_NOTIFICATION_SCHEME=MyTonWalletNotificationServiceExtension" >> "$GITHUB_ENV"
-              echo "IOS_PLIST_PATH=../../App/App/Resources/MyTonWallet/Info.plist" >> "$GITHUB_ENV"
+            ionwallet)
+              echo "IOS_APP_NAME=ION Wallet" >> "$GITHUB_ENV"
+              echo "IOS_APP_IDENTIFIER=io.ice.wallet" >> "$GITHUB_ENV"
+              echo "IOS_SCHEME=IONWallet" >> "$GITHUB_ENV"
+              echo "IOS_PLIST_PATH=../../App/App/Resources/IONWallet/Info.plist" >> "$GITHUB_ENV"
               echo "IOS_TESTFLIGHT_GROUP=${IOS_TESTFLIGHT_GROUP:-MTW external group}" >> "$GITHUB_ENV"
               ;;
             *)
@@ -1102,7 +1100,7 @@ jobs:
             # (app_direct_apk_version_url_template), so every release must also carry
             # the pre-rename filename until those clients rotate out.
             if [ "$FILE_NAME" = "${{ env.ARTIFACT_NAME_BASE }}.apk" ]; then
-              upload_apk "$FILE_PATH" "MyTonWallet.apk"
+              upload_apk "$FILE_PATH" "IONWallet.apk"
             fi
           done
 

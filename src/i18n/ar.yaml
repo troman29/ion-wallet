@@ -308,7 +308,7 @@ $many_transactions:
   otherValue: تحويلات %count%
 Total Amount: المبلغ الإجمالي
 $unstaking_short: غير مؤكد
-Handle ton:// links: "التعامل مع طن: // الروابط"
+Handle ion:// links: "التعامل مع طن: // الروابط"
 Back up wallet to have full access to it: قم بعمل نسخة احتياطية من المحفظة للوصول إليها بشكل كامل
 Consider More Secure Version: فكر في إصدار أكثر أمانًا
 Install our native app or browser extension.: قم بتثبيت تطبيقنا الأصلي أو امتداد المتصفح.

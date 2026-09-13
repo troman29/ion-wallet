@@ -304,7 +304,7 @@ $many_transactions:
   otherValue: "%count% transferencias"
 Total Amount: Cantidad total
 $unstaking_short: Retirando
-Handle ton:// links: Habilitar enlaces ton://
+Handle ion:// links: Habilitar enlaces ion://
 Back up wallet to have full access to it: Haga una copia de seguridad del monedero para tener acceso completo al mismo
 Consider More Secure Version: Mejore la seguridad del monedero
 Install our native app or browser extension.: Instala una aplicación nativa o una extensión de navegador.

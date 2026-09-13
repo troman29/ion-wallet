@@ -255,7 +255,7 @@ async function processTonDeeplink(url: string): Promise<boolean> {
   }
 
   // Trying to open the transfer modal from a widget using a deeplink
-  if (url === 'ton://transfer') {
+  if (url === 'ion://transfer') {
     getActions().startTransfer();
 
     return true;
@@ -264,7 +264,7 @@ async function processTonDeeplink(url: string): Promise<boolean> {
   return processTransferDeeplink((global) => parseTonDeeplink(url, global));
 }
 
-// Handles mtw://send/{chain}:{address}?amount=...&token=...&text=...
+// Handles ion://send/{chain}:{address}?amount=...&token=...&text=...
 async function processSendDeeplink(
   pathname: string,
   searchParams: URLSearchParams,
@@ -274,7 +274,7 @@ async function processSendDeeplink(
   const target = pathParts[1];
 
   if (!target) {
-    // mtw://send with no address - open empty transfer modal
+    // ion://send with no address - open empty transfer modal
     getActions().startTransfer();
     return true;
   }
@@ -779,10 +779,10 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         let tokenSlug: string | undefined;
 
         if (pathParts.length === 2) {
-          // Format: mtw://token/{slug}
+          // Format: ion://token/{slug}
           tokenSlug = pathParts[1];
         } else if (pathParts.length === 3) {
-          // Format: mtw://token/{chain}/{tokenAddress}
+          // Format: ion://token/{chain}/{tokenAddress}
           const chain = pathParts[1];
           const tokenAddress = pathParts[2];
 
@@ -799,7 +799,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
       }
 
       case DeeplinkCommand.Transaction: {
-        // Format: mtw://tx/{chain}/{txId}
+        // Format: ion://tx/{chain}/{txId}
         const pathParts = pathname.split('/');
 
         if (pathParts.length < 3) {
@@ -885,7 +885,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
       }
 
       case DeeplinkCommand.Nft: {
-        // Format: mtw://nft/{nftAddress}
+        // Format: ion://nft/{nftAddress}
         const pathParts = pathname.split('/');
         const nftAddress = pathParts[2];
 

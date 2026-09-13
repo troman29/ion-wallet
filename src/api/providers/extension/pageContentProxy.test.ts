@@ -65,7 +65,7 @@ describe('pageContentProxy', () => {
       channel,
       type: 'callMethod',
       name: 'processDeeplink',
-      args: [{ url: 'ton://transfer/attacker' }],
+      args: [{ url: 'ion://transfer/attacker' }],
       messageId: 'message-id',
     };
 

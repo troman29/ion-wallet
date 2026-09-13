@@ -306,7 +306,7 @@ $many_transactions:
   manyValue: "%count% przelewów"
 Total Amount: Całkowita kwota
 $unstaking_short: Odzastawianie
-Handle ton:// links: Obsłuż ton:// linki
+Handle ion:// links: Obsłuż ion:// linki
 Back up wallet to have full access to it: Zrób kopię zapasową portfela, aby mieć do niego pełny dostęp.
 Consider More Secure Version: Rozważ bardziej bezpieczną wersję
 Install our native app or browser extension.: Zainstaluj naszą natywną aplikację lub rozszerzenie przeglądarki.

@@ -300,7 +300,7 @@ Payload: Yük
 $many_transactions: "%count% Transfer"
 Total Amount: Toplam tutar
 $unstaking_short: Unstaking
-Handle ton:// links: ton:// bağlantılarını işle
+Handle ion:// links: ion:// bağlantılarını işle
 Back up wallet to have full access to it: Tam erişime sahip olmak için cüzdanı yedekleyin
 Consider More Secure Version: Daha güvenli sürümü kullanmayı düşünün
 Install our native app or browser extension.: Yerel uygulamamızı veya tarayıcı uzantımızı yükleyin.

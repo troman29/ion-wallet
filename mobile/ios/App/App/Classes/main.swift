@@ -3,6 +3,6 @@ import UIKit
 UIApplicationMain(
     CommandLine.argc,
     CommandLine.unsafeArgv,
-    NSStringFromClass(MyTonWalletApp.self),
+    NSStringFromClass(IONWalletApp.self),
     NSStringFromClass(AppDelegate.self)
 )

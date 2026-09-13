@@ -306,7 +306,7 @@ $many_transactions:
   otherValue: "%count% انتقال"
 Total Amount: مبلغ کل
 $unstaking_short: در حال برداشت استیک
-Handle ton:// links: مدیریت لینک‌های ton://
+Handle ion:// links: مدیریت لینک‌های ion://
 Back up wallet to have full access to it: برای دسترسی کامل به کیف پول، از آن پشتیبان بگیرید
 Consider More Secure Version: نسخه امن‌تر را در نظر بگیرید
 Install our native app or browser extension.: اپلیکیشن بومی یا افزونه مرورگر ما را نصب کنید.

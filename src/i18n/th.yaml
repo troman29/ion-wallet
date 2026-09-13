@@ -300,7 +300,7 @@ Payload: เปย์โหลด
 $many_transactions: "%count% การโอน"
 Total Amount: มูลค่าสุทธิ
 $unstaking_short: ถอนการสเต็ก
-Handle ton:// links: รับลิงก์ ton://
+Handle ion:// links: รับลิงก์ ion://
 Back up wallet to have full access to it: สำรองวอลเล็ตเพื่อให้เข้าถึงได้อย่างเต็มที่
 Consider More Secure Version: พิจารณาเวอร์ชันที่ปลอดภัยยิ่งขึ้น
 Install our native app or browser extension.: ติดตั้งแอปหรือส่วนขยายเบราว์เซอร์ของเรา.
