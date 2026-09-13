@@ -105,6 +105,9 @@
 - [ ] Заменить `TON_DNS_ZONES` на единственную утверждённую ION DNS-зону.
   - Получить suffix, resolver, название коллекции и правила renewal/linking для ION DNS, затем убрать TON-специфичные зоны из `src/config.ts`.
   - Проверить валидацию доменов, receive/send, NFT metadata и экран управления доменом с новой зоной.
+- [ ] Завершить переход публичного моста с TON Connect на ION Gateway после утверждения схемы и регистрации протокола.
+  - Сейчас extension публикует один мост под `window.ionwallet.ionconnect` и временным совместимым alias `window.ionwallet.tonconnect`.
+  - После фикса окончательных URI-схем, manifest/registry-записей и требований ION Gateway заменить или удалить legacy alias, старые bridge identifiers и пользовательские упоминания TON Connect.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Закоммитить и перенести в репозиторий nginx-конфигурацию предпросмотра `wallet.lab.windbit.dev`, если она остаётся частью инфраструктуры проекта.
 
