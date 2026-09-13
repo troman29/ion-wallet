@@ -10,10 +10,7 @@ import {
   selectCurrentAccountId,
   selectCurrentAccountSettings,
   selectCurrentAccountState,
-  selectDefaultOffRampChain,
-  selectDefaultOnRampChain,
   selectIsCurrentAccountViewMode,
-  selectIsOffRampAllowed,
   selectIsStakingDisabled,
   selectIsSwapDisabled,
 } from '../../global/selectors';
@@ -72,8 +69,6 @@ type StateProps = {
   isStakingInfoModalOpen?: boolean;
   isSwapDisabled?: boolean;
   isStakingDisabled?: boolean;
-  isOnRampDisabled?: boolean;
-  isOffRampAllowed?: boolean;
   isMediaViewerOpen?: boolean;
   isAppReady?: boolean;
   theme: Theme;
@@ -91,8 +86,6 @@ function Main({
   isStakingInfoModalOpen,
   isSwapDisabled,
   isStakingDisabled,
-  isOnRampDisabled,
-  isOffRampAllowed,
   isMediaViewerOpen,
   isAppReady,
   theme,
@@ -170,13 +163,9 @@ function Main({
 
           {!isViewMode && (
             <PortraitActions
-              containerRef={portraitContainerRef}
-              isTestnet={isTestnet}
               stakingStatus={stakingStatus}
               isStakingDisabled={isStakingDisabled}
               isSwapDisabled={isSwapDisabled}
-              isOnRampDisabled={isOnRampDisabled}
-              isOffRampDisabled={!isOffRampAllowed}
               onEarnClick={handleEarnClick}
             />
           )}
@@ -265,8 +254,6 @@ export default memo(
         isSwapDisabled: selectIsSwapDisabled(global),
         isStakingDisabled: selectIsStakingDisabled(global),
         // Both labels stand for the ramps reachable from this account, so they read the very chain each would open
-        isOnRampDisabled: !selectDefaultOnRampChain(global),
-        isOffRampAllowed: selectIsOffRampAllowed(global, selectDefaultOffRampChain(global)),
         isAppReady,
         theme: global.settings.theme,
         accentColorIndex: selectCurrentAccountSettings(global)?.accentColorIndex,

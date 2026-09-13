@@ -66,10 +66,7 @@ import {
   selectCurrentAccountId,
   selectCurrentAccountState,
   selectCurrentNetwork,
-  selectDefaultOffRampChain,
   selectHasPassword,
-  selectIsOffRampAllowed,
-  selectIsOnRampAllowed,
 } from '../../selectors';
 import { switchAccount } from '../api/auth';
 
@@ -642,29 +639,6 @@ addActionHandler('setIsPinAccepted', (global) => {
 
 addActionHandler('clearIsPinAccepted', (global) => {
   return clearIsPinAccepted(global);
-});
-
-addActionHandler('openOnRampWidgetModal', (global, actions, { chain }) => {
-  // Single choke point for every dispatch site, including deeplinks and menu items with no gate of their own
-  if (!selectIsOnRampAllowed(global, chain)) return;
-
-  setGlobal({ ...global, chainForOnRampWidgetModal: chain });
-});
-
-addActionHandler('closeOnRampWidgetModal', (global) => {
-  setGlobal({ ...global, chainForOnRampWidgetModal: undefined });
-});
-
-addActionHandler('openOffRampWidgetModal', (global) => {
-  const chain = selectDefaultOffRampChain(global);
-
-  if (!selectIsOffRampAllowed(global, chain)) return;
-
-  setGlobal({ ...global, chainForOffRampWidgetModal: chain });
-});
-
-addActionHandler('closeOffRampWidgetModal', (global) => {
-  setGlobal({ ...global, chainForOffRampWidgetModal: undefined });
 });
 
 addActionHandler('openMediaViewer', (global, actions, {

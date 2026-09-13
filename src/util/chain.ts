@@ -64,12 +64,6 @@ export interface ChainConfig {
   chainStandard?: ApiChain;
   /** Whether the chain supports domain names that resolve to regular addresses */
   isDnsSupported: boolean;
-  /** Whether My Wallet supports purchasing crypto in that blockchain with a bank card in Russia */
-  canBuyWithCardInRussia: boolean;
-  /** Whether the chain is supported by the on-ramp widget (Moonpay outside RU, Avanchange in RU) */
-  isOnRampSupported: boolean;
-  /** Whether the chain is supported by the off-ramp widget (Moonpay) */
-  isOffRampSupported: boolean;
   /** Whether the chain supports onchain swaps (DEX) */
   isOnchainSwapSupported: boolean;
   /** Whether onchain swaps can be estimated from the buy amount */
@@ -177,9 +171,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
   ton: {
     title: 'TON',
     isDnsSupported: true,
-    canBuyWithCardInRussia: true,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
     isOnchainSwapSupported: true,
     canSwapByBuyAmount: true,
     isTransferPayloadSupported: true,
@@ -267,9 +258,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     title: 'BNB',
     chainStandard: 'bnb',
     isDnsSupported: false,
-    canBuyWithCardInRussia: false,
-    isOnRampSupported: true,
-    isOffRampSupported: true,
     isOnchainSwapSupported: false,
     isTransferPayloadSupported: false,
     isEncryptedCommentSupported: false,

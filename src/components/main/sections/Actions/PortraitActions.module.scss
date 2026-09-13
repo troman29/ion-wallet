@@ -58,10 +58,6 @@
   }
 }
 
-.buttonActive {
-  color: var(--color-accent);
-}
-
 .buttonIcon {
   display: block;
 
@@ -83,23 +79,4 @@
     height: 1.875rem;
     font-size: 1.875rem;
   }
-}
-
-.name {
-  white-space: nowrap;
-}
-
-.divider {
-  margin: 0 0.25rem;
-  color: var(--color-gray-4);
-}
-
-.menu {
-  --offset-y-value: 0;
-  --offset-y-bottom-value: 0;
-  --offset-x-value: 0;
-
-  inset-inline-start: 0 !important;
-  inset-inline-end: auto !important;
-  max-height: max(70vh, 20rem);
 }

@@ -228,7 +228,6 @@ export async function tryUpdateConfig() {
       seasonalTheme,
       isUpdateRequired: isAppUpdateRequired,
       knowledgeBaseVersion,
-      allowedOnOffRampCurrencies,
     } = config;
 
     const updateConfig: ApiUpdateConfig = {
@@ -241,7 +240,6 @@ export async function tryUpdateConfig() {
       swapVersion,
       seasonalTheme,
       knowledgeBaseVersion,
-      allowedOnOffRampCurrencies,
     };
 
     onUpdate(updateConfig);

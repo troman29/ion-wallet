@@ -488,5 +488,4 @@ export type ApiBackendConfig = {
   seasonalTheme?: 'newYear' | 'valentine';
   knowledgeBaseVersion?: string;
   // Lower-case currency codes the on/off-ramp surfaces may offer; the client may only narrow its own baseline with it
-  allowedOnOffRampCurrencies?: string[];
 };

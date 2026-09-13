@@ -383,7 +383,6 @@ export type ApiUpdateConfig = {
   swapVersion?: ApiSwapVersion;
   seasonalTheme: ApiBackendConfig['seasonalTheme'];
   knowledgeBaseVersion?: string;
-  allowedOnOffRampCurrencies?: string[];
 };
 
 export type ApiUpdateWalletVersions = {

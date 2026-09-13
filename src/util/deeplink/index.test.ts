@@ -272,8 +272,6 @@ describe('processSelfDeeplink', () => {
     mockActions = {
       startSwap: jest.fn(),
       showError: jest.fn(),
-      openOnRampWidgetModal: jest.fn(),
-      openOffRampWidgetModal: jest.fn(),
       startStaking: jest.fn(),
       startTransfer: jest.fn(),
       closeSettings: jest.fn(),
@@ -468,48 +466,6 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.showError).toHaveBeenCalledWith({
         error: 'Swap is not supported in Testnet.',
       });
-    });
-  });
-
-  describe('Buy with card command', () => {
-    it('should open on-ramp widget modal', async () => {
-      const result = await processSelfDeeplink('mtw://buy-with-card');
-
-      expect(result).toBe(true);
-      expect(mockActions.openOnRampWidgetModal).toHaveBeenCalledWith({ chain: 'ton' });
-    });
-
-    it('should show error when buy-with-card is requested in testnet', async () => {
-      mockGlobal.settings.isTestnet = true;
-
-      const result = await processSelfDeeplink('https://my.tt/buy-with-card');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: 'Buying with card is not supported in Testnet.',
-      });
-      expect(mockActions.openOnRampWidgetModal).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Sell on card command', () => {
-    it('should open off-ramp widget modal', async () => {
-      const result = await processSelfDeeplink('mtw://sell-on-card');
-
-      expect(result).toBe(true);
-      expect(mockActions.openOffRampWidgetModal).toHaveBeenCalledWith();
-    });
-
-    it('should show error when sell-on-card is requested in testnet', async () => {
-      mockGlobal.settings.isTestnet = true;
-
-      const result = await processSelfDeeplink('https://my.tt/sell-on-card');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: 'Selling to card is not supported in Testnet.',
-      });
-      expect(mockActions.openOffRampWidgetModal).not.toHaveBeenCalled();
     });
   });
 
@@ -1052,8 +1008,6 @@ describe('View-only mode deeplink blocking', () => {
     mockActions = {
       startSwap: jest.fn(),
       showError: jest.fn(),
-      openOnRampWidgetModal: jest.fn(),
-      openOffRampWidgetModal: jest.fn(),
       startStaking: jest.fn(),
       startTransfer: jest.fn(),
       closeSettings: jest.fn(),

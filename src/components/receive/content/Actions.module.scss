@@ -73,11 +73,6 @@
       background-color: var(--color-interactive-item-hover);
     }
   }
-
-  &.disabled {
-    pointer-events: none;
-    opacity: 0.4;
-  }
 }
 
 .actionIcon {

@@ -1,4 +1,3 @@
-import type { ApiBaseCurrency, ApiChain } from '../../api/types';
 import type { GlobalState } from '../types';
 
 import {
@@ -7,14 +6,8 @@ import {
   TON_USDT_MAINNET,
   TONCOIN,
 } from '../../config';
-import { CHAIN_ORDER, getChainConfig } from '../../util/chain';
 import { INITIAL_STATE } from '../initialState';
-import {
-  selectDefaultOnRampChain,
-  selectIsOffRampAllowed,
-  selectIsOnRampAllowed,
-  selectTokenMatchingCurrentTransferAddressSlow,
-} from './transfer';
+import { selectTokenMatchingCurrentTransferAddressSlow } from './transfer';
 
 const ACCOUNT_ID = 'test-account';
 const TON_ADDRESS = 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S';
@@ -167,90 +160,5 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
 
       expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BNB.slug);
     });
-  });
-});
-
-describe('ramp availability by allowed currencies', () => {
-  function buildRestrictedGlobal(allowedOnOffRampCurrencies?: ApiBaseCurrency[]): GlobalState {
-    return {
-      ...INITIAL_STATE,
-      restrictions: { ...INITIAL_STATE.restrictions, allowedOnOffRampCurrencies },
-    };
-  }
-
-  it('allows both ramps when the server list is absent', () => {
-    const global = buildRestrictedGlobal(undefined);
-
-    expect(selectIsOnRampAllowed(global, 'ton')).toBe(true);
-    expect(selectIsOffRampAllowed(global, 'ton')).toBe(true);
-  });
-
-  it('hides both ramps when the server list is empty', () => {
-    const global = buildRestrictedGlobal([]);
-
-    expect(selectIsOnRampAllowed(global, 'ton')).toBe(false);
-    expect(selectIsOffRampAllowed(global, 'ton')).toBe(false);
-  });
-
-  it('keeps the on-ramp when only off-ramp currencies are gone', () => {
-    const global = buildRestrictedGlobal(['USD']);
-
-    expect(selectIsOnRampAllowed(global, 'ton')).toBe(true);
-    expect(selectIsOffRampAllowed(global, 'ton')).toBe(false);
-  });
-
-  it('hides the off-ramp outside TON when RUB is the only allowed currency', () => {
-    const global = buildRestrictedGlobal(['RUB']);
-
-    expect(selectIsOffRampAllowed(global, 'bnb')).toBe(false);
-    expect(selectIsOffRampAllowed(global, 'ton')).toBe(true);
-  });
-
-  it('hides the on-ramp outside TON when RUB is the only allowed currency', () => {
-    const global = buildRestrictedGlobal(['RUB']);
-
-    expect(selectIsOnRampAllowed(global, 'bnb')).toBe(false);
-    expect(selectIsOnRampAllowed(global, 'ton')).toBe(true);
-  });
-
-  function buildAccountGlobal(chains: ApiChain[], allowedOnOffRampCurrencies?: ApiBaseCurrency[]): GlobalState {
-    const byChain = Object.fromEntries(chains.map((chain) => [chain, { address: TON_ADDRESS }]));
-
-    return {
-      ...buildRestrictedGlobal(allowedOnOffRampCurrencies),
-      currentAccountId: ACCOUNT_ID,
-      accounts: { byId: { [ACCOUNT_ID]: { title: 'Test', type: 'mnemonic', byChain } } } as GlobalState['accounts'],
-    };
-  }
-
-  describe('selectDefaultOnRampChain', () => {
-    it('answers in the app chain order, not in the order the account stores its chains', () => {
-      expect(selectDefaultOnRampChain(buildAccountGlobal(['bnb', 'ton']))).toBe('ton');
-      expect(selectDefaultOnRampChain(buildAccountGlobal(['bnb']))).toBe('bnb');
-    });
-
-    // The Buy button reads this and nothing else, so an answer the ramp then refuses would be a button
-    // whose own click declines
-    it('never answers with a chain the on-ramp refuses', () => {
-      const allowedLists: (ApiBaseCurrency[] | undefined)[] = [undefined, [], ['USD'], ['RUB']];
-
-      for (const allowed of allowedLists) {
-        const global = buildAccountGlobal(CHAIN_ORDER, allowed);
-        const chain = selectDefaultOnRampChain(global);
-
-        expect(chain === undefined || selectIsOnRampAllowed(global, chain)).toBe(true);
-      }
-    });
-  });
-
-  // Both selectors are the choke point their entry points dispatch through, so a chain the ramp does
-  // not serve has to be refused there and not only in whichever component happens to remember
-  it('refuses both ramps on a chain that does not support them', () => {
-    const global = buildRestrictedGlobal(undefined);
-
-    for (const chain of CHAIN_ORDER) {
-      expect(selectIsOnRampAllowed(global, chain)).toBe(getChainConfig(chain).isOnRampSupported);
-      expect(selectIsOffRampAllowed(global, chain)).toBe(getChainConfig(chain).isOffRampSupported);
-    }
   });
 });

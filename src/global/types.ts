@@ -747,7 +747,6 @@ export type GlobalState = {
     isGaslessWithStars?: boolean;
     scamWarningType?: ScamWarningType;
     isTransferReadonly?: boolean;
-    isOfframp?: boolean;
     isNftBurn?: boolean;
     /**
      * Normalized explanation of the fee and gasless parameters for the current draft, ready for UI consumption.
@@ -1073,8 +1072,6 @@ export type GlobalState = {
   isPromotionModalOpen?: boolean;
   confettiRequestedAt?: number;
   isPinAccepted?: boolean;
-  chainForOnRampWidgetModal?: ApiChain;
-  chainForOffRampWidgetModal?: ApiChain;
   isInvoiceModalOpen?: boolean;
   isReceiveModalOpen?: boolean;
   isVestingModalOpen?: boolean;
@@ -1097,13 +1094,10 @@ export type GlobalState = {
   restrictions: {
     isLimitedRegion: boolean;
     isSwapDisabled: boolean;
-    isOnRampDisabled: boolean;
-    isOffRampDisabled: boolean;
     isNftBuyingDisabled: boolean;
     isCopyStorageEnabled?: boolean;
     supportAccountsCount?: number;
     countryCode?: ApiCountryCode;
-    allowedOnOffRampCurrencies?: ApiBaseCurrency[];
   };
 
   mediaViewer: {
@@ -1240,7 +1234,6 @@ export interface ActionPayloads {
     binPayload?: string;
     stateInit?: string;
     isTransferReadonly?: boolean;
-    isOfframp?: boolean;
   } | undefined;
   changeTransferToken: { tokenSlug: string; withResetAmount?: boolean };
   fetchTransferFee: {
@@ -1574,12 +1567,6 @@ export interface ActionPayloads {
   addSwapToken: { token: UserSwapToken };
   toggleSwapSettingsModal: { isOpen: boolean };
   updatePendingSwaps: { forceProviderRefresh?: boolean; contextActivities?: ApiActivity[] } | undefined;
-
-  openOnRampWidgetModal: { chain: ApiChain };
-  closeOnRampWidgetModal: undefined;
-
-  openOffRampWidgetModal: undefined;
-  closeOffRampWidgetModal: undefined;
 
   // WalletConnect Pay
   apiUpdateWalletConnectPayLoading: { accountId: string };

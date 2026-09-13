@@ -1,6 +1,6 @@
 import './initial';
 
-import type { ApiBaseCurrency, ApiNft } from '../../../api/types';
+import type { ApiNft } from '../../../api/types';
 import type { ApiUpdate } from '../../../api/types/updates';
 import type { GlobalState } from '../../types';
 
@@ -151,50 +151,17 @@ describe('updateConfig api update', () => {
     (setGlobal as jest.Mock).mockClear();
   });
 
-  function makeGlobalWithRestrictions(allowedOnOffRampCurrencies?: ApiBaseCurrency[]): GlobalState {
-    return {
-      restrictions: { allowedOnOffRampCurrencies },
-      settings: { byAccountId: {} },
-    } as unknown as GlobalState;
-  }
-
-  function dispatchUpdateConfig(global: GlobalState, allowed?: string[]) {
+  function dispatchUpdateConfig(global: GlobalState) {
     getApiUpdateHandler()(global, {}, {
       type: 'updateConfig',
       isLimited: false,
       isCopyStorageEnabled: false,
       isAppUpdateRequired: false,
       seasonalTheme: undefined,
-      allowedOnOffRampCurrencies: allowed,
     } as ApiUpdate);
     const [updatedGlobal] = (setGlobal as jest.Mock).mock.calls.at(-1)!;
     return updatedGlobal as GlobalState;
   }
-
-  it('normalizes the allowed ramp currencies into upper-case known codes', () => {
-    const updatedGlobal = dispatchUpdateConfig(makeGlobalWithRestrictions(undefined), ['usd', 'rub', 'xyz']);
-
-    expect(updatedGlobal.restrictions.allowedOnOffRampCurrencies).toEqual(['USD', 'RUB']);
-  });
-
-  it('keeps the previous array reference when the list is unchanged', () => {
-    const previous: ApiBaseCurrency[] = ['USD', 'RUB'];
-    const updatedGlobal = dispatchUpdateConfig(makeGlobalWithRestrictions(previous), ['usd', 'rub']);
-
-    expect(updatedGlobal.restrictions.allowedOnOffRampCurrencies).toBe(previous);
-  });
-
-  it('clears the field when the backend omits it', () => {
-    const updatedGlobal = dispatchUpdateConfig(makeGlobalWithRestrictions(['USD']), undefined);
-
-    expect(updatedGlobal.restrictions.allowedOnOffRampCurrencies).toBeUndefined();
-  });
-
-  it('treats a malformed payload as an absent field', () => {
-    const updatedGlobal = dispatchUpdateConfig(makeGlobalWithRestrictions(['USD']), 'rub' as unknown as string[]);
-
-    expect(updatedGlobal.restrictions.allowedOnOffRampCurrencies).toBeUndefined();
-  });
 
   it('clears a stale isNftBuyingDisabled persisted by an older build', () => {
     const global = {
@@ -202,7 +169,7 @@ describe('updateConfig api update', () => {
       settings: { byAccountId: {} },
     } as unknown as GlobalState;
 
-    const updatedGlobal = dispatchUpdateConfig(global, undefined);
+    const updatedGlobal = dispatchUpdateConfig(global);
 
     expect(updatedGlobal.restrictions.isNftBuyingDisabled).toBe(false);
   });

@@ -53,8 +53,6 @@ import LedgerModal from './ledger/LedgerModal';
 import Main from './main/Main';
 import BackupModal from './main/modals/BackupModal';
 import NftAttributesModal from './main/modals/NftAttributesModal';
-import OffRampWidgetModal from './main/modals/OffRampWidgetModal';
-import OnRampWidgetModal from './main/modals/OnRampWidgetModal';
 import QrScannerModal from './main/modals/QrScannerModal';
 import ReportNftModal from './main/modals/ReportNftModal';
 import SignatureModal from './main/modals/SignatureModal';
@@ -270,8 +268,6 @@ function App({
           <DappConnectModal />
           <DappSignDataModal />
           <DappTransferModal />
-          <OnRampWidgetModal />
-          <OffRampWidgetModal />
           <WalletConnectPayModal />
           <WalletConnectPayOptionSelectionModal />
           <WalletConnectPayDataCollectionModal />

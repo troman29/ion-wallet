@@ -10,10 +10,8 @@ import {
   TELEGRAM_GIFTS_SUPER_COLLECTION,
 } from '../../../config';
 import { parseAccountId } from '../../../util/account';
-import { areDeepEqual } from '../../../util/areDeepEqual';
 import { buildCollectionByKey, omitUndefined, unique } from '../../../util/iteratees';
 import { openUrl } from '../../../util/openUrl';
-import { normalizeAllowedOnOffRampCurrencies } from '../../../util/ramp-currencies';
 import { getIsActiveStakingState } from '../../../util/staking';
 import { IS_IOS_APP } from '../../../util/windowEnvironment';
 import { omitAccounts } from '../../helpers/auth';
@@ -376,28 +374,19 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         isAppUpdateRequired,
         swapVersion,
         seasonalTheme,
-        allowedOnOffRampCurrencies,
       } = update;
 
-      const normalizedRampCurrencies = normalizeAllowedOnOffRampCurrencies(allowedOnOffRampCurrencies);
-      const previousRampCurrencies = global.restrictions.allowedOnOffRampCurrencies;
-      const shouldRestrictSwapsAndOnOffRamp = IS_IOS_APP && isLimitedRegion;
+      const shouldRestrictRegionalFeatures = IS_IOS_APP && isLimitedRegion;
 
       global = updateRestrictions(global, {
         isLimitedRegion,
-        isSwapDisabled: shouldRestrictSwapsAndOnOffRamp,
-        isOnRampDisabled: shouldRestrictSwapsAndOnOffRamp,
-        isOffRampDisabled: shouldRestrictSwapsAndOnOffRamp,
+        isSwapDisabled: shouldRestrictRegionalFeatures,
         // The `restrictions` object is cached, so an excluded key will allow a stale value stored in an older build
         // to survive a shallow merge with a cached state
-        isNftBuyingDisabled: shouldRestrictSwapsAndOnOffRamp,
+        isNftBuyingDisabled: shouldRestrictRegionalFeatures,
         isCopyStorageEnabled,
         supportAccountsCount,
         countryCode,
-        // Keep the previous reference for an unchanged list so connected containers do not re-render on every poll
-        allowedOnOffRampCurrencies: areDeepEqual(normalizedRampCurrencies, previousRampCurrencies)
-          ? previousRampCurrencies
-          : normalizedRampCurrencies,
       });
       global = {
         ...global,
