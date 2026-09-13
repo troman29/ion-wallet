@@ -1,7 +1,6 @@
 import type { ApiChain, ApiStakingState } from '../api/types';
 import type { ChainDisplayConfiguration, UserToken } from '../global/types';
 
-import { IS_GRAM_WALLET, TONCOIN } from '../config';
 import { getAllSupportedVisibleChains } from './chain';
 import { unique } from './iteratees';
 import { getFullStakingBalance } from './staking';
@@ -52,32 +51,6 @@ export function getChainsWithBalance(tokens?: UserToken[], stakingStates?: ApiSt
   }
 
   return result;
-}
-
-/**
- * The chains whose addresses the account's address line shows: the visible chains narrowed for Gram Wallet.
- * While a Gram Wallet account's shown token list holds tokens on TON alone (or none at all), the line collapses
- * to the TON address, matching Air (`MAccount.addressLineChains` on iOS, `WMultichainAddressLabel` on Android).
- * Display-only: the address menu, the Receive screen and the share link keep every visible chain.
- * An undefined `hasOnlyTonTokens` means the token list is not known yet, so nothing is hidden.
- */
-export function getAddressLineChains(
-  chains: ApiChain[],
-  hasOnlyTonTokens?: boolean,
-  isGramWallet = IS_GRAM_WALLET,
-): ApiChain[] {
-  if (!isGramWallet || !hasOnlyTonTokens || !chains.includes(TONCOIN.chain)) {
-    return chains;
-  }
-
-  return [TONCOIN.chain];
-}
-
-/** Whether every shown token belongs to the TON chain; undefined while the token list is not known yet */
-export function getHasOnlyTonTokens(tokens?: UserToken[]) {
-  if (!tokens) return undefined;
-
-  return !tokens.some(({ isDisabled, chain }) => !isDisabled && chain !== TONCOIN.chain);
 }
 
 export function getIsChainVisible(

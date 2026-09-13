@@ -9,8 +9,6 @@ import {
   INACTIVE_MARKER,
   IS_ANDROID_DIRECT,
   IS_CAPACITOR,
-  IS_EXPLORER,
-  IS_GRAM_WALLET,
 } from '../config';
 import { selectCurrentAccountId, selectCurrentAccountSettings, selectCurrentAccountState } from '../global/selectors';
 import { useAccentColor } from '../util/accentColor';
@@ -135,7 +133,7 @@ function App({
   const renderingKey = resolveRenderingKey({
     isInactive, areSettingsOpen, isExploreOpen, currentTokenSlug, isPortrait, appState,
   });
-  const withBottomBar = isPortrait && (!IS_EXPLORER || isAppReady) && APP_STATES_WITH_BOTTOM_BAR.has(renderingKey);
+  const withBottomBar = isPortrait && APP_STATES_WITH_BOTTOM_BAR.has(renderingKey);
   // Screens sharing the bottom bar are sibling tabs, so they cross-fade into each other. The token
   // screen is the exception: the bar stays visible, but the transition slides in.
   const withSlide = isPortrait && (!withBottomBar || renderingKey === AppState.TokenInfo);
@@ -146,8 +144,7 @@ function App({
     renderingKey === AppState.Auth && !canPrerenderMain ? PRERENDER_MAIN_DELAY : undefined,
   );
 
-  // Gram Wallet Web is deployed to a domain we do not own and has no store presence, so there is no version to nag about
-  useInterval(checkAppVersion, IS_GRAM_WALLET ? undefined : APP_UPDATE_INTERVAL);
+  useInterval(checkAppVersion, APP_UPDATE_INTERVAL);
 
   useEffect(() => {
     document.documentElement.classList.toggle('with-bottombar', withBottomBar);

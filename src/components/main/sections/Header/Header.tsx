@@ -2,10 +2,8 @@ import React, { memo } from '../../../../lib/teact/teact';
 import { withGlobal } from '../../../../global';
 
 import {
-  IS_EXPLORER,
   IS_EXTENSION,
   IS_TELEGRAM_APP,
-  SELF_UNIVERSAL_HOST_URL,
 } from '../../../../config';
 import {
   selectCurrentAccountId,
@@ -13,11 +11,9 @@ import {
   selectIsCurrentAccountViewMode,
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
-import { tryOpenNativeApp } from '../../../../util/deeplink';
 import { IS_ELECTRON } from '../../../../util/windowEnvironment';
 
 import { useDeviceScreen } from '../../../../hooks/useDeviceScreen';
-import useLang from '../../../../hooks/useLang';
 import useQrScannerSupport from '../../../../hooks/useQrScannerSupport';
 
 import AccountSelector from './AccountSelector';
@@ -29,8 +25,6 @@ import ToggleLayoutButton from './actionButtons/ToggleLayoutButton';
 import ToggleSensitiveDataButton from './actionButtons/ToggleSensitiveDataButton';
 
 import styles from './Header.module.scss';
-
-import logoSrc from '../../../../assets/logoMinimalistic.svg';
 
 export const HEADER_HEIGHT_REM = 3;
 
@@ -58,43 +52,16 @@ function Header({
   isFullscreen,
   isTemporaryAccount,
 }: OwnProps & StateProps) {
-  const lang = useLang();
-
   const { isPortrait } = useDeviceScreen();
   const canToggleAppLayout = IS_EXTENSION || IS_ELECTRON;
   const isQrScannerSupported = useQrScannerSupport() && !isViewMode;
 
-  const handleOpenInAppClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    tryOpenNativeApp(SELF_UNIVERSAL_HOST_URL);
-  };
-
-  const showBackButton = isTemporaryAccount && !IS_EXPLORER;
+  const showBackButton = isTemporaryAccount;
   const headerClassName = buildClassName(
     styles.header,
     areTabsStuck && styles.areTabsStuck,
     isScrolled && styles.isScrolled,
   );
-
-  if (isPortrait && IS_EXPLORER) {
-    return (
-      <div className={headerClassName}>
-        <div className={styles.headerInner} style="--icons-amount: 3">
-          <AccountSelector withBalance={withBalance} withAccountSelector={!IS_EXPLORER} />
-          <div className={styles.portraitActionsRight}>
-            <a
-              href={SELF_UNIVERSAL_HOST_URL}
-              className={styles.openLink}
-              onClick={handleOpenInAppClick}
-            >
-              <img src={logoSrc} alt="" className={styles.mtLogo} />
-              {lang('Open')}
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const buttonsAmount = Math.max(
     1 + (showBackButton ? 1 : 0) + (isAppLockEnabled ? 1 : 0),
@@ -121,11 +88,11 @@ function Header({
       <div className={styles.headerInner} style={`--icons-amount: ${buttonsAmount}`}>
         <div className={actionsStartClassName}>
           {showBackButton && <BackButton isIconOnly />}
-          {!IS_EXPLORER && <ToggleSensitiveDataButton isSensitiveDataHidden={isSensitiveDataHidden} />}
+          <ToggleSensitiveDataButton isSensitiveDataHidden={isSensitiveDataHidden} />
           {isAppLockEnabled && <AppLockButton />}
         </div>
 
-        <AccountSelector withBalance={withBalance} withAccountSelector={!IS_EXPLORER} />
+        <AccountSelector withBalance={withBalance} withAccountSelector />
 
         <div className={actionsEndClassName}>
           <QrScannerButton isViewMode={isViewMode} />

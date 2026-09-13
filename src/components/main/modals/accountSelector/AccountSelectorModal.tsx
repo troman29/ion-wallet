@@ -146,7 +146,7 @@ function AccountSelectorModal({
   const currentTabIndex = useMemo(() => getCurrentTabIndex(tabs, activeTab), [activeTab, tabs]);
   const selectedTab = tabs[currentTabIndex]?.id ?? DEFAULT_TAB;
   const filteredAccounts = useFilteredAccounts(orderedAccounts, selectedTab);
-  const { balancesByAccountId, totalBalance, addressLineChainsByAccountId } = useMultipleAccountsBalances({
+  const { balancesByAccountId, totalBalance, visibleChainsByAccountId } = useMultipleAccountsBalances({
     filteredAccounts,
     sourceAccounts: networkAccounts,
     byAccountId,
@@ -492,7 +492,7 @@ function AccountSelectorModal({
       activeTab: selectedTab,
       balancesByAccountId,
       settingsByAccountId,
-      addressLineChainsByAccountId,
+      visibleChainsByAccountId,
       currentAccountId,
       isSensitiveDataHidden,
       onScrollInitialize: handleScrollInitialize,

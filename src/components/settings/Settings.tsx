@@ -13,7 +13,6 @@ import {
   APP_NAME,
   APP_VERSION,
   IS_CAPACITOR,
-  IS_EXPLORER,
   IS_EXTENSION,
   LANG_LIST,
   PROXY_HOSTS,
@@ -673,7 +672,7 @@ function Settings({
             </div>
           )}
 
-          <div className={styles.version} onClick={IS_EXPLORER ? undefined : handleMultipleClick}>
+          <div className={styles.version} onClick={handleMultipleClick}>
             {APP_NAME} {APP_VERSION} {APP_ENV_MARKER}
           </div>
         </div>
@@ -836,17 +835,15 @@ function Settings({
       >
         {renderContent}
       </Transition>
-      {!IS_EXPLORER && (
-        <SettingsDeveloperOptions
-          isOpen={isDeveloperModalOpen}
-          isTestnet={isTestnet}
-          isCopyStorageEnabled={isCopyStorageEnabled}
-          isViewMode={isViewMode}
-          onShowAllWalletVersions={handleShowAllWalletVersions}
-          onOpenPermissions={handleOpenPermissionsFromDev}
-          onClose={handlCloseDeveloperModal}
-        />
-      )}
+      <SettingsDeveloperOptions
+        isOpen={isDeveloperModalOpen}
+        isTestnet={isTestnet}
+        isCopyStorageEnabled={isCopyStorageEnabled}
+        isViewMode={isViewMode}
+        onShowAllWalletVersions={handleShowAllWalletVersions}
+        onOpenPermissions={handleOpenPermissionsFromDev}
+        onClose={handlCloseDeveloperModal}
+      />
       <LogOutModal isOpen={isLogOutModalOpened} onClose={handleCloseLogOutModal} />
     </div>
   );

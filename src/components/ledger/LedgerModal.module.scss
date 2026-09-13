@@ -219,10 +219,6 @@
 
   @include mixins.card-image("../../assets/", "account_button_bg", v.$defaultCardGradient);
 
-  &:global(.gram) {
-    @include mixins.card-image("../../assets/", "account_button_gram_bg", v.$gramCardGradient);
-  }
-
   &_connected {
     cursor: not-allowed;
     filter: grayscale(100%);

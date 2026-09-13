@@ -4,7 +4,6 @@ import { getActions, withGlobal } from '../../global';
 import type { ApiStakingState } from '../../api/types';
 import type { Theme } from '../../global/types';
 
-import { IS_EXPLORER } from '../../config';
 import {
   selectAccountStakingState,
   selectCurrentAccountId,
@@ -39,9 +38,7 @@ import StakeModal from '../staking/StakeModal';
 import StakingClaimModal from '../staking/StakingClaimModal';
 import StakingInfoModal from '../staking/StakingInfoModal';
 import UnstakeModal from '../staking/UnstakeModal';
-import Transition from '../ui/Transition';
 import UpdateAvailable from '../ui/UpdateAvailable';
-import MainSkeleton from './MainSkeleton';
 import AccountSelectorModal from './modals/accountSelector/AccountSelectorModal';
 import PromotionModal from './modals/PromotionModal';
 import {
@@ -49,7 +46,6 @@ import {
   LandscapeWalletList,
   PortraitActions,
 } from './sections/Actions';
-import PromoteWallet from './sections/Actions/PromoteWallet';
 import Card from './sections/Card';
 import PortraitContent from './sections/Content/PortraitContent';
 import Header, { HEADER_HEIGHT_REM } from './sections/Header/Header';
@@ -192,7 +188,6 @@ function Main({
 
           <LandscapeNavBar />
           <LandscapeWalletList />
-          {IS_EXPLORER && <PromoteWallet />}
         </div>
         <div className={styles.main}>
           <LandscapeLayout onStakedTokenClick={handleEarnClick} />
@@ -202,16 +197,6 @@ function Main({
   }
 
   function renderContent() {
-    if (IS_EXPLORER) {
-      return (
-        <Transition name="semiFade" activeKey={isAppReady ? 1 : 0}>
-          {isAppReady
-            ? (isPortrait ? renderPortraitLayout() : renderLandscapeLayout())
-            : <MainSkeleton isViewMode={isViewMode} />}
-        </Transition>
-      );
-    }
-
     return isPortrait ? renderPortraitLayout() : renderLandscapeLayout();
   }
 

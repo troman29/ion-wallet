@@ -1079,14 +1079,3 @@ export async function addAllFoundSubwallets(
     return handleServerError(err);
   }
 }
-
-/** In explorer mode, we don't need to store all data, only current account, so we clear the storage  */
-export async function clearStorageForExplorerMode() {
-  const currentAccountId = await storage.getItem('currentAccountId');
-  const accounts = await storage.getItem('accounts') as Record<string, ApiAccountAny> | undefined;
-  await storage.clear();
-
-  if (currentAccountId && accounts?.[currentAccountId]) {
-    await storage.setItem('accounts', { [currentAccountId]: accounts[currentAccountId] });
-  }
-}

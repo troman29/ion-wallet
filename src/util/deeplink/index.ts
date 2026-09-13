@@ -11,7 +11,6 @@ import {
   DEFAULT_SWAP_AMOUNT,
   DEFAULT_SWAP_FIRST_TOKEN_SLUG,
   DEFAULT_SWAP_SECOND_TOKEN_SLUG,
-  IS_EXPLORER,
   TONCOIN,
 } from '../../config';
 import {
@@ -67,12 +66,6 @@ export const enum DeeplinkCommand {
   Nft = 'nft',
   Settings = 'settings',
 }
-
-const EXPLORER_ALLOWED_COMMANDS = new Set([
-  DeeplinkCommand.View,
-  DeeplinkCommand.Transaction,
-  DeeplinkCommand.Nft,
-]);
 
 const SETTINGS_SECTION_MAP: Record<string, SettingsState> = {
   appearance: SettingsState.Appearance,
@@ -597,12 +590,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
 
     logDebug('Processing deeplink', deeplink);
 
-    // In explorer mode, only allow `View`, `Nft` and `Transaction` commands
-    if (IS_EXPLORER && !EXPLORER_ALLOWED_COMMANDS.has(command as DeeplinkCommand)) {
-      actions.showError({ error: 'This action is not supported in explorer mode.' });
-      return false;
-    }
-
     if (selectIsCurrentAccountViewMode(global) && !VIEW_MODE_ALLOWED_COMMANDS.has(command as DeeplinkCommand)) {
       actions.showError({ error: '$action_not_available_view_mode' });
       return false;
@@ -833,7 +820,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         }
 
         const { network } = ensureNetwork(searchParams, currentNetwork);
-        const shouldOpenViewAccount = IS_EXPLORER || network !== currentNetwork;
+        const shouldOpenViewAccount = network !== currentNetwork;
 
         const activities = await callApi('fetchTransactionById', {
           chain,
@@ -905,7 +892,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         if (!nftAddress) return false;
 
         const { network } = ensureNetwork(searchParams, currentNetwork);
-        const shouldOpenViewAccount = IS_EXPLORER || network !== currentNetwork;
+        const shouldOpenViewAccount = network !== currentNetwork;
 
         const nft = await callApi('fetchNftByAddress', 'ton', network, nftAddress);
 

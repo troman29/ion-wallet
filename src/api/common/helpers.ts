@@ -26,7 +26,6 @@ import {
   getKnownAddresses,
   getScamMarkers,
 } from './addresses';
-import { purgeCoreTwins } from './coreTwins';
 import { hexToBytes } from './utils';
 
 const actualStateVersion = 23;
@@ -97,11 +96,7 @@ export function isUpdaterAlive(onUpdate: OnApiUpdate) {
 
 export async function tryMigrateStorage(onUpdate: OnApiUpdate, accountIds?: string[]) {
   try {
-    const result = await migrateStorage(onUpdate, accountIds);
-    // Not a state migration: runs on EVERY boot (including when the version is already current) and self-gates
-    // by build flavor and its own storage marker. See `coreTwins.ts` for why it must not ride stateVersion.
-    await purgeCoreTwins(onUpdate);
-    return result;
+    return await migrateStorage(onUpdate, accountIds);
   } catch (err) {
     logDebugError('Migration error', err);
     onUpdate?.({

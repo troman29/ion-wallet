@@ -8,7 +8,6 @@ import {
   DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   DEFAULT_TRANSFER_TOKEN_SLUG,
   IS_CAPACITOR,
-  IS_EXPLORER,
   IS_EXTENSION,
   IS_TELEGRAM_APP,
   TEST_MNEMONIC,
@@ -19,13 +18,11 @@ import { requestMutation } from '../../../lib/fasterdom/fasterdom';
 import { parseAccountId } from '../../../util/account';
 import { initCapacitorWithGlobal } from '../../../util/capacitor';
 import {
-  getDeeplinkFromLocation,
-  processDeeplink,
   processDeeplinkAfterInit,
   processDeeplinkAfterSignIn,
 } from '../../../util/deeplink';
 import { omit } from '../../../util/iteratees';
-import { clearPreviousLangpacks, getTranslation, setLanguage } from '../../../util/langProvider';
+import { clearPreviousLangpacks, setLanguage } from '../../../util/langProvider';
 import { initializeSounds } from '../../../util/notificationSound';
 import switchAnimationLevel from '../../../util/switchAnimationLevel';
 import switchTheme, { setStatusBarStyle } from '../../../util/switchTheme';
@@ -143,21 +140,6 @@ addActionHandler('afterInit', (global, actions) => {
   if (TEST_MNEMONIC) {
     void tryAutoImportTestMnemonic(actions);
   }
-
-  if (!IS_EXPLORER) return;
-
-  void (async () => {
-    await callApi('waitDataPreload');
-    await callApi('clearStorageForExplorerMode');
-
-    const deeplinkUrl = getDeeplinkFromLocation();
-
-    if (deeplinkUrl) {
-      await processDeeplink(deeplinkUrl);
-    } else {
-      actions.showToast({ message: getTranslation('$explorer_mode_warning') });
-    }
-  })();
 });
 
 addActionHandler('afterSignIn', (global, actions) => {
@@ -440,7 +422,7 @@ addActionHandler('signOut', async (global, actions, payload) => {
 });
 
 async function tryAutoImportTestMnemonic(actions: any) {
-  if (!TEST_MNEMONIC || IS_EXPLORER) return;
+  if (!TEST_MNEMONIC) return;
 
   const global = getGlobal();
   if (selectCurrentAccountId(global)) return;

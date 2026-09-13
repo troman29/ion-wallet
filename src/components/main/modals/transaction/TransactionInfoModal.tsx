@@ -15,7 +15,6 @@ import type {
 import type { Account, SavedAddress, Theme } from '../../../../global/types';
 import { TransactionInfoState } from '../../../../global/types';
 
-import { IS_EXPLORER } from '../../../../config';
 import { resolveSwapAsset } from '../../../../global/helpers';
 import {
   selectAccountStakingStatesBySlug,
@@ -390,9 +389,9 @@ function TransactionInfoModal({
       onCloseAnimationEnd={closePasswordSlide}
     >
       <Transition
-        name={IS_EXPLORER ? 'semiFade' : resolveSlideTransitionName()}
+        name={resolveSlideTransitionName()}
         className={buildClassName(modalStyles.transition, styles.rootTransition, 'custom-scroll')}
-        slideClassName={buildClassName(modalStyles.transitionSlide, IS_EXPLORER && styles.explorerSlide)}
+        slideClassName={modalStyles.transitionSlide}
         activeKey={activeSlide}
       >
         {renderContent}

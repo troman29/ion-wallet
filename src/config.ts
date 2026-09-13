@@ -14,16 +14,13 @@ import type { AutolockValueType, LangCode, LangItem } from './global/types';
 
 export const APP_ENV = process.env.APP_ENV || 'production';
 
-export const IS_GRAM_WALLET = process.env.IS_GRAM_WALLET === '1';
-export const APP_NAME = process.env.APP_NAME || (IS_GRAM_WALLET ? 'Gram Wallet' : 'My Wallet');
+export const APP_NAME = process.env.APP_NAME || 'My Wallet';
 export const APP_VERSION = process.env.APP_VERSION!;
 export const APP_COMMIT_HASH = process.env.APP_COMMIT_HASH!;
 export const APP_ENV_MARKER = APP_ENV === 'staging' ? 'Beta' : APP_ENV === 'development' ? 'Dev' : undefined;
-export const EXTENSION_NAME = IS_GRAM_WALLET ? 'Gram Wallet' : 'My Wallet • Crypto & Web3';
-export const EXTENSION_DESCRIPTION = IS_GRAM_WALLET
-  ? 'Set up your own Gram Wallet on The Open Network'
-  : 'Self-custodial wallet for TON, TRON, Solana, Ethereum and more. '
-    + 'Swap, stake, buy crypto, manage NFTs and explore dapps.';
+export const EXTENSION_NAME = 'My Wallet • Crypto & Web3';
+export const EXTENSION_DESCRIPTION = 'Self-custodial wallet for TON and BNB. '
+  + 'Swap, stake, manage NFTs and explore dapps.';
 
 export const DEBUG = APP_ENV !== 'production' && APP_ENV !== 'perf' && APP_ENV !== 'test';
 export const DEBUG_MORE = false;
@@ -44,13 +41,12 @@ export const IS_CAPACITOR = process.env.IS_CAPACITOR === '1';
 export const IS_ANDROID_DIRECT = process.env.IS_ANDROID_DIRECT === '1';
 export const IS_ANDROID = IS_ANDROID_DIRECT || process.env.CAP_PLATFORM === 'android';
 export const IS_TELEGRAM_APP = process.env.IS_TELEGRAM_APP === '1';
-export const IS_EXPLORER = process.env.IS_EXPLORER === '1';
 export const IS_HEADLESS = process.env.IS_HEADLESS === '1';
 
 export const ELECTRON_HOST_URL = 'https://dumb-host';
 export const INACTIVE_MARKER = '[Inactive]';
-export const PRODUCTION_URL = IS_GRAM_WALLET ? 'https://wallet.ton.org' : 'https://web.mywallet.io';
-export const BETA_URL = IS_GRAM_WALLET ? 'https://beta.wallet.ton.org' : 'https://beta.mywallet.io';
+export const PRODUCTION_URL = 'https://web.mywallet.io';
+export const BETA_URL = 'https://beta.mywallet.io';
 // Beta desktop auto-update feed base. This is BOTH the staging gate poll base and the value baked
 // into app-update.yml by the generic electron-builder provider - the two must agree.
 export const BETA_UPDATE_URL = 'https://s3.mywallet.io/public/desktop-beta';
@@ -63,13 +59,11 @@ export const LEGACY_APP_HOSTS = ['mytonwallet.app'];
 // the wallet context (addresses included) and open it in the in-app iframe browser - where the site renders blank
 // under `X-Frame-Options: Deny`. `utm_source` attributes the migrated traffic.
 export const NEW_APP_URL = `${PRODUCTION_URL}?utm_source=legacy_web`;
-export const APP_INSTALL_URL = IS_GRAM_WALLET ? 'https://get.gramwallet.io/' : 'https://get.mywallet.io/';
+export const APP_INSTALL_URL = 'https://get.mywallet.io/';
 export const APP_REPO_URL = 'https://github.com/mytonwallet-org/mytonwallet';
 export const SELF_UNIVERSAL_HOST_URL = 'https://my.tt';
-export const APP_WEBSITE_URL = IS_GRAM_WALLET ? 'https://gramwallet.io' : 'https://mywallet.io';
-export const APP_ICON_URL = IS_GRAM_WALLET
-  ? 'https://gramwallet.io/icon-512x512.png'
-  : 'https://mywallet.io/icon-512x512.png';
+export const APP_WEBSITE_URL = 'https://mywallet.io';
+export const APP_ICON_URL = 'https://mywallet.io/icon-512x512.png';
 
 // GitHub workflow uses an empty string as the default value if it's not in repository variables, so we cannot define a default value here
 export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
@@ -123,13 +117,7 @@ export const WHOLE_PART_DELIMITER = ' '; // https://www.compart.com/en/unicode
 export const DEFAULT_SLIPPAGE_VALUE = 5;
 
 export const GLOBAL_STATE_CACHE_DISABLED = false;
-// Gram Wallet Web serves the existing wallet.ton.org population, so it must keep reading
-// the storage keys the users' state is saved under - changing them would orphan it.
-export const GLOBAL_STATE_CACHE_KEY = IS_GRAM_WALLET
-  ? 'tonwallet-global-state'
-  : IS_EXPLORER
-    ? 'explorer-global-state'
-    : 'mytonwallet-global-state';
+export const GLOBAL_STATE_CACHE_KEY = 'mytonwallet-global-state';
 
 export const ANIMATION_LEVEL_MIN = 0;
 export const ANIMATION_LEVEL_MED = 1;
@@ -198,16 +186,10 @@ export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
 };
 export const MW_STATIC_BASE_URL = 'https://static.mytonwallet.org';
 export const MW_CARDS_BASE_URL = `${MW_STATIC_BASE_URL}/cards/v2/cards/`;
-// Every outbound link the app puts in front of a user follows its brand. The blog and the help center stay on the
-// My Wallet domain for all brands, since that is the only place they are published (Air links them the same way).
-export const APP_PROMO_URL = IS_GRAM_WALLET ? 'https://gramwallet.io/' : 'https://mywallet.io/';
-export const APP_WEBSITE_HOST = IS_GRAM_WALLET ? 'gramwallet.io' : 'mywallet.io';
-export const APP_TERMS_OF_USE_URL = IS_GRAM_WALLET
-  ? 'https://gramwallet.io/terms-of-use/'
-  : 'https://mywallet.io/terms-of-use';
-export const APP_PRIVACY_POLICY_URL = IS_GRAM_WALLET
-  ? 'https://gramwallet.io/privacy-policy/'
-  : 'https://mywallet.io/privacy-policy';
+export const APP_PROMO_URL = 'https://mywallet.io/';
+export const APP_WEBSITE_HOST = 'mywallet.io';
+export const APP_TERMS_OF_USE_URL = 'https://mywallet.io/terms-of-use';
+export const APP_PRIVACY_POLICY_URL = 'https://mywallet.io/privacy-policy';
 export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {
   en: 'https://mywallet.io/en/blog/',
   ru: 'https://mywallet.io/ru/blog/',
@@ -236,7 +218,7 @@ export const PROXY_HOSTS = process.env.PROXY_HOSTS;
 
 export const TINY_TRANSFER_MAX_COST = 0.01;
 
-export const IMAGE_CACHE_NAME = IS_EXPLORER ? 'explorer-image' : 'mtw-image';
+export const IMAGE_CACHE_NAME = 'mtw-image';
 export const LANG_CACHE_NAME = 'mtw-lang-354';
 
 export const LANG_LIST: LangItem[] = [{
@@ -341,7 +323,7 @@ export const MIN_ACTIVE_STAKING_REWARDS = 100_000_000n; // 0.1 MY
 export const STAKING_SLUG_PREFIX = 'staking-';
 
 export const TONCONNECT_PROTOCOL_VERSION = 2;
-export const TONCONNECT_WALLET_JSBRIDGE_KEY = IS_GRAM_WALLET ? 'gramwallet' : 'mytonwallet';
+export const TONCONNECT_WALLET_JSBRIDGE_KEY = 'mytonwallet';
 export const EMBEDDED_DAPP_BRIDGE_CHANNEL = 'embedded-dapp-bridge';
 
 export const NFT_FRAGMENT_COLLECTIONS = [
@@ -491,17 +473,13 @@ export const SWAP_DEX_LABELS: Record<ApiSwapDexLabel, string> = {
   ston: 'STON.fi',
 };
 
-export const ACTIVE_TAB_STORAGE_KEY = IS_GRAM_WALLET
-  ? 'tw-active-tab'
-  : IS_EXPLORER
-    ? 'explorer-active-tab'
-    : 'mtw-active-tab';
+export const ACTIVE_TAB_STORAGE_KEY = 'mtw-active-tab';
 
-export const INDEXED_DB_NAME = IS_EXPLORER ? 'explorer-keyval-store' : 'keyval-store';
+export const INDEXED_DB_NAME = 'keyval-store';
 export const INDEXED_DB_STORE_NAME = 'keyval';
 
 export const WINDOW_PROVIDER_CHANNEL = 'windowProvider';
-export const WINDOW_PROVIDER_PORT = `${IS_GRAM_WALLET ? 'GramWallet' : 'MyWallet'}_popup_reversed`;
+export const WINDOW_PROVIDER_PORT = 'MyWallet_popup_reversed';
 
 export const PORTRAIT_MIN_ASSETS_TAB_VIEW = 6;
 

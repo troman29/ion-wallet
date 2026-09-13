@@ -41,7 +41,6 @@ interface StateProps {
   accountByChain?: Account['byChain'];
   visibleChains?: ApiChain[];
   orderedChains?: ApiChain[];
-  addressLineChains?: ApiChain[];
   isTestnet?: boolean;
   isTemporary?: boolean;
   withTextGradient?: boolean;
@@ -56,7 +55,6 @@ function CardAddress({
   accountByChain,
   visibleChains,
   orderedChains,
-  addressLineChains,
   isTestnet,
   accountType,
   withTextGradient,
@@ -86,9 +84,6 @@ function CardAddress({
 
   const byChain = accountByChain ?? EMPTY_BY_CHAIN;
   const chains = visibleChains ?? EMPTY_CHAINS;
-  // The address line collapses under the Gram Wallet gate while the menu keeps every visible chain,
-  // matching Air (`AddressesMenu` renders un-gated `displayedChains` on iOS)
-  const lineChains = addressLineChains ?? EMPTY_CHAINS;
 
   const isHardwareAccount = accountType === 'hardware';
   const isViewAccount = accountType === 'view';
@@ -122,7 +117,7 @@ function CardAddress({
       {isViewAccount && <ViewModeIcon isTemporary={isTemporary} isMinimized={isMinimized} />}
       {isHardwareAccount && <i className={buildClassName(styles.icon, 'icon-ledger')} aria-hidden />}
       <AddressMenuButton
-        chains={lineChains}
+        chains={chains}
         byChain={byChain}
         withTextGradient={withTextGradient}
         isMinimized={isMinimized}
@@ -164,7 +159,6 @@ export default memo(withGlobal((global): StateProps => {
     accountByChain: byChain,
     visibleChains: chainDisplay?.visibleChains,
     orderedChains: chainDisplay?.orderedChains,
-    addressLineChains: chainDisplay?.addressLineChains,
     isTestnet: global.settings.isTestnet,
     accountType,
     isTemporary,

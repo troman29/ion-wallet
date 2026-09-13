@@ -3,7 +3,6 @@ import type { AccountChain } from '../../types';
 
 import {
   DEFAULT_STAKING_STATE,
-  IS_GRAM_WALLET,
   MW_CARDS_COLLECTION,
   STAKING_SLUG_PREFIX,
   SWAP_API_VERSION,
@@ -390,7 +389,7 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       });
       global = {
         ...global,
-        isAppUpdateRequired: IS_GRAM_WALLET ? undefined : isAppUpdateRequired,
+        isAppUpdateRequired,
         swapVersion: swapVersion ?? SWAP_API_VERSION,
         seasonalTheme,
       };

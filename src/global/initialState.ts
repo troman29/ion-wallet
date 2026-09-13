@@ -25,7 +25,6 @@ import {
   DEFAULT_STAKING_STATE,
   DEFAULT_TRANSFER_TOKEN_SLUG,
   INIT_SWAP_ASSETS,
-  IS_EXPLORER,
   SWAP_API_VERSION,
   THEME_DEFAULT,
 } from '../config';
@@ -36,7 +35,7 @@ import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 export const STATE_VERSION = 62;
 
 export const INITIAL_STATE: GlobalState = {
-  appState: IS_EXPLORER ? AppState.Main : AppState.Auth,
+  appState: AppState.Auth,
 
   auth: {
     state: AuthState.none,

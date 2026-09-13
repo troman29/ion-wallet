@@ -4,7 +4,6 @@ import {
   BNB,
   BSC_USDT_MAINNET,
   DEBUG,
-  IS_GRAM_WALLET,
   TON_TSUSDE,
   TON_USDE,
   TON_USDT_MAINNET,
@@ -435,7 +434,7 @@ export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((network: ApiNet
   // (`ApiToken.defaultSlugs`). It also spares the legacy wallet.ton.org accounts, whose TON-native mnemonic cannot
   // derive foreign addresses, zero-balance rows they can never use: `updateBalances` (`global/reducers/misc.ts`)
   // seeds every default slug and empty wallets render them all.
-  const chainConfigs = IS_GRAM_WALLET ? [CHAIN_CONFIG.ton] : Object.values(CHAIN_CONFIG);
+  const chainConfigs = Object.values(CHAIN_CONFIG);
 
   return new Set(
     chainConfigs.flatMap((chainConfig) => chainConfig.defaultEnabledSlugs[network]),
@@ -448,7 +447,7 @@ export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((network: ApiNet
  * TON-forward, so its empty wallets list TON alone.
  */
 export const getAllSupportedVisibleChains = /* #__PURE__ */ withCache((): ReadonlySet<ApiChain> => {
-  return new Set(IS_GRAM_WALLET ? [TONCOIN.chain] : getSupportedChains());
+  return new Set(getSupportedChains());
 });
 
 export const getSlugsSupportingCexSwap = /* #__PURE__ */ withCache((): ReadonlySet<string> => {

@@ -10,7 +10,6 @@ import {
   type Theme,
 } from '../../../global/types';
 
-import { IS_EXPLORER } from '../../../config';
 import { selectCurrentAccountId, selectCurrentAccountState, selectNetworkAccounts } from '../../../global/selectors';
 import buildClassName from '../../../util/buildClassName';
 import { getChainTitle } from '../../../util/chain';
@@ -70,7 +69,7 @@ function NftAttributesModal({
 
   const isOpen = !!nft;
   const renderedNft = useCurrentOrPrev(nft, true);
-  const renderedWithNftOwner = useCurrentOrPrev(shouldShowOwnerInNftAttributes || IS_EXPLORER, true);
+  const renderedWithNftOwner = useCurrentOrPrev(shouldShowOwnerInNftAttributes, true);
   const {
     chain,
     ownerAddress,

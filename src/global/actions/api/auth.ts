@@ -4,7 +4,6 @@ import { ApiAuthError, ApiCommonError } from '../../../api/types';
 import { AppState, AuthState, BiometricsState } from '../../types';
 
 import {
-  IS_EXPLORER,
   MNEMONIC_CHECK_COUNT,
   MNEMONIC_COUNT,
   SHOULD_CLEANUP_LEGACY_AUTH,
@@ -41,11 +40,7 @@ import {
   peekAbortDappConnectWalletCreation,
   takeAbortDappConnectWalletCreationIfRequested,
 } from '../../helpers/abortDappConnectWalletCreation';
-import {
-  handleExplorerMode,
-  handleStandardMode,
-  removeTemporaryAccount,
-} from '../../helpers/auth';
+import { handleStandardMode, removeTemporaryAccount } from '../../helpers/auth';
 import { dropEnclaveSessionHold, holdEnclaveSession, withEnclaveSessionRelease } from '../../helpers/enclave';
 import { presentMigrationFailure } from '../../helpers/migrationFailure';
 import { isErrorTransferResult } from '../../helpers/transfer';
@@ -165,8 +160,6 @@ addActionHandler('resetAuth', (global) => {
 });
 
 addActionHandler('startCreatingWallet', async (global, actions, payload) => {
-  if (IS_EXPLORER) return;
-
   const { enclaveToken } = payload ?? {};
 
   const accounts = selectAccounts(global) ?? {};
@@ -379,8 +372,6 @@ addActionHandler('skipBiometrics', (global, actions) => {
 });
 
 addActionHandler('createAccount', async (global, actions) => {
-  if (IS_EXPLORER) return;
-
   if (takeAbortDappConnectWalletCreationIfRequested()) {
     finalizeDappConnectWalletCreationAbort();
     return;
@@ -653,8 +644,6 @@ addActionHandler('skipCheckMnemonic', (global, actions) => {
 });
 
 addActionHandler('startImportingWallet', (global, actions, payload) => {
-  if (IS_EXPLORER) return;
-
   const { enclaveToken } = payload ?? {};
   const hasPassword = selectHasPassword(global);
   const state = hasPassword && !enclaveToken && !selectIsEnclaveSessionValid(global)
@@ -1306,23 +1295,17 @@ addActionHandler('openTemporaryViewAccount', async (global, actions, { addressBy
 
   const network = selectCurrentNetwork(global);
 
-  if (IS_EXPLORER) {
-    await handleExplorerMode(global, actions, network, addressByChain, SWITHCHING_ACCOUNT_DURATION_MS);
-  } else {
-    await handleStandardMode(
-      global,
-      actions,
-      network,
-      addressByChain,
-      SWITHCHING_ACCOUNT_DURATION_MS,
-      getIsPortrait,
-    );
-  }
+  await handleStandardMode(
+    global,
+    actions,
+    network,
+    addressByChain,
+    SWITHCHING_ACCOUNT_DURATION_MS,
+    getIsPortrait,
+  );
 });
 
 addActionHandler('saveTemporaryAccount', (global, actions) => {
-  if (IS_EXPLORER) return;
-
   const newAccountId = global.currentTemporaryViewAccountId!;
   const network = selectCurrentNetwork(global);
   const accounts = selectNetworkAccounts(global) || {};

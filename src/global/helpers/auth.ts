@@ -1,7 +1,6 @@
 import type { ApiAuthImportViewAccountResult, ApiChain, ApiNetwork } from '../../api/types';
 import type { getActions } from '../index';
 import type { GlobalState } from '../types';
-import { AppState } from '../types';
 
 import { TEMPORARY_ACCOUNT_NAME } from '../../config';
 import { omit } from '../../util/iteratees';
@@ -128,32 +127,6 @@ export function findExistingAccountByAddresses(
       (chain) => account.byChain[chain]?.address === addressByChain[chain],
     );
   });
-}
-
-export async function handleExplorerMode(
-  global: GlobalState,
-  actions: ReturnType<typeof getActions>,
-  network: ApiNetwork,
-  addressByChain: Partial<Record<ApiChain, string>>,
-  switchingDuration: number,
-) {
-  if (global.currentTemporaryViewAccountId) {
-    await removeTemporaryAccount(global.currentTemporaryViewAccountId);
-  }
-
-  const result = await importTemporaryViewAccount(network, addressByChain);
-
-  if (!result || 'error' in result) {
-    actions.showError({ error: result?.error });
-    return;
-  }
-
-  createAndSetTemporaryAccount(result, {
-    currentAccountId: result.accountId,
-    appState: AppState.Main,
-  });
-
-  finalizeAccountCreation(actions, true, switchingDuration);
 }
 
 export async function handleStandardMode(

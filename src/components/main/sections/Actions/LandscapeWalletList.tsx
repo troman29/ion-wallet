@@ -71,7 +71,7 @@ function LandscapeWalletList({
     return orderedAccounts.slice(0, MAX_VISIBLE_WALLETS);
   }, [orderedAccounts]);
 
-  const { balancesByAccountId, addressLineChainsByAccountId } = useMultipleAccountsBalances({
+  const { balancesByAccountId, visibleChainsByAccountId } = useMultipleAccountsBalances({
     filteredAccounts,
     sourceAccounts: networkAccounts,
     byAccountId,
@@ -117,7 +117,7 @@ function LandscapeWalletList({
                 ref={menuProps.ref as ElementRef<HTMLDivElement>}
                 accountId={accountId}
                 byChain={byChain}
-                visibleChains={addressLineChainsByAccountId?.[accountId]}
+                visibleChains={visibleChainsByAccountId?.[accountId]}
                 accountType={type}
                 title={title}
                 isRecoveryRequired={isRecoveryRequired}

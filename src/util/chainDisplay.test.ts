@@ -3,10 +3,8 @@ import type { ChainDisplayConfiguration, UserToken } from '../global/types';
 
 import {
   DEFAULT_CHAIN_DISPLAY_CONFIGURATION,
-  getAddressLineChains,
   getChainsWithBalance,
   getDefaultVisibleChains,
-  getHasOnlyTonTokens,
   getNormalizedManualOrder,
   getOrderedChainsForDisplay,
   getVisibleChains,
@@ -66,54 +64,6 @@ describe('getDefaultVisibleChains', () => {
 
   it('shows only the first chain when the funds are outside the account chains', () => {
     expect([...getDefaultVisibleChains(['ton', 'bnb'], new Set([ALPHA]))]).toEqual(['ton']);
-  });
-});
-
-describe('getAddressLineChains', () => {
-  const chains: ApiChain[] = ['ton', 'bnb'];
-
-  it('collapses a Gram Wallet line to TON while the shown tokens are TON-only', () => {
-    expect(getAddressLineChains(chains, true, true)).toEqual(['ton']);
-  });
-
-  it('keeps every chain once a foreign-chain token is shown', () => {
-    expect(getAddressLineChains(chains, false, true)).toBe(chains);
-  });
-
-  it('keeps every chain while the token list is not known yet', () => {
-    expect(getAddressLineChains(chains, undefined, true)).toBe(chains);
-  });
-
-  it('keeps an account without a TON wallet intact', () => {
-    const noTonChains: ApiChain[] = ['bnb'];
-
-    expect(getAddressLineChains(noTonChains, true, true)).toBe(noTonChains);
-  });
-
-  it('never collapses outside the Gram Wallet build', () => {
-    expect(getAddressLineChains(chains, true, false)).toBe(chains);
-  });
-});
-
-describe('getHasOnlyTonTokens', () => {
-  it('is true while every shown token is on TON', () => {
-    expect(getHasOnlyTonTokens([buildToken('ton', 'ton', 10n)])).toBe(true);
-  });
-
-  it('is true for an empty token list', () => {
-    expect(getHasOnlyTonTokens([])).toBe(true);
-  });
-
-  it('ignores disabled foreign tokens', () => {
-    expect(getHasOnlyTonTokens([buildToken('ton', 'ton', 10n), buildToken('bnb', 'bnb', 0n, true)])).toBe(true);
-  });
-
-  it('is false once a foreign-chain token is shown', () => {
-    expect(getHasOnlyTonTokens([buildToken('bnb', 'bnb', 5n)])).toBe(false);
-  });
-
-  it('is undefined while the token list is not known yet', () => {
-    expect(getHasOnlyTonTokens(undefined)).toBeUndefined();
   });
 });
 
