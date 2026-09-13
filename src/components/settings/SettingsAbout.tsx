@@ -13,7 +13,7 @@ import { getHelpCenterUrl } from '../../global/helpers/getHelpCenterUrl';
 import renderText from '../../global/helpers/renderText';
 import buildClassName from '../../util/buildClassName';
 import { handleUrlClick } from '../../util/openUrl';
-import { getBlogUrl, getTelegramNewsChannelUrl, getTelegramTipsChannelUrl } from '../../util/url';
+import { getBlogUrl } from '../../util/url';
 
 import { useDeviceScreen } from '../../hooks/useDeviceScreen';
 import useHistoryBack from '../../hooks/useHistoryBack';
@@ -29,7 +29,6 @@ import styles from './Settings.module.scss';
 import logoWebpPath from '../../assets/logo.webp';
 import helpcenterImg from '../../assets/settings/settings_helpcenter.svg';
 import hotImg from '../../assets/settings/settings_hot.svg';
-import videoImg from '../../assets/settings/settings_video.svg';
 
 const LOGO_PATH = logoWebpPath;
 
@@ -87,18 +86,6 @@ function SettingsAbout({
 
         <p className={styles.blockTitle}>{lang('%app_name% Resources', { app_name: APP_NAME })}</p>
         <div className={styles.settingsBlock}>
-          <a
-            href={getTelegramTipsChannelUrl(lang.code!)}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.item}
-            onClick={handleUrlClick}
-          >
-            <img className={styles.menuIcon} src={videoImg} alt={lang('Watch Video about Features')} />
-            <span className={styles.itemTitle}>{lang('Watch Video about Features')}</span>
-
-            <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-          </a>
           <a
             href={getBlogUrl(lang.code!)}
             target="_blank"
@@ -168,26 +155,6 @@ function SettingsAbout({
               github_link: (
                 <a href={APP_REPO_URL} target="_blank" rel="noreferrer">
                   {renderText(lang('$about_github_link_text'))}
-                </a>
-              ),
-            })}
-          </p>
-          <hr className={styles.separator} />
-          <h3 className={buildClassName(activityStyles.comment, activityStyles.colorIn, styles.heading)}>
-            <i
-              className={buildClassName(styles.telegram, 'icon-telegram')}
-              aria-hidden
-            /> {lang('Is there a community?')}
-          </h3>
-          <p className={buildClassName(styles.text, styles.textInChat)}>
-            {lang('$about_wallet_community', {
-              community_link: (
-                <a
-                  href={getTelegramNewsChannelUrl(lang.code!)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {renderText(lang('$about_community_link_text'))}
                 </a>
               ),
             })}

@@ -1,9 +1,6 @@
 import type { ApiActivity, ApiChain } from '../../../api/types';
 import type { GlobalState } from '../../types';
 
-import {
-  MW_CARDS_COLLECTION,
-} from '../../../config';
 import { getIsHiddenNftActivity } from '../../../util/activities';
 import { playIncomingTransactionSound } from '../../../util/notificationSound';
 import { getIsTransactionWithPoisoning, updatePoisoningCacheFromActivities } from '../../../util/poisoningHash';
@@ -32,7 +29,6 @@ import {
   whitelistNft,
 } from '../../reducers';
 import {
-  selectAccountSettings,
   selectAccountState,
   selectAccountTokens,
   selectLocalActivitiesSlow,
@@ -173,7 +169,7 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
 
         // NFT polling is executed at long intervals, so a transaction-event with an NFT can arrive
         // long before the next polling round. Apply the change to local NFT state immediately so the UI
-        // reflects new ownership (incl. MW-card auto-install) without waiting for polling.
+        // reflects new ownership without waiting for polling.
         // A subsequent `nftReceived`/`nftSent` socket update or polling round is idempotent here.
         for (const activity of newConfirmedActivities) {
           if (activity.kind !== 'transaction' || !activity.nft) continue;
@@ -188,17 +184,8 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
             if (activity.type === 'nftTrade') {
               global = whitelistNft(global, accountId, activity.nft.address);
             }
-
-            if (activity.nft.collectionAddress === MW_CARDS_COLLECTION) {
-              const settings = selectAccountSettings(global, accountId);
-
-              if (!settings?.cardBackgroundNft) {
-                getActions().setCardBackgroundNft({ nft: activity.nft, accountId });
-                getActions().installAccentColorFromNft({ nft: activity.nft, accountId });
-              }
-            }
           } else {
-            // `newOwnerAddress` is `unknown` from the sender's activity; `ownedSet` pruning is the meaningful effect
+            // `newOwnerAddress` is `unknown` from the sender's activity
             global = applyOutgoingNftFromActivity(global, accountId, activity.nft);
           }
         }

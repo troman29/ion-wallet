@@ -45,7 +45,7 @@ const TEST_BNB_ADDRESS = '0x0000000000000000000000000000000000000001';
 const TEST_DNS_NAME = 'testmywallet.ton';
 const TEST_BIN_PAYLOAD = 'te6ccgEBAQEANwAAaV0r640BleSq4Ql3m5OrdlSApYTNRMdDGUFXwTpwZ1oe1G8cPlS_Zym8CwoAdO4mWSned-Fg';
 const TEST_STATE_INIT = 'te6ccgEBAgEACwACATQBAQAI_____w\\=\\=';
-const TEST_COMMENT = 'My Wallet';
+const TEST_COMMENT = 'ION Wallet';
 const TEST_AMOUNT = 1n;
 
 // Test timestamps
@@ -446,7 +446,7 @@ describe('processSelfDeeplink', () => {
 
     it('should start swap with custom parameters for buying', async () => {
       const result = await processSelfDeeplink(
-        'https://go.mytonwallet.org/buy-with-crypto?in=ton-usdt&out=toncoin&amount=200',
+        'https://go.wallet.ice.io/buy-with-crypto?in=ton-usdt&out=toncoin&amount=200',
       );
 
       expect(result).toBe(true);
@@ -751,15 +751,15 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.startStaking).toHaveBeenCalled();
     });
 
-    it('should handle https://go.mytonwallet.org protocol', async () => {
-      const result = await processSelfDeeplink('https://go.mytonwallet.org/stake');
+    it('should handle https://go.wallet.ice.io protocol', async () => {
+      const result = await processSelfDeeplink('https://go.wallet.ice.io/stake');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalled();
     });
 
     it('should convert http:// to https://', async () => {
-      const result = await processSelfDeeplink('http://my.tt/stake');
+      const result = await processSelfDeeplink('http://wallet.ice.io/stake');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalled();
@@ -1095,7 +1095,8 @@ describe('View-only mode deeplink blocking', () => {
 
   describe('processDeeplink blocks dapp connector protocols', () => {
     it.each([
-      { name: 'TonConnect (tc://)', url: 'tc://some-dapp-request' },
+      { name: 'ION Gateway (tc://)', url: 'tc://some-dapp-request' },
+      { name: 'ION Gateway (ion-gateway://)', url: 'ion-gateway://some-dapp-request' },
       { name: 'WalletConnect (wc:)', url: 'wc:some-session-request' },
     ])('should block $name in view-only mode', async ({ url }) => {
       const result = await processDeeplink(url);

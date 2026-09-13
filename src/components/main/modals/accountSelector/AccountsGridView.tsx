@@ -60,9 +60,7 @@ function AccountsGridView({
     byChain: Account['byChain'],
     accountType: AccountType,
     title?: string,
-    isRecoveryRequired?: true,
   ) {
-    const { cardBackgroundNft } = settingsByAccountId?.[accountId] || {};
     const isActive = accountId === currentAccountId;
     const balanceData = balancesByAccountId[accountId];
 
@@ -76,9 +74,7 @@ function AccountsGridView({
         accountType={accountType}
         isActive={isActive}
         title={title}
-        isRecoveryRequired={isRecoveryRequired}
         balanceData={balanceData}
-        cardBackgroundNft={cardBackgroundNft}
         withContextMenu
         isSensitiveDataHidden={isSensitiveDataHidden}
         onClick={onSwitchAccount}
@@ -111,9 +107,8 @@ function AccountsGridView({
               title,
               byChain,
               type,
-              isRecoveryRequired,
             }]) => {
-              return renderCard(accountId, byChain, type, title, isRecoveryRequired);
+              return renderCard(accountId, byChain, type, title);
             },
           )}
         </div>

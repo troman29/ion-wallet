@@ -103,9 +103,7 @@ function AccountsListView({
             title,
             byChain,
             type,
-            isRecoveryRequired,
           }], index) => {
-            const { cardBackgroundNft } = settingsByAccountId?.[accountId] || {};
             const isCurrentAccount = accountId === currentAccountId;
             const balanceData = balancesByAccountId[accountId];
 
@@ -127,7 +125,6 @@ function AccountsListView({
               <AccountWalletItem
                 key={accountId}
                 isTestnet={isTestnet}
-                isRecoveryRequired={isRecoveryRequired}
                 accountId={accountId}
                 byChain={byChain}
                 visibleChains={visibleChainsByAccountId?.[accountId]}
@@ -135,7 +132,6 @@ function AccountsListView({
                 isSelected={isCurrentAccount}
                 title={title}
                 balanceData={balanceData}
-                cardBackgroundNft={cardBackgroundNft}
                 withContextMenu={!isReorder}
                 isSensitiveDataHidden={isSensitiveDataHidden}
                 onClick={onSwitchAccount}

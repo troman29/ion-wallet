@@ -3,8 +3,7 @@ import './auth';
 import type { GlobalState } from '../../types';
 import { AppState, AuthState } from '../../types';
 
-import { callApi } from '../../../api';
-import { enclave, legacyAuth } from '../../../enclave';
+import { enclave } from '../../../enclave';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
 
 jest.mock('../../index', () => ({
@@ -19,7 +18,6 @@ jest.mock('../../../api', () => ({
 }));
 
 jest.mock('../../../enclave', () => ({
-  ...jest.requireActual('../../../enclave/legacy/migration'),
   enclave: {
     setupAuth: jest.fn(),
     authorize: jest.fn(),
@@ -30,11 +28,6 @@ jest.mock('../../../enclave', () => ({
     importSecret: jest.fn(),
     duplicateSecret: jest.fn(),
     migrateAuth: jest.fn(),
-  },
-  legacyAuth: {
-    migrateFromLegacy: jest.fn(),
-    migrateFromLegacyBiometric: jest.fn(),
-    getPasswordFromLegacyBiometrics: jest.fn(),
   },
 }));
 
@@ -47,8 +40,6 @@ function getHandler(name: string): ActionHandler {
 
 const ACCOUNT_ID = '0-ton-mainnet';
 const PASSWORD = '123456';
-const MNEMONIC = 'plastic burst injury easily panther auto snack call volume humor ritual thrive'.split(' ');
-
 function makeGlobal(overrides: Partial<GlobalState>): GlobalState {
   return {
     auth: {},
@@ -96,14 +87,6 @@ describe('add-account routing', () => {
     expect(result.auth.state).toBe(AuthState.importWalletCheckPassword);
   });
 
-  // Accounts exist but `authTypes` is empty: the user still lives on legacy auth and has a password.
-  // Offering to create a new one strands the legacy secrets outside the Enclave.
-  it('asks a not-yet-migrated user for the existing password instead of creating a new one', async () => {
-    const result = await run('startImportingWallet', makeGlobal({}));
-
-    expect(result.auth.state).toBe(AuthState.importWalletCheckPassword);
-  });
-
   it('shows the password screen inside the auth flow when creating a wallet', async () => {
     const result = await run('startCreatingWallet', makeGlobal({ authTypes: ['passcode'] }));
 
@@ -123,14 +106,6 @@ describe('add-account routing', () => {
 
     expect(result.auth.state).toBe(AuthState.safetyRules);
     expect(actions.createAccount).toHaveBeenCalled();
-  });
-
-  it('does not offer to create a password to a not-yet-migrated user after the mnemonic is entered', async () => {
-    const actions = { confirmDisclaimer: jest.fn() };
-    const result = await run('afterImportMnemonic', makeGlobal({}), actions, { mnemonic: MNEMONIC });
-
-    expect(result.auth.state).toBeUndefined();
-    expect(actions.confirmDisclaimer).toHaveBeenCalled();
   });
 });
 
@@ -268,94 +243,5 @@ describe('auth setup over existing storage', () => {
 
     expect(result.auth.error).toBe('Biometric confirmation failed.');
     expect(result.auth.isLoading).toBe(false);
-  });
-});
-
-/**
- * The screen that starts a migration sets a guard and has no way to await the action, so it waits for
- * one of the callbacks. A throw that escapes a handler leaves that guard set and every later submit,
- * biometric tap and retry returns at it, until the screen is closed and opened again.
- */
-describe('a migration handler always answers', () => {
-  const CONFIG = { kind: 'native-biometrics' } as const;
-  const SESSION = { token: 'passcode:stub' };
-  const MIGRATED = {
-    session: SESSION,
-    privateKeyAccountIds: [],
-    migratedAccountIds: [ACCOUNT_ID],
-    unreadableAccountIds: [],
-  };
-
-  const globalState = makeGlobal({});
-  // Resolved before any `clearAllMocks`, which would drop the registrations made at import time
-  const migrateBiometric = getHandler('migrateLegacyBiometricAuth');
-  const migratePasscode = getHandler('migrateLegacyAuth');
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (getGlobal as jest.Mock).mockReturnValue(globalState);
-    (legacyAuth.getPasswordFromLegacyBiometrics as jest.Mock).mockResolvedValue(PASSWORD);
-    (legacyAuth.migrateFromLegacy as jest.Mock).mockResolvedValue(MIGRATED);
-    (callApi as jest.Mock).mockResolvedValue([{ accountId: ACCOUNT_ID, mnemonicEncrypted: 'x' }]);
-  });
-
-  it('reports a rejected second auth instead of leaving the caller waiting', async () => {
-    (enclave.migrateAuth as jest.Mock).mockRejectedValue(
-      Object.assign(new Error('Enclave: session is spent'), { code: 'session_expired' }),
-    );
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
-
-    await migrateBiometric(globalState, {}, {
-      legacyAuthConfig: CONFIG, isLongSession: false, onSuccess, onError,
-    });
-
-    expect(onSuccess).not.toHaveBeenCalled();
-    expect(onError).toHaveBeenCalledWith(expect.objectContaining({
-      kind: 'dialog',
-      errorCode: expect.stringContaining('mig-secondAuth-session_expired'),
-    }));
-  });
-
-  // The step before the migration owns its own prompt, and dismissing that one stops it just as squarely
-  it('reports a dismissed biometric prompt from the legacy store', async () => {
-    (legacyAuth.getPasswordFromLegacyBiometrics as jest.Mock).mockRejectedValue(
-      Object.assign(new Error('The operation was not allowed'), { name: 'NotAllowedError' }),
-    );
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
-
-    await migrateBiometric(globalState, {}, {
-      legacyAuthConfig: CONFIG, isLongSession: false, onSuccess, onError,
-    });
-
-    expect(onSuccess).not.toHaveBeenCalled();
-    expect(onError).toHaveBeenCalledWith({ kind: 'silent' });
-  });
-
-  it('reports a throw on the passcode path', async () => {
-    (callApi as jest.Mock).mockRejectedValue(new Error('bridge is gone'));
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
-
-    await migratePasscode(globalState, {}, {
-      password: PASSWORD, isLongSession: false, onSuccess, onError,
-    });
-
-    expect(onSuccess).not.toHaveBeenCalled();
-    expect(onError).toHaveBeenCalledTimes(1);
-  });
-
-  it('answers exactly once when everything works', async () => {
-    (enclave.migrateAuth as jest.Mock).mockResolvedValue({ token: 'biometric:stub' });
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
-
-    await migrateBiometric(globalState, {}, {
-      legacyAuthConfig: CONFIG, isLongSession: false, onSuccess, onError,
-    });
-
-    expect(onError).not.toHaveBeenCalled();
-    expect(onSuccess).toHaveBeenCalledWith('biometric:stub');
   });
 });

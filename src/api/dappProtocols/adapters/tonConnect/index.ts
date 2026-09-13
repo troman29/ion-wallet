@@ -1,15 +1,15 @@
 /**
- * TON Connect Protocol Adapter
+ * ION Gateway Protocol Adapter
  *
- * Implements DappProtocolAdapter for TON Connect protocol.
- * This adapter wraps the existing TON Connect implementation to conform
+ * Implements DappProtocolAdapter for ION Gateway.
+ * This adapter retains the legacy-compatible implementation to conform
  * to the unified dApp protocol interface.
  *
  * Key responsibilities:
- * - Handle TON Connect connection requests
+ * - Handle ION Gateway connection requests
  * - Process sendTransaction and signData requests
  * - Manage SSE bridge connections
- * - Convert between TON Connect types and unified types
+ * - Convert between ION Gateway types and unified types
  */
 
 import { Cell } from '@ton/core';
@@ -72,9 +72,9 @@ import { parseAccountId } from '../../../../util/account';
 import { areDeepEqual } from '../../../../util/areDeepEqual';
 import { bigintDivideToNumber } from '../../../../util/bigint';
 import {
-  TONCONNECT_PROTOCOL,
-  TONCONNECT_PROTOCOL_SELF,
-  TONCONNECT_UNIVERSAL_URL,
+  ION_GATEWAY_PROTOCOL,
+  ION_GATEWAY_PROTOCOL_SELF,
+  ION_GATEWAY_UNIVERSAL_URL,
 } from '../../../../util/deeplink/constants';
 import { fetchJsonWithProxy, handleFetchErrors } from '../../../../util/fetch';
 import { getDappConnectionUniqueId } from '../../../../util/getDappConnectionUniqueId';
@@ -158,7 +158,7 @@ type SseDapp = {
 } & ApiSseOptions;
 
 /**
- * TON Connect protocol adapter.
+ * ION Gateway protocol adapter.
  */
 class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConnect> {
   readonly protocolType = DappProtocolType.TonConnect;
@@ -787,9 +787,9 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
   // ---------------------------------------------------------------------------
 
   canHandleDeepLink(url: string): boolean {
-    return url.startsWith(TONCONNECT_PROTOCOL)
-      || url.startsWith(TONCONNECT_PROTOCOL_SELF)
-      || omitProtocol(url).startsWith(omitProtocol(TONCONNECT_UNIVERSAL_URL));
+    return url.startsWith(ION_GATEWAY_PROTOCOL)
+      || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
+      || omitProtocol(url).startsWith(omitProtocol(ION_GATEWAY_UNIVERSAL_URL));
   }
 
   async handleDeepLink(
@@ -868,7 +868,7 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
     if (!connectRequest) {
       this.onUpdate({
         type: 'showError',
-        error: 'Invalid TON Connect link',
+        error: 'Invalid ION Gateway link',
       });
 
       return undefined;

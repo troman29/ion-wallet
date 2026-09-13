@@ -48,18 +48,16 @@ export const PRODUCTION_URL = 'https://wallet.ice.io';
 export const BETA_URL = 'https://beta.wallet.ice.io';
 // Beta desktop auto-update feed base. This is BOTH the staging gate poll base and the value baked
 // into app-update.yml by the generic electron-builder provider - the two must agree.
-export const BETA_UPDATE_URL = 'https://s3.mywallet.io/public/desktop-beta';
-// The pre-rebrand host still serves this very build - it is an extra domain of the same site, kept alive because
-// outdated desktop clients poll it for update manifests. Listed explicitly rather than derived by negating
-// PRODUCTION_URL, which would also match self-hosted installations.
-export const LEGACY_APP_HOSTS = ['mytonwallet.app'];
+export const BETA_UPDATE_URL = 'https://s3.wallet.ice.io/public/desktop-beta';
+// Legacy brand hosts are intentionally not recognised by this build.
+export const LEGACY_APP_HOSTS: string[] = [];
 // Where a legacy-host visitor is nudged to continue on the current brand. Opened via a plain anchor or `window.open`,
-// never `openUrl`: `SUBPROJECT_URL_MASK` treats every `*.mywallet.io` host as a subproject, so `openUrl` would append
+// never `openUrl`: `SUBPROJECT_URL_MASK` treats every `*.wallet.ice.io` host as a subproject, so `openUrl` would append
 // the wallet context (addresses included) and open it in the in-app iframe browser - where the site renders blank
 // under `X-Frame-Options: Deny`. `utm_source` attributes the migrated traffic.
 export const NEW_APP_URL = `${PRODUCTION_URL}?utm_source=legacy_web`;
 export const APP_INSTALL_URL = 'https://wallet.ice.io/download';
-export const APP_REPO_URL = 'https://github.com/mytonwallet-org/mytonwallet';
+export const APP_REPO_URL = 'https://wallet.ice.io';
 export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
 export const APP_WEBSITE_URL = 'https://wallet.ice.io';
 export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
@@ -67,7 +65,7 @@ export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
 // GitHub workflow uses an empty string as the default value if it's not in repository variables, so we cannot define a default value here
 export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
 
-export const BOT_USERNAME = process.env.BOT_USERNAME || 'MyTonWalletBot';
+export const BOT_USERNAME = process.env.BOT_USERNAME || 'IONWalletBot';
 
 export const SWAP_FEE_ADDRESS = process.env.SWAP_FEE_ADDRESS || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
 
@@ -77,13 +75,11 @@ export const DEBUG_ALERT_MSG = 'Shoot!\nSomething went wrong, please see the err
 
 export const PIN_LENGTH = 4;
 
-/** If true, legacy auth data (mnemonicEncrypted, authConfig) will be removed after migration to Enclave */
-export const SHOULD_CLEANUP_LEGACY_AUTH = false;
 export const NATIVE_BIOMETRICS_PROMPT_KEY = 'confirm an action in ION Wallet';
 // Keychain and Keystore address the stored secret by this pair, so changing either orphans
 // the credentials already saved on the device
-export const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';
-export const NATIVE_BIOMETRICS_SERVER = 'https://mytonwallet.app';
+export const NATIVE_BIOMETRICS_USERNAME = 'IONWallet';
+export const NATIVE_BIOMETRICS_SERVER = 'https://wallet.ice.io';
 
 export const MNEMONIC_COUNT = 24;
 export const MNEMONIC_COUNTS = [12, 24];
@@ -115,7 +111,7 @@ export const WHOLE_PART_DELIMITER = ' '; // https://www.compart.com/en/unicode
 export const DEFAULT_SLIPPAGE_VALUE = 5;
 
 export const GLOBAL_STATE_CACHE_DISABLED = false;
-export const GLOBAL_STATE_CACHE_KEY = 'mytonwallet-global-state';
+export const GLOBAL_STATE_CACHE_KEY = 'ionwallet-global-state';
 
 export const ANIMATION_LEVEL_MIN = 0;
 export const ANIMATION_LEVEL_MED = 1;
@@ -126,20 +122,20 @@ export const THEME_DEFAULT = 'system';
 export const MAIN_ACCOUNT_ID = '0-ton-mainnet';
 export const TEMPORARY_ACCOUNT_NAME = 'Wallet';
 
-export const TONCENTER_MAINNET_URL = process.env.TONCENTER_MAINNET_URL || 'https://toncenter.mytonwallet.org';
+export const TONCENTER_MAINNET_URL = process.env.TONCENTER_MAINNET_URL || 'https://toncenter.wallet.ice.io';
 export const TONCENTER_MAINNET_KEY = process.env.TONCENTER_MAINNET_KEY;
 export const ELECTRON_TONCENTER_MAINNET_KEY = process.env.ELECTRON_TONCENTER_MAINNET_KEY;
-export const TONAPIIO_MAINNET_URL = process.env.TONAPIIO_MAINNET_URL || 'https://tonapiio.mytonwallet.org';
+export const TONAPIIO_MAINNET_URL = process.env.TONAPIIO_MAINNET_URL || 'https://tonapiio.wallet.ice.io';
 
-export const TONCENTER_TESTNET_URL = process.env.TONCENTER_TESTNET_URL || 'https://toncenter-testnet.mytonwallet.org';
+export const TONCENTER_TESTNET_URL = process.env.TONCENTER_TESTNET_URL || 'https://toncenter-testnet.wallet.ice.io';
 export const TONCENTER_TESTNET_KEY = process.env.TONCENTER_TESTNET_KEY;
 export const ELECTRON_TONCENTER_TESTNET_KEY = process.env.ELECTRON_TONCENTER_TESTNET_KEY;
-export const TONAPIIO_TESTNET_URL = process.env.TONAPIIO_TESTNET_URL || 'https://tonapiio-testnet.mytonwallet.org';
+export const TONAPIIO_TESTNET_URL = process.env.TONAPIIO_TESTNET_URL || 'https://tonapiio-testnet.wallet.ice.io';
 
-export const BRILLIANT_API_BASE_URL = process.env.BRILLIANT_API_BASE_URL || 'https://api.mywallet.io';
-export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api.mywallet.io/proxy';
+export const BRILLIANT_API_BASE_URL = process.env.BRILLIANT_API_BASE_URL || 'https://api.wallet.ice.io';
+export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api.wallet.ice.io/proxy';
 export const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
-export const SSE_BRIDGE_URL = 'https://tonconnectbridge.mytonwallet.org/bridge/';
+export const SSE_BRIDGE_URL = 'https://tonconnectbridge.wallet.ice.io/bridge/';
 
 export const TON_CONNECT_ANALYTICS_URL = 'https://analytics.ton.org';
 
@@ -160,37 +156,27 @@ export const WALLET_CONNECT_PAY_FRAME_ORIGINS = [
 export const WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID || '';
 export const WALLET_CONNECT_PAY_APP_ID = process.env.WALLET_CONNECT_PAY_APP_ID || '';
 
-export const EVM_MAINNET_RPC_URL = process.env.EVM_MAINNET_RPC_URL || 'https://evmapi.mytonwallet.org';
-export const EVM_TESTNET_RPC_URL = process.env.EVM_TESTNET_RPC_URL || 'https://evmapi-testnet.mytonwallet.org';
+export const EVM_MAINNET_RPC_URL = process.env.EVM_MAINNET_RPC_URL || 'https://evmapi.wallet.ice.io';
+export const EVM_TESTNET_RPC_URL = process.env.EVM_TESTNET_RPC_URL || 'https://evmapi-testnet.wallet.ice.io';
 
 export const FRACTION_DIGITS = 9;
 export const SHORT_FRACTION_DIGITS = 2;
 
 export const MAX_PUSH_NOTIFICATIONS_ACCOUNT_COUNT = 3;
 
-export const SUPPORT_USERNAME = 'mysupport';
-export const MW_NEWS_CHANNEL_NAME: Partial<Record<LangCode, string>> = {
-  en: 'MyWalletEng',
-  ru: 'MyWalletRus',
-};
-export const MW_TIPS_CHANNEL_NAME: Partial<Record<LangCode, string>> = {
-  en: 'MyWalletTips',
-  ru: 'MyWalletTipsRu',
-};
 export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
   getgems: 'Getgems',
   fragment: 'Fragment',
   opensea: 'OpenSea',
 };
-export const MW_STATIC_BASE_URL = 'https://static.mytonwallet.org';
-export const MW_CARDS_BASE_URL = `${MW_STATIC_BASE_URL}/cards/v2/cards/`;
-export const APP_PROMO_URL = 'https://mywallet.io/';
-export const APP_WEBSITE_HOST = 'mywallet.io';
-export const APP_TERMS_OF_USE_URL = 'https://mywallet.io/terms-of-use';
-export const APP_PRIVACY_POLICY_URL = 'https://mywallet.io/privacy-policy';
+export const MW_STATIC_BASE_URL = 'https://static.wallet.ice.io';
+export const APP_PROMO_URL = 'https://wallet.ice.io/';
+export const APP_WEBSITE_HOST = 'wallet.ice.io';
+export const APP_TERMS_OF_USE_URL = 'https://wallet.ice.io/terms-of-use';
+export const APP_PRIVACY_POLICY_URL = 'https://wallet.ice.io/privacy-policy';
 export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {
-  en: 'https://mywallet.io/en/blog/',
-  ru: 'https://mywallet.io/ru/blog/',
+  en: 'https://wallet.ice.io/en/blog/',
+  ru: 'https://wallet.ice.io/ru/blog/',
 };
 
 export const NFT_MARKETPLACE_URL = 'https://opensea.io/';
@@ -208,7 +194,7 @@ export const IFRAME_WHITELIST = [
   'https://tonviewer.com',
   'https://testnet.tonviewer.com',
 ];
-export const SUBPROJECT_URL_MASK = 'https://*.mywallet.io';
+export const SUBPROJECT_URL_MASK = 'https://*.wallet.ice.io';
 
 export const CEX_WAITING_DEADLINE = 3 * 60 * 60 * 1000; // 3 hours
 
@@ -301,7 +287,7 @@ export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
  *
  * What stays is a plain wallet: accounts, transfers, tokens, activities, NFTs, domains and TON Connect.
  * Swap, staking, WalletConnect, the explore catalogue, portfolio history, push notifications, legacy
- * (pre-Enclave) auth, the Agent, encrypted comments and the receive-screen backgrounds all go — their
+ * (pre-Enclave) auth, encrypted comments and the receive-screen backgrounds all go — their
  * methods leave the dispatch table and their modules leave the bundle.
  *
  * `NO_LEDGER` stays a separate axis: hardware wallet support is orthogonal to the extras.
@@ -321,14 +307,13 @@ export const MIN_ACTIVE_STAKING_REWARDS = 100_000_000n; // 0.1 MY
 export const STAKING_SLUG_PREFIX = 'staking-';
 
 export const TONCONNECT_PROTOCOL_VERSION = 2;
-export const TONCONNECT_WALLET_JSBRIDGE_KEY = 'mytonwallet';
+export const TONCONNECT_WALLET_JSBRIDGE_KEY = 'ionwallet';
 export const EMBEDDED_DAPP_BRIDGE_CHANNEL = 'embedded-dapp-bridge';
 
 export const NFT_FRAGMENT_COLLECTIONS = [
   '0:0e41dc1dc3c9067ed24248580e12b3359818d83dee0304fabcf80845eafafdb2', // Anonymous Telegram Numbers
   '0:80d78a35f955a14b679faa887ff4cd5bfc0f43b4a4eea2a7e6927f3701b273c2', // Telegram Usernames
 ];
-export const MW_CARDS_COLLECTION = 'EQCQE2L9hfwx1V8sgmF9keraHx1rNK9VmgR1ctVvINBGykyM';
 
 export const TON_DNS_RENEWAL_WARNING_DAYS = 14;
 export const TON_DNS_RENEWAL_NFT_WARNING_DAYS = 30;
@@ -363,7 +348,7 @@ export const ETHENA_ELIGIBILITY_CHECK_URL = 'https://t.me/id_app/start?startapp=
 export const STON_PTON_ADDRESS = 'EQCM3B12QK1e4yZSf8GtBRT0aLMNyEsBc_DhVfRRtOEffLez';
 export const STON_PTON_SLUG = 'ton-eqcm3b12qk';
 
-export const DNS_IMAGE_GEN_URL = 'https://dns-image.mytonwallet.org/img?d=';
+export const DNS_IMAGE_GEN_URL = 'https://dns-image.wallet.ice.io/img?d=';
 
 export const TON_USDT_MAINNET = {
   name: 'Tether USD',
@@ -372,7 +357,7 @@ export const TON_USDT_MAINNET = {
   slug: 'ton-eqcxe6mutq',
   decimals: 6,
   tokenAddress: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
-  image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
+  image: 'https://imgproxy.wallet.ice.io/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
   label: 'ION',
   priceUsd: 1,
 } as const;
@@ -407,7 +392,7 @@ export const TON_TSUSDE = {
 
 /**
  * The display names this fork insists on, whatever the backend answers. The wallet still reads the
- * token list from MyTonWallet's backend, which calls the native coin Gram; until ION serves its own
+ * token list from IONWallet's backend, which calls the native coin Gram; until ION serves its own
  * list, the rebranded names would be overwritten on every poll.
  */
 export const TOKEN_NAME_OVERRIDES: Record<string, { name: string; symbol: string }> = {
@@ -434,7 +419,7 @@ export const BSC_USDT_MAINNET = {
   slug: 'bnb-0x55d39832',
   tokenAddress: '0x55d398326f99059ff775485246999027b3197955',
   label: 'BEP-20',
-  image: 'https://imgproxy.mytonwallet.org/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
+  image: 'https://imgproxy.wallet.ice.io/imgproxy/T3PB4s7oprNVaJkwqbGg54nexKE0zzKhcrPv8jcWYzU/rs:fill:200:200:1/g:no/aHR0cHM6Ly90ZXRoZXIudG8vaW1hZ2VzL2xvZ29DaXJjbGUucG5n.webp',
   priceUsd: 1,
 } as const;
 
@@ -495,14 +480,14 @@ export const INDEXED_DB_NAME = 'keyval-store';
 export const INDEXED_DB_STORE_NAME = 'keyval';
 
 export const WINDOW_PROVIDER_CHANNEL = 'windowProvider';
-export const WINDOW_PROVIDER_PORT = 'MyWallet_popup_reversed';
+export const WINDOW_PROVIDER_PORT = 'IONWallet_popup_reversed';
 
 export const PORTRAIT_MIN_ASSETS_TAB_VIEW = 6;
 
 export const DEFAULT_PRICE_CURRENCY = 'USD';
 export const CURRENCIES: Record<
   ApiBaseCurrency,
-  // Get the fallback rates at https://api.mywallet.io/currency-rates
+  // Get the fallback rates at https://api.wallet.ice.io/currency-rates
   { name: string; decimals: number; shortSymbol?: string; shortSymbolPosition?: 'start' | 'end'; fallbackRate: string }
 > = {
   USD: {
@@ -664,20 +649,20 @@ export const JVAULT_URL = 'https://jvault.xyz';
 
 export const HELP_CENTER_URL = {
   home: {
-    en: 'https://help.mywallet.io/',
-    ru: 'https://help.mywallet.io/ru',
+    en: 'https://help.wallet.ice.io/',
+    ru: 'https://help.wallet.ice.io/ru',
   },
   domainScam: {
-    en: 'https://help.mywallet.io/intro/scams/.ton-domain-scams',
-    ru: 'https://help.mywallet.io/ru/baza-znanii/moshennichestvo-i-skamy/moshennichestvo-s-ispolzovaniem-domenov-.ton',
+    en: 'https://help.wallet.ice.io/intro/scams/.ton-domain-scams',
+    ru: 'https://help.wallet.ice.io/ru/baza-znanii/moshennichestvo-i-skamy/moshennichestvo-s-ispolzovaniem-domenov-.ton',
   },
   seedScam: {
-    en: 'https://help.mywallet.io/intro/scams/leaked-seed-phrases',
-    ru: 'https://help.mywallet.io/ru/baza-znanii/moshennichestvo-i-skamy/slitye-sid-frazy',
+    en: 'https://help.wallet.ice.io/intro/scams/leaked-seed-phrases',
+    ru: 'https://help.wallet.ice.io/ru/baza-znanii/moshennichestvo-i-skamy/slitye-sid-frazy',
   },
   ethenaStaking: {
-    en: 'https://help.mywallet.io/intro/staking/what-is-usde-how-does-the-ethena-protocol-work',
-    ru: 'https://help.mywallet.io/ru/baza-znanii/steiking/chto-takoe-usde-kak-rabotaet-protokol-ethena',
+    en: 'https://help.wallet.ice.io/intro/staking/what-is-usde-how-does-the-ethena-protocol-work',
+    ru: 'https://help.wallet.ice.io/ru/baza-znanii/steiking/chto-takoe-usde-kak-rabotaet-protokol-ethena',
   },
 };
 

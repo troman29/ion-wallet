@@ -63,19 +63,19 @@ describe('getViewAccountUrl', () => {
     expect(getViewAccountUrl({
       bnb: TEST_EVM_ADDRESS,
       ton: TEST_TON_ADDRESS,
-    })).toBe(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&ton=${TEST_TON_ADDRESS}`);
+    })).toBe(`https://wallet.ice.io/view/?evm=${TEST_EVM_ADDRESS}&ton=${TEST_TON_ADDRESS}`);
   });
 
   it('should name a non-EVM chain by its own parameter', () => {
     expect(getViewAccountUrl({
       ton: TEST_TON_ADDRESS,
-    })).toBe(`https://my.tt/view/?ton=${TEST_TON_ADDRESS}`);
+    })).toBe(`https://wallet.ice.io/view/?ton=${TEST_TON_ADDRESS}`);
   });
 
   it('should keep testnet parameter after the collapsed EVM parameter', () => {
     expect(getViewAccountUrl({
       bnb: TEST_EVM_ADDRESS,
-    }, true)).toBe(`https://my.tt/view/?evm=${TEST_EVM_ADDRESS}&testnet=true`);
+    }, true)).toBe(`https://wallet.ice.io/view/?evm=${TEST_EVM_ADDRESS}&testnet=true`);
   });
 });
 

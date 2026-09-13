@@ -5,7 +5,6 @@ import { getActions, getGlobal } from '../../../global';
 import type { ApiChain, ApiNft } from '../../../api/types';
 import type { DropdownItem } from '../../ui/Dropdown';
 
-import { MW_CARDS_COLLECTION } from '../../../config';
 import { formatRelativeDays } from '../../../util/dateFormat';
 import { isDotTonDomainNft, isLinkableDnsNft, isRenewableDnsNft } from '../../../util/dns';
 import { compact } from '../../../util/iteratees';
@@ -23,8 +22,7 @@ import useLang from '../../../hooks/useLang';
 import useLastCallback from '../../../hooks/useLastCallback';
 
 export type NftMenuHandler = 'send' | 'tondns' | 'fragment' | 'marketplace' | 'explorer' | 'collection' | 'hide'
-  | 'unhide' | 'not_scam' | 'burn' | 'select' | 'installCard' | 'resetCard' | 'installAccentColor'
-  | 'resetAccentColor' | 'renew' | 'linkDomain' | 'shareLink';
+  | 'unhide' | 'not_scam' | 'burn' | 'select' | 'renew' | 'linkDomain' | 'shareLink';
 
 const ON_SALE_ITEM: DropdownItem<NftMenuHandler> = {
   name: 'Cannot be sent',
@@ -87,22 +85,6 @@ const SELECT_ITEM: DropdownItem<NftMenuHandler> = {
   value: 'select',
   withDelimiter: true,
 };
-const INSTALL_CARD: DropdownItem<NftMenuHandler> = {
-  name: 'Install Card',
-  value: 'installCard',
-};
-const RESET_CARD: DropdownItem<NftMenuHandler> = {
-  name: 'Reset Card',
-  value: 'resetCard',
-};
-const INSTALL_ACCENT_COLOR: DropdownItem<NftMenuHandler> = {
-  name: 'Apply Palette',
-  value: 'installAccentColor',
-};
-const RESET_ACCENT_COLOR: DropdownItem<NftMenuHandler> = {
-  name: 'Reset Palette',
-  value: 'resetAccentColor',
-};
 const LINK_TO_ADDRESS: DropdownItem<NftMenuHandler> = {
   name: 'Link to Wallet',
   value: 'linkDomain',
@@ -125,8 +107,6 @@ export default function useNftMenu({
   linkedAddress,
   isNftBlacklisted,
   isNftWhitelisted,
-  isNftInstalled,
-  isNftAccentColorInstalled,
   isTestnet,
 }: {
   nft?: ApiNft;
@@ -136,8 +116,6 @@ export default function useNftMenu({
   linkedAddress?: string;
   isNftBlacklisted?: boolean;
   isNftWhitelisted?: boolean;
-  isNftInstalled?: boolean;
-  isNftAccentColorInstalled?: boolean;
   isTestnet?: boolean;
 }) {
   const {
@@ -150,10 +128,6 @@ export default function useNftMenu({
     closeNftAttributesModal,
     openUnhideNftModal,
     openReportNftModal,
-    setCardBackgroundNft,
-    clearCardBackgroundNft,
-    installAccentColorFromNft,
-    clearAccentColorFromNft,
     openDomainRenewalModal,
     openDomainLinkingModal,
   } = getActions();
@@ -210,28 +184,6 @@ export default function useNftMenu({
         const url = `https://dns.ton.org/#${(nft!.name || '').replace(/\.ton$/i, '')}`;
 
         void openUrl(url, { isExternal });
-        break;
-      }
-
-      case 'installCard': {
-        setCardBackgroundNft({ nft: nft! });
-        installAccentColorFromNft({ nft: nft! });
-        break;
-      }
-
-      case 'resetCard': {
-        clearCardBackgroundNft();
-        clearAccentColorFromNft();
-        break;
-      }
-
-      case 'installAccentColor': {
-        installAccentColorFromNft({ nft: nft! });
-        break;
-      }
-
-      case 'resetAccentColor': {
-        clearAccentColorFromNft();
         break;
       }
 
@@ -315,11 +267,8 @@ export default function useNftMenu({
     const isDotTon = isDotTonDomainNft(nft);
     const isRenewable = isRenewableDnsNft(nft);
     const isLinkable = isLinkableDnsNft(nft);
-    const isCard = nft.collectionAddress === MW_CARDS_COLLECTION;
 
     return compact([
-      ...(isCard ? [!isNftInstalled ? INSTALL_CARD : RESET_CARD] : []),
-      ...(isCard ? [!isNftAccentColorInstalled ? INSTALL_ACCENT_COLOR : RESET_ACCENT_COLOR] : []),
       isOnFragment && FRAGMENT_ITEM,
       !isViewMode && (isOnSale ? ON_SALE_ITEM : SEND_ITEM),
       !isViewMode && isLinkable && !isOnSale && (linkedAddress ? CHANGE_LINKED_ADDRESS : LINK_TO_ADDRESS),
@@ -344,7 +293,7 @@ export default function useNftMenu({
     ]);
   }, [
     nft, isViewMode, isWidget, dnsExpireInDays, lang, linkedAddress, isNftBlacklisted,
-    isNftWhitelisted, isNftInstalled, isNftAccentColorInstalled,
+    isNftWhitelisted,
   ]);
 
   return { menuItems, handleMenuItemSelect };

@@ -119,18 +119,18 @@ describe('node-file storage', () => {
   });
 
   it('should resolve profile-backed storage into a durable home-directory path', async () => {
-    const storage = createNodeFileStorage({ type: 'nodeFile', profile: 'mywallet' });
+    const storage = createNodeFileStorage({ type: 'nodeFile', profile: 'ionwallet' });
 
     await storage.getItem('accounts');
 
-    expect(readFileMock).toHaveBeenCalledWith(resolveDefaultNodeFileStoragePath('mywallet'), 'utf8');
+    expect(readFileMock).toHaveBeenCalledWith(resolveDefaultNodeFileStoragePath('ionwallet'), 'utf8');
   });
 
   it('should expand ${HOME} placeholders in explicit storage paths', async () => {
-    const storage = createNodeFileStorage({ type: 'nodeFile', path: '${HOME}/.mywallet/custom/storage.json' });
+    const storage = createNodeFileStorage({ type: 'nodeFile', path: '${HOME}/.ionwallet/custom/storage.json' });
 
     await storage.getItem('accounts');
 
-    expect(readFileMock).toHaveBeenCalledWith(`${homedir()}/.mywallet/custom/storage.json`, 'utf8');
+    expect(readFileMock).toHaveBeenCalledWith(`${homedir()}/.ionwallet/custom/storage.json`, 'utf8');
   });
 });

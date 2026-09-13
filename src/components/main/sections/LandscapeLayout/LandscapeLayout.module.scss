@@ -18,7 +18,7 @@
   flex-direction: column;
 
   // Mirrors the scrollbar gutter that `LandscapeWalletOverview`'s outer scroll
-  // container reserves, so Agent/Explore content right edge aligns with
+  // container reserves, so Explore content right edge aligns with
   // Activities at narrow viewports (no-op once max-width caps the box).
   width: calc(100% - var(--scrollbar-width));
   max-width: v.$landscapeMainContentMaxWidth;

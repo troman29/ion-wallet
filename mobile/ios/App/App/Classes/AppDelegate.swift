@@ -5,8 +5,14 @@ import FirebaseMessaging
 
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    private var hasFirebaseConfiguration: Bool {
+        Bundle.main.object(forInfoDictionaryKey: "GOOGLE_APP_ID") as? String != "1:000000000000:ios:0000000000000001"
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
+        if hasFirebaseConfiguration {
+            FirebaseApp.configure()
+        }
         return true
     }
 
@@ -21,6 +27,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        guard hasFirebaseConfiguration else {
+            return
+        }
+
         Messaging.messaging().apnsToken = deviceToken
         Messaging.messaging().token(completion: { (token, error) in
             if let error = error {

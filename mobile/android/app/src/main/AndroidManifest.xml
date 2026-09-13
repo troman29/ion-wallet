@@ -38,7 +38,7 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
 
-        <data android:scheme="@string/ton_url_scheme" />
+        <data android:scheme="@string/ion_url_scheme" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -46,7 +46,7 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
 
-        <data android:scheme="@string/tc_url_scheme" />
+        <data android:scheme="@string/ion_gateway_url_scheme" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -54,7 +54,7 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
 
-        <data android:scheme="@string/app_tc_url_scheme" />
+        <data android:scheme="@string/app_ion_gateway_url_scheme" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />

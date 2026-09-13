@@ -1,17 +1,14 @@
 import React, { useLayoutEffect, useRef } from '../../../../lib/teact/teact';
 
-import type { ApiChain, ApiNft } from '../../../../api/types';
+import type { ApiChain } from '../../../../api/types';
 import type { Account, AccountType } from '../../../../global/types';
 import type { Layout } from '../../../../hooks/useMenuPosition';
 
 import buildClassName from '../../../../util/buildClassName';
-import buildStyle from '../../../../util/buildStyle';
 import { getOrderedAccountChains } from '../../../../util/chain';
 import { formatAccountAddresses } from '../../../../util/formatAccountAddress';
 import { OPEN_CONTEXT_MENU_CLASS_NAME } from './constants';
 
-import { useCachedImage } from '../../../../hooks/useCachedImage';
-import useCardCustomization from '../../../../hooks/useCardCustomization';
 import { useDeviceScreen } from '../../../../hooks/useDeviceScreen';
 import useFontScale from '../../../../hooks/useFontScale';
 import useLang from '../../../../hooks/useLang';
@@ -20,10 +17,8 @@ import useWindowSize from '../../../../hooks/useWindowSize';
 import useAccountContextMenu from './hooks/useAccountContextMenu';
 
 import DropdownMenu from '../../../ui/DropdownMenu';
-import IconWithTooltip from '../../../ui/IconWithTooltip';
 import MenuBackdrop from '../../../ui/MenuBackdrop';
 import SensitiveData from '../../../ui/SensitiveData';
-import getSensitiveDataMaskSkinFromCardNft from '../../sections/Card/helpers/getSensitiveDataMaskSkinFromCardNft';
 
 import styles from './AccountWalletCard.module.scss';
 
@@ -35,13 +30,11 @@ interface OwnProps {
   visibleChains?: ApiChain[];
   accountType: AccountType;
   title?: string;
-  isRecoveryRequired?: true;
   balanceData?: {
     wholePart: string;
     fractionPart?: string;
     currencySymbol: string;
   };
-  cardBackgroundNft?: ApiNft;
   withContextMenu?: boolean;
   isSensitiveDataHidden?: true;
   onClick: (accountId: string) => void;
@@ -60,9 +53,7 @@ function AccountWalletCard({
   visibleChains,
   accountType,
   title,
-  isRecoveryRequired,
   balanceData,
-  cardBackgroundNft,
   withContextMenu,
   isSensitiveDataHidden,
   onClick,
@@ -84,14 +75,6 @@ function AccountWalletCard({
   const isViewMode = accountType === 'view';
   const chains = visibleChains ?? getOrderedAccountChains(byChain);
   const formattedAddress = formatAccountAddresses(byChain, chains, 'x-small');
-
-  const {
-    backgroundImageUrl,
-    withTextGradient,
-    classNames: mwCardClassNames,
-  } = useCardCustomization(cardBackgroundNft);
-  const { imageUrl } = useCachedImage(backgroundImageUrl);
-  const sensitiveDataMaskSkin = getSensitiveDataMaskSkinFromCardNft(cardBackgroundNft);
 
   const handleRenameClick = useLastCallback(() => {
     onRename(accountId);
@@ -127,7 +110,6 @@ function AccountWalletCard({
   } = useAccountContextMenu(contentRef, {
     isPortrait,
     withContextMenu,
-    accountId,
     onReorderClick: onReorder,
     onRenameClick: handleRenameClick,
     onRemoveClick: handleRemoveClick,
@@ -149,8 +131,6 @@ function AccountWalletCard({
   const buttonClassName = buildClassName(
     styles.button,
     isActive && styles.current,
-    imageUrl && styles.customCard,
-    imageUrl && mwCardClassNames,
     isContextMenuOpen && OPEN_CONTEXT_MENU_CLASS_NAME,
   );
 
@@ -163,7 +143,6 @@ function AccountWalletCard({
       />
       <div ref={contentRef} className={styles.content}>
         <div
-          style={buildStyle(imageUrl && `--bg: url(${imageUrl})`)}
           className={buttonClassName}
           aria-label={lang('Switch Account')}
           role="button"
@@ -180,7 +159,6 @@ function AccountWalletCard({
               rows={3}
               cols={12}
               cellSize={8}
-              maskSkin={sensitiveDataMaskSkin}
               maskClassName={styles.balanceMask}
               className={styles.balanceWrapper}
               contentClassName={styles.balanceContent}
@@ -188,7 +166,7 @@ function AccountWalletCard({
             >
               <div
                 ref={balanceRef}
-                className={buildClassName(styles.accountBalance, 'rounded-font', withTextGradient && 'gradientText')}
+                className={buildClassName(styles.accountBalance, 'rounded-font')}
               >
                 {balanceData.currencySymbol.length === 1 && (
                   <span className={styles.currencySymbol}>{balanceData.currencySymbol}</span>
@@ -203,7 +181,7 @@ function AccountWalletCard({
               </div>
             </SensitiveData>
           )}
-          <div className={buildClassName(styles.accountAddressBlock, withTextGradient && 'gradientText')}>
+          <div className={buildClassName(styles.accountAddressBlock)}>
             {isTestnet && <i className="icon-testnet" aria-hidden />}
             {isHardware && <i className="icon-ledger" aria-hidden />}
             {isViewMode && <i className="icon-eye-filled" aria-hidden />}
@@ -219,15 +197,6 @@ function AccountWalletCard({
         {title && (
           <div className={styles.accountName}>
             {title}
-            {isRecoveryRequired && (
-              <IconWithTooltip
-                type="danger"
-                size="small"
-                message={lang('$enclave_recovery_required_tooltip')}
-                iconClassName={styles.recoveryIcon}
-                canHoverOnTooltip
-              />
-            )}
           </div>
         )}
         {withContextMenu && isContextMenuShown && (

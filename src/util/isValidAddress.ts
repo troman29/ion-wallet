@@ -30,8 +30,8 @@ export function getChainFromAddress(
   ));
 }
 
-export function isTonsiteAddress(address: string) {
+export function isIonsiteAddress(address: string) {
   address = address.trim().toLowerCase();
 
-  return address.startsWith('tonsite://') || address.startsWith('ion://');
+  return address.startsWith('ionsite://') || address.startsWith('ion://');
 }

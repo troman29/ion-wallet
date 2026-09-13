@@ -40,12 +40,12 @@ import { waitFor } from '../schedulers';
 import { isTelegramUrl } from '../url';
 import {
   CHECKIN_URL,
+  ION_GATEWAY_PROTOCOL,
+  ION_GATEWAY_PROTOCOL_SELF,
+  ION_GATEWAY_UNIVERSAL_URL,
   SELF_PROTOCOL,
   SELF_UNIVERSAL_URLS,
   TON_PROTOCOL,
-  TONCONNECT_PROTOCOL,
-  TONCONNECT_PROTOCOL_SELF,
-  TONCONNECT_UNIVERSAL_URL,
   WALLETCONNECT_DEEPLINK,
   WALLETCONNECT_PROTOCOL,
   WALLETCONNECT_UNIVERSAL_URLS,
@@ -130,7 +130,7 @@ export async function openDeeplinkOrUrl(
 ) {
   if (
     isTonDeeplink(url)
-    || isTonConnectDeeplink(url)
+    || isIonGatewayDeeplink(url)
     || isWalletConnectDeeplink(url)
     || isPaymentLink(url)
     || isSelfDeeplink(url)
@@ -464,10 +464,10 @@ function rawParseTonDeeplink(value?: string) {
   }
 }
 
-function isTonConnectDeeplink(url: string) {
-  return url.startsWith(TONCONNECT_PROTOCOL)
-    || url.startsWith(TONCONNECT_PROTOCOL_SELF)
-    || omitProtocol(url).startsWith(omitProtocol(TONCONNECT_UNIVERSAL_URL));
+function isIonGatewayDeeplink(url: string) {
+  return url.startsWith(ION_GATEWAY_PROTOCOL)
+    || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
+    || omitProtocol(url).startsWith(omitProtocol(ION_GATEWAY_UNIVERSAL_URL));
 }
 
 function isWalletConnectDeeplink(url: string) {
@@ -527,7 +527,7 @@ function extractWalletConnectUriQueryValue(encodedQuery: string): string | undef
 
 function getDappProtocolForDeeplink(url: string) {
   switch (true) {
-    case isTonConnectDeeplink(url): {
+    case isIonGatewayDeeplink(url): {
       return DappProtocolType.TonConnect;
     }
     case isWalletConnectDeeplink(url):

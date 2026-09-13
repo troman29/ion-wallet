@@ -20,7 +20,7 @@ describe('storage selection', () => {
   });
 
   it('should persist accounts and currentAccountId across fresh node-file storage instances', async () => {
-    const storageDir = await mkdtemp(join(tmpdir(), 'mywallet-storage-'));
+    const storageDir = await mkdtemp(join(tmpdir(), 'ionwallet-storage-'));
     const storagePath = join(storageDir, STORAGE_FILE_NAME);
     const accounts = {
       'ton-testnet-1': {

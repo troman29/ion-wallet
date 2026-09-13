@@ -30,7 +30,6 @@ coverage/
 src/i18n/en.json
 notarization-error.log
 .patch-version
-statoscope-reference.json
 mobile/ios/buildServer.json
 mobile/ios/Air/scripts/strings/.venv
 mobile/ios/App/App/Resources/Localizable.xcstrings

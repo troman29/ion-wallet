@@ -24,7 +24,7 @@ describe('Electron bundle identity', () => {
     // Electron reads `app.getName()` from the packaged package.json, which `extraMetadata` writes.
     // It resolves `~/Library/Application Support/<name>` (wallets live there) and the keychain entry
     // `<name> Safe Storage` (`secrets.ts`). Renaming it orphans both, with no migration path.
-    expect(config.extraMetadata.productName).toBe('MyTonWallet');
+    expect(config.extraMetadata.productName).toBe('IONWallet');
   });
 
   it('keeps the appId', () => {
@@ -36,7 +36,7 @@ describe('Electron bundle identity', () => {
   it('keeps the artifact filenames in sync with the release workflow', () => {
     // Renaming is safe for installed clients (feed and files ship together per release), but the
     // workflow finds electron-builder output by these names: ARTIFACT_NAME_BASE in
-    // package-and-publish.yml and the get.mywallet.io download page must move together with this.
+    // package-and-publish.yml and the get.wallet.ice.io download page must move together with this.
     // eslint-disable-next-line no-template-curly-in-string
     expect(config.artifactName).toBe('IONWallet-${arch}.${ext}');
   });

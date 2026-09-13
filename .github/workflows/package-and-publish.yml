@@ -52,7 +52,7 @@ concurrency:
 env:
   # Base of downloadable artifact filenames (dmg/exe/AppImage/apk). The user-visible
   # app name is NOT set here - it comes from `APP_NAME` in src/config.ts, and the
-  # TonConnect protocol identity stays 'IONWallet' via the mapping in
+  # ION Gateway protocol identity stays 'IONWallet' via the mapping in
   # src/util/tonConnectEnvironment.ts.
   # Must match `artifactName` in src/electron/config.yml (pinned by config.test.ts).
   ARTIFACT_NAME_BASE: IONWallet
@@ -172,7 +172,7 @@ jobs:
           # each mobile platform regardless of what the tip commit happens to touch. The filter
           # above reads HEAD~1..HEAD, which describes one commit rather than the push: on 26.9 an
           # Android-only commit landed last and took the whole iOS matrix down with it, leaving the
-          # Agent V1 restoration with no TestFlight build to verify it.
+          # release without an iOS build to verify it.
           if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
             ANDROID_ONLY="false"
             IOS_ONLY="false"
@@ -228,7 +228,7 @@ jobs:
       - name: Point staging electron-builder at the beta feed
         if: env.PUBLISH_REPO == ''
         run: |
-          yq -i '.publish = {"provider":"generic","url":"https://s3.mywallet.io/public/desktop-beta"} | .mac.artifactName = "IONWallet-${version}-${arch}.${ext}"' src/electron/config.yml
+          yq -i '.publish = {"provider":"generic","url":"https://s3.wallet.ice.io/public/desktop-beta"} | .mac.artifactName = "IONWallet-${version}-${arch}.${ext}"' src/electron/config.yml
           echo "Effective staging publish/artifactName:"
           yq '.publish, .mac.artifactName' src/electron/config.yml
 
@@ -864,7 +864,7 @@ jobs:
     needs: detect-changes
     runs-on: macos-26
     environment: production
-    # The mytonwallet variant takes 30+ minutes on slow runners; v26.7.1 needed 3 attempts against a 30-minute cap
+    # The ionwallet variant takes 30+ minutes on slow runners; v26.7.1 needed 3 attempts against a 30-minute cap
     timeout-minutes: 45
     if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' || (startsWith(github.ref, 'refs/heads/release/') && vars.PUBLISH_REPO == '')) && needs.detect-changes.outputs.android-only != 'true' && needs.detect-changes.outputs.ios-variants != '[]'
     strategy:

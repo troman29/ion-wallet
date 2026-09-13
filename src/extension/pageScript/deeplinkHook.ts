@@ -1,10 +1,10 @@
 import {
+  ION_GATEWAY_PROTOCOL,
+  ION_GATEWAY_PROTOCOL_SELF,
+  ION_GATEWAY_UNIVERSAL_URL,
   SELF_PROTOCOL,
   SELF_UNIVERSAL_URLS,
   TON_PROTOCOL,
-  TONCONNECT_PROTOCOL,
-  TONCONNECT_PROTOCOL_SELF,
-  TONCONNECT_UNIVERSAL_URL,
 } from '../../util/deeplink/constants';
 import { callApi } from '../../api/providers/extension/connectorForPageScript';
 
@@ -70,9 +70,9 @@ function isDeeplink(url: string) {
   return (
     url.startsWith(TON_PROTOCOL)
     || url.startsWith(SELF_PROTOCOL)
-    || url.startsWith(TONCONNECT_PROTOCOL)
-    || url.startsWith(TONCONNECT_PROTOCOL_SELF)
+    || url.startsWith(ION_GATEWAY_PROTOCOL)
+    || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
     || SELF_UNIVERSAL_URLS.some((universalUrl) => url.startsWith(universalUrl))
-    || url.startsWith(TONCONNECT_UNIVERSAL_URL)
+    || url.startsWith(ION_GATEWAY_UNIVERSAL_URL)
   );
 }

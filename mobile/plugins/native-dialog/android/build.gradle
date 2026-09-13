@@ -30,7 +30,7 @@ if (System.getenv("CAP_PLUGIN_PUBLISH") == "true") {
 }
 
 android {
-    namespace = "org.mytonwallet.plugins.nativedialog"
+    namespace = "io.ice.wallet.plugins.nativedialog"
     compileSdk = project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 36
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 24

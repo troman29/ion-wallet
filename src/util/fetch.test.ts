@@ -35,8 +35,8 @@ function setNegVerdictCacheFlag(enabled: boolean) {
   setBackendConfigCache({ isNegVerdictCacheEnabled: enabled } as unknown as ApiBackendConfig);
 }
 
-const BURN_URL = 'https://evmapi.mytonwallet.org/v1/wallets/0xdead/transactions/?page[size]=50';
-const OTHER_URL = 'https://evmapi.mytonwallet.org/v1/wallets/0xbeef/transactions/?page[size]=50';
+const BURN_URL = 'https://evmapi.wallet.ice.io/v1/wallets/0xdead/transactions/?page[size]=50';
+const OTHER_URL = 'https://evmapi.wallet.ice.io/v1/wallets/0xbeef/transactions/?page[size]=50';
 
 describe('classifyFetchFailure', () => {
   it.each([undefined, 408, 429, 500, 502, 503, 504])('treats %s as retryable', (status) => {
@@ -197,7 +197,7 @@ describe('fetchWithRetry negative-verdict cache', () => {
   it('does not cache non-evmapi origins even when enabled (scope is evmapi-only)', async () => {
     setNegVerdictCacheFlag(true);
     fetchMock.mockResolvedValue(mockResponse(400, { error: 'bad' }));
-    const nonEvmUrl = 'https://tonapiio.mytonwallet.org/v2/accounts/0xdead?x=1';
+    const nonEvmUrl = 'https://tonapiio.wallet.ice.io/v2/accounts/0xdead?x=1';
 
     await expect(fetchWithRetry(nonEvmUrl)).rejects.toMatchObject({ statusCode: 400 });
     await expect(fetchWithRetry(nonEvmUrl)).rejects.toMatchObject({ statusCode: 400 });

@@ -115,7 +115,7 @@ export class EvmConnect {
 
   constructor(private apiConnector: Connector) {
     const provider: EIP1193Provider = {
-      isMyTonWallet: true,
+      isIONWallet: true,
       request: (args) => this.request(args),
       on: (event, handler) => {
         this.addListener(event as Eip1193Event, handler);
@@ -610,7 +610,7 @@ export function initEvmConnect(apiConnector: Connector) {
       uuid: crypto.randomUUID(),
       name: APP_NAME,
       icon: `data:image/svg+xml,${encodeURIComponent(INJECTED_ICON)}`,
-      rdns: 'app.mywallet',
+      rdns: 'io.ice.wallet',
     },
     provider: evm.provider,
   });

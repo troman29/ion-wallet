@@ -2,7 +2,7 @@
 
 set -e
 
-rm -f MyWallet-firefox-sources.tgz
+rm -f IONWallet-firefox-sources.tgz
 
 COPYFILE_DISABLE=1 tar \
   --exclude='*.zip' \
@@ -17,6 +17,6 @@ COPYFILE_DISABLE=1 tar \
   --exclude=./mobile/android \
   --exclude=./mobile/ios \
   --exclude=./mobile/plugins/native-dialog/node_modules \
-  "$@" -cvzf /tmp/MyTonWallet-firefox-sources.tgz ./
+  "$@" -cvzf /tmp/IONWallet-firefox-sources.tgz ./
 
-mv /tmp/MyTonWallet-firefox-sources.tgz ./
+mv /tmp/IONWallet-firefox-sources.tgz ./

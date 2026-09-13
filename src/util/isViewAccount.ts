@@ -7,7 +7,7 @@ export default function isViewAccount(accountType?: AccountType) {
 }
 
 export function getIsViewAccountDisabled(account: Account) {
-  // A wallet whose stored secret the Enclave migration could not read has nothing to sign with, so the signing
+  // A view-only wallet has no signing key, so the signing
   // pickers treat it as watch-only instead of letting a person fill in a form that can only end on a refusal.
-  return isViewAccount(account.type) || !!account.isRecoveryRequired;
+  return isViewAccount(account.type);
 }

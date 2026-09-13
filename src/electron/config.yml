@@ -4,7 +4,7 @@ productName: "ION Wallet"
 copyright: "Copyright © 2026 ION Wallet Apps Ltd."
 # Pinned by config.test.ts: change ONLY together with ARTIFACT_NAME_BASE in
 # package-and-publish.yml (workflow artifact names must match electron-builder output) and the
-# get.mywallet.io download page. Renaming is safe for installed clients: the update feed
+# get.wallet.ice.io download page. Renaming is safe for installed clients: the update feed
 # (latest*.yml) and the files it points at are generated together into the same release, so old
 # clients download whatever name the new feed declares.
 artifactName: "IONWallet-${arch}.${ext}"
@@ -16,10 +16,10 @@ extraMetadata:
   # on Touch ID re-encrypts the wallet under a random password whose only copy is sealed by that
   # keychain entry, so losing the entry leaves the mnemonic undecryptable and the seed phrase the
   # only way back. No migration exists, and any other value - including deleting the key, which
-  # falls back to package.json `name` ("mytonwallet") - strands existing desktop wallets.
+  # falls back to package.json `name` ("ionwallet") - strands existing desktop wallets.
   # `CFBundleName` has no say in either path. The user-visible name is `productName` above, which
   # never reaches the packaged package.json and is safe to change. Enforced by `config.test.ts`.
-  productName: "MyTonWallet"
+  productName: "IONWallet"
 files:
   - "dist"
   - "package.json"
@@ -28,9 +28,6 @@ files:
   - "public/icon-electron-windows.ico"
   - "public/icon-electron-macos.icns"
   - "!dist/get"
-  - "!dist/**/statoscope-build-statistics.json"
-  - "!dist/**/statoscope-report.html"
-  - "!dist/**/statoscope-reference.json"
   - "!node_modules"
 directories:
   buildResources: "./public"
@@ -38,19 +35,17 @@ directories:
 protocols:
   - name: "ION Wallet"
     schemes: ["ion"]
-  - name: "TonConnect"
+  - name: "ION Gateway"
     schemes: ["tc"]
-  - name: "ION Wallet Connect"
-    schemes: ["ion-tc"]
+  - name: "ION Wallet ION Gateway"
+    schemes: ["ion-gateway"]
   - name: "WalletConnect"
     schemes: ["wc"]
   - name: "WalletConnect ION Wallet"
     schemes: ["ion-wc"]
 publish:
-  provider: "github"
-  owner: "mytonwallet-org"
-  repo: "mytonwallet"
-  releaseType: "draft"
+  provider: "generic"
+  url: "https://s3.wallet.ice.io/public/desktop"
 win:
   target:
     - target: "nsis"

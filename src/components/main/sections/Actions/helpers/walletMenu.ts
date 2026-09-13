@@ -4,16 +4,12 @@ import type { DropdownItem } from '../../../../ui/Dropdown';
 
 import { vibrate } from '../../../../../util/haptics';
 
-export type MenuHandler = 'rename' | 'customize' | 'remove';
+export type MenuHandler = 'rename' | 'remove';
 
 export const WALLET_CONTEXT_MENU_ITEMS: DropdownItem<MenuHandler>[] = [{
   name: 'Rename',
   fontIcon: 'menu-rename',
   value: 'rename',
-}, {
-  name: 'Customize',
-  fontIcon: 'menu-magic',
-  value: 'customize',
 }, {
   name: 'Remove',
   fontIcon: 'menu-trash',
@@ -26,19 +22,13 @@ export function handleWalletMenuItemClick(
   accountId: string,
   onRemove: (accountId: string) => void,
 ) {
-  const { openWalletRenameModal, switchAccount, openCustomizeWalletModal } = getActions();
+  const { openWalletRenameModal } = getActions();
 
   void vibrate();
 
   switch (value) {
     case 'rename':
       openWalletRenameModal({ accountId });
-      break;
-
-    case 'customize':
-      switchAccount({ accountId });
-      // There is no parent modal to return to
-      openCustomizeWalletModal({ returnTo: undefined });
       break;
 
     case 'remove':

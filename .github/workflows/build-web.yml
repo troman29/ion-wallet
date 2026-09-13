@@ -41,5 +41,5 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ vars.PUBLISH_REPO && 'mytonwallet.app' || 'beta.mytonwallet.app' }}
+          name: ${{ vars.PUBLISH_REPO && 'wallet.ice.io' || 'beta.wallet.ice.io' }}
           path: dist

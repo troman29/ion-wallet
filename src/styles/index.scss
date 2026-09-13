@@ -6,8 +6,6 @@
 
 @use "mixins";
 
-@use "mwCustomCard";
-
 @use "scssVariables" as v;
 
 // Self-hosted fonts for RTL languages (variable weight axis)
@@ -42,7 +40,6 @@ html, body {
 
   transition: background-color 350ms;
 
-  &.is-agent-active.with-bottombar,
   &.is-explore-active.with-bottombar {
     --color-app-background: var(--color-background-second);
 

@@ -13,14 +13,14 @@
     "ios/Plugin/",
     "CapacitorDialog.podspec"
   ],
-  "author": "MyTonWallet Team",
+  "author": "IONWallet Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mytonwalletorg/native-dialog.git"
+    "url": "https://wallet.ice.io"
   },
   "bugs": {
-    "url": "https://github.com/mytonwalletorg/native-dialog/issues"
+    "url": "https://wallet.ice.io"
   },
   "keywords": [
     "capacitor",

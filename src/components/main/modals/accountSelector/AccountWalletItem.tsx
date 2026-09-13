@@ -1,6 +1,6 @@
 import React, { type ElementRef, useRef } from '../../../../lib/teact/teact';
 
-import type { ApiChain, ApiNft } from '../../../../api/types';
+import type { ApiChain } from '../../../../api/types';
 import type { Account, AccountType } from '../../../../global/types';
 import type { AccountBalance } from '../../../../hooks/useAccountsBalances';
 import type { Layout } from '../../../../hooks/useMenuPosition';
@@ -23,14 +23,12 @@ import styles from './AccountWalletItem.module.scss';
 interface OwnProps {
   isSelected: boolean;
   isTestnet?: boolean;
-  isRecoveryRequired?: true;
   accountId: string;
   byChain: Account['byChain'];
   visibleChains?: ApiChain[];
   accountType: AccountType;
   title?: string;
   balanceData?: AccountBalance;
-  cardBackgroundNft?: ApiNft;
   withContextMenu?: boolean;
   isSensitiveDataHidden?: true;
   onClick: (accountId: string) => void;
@@ -51,14 +49,12 @@ const CONTEXT_MENU_VERTICAL_SHIFT_PX = 4;
 function AccountWalletItem({
   isSelected,
   isTestnet,
-  isRecoveryRequired,
   accountId,
   byChain,
   visibleChains,
   accountType,
   title,
   balanceData,
-  cardBackgroundNft,
   withContextMenu,
   isSensitiveDataHidden,
   onClick,
@@ -109,7 +105,6 @@ function AccountWalletItem({
   } = useAccountContextMenu(contentRef, {
     isPortrait,
     withContextMenu,
-    accountId,
     onReorderClick: onReorder,
     onRenameClick: handleRenameClick,
     onRemoveClick: handleRemoveClick,
@@ -168,9 +163,7 @@ function AccountWalletItem({
           accountType={accountType}
           title={title}
           isTestnet={isTestnet}
-          isRecoveryRequired={isRecoveryRequired}
           balanceData={balanceData}
-          cardBackgroundNft={cardBackgroundNft}
           isSensitiveDataHidden={isSensitiveDataHidden}
         />
       </div>
