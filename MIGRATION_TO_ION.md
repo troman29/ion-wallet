@@ -79,6 +79,8 @@
   - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
   - Для собственного ION Gateway-канала используется `ion-gateway://`. Стандартный входящий URI ION Gateway `tc://` сохранён для совместимости с официальным SDK; public links используют `wallet.ice.io`.
+- [x] Сохранить отдельный Capacitor WebView origin `https://ionwallet.local`.
+  - Это технический локальный origin native-обёртки; он не заменяет публичные Universal Links и App Links на `wallet.ice.io`.
 - [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
   - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
   - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.

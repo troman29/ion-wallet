@@ -33,8 +33,10 @@ const config: CapacitorConfig = {
   appName: APP_NAME,
   webDir: 'dist',
   server: {
+    // Native WebView origin. This is intentionally not the public website:
+    // Universal Links and App Links use wallet.ice.io independently.
     androidScheme: 'https',
-    hostname: 'wallet.ice.io',
+    hostname: 'ionwallet.local',
   },
   android: {
     path: 'mobile/android',
