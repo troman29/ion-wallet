@@ -278,6 +278,8 @@ export const NO_EVM = process.env.NO_EVM === '1';
  * indexer gains either.
  */
 export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
+/** Disables unavailable ION WebSockets; data uses HTTP polling. */
+export const NO_WEBSOCKET = process.env.NO_WEBSOCKET === '1';
 /**
  * Standalone SDK builds, embedded by third-party apps that ship their own UI, so nothing in the UI layer
  * reads this flag.

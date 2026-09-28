@@ -436,6 +436,7 @@ export default function createConfig(
         NO_TON: '0',
         NO_EVM: '0',
         NO_PENDING_ACTIVITIES: '0',
+        NO_WEBSOCKET: '0',
         NO_EXTRA_FEATURES: '0',
         NO_LEDGER: '0',
       }),

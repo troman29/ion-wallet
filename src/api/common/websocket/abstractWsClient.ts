@@ -1,6 +1,7 @@
 import type { SocketFinality } from '../../chains/ton/toncenter/types';
 import type { ApiActivity, ApiChain } from '../../types';
 
+import { NO_WEBSOCKET } from '../../../config';
 import ReconnectingWebSocket from '../../../util/reconnectingWebsocket';
 import { throttle } from '../../../util/schedulers';
 
@@ -164,6 +165,11 @@ export abstract class AbstractWebsocketClient<
    *  - Avoid reconnecting the socket when watched addresses arrive shortly after stopping watching all addresses.
    */
   #actualizeSocket = throttle(() => {
+    // Watchers stay active so their callers use HTTP polling.
+    if (NO_WEBSOCKET) {
+      return;
+    }
+
     if (this.#doesHaveWatchedAddresses()) {
       this.socket ??= this.#createSocket();
       if (this.socket.isConnected) {
