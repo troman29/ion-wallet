@@ -24,6 +24,5 @@ export {
   signDappData,
 } from './dapps';
 export * from './other';
-export * from './market';
 export * from './prices';
 export * from './preload';

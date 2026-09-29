@@ -75,7 +75,7 @@
   - На 2026-09-29 `api.wallet.ice.io` не резолвится из среды сборки; fallback в `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` нельзя считать работающей ION-инфраструктурой.
   - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
     - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/account-config`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
-    - каталог и рынок: `/v2/dapp/catalog`, `/market/assets`, `/prices/chart/*`;
+    - каталог и рынок: `/v2/dapp/catalog`, `/prices/chart/*`;
     - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
     - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;
     - уведомления и live-обновления: `/notifications/*`, WebSocket `/{testnet/}ws`;
