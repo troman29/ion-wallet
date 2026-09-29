@@ -8,7 +8,6 @@ import buildClassName from '../../util/buildClassName';
 import TopActions from '../main/sections/Actions/TopActions';
 import Balance from './sections/Balance';
 import Chart from './sections/Chart';
-import Info from './sections/Info';
 
 import styles from './Summary.module.scss';
 
@@ -20,8 +19,6 @@ interface OwnProps {
 function Summary({ token, className }: OwnProps) {
   // The balance follows the point under the cursor, so the chart reports the point up to here
   const [pricePoint, setPricePoint] = useState<TokenPricePoint>();
-
-  const { slug } = token;
 
   return (
     <div className={buildClassName(styles.root, className)}>
@@ -35,7 +32,6 @@ function Summary({ token, className }: OwnProps) {
           className={styles.panel}
           onPricePointChange={setPricePoint}
         />
-        <Info tokenSlug={slug} className={styles.panel} />
       </div>
     </div>
   );

@@ -43,7 +43,6 @@ import type {
   ApiSwapDexRouterLabel,
   ApiSwapRoute,
   ApiSwapVersion,
-  ApiTokenDetails,
   ApiTokenType,
   ApiTokenWithPrice,
   ApiUpdate,
@@ -418,12 +417,6 @@ export type UserSwapToken = Omit<UserToken, 'change24h' | 'chain'> & {
 export type TokenPeriod = '1D' | '7D' | '1M' | '3M' | '1Y' | 'ALL';
 
 export type PriceHistoryPeriods = Partial<Record<ApiPriceHistoryPeriod, ApiHistoryList>>;
-
-/** Absent while the request is in flight; an entry with neither field means the backend has no info */
-export type TokenDetailsState = {
-  data?: ApiTokenDetails;
-  hasError?: true;
-};
 
 export type AccountType = 'mnemonic' | 'hardware' | 'view';
 
@@ -926,10 +919,6 @@ export type GlobalState = {
 
   tokenPriceHistory: {
     bySlug: Record<string, PriceHistoryPeriods>;
-  };
-
-  tokenDetails: {
-    bySlug: Record<string, TokenDetailsState>;
   };
 
   byAccountId: Record<string, AccountState>;
@@ -1481,7 +1470,6 @@ export interface ActionPayloads {
   closeInvoiceModal: undefined;
 
   loadPriceHistory: { slug: string; period: ApiPriceHistoryPeriod; currency?: ApiBaseCurrency };
-  loadTokenDetails: { slug: string };
 
   showIncorrectTimeError: undefined;
 

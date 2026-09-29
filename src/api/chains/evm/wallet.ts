@@ -327,7 +327,7 @@ async function fetchAccountAssetsUncoalesced(
     });
   }
 
-  await updateTokens(tokenEntities, sendUpdateTokens, [], true);
+  await updateTokens(tokenEntities, sendUpdateTokens, true);
 
   return { balances: slugPairs, asOf };
 }

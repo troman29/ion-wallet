@@ -13,7 +13,7 @@
 | Область | Статус | Что сделано |
 | --- | --- | --- |
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
-| Лишние продукты | ◐ | Удалены Portfolio, включая token net worth graph и его backend endpoint, Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
+| Лишние продукты | ◐ | Удалены Portfolio, включая token net worth graph и его backend endpoint, а также POST-запрос ассетов и экран расширенной информации токена; Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
 | Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
 | Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, ION Gateway/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
@@ -74,7 +74,7 @@
 - [ ] **Убрать зависимость preview от MyTonWallet backend.**
   - На 2026-09-29 `api.wallet.ice.io` не резолвится из среды сборки; fallback в `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` нельзя считать работающей ION-инфраструктурой.
   - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
-    - кошелёк и безопасность: `/assets`, `POST /assets`, `/currency-rates`, `/known-addresses`, `/account-config`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
+    - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/account-config`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
     - каталог и рынок: `/v2/dapp/catalog`, `/market/assets`, `/prices/chart/*`;
     - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
     - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;

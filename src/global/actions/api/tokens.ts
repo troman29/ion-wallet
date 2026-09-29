@@ -1,6 +1,6 @@
 import { callApi } from '../../../api';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
-import { updateTokenDetails, updateTokenPriceHistory } from '../../reducers/tokens';
+import { updateTokenPriceHistory } from '../../reducers/tokens';
 
 addActionHandler('loadPriceHistory', async (global, actions, payload) => {
   const { slug, period, currency = global.settings.baseCurrency } = payload ?? {};
@@ -21,13 +21,4 @@ addActionHandler('loadPriceHistory', async (global, actions, payload) => {
 
   global = updateTokenPriceHistory(global, slug, { [period]: history });
   setGlobal(global);
-});
-
-addActionHandler('loadTokenDetails', async (global, actions, { slug }) => {
-  const result = await callApi('fetchTokenInfo', slug);
-
-  global = getGlobal();
-  setGlobal(updateTokenDetails(global, slug, !result || 'error' in result
-    ? { hasError: true }
-    : { data: result.details, hasError: undefined }));
 });

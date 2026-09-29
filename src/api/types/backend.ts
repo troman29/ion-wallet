@@ -1,58 +1,6 @@
 import type { StakingPoolConfig } from '../chains/ton/contracts/JettonStaking/StakingPool';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
-import type { ApiChain, ApiCountryCode, ApiLoyaltyType, ApiTokenWithPrice } from './misc';
-
-export type ApiTokenPriceDetails = Pick<
-  ApiTokenWithPrice, 'slug' | 'type' | 'priceUsd' | 'percentChange24h' | 'localizedName'
-> & {
-  tokenInfo?: {
-    description?: string;
-    localizedDescription?: string;
-    marketCap?: number;
-    supply?: {
-      circulating?: number;
-      total: number;
-    };
-    createdAt?: string;
-    volume24h?: {
-      sell: number;
-      buy: number;
-      percentChange?: number;
-    };
-    links?: { url: string; type?: 'telegram' | 'x' }[];
-    aggregatorLinks?: { url: string; name: string }[];
-    docsUrl?: string;
-    sourceCodeUrl?: string;
-  };
-};
-
-export interface ApiTokenDetails {
-  description?: string;
-  links?: ApiTokenLink[];
-  /** Market data sites, with the display name supplied by the backend */
-  aggregatorLinks?: { name: string; url: string }[];
-  docsUrl?: string;
-  sourceCodeUrl?: string;
-  marketCap?: number;
-  circulatingSupply?: number;
-  totalSupply?: number;
-  /** Unix seconds */
-  createdAt?: number;
-  volume24h?: ApiTokenVolume;
-}
-
-export interface ApiTokenLink {
-  kind: 'x' | 'telegram' | 'website';
-  url: string;
-}
-
-export interface ApiTokenVolume {
-  total: number;
-  buy: number;
-  sell: number;
-  /** A share, not a percentage: 0.8946 means +89.46%. Absent when the data source has no such stat. */
-  change?: number;
-}
+import type { ApiChain, ApiCountryCode, ApiLoyaltyType } from './misc';
 
 export type ApiSwapDexRouterLabel = 'dedust-router-v2' | 'omniston' | 'jupiter';
 

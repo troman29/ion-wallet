@@ -1,16 +1,15 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from '../../lib/teact/teact';
 import { withGlobal } from '../../global';
 
-import type { ApiChain, ApiTokenDetails } from '../../api/types';
+import type { ApiChain } from '../../api/types';
 import type { IAnchorPosition, UserToken } from '../../global/types';
 import type { DropdownItem } from '../ui/Dropdown';
 
-import { selectTokenDetails } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import captureEscKeyListener from '../../util/captureEscKeyListener';
 import { compact } from '../../util/iteratees';
 import { openUrl } from '../../util/openUrl';
-import { getExplorerTokenUrl, isValidUrl } from '../../util/url';
+import { getExplorerTokenUrl } from '../../util/url';
 
 import useHistoryBack from '../../hooks/useHistoryBack';
 import useLang from '../../hooks/useLang';
@@ -28,7 +27,6 @@ interface OwnProps {
 }
 
 interface StateProps {
-  details?: ApiTokenDetails;
   tokenAddress?: string;
   isTestnet?: boolean;
   selectedExplorerIds?: Partial<Record<ApiChain, string>>;
@@ -38,7 +36,6 @@ function Header({
   token,
   isScrolled,
   onBackClick,
-  details,
   tokenAddress,
   isTestnet,
   selectedExplorerIds,
@@ -56,7 +53,7 @@ function Header({
   );
 
   // The links open a browser instead of dispatching an action, so they are keyed by their own URL
-  const menuItems = useMemo(() => buildLinkItems(details, explorerUrl), [details, explorerUrl]);
+  const menuItems = useMemo(() => buildLinkItems(explorerUrl), [explorerUrl]);
 
   const handleSelect = useLastCallback((url: string) => {
     void openUrl(url);
@@ -108,33 +105,13 @@ function Header({
   );
 }
 
-function buildLinkItems(details?: ApiTokenDetails, explorerUrl?: string): DropdownItem<string>[] {
-  const { aggregatorLinks, docsUrl, sourceCodeUrl } = details ?? {};
-
-  const groups: DropdownItem<string>[][] = [
-    aggregatorLinks
-      ?.filter(({ url }) => isValidUrl(url))
-      .map(({ name, url }) => ({ name, value: url, noTranslate: true })) ?? [],
-    compact([
-      docsUrl && isValidUrl(docsUrl) && { name: 'Documentation', value: docsUrl },
-      sourceCodeUrl && isValidUrl(sourceCodeUrl) && { name: 'Source Code', value: sourceCodeUrl },
-    ]),
-    compact([explorerUrl && { name: 'Open in Explorer', fontIcon: 'menu-globe', value: explorerUrl }]),
-  ];
-
-  // `DropdownMenu` draws the delimiter above an item, so it goes on the first item of every group
-  // except the topmost one
-  return groups
-    .filter((group) => group.length)
-    .flatMap((group, index) => (index === 0
-      ? group
-      : [{ ...group[0], withDelimiter: true }, ...group.slice(1)]));
+function buildLinkItems(explorerUrl?: string): DropdownItem<string>[] {
+  return compact([explorerUrl && { name: 'Open in Explorer', fontIcon: 'menu-globe', value: explorerUrl }]);
 }
 
 export default memo(
   withGlobal<OwnProps>((global, { token }): StateProps => {
     return {
-      details: selectTokenDetails(global, token.slug)?.data,
       tokenAddress: global.tokenInfo.bySlug[token.slug]?.tokenAddress,
       isTestnet: global.settings.isTestnet,
       selectedExplorerIds: global.settings.selectedExplorerIds,

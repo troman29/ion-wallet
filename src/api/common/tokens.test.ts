@@ -1,7 +1,6 @@
 import type { ApiTokenWithPrice } from '../types';
 
 import {
-  buildTokenDetailsPayload,
   buildTokenSlug,
   getTokenByAddress,
   getTokensCache,
@@ -68,47 +67,6 @@ describe('token lookup', () => {
   });
 });
 
-describe('token details payload', () => {
-  const held = makeToken('ton-held', 'ton', 'EQHeld');
-  const abandoned = makeToken('ton-abandoned', 'ton', 'EQAbandoned');
-  const lp = makeToken('ton-lp', 'ton', 'EQLp', { type: 'lp_token' });
-  const unclassifiedLp = makeToken('ton-lp-new', 'ton', 'EQLpNew');
-  const published = makeToken('ton-published', 'ton', 'EQPublished', { isFromBackend: true });
-  const native = makeToken('toncoin', 'ton', '', { tokenAddress: undefined });
-
-  const backendSlugs = new Set([published.slug]);
-  const heldSlugs = new Set([held.slug, lp.slug, unclassifiedLp.slug, native.slug]);
-  const allTokens = [held, abandoned, lp, unclassifiedLp, published, native];
-
-  it('requests the held tokens only, LP aside', () => {
-    expect(buildTokenDetailsPayload(allTokens, { backendSlugs, heldSlugs, maxCount: 100 }))
-      .toEqual([held.tokenAddress, unclassifiedLp.tokenAddress]);
-  });
-
-  it('keeps requesting every non-published token when the held ones are unknown', () => {
-    expect(buildTokenDetailsPayload(allTokens, { backendSlugs, maxCount: 100 }))
-      .toEqual([held.tokenAddress, abandoned.tokenAddress, unclassifiedLp.tokenAddress]);
-  });
-
-  it('requests a token the backend used to publish but stopped', () => {
-    const delisted = { ...published, slug: 'ton-delisted', tokenAddress: 'EQDelisted' };
-
-    expect(buildTokenDetailsPayload([delisted], { backendSlugs, maxCount: 100 }))
-      .toEqual([delisted.tokenAddress]);
-  });
-
-  it('skips a locally imported token once the backend starts publishing it', () => {
-    const adopted = makeToken(published.slug, 'ton', 'EQAdopted');
-
-    expect(buildTokenDetailsPayload([adopted], { backendSlugs, maxCount: 100 })).toEqual([]);
-  });
-
-  it('never exceeds the cap', () => {
-    expect(buildTokenDetailsPayload(allTokens, { backendSlugs, maxCount: 1 }))
-      .toEqual([held.tokenAddress]);
-  });
-});
-
 describe('token updates', () => {
   beforeEach(pauseTokenUpdates);
 
@@ -129,7 +87,7 @@ describe('token updates', () => {
       await updateTokens([{ ...token, name: 'Updated name' }], sendUpdate);
       expect(sendUpdate).not.toHaveBeenCalled();
 
-      await updateTokens([{ ...token, codeHash: 'hash' }], sendUpdate, [], true);
+      await updateTokens([{ ...token, codeHash: 'hash' }], sendUpdate, true);
       expect(sendUpdate).toHaveBeenCalledTimes(1);
     } finally {
       if (previousToken) {

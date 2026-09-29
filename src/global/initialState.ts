@@ -101,10 +101,6 @@ export const INITIAL_STATE: GlobalState = {
     bySlug: {},
   },
 
-  tokenDetails: {
-    bySlug: {},
-  },
-
   settings: {
     state: SettingsState.Initial,
     theme: THEME_DEFAULT,
