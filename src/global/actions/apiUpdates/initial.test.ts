@@ -157,7 +157,6 @@ describe('updateConfig api update', () => {
       isLimited: false,
       isCopyStorageEnabled: false,
       isAppUpdateRequired: false,
-      seasonalTheme: undefined,
     } as ApiUpdate);
     const [updatedGlobal] = (setGlobal as jest.Mock).mock.calls.at(-1)!;
     return updatedGlobal as GlobalState;

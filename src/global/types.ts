@@ -11,10 +11,8 @@ import type {
 import type { StoredDappConnection } from '../api/dappProtocols/storage';
 import type { UnifiedSignDataPayload } from '../api/dappProtocols/types';
 import type {
-  ApiAccountConfig,
   ApiActivity,
   ApiAnyDisplayError,
-  ApiBackendConfig,
   ApiBalanceBySlug,
   ApiBaseCurrency,
   ApiChain,
@@ -77,21 +75,6 @@ export type AppTheme = 'dark' | 'light';
 export type AppLayout = 'portrait' | 'landscape';
 export type DialogAction = 'openBluetoothSettings' | 'openReturnUrl';
 export type ToastAction = 'openRenameWallet';
-
-export type DeveloperSettingsUndefinedOverride = '__undefined';
-export type DeveloperSettingsOverrideValue<Value> = Exclude<Value, undefined> | DeveloperSettingsUndefinedOverride;
-
-export interface DeveloperSettingsOverrides {
-  seasonalTheme?: DeveloperSettingsOverrideValue<ApiBackendConfig['seasonalTheme']>;
-}
-
-export type DeveloperSettingsOverrideKey = keyof DeveloperSettingsOverrides;
-export type DeveloperSettingsOverridePayload = {
-  [Key in DeveloperSettingsOverrideKey]: {
-    key: Key;
-    value?: DeveloperSettingsOverrides[Key];
-  };
-}[DeveloperSettingsOverrideKey];
 
 export type ToastType = {
   icon?: string;
@@ -541,7 +524,6 @@ export interface AccountState {
   dapps?: StoredDappConnection[];
   currentSiteCategoryId?: number;
 
-  config?: ApiAccountConfig;
   isAppReady?: boolean;
 }
 
@@ -932,8 +914,6 @@ export type GlobalState = {
     state: SettingsState;
     theme: Theme;
     animationLevel: AnimationLevel;
-    isSeasonalThemingDisabled?: boolean;
-    developerSettingsOverrides?: DeveloperSettingsOverrides;
     langCode: LangCode;
     langSource?: LanguageSource;
     byAccountId: Record<string, AccountSettings>;
@@ -979,8 +959,6 @@ export type GlobalState = {
   isAppUpdateAvailable?: boolean;
   // Force show the "Update My Wallet" pop-up on all platforms
   isAppUpdateRequired?: boolean;
-  seasonalTheme?: ApiBackendConfig['seasonalTheme'];
-  isPromotionModalOpen?: boolean;
   confettiRequestedAt?: number;
   isPinAccepted?: boolean;
   isInvoiceModalOpen?: boolean;
@@ -1310,8 +1288,6 @@ export interface ActionPayloads {
   closeSettings: undefined;
   setTheme: { theme: Theme };
   setAnimationLevel: { level: AnimationLevel };
-  toggleSeasonalTheming: { isEnabled?: boolean };
-  setDeveloperSettingsOverride: DeveloperSettingsOverridePayload;
   toggleTinyTransfersHidden: { isEnabled?: boolean } | undefined;
   toggleUnverifiedNftsHidden: { isEnabled?: boolean } | undefined;
   toggleLocalizedTokenNames: { isEnabled?: boolean } | undefined;
@@ -1482,9 +1458,6 @@ export interface ActionPayloads {
   submitClaimingVesting: { enclaveToken?: string } | undefined;
   clearVestingError: undefined;
   cancelClaimingVesting: undefined;
-
-  openPromotionModal: undefined;
-  closePromotionModal: undefined;
 
   toggleNotifications: { isEnabled: boolean };
   renameNotificationAccount: { accountId: string };

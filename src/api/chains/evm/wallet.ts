@@ -2,7 +2,7 @@ import { Contract, isError } from 'ethers';
 
 import type { QueryParams } from '../../../util/fetch';
 import type {
-  ApiAddressInfo, ApiBalanceBySlug, ApiNetwork, ApiTokenWithMaybePrice, EVMChain, StampedBalances,
+  ApiAddressInfo, ApiNetwork, ApiTokenWithMaybePrice, EVMChain, StampedBalances,
 } from '../../types';
 import type {
   AlchemyGetAssetTransfersResponse,
@@ -14,18 +14,14 @@ import { ApiCommonError } from '../../types';
 
 import { throwIfAborted } from '../../../util/abortSignal';
 import { getChainConfig, getChainsByStandard, getIsTokenKept } from '../../../util/chain';
-import { buildRequestUrl, fetchJson, fetchWithRetry, isNegativeCacheableStatus } from '../../../util/fetch';
+import { buildRequestUrl, fetchJson, fetchWithRetry } from '../../../util/fetch';
 import { compact } from '../../../util/iteratees';
-import { logDebugError } from '../../../util/logs';
 import withCacheAsync from '../../../util/withCacheAsync';
 import { getEvmProvider } from './util/client';
 import { inactiveWallets } from './util/inactiveWallets';
 import { getZerionFungibleImplementation, isZerionNativeFungible } from './util/tokens';
-import { untrackableRegistry } from './util/untrackable';
 import { getKnownAddressInfo } from '../../common/addresses';
-import { getIsNegVerdictCacheEnabled } from '../../common/cache';
 import { buildTokenSlug, updateTokens } from '../../common/tokens';
-import { ApiServerError } from '../../errors';
 import { isValidAddress } from './address';
 import { EVM_RPC_URLS, getApiChainByZerionChain, getEvmApiUrl, getZerionChainByApiChain } from './constants';
 
@@ -218,13 +214,6 @@ async function fetchAccountAssetsUncoalesced(
   options: { isCrossChain?: boolean; signal?: AbortSignal },
 ): Promise<StampedBalances> {
   const { isCrossChain = false, signal } = options;
-  const isUntrackableGuarded = !signal && getIsNegVerdictCacheEnabled();
-  if (isUntrackableGuarded && untrackableRegistry.has(network, address)) {
-    // Same address Zerion already rejected (e.g. on the transactions endpoint); skip the
-    // round-trip and return converged-empty positions so the balance poller stops probing it.
-    return { balances: buildEmptyEvmBalances(chain, isCrossChain) };
-  }
-
   const zerionChain = getZerionChainByApiChain(chain);
 
   const params = {
@@ -236,26 +225,11 @@ async function fetchAccountAssetsUncoalesced(
       : zerionChain,
   };
 
-  let response: ZerionPositionsResponse;
-  let asOf: number | undefined;
-  try {
-    const { data, snapshotAt } = await fetchPositionsPage(
-      `${getEvmApiUrl(network)}/v1/wallets/${address}/positions/`,
-      params,
-      signal,
-    );
-    response = data;
-    asOf = snapshotAt;
-  } catch (err) {
-    throwIfAborted(signal);
-    if (isUntrackableGuarded && err instanceof ApiServerError && isNegativeCacheableStatus(err.statusCode)) {
-      untrackableRegistry.mark(network, address);
-      logDebugError('fetchAccountAssets: wallet is untrackable on Zerion', { address, chain, status: err.statusCode });
-      return { balances: buildEmptyEvmBalances(chain, isCrossChain) };
-    }
-
-    throw err;
-  }
+  const { data: response, snapshotAt: asOf } = await fetchPositionsPage(
+    `${getEvmApiUrl(network)}/v1/wallets/${address}/positions/`,
+    params,
+    signal,
+  );
   throwIfAborted(signal);
 
   const tokenEntities: ApiTokenWithMaybePrice[] = [];
@@ -330,18 +304,6 @@ async function fetchAccountAssetsUncoalesced(
   await updateTokens(tokenEntities, sendUpdateTokens, true);
 
   return { balances: slugPairs, asOf };
-}
-
-// An untrackable address genuinely has no positions; return the same converged-empty shape a
-// normal empty wallet produces (native slug present at 0) so the balance poller emits a zero
-// update instead of leaving the previous balances stale (an empty {} yields no update at all).
-function buildEmptyEvmBalances(chain: EVMChain, isCrossChain?: boolean): ApiBalanceBySlug {
-  const chainsForNative = (isCrossChain ? getChainsByStandard(chain) : [chain]) as EVMChain[];
-  const balances: ApiBalanceBySlug = {};
-  for (const balanceChain of chainsForNative) {
-    balances[getChainConfig(balanceChain).nativeToken.slug] = 0n;
-  }
-  return balances;
 }
 
 function isNativeZerionAsset(chain: EVMChain, zerionChain: string, position: ZerionPosition) {

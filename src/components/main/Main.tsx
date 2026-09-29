@@ -40,7 +40,6 @@ import StakingInfoModal from '../staking/StakingInfoModal';
 import UnstakeModal from '../staking/UnstakeModal';
 import UpdateAvailable from '../ui/UpdateAvailable';
 import AccountSelectorModal from './modals/accountSelector/AccountSelectorModal';
-import PromotionModal from './modals/PromotionModal';
 import {
   LandscapeNavBar,
   LandscapeWalletList,
@@ -212,7 +211,6 @@ function Main({
       <StakingClaimModal />
       <RenewDomainModal />
       <LinkingDomainModal />
-      <PromotionModal />
       {!IS_ELECTRON && <UpdateAvailable />}
       <AccountSelectorModal />
     </>

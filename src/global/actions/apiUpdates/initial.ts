@@ -286,7 +286,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         countryCode,
         isAppUpdateRequired,
         swapVersion,
-        seasonalTheme,
       } = update;
 
       const shouldRestrictRegionalFeatures = IS_IOS_APP && isLimitedRegion;
@@ -305,7 +304,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         ...global,
         isAppUpdateRequired,
         swapVersion: swapVersion ?? SWAP_API_VERSION,
-        seasonalTheme,
       };
       setGlobal(global);
       break;
@@ -382,13 +380,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
           actions.switchAccount({ accountId: survivorId, newNetwork: parseAccountId(survivorId).network });
         }
       }
-      break;
-    }
-
-    case 'updateAccountConfig': {
-      const { accountConfig, accountId } = update;
-      global = updateAccountState(global, accountId, { config: accountConfig });
-      setGlobal(global);
       break;
     }
 

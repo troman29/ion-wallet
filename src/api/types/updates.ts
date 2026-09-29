@@ -11,8 +11,6 @@ import type { StoredDappConnection } from '../dappProtocols/storage';
 import type { UnifiedSignDataPayload } from '../dappProtocols/types';
 import type { ApiActivity } from './activities';
 import type {
-  ApiAccountConfig,
-  ApiBackendConfig,
   ApiSwapAsset,
   ApiSwapVersion,
   ApiVestingInfo,
@@ -379,7 +377,6 @@ export type ApiUpdateConfig = {
   countryCode?: ApiCountryCode;
   isAppUpdateRequired: boolean;
   swapVersion?: ApiSwapVersion;
-  seasonalTheme: ApiBackendConfig['seasonalTheme'];
   knowledgeBaseVersion?: string;
 };
 
@@ -427,12 +424,6 @@ export type ApiUpdateSettings = {
 export type ApiUpdateRemoveAccounts = {
   type: 'removeAccounts';
   accountIds: string[];
-};
-
-export type ApiUpdateAccountConfig = {
-  type: 'updateAccountConfig';
-  accountId: string;
-  accountConfig: ApiAccountConfig;
 };
 
 export type ApiUpdateAccountDomainData = {
@@ -494,7 +485,6 @@ export type ApiUpdate =
   | ApiUpdatingStatus
   | ApiUpdateSettings
   | ApiUpdateRemoveAccounts
-  | ApiUpdateAccountConfig
   | ApiUpdateAccountDomainData;
 
 export type OnApiUpdate = (update: ApiUpdate) => void;

@@ -74,13 +74,24 @@
 - [ ] **Убрать зависимость preview от MyTonWallet backend.**
   - На 2026-09-29 `api.wallet.ice.io` не резолвится из среды сборки; fallback в `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` нельзя считать работающей ION-инфраструктурой.
   - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
-    - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/account-config`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
+    - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
     - каталог и рынок: `/v2/dapp/catalog`, `/prices/chart/*`;
     - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
     - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;
     - уведомления и live-обновления: `/notifications/*`, WebSocket `/{testnet/}ws`;
     - proxy: `/proxy/download-json` и `/proxy/download-lottie` для внешних метаданных и анимаций.
   - После решения проверить, что все runtime запросы к backend идут к утверждённому ION-сервису, а не к MyTonWallet; сами GitHub forks в `package.json` остаются закреплёнными исходниками зависимостей до появления ION forks.
+
+- [ ] **Принять решение по каждому оставшемуся полю `/utils/get-config`.**
+  - `isLimited` и `country`: нужны только для региональных ограничений iOS/Android; утвердить источник и правила ION или удалить ограничение.
+  - `isCopyStorageEnabled`: разрешает экспорт диагностических данных; определить, нужен ли он в production и чем управляется.
+  - `supportAccountsCount`: лимит числа аккаунтов; утвердить продуктовый лимит или сделать локальной константой.
+  - `now`: используется для предупреждения о неверном времени устройства; сохранить через ION time endpoint либо заменить локальной проверкой.
+  - `isUpdateRequired`: обязательное обновление клиента; определить источник версии для App Store, Google Play и desktop.
+  - `swapVersion`: выбирает доступные swap-пары и backend-версию; решить вместе с заменой swap-инфраструктуры.
+  - `knowledgeBaseVersion`: инвалидация базы знаний; проверить потребителя и либо подключить ION help-центр, либо убрать поле.
+  - `isVestingEnabled` и `isWebSocketEnabled`: сейчас не читаются клиентом; удалить из контрактной схемы после решения, нужны ли vesting и live-обновления.
+  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `/account-config`, promotion UI, сезонные ресурсы, negative-verdict cache и TonConnect telemetry.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 

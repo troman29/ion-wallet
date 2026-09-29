@@ -1,6 +1,5 @@
 import type {
   ApiAccountAny,
-  ApiAccountConfig,
   ApiActivityTimestamps,
   ApiBackendConfig,
   ApiChain,
@@ -14,7 +13,6 @@ import type {
 
 import { NO_EXTRA_FEATURES } from '../../config';
 import { parseAccountId } from '../../util/account';
-import { areDeepEqual } from '../../util/areDeepEqual';
 import { omit } from '../../util/iteratees';
 import { logDebugError } from '../../util/logs';
 import { OrGate } from '../../util/orGate';
@@ -28,7 +26,7 @@ import {
   fetchStoredAccounts,
 } from '../common/accounts';
 import { tryUpdateKnownAddresses } from '../common/addresses';
-import { callBackendGet, callBackendPost } from '../common/backend';
+import { callBackendGet } from '../common/backend';
 import { setBackendConfigCache } from '../common/cache';
 import { pollingLoop } from '../common/polling/utils';
 import {
@@ -46,8 +44,6 @@ import { resolveDataPreloadPromise } from './preload';
 const BACKEND_INTERVAL = 30 * SEC;
 const LONG_BACKEND_INTERVAL = MINUTE;
 const INCORRECT_TIME_DIFF = 30 * SEC;
-
-const ACCOUNT_CONFIG_INTERVAL = { focused: MINUTE, notFocused: 10 * MINUTE };
 
 let onUpdate: OnApiUpdate;
 let stopCommonBackendPolling: NoneToVoidFunction | undefined;
@@ -181,7 +177,6 @@ export async function tryUpdateConfig() {
       now: serverUtc,
       country: countryCode,
       swapVersion,
-      seasonalTheme,
       isUpdateRequired: isAppUpdateRequired,
       knowledgeBaseVersion,
     } = config;
@@ -194,7 +189,6 @@ export async function tryUpdateConfig() {
       countryCode,
       isAppUpdateRequired,
       swapVersion,
-      seasonalTheme,
       knowledgeBaseVersion,
     };
 
@@ -222,10 +216,7 @@ export async function setActivePollingAccount(
 
   if (accountId) {
     const account = await fetchStoredAccount(accountId);
-
     const stopPollingFns = [
-      canPollAccountConfig(account) ? setupAccountConfigPolling(accountId, account).stop : undefined,
-
       ...(Object.keys(chains) as (keyof typeof chains)[]).map((chain) => {
         if (doesAccountHaveChain(account, chain)) {
           return chains[chain].setupActivePolling(
@@ -269,51 +260,6 @@ export function removeNetworkPollingAccounts(network: ApiNetwork) {
 /** Call it every time all accounts are removed */
 export function removeAllPollingAccounts() {
   inactiveAccountPolling?.removeAllAccounts();
-}
-
-/**
- * The endpoint answers a `view` account with an empty config, and keys every other type by its TON
- * address. An account of another type that carries no TON address therefore has nothing to ask for,
- * and asking anyway is a request the backend can only reject.
- */
-function canPollAccountConfig(account: ApiAccountAny) {
-  return account.type === 'view' || doesAccountHaveChain(account, 'ton');
-}
-
-function setupAccountConfigPolling(accountId: string, account: ApiAccountAny) {
-  let lastResult: ApiAccountConfig | undefined;
-
-  // The endpoint reads the account type and the chain addresses only, while `authToken` is a bearer credential for
-  // our own API - it has no business riding a polling loop's request body once a swap has put it on the wallet.
-  const { byChain } = account;
-  const partialAccount = {
-    ...account,
-    ...(byChain.ton && { byChain: { ...byChain, ton: omit(byChain.ton, ['authToken']) } }),
-  };
-
-  return pollingLoop({
-    period: ACCOUNT_CONFIG_INTERVAL,
-    async poll() {
-      try {
-        const langCode = await storage.getItem('langCode');
-        const accountConfig = await callBackendPost<ApiAccountConfig>('/account-config', {
-          ...partialAccount,
-          langCode,
-        });
-
-        if (!areDeepEqual(accountConfig, lastResult)) {
-          lastResult = accountConfig;
-          onUpdate({
-            type: 'updateAccountConfig',
-            accountId,
-            accountConfig,
-          });
-        }
-      } catch (err) {
-        logDebugError('setupBackendAccountPolling', err);
-      }
-    },
-  });
 }
 
 /**

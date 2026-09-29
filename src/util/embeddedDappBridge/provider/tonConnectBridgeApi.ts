@@ -18,7 +18,6 @@ import {
   SEND_TRANSACTION_ERROR_CODES,
 } from '../../../api/dappProtocols/adapters/tonConnect/errors';
 import { logDebugError } from '../../logs';
-import { wrapJsBridgeMethods } from '../jsBridgeAnalytics';
 
 export interface BrowserTonConnectBridgeMethods {
   connect(protocolVersion: number, message: ConnectRequest): Promise<ConnectEvent>;
@@ -244,9 +243,7 @@ export function buildTonConnectBridgeApi(pageUrl: string): BrowserTonConnectBrid
     },
   };
 
-  return wrapJsBridgeMethods(bridgeApi, (input) => {
-    void callApi('recordTonConnectEvent', input);
-  });
+  return bridgeApi;
 }
 
 function buildConnectError(

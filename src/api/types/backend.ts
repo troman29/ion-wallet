@@ -367,41 +367,7 @@ export type ApiVestingInfo = {
   }[];
 };
 
-export type ApiAccountConfig = {
-  activePromotion?: ApiPromotion;
-};
-
 export type ApiSwapVersion = 2 | 3;
-
-export type ApiPromotion = {
-  id: string;
-  kind: 'cardOverlay';
-  cardOverlay: {
-    mascotIcon?: {
-      url: string;
-      top: number;
-      right: number;
-      height: number;
-      width: number;
-      rotation: number;
-    };
-    onClickAction: 'openPromotionModal';
-  };
-  modal?: {
-    backgroundImageUrl: string;
-    backgroundFallback: string;
-    heroImageUrl?: string;
-    title: string;
-    titleColor?: string;
-    description: string;
-    descriptionColor?: string;
-    availabilityIndicator?: string;
-    actionButton?: {
-      title: string;
-      url: string;
-    };
-  };
-};
 
 export type ApiBackendConfig = {
   isLimited: boolean;
@@ -412,12 +378,7 @@ export type ApiBackendConfig = {
   isUpdateRequired: boolean;
   isVestingEnabled?: boolean;
   isWebSocketEnabled?: boolean;
-  // Enables the L1 client-side negative-verdict cache + EVM untrackable-address registry
-  // (retry-break on deterministic 4xx). Absent/false = safe legacy behavior. Global kill switch.
-  isNegVerdictCacheEnabled?: boolean;
-  isTonConnectAnalyticsEnabled?: boolean;
   swapVersion?: ApiSwapVersion;
-  seasonalTheme?: 'newYear' | 'valentine';
   knowledgeBaseVersion?: string;
   // Lower-case currency codes the on/off-ramp surfaces may offer; the client may only narrow its own baseline with it
 };

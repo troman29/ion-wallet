@@ -2,12 +2,9 @@ import {
   DEFAULT_ERROR_PAUSE,
   DEFAULT_RETRIES,
   DEFAULT_TIMEOUT,
-  EVM_MAINNET_RPC_URL,
-  EVM_TESTNET_RPC_URL,
   IPFS_GATEWAY_BASE_URL,
   PROXY_API_BASE_URL,
 } from '../config';
-import { getIsNegVerdictCacheEnabled } from '../api/common/cache';
 import { ApiServerError } from '../api/errors';
 import { pauseWithAbortSignal, throwIfAborted } from './abortSignal';
 import {
@@ -16,7 +13,6 @@ import {
   CircuitOpenError,
 } from './circuit-breaker';
 import { logDebug } from './logs';
-import { NegativeVerdictCache } from './negativeVerdictCache';
 
 import {
   fetchWithThrottledProvider,
@@ -32,27 +28,11 @@ type FetchOptions = {
 };
 
 const breaker = new CircuitBreaker();
-const negativeVerdictCache = new NegativeVerdictCache();
 
 export type QueryParams = Record<string, string | number | boolean | string[] | undefined>;
 
 const MAX_TIMEOUT = 30000; // 30 sec
 const MAX_BACKOFF_MS = 10000; // 10 sec - jitter ceiling for retryable failures
-
-// Deterministic client-error statuses safe to cache and replay: repeating the identical request
-// cannot change the answer. Narrower than the full terminal set on purpose - 401/403 stay
-// terminal (no retry) but are NOT cached, so a transient auth state is never masked for the TTL.
-const NEGATIVE_CACHEABLE_STATUSES = [400, 404, 422];
-
-// The negative-verdict cache is scoped to the evmapi (Zerion) origin - the only path with the
-// deterministic-4xx storm class. Other origins are excluded deliberately: toncenter GETs carry a
-// `_=<time>` cache-buster (every URL unique, they would only pollute the bounded LRU) and some
-// non-evmapi GETs legitimately poll a 404 until it flips to 200 (a fresh NFT before indexing, a
-// dapp manifest), which a cached 4xx would stall.
-const EVM_API_ORIGINS = new Set([
-  new URL(EVM_MAINNET_RPC_URL).origin,
-  new URL(EVM_TESTNET_RPC_URL).origin,
-]);
 
 export function fetchJsonWithProxy(url: string | URL, data?: QueryParams, init?: RequestInit) {
   return fetchJson(getProxiedJsonUrl(url.toString()), data, init);
@@ -104,34 +84,12 @@ export async function fetchWithRetry(url: string | URL, init?: RequestInit, opti
   const method = init?.method ?? 'GET';
   const urlString = url.toString();
 
-  // A GET to evmapi whose deterministic 4xx we already saw is replayed locally, before touching
-  // the breaker: a replay is not a host contact, so it must produce no breaker or probe signal.
-  const isNegVerdictCacheable = !init?.signal
-    && method === 'GET'
-    && getIsNegVerdictCacheEnabled()
-    && isEvmApiOrigin(urlString);
-  if (isNegVerdictCacheable) {
-    const cached = negativeVerdictCache.get(urlString);
-    if (cached) {
-      throw new ApiServerError(
-        buildFetchErrorMessage(method, urlString, cached.message, 0, cached.statusCode),
-        cached.statusCode,
-      );
-    }
-  }
-
   const slot = breaker.acquire(bucketKey);
   if (!slot) throw new CircuitOpenError(bucketKey);
 
   let message = 'Unknown error.';
   let statusCode: number | undefined;
   let settled = false;
-
-  const cacheNegativeVerdictIfEligible = () => {
-    if (isNegVerdictCacheable && isNegativeCacheableStatus(statusCode)) {
-      negativeVerdictCache.set(urlString, { statusCode: statusCode!, message });
-    }
-  };
 
   try {
     for (let i = 1; i <= retries; i++) {
@@ -181,7 +139,6 @@ export async function fetchWithRetry(url: string | URL, init?: RequestInit, opti
           } else {
             slot.recordFailure();
           }
-          cacheNegativeVerdictIfEligible();
           settled = true;
           throw new ApiServerError(buildFetchErrorMessage(method, urlString, message, i, statusCode), statusCode);
         }
@@ -203,7 +160,6 @@ export async function fetchWithRetry(url: string | URL, init?: RequestInit, opti
     } else {
       slot.recordFailure();
     }
-    cacheNegativeVerdictIfEligible();
     settled = true;
     throw new ApiServerError(buildFetchErrorMessage(method, urlString, message, retries, statusCode), statusCode);
   } finally {
@@ -264,27 +220,13 @@ function isBreakerHealthy4xx(statusCode?: number): boolean {
     && classifyFetchFailure(statusCode) === 'terminal';
 }
 
-export function isNegativeCacheableStatus(statusCode?: number): boolean {
-  return statusCode !== undefined && NEGATIVE_CACHEABLE_STATUSES.includes(statusCode);
-}
-
-function isEvmApiOrigin(url: string): boolean {
-  try {
-    return EVM_API_ORIGINS.has(new URL(url).origin);
-  } catch {
-    return false;
-  }
-}
-
 /** Full-jitter exponential backoff: random in [0, min(MAX, BASE * 2^attempt)] (1-based attempt). */
 export function computeRetryBackoffMs(attempt: number): number {
   const ceiling = Math.min(MAX_BACKOFF_MS, DEFAULT_ERROR_PAUSE * 2 ** attempt);
   return Math.round(Math.random() * ceiling);
 }
 
-/** Test-only: clears module-level fetch state (negative-verdict cache + circuit breaker). */
 export function resetFetchStateForTests(): void {
-  negativeVerdictCache.reset();
   breaker.reset();
 }
 

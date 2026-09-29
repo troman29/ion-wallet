@@ -8,4 +8,3 @@ export * from './transfer';
 export * from './staking';
 export * from './domains';
 export * from './enclave';
-export * from './settings';

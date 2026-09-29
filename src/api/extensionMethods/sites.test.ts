@@ -11,10 +11,6 @@ jest.mock('../common/dappPromises', () => ({
   resolveDappPromise: jest.fn(),
 }));
 
-jest.mock('../methods/analytics', () => ({
-  recordTonConnectEvent: jest.fn(),
-}));
-
 jest.mock('../storages/extension', () => ({
   __esModule: true,
   default: {
