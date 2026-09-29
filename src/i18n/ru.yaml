@@ -101,7 +101,6 @@ Is there a community?: Существует ли комьюнити?
 $about_wallet_community: А как же, добро пожаловать в наш %community_link%.
 $about_community_link_text: "**Telegram-канал**"
 Currency History: График курса
-Net Worth: Стоимость
 Price: Цена
 Enter Password: Введите пароль
 Send: Отправить
@@ -133,10 +132,7 @@ Invoice Link Copied: Ссылка скопирована
 Theme: Тема
 Language: Язык
 Enable Animations: Включить анимацию
-Enable Seasonal Theming: Включить сезонное оформление
 Enable Landscape Mode: Включить горизонтальный режим
-Disable Seasonal Theming: Отключить сезонное оформление
-You can always enable seasonal theming again in the appearance settings.: Вы всегда можете снова включить сезонное оформление в настройках внешнего вида.
 Base Currency: Базовая валюта
 Investor View: Режим инвестора
 Toggle Investor View: Переключить в режим инвестора
@@ -331,20 +327,7 @@ Other: Другие
 No price data: Нет данных о цене
 Price Copied: Цена скопирована
 Not staked: Не в стейкинге
-Portfolio: Портфель
-Performance, insights and P&L: Динамика, аналитика и P&L
-Overview: Обзор
-Total Balance: Общий баланс
-Net Change: Изменение стоимости портфеля
 No data: Нет данных
-Total Value: Общая стоимость
-Tracked asset value over time.: Стоимость отслеживаемых активов во времени.
-Total P&L: Общий P&L
-Daily P&L: P&L за сутки
-Portfolio Share: Структура портфеля
-Current allocation across tracked assets.: Текущее распределение отслеживаемых активов.
-Deep history analysis will be available in upcoming updates.: Глубокий анализ истории появится в следующих обновлениях.
-By Chain: По сетям
 No chain balances: Нет балансов по сетям
 Native: Нативные
 Stablecoins: Стейблкоины
@@ -750,14 +733,6 @@ Install on Desktop: Установить на компьютер
 Install on Mobile: Установить на мобильное устройство
 Install App: Установить приложение
 Hide: Скрыть
-Hide and Report: Скрыть и пожаловаться
-Hide and Report NFT: Скрыть NFT и пожаловаться
-Report: Пожаловаться
-Report NFT: Пожаловаться на NFT
-This NFT will remain hidden on this device and be reported.: Этот NFT останется скрытым на этом устройстве, и на него будет отправлена жалоба.
-Only Hide: Только скрыть
-Do you also want to report this NFT as inappropriate? It will be then permanently removed on this device.: Вы также хотите пожаловаться на этот NFT как на неприемлемый? После этого он будет навсегда удалён на этом устройстве.
-This NFT will be permanently hidden on this device and reported.: Этот NFT будет навсегда скрыт на этом устройстве, и на него будет отправлена жалоба.
 Hidden NFTs: Скрытые NFT
 Hidden By Me: Скрыто мной
 Probably Scam: Вероятно, скам
@@ -956,7 +931,6 @@ Unstake %amount%: Вывести %amount%
 Request Unstaking: Запросить вывод
 Confirm Upgrading: Подтвердить улучшение
 How does it work?: Как это работает?
-Multisend: Мультиотправка
 Renew All: Продлить все
 Renew: Продлить
 Renew Domain: Продлить домен

@@ -1,6 +1,5 @@
 import type {
   ApiAccountAny,
-  ApiAccountConfig,
   ApiActivityTimestamps,
   ApiBackendConfig,
   ApiChain,
@@ -14,11 +13,10 @@ import type {
 
 import { NO_EXTRA_FEATURES } from '../../config';
 import { parseAccountId } from '../../util/account';
-import { areDeepEqual } from '../../util/areDeepEqual';
 import { omit } from '../../util/iteratees';
 import { logDebugError } from '../../util/logs';
 import { OrGate } from '../../util/orGate';
-import { forbidConcurrency, throttle } from '../../util/schedulers';
+import { forbidConcurrency } from '../../util/schedulers';
 import { getNativeToken } from '../../util/tokens';
 import chains from '../chains';
 import {
@@ -28,24 +26,14 @@ import {
   fetchStoredAccounts,
 } from '../common/accounts';
 import { tryUpdateKnownAddresses } from '../common/addresses';
-import { callBackendGet, callBackendPost } from '../common/backend';
+import { callBackendGet } from '../common/backend';
 import { setBackendConfigCache } from '../common/cache';
-import {
-  forgetAllHeldTokens,
-  forgetHeldTokens,
-  forgetNetworkHeldTokens,
-  forgetOtherNetworksHeldTokens,
-  recordHeldTokens,
-} from '../common/held-tokens';
 import { pollingLoop } from '../common/polling/utils';
 import {
-  fetchNonBackendTokenDetails,
   loadTokensCache,
   pauseTokenUpdates,
   resumeTokenUpdates,
-  sendUpdateTokens,
   tokensPreload,
-  updateTokens,
   updateTokensFromBackend,
 } from '../common/tokens';
 import { MINUTE, SEC } from '../constants';
@@ -57,11 +45,6 @@ const BACKEND_INTERVAL = 30 * SEC;
 const LONG_BACKEND_INTERVAL = MINUTE;
 const INCORRECT_TIME_DIFF = 30 * SEC;
 
-const ACCOUNT_CONFIG_INTERVAL = { focused: MINUTE, notFocused: 10 * MINUTE };
-
-/** Lets the balances of the several polled wallets arrive before the details of their new tokens are requested */
-const TOKEN_DETAILS_THROTTLE = 3 * SEC;
-
 let onUpdate: OnApiUpdate;
 let stopCommonBackendPolling: NoneToVoidFunction | undefined;
 let stopActiveAccountPolling: NoneToVoidFunction | undefined;
@@ -70,15 +53,7 @@ const inactiveAccountPolling = createInactiveAccountsPollingManager();
 const setUpdatingStatus = createUpdatingStatusManager();
 
 export function initPolling(_onUpdate: OnApiUpdate) {
-  // Every chain reports the balances of both the active and the inactive accounts through this callback, which makes it
-  // the one place where the set of held tokens can be tracked without touching the chain implementations
-  onUpdate = (update) => {
-    if (update.type === 'updateBalances' && recordHeldTokens(update.accountId, update.balances)) {
-      refreshTokenDetails();
-    }
-
-    _onUpdate(update);
-  };
+  onUpdate = _onUpdate;
 
   pauseTokenUpdates();
   void loadTokensCache();
@@ -137,7 +112,7 @@ function setupCommonBackendPolling() {
 async function tryUpdateTokens() {
   try {
     const langCode = await storage.getItem('langCode');
-    await updateTokensFromBackend(onUpdate, { langCode, shouldNarrowToHeldTokens: true });
+    await updateTokensFromBackend(onUpdate, { langCode });
   } catch (err) {
     logDebugError('tryUpdateTokens', err);
   } finally {
@@ -145,24 +120,6 @@ async function tryUpdateTokens() {
     resumeTokenUpdates();
   }
 }
-
-/**
- * `tryUpdateTokens` runs before the first balances arrive, so the tokens discovered on the wallets afterwards would
- * wait for the next poll to get their price and type. This catches them up.
- */
-const refreshTokenDetails = throttle(async () => {
-  try {
-    await tokensPreload.promise;
-    const langCode = await storage.getItem('langCode');
-    const tokenDetails = await fetchNonBackendTokenDetails({ langCode, shouldNarrowToHeldTokens: true });
-
-    if (tokenDetails?.length) {
-      await updateTokens([], () => sendUpdateTokens(onUpdate), tokenDetails, true);
-    }
-  } catch (err) {
-    logDebugError('refreshTokenDetails', err);
-  }
-}, TOKEN_DETAILS_THROTTLE, false);
 
 async function tryUpdateCurrencyRates() {
   try {
@@ -216,25 +173,17 @@ export async function tryUpdateConfig() {
     const {
       isLimited,
       isCopyStorageEnabled = false,
-      supportAccountsCount = 1,
       now: serverUtc,
       country: countryCode,
-      swapVersion,
-      seasonalTheme,
       isUpdateRequired: isAppUpdateRequired,
-      knowledgeBaseVersion,
     } = config;
 
     const updateConfig: ApiUpdateConfig = {
       type: 'updateConfig',
       isLimited,
       isCopyStorageEnabled,
-      supportAccountsCount,
       countryCode,
       isAppUpdateRequired,
-      swapVersion,
-      seasonalTheme,
-      knowledgeBaseVersion,
     };
 
     onUpdate(updateConfig);
@@ -261,10 +210,7 @@ export async function setActivePollingAccount(
 
   if (accountId) {
     const account = await fetchStoredAccount(accountId);
-
     const stopPollingFns = [
-      canPollAccountConfig(account) ? setupAccountConfigPolling(accountId, account).stop : undefined,
-
       ...(Object.keys(chains) as (keyof typeof chains)[]).map((chain) => {
         if (doesAccountHaveChain(account, chain)) {
           return chains[chain].setupActivePolling(
@@ -298,64 +244,16 @@ export function addPollingAccount(accountId: string, account: ApiAccountAny) {
 /** Call it every time an account is removed (except for cases in the other remove...account functions) */
 export function removePollingAccount(accountId: string) {
   inactiveAccountPolling?.removeAccount(accountId);
-  forgetHeldTokens(accountId);
 }
 
 /** Call it every time all accounts of a network are removed */
 export function removeNetworkPollingAccounts(network: ApiNetwork) {
   inactiveAccountPolling?.removeNetworkAccounts(network);
-  forgetNetworkHeldTokens(network);
 }
 
 /** Call it every time all accounts are removed */
 export function removeAllPollingAccounts() {
   inactiveAccountPolling?.removeAllAccounts();
-  forgetAllHeldTokens();
-}
-
-/**
- * The endpoint answers a `view` account with an empty config, and keys every other type by its TON
- * address. An account of another type that carries no TON address therefore has nothing to ask for,
- * and asking anyway is a request the backend can only reject.
- */
-function canPollAccountConfig(account: ApiAccountAny) {
-  return account.type === 'view' || doesAccountHaveChain(account, 'ton');
-}
-
-function setupAccountConfigPolling(accountId: string, account: ApiAccountAny) {
-  let lastResult: ApiAccountConfig | undefined;
-
-  // The endpoint reads the account type and the chain addresses only, while `authToken` is a bearer credential for
-  // our own API - it has no business riding a polling loop's request body once a swap has put it on the wallet.
-  const { byChain } = account;
-  const partialAccount = {
-    ...account,
-    ...(byChain.ton && { byChain: { ...byChain, ton: omit(byChain.ton, ['authToken']) } }),
-  };
-
-  return pollingLoop({
-    period: ACCOUNT_CONFIG_INTERVAL,
-    async poll() {
-      try {
-        const langCode = await storage.getItem('langCode');
-        const accountConfig = await callBackendPost<ApiAccountConfig>('/account-config', {
-          ...partialAccount,
-          langCode,
-        });
-
-        if (!areDeepEqual(accountConfig, lastResult)) {
-          lastResult = accountConfig;
-          onUpdate({
-            type: 'updateAccountConfig',
-            accountId,
-            accountConfig,
-          });
-        }
-      } catch (err) {
-        logDebugError('setupBackendAccountPolling', err);
-      }
-    },
-  });
 }
 
 /**
@@ -448,8 +346,6 @@ function createInactiveAccountsPollingManager() {
     stopAllPollings();
     activeAccountId = newActiveAccountId;
     const { network } = parseAccountId(activeAccountId);
-    // The other network is no longer polled, so its held tokens would linger in the details payload forever
-    forgetOtherNetworksHeldTokens(network);
     const accounts = await fetchStoredAccounts();
     const otherAccountIds = Object.keys(accounts).filter((accountId) => (
       accountId !== activeAccountId

@@ -452,37 +452,6 @@ addActionHandler('toggleCanPlaySounds', (global, actions, { isEnabled } = {}) =>
   };
 });
 
-addActionHandler('toggleSeasonalTheming', (global, actions, { isEnabled }) => {
-  return {
-    ...global,
-    settings: {
-      ...global.settings,
-      isSeasonalThemingDisabled: !isEnabled || undefined,
-    },
-  };
-});
-
-addActionHandler('setDeveloperSettingsOverride', (global, actions, { key, value }) => {
-  if (value === undefined) {
-    if (global.settings.developerSettingsOverrides?.[key] === undefined) {
-      return global;
-    }
-
-    const rest = omit(global.settings.developerSettingsOverrides, [key]);
-
-    return updateSettings(global, {
-      developerSettingsOverrides: Object.keys(rest).length ? rest : undefined,
-    });
-  }
-
-  return updateSettings(global, {
-    developerSettingsOverrides: {
-      ...global.settings.developerSettingsOverrides,
-      [key]: value,
-    },
-  });
-});
-
 addActionHandler('closeSecurityWarning', (global) => {
   return {
     ...global,
@@ -785,14 +754,6 @@ addActionHandler('switchToExplore', (global: GlobalState, actions) => {
 addActionHandler('switchToSettings', (global: GlobalState, actions) => {
   actions.closeExplore(undefined, { forceOnHeavyAnimation: true });
   actions.openSettings(undefined, { forceOnHeavyAnimation: true });
-});
-
-addActionHandler('openPromotionModal', (global) => {
-  return { ...global, isPromotionModalOpen: true };
-});
-
-addActionHandler('closePromotionModal', (global) => {
-  return { ...global, isPromotionModalOpen: undefined };
 });
 
 addActionHandler('setAppLayout', (global, actions, { layout }) => {

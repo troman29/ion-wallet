@@ -18,8 +18,6 @@ addActionHandler('initApi', async (global, actions) => {
     isIosApp: IS_IOS_APP,
     isAndroidApp: IS_ANDROID_APP,
     langCode: global.settings.langCode,
-    referrer: new URLSearchParams(window.location.search).get('r') ?? undefined,
-    channel: new URLSearchParams(window.location.search).get('utm_source') ?? undefined,
     accountIds,
   });
 

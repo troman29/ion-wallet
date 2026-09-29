@@ -97,7 +97,6 @@ Is there a community?: آیا انجمنی وجود دارد؟
 $about_wallet_community: البته، به %community_link% ما خوش آمدید.
 $about_community_link_text: "**کانال تلگرام**"
 Currency History: تاریخچه ارز
-Net Worth: ارزش خالص دارایی
 Price: قیمت
 Enter Password: رمز عبور را وارد کنید
 Send: ارسال
@@ -128,10 +127,7 @@ Invoice Link Copied: لینک فاکتور کپی شد
 Theme: پوسته
 Language: زبان
 Enable Animations: فعال‌سازی انیمیشن‌ها
-Enable Seasonal Theming: فعال‌سازی پوسته‌بندی فصلی
 Enable Landscape Mode: فعال‌سازی حالت افقی
-Disable Seasonal Theming: غیرفعال‌سازی پوسته‌بندی فصلی
-You can always enable seasonal theming again in the appearance settings.: همیشه می‌توانید پوسته‌بندی فصلی را دوباره در تنظیمات ظاهر فعال کنید.
 Base Currency: ارز پایه
 Investor View: نمای سرمایه‌گذار
 Toggle Investor View: تغییر وضعیت نمای سرمایه‌گذار
@@ -322,20 +318,7 @@ Are you sure you want to disconnect all websites?: آیا مطمئن هستید 
 Logged in with %app_name%: واردشده با %app_name%
 No active connections: هیچ اتصال فعالی وجود ندارد
 Other: سایر
-Portfolio: سبد دارایی‌ها
-Performance, insights and P&L: عملکرد، بینش‌ها و سود و زیان
-Overview: نمای کلی
-Total Balance: موجودی کل
-Net Change: تغییر خالص
 No data: داده‌ای وجود ندارد
-Total Value: ارزش کل
-Tracked asset value over time.: ارزش دارایی پیگیری‌شده در طول زمان.
-Total P&L: سود و زیان کل
-Daily P&L: سود و زیان روزانه
-Portfolio Share: سهم در سبد دارایی‌ها
-Current allocation across tracked assets.: تخصیص فعلی بین دارایی‌های پیگیری‌شده.
-Deep history analysis will be available in upcoming updates.: تحلیل عمیق تاریخچه در به‌روزرسانی‌های آینده در دسترس خواهد بود.
-By Chain: بر اساس زنجیره
 No chain balances: موجودی زنجیره‌ای وجود ندارد
 Native: بومی
 Stablecoins: استیبل‌کوین‌ها
@@ -738,14 +721,6 @@ Install on Desktop: نصب روی دسکتاپ
 Install on Mobile: نصب روی موبایل
 Install App: نصب اپلیکیشن
 Hide: پنهان کردن
-Hide and Report: پنهان و گزارش کردن
-Hide and Report NFT: پنهان و گزارش کردن NFT
-Report: گزارش
-Report NFT: گزارش NFT
-This NFT will remain hidden on this device and be reported.: این NFT در این دستگاه پنهان می‌ماند و گزارش خواهد شد.
-Only Hide: فقط پنهان کردن
-Do you also want to report this NFT as inappropriate? It will be then permanently removed on this device.: آیا می‌خواهید این NFT را نیز به‌عنوان نامناسب گزارش کنید؟ سپس برای همیشه از این دستگاه حذف خواهد شد.
-This NFT will be permanently hidden on this device and reported.: این NFT برای همیشه در این دستگاه پنهان و گزارش خواهد شد.
 Hidden NFTs: "\u200FNFT های پنهان‌شده"
 Hidden By Me: پنهان‌شده توسط من
 Probably Scam: احتمالاً کلاهبرداری
@@ -944,7 +919,6 @@ Unstake %amount%: برداشت استیک %amount%
 Request Unstaking: درخواست برداشت استیک
 Confirm Upgrading: تأیید ارتقا
 How does it work?: چگونه کار می‌کند؟
-Multisend: ارسال گروهی
 Renew All: تمدید همه
 Renew: تمدید
 Renew Domain: تمدید دامنه

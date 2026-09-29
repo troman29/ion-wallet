@@ -24,8 +24,6 @@ export interface ApiInitArgs {
   isIosApp?: boolean;
   isAndroidApp?: boolean;
   langCode?: LangCode;
-  referrer?: string;
-  channel?: string;
   accountIds?: string[];
   storage?: ApiStorageConfig;
 }
@@ -51,8 +49,7 @@ export interface ApiToken {
   codeHash?: string;
   /** A small dim label to show in the UI right after the token name */
   label?: string;
-  /* Means the token is fetched from the backend by default and already includes price
-  and other details (`ApiTokenPriceDetails`), so no separate requests are needed. */
+  /** Means the token is fetched from the backend by default. */
   isFromBackend?: boolean;
 }
 
@@ -176,12 +173,6 @@ export interface ApiNft {
 export interface ApiNftCollection {
   chain: ApiChain;
   address: string;
-}
-
-export interface ApiReportNftOptions {
-  chain: ApiChain;
-  network: ApiNetwork;
-  nftAddress: string;
 }
 
 export interface ApiDomainData {

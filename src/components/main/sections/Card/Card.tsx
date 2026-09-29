@@ -2,57 +2,44 @@ import React, {
   type ElementRef,
   memo, useLayoutEffect, useMemo, useRef, useState,
 } from '../../../../lib/teact/teact';
-import { getActions, withGlobal } from '../../../../global';
+import { withGlobal } from '../../../../global';
 
 import type {
   ApiBaseCurrency, ApiCurrencyRates, ApiStakingState,
 } from '../../../../api/types';
-import type { ApiBackendConfig } from '../../../../api/types/backend';
-import type { ApiPromotion } from '../../../../api/types/backend';
 import type {
   IAnchorPosition,
   UserToken,
 } from '../../../../global/types';
-import type { LangFn } from '../../../../hooks/useLang';
-import type { DropdownItem } from '../../../ui/Dropdown';
 
 import {
   selectAccountStakingStates, selectCurrentAccount,
   selectCurrentAccountId,
-  selectCurrentAccountState,
   selectCurrentAccountTokens,
   selectIsCurrentAccountViewMode,
-  selectSeasonalTheme,
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import { calculateFullBalance } from '../../../../util/calculateFullBalance';
 import { formatCurrency, formatCurrencyExtended, getShortCurrencySymbol } from '../../../../util/formatNumber';
 import { toNativeDigits } from '../../../../util/nativeDigits';
-import { preloadedImageUrls } from '../../../../util/preloadImage';
 import { IS_IOS, IS_SAFARI } from '../../../../util/windowEnvironment';
 
 import { useDeviceScreen } from '../../../../hooks/useDeviceScreen';
 import useFontScale from '../../../../hooks/useFontScale';
-import useLang from '../../../../hooks/useLang';
 import useLastCallback from '../../../../hooks/useLastCallback';
 import useSyncEffect from '../../../../hooks/useSyncEffect';
 import useUpdateIndicator from '../../../../hooks/useUpdateIndicator';
 import useWindowSize from '../../../../hooks/useWindowSize';
 
 import AnimatedCounter from '../../../ui/AnimatedCounter';
-import Image from '../../../ui/Image';
 import LoadingDots from '../../../ui/LoadingDots';
 import SensitiveData from '../../../ui/SensitiveData';
 import Spinner from '../../../ui/Spinner';
 import Transition from '../../../ui/Transition';
 import CardAddress from './CardAddress';
 import CurrencySwitcherMenu from './CurrencySwitcherMenu';
-import SeasonalTheming from './SeasonalTheming';
 
 import styles from './Card.module.scss';
-
-import promoBgMaskUrl from '../../../../assets/cards/promo_card_bg.png';
-import promoOverlayMaskUrl from '../../../../assets/cards/promo_card_overlay.png';
 
 interface OwnProps {
   ref?: ElementRef<HTMLDivElement>;
@@ -69,48 +56,9 @@ interface StateProps {
   isSensitiveDataHidden?: true;
   isNftBuyingDisabled: boolean;
   isViewMode: boolean;
-  animationLevel: number;
-  isSeasonalThemingDisabled?: boolean;
-  seasonalTheme?: ApiBackendConfig['seasonalTheme'];
-  activePromotion?: ApiPromotion;
 }
 
 let mainKey = 0;
-
-function useSeasonalTheming({
-  toggleSeasonalTheming,
-  lang,
-  showToast,
-}: {
-  toggleSeasonalTheming: (options: { isEnabled: boolean }) => void;
-  lang: LangFn;
-  showToast: (options: { message: string }) => void;
-}) {
-  const handleDisableSeasonalTheming = useLastCallback(() => {
-    toggleSeasonalTheming({ isEnabled: false });
-    showToast({
-      message: lang('You can always enable seasonal theming again in the appearance settings.'),
-    });
-  });
-
-  const seasonalContextMenuItems = useMemo<DropdownItem<'disable'>[]>(() => ([
-    {
-      value: 'disable',
-      name: lang('Disable Seasonal Theming'),
-      fontIcon: 'eye-closed',
-    },
-  ]), [lang]);
-
-  return {
-    seasonalContextMenuItems,
-    handleDisableSeasonalTheming,
-  };
-}
-
-const CARD_PORTRAIT_WIDTH = 378;
-const CARD_PORTRAIT_HEIGHT = 220;
-const CARD_LANDSCAPE_WIDTH = 328;
-const CARD_LANDSCAPE_HEIGHT = 200;
 
 function Card({
   ref,
@@ -124,15 +72,7 @@ function Card({
   isSensitiveDataHidden,
   isNftBuyingDisabled,
   isViewMode,
-  animationLevel,
-  isSeasonalThemingDisabled,
-  seasonalTheme,
-  activePromotion,
 }: OwnProps & StateProps) {
-  const {
-    toggleSeasonalTheming, showToast, openPromotionModal,
-  } = getActions();
-  const lang = useLang();
   const amountRef = useRef<HTMLDivElement>();
   const cardRef = useRef<HTMLDivElement>();
   const shortBaseSymbol = getShortCurrencySymbol(baseCurrency);
@@ -159,28 +99,6 @@ function Card({
 
   const closeCurrencyMenu = useLastCallback(() => {
     setCurrencyMenuAnchor(undefined);
-  });
-
-  const { seasonalContextMenuItems, handleDisableSeasonalTheming } = useSeasonalTheming({
-    toggleSeasonalTheming,
-    lang,
-    showToast,
-  });
-
-  const {
-    shouldRenderPromo,
-    promoMascotStyle,
-    isPromoImagesLoaded,
-    handlePromoBgLoad,
-    handlePromoOverlayLoad,
-    handlePromoClick,
-    mascotIcon,
-  } = usePromotionModal({
-    activePromotion,
-    promoBgMaskUrl,
-    promoOverlayMaskUrl,
-    openPromotionModal,
-    isPortrait,
   });
 
   const values = useMemo(() => {
@@ -340,49 +258,6 @@ function Card({
           )
         }
       >
-        <SeasonalTheming
-          animationLevel={animationLevel}
-          seasonalTheme={seasonalTheme}
-          isSeasonalThemingDisabled={isSeasonalThemingDisabled}
-          seasonalContextMenuItems={seasonalContextMenuItems}
-          onDisableSeasonalTheming={handleDisableSeasonalTheming}
-        />
-
-        {shouldRenderPromo && (
-          <div className={styles.promoLayer}>
-            <Image
-              url={promoBgMaskUrl}
-              alt=""
-              className={styles.promoBg}
-              imageClassName={styles.promoBg_img}
-              isSlow
-              loading="eager"
-              onLoad={handlePromoBgLoad}
-            />
-            <Image
-              url={promoOverlayMaskUrl}
-              alt=""
-              className={styles.promoOverlay}
-              imageClassName={styles.promoOverlay_img}
-              isSlow
-              loading="eager"
-              onLoad={handlePromoOverlayLoad}
-            />
-            <div
-              // This class name should be applied only once. When the mascot is present, it should be applied to the image instead.
-              className={!(mascotIcon && isPromoImagesLoaded) ? styles.promoMascot : undefined}
-              style={promoMascotStyle}
-              role="button"
-              tabIndex={0}
-              onClick={handlePromoClick}
-            >
-              {mascotIcon && isPromoImagesLoaded && (
-                <Image url={mascotIcon.url} alt="" loading="eager" className={styles.promoMascot} />
-              )}
-            </div>
-          </div>
-        )}
-
         <div className={styles.containerInner}>
           {values ? renderBalance() : renderLoader()}
           <Transition
@@ -404,7 +279,6 @@ export default memo(
   withGlobal<OwnProps>(
     (global): StateProps => {
       const currentAccountId = selectCurrentAccountId(global)!;
-      const accountState = selectCurrentAccountState(global);
       const stakingStates = selectAccountStakingStates(global, currentAccountId);
 
       const { baseCurrency } = global.settings;
@@ -419,68 +293,8 @@ export default memo(
         stakingStates,
         isSensitiveDataHidden: global.settings.isSensitiveDataHidden,
         isNftBuyingDisabled: global.restrictions.isNftBuyingDisabled,
-        animationLevel: global.settings.animationLevel,
-        isSeasonalThemingDisabled: global.settings.isSeasonalThemingDisabled,
-        seasonalTheme: selectSeasonalTheme(global),
-        activePromotion: accountState?.config?.activePromotion,
       };
     },
     (global, _, stickToFirst) => stickToFirst(selectCurrentAccountId(global)),
   )(Card),
 );
-
-function usePromotionModal({
-  activePromotion,
-  promoBgMaskUrl: promoBgMaskUrlParam,
-  promoOverlayMaskUrl: promoOverlayMaskUrlParam,
-  openPromotionModal,
-  isPortrait,
-}: {
-  activePromotion?: ApiPromotion;
-  promoBgMaskUrl: string;
-  promoOverlayMaskUrl: string;
-  openPromotionModal: NoneToVoidFunction;
-  isPortrait: boolean;
-}) {
-  const shouldRenderPromo = Boolean(activePromotion?.kind === 'cardOverlay');
-  const mascotIcon = activePromotion?.cardOverlay?.mascotIcon;
-
-  const cardWidth = isPortrait ? CARD_PORTRAIT_WIDTH : CARD_LANDSCAPE_WIDTH;
-  const cardHeight = isPortrait ? CARD_PORTRAIT_HEIGHT : CARD_LANDSCAPE_HEIGHT;
-
-  const promoMascotStyle = useMemo(() => (mascotIcon
-    ? `--promo-mascot-top: ${mascotIcon.top}px; `
-    + `--promo-mascot-right: ${mascotIcon.right}px; `
-    + `--promo-mascot-height: ${mascotIcon.height / cardHeight * 100}%;`
-    + `--promo-mascot-width: ${mascotIcon.width / cardWidth * 100}%;`
-    + `--promo-mascot-rotation: ${mascotIcon.rotation}deg;`
-    : undefined), [mascotIcon, cardWidth, cardHeight]);
-
-  // Mascot image should appear only after the card overlay is loaded
-  const [isPromoBgLoaded, setIsPromoBgLoaded] = useState(preloadedImageUrls.has(promoBgMaskUrlParam));
-  const [isPromoOverlayLoaded, setIsPromoOverlayLoaded] = useState(preloadedImageUrls.has(promoOverlayMaskUrlParam));
-  const isPromoImagesLoaded = isPromoBgLoaded && isPromoOverlayLoaded;
-  const handlePromoBgLoad = useLastCallback(() => setIsPromoBgLoaded(true));
-  const handlePromoOverlayLoad = useLastCallback(() => setIsPromoOverlayLoaded(true));
-
-  const handlePromoClick = useLastCallback(() => {
-    const { onClickAction } = activePromotion?.cardOverlay || {};
-    switch (onClickAction) {
-      case 'openPromotionModal':
-        openPromotionModal();
-        break;
-      default:
-        break;
-    }
-  });
-
-  return {
-    shouldRenderPromo,
-    promoMascotStyle,
-    isPromoImagesLoaded,
-    mascotIcon,
-    handlePromoBgLoad,
-    handlePromoOverlayLoad,
-    handlePromoClick,
-  };
-}

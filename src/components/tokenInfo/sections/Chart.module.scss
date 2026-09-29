@@ -9,18 +9,6 @@
   background-color: var(--color-background-first);
 }
 
-.modes ,
-.modesOverlay {
-  flex: 0 0 auto;
-  align-self: center;
-
-  margin-top: -0.25rem;
-  margin-bottom: -0.25rem;
-
-  font-size: 0.75rem;
-  line-height: 1.333;
-}
-
 .slide {
   display: flex;
   flex-direction: column;

@@ -1,14 +1,12 @@
 import type { ApiInitArgs, OnApiUpdate } from '../types';
 
 import { initWindowConnector } from '../../util/windowProvider/connector';
-import { fetchBackendReferrer } from '../common/backend';
 import { connectUpdater, disconnectUpdater, tryMigrateStorage } from '../common/helpers';
 import { initClientId } from '../common/other';
 import { getProtocolManager, initProtocolManager } from '../dappProtocols';
 import { setEnvironment } from '../environment';
 import { addHooks } from '../hooks';
 import { configureStorage, createStorage, withStorage } from '../storages';
-import { claimInstallAttribution } from './attribution';
 import { destroyPolling } from './polling';
 import * as methods from '.';
 
@@ -54,23 +52,9 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
     onDappDisconnected: protocolManager.closeRemoteConnection.bind(protocolManager),
     onDappsChanged: protocolManager.resetupRemoteConnection.bind(protocolManager),
   });
-
-  void saveReferrer(args, runtimeStorage);
-  void claimInstallAttribution(args, runtimeStorage);
 }
 
 export function destroy() {
   void destroyPolling();
   disconnectUpdater();
-}
-
-async function saveReferrer(args: ApiInitArgs, runtimeStorage: ReturnType<typeof createStorage>) {
-  const referrer = args.referrer ?? await fetchBackendReferrer();
-
-  if (referrer) {
-    await runtimeStorage.setItem('referrer', referrer);
-    await withStorage(runtimeStorage, async () => {
-      await initClientId();
-    });
-  }
 }

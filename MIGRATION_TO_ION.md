@@ -8,18 +8,18 @@
 
 ## Текущее состояние
 
-Рабочая ветка: `ion/restore-capacitor`. Статус фиксируется вместе с каждым блоком миграции.
+Рабочая ветка фиксируется в текущем PR. Статус обновляется вместе с каждым блоком миграции.
 
 | Область | Статус | Что сделано |
 | --- | --- | --- |
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
-| Лишние продукты | ◐ | Удалены Portfolio, Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
+| Лишние продукты | ◐ | Удалены Portfolio, включая token net worth graph и его backend endpoint, а также POST-запрос ассетов и экран расширенной информации токена; Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
 | Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
 | Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, ION Gateway/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
 | ION API и инфраструктура | ◐ | Runtime URL переведены на `wallet.ice.io`; в предпросмотре подключён ION RPC v2. Полноценного совместимого v3 indexer пока нет. Firebase использует безопасную заглушку до получения настоящих ключей. |
 | Agent | ✅ | Удалены оставшиеся ключи storage и локализаций, CI-задачи, иконки, анимации, CSS и комментарии. |
-| iOS-проект | ◐ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install` и `cap sync ios` проходят. Осталось проверить сборку на симуляторе или устройстве. |
+| iOS-проект | ✅ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install`, `cap sync ios` и сборка всех трёх схем для generic iOS Simulator проходят. |
 
 ## Решения, которые уже приняты
 
@@ -61,9 +61,10 @@
   - Удалены Fragment collections, NFT-меню, marketplace-метаданные и тестовые trace fixtures; Notcoin voucher exchange/burn flow; Ethena USDe/tsUSDe staking, контракты, backend-модели, activity parsing, интерфейс и локализации.
   - Обычные NFT, общий burn NFT, liquid staking и jetton staking сохранены.
 
-- [ ] **Проверить iOS Capacitor-проект.**
+- [x] **Проверить сборку iOS Capacitor-проекта.**
   - Удалены Air package products, `AirWidgetExtension`, Air-only target и ссылки на удалённые файлы.
-  - Проверить открытие проекта, `cap sync ios`, сборку и запуск на симуляторе или устройстве.
+  - Workspace разрешает зависимости; после `cap sync ios` собраны `IONWallet`, `IONWallet_NoExtensions` и `IONWallet_Preview` для generic iOS Simulator с отключённым code signing.
+  - Запуск на симуляторе или устройстве остаётся ручной проверкой из P2.
 
 - [ ] **Закрыть вопрос с ION activity API.**
   - ION RPC v2 отвечает на JSON-RPC вызовы и подходит для базовых операций.
@@ -71,8 +72,23 @@
   - Нужен совместимый ION v3 endpoint либо отдельная адаптация слоя активности. Подмена nginx не решает проблему.
 
 - [ ] **Убрать зависимость preview от MyTonWallet backend.**
-  - Проверить все запросы, которые ещё идут через `/api/` к MyTonWallet.
-  - Для каждого выбрать ION-аналог, собственный сервис или осознанно удалить функцию.
+  - На 2026-09-29 `api.wallet.ice.io` не резолвится из среды сборки; fallback в `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` нельзя считать работающей ION-инфраструктурой.
+  - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
+    - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/utils/get-config`;
+    - каталог и рынок: `/v2/dapp/catalog`, `/prices/chart/*`;
+    - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
+    - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;
+    - уведомления и live-обновления: `/notifications/*`, WebSocket `/{testnet/}ws`;
+    - proxy: `/proxy/download-json` и `/proxy/download-lottie` для внешних метаданных и анимаций.
+  - После решения проверить, что все runtime запросы к backend идут к утверждённому ION-сервису, а не к MyTonWallet; сами GitHub forks в `package.json` остаются закреплёнными исходниками зависимостей до появления ION forks.
+
+- [ ] **Принять решение по каждому оставшемуся полю `/utils/get-config`.**
+  - `isLimited` и `country`: нужны только для региональных ограничений iOS/Android; утвердить источник и правила ION или удалить ограничение.
+  - `isCopyStorageEnabled`: разрешает экспорт диагностических данных; определить, нужен ли он в production и чем управляется.
+  - `now`: используется для предупреждения о неверном времени устройства; сохранить через ION time endpoint либо заменить локальной проверкой.
+  - `isUpdateRequired`: обязательное обновление клиента; определить источник версии для App Store, Google Play и desktop.
+  - `isWebSocketEnabled`: сейчас не читается клиентом; удалить из контрактной схемы после решения, нужны ли live-обновления.
+  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `supportAccountsCount`, `knowledgeBaseVersion`, `isVestingEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry. Swap всегда использует локально закреплённую последнюю версию `SWAP_API_VERSION`.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 
@@ -112,6 +128,8 @@
 - [ ] Завершить переход публичного моста с TON Connect на ION Gateway после утверждения схемы и регистрации протокола.
   - Сейчас extension публикует один мост под `window.ionwallet.ionconnect` и временным совместимым alias `window.ionwallet.tonconnect`.
   - После фикса окончательных URI-схем, manifest/registry-записей и требований ION Gateway заменить или удалить legacy alias, старые bridge identifiers и пользовательские упоминания TON Connect.
+- [ ] Снять `NO_WEBSOCKET`, когда ION начнёт отдавать update-сокет.
+  - Пока сборки используют HTTP polling вместо Toncenter, EVM и backend WebSocket.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Закоммитить и перенести в репозиторий nginx-конфигурацию предпросмотра `wallet.lab.windbit.dev`, если она остаётся частью инфраструктуры проекта.
 
@@ -128,7 +146,7 @@
 
 - Предпросмотр на Home Lab уже умеет проксировать ION RPC v2. В нём также устранены утечка basic-auth заголовка в upstream и ошибочный SPA fallback для отсутствующих API.
 - У ION пока нет совместимого v3 indexer. Без решения этого вопроса история операций не может считаться готовой.
-- Android: `:app:assembleIonwalletProdDebug` проходит с Firebase-заглушкой. iOS: `cap sync ios --deployment` и `pod install` проходят; полноценная Xcode-сборка всё ещё требует установленный iOS runtime или подключённое устройство.
+- Android: `:app:assembleIonwalletProdDebug` проходит с Firebase-заглушкой. iOS: `cap sync ios --deployment`, `pod install` и Xcode-сборка всех рабочих схем проходят; запуск требует совместимого iOS runtime или подключённого устройства.
 - В текущем checkout нет файла `AGENTS.md`. Запрошенная зачистка Agent относится к остаткам функциональности в коде и CI, перечисленным выше.
 
 ## Как обновлять план

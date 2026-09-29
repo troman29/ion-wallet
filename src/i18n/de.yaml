@@ -98,7 +98,6 @@ Is there a community?: Gibt es eine Gemeinschaft?
 $about_wallet_community: Natürlich, willkommen in unserer %community_link%.
 $about_community_link_text: "**Telegram Kanal**"
 Currency History: Währungsgeschichte
-Net Worth: Vermögenswert
 Price: Preis
 Enter Password: Passwort eingeben
 Send: Senden
@@ -129,10 +128,7 @@ Invoice Link Copied: Die Rechnungslink wurde kopiert
 Theme: Thema
 Language: Sprache
 Enable Animations: Animationen aktivieren
-Enable Seasonal Theming: Saisonales Design aktivieren
 Enable Landscape Mode: Querformat aktivieren
-Disable Seasonal Theming: Saisonales Design deaktivieren
-You can always enable seasonal theming again in the appearance settings.: Sie können das saisonale Design jederzeit in den Darstellungseinstellungen wieder aktivieren.
 Base Currency: Basiswährung
 Investor View: Investorenansicht
 Toggle Investor View: Investorenansicht umschalten
@@ -329,20 +325,7 @@ Other: Sonstige
 No price data: Keine Preisdaten
 Price Copied: Preis kopiert
 Not staked: Nicht gestakt
-Portfolio: Portfolio
-Performance, insights and P&L: Dynamik, Einblicke und GuV
-Overview: Übersicht
-Total Balance: Gesamtguthaben
-Net Change: Portfolioänderung
 No data: Keine Daten
-Total Value: Gesamtwert
-Tracked asset value over time.: Wert der verfolgten Vermögenswerte im Zeitverlauf.
-Total P&L: Gesamt-GuV
-Daily P&L: Tägliche GuV
-Portfolio Share: Portfolio-Aufteilung
-Current allocation across tracked assets.: Aktuelle Verteilung der verfolgten Vermögenswerte.
-Deep history analysis will be available in upcoming updates.: Die Analyse der vollständigen Historie wird in kommenden Updates verfügbar sein.
-By Chain: Nach Netzwerk
 No chain balances: Keine Netzwerkguthaben
 Native: Nativ
 Stablecoins: Stablecoins
@@ -741,14 +724,6 @@ Install on Desktop: Auf dem Desktop installieren
 Install on Mobile: Auf dem Mobilgerät installieren
 Install App: App installieren
 Hide: Verstecken
-Hide and Report: Ausblenden und melden
-Hide and Report NFT: NFT ausblenden und melden
-Report: Melden
-Report NFT: NFT melden
-This NFT will remain hidden on this device and be reported.: Dieses NFT bleibt auf diesem Gerät ausgeblendet und wird gemeldet.
-Only Hide: Nur ausblenden
-Do you also want to report this NFT as inappropriate? It will be then permanently removed on this device.: Möchtest du dieses NFT auch als unangemessen melden? Es wird anschließend dauerhaft von diesem Gerät entfernt.
-This NFT will be permanently hidden on this device and reported.: Dieses NFT wird dauerhaft auf diesem Gerät ausgeblendet und gemeldet.
 Hidden NFTs: Versteckte NFTs
 Hidden By Me: Von mir versteckt
 Probably Scam: Wahrscheinlich Betrug
@@ -947,7 +922,6 @@ Unstake %amount%: "%amount% entstaken"
 Request Unstaking: Entstaken anfordern
 Confirm Upgrading: Upgrade bestätigen
 How does it work?: Wie funktioniert das?
-Multisend: Multisend
 Renew All: Alle erneuern
 Renew: Erneuern
 Renew Domain: Domain erneuern

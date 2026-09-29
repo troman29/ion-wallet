@@ -8,9 +8,8 @@
  * that receives its first funds mid-session showing an empty feed until restart. Hence the TTL
  * here, and none on the positive half.
  *
- * Keyed by (network, chain, lowercased address) - unlike the untrackable registry this is a
- * per-chain fact, since an address can be busy on one chain and untouched on another. Bounded
- * LRU so a wallet holding many chains cannot grow it without limit.
+ * Keyed by network, chain and lowercased address, because an address can be busy on one chain
+ * and untouched on another. Bounded LRU so a wallet holding many chains cannot grow it without limit.
  */
 
 const DEFAULT_TTL_MS = 10 * 60_000;

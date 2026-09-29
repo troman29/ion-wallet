@@ -80,7 +80,7 @@ export async function getStoredBackendAuthToken(accountId: string) {
   return authToken;
 }
 
-export async function fetchAccountConfigForDebugPurposesOnly() {
+export async function getStorageDataForDebugPurposesOnly() {
   try {
     const [accounts, stateVersion, mnemonicsEncrypted] = await Promise.all([
       fetchStoredAccounts(),
@@ -90,7 +90,7 @@ export async function fetchAccountConfigForDebugPurposesOnly() {
 
     return JSON.stringify({ accounts, stateVersion, mnemonicsEncrypted });
   } catch (err) {
-    logDebugError('fetchAccountConfigForDebugPurposesOnly', err);
+    logDebugError('getStorageDataForDebugPurposesOnly', err);
 
     return undefined;
   }

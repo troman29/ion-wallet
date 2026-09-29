@@ -38,7 +38,6 @@ import {
   PROXY_API_BASE_URL,
   SSE_BRIDGE_URL,
   SUBPROJECT_URL_MASK,
-  TON_CONNECT_ANALYTICS_URL,
   TONCENTER_MAINNET_URL,
   TONCENTER_TESTNET_URL,
   WALLET_CONNECT_BRIDGE_PATTERNS,
@@ -90,7 +89,6 @@ const cspConnectSrcHosts = Array.from(new Set([
   EVM_TESTNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
   ensureTrailingSlash(IPFS_GATEWAY_BASE_URL),
   ensureTrailingSlash(SSE_BRIDGE_URL),
-  TON_CONNECT_ANALYTICS_URL,
 ])).join(' ');
 
 const cspImageSrcHosts = [
@@ -436,6 +434,7 @@ export default function createConfig(
         NO_TON: '0',
         NO_EVM: '0',
         NO_PENDING_ACTIVITIES: '0',
+        NO_WEBSOCKET: '0',
         NO_EXTRA_FEATURES: '0',
         NO_LEDGER: '0',
       }),

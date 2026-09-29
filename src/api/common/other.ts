@@ -2,25 +2,14 @@ import { randomBytes } from '../../util/random';
 import { storage } from '../storages';
 
 let clientId: string | undefined;
-let referrer: string | undefined;
-
 export async function initClientId() {
   if (!clientId) {
-    [clientId, referrer] = await Promise.all([
-      storage.getItem('clientId'),
-      storage.getItem('referrer'),
-    ]);
+    clientId = await storage.getItem('clientId');
   }
 
-  if (clientId) {
-    const parts = clientId.split(':', 1);
-    if (referrer && referrer !== parts[1]) {
-      clientId = `${parts[0]}:${referrer}`;
-      void storage.setItem('clientId', clientId);
-    }
-  } else {
+  if (!clientId) {
     const hex = Buffer.from(randomBytes(10)).toString('hex');
-    clientId = `${hex}:${referrer ?? ''}`;
+    clientId = hex;
     void storage.setItem('clientId', clientId);
   }
 }

@@ -593,7 +593,6 @@ addActionHandler('estimateSwap', async () => {
         tokenInSlug,
         tokenOutSlug,
         global.swapPairs?.bySlug,
-        global.swapVersion,
         accountChains,
       )) {
         return {

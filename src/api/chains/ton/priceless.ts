@@ -46,7 +46,7 @@ export async function updateTokenHashes(
 
     const updatedTokens = Object.values(tokensByAddress).filter((token) => token.codeHash);
     if (updatedTokens.length) {
-      await updateTokens(updatedTokens, sendUpdateTokens, [], true);
+      await updateTokens(updatedTokens, sendUpdateTokens, true);
     }
   } catch (err) {
     throwIfAborted(signal);

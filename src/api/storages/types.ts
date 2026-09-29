@@ -36,11 +36,7 @@ export type StorageKey = 'accounts'
   | 'stateVersion'
   | 'currentAccountId'
   | 'clientId'
-  | 'referrer'
   | 'langCode'
-  // For install attribution
-  | 'attributionClaimed'
-  | 'attributionChannel'
   // For extension
   | 'dapps'
   | 'dappMethods:lastAccountId'

@@ -2,7 +2,6 @@ import '../../util/bigintPatch';
 
 export { destroy } from './init';
 export * from './activities';
-export * from './analytics';
 export * from './auth';
 export * from './wallet';
 export * from './transfer';
@@ -24,6 +23,5 @@ export {
   signDappData,
 } from './dapps';
 export * from './other';
-export * from './market';
 export * from './prices';
 export * from './preload';

@@ -1,58 +1,6 @@
 import type { StakingPoolConfig } from '../chains/ton/contracts/JettonStaking/StakingPool';
 import type { ApiTonWalletVersion } from '../chains/ton/types';
-import type { ApiChain, ApiCountryCode, ApiLoyaltyType, ApiTokenWithPrice } from './misc';
-
-export type ApiTokenPriceDetails = Pick<
-  ApiTokenWithPrice, 'slug' | 'type' | 'priceUsd' | 'percentChange24h' | 'localizedName'
-> & {
-  tokenInfo?: {
-    description?: string;
-    localizedDescription?: string;
-    marketCap?: number;
-    supply?: {
-      circulating?: number;
-      total: number;
-    };
-    createdAt?: string;
-    volume24h?: {
-      sell: number;
-      buy: number;
-      percentChange?: number;
-    };
-    links?: { url: string; type?: 'telegram' | 'x' }[];
-    aggregatorLinks?: { url: string; name: string }[];
-    docsUrl?: string;
-    sourceCodeUrl?: string;
-  };
-};
-
-export interface ApiTokenDetails {
-  description?: string;
-  links?: ApiTokenLink[];
-  /** Market data sites, with the display name supplied by the backend */
-  aggregatorLinks?: { name: string; url: string }[];
-  docsUrl?: string;
-  sourceCodeUrl?: string;
-  marketCap?: number;
-  circulatingSupply?: number;
-  totalSupply?: number;
-  /** Unix seconds */
-  createdAt?: number;
-  volume24h?: ApiTokenVolume;
-}
-
-export interface ApiTokenLink {
-  kind: 'x' | 'telegram' | 'website';
-  url: string;
-}
-
-export interface ApiTokenVolume {
-  total: number;
-  buy: number;
-  sell: number;
-  /** A share, not a percentage: 0.8946 means +89.46%. Absent when the data source has no such stat. */
-  change?: number;
-}
+import type { ApiChain, ApiCountryCode, ApiLoyaltyType } from './misc';
 
 export type ApiSwapDexRouterLabel = 'dedust-router-v2' | 'omniston' | 'jupiter';
 
@@ -419,57 +367,14 @@ export type ApiVestingInfo = {
   }[];
 };
 
-export type ApiAccountConfig = {
-  activePromotion?: ApiPromotion;
-};
-
 export type ApiSwapVersion = 2 | 3;
-
-export type ApiPromotion = {
-  id: string;
-  kind: 'cardOverlay';
-  cardOverlay: {
-    mascotIcon?: {
-      url: string;
-      top: number;
-      right: number;
-      height: number;
-      width: number;
-      rotation: number;
-    };
-    onClickAction: 'openPromotionModal';
-  };
-  modal?: {
-    backgroundImageUrl: string;
-    backgroundFallback: string;
-    heroImageUrl?: string;
-    title: string;
-    titleColor?: string;
-    description: string;
-    descriptionColor?: string;
-    availabilityIndicator?: string;
-    actionButton?: {
-      title: string;
-      url: string;
-    };
-  };
-};
 
 export type ApiBackendConfig = {
   isLimited: boolean;
   isCopyStorageEnabled?: boolean;
-  supportAccountsCount?: number;
   now: number;
   country: ApiCountryCode;
   isUpdateRequired: boolean;
-  isVestingEnabled?: boolean;
   isWebSocketEnabled?: boolean;
-  // Enables the L1 client-side negative-verdict cache + EVM untrackable-address registry
-  // (retry-break on deterministic 4xx). Absent/false = safe legacy behavior. Global kill switch.
-  isNegVerdictCacheEnabled?: boolean;
-  isTonConnectAnalyticsEnabled?: boolean;
-  swapVersion?: ApiSwapVersion;
-  seasonalTheme?: 'newYear' | 'valentine';
-  knowledgeBaseVersion?: string;
   // Lower-case currency codes the on/off-ramp surfaces may offer; the client may only narrow its own baseline with it
 };

@@ -100,7 +100,6 @@ Is there a community?: Czy istnieje społeczność?
 $about_wallet_community: Jasne, witamy w naszej %community_link%.
 $about_community_link_text: "**Telegram channel**"
 Currency History: Historia walut
-Net Worth: Wartość netto
 Price: Cena
 Enter Password: Wprowadź hasło
 Send: Wyślij
@@ -131,10 +130,7 @@ Invoice Link Copied: Link do faktury został skopiowany
 Theme: Temat
 Language: Język
 Enable Animations: Włącz animacje
-Enable Seasonal Theming: Włącz motyw sezonowy
 Enable Landscape Mode: Włącz tryb poziomy
-Disable Seasonal Theming: Wyłącz motyw sezonowy
-You can always enable seasonal theming again in the appearance settings.: Zawsze możesz ponownie włączyć motyw sezonowy w ustawieniach wyglądu.
 Base Currency: Waluta bazowa
 Investor View: Widok inwestora
 Toggle Investor View: Przełączanie widoku inwestora
@@ -331,20 +327,7 @@ Other: Inne
 No price data: Brak danych o cenie
 Price Copied: Cena skopiowana
 Not staked: Nie w stakingu
-Portfolio: Portfolio
-Performance, insights and P&L: Dynamika, spostrzeżenia i P&L
-Overview: Przegląd
-Total Balance: Łączne saldo
-Net Change: Zmiana wartości portfela
 No data: Brak danych
-Total Value: Łączna wartość
-Tracked asset value over time.: Wartość śledzonych aktywów w czasie.
-Total P&L: Łączny zysk/strata
-Daily P&L: Dzienny zysk/strata
-Portfolio Share: Udział w portfolio
-Current allocation across tracked assets.: Aktualny podział śledzonych aktywów.
-Deep history analysis will be available in upcoming updates.: Dogłębna analiza historii będzie dostępna w kolejnych aktualizacjach.
-By Chain: Według sieci
 No chain balances: Brak sald według sieci
 Native: Natywne
 Stablecoins: Stablecoiny
@@ -751,14 +734,6 @@ Install on Desktop: Zainstaluj na komputerze
 Install on Mobile: Zainstaluj na telefonie komórkowym
 Install App: Zainstaluj aplikację
 Hide: Ukryj
-Hide and Report: Ukryj i zgłoś
-Hide and Report NFT: Ukryj i zgłoś NFT
-Report: Zgłoś
-Report NFT: Zgłoś NFT
-This NFT will remain hidden on this device and be reported.: Ten NFT pozostanie ukryty na tym urządzeniu i zostanie zgłoszony.
-Only Hide: Tylko ukryj
-Do you also want to report this NFT as inappropriate? It will be then permanently removed on this device.: Czy chcesz również zgłosić ten NFT jako nieodpowiedni? Zostanie on następnie trwale usunięty z tego urządzenia.
-This NFT will be permanently hidden on this device and reported.: Ten NFT zostanie trwale ukryty na tym urządzeniu i zgłoszony.
 Hidden NFTs: Ukryte NFT
 Hidden By Me: Ukryte przeze mnie
 Probably Scam: Prawdopodobnie oszustwo
@@ -957,7 +932,6 @@ Unstake %amount%: Wycofać %amount%
 Request Unstaking: Żądaj odblokowania
 Confirm Upgrading: Potwierdź ulepszenie
 How does it work?: Jak to działa?
-Multisend: Multiwysyłka
 Renew All: Odnów wszystkie
 Renew: Odnów
 Renew Domain: Odnów domenę

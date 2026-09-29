@@ -40,7 +40,6 @@ import {
   rememberWalletOperationSubmittedHashes,
 } from '../common/activities/reconciler/operationIntentStore';
 import { callBackendGet, callBackendPost } from '../common/backend';
-import { getBackendConfigCache } from '../common/cache';
 import {
   convertSwapItemToTrusted,
   getSwapItemSlug,
@@ -242,11 +241,9 @@ export async function swapEstimate(
   request: ApiSwapEstimateRequest,
 ): Promise<ApiSwapEstimateResponse | { error: string }> {
   const walletVersion = (await fetchStoredWallet(accountId, 'ton')).version;
-  const { swapVersion } = await getBackendConfigCache();
-
   return callBackendPost('/swap/estimate', {
     ...request,
-    swapVersion: swapVersion ?? SWAP_API_VERSION,
+    swapVersion: SWAP_API_VERSION,
     walletVersion,
   }, {
     isAllowBadRequest: true,
@@ -257,11 +254,9 @@ export async function swapBuild(
   authToken: string,
   request: ApiSwapBuildTransactionRequest,
 ): Promise<ApiSwapBuildTransactionResponse> {
-  const { swapVersion } = await getBackendConfigCache();
-
   return callBackendPost('/swap/buildTransaction', {
     ...request,
-    swapVersion: swapVersion ?? SWAP_API_VERSION,
+    swapVersion: SWAP_API_VERSION,
     isMsgHashMode: true,
   }, {
     authToken,

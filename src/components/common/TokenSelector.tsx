@@ -9,7 +9,7 @@ import React, {
 } from '../../lib/teact/teact';
 import { getActions, withGlobal } from '../../global';
 
-import type { ApiBaseCurrency, ApiChain, ApiSwapVersion } from '../../api/types';
+import type { ApiBaseCurrency, ApiChain } from '../../api/types';
 import {
   type AssetPairs, SettingsState, type UserSwapToken, type UserToken,
 } from '../../global/types';
@@ -81,7 +81,6 @@ interface StateProps {
   swapTokens?: UserSwapToken[];
   tokenInSlug?: string;
   pairsBySlug?: Record<string, AssetPairs>;
-  swapVersion: ApiSwapVersion;
   baseCurrency: ApiBaseCurrency;
   isLoading?: boolean;
   error?: string;
@@ -113,7 +112,6 @@ function TokenSelector({
   baseCurrency,
   tokenInSlug,
   pairsBySlug,
-  swapVersion,
   isActive,
   isLoading,
   error,
@@ -167,9 +165,9 @@ function TokenSelector({
   // It is necessary to use useCallback instead of useLastCallback here
   const filterTokens = useCallback((tokens: TokenType[]) => {
     return shouldFilter
-      ? filterAndSortTokens(tokens, availableChains, tokenInSlug, pairsBySlug, swapVersion)
+      ? filterAndSortTokens(tokens, availableChains, tokenInSlug, pairsBySlug)
       : tokens;
-  }, [shouldFilter, availableChains, tokenInSlug, pairsBySlug, swapVersion]);
+  }, [shouldFilter, availableChains, tokenInSlug, pairsBySlug]);
 
   const token = useMemo(
     () => tokenProp ? filterTokens([tokenProp])[0] : undefined,
@@ -527,7 +525,6 @@ export default memo(withGlobal<OwnProps>((global, ownProps): StateProps => {
   const { baseCurrency, isSensitiveDataHidden } = global.settings;
   const { isLoading, token, error } = global.settings.importToken ?? {};
   const { tokenInSlug } = global.currentSwap ?? {};
-  const { swapVersion } = global;
   const pairsBySlug = global.swapPairs?.bySlug;
   const userTokens = selectAvailableUserForSwapTokens(global, ownProps.isSwapOut);
   const popularTokens = selectPopularTokens(global);
@@ -540,7 +537,6 @@ export default memo(withGlobal<OwnProps>((global, ownProps): StateProps => {
     token,
     error,
     pairsBySlug,
-    swapVersion,
     tokenInSlug,
     userTokens,
     popularTokens,
@@ -637,14 +633,13 @@ function filterAndSortTokens(
   availableChains: Partial<Record<ApiChain, unknown>>,
   tokenInSlug: string | undefined,
   pairsBySlug: Record<string, AssetPairs> | undefined,
-  swapVersion: ApiSwapVersion,
 ) {
   if (!tokens.length || !tokenInSlug) return [];
 
   return tokens
     .map((token) => ({
       ...token,
-      canSwap: isSwapPairValid(tokenInSlug, token.slug, pairsBySlug, swapVersion, availableChains),
+      canSwap: isSwapPairValid(tokenInSlug, token.slug, pairsBySlug, availableChains),
     }))
     .sort((a, b) => Number(b.canSwap) - Number(a.canSwap));
 }

@@ -123,7 +123,7 @@ function Transaction({
   shouldHideStakingAnnualYield,
   onClick,
 }: OwnProps) {
-  const { openNftAttributesModal, openReportNftModal } = getActions();
+  const { addNftsToBlacklist, openNftAttributesModal } = getActions();
   const lang = useLang();
   const { isPortrait } = useDeviceScreen();
 
@@ -205,7 +205,7 @@ function Transaction({
 
   const handleNftMenuItemClick = useLastCallback(() => {
     void vibrate();
-    openReportNftModal({ chain: nft!.chain, address: nft!.address });
+    addNftsToBlacklist({ addresses: [nft!.address] });
   });
 
   const canHideNft = Boolean(nft) && isIncoming && status !== 'failed';

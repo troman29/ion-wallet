@@ -98,7 +98,6 @@ Is there a community?: Topluluğunuz var mı?
 $about_wallet_community: Elbette, topluluğumuza %community_link% üzerinden erişebilirsiniz.
 $about_community_link_text: "**Telegram kanalı**"
 Currency History: Para birimi geçmişi
-Net Worth: Net Değer
 Price: Fiyat
 Enter Password: Şifre girin
 Send: Gönder
@@ -129,10 +128,7 @@ Invoice Link Copied: Fatura bağlantısı kopyalandı
 Theme: Tema
 Language: Dil
 Enable Animations: Animasyonları Etkinleştir
-Enable Seasonal Theming: Mevsimsel Temayı Etkinleştir
 Enable Landscape Mode: Yatay Modu Etkinleştir
-Disable Seasonal Theming: Mevsimsel Temayı Devre Dışı Bırak
-You can always enable seasonal theming again in the appearance settings.: Görünüm ayarlarından mevsimsel temayı istediğiniz zaman tekrar etkinleştirebilirsiniz.
 Base Currency: Ana Para Birimi
 Investor View: Yatırımcı Görünümü
 Toggle Investor View: Yatırımcı Görünümüne Geçiş Yap
@@ -325,20 +321,7 @@ Other: Diğer
 No price data: Fiyat verisi yok
 Price Copied: Fiyat kopyalandı
 Not staked: Stake edilmemiş
-Portfolio: Portföy
-Performance, insights and P&L: Performans, içgörüler ve K/Z
-Overview: Genel bakış
-Total Balance: Toplam bakiye
-Net Change: Portföy değişimi
 No data: Veri yok
-Total Value: Toplam değer
-Tracked asset value over time.: İzlenen varlıkların zaman içindeki değeri.
-Total P&L: Toplam Kâr/Zarar
-Daily P&L: Günlük Kâr/Zarar
-Portfolio Share: Portföy dağılımı
-Current allocation across tracked assets.: İzlenen varlıklar arasındaki mevcut dağılım.
-Deep history analysis will be available in upcoming updates.: Derin geçmiş analizi gelecek güncellemelerde kullanıma sunulacak.
-By Chain: Ağa göre
 No chain balances: Ağ bakiyesi yok
 Native: Yerel
 Stablecoins: Stablecoinler
@@ -736,14 +719,6 @@ Install on Desktop: Masaüstüne Kur
 Install on Mobile: Mobile Kur
 Install App: Uygulamayı Yükle
 Hide: Gizle
-Hide and Report: Gizle ve Bildir
-Hide and Report NFT: NFT'yi Gizle ve Bildir
-Report: Bildir
-Report NFT: NFT'yi Bildir
-This NFT will remain hidden on this device and be reported.: Bu NFT bu cihazda gizli kalacak ve bildirilecek.
-Only Hide: Yalnızca Gizle
-Do you also want to report this NFT as inappropriate? It will be then permanently removed on this device.: Bu NFT'yi uygunsuz olarak da bildirmek istiyor musunuz? Ardından bu cihazdan kalıcı olarak kaldırılacaktır.
-This NFT will be permanently hidden on this device and reported.: Bu NFT bu cihazda kalıcı olarak gizlenecek ve bildirilecek.
 Hidden NFTs: Gizli NFT'ler
 Hidden By Me: Benim Tarafımdan Gizlendi
 Probably Scam: Muhtemelen Dolandırıcılık
@@ -942,7 +917,6 @@ Unstake %amount%: "%amount% unstake et"
 Request Unstaking: Stake Çekme Talebi
 Confirm Upgrading: Yükseltmeyi Onayla
 How does it work?: Nasıl çalışır?
-Multisend: Çoklu Gönder
 Renew All: Tümünü yenile
 Renew: Yenile
 Renew Domain: Alan adını yenile

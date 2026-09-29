@@ -135,8 +135,6 @@ export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api
 export const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
 export const SSE_BRIDGE_URL = 'https://tonconnectbridge.wallet.ice.io/bridge/';
 
-export const TON_CONNECT_ANALYTICS_URL = 'https://analytics.ton.org';
-
 export const WALLET_CONNECT_BRIDGE_PATTERNS = 'https://*.walletconnect.com https://*.walletconnect.org wss://*.walletconnect.com wss://*.walletconnect.org';
 
 /** WalletConnect Pay API + collect iframe (multi-level subdomains; not covered by `*.walletconnect.com`). */
@@ -278,6 +276,8 @@ export const NO_EVM = process.env.NO_EVM === '1';
  * indexer gains either.
  */
 export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
+/** Disables unavailable ION WebSockets; data uses HTTP polling. */
+export const NO_WEBSOCKET = process.env.NO_WEBSOCKET === '1';
 /**
  * Standalone SDK builds, embedded by third-party apps that ship their own UI, so nothing in the UI layer
  * reads this flag.

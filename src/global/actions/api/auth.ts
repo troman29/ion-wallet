@@ -892,11 +892,11 @@ addActionHandler('closeCheckWordsPage', (global, actions, props) => {
 });
 
 addActionHandler('copyStorageData', async (global, actions) => {
-  const accountConfigJson = await callApi('fetchAccountConfigForDebugPurposesOnly');
+  const storageJson = await callApi('getStorageDataForDebugPurposesOnly');
 
-  if (accountConfigJson) {
+  if (storageJson) {
     const storageData = JSON.stringify({
-      ...JSON.parse(accountConfigJson),
+      ...JSON.parse(storageJson),
       global: reduceGlobalForDebug(),
     });
 

@@ -2,12 +2,10 @@ import React, { memo, useEffect, useMemo, useState } from '../../../lib/teact/te
 import { getActions, withGlobal } from '../../../global';
 
 import type { ApiBaseCurrency, ApiHistoryList, ApiPriceHistoryPeriod } from '../../../api/types';
-import type { LangCode, PriceHistoryPeriods, TokenChartMode, UserToken } from '../../../global/types';
-import type { TabWithProperties } from '../../ui/TabList';
+import type { LangCode, PriceHistoryPeriods, UserToken } from '../../../global/types';
 
 import { DEFAULT_PRICE_CURRENCY } from '../../../config';
 import { selectCurrentAccountState } from '../../../global/selectors';
-import { isNetWorthChartAvailable } from '../../../util/assets/netWorth';
 import buildClassName from '../../../util/buildClassName';
 import { formatChartDate, formatShortDay, formatTime, SECOND } from '../../../util/dateFormat';
 import { formatCurrency, formatPercent, getShortCurrencySymbol } from '../../../util/formatNumber';
@@ -23,7 +21,6 @@ import useSyncEffect from '../../../hooks/useSyncEffect';
 
 import TimeRangeSelector from '../../common/TimeRangeSelector';
 import Spinner from '../../ui/Spinner';
-import TabList from '../../ui/TabList';
 import Transition from '../../ui/Transition';
 import Plot from './Plot';
 
@@ -36,9 +33,7 @@ export interface TokenPricePoint {
 
 interface OwnProps {
   token: UserToken;
-  chartMode: TokenChartMode;
   className?: string;
-  onChartModeChange: (mode: TokenChartMode) => void;
   onPricePointChange: (point?: TokenPricePoint) => void;
 }
 
@@ -46,7 +41,6 @@ interface StateProps {
   period: ApiPriceHistoryPeriod;
   baseCurrency: ApiBaseCurrency;
   historyPeriods?: PriceHistoryPeriods;
-  netWorthHistoryPeriods?: PriceHistoryPeriods;
 }
 
 const DEFAULT_PERIOD: ApiPriceHistoryPeriod = '1D';
@@ -55,8 +49,6 @@ const DEFAULT_PERIOD: ApiPriceHistoryPeriod = '1D';
 const REFRESH_INTERVAL = 15 * SECOND;
 
 const NO_SELECTION = -1;
-const PRICE_TAB = 0;
-const NET_WORTH_TAB = 1;
 const LOADING_SLIDE_KEY = 0;
 const AXIS_LABEL_COUNT = 4;
 const PRICE_FRACTION_DIGITS = 2;
@@ -64,16 +56,13 @@ const SELECTED_PRICE_FRACTION_DIGITS = 4;
 
 function Chart({
   token,
-  chartMode,
   className,
   period,
   baseCurrency,
   historyPeriods,
-  netWorthHistoryPeriods,
-  onChartModeChange,
   onPricePointChange,
 }: OwnProps & StateProps) {
-  const { loadPriceHistory, loadTokenNetWorthHistory, setCurrentTokenPeriod } = getActions();
+  const { loadPriceHistory, setCurrentTokenPeriod } = getActions();
 
   const lang = useLang();
   const [selectedIndex, setSelectedIndex] = useState(NO_SELECTION);
@@ -84,27 +73,21 @@ function Chart({
   const chartCurrency = getShortCurrencySymbol(baseCurrency) === symbol ? DEFAULT_PRICE_CURRENCY : baseCurrency;
   const currencySymbol = getShortCurrencySymbol(chartCurrency);
 
-  const isNetWorthMode = chartMode === 'netWorth' && isNetWorthChartAvailable(token);
-  const canSwitchMode = isNetWorthChartAvailable(token);
-  const history = isNetWorthMode ? netWorthHistoryPeriods?.[period] : historyPeriods?.[period];
+  const history = historyPeriods?.[period];
   const isLoading = !history;
 
   const refreshHistory = useLastCallback(() => {
-    if (isNetWorthMode) {
-      loadTokenNetWorthHistory({ slug, period, currency: chartCurrency });
-    } else {
-      loadPriceHistory({ slug, period, currency: chartCurrency });
-    }
+    loadPriceHistory({ slug, period, currency: chartCurrency });
   });
 
-  useEffect(refreshHistory, [slug, period, chartCurrency, isNetWorthMode, refreshHistory]);
+  useEffect(refreshHistory, [slug, period, chartCurrency, refreshHistory]);
 
   useInterval(refreshHistory, REFRESH_INTERVAL, true);
 
-  // The selection points into the shown series, so switching the token, the period or the mode drops it
+  // The selection points into the shown series, so switching the token or the period drops it.
   useEffect(() => {
     setSelectedIndex(NO_SELECTION);
-  }, [slug, period, isNetWorthMode]);
+  }, [slug, period]);
 
   useSyncEffect(([prevSelectedIndex]) => {
     if (IS_IOS && prevSelectedIndex !== undefined) void vibrate();
@@ -121,7 +104,7 @@ function Chart({
   const changePercent = initialPrice && shownPoint ? (shownPoint[1] / initialPrice - 1) * 100 : undefined;
 
   // A price quoted in another currency would make the balance above jump between currencies
-  const shownPrice = isNetWorthMode || chartCurrency !== baseCurrency ? undefined : shownPoint?.[1];
+  const shownPrice = chartCurrency !== baseCurrency ? undefined : shownPoint?.[1];
 
   useEffect(() => {
     onPricePointChange(shownPrice !== undefined && initialPrice
@@ -136,36 +119,17 @@ function Chart({
     setCurrentTokenPeriod({ period: newPeriod });
   });
 
-  const modeTabs = useMemo<TabWithProperties[]>(() => [
-    { id: PRICE_TAB, title: lang('Price') },
-    { id: NET_WORTH_TAB, title: lang('Net Worth') },
-  ], [lang]);
-
-  const handleModeSwitch = useLastCallback((tabId: number) => {
-    onChartModeChange(tabId === NET_WORTH_TAB ? 'netWorth' : 'price');
-  });
-
   // Dragging over the plot shows the price at that point, so the card is excluded from the swipe
   // between content tabs and from the swipe back
   const fullClassName = buildClassName(styles.root, 'no-swipe', SWIPE_DISABLED_CLASS_NAME, className);
 
-  // Every swap of the shown series cross-fades, so the key covers both the period and the mode
+  // Every new series cross-fades.
   const contentKey = isLoading
     ? LOADING_SLIDE_KEY
-    : TIME_RANGES.indexOf(period) * 2 + (isNetWorthMode ? 1 : 0) + 1;
+    : TIME_RANGES.indexOf(period) + 1;
 
   return (
     <section className={fullClassName}>
-      {canSwitchMode && (
-        <TabList
-          tabs={modeTabs}
-          activeTab={isNetWorthMode ? NET_WORTH_TAB : PRICE_TAB}
-          className={styles.modes}
-          overlayClassName={styles.modesOverlay}
-          onSwitchTab={handleModeSwitch}
-        />
-      )}
-
       <Transition name="fade" activeKey={contentKey} shouldRestoreHeight shouldCleanup>
         <div className={styles.slide}>
           <div className={styles.summary}>
@@ -257,7 +221,6 @@ export default memo(
       period: accountState?.currentTokenPeriod ?? DEFAULT_PERIOD,
       baseCurrency: global.settings.baseCurrency,
       historyPeriods: global.tokenPriceHistory.bySlug[token.slug],
-      netWorthHistoryPeriods: accountState?.tokenNetWorthHistory?.[token.slug],
     };
   })(Chart),
 );

@@ -11,10 +11,8 @@ import type {
 import type { StoredDappConnection } from '../api/dappProtocols/storage';
 import type { UnifiedSignDataPayload } from '../api/dappProtocols/types';
 import type {
-  ApiAccountConfig,
   ApiActivity,
   ApiAnyDisplayError,
-  ApiBackendConfig,
   ApiBalanceBySlug,
   ApiBaseCurrency,
   ApiChain,
@@ -42,8 +40,6 @@ import type {
   ApiSwapDexLabel,
   ApiSwapDexRouterLabel,
   ApiSwapRoute,
-  ApiSwapVersion,
-  ApiTokenDetails,
   ApiTokenType,
   ApiTokenWithPrice,
   ApiUpdate,
@@ -78,21 +74,6 @@ export type AppTheme = 'dark' | 'light';
 export type AppLayout = 'portrait' | 'landscape';
 export type DialogAction = 'openBluetoothSettings' | 'openReturnUrl';
 export type ToastAction = 'openRenameWallet';
-
-export type DeveloperSettingsUndefinedOverride = '__undefined';
-export type DeveloperSettingsOverrideValue<Value> = Exclude<Value, undefined> | DeveloperSettingsUndefinedOverride;
-
-export interface DeveloperSettingsOverrides {
-  seasonalTheme?: DeveloperSettingsOverrideValue<ApiBackendConfig['seasonalTheme']>;
-}
-
-export type DeveloperSettingsOverrideKey = keyof DeveloperSettingsOverrides;
-export type DeveloperSettingsOverridePayload = {
-  [Key in DeveloperSettingsOverrideKey]: {
-    key: Key;
-    value?: DeveloperSettingsOverrides[Key];
-  };
-}[DeveloperSettingsOverrideKey];
 
 export type ToastType = {
   icon?: string;
@@ -417,15 +398,7 @@ export type UserSwapToken = Omit<UserToken, 'change24h' | 'chain'> & {
 
 export type TokenPeriod = '1D' | '7D' | '1M' | '3M' | '1Y' | 'ALL';
 
-export type TokenChartMode = 'price' | 'netWorth';
-
 export type PriceHistoryPeriods = Partial<Record<ApiPriceHistoryPeriod, ApiHistoryList>>;
-
-/** Absent while the request is in flight; an entry with neither field means the backend has no info */
-export type TokenDetailsState = {
-  data?: ApiTokenDetails;
-  hasError?: true;
-};
 
 export type AccountType = 'mnemonic' | 'hardware' | 'view';
 
@@ -507,10 +480,6 @@ export interface AccountState {
     address: ApiNft['address'];
     name: ApiNft['name'];
   };
-  selectedNftToReport?: {
-    chain: ApiChain;
-    address: ApiNft['address'];
-  };
   currentNftForAttributes?: ApiNft;
   shouldShowOwnerInNftAttributes?: true;
   dappLastOpenedDatesByUrl?: Record<string, number>;
@@ -518,7 +487,6 @@ export interface AccountState {
   currentTokenSlug?: string;
   currentActivityId?: string;
   currentTokenPeriod?: TokenPeriod;
-  tokenNetWorthHistory?: Record<string, PriceHistoryPeriods>;
   savedAddresses?: SavedAddress[];
   activeContentTab?: ContentTab;
   activityReturnContentTab?: ContentTab;
@@ -551,7 +519,6 @@ export interface AccountState {
   dapps?: StoredDappConnection[];
   currentSiteCategoryId?: number;
 
-  config?: ApiAccountConfig;
   isAppReady?: boolean;
 }
 
@@ -921,18 +888,12 @@ export type GlobalState = {
     isLoaded?: true;
   };
 
-  swapVersion: ApiSwapVersion;
-
   swapPairs?: {
     bySlug: Record<string, AssetPairs>;
   };
 
   tokenPriceHistory: {
     bySlug: Record<string, PriceHistoryPeriods>;
-  };
-
-  tokenDetails: {
-    bySlug: Record<string, TokenDetailsState>;
   };
 
   byAccountId: Record<string, AccountState>;
@@ -946,8 +907,6 @@ export type GlobalState = {
     state: SettingsState;
     theme: Theme;
     animationLevel: AnimationLevel;
-    isSeasonalThemingDisabled?: boolean;
-    developerSettingsOverrides?: DeveloperSettingsOverrides;
     langCode: LangCode;
     langSource?: LanguageSource;
     byAccountId: Record<string, AccountSettings>;
@@ -993,8 +952,6 @@ export type GlobalState = {
   isAppUpdateAvailable?: boolean;
   // Force show the "Update My Wallet" pop-up on all platforms
   isAppUpdateRequired?: boolean;
-  seasonalTheme?: ApiBackendConfig['seasonalTheme'];
-  isPromotionModalOpen?: boolean;
   confettiRequestedAt?: number;
   isPinAccepted?: boolean;
   isInvoiceModalOpen?: boolean;
@@ -1021,7 +978,6 @@ export type GlobalState = {
     isSwapDisabled: boolean;
     isNftBuyingDisabled: boolean;
     isCopyStorageEnabled?: boolean;
-    supportAccountsCount?: number;
     countryCode?: ApiCountryCode;
   };
 
@@ -1243,12 +1199,6 @@ export interface ActionPayloads {
     isCollection: boolean;
   };
   closeHideNftModal: undefined;
-  openReportNftModal: {
-    chain: ApiChain;
-    address: ApiNft['address'];
-  };
-  closeReportNftModal: undefined;
-  hideNft: { shouldReport?: true } | undefined;
   openNftAttributesModal: { nft: ApiNft; withOwner?: true };
   closeNftAttributesModal: undefined;
 
@@ -1324,8 +1274,6 @@ export interface ActionPayloads {
   closeSettings: undefined;
   setTheme: { theme: Theme };
   setAnimationLevel: { level: AnimationLevel };
-  toggleSeasonalTheming: { isEnabled?: boolean };
-  setDeveloperSettingsOverride: DeveloperSettingsOverridePayload;
   toggleTinyTransfersHidden: { isEnabled?: boolean } | undefined;
   toggleUnverifiedNftsHidden: { isEnabled?: boolean } | undefined;
   toggleLocalizedTokenNames: { isEnabled?: boolean } | undefined;
@@ -1484,12 +1432,6 @@ export interface ActionPayloads {
   closeInvoiceModal: undefined;
 
   loadPriceHistory: { slug: string; period: ApiPriceHistoryPeriod; currency?: ApiBaseCurrency };
-  loadTokenNetWorthHistory: {
-    slug: string;
-    period: ApiPriceHistoryPeriod;
-    currency?: ApiBaseCurrency;
-  };
-  loadTokenDetails: { slug: string };
 
   showIncorrectTimeError: undefined;
 
@@ -1502,9 +1444,6 @@ export interface ActionPayloads {
   submitClaimingVesting: { enclaveToken?: string } | undefined;
   clearVestingError: undefined;
   cancelClaimingVesting: undefined;
-
-  openPromotionModal: undefined;
-  closePromotionModal: undefined;
 
   toggleNotifications: { isEnabled: boolean };
   renameNotificationAccount: { accountId: string };

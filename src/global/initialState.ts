@@ -25,7 +25,6 @@ import {
   DEFAULT_STAKING_STATE,
   DEFAULT_TRANSFER_TOKEN_SLUG,
   INIT_SWAP_ASSETS,
-  SWAP_API_VERSION,
   THEME_DEFAULT,
 } from '../config';
 import { getTokenInfo } from '../util/chain';
@@ -95,13 +94,7 @@ export const INITIAL_STATE: GlobalState = {
     bySlug: buildCollectionByKey(Object.values(INIT_SWAP_ASSETS), 'slug'),
   },
 
-  swapVersion: SWAP_API_VERSION,
-
   tokenPriceHistory: {
-    bySlug: {},
-  },
-
-  tokenDetails: {
     bySlug: {},
   },
 

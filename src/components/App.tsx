@@ -51,7 +51,6 @@ import Main from './main/Main';
 import BackupModal from './main/modals/BackupModal';
 import NftAttributesModal from './main/modals/NftAttributesModal';
 import QrScannerModal from './main/modals/QrScannerModal';
-import ReportNftModal from './main/modals/ReportNftModal';
 import SignatureModal from './main/modals/SignatureModal';
 import UnhideNftModal from './main/modals/UnhideNftModal';
 import BottomBar from './main/sections/Actions/BottomBar';
@@ -265,7 +264,6 @@ function App({
           <WalletConnectPayOptionSelectionModal />
           <WalletConnectPayDataCollectionModal />
           <UnhideNftModal />
-          <ReportNftModal />
           <NftAttributesModal />
           {IS_CAPACITOR && (
             <QrScannerModal

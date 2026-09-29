@@ -3,7 +3,6 @@ import type {
   ApiNetwork,
   ApiNft,
   ApiNftCollection,
-  ApiReportNftOptions,
   OnApiUpdate,
 } from '../types';
 
@@ -13,7 +12,6 @@ import { extractKey } from '../../util/iteratees';
 import { logDebug, logDebugError } from '../../util/logs';
 import chains from '../chains';
 import { fetchStoredWallet } from '../common/accounts';
-import { callBackendPost } from '../common/backend';
 import { createLocalTransactions } from './transfer';
 
 let onUpdate: OnApiUpdate;
@@ -103,12 +101,4 @@ export function fetchNftByAddress(
 
 export async function checkNftOwnership(chain: ApiChain, accountId: string, nftAddress: string) {
   return chains[chain].checkNftOwnership(accountId, nftAddress);
-}
-
-/**
- * Reports an NFT to the My Wallet backend. The app client ID header supplied by `callBackendPost`
- * lets the backend deduplicate abuse without exposing a wallet address.
- */
-export async function reportNft(options: ApiReportNftOptions): Promise<void> {
-  await callBackendPost<{ ok: true }>('/nfts/report', options);
 }

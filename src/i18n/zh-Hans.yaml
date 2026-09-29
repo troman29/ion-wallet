@@ -98,7 +98,6 @@ Is there a community?: 有社区吗？
 $about_wallet_community: 当然，欢迎来到我们的社区 %community_link%.
 $about_community_link_text: "**Telegram 频道**"
 Currency History: 代币历史记录
-Net Worth: 净值
 Price: 价格
 Enter Password: 输入密码
 Send: 发送
@@ -127,10 +126,7 @@ Invoice Link Copied: 发票链接已复制
 Theme: 主题
 Language: 语言
 Enable Animations: 启用动画
-Enable Seasonal Theming: 启用季节性主题
 Enable Landscape Mode: 启用横屏模式
-Disable Seasonal Theming: 禁用季节性主题
-You can always enable seasonal theming again in the appearance settings.: 您随时可以在外观设置中重新启用季节性主题。
 Base Currency: 基本货币
 Investor View: 投资者见解
 Toggle Investor View: 切换投资者见解
@@ -322,20 +318,7 @@ Other: 其他的
 No price data: 暂无价格数据
 Price Copied: 价格已复制
 Not staked: 未质押
-Portfolio: 投资组合
-Performance, insights and P&L: 动态、洞察与盈亏
-Overview: 概览
-Total Balance: 总余额
-Net Change: 组合净变动
 No data: 暂无数据
-Total Value: 总价值
-Tracked asset value over time.: 跟踪资产价值随时间的变化。
-Total P&L: 总盈亏
-Daily P&L: 每日盈亏
-Portfolio Share: 投资组合占比
-Current allocation across tracked assets.: 当前跟踪资产的分配情况。
-Deep history analysis will be available in upcoming updates.: 深度历史分析将在后续更新中提供。
-By Chain: 按链
 No chain balances: 暂无链余额
 Native: 原生
 Stablecoins: 稳定币
@@ -731,14 +714,6 @@ Install on Desktop: 安装到桌面
 Install on Mobile: 安装在手机
 Install App: 安装应用
 Hide: 隐藏
-Hide and Report: 隐藏并举报
-Hide and Report NFT: 隐藏并举报 NFT
-Report: 举报
-Report NFT: 举报 NFT
-This NFT will remain hidden on this device and be reported.: 此 NFT 将在此设备上保持隐藏并被举报。
-Only Hide: 仅隐藏
-Do you also want to report this NFT as inappropriate? It will be then permanently removed on this device.: 你是否还要举报此 NFT 内容不当？随后它将从此设备上永久移除。
-This NFT will be permanently hidden on this device and reported.: 此 NFT 将在此设备上永久隐藏并被举报。
 Hidden NFTs: 隐藏的NFT
 Hidden By Me: 我隐藏的
 Probably Scam: 可能是骗局
@@ -937,7 +912,6 @@ Unstake %amount%: 解除质押 %amount%
 Request Unstaking: 申请取消质押
 Confirm Upgrading: 确认升级
 How does it work?: 它是如何运作的？
-Multisend: 批量发送
 Renew All: 全部续费
 Renew: 续费
 Renew Domain: 续费域名
