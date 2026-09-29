@@ -22,7 +22,6 @@ interface OwnProps {
 
 interface StateProps {
   isTestnet?: boolean;
-  isSwapDisabled?: boolean;
   isViewMode?: boolean;
 }
 
@@ -31,31 +30,19 @@ function Actions({
   className,
   isTestnet,
   isLedger,
-  isSwapDisabled,
   isViewMode,
   onClose,
 }: OwnProps & StateProps) {
   const {
-    startSwap,
     openInvoiceModal,
     closeReceiveModal,
   } = getActions();
 
   const lang = useLang();
 
-  const { formatTransferUrl, buySwap } = getChainConfig(chain);
-  const isSwapAllowed = !isViewMode && !isTestnet && !isLedger && !isSwapDisabled && !!buySwap;
+  const { formatTransferUrl } = getChainConfig(chain);
   const isDepositLinkSupported = !!formatTransferUrl;
-  const shouldRender = Boolean(isSwapAllowed || isDepositLinkSupported);
-
-  const handleSwapClick = useLastCallback(() => {
-    startSwap({
-      tokenInSlug: buySwap!.tokenInSlug,
-      tokenOutSlug: getNativeToken(chain).slug,
-      amountIn: buySwap!.amountIn,
-    });
-    onClose?.();
-  });
+  const shouldRender = isDepositLinkSupported;
 
   const handleReceiveClick = useLastCallback(() => {
     closeReceiveModal();
@@ -74,13 +61,6 @@ function Actions({
 
   return (
     <div className={contentClassName}>
-      {isSwapAllowed && (
-        <div className={styles.actionButton} onClick={handleSwapClick}>
-          <i className={buildClassName(styles.actionIcon, 'icon-crypto')} aria-hidden />
-          {lang('Buy with Crypto')}
-          <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-        </div>
-      )}
       {isDepositLinkSupported && (
         <div className={styles.actionButton} onClick={handleReceiveClick}>
           <i className={buildClassName(styles.actionIcon, 'icon-link')} aria-hidden />
@@ -94,8 +74,6 @@ function Actions({
 
 export default memo(withGlobal<OwnProps>((global): StateProps => {
   return {
-    isTestnet: global.settings.isTestnet,
-    isSwapDisabled: global.restrictions.isSwapDisabled,
     isViewMode: selectIsCurrentAccountViewMode(global),
   };
 })(Actions));

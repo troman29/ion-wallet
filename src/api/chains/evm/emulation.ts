@@ -5,13 +5,10 @@ import type { AlchemyAssetChange, AlchemyAssetChangesResponse, EvmTokenOperation
 import { EVM_CHAIN_IDS } from '../../dappProtocols/adapters/walletConnect/types';
 
 import { getChainConfig } from '../../../util/chain';
-import { toDecimal } from '../../../util/decimals';
 import { fetchJson } from '../../../util/fetch';
 import { logDebugError } from '../../../util/logs';
 import { getEvmProvider } from './util/client';
-import { updateTokensMetadataByAddress } from './util/metadata';
 import { updateActivityMetadata } from '../../common/helpers';
-import { getTokenBySlug } from '../../common/tokens';
 import { buildTokenSlug } from '../../methods';
 import { normalizeAddress } from './address';
 import { EVM_RPC_URLS } from './constants';
@@ -180,61 +177,34 @@ export async function parseTransactionForPreview(
   try {
     const emulated = await emulateTransaction(chain, network, address, tx);
 
-    const tokenOperation = await parseTokenOperation(network, chain, emulated, address);
+    const tokenOperation = parseTokenOperation(network, chain, emulated, address);
 
     if (tokenOperation?.assets) {
       transfers.push(getFakeTransfer(chain, rawTx, false));
+      const { transfer } = tokenOperation;
 
-      if (tokenOperation?.isSwap) {
-        const { swap } = tokenOperation;
-
-        emulation = {
-          networkFee,
-          received: 0n,
-          traceOutputs: [],
-          activities: [updateActivityMetadata({
-            id: '',
-            kind: 'swap',
-            fromAddress: address,
-            timestamp: 0,
-            from: swap.from,
-            fromAmount: swap.fromAmount,
-            to: swap.to,
-            toAmount: swap.toAmount,
-            networkFee: swap.networkFee,
-            swapFee: '0',
-            status: 'completed',
-            hashes: [],
-            transactionIds: {},
-          })],
-          realFee: feeForActivity,
-        };
-      } else {
-        const { transfer } = tokenOperation;
-
-        emulation = {
-          networkFee,
-          received: 0n,
-          traceOutputs: [],
-          // We need to pass TON-like structure, but it's not actual emulation,
-          // so we don't have all the fields, but have essential
-          activities: [updateActivityMetadata({
-            id: '',
-            kind: 'transaction',
-            timestamp: 0,
-            comment: undefined,
-            fromAddress: fromAddr,
-            toAddress: transfer.toAddress,
-            amount: transfer.amount,
-            slug: transfer.slug,
-            isIncoming: false,
-            normalizedAddress: transfer.toAddress,
-            fee: transfer.fee,
-            status: 'completed',
-          })],
-          realFee: transfer.fee,
-        };
-      }
+      emulation = {
+        networkFee,
+        received: 0n,
+        traceOutputs: [],
+        // We need to pass TON-like structure, but it's not actual emulation,
+        // so we don't have all the fields, but have essential
+        activities: [updateActivityMetadata({
+          id: '',
+          kind: 'transaction',
+          timestamp: 0,
+          comment: undefined,
+          fromAddress: fromAddr,
+          toAddress: transfer.toAddress,
+          amount: transfer.amount,
+          slug: transfer.slug,
+          isIncoming: false,
+          normalizedAddress: transfer.toAddress,
+          fee: transfer.fee,
+          status: 'completed',
+        })],
+        realFee: transfer.fee,
+      };
     }
   } catch (error) {
     logDebugError(`parseTransactionForPreview:${chain} Failed to emulate transaction`, error);
@@ -284,12 +254,12 @@ async function emulateTransaction(
   return response.result;
 }
 
-export async function parseTokenOperation(
+export function parseTokenOperation(
   network: ApiNetwork,
   chain: EVMChain,
   tx: AlchemyAssetChange,
   userAddress: string,
-): Promise<EvmTokenOperation | undefined> {
+): EvmTokenOperation | undefined {
   const changes = new Map<string, bigint>();
   const assets: string[] = [];
 
@@ -357,7 +327,6 @@ export async function parseTokenOperation(
 
     return {
       assets,
-      isSwap: false,
       transfer: {
         amount: isIncoming ? amount : -amount,
         fromAddress,
@@ -370,38 +339,5 @@ export async function parseTokenOperation(
     };
   }
 
-  const firstSentAsset = [...sent]?.[0]?.[0] || '';
-  const firstReceivedAsset = [...received]?.[0]?.[0] || '';
-
-  if (!firstSentAsset && !firstReceivedAsset) {
-    return;
-  }
-
-  await updateTokensMetadataByAddress(
-    network,
-    chain,
-    [firstSentAsset, firstReceivedAsset].filter((e) => e && e !== nativeSlug),
-  );
-
-  const assetTo = firstReceivedAsset === nativeSlug
-    ? getChainConfig(chain).nativeToken
-    : getTokenBySlug(buildTokenSlug(chain, firstReceivedAsset));
-
-  const assetFrom = firstSentAsset === nativeSlug
-    ? getChainConfig(chain).nativeToken
-    : getTokenBySlug(buildTokenSlug(chain, firstSentAsset));
-
-  return {
-    assets,
-    isSwap: true,
-    swap: {
-      fromAddress: userAddress,
-      from: assetFrom?.slug || '',
-      fromAmount: toDecimal(sent.get([...sent][0][0])!, assetFrom?.decimals || 18),
-      to: assetTo?.slug || '',
-      toAmount: toDecimal(received.get([...received][0][0])!, assetTo?.decimals || 18),
-      networkFee: toDecimal(BigInt(tx.gasUsed), getChainConfig(chain).nativeToken.decimals),
-      swapFee: '0',
-    },
-  };
+  return undefined;
 }

@@ -1,11 +1,8 @@
-import type { ApiSwapDexLabel, ApiSwapHistoryItem } from './backend';
 import type { ApiNetwork, ApiNftMarketplace, ApiTransaction } from './misc';
 
 export type ApiActivityReconciliationReason =
   | 'raw'
   | 'local-intent'
-  | 'cex-swap'
-  | 'ton-aggregated-swap'
   | 'ton-partial-failure-deaggregated';
 
 export type ApiActivityReconciliationMetadata = {
@@ -29,19 +26,9 @@ type BaseActivity = {
   shouldLoadDetails?: boolean;
   isScam?: boolean;
   extra?: {
-    dex?: ApiSwapDexLabel; // Only for TON liquidity deposit and withdrawal
     marketplace?: ApiNftMarketplace;
     /** Request identifier from the underlying message where available (TON only) */
     queryId?: string;
-    /** Marks hidden transfers that include the My Wallet swap fee */
-    isOurSwapFee?: boolean;
-    /** Aggregated swap marker used to merge internal aggregator routes */
-    mtwAggregator?: {
-      traceId: string;
-      swapIds: string[];
-      from: string;
-      to: string;
-    };
     /** SDK-owned source/projection metadata for activity reconciliation. Optional for backwards compatibility. */
     reconciliation?: ApiActivityReconciliationMetadata;
     // TODO Move other extra fields here (externalMsgHash, ...)
@@ -52,11 +39,7 @@ export type ApiTransactionActivity = BaseActivity & ApiTransaction & {
   kind: 'transaction';
 };
 
-export type ApiSwapActivity = BaseActivity & ApiSwapHistoryItem & {
-  kind: 'swap';
-};
-
-export type ApiActivity = ApiTransactionActivity | ApiSwapActivity;
+export type ApiActivity = ApiTransactionActivity;
 
 export type ApiFetchActivitySliceOptions = {
   accountId: string;

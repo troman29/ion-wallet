@@ -68,7 +68,7 @@
  * origin, since all endpoints share upstream rate-limit pools). Use
  * bucketKey(url, { includePathPrefix: true }) for our own backend
  * (per-endpoint SLA divergence - a slow /assets must not gate /currency-rates,
- * /swap, /referrer, etc.).
+ * /referrer, etc.).
  *
  * # Known limitations
  *

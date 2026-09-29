@@ -1,4 +1,4 @@
-import { findChainConfig } from '../chain';
+import { findChainConfig } from './chain';
 
 const NETWORK_NAMES_EXCEPTIONS: Record<string, string> = {
   binance_smart_chain: 'Binance Smart Chain',

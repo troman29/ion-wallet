@@ -6,12 +6,10 @@ import type {
   ApiCurrencyRates,
   ApiNft,
   ApiStakingState,
-  ApiSwapAsset,
   ApiTokenWithPrice,
 } from '../../../../api/types';
 import type { Account, AppTheme, SavedAddress } from '../../../../global/types';
 
-import Swap, { getSwapHeight } from './Swap';
 import Transaction, { getTransactionHeight } from './Transaction';
 
 interface OwnProps {
@@ -23,7 +21,6 @@ interface OwnProps {
   withChainIcon?: boolean;
   className?: string;
   tokensBySlug: Record<string, ApiTokenWithPrice>;
-  swapTokensBySlug: Record<string, ApiSwapAsset> | undefined;
   appTheme: AppTheme;
   nftsByAddress: Record<string, ApiNft> | undefined;
   currentAccountId: string;
@@ -45,7 +42,6 @@ export default function Activity({
   withChainIcon,
   className,
   tokensBySlug,
-  swapTokensBySlug,
   appTheme,
   nftsByAddress,
   currentAccountId,
@@ -57,52 +53,34 @@ export default function Activity({
   shouldHideStakingAnnualYield,
   onClick,
 }: OwnProps) {
-  if (activity.kind === 'swap') {
-    return (
-      <Swap
-        activity={activity}
-        tokensBySlug={tokensBySlug}
-        swapTokensBySlug={swapTokensBySlug}
-        isLast={isLast}
-        isActive={isActive}
-        className={className}
-        appTheme={appTheme}
-        accountChains={accounts?.[currentAccountId]?.byChain}
-        isSensitiveDataHidden={isSensitiveDataHidden}
-        isFuture={isFuture}
-        onClick={onClick}
-      />
-    );
-  } else {
-    const doesNftExist = Boolean(activity.nft && nftsByAddress?.[activity.nft.address]);
-    const { annualYield, yieldType } = stakingStateBySlug[activity.slug] ?? {};
+  const doesNftExist = Boolean(activity.nft && nftsByAddress?.[activity.nft.address]);
+  const { annualYield, yieldType } = stakingStateBySlug[activity.slug] ?? {};
 
-    return (
-      <Transaction
-        currentAccountId={currentAccountId}
-        transaction={activity}
-        tokensBySlug={tokensBySlug}
-        isActive={isActive}
-        className={className}
-        annualYield={annualYield}
-        yieldType={yieldType}
-        isLast={isLast}
-        savedAddresses={savedAddresses}
-        withChainIcon={withChainIcon}
-        appTheme={appTheme}
-        doesNftExist={doesNftExist}
-        isSensitiveDataHidden={isSensitiveDataHidden}
-        isFuture={isFuture}
-        accounts={accounts}
-        baseCurrency={baseCurrency}
-        currencyRates={currencyRates}
-        shouldHideStakingAnnualYield={shouldHideStakingAnnualYield}
-        onClick={onClick}
-      />
-    );
-  }
+  return (
+    <Transaction
+      currentAccountId={currentAccountId}
+      transaction={activity}
+      tokensBySlug={tokensBySlug}
+      isActive={isActive}
+      className={className}
+      annualYield={annualYield}
+      yieldType={yieldType}
+      isLast={isLast}
+      savedAddresses={savedAddresses}
+      withChainIcon={withChainIcon}
+      appTheme={appTheme}
+      doesNftExist={doesNftExist}
+      isSensitiveDataHidden={isSensitiveDataHidden}
+      isFuture={isFuture}
+      accounts={accounts}
+      baseCurrency={baseCurrency}
+      currencyRates={currencyRates}
+      shouldHideStakingAnnualYield={shouldHideStakingAnnualYield}
+      onClick={onClick}
+    />
+  );
 }
 
 export function getActivityHeight(activity: ApiActivity, isFuture?: boolean) {
-  return activity.kind === 'swap' ? getSwapHeight() : getTransactionHeight(activity, isFuture);
+  return getTransactionHeight(activity, isFuture);
 }

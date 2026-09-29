@@ -62,10 +62,6 @@ export interface ChainConfig {
   chainStandard?: ApiChain;
   /** Whether the chain supports domain names that resolve to regular addresses */
   isDnsSupported: boolean;
-  /** Whether the chain supports onchain swaps (DEX) */
-  isOnchainSwapSupported: boolean;
-  /** Whether onchain swaps can be estimated from the buy amount */
-  canSwapByBuyAmount?: boolean;
   /** Whether the chain supports sending asset transfers with a comment */
   isTransferPayloadSupported: boolean;
   /** Whether the chain supports comment encrypting */
@@ -179,8 +175,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
   ton: {
     title: 'ION',
     isDnsSupported: true,
-    isOnchainSwapSupported: true,
-    canSwapByBuyAmount: true,
     isTransferPayloadSupported: true,
     isEncryptedCommentSupported: true,
     canTransferFullNativeBalance: true,
@@ -264,7 +258,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     title: 'BNB',
     chainStandard: 'bnb',
     isDnsSupported: false,
-    isOnchainSwapSupported: false,
     isTransferPayloadSupported: false,
     isEncryptedCommentSupported: false,
     canTransferFullNativeBalance: false,
@@ -478,13 +471,6 @@ export const getDefaultEnabledSlugs = /* #__PURE__ */ withCache((
  */
 export const getAllSupportedVisibleChains = /* #__PURE__ */ withCache((): ReadonlySet<ApiChain> => {
   return new Set(getSupportedChains());
-});
-
-export const getSlugsSupportingCexSwap = /* #__PURE__ */ withCache((): ReadonlySet<string> => {
-  return new Set(
-    Object.values(CHAIN_CONFIG)
-      .flatMap((chainConfig) => chainConfig.crosschainSwapSlugs),
-  );
 });
 
 /** Returns the tokens from all the chains to fill the token cache until it's loaded from the backend */

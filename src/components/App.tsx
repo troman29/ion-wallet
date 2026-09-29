@@ -23,7 +23,7 @@ import {
 } from '../util/windowEnvironment';
 import { updateSizes } from '../util/windowSize';
 import { callApi } from '../api';
-import { SwapActivityModal, TransactionInfoModal, TransactionModal } from './main/modals/transaction';
+import { TransactionInfoModal, TransactionModal } from './main/modals/transaction';
 import IFrameBrowser from './ui/IFrameBrowser';
 
 import { useAppIntersectionObserver } from '../hooks/useAppIntersectionObserver';
@@ -45,6 +45,7 @@ import DappSignDataModal from './dapps/DappSignDataModal';
 import DappTransferModal from './dapps/DappTransferModal';
 import Dialogs from './Dialogs';
 import ElectronHeader from './electron/ElectronHeader';
+import ExchangeModal from './exchange/ExchangeModal';
 import Explore from './explore/Explore';
 import LedgerModal from './ledger/LedgerModal';
 import Main from './main/Main';
@@ -58,7 +59,6 @@ import Toasts from './main/Toasts';
 import WalletRenameModal from './main/WalletRenameModal';
 import MediaViewer from './mediaViewer/MediaViewer';
 import Settings from './settings/Settings';
-import SwapModal from './swap/SwapModal';
 import TokenInfo from './tokenInfo/TokenInfo';
 import TransferModal from './transfer/TransferModal';
 import ConfettiContainer from './ui/ConfettiContainer';
@@ -252,11 +252,10 @@ function App({
             onClose={closeBackupWalletModal}
           />
           <TransferModal />
-          <SwapModal />
+          <ExchangeModal />
           <SignatureModal />
           <TransactionModal />
           <TransactionInfoModal />
-          <SwapActivityModal />
           <DappConnectModal />
           <DappSignDataModal />
           <DappTransferModal />

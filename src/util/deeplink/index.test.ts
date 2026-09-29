@@ -6,15 +6,12 @@ import { ContentTab } from '../../global/types';
 import {
   BNB,
   BSC_USDT_MAINNET,
-  DEFAULT_SWAP_AMOUNT,
-  DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-  DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   TON_USDT_MAINNET,
   TONCOIN,
 } from '../../config';
 import { INITIAL_STATE } from '../../global/initialState';
 import { callApi } from '../../api';
-import { getChainConfig, getEvmChains } from '../chain';
+import { getEvmChains } from '../chain';
 import { openUrl } from '../openUrl';
 import { getDeeplinkFromLocation, parseTonDeeplink, processDeeplink, processSelfDeeplink } from './index';
 
@@ -270,7 +267,7 @@ describe('processSelfDeeplink', () => {
 
     // Setup mock actions
     mockActions = {
-      startSwap: jest.fn(),
+      startExchange: jest.fn(),
       showError: jest.fn(),
       startStaking: jest.fn(),
       startTransfer: jest.fn(),
@@ -290,182 +287,10 @@ describe('processSelfDeeplink', () => {
     (getGlobal as jest.Mock).mockReturnValue(mockGlobal);
   });
 
-  describe('Swap command', () => {
-    it('should start swap with default parameters using ion:// protocol', async () => {
-      const result = await processSelfDeeplink('ion://swap');
-
-      expect(result).toBe(true);
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: TONCOIN.slug,
-        tokenOutSlug: DEFAULT_SWAP_SECOND_TOKEN_SLUG,
-        amountIn: DEFAULT_SWAP_AMOUNT,
-      });
-      expect(mockActions.showError).not.toHaveBeenCalled();
-    });
-
-    it('should start swap with custom parameters using https://wallet.ice.io protocol', async () => {
-      mockGlobal.swapTokenInfo = {
-        bySlug: {
-          'ton-usdt': { slug: 'ton-usdt' } as any,
-          [TONCOIN.slug]: { slug: TONCOIN.slug } as any,
-        },
-      };
-
-      const result = await processSelfDeeplink('https://wallet.ice.io/swap?in=ton-usdt&out=toncoin&amount=50');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).not.toHaveBeenCalled();
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: 'ton-usdt',
-        tokenOutSlug: TONCOIN.slug,
-        amountIn: '50',
-      });
-    });
-
-    it('should show error and use default tokenInSlug when in param is unknown', async () => {
-      mockGlobal.swapTokenInfo = {
-        bySlug: {
-          [TONCOIN.slug]: { slug: TONCOIN.slug } as any,
-          [TON_USDT_MAINNET.slug]: { slug: TON_USDT_MAINNET.slug } as any,
-        },
-      };
-
-      const result = await processSelfDeeplink('ion://swap?in=unknown-token&out=ton-usdt');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$unknown_swap_token',
-      });
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-        tokenOutSlug: TON_USDT_MAINNET.slug,
-        amountIn: DEFAULT_SWAP_AMOUNT,
-      });
-    });
-
-    it('should show error and use default tokenInSlug when in is unknown and out is toncoin', async () => {
-      mockGlobal.swapTokenInfo = {
-        bySlug: {
-          [TONCOIN.slug]: { slug: TONCOIN.slug } as any,
-          [TON_USDT_MAINNET.slug]: { slug: TON_USDT_MAINNET.slug } as any,
-        },
-      };
-
-      const result = await processSelfDeeplink('ion://swap?in=unknown-token&out=toncoin');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$unknown_swap_token',
-      });
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-        tokenOutSlug: DEFAULT_SWAP_SECOND_TOKEN_SLUG,
-        amountIn: DEFAULT_SWAP_AMOUNT,
-      });
-    });
-
-    it('should show error and use default tokenOutSlug when out param is unknown', async () => {
-      mockGlobal.swapTokenInfo = {
-        bySlug: {
-          [TONCOIN.slug]: { slug: TONCOIN.slug } as any,
-          [TON_USDT_MAINNET.slug]: { slug: TON_USDT_MAINNET.slug } as any,
-        },
-      };
-
-      const result = await processSelfDeeplink(`ion://swap?in=toncoin&out=unknown-token`);
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$unknown_swap_token',
-      });
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-        tokenOutSlug: DEFAULT_SWAP_SECOND_TOKEN_SLUG,
-        amountIn: DEFAULT_SWAP_AMOUNT,
-      });
-    });
-
-    it('should show error and use both defaults when both in and out params are unknown', async () => {
-      mockGlobal.swapTokenInfo = {
-        bySlug: {
-          [TONCOIN.slug]: { slug: TONCOIN.slug } as any,
-          [TON_USDT_MAINNET.slug]: { slug: TON_USDT_MAINNET.slug } as any,
-        },
-      };
-
-      const result = await processSelfDeeplink('ion://swap?in=unknown-in&out=unknown-out');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: '$unknown_swap_token',
-      });
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-        tokenOutSlug: DEFAULT_SWAP_SECOND_TOKEN_SLUG,
-        amountIn: DEFAULT_SWAP_AMOUNT,
-      });
-    });
-
-    it('should show error when swap is requested in testnet', async () => {
-      mockGlobal.settings.isTestnet = true;
-
-      const result = await processSelfDeeplink('ion://swap');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: 'Swap is not supported in Testnet.',
-      });
-      expect(mockActions.startSwap).not.toHaveBeenCalled();
-    });
-
-    it('should show error when swap is requested with Ledger account', async () => {
-      mockGlobal.accounts!.byId['test-account-id'].type = 'hardware';
-
-      const result = await processSelfDeeplink('ion://swap');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: 'Swap is not yet supported by Ledger.',
-      });
-      expect(mockActions.startSwap).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Buy with crypto command', () => {
-    it('should start swap for buying with default parameters', async () => {
-      const result = await processSelfDeeplink('ion://buy-with-crypto');
-      const { nativeToken, buySwap: defaultBuySwap } = getChainConfig('ton');
-
-      expect(result).toBe(true);
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: defaultBuySwap!.tokenInSlug,
-        tokenOutSlug: nativeToken.slug,
-        amountIn: defaultBuySwap!.amountIn,
-      });
-    });
-
-    it('should start swap with custom parameters for buying', async () => {
-      const result = await processSelfDeeplink(
-        'https://go.wallet.ice.io/buy-with-crypto?in=ton-usdt&out=toncoin&amount=200',
-      );
-
-      expect(result).toBe(true);
-      expect(mockActions.startSwap).toHaveBeenCalledWith({
-        tokenInSlug: 'ton-usdt',
-        tokenOutSlug: TONCOIN.slug,
-        amountIn: '200',
-      });
-    });
-
-    it('should show error when buy-with-crypto is requested in testnet', async () => {
-      mockGlobal.settings.isTestnet = true;
-
-      const result = await processSelfDeeplink('ion://buy-with-crypto');
-
-      expect(result).toBe(true);
-      expect(mockActions.showError).toHaveBeenCalledWith({
-        error: 'Swap is not supported in Testnet.',
-      });
+  describe('Exchange commands', () => {
+    it.each(['ion://swap', 'ion://buy-with-crypto'])('opens Exchange for %s', async (url) => {
+      expect(await processSelfDeeplink(url)).toBe(true);
+      expect(mockActions.startExchange).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -1001,7 +826,7 @@ describe('View-only mode deeplink blocking', () => {
     jest.clearAllMocks();
 
     mockActions = {
-      startSwap: jest.fn(),
+      startExchange: jest.fn(),
       showError: jest.fn(),
       startStaking: jest.fn(),
       startTransfer: jest.fn(),
@@ -1059,9 +884,9 @@ describe('View-only mode deeplink blocking', () => {
       });
     });
 
-    it('should not call startSwap in view-only mode', async () => {
+    it('should not open exchange in view-only mode', async () => {
       await processSelfDeeplink('ion://swap');
-      expect(mockActions.startSwap).not.toHaveBeenCalled();
+      expect(mockActions.startExchange).not.toHaveBeenCalled();
     });
 
     it('should not call addSavedAddress for offramp in view-only mode', async () => {

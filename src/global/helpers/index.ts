@@ -1,6 +1,6 @@
-import type { ApiSwapAsset, ApiTokenWithPrice, ApiTransaction } from '../../api/types';
+import type { ApiTokenWithPrice, ApiTransaction } from '../../api/types';
 
-import { TINY_TRANSFER_MAX_COST, TONCOIN } from '../../config';
+import { TINY_TRANSFER_MAX_COST } from '../../config';
 import { isScamTransaction } from '../../util/activities';
 import { toBig } from '../../util/decimals';
 
@@ -18,16 +18,4 @@ export function getIsTinyOrScamTransaction(transaction: ApiTransaction, token?: 
 
   const cost = toBig(transaction.amount, token.decimals).abs().mul(token.priceUsd ?? 0);
   return cost.lt(TINY_TRANSFER_MAX_COST);
-}
-
-// FIXME: TON renaming
-export function resolveSwapAssetId(asset: ApiSwapAsset) {
-  return asset.slug === TONCOIN.slug ? 'TON' : (asset.tokenAddress ?? asset.slug);
-}
-
-export function resolveSwapAsset(
-  bySlug: Record<string, ApiSwapAsset> | Record<string, ApiTokenWithPrice>,
-  anyId: string,
-) {
-  return bySlug[anyId] ?? Object.values(bySlug).find(({ tokenAddress }) => tokenAddress === anyId);
 }

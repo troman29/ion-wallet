@@ -8,7 +8,7 @@ import { removeExtraClass } from '../lib/teact/teact-dom';
 import type { ApiChain } from '../api/types';
 
 import { getChainConfig } from '../util/chain';
-import getChainNetworkIcon from '../util/swap/getChainNetworkIcon';
+import getChainNetworkIcon from '../util/getChainNetworkIcon';
 
 const QR_SIZE = 600;
 

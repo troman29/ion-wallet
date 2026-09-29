@@ -5,9 +5,9 @@ import type { ApiChain } from '../../../../api/types';
 import type { Account } from '../../../../global/types';
 
 import buildClassName from '../../../../util/buildClassName';
+import getChainNetworkIcon from '../../../../util/getChainNetworkIcon';
 import { shortenAddress } from '../../../../util/shortenAddress';
 import { shortenDomain } from '../../../../util/shortenDomain';
-import getChainNetworkIcon from '../../../../util/swap/getChainNetworkIcon';
 
 import useLastCallback from '../../../../hooks/useLastCallback';
 import useLongPress from '../../../../hooks/useLongPress';

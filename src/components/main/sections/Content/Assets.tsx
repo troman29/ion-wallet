@@ -4,7 +4,7 @@ import { getActions, withGlobal } from '../../../../global';
 import type {
   ApiBaseCurrency, ApiCurrencyRates, ApiStakingState,
 } from '../../../../api/types';
-import type { LoadMoreDirection, Theme, UserSwapToken, UserToken } from '../../../../global/types';
+import type { LoadMoreDirection, Theme, UserToken } from '../../../../global/types';
 import { SettingsState } from '../../../../global/types';
 
 import { ANIMATED_STICKER_SMALL_SIZE_PX } from '../../../../config';
@@ -17,8 +17,6 @@ import {
   selectIsCurrentAccountViewMode,
   selectIsMultichainAccount,
   selectIsStakingDisabled,
-  selectIsSwapDisabled,
-  selectSwapTokens,
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import buildStyle from '../../../../util/buildStyle';
@@ -59,7 +57,6 @@ type OwnProps = {
 
 interface StateProps {
   tokens?: UserToken[];
-  swapTokens?: UserSwapToken[];
   isInvestorViewEnabled?: boolean;
   currentTokenSlug?: string;
   baseCurrency: ApiBaseCurrency;
@@ -68,7 +65,6 @@ interface StateProps {
   areTokenNamesLocalized?: boolean;
   states?: ApiStakingState[];
   isViewMode?: boolean;
-  isSwapDisabled?: boolean;
   isMultichainAccount: boolean;
   isStakingDisabled?: boolean;
   pinnedSlugs?: string[];
@@ -81,7 +77,6 @@ const TOKEN_HEIGHT_REM = 4;
 function Assets({
   isActive,
   tokens,
-  swapTokens,
   isInvestorViewEnabled,
   isSeparatePanel,
   isWidget,
@@ -93,7 +88,6 @@ function Assets({
   states,
   isMultichainAccount,
   isViewMode,
-  isSwapDisabled,
   isStakingDisabled,
   pinnedSlugs = MEMO_EMPTY_ARRAY,
   alwaysHiddenSlugs = MEMO_EMPTY_ARRAY,
@@ -125,10 +119,6 @@ function Assets({
     pinnedSlugs,
     alwaysHiddenSlugs,
   });
-
-  const swapTokensBySlug = useMemo(() => {
-    return buildCollectionByKey<UserSwapToken>(swapTokens ?? [], 'slug');
-  }, [swapTokens]);
 
   const tokenSlugs = useMemo(() => (
     allTokensWithStaked
@@ -257,7 +247,6 @@ function Assets({
     const isStakingAvailable = Boolean(baseTokenState && !isStakingDisabled && getIsNewStakeAllowed(slug));
     const yieldSource = stakingState || (isStakingAvailable ? baseTokenState : undefined);
     const { annualYield, yieldType } = yieldSource || {};
-    const isSwapAvailable = Boolean(swapTokensBySlug[slug]);
     const isPinned = pinnedSlugsSet.has(slug);
     const amountDecimal = isStaking ? toDecimal(amount, decimals) : undefined;
     const isPinToggled = slug === pinToggledSlug;
@@ -288,7 +277,6 @@ function Assets({
           tokenClassName={isWidget ? styles.tokenInWidget : undefined}
           isViewMode={isViewMode}
           isStakingAvailable={isStakingAvailable}
-          isSwapDisabled={isSwapDisabled || !isSwapAvailable}
           isPinned={isPinned}
           withPinTransition={withPinTransition}
           onClick={handleTokenClick}
@@ -368,7 +356,6 @@ export default memo(
     (global): StateProps => {
       const currentAccountId = selectCurrentAccountId(global)!;
       const tokens = selectCurrentAccountTokens(global);
-      const swapTokens = selectSwapTokens(global);
       const accountState = selectCurrentAccountState(global);
       const accountSettings = selectCurrentAccountSettings(global);
       const { isInvestorViewEnabled, areTokenNamesLocalized } = global.settings;
@@ -378,7 +365,6 @@ export default memo(
 
       return {
         tokens,
-        swapTokens,
         isInvestorViewEnabled,
         currentTokenSlug: accountState?.currentTokenSlug,
         baseCurrency: global.settings.baseCurrency,
@@ -388,7 +374,6 @@ export default memo(
         states,
         isMultichainAccount: selectIsMultichainAccount(global, currentAccountId),
         isViewMode,
-        isSwapDisabled: selectIsSwapDisabled(global),
         isStakingDisabled: selectIsStakingDisabled(global),
         pinnedSlugs: accountSettings?.pinnedSlugs,
         alwaysHiddenSlugs: accountSettings?.alwaysHiddenSlugs,

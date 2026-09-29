@@ -13,7 +13,6 @@ import {
   selectCurrentAccountState,
   selectIsCurrentAccountViewMode,
   selectIsStakingDisabled,
-  selectIsSwapDisabled,
 } from '../../../../global/selectors';
 import { ACCENT_COLORS } from '../../../../util/accentColor/constants';
 import buildClassName from '../../../../util/buildClassName';
@@ -52,7 +51,6 @@ interface OwnProps {
 
 interface StateProps {
   isViewMode: boolean;
-  isSwapDisabled?: boolean;
   isEarnHidden: boolean;
   stakingStatus: StakingStateStatus;
   theme: Theme;
@@ -61,7 +59,6 @@ interface StateProps {
 
 function TopActions({
   isViewMode,
-  isSwapDisabled,
   isEarnHidden,
   stakingStatus,
   theme,
@@ -70,7 +67,7 @@ function TopActions({
 }: OwnProps & StateProps) {
   const {
     startTransfer,
-    startSwap,
+    startExchange,
     openReceiveModal,
     openStakingInfoOrStart,
   } = getActions();
@@ -90,7 +87,7 @@ function TopActions({
 
   const handleTradeClick = useLastCallback(() => {
     void vibrate();
-    startSwap();
+    startExchange();
   });
 
   const handleEarnClick = useLastCallback(() => {
@@ -132,15 +129,13 @@ function TopActions({
         accentColor={accentColor}
         onClick={handleSendClick}
       />
-      {!isSwapDisabled && (
-        <ActionButton
-          label={lang('Trade')}
-          tgsUrl={stickerPaths.iconSwap}
-          previewUrl={stickerPaths.preview.iconSwap}
-          accentColor={accentColor}
-          onClick={handleTradeClick}
-        />
-      )}
+      <ActionButton
+        label={lang('Exchange')}
+        tgsUrl={stickerPaths.iconSend}
+        previewUrl={stickerPaths.preview.iconSend}
+        accentColor={accentColor}
+        onClick={handleTradeClick}
+      />
       {!isEarnHidden && (
         <ActionButton
           label={lang(STAKING_TAB_TEXT_VARIANTS[stakingStatus])}
@@ -173,7 +168,6 @@ export default memo(
 
       return {
         isViewMode: selectIsCurrentAccountViewMode(global),
-        isSwapDisabled: selectIsSwapDisabled(global),
         isEarnHidden,
         stakingStatus: stakingState ? getStakingStateStatus(stakingState) : 'inactive',
         theme: global.settings.theme,

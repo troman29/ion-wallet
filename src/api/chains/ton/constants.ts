@@ -78,8 +78,6 @@ export const ALL_WALLET_VERSIONS: ApiTonWalletVersion[] = [
   'simpleR1', 'simpleR2', 'simpleR3', 'v2R1', 'v2R2', 'v3R1', 'v3R2', 'v4R2', 'W5',
 ];
 
-export const OUR_FEE_PAYLOAD_BOC = 'te6cckEBAQEABgAACE0jhUPUcYAL';
-
 export const RAW_ADDRESS_LENGTH = 66;
 
 export enum Workchain {
@@ -285,115 +283,95 @@ export const KnownContracts: Record<ContractName, ContractInfo> = {
   dedustPool: {
     name: 'dedustPool',
     oldHash: 'f216ded2b43d32e2d487db6fa6e4d2387f0ef1d7b53ec1ad85f0b4feb8e4ed62',
-    isSwapAllowed: true,
   },
   // Example: https://tonviewer.com/EQDFJ4-4-CXUn7TTt3e1Z7FBpH6lkJRP5mVkGtGd5dHZzGe0
   dedustV2Cpmm: {
     name: 'dedustV2Cpmm',
     hash: '3997a5c1ee8923e93cf3a6a98ea3ef9482c64dd8aea2ba8365689e14d99c760d',
-    isSwapAllowed: true,
   },
   // Example: https://tonviewer.com/EQD026kOv4j6-56O6y8kbaaFZdQhVkh4RbEGrQND7XJMlgLf
   dedustV2CpmmPoolV2: {
     name: 'dedustV2CpmmPoolV2',
     hash: '5851780d2386e989b9ab956da7cec5c69a667b9e525f628dcba5eb02c1ee0367',
-    isSwapAllowed: true,
   },
   dedustVaultNative: {
     name: 'dedustVaultNative',
     oldHash: '64a42ad66688097422901ae6188670f0d6292ad3bdb4139289666f24187e86cb',
-    isSwapAllowed: true,
   },
   dedustVaultNativeV2: {
     name: 'dedustVaultNativeV2',
     hash: '875fac5e08e5062f0f7c5c9f4c989607108e35a9ad88dc563e3e4fc7a3d3e75c',
-    isSwapAllowed: true,
   },
   // Example: https://tonviewer.com/EQAO_1qemostkDtMfhp7XU0nOsAkQ_tLUO5YJeNMrj3dRAaH
   dedustUranusMemeV2: {
     name: 'dedustUranusMemeV2',
     hash: '722d37be518ee0d4b6714077727ed60724bf379e8f1479c220b853d1af3cf00d',
-    isSwapAllowed: true,
   },
   // Example: https://tonviewer.com/EQA6dGeKIcHUVQghKGmGe1fEfyfYaYyLC594PkYO5uIbEqT4
   dedustUranusMemeV3: {
     name: 'dedustUranusMemeV3',
     hash: '1e4f8fcaabefdbbb9b397372d9f021511c272eda2b492ca2d33b817bc3251afe',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQAYqo4u7VF0fa4DPAebk4g9lBytj2VFny7pzXR0trjtXQaO
   dedustVaultJetton: {
     name: 'dedustVaultJetton',
     oldHash: '5bc82f0c5972ccc6732e98cbe31ea4795da818f9e06c991331568182a8362307',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQARULUYsmJq1RiZ-YiH-IJLcAZUVkVff-KBPwEmmaQGH6aC
   stonPtonWallet: {
     name: 'stonPtonWallet',
     hash: '8836d2f41b39cd2cbdd8a66c10f9665d075242a66003bd8f14485bd6b140d303',
-    isSwapAllowed: true,
   },
   stonRouter: {
     name: 'stonRouter',
     oldHash: '14ce618a0e9a94adc99fa6e975219ddd675425b30dfa9728f98714c8dc55f9da',
-    isSwapAllowed: true,
   },
   stonRouterV2_1: {
     name: 'stonRouterV2_1',
     oldHash: 'd61cb7fb7bee0cc414286a482fccdec53c3f8717e4aae4fc362d98ab6254e6cd',
-    isSwapAllowed: true,
   },
   stonPoolV2_1: {
     name: 'stonPoolV2_1',
     oldHash: '16cc513c380e329f45d54f294787e2030e289799eca138961c1cd7e26e882c7c',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQCS4UEa5UaJLzOyyKieqQOQ2P9M-7kXpkO5HnP3Bv250cN3
   stonRouterV2_2: {
     name: 'stonRouterV2_2',
     oldHash: '094b5084111addda1b6fac7007c8a8f85ff4ccc63475815ab3dfa3b5b4c6b102',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQBSNX_5mSikBVttWhIaIb0f8jJU7fL6kvyyFVppd7dWRO6M
   stonRouterV2_2_alt: {
     name: 'stonRouterV2_2_alt',
     oldHash: 'd41e7563afa05ee008655e190920d3f53de9cab4c2d4e10ee1d0f158e95e52e5',
-    isSwapAllowed: true,
   },
   stonPoolV2_2: {
     name: 'stonPoolV2_2',
     oldHash: '11eaf6db706e63adf9327897aaa845c77a631856abfc14375837f19b617cacb4',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQBiLHuQjDj4fNyCD7Ch5HwpNGldlb5g-LMwQ1kStQ4NM5kv
   stonPtonWalletV2: {
     name: 'stonPtonWalletV2',
     oldHash: '2761042202032258de9eb1b672e1ec2e4f13b2af00700195801ada33f7ced1b6',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQC_-t0nCnOFMdp7E7qPxAOCbCWGFz-e3pwxb6tTvFmshjt5
   toncoRouter: {
     name: 'toncoRouter',
     hash: '9b9891eaa7db7becc6ccdda1bd9a8d25dc3df2817d57e4b27ec003daf81a4439',
-    isSwapAllowed: true,
   },
   // Example: https://tonscan.org/address/EQCHHakhWxSQIWbw6ioW21YnjVKBCDd_gVjF9Mz9_dIuFy23
   wrappedToncoTonWallet: {
     name: 'wrappedToncoTonWallet',
     hash: 'c16fb5d47aa4f0ad23057d34490e6f26a62c71e6422e4f6a8648126857c71438',
-    isSwapAllowed: true,
   },
   // Example: https://tonviewer.com/EQC7D80WjxMZZmvdCJxWhR-X69p-WesFsRtn-fu-hq_MQY3S
   wrappedToncoGramWallet: {
     name: 'wrappedToncoGramWallet',
     hash: 'caa9701013595a9a3e13a0ebb24fa7630cadd558824efee977e54b571904e824',
-    isSwapAllowed: true,
   },
   // Example: https://tonviewer.com/EQAbWJ3Y1HgIIvcMq1prG1anlDC0T3cZlAU7luPT6LmTpmrZ
   omnistonEscrowMinter: {
     name: 'omnistonEscrowMinter',
     hash: 'f91c43d395d0f7d955515ab24a55098b68fed2e708f80a79c95ecaa4fcc102b8',
-    isSwapAllowed: true,
   },
   // STON.fi publishes its router fleet at https://api.ston.fi/v1/routers: one code per router type and
   // build, and the fleet below is the whole v2.2 set as of this entry, not only the routers seen in the wild.
@@ -401,61 +379,51 @@ export const KnownContracts: Record<ContractName, ContractInfo> = {
   stonRouterV2_2_cpi1: {
     name: 'stonRouterV2_2_cpi1',
     hash: '8b65670dcd47a8a04383c27cd883a0794d52db87538ec3f8ec5572f09da8319e',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (release), ConstantProduct. Example: https://tonviewer.com/EQCiz74FCV2lYlvFPEYhL3Jql8WwIO7QvbvYT-LQH0SmtCgI
   stonRouterV2_2_cpi2: {
     name: 'stonRouterV2_2_cpi2',
     hash: '2caa6153534276cd894fec8730cdc92ed1b3baeaa7f0781987191413a63a0322',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (release), ConstantProduct. Example: https://tonviewer.com/EQD11suHkrO_1Mb5IIdYFx5ZPy38MuHoeHx6dA-QRaD8w0UJ
   stonRouterV2_2_cpi3: {
     name: 'stonRouterV2_2_cpi3',
     hash: '5c327aefd0f71a8c71a907f95e4655e4e72d403e118f255356075a0e8d6db547',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (release), ConstantProduct. Example: https://tonviewer.com/EQC67o2-2UzR1cJFrUGL5M7OAnLgG8oY_tHaTgGmR63LQNV-
   stonRouterV2_2_cpi4: {
     name: 'stonRouterV2_2_cpi4',
     hash: 'f9502b55cf962dac6d86af158405af50b281fb110cabfafb9a198db46f75b154',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (rev1), ConstantProduct. Example: https://tonviewer.com/EQAsa5p_UWxUDaU9n9bo3CAv2xRNrNFjadhm70JQAesdVt_5
   stonRouterV2_2_cpi5: {
     name: 'stonRouterV2_2_cpi5',
     hash: 'c39a85ac98055c68309bcc6570432d88cc68a586e0dec124b607564a12cec3eb',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (rev1), ConstantProduct. Example: https://tonviewer.com/EQBd9vfWfn6MOqBYEEYFeyFqliOYln1znFklfp8B02zlS_Lq
   stonRouterV2_2_cpi6: {
     name: 'stonRouterV2_2_cpi6',
     hash: '5a19635c1dc8780c352c18b7cd6c2b0e6835ca4b9926608119cb032d12719aaa',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (release), WeightedConstProduct. Example: https://tonviewer.com/EQACn16m9OrZ-mw186M4NlIpVP8Tb3q6SV9aX8NjSgVfJTo9
   stonRouterV2_2_wcpi: {
     name: 'stonRouterV2_2_wcpi',
     hash: '29a542d36e4196a8719faf33e58e855c8f07bdb0b25897bf3a283ca017c97965',
-    isSwapAllowed: true,
   },
   // STON.fi router v2.2 (release), WeightedStableSwap. Example: https://tonviewer.com/EQAGV9vw11tKW2QOCYCXEmIdyufM3p5CfcgHcY9NiiBLfZGH
   stonRouterV2_2_wstable: {
     name: 'stonRouterV2_2_wstable',
     hash: 'f451dd294a06530b6e4ec99790a595c1ac421829f78b9231245f8b51cba72556',
-    isSwapAllowed: true,
   },
   // swap.coffee TON vault, the single native-asset entry point of the DEX. Example: https://tonviewer.com/EQDbLqT_zhxpERj0EnXG2iqr1g71ODb_Xoc74R8RzUSElKGD
   swapCoffeeVaultNative: {
     name: 'swapCoffeeVaultNative',
     hash: 'd143135bc56a2f2b031c58ebc89bb747dfe31f9df98326117c1b547037897895',
-    isSwapAllowed: true,
   },
   // swap.coffee jetton vault, one per jetton, all deployed by the factory with the same code. Example: https://tonviewer.com/EQD_PJnmYQsM3jeMAAOOiWpz1XRrR7G_5tx9ZuU6nYRkLCAW
   swapCoffeeVaultJetton: {
     name: 'swapCoffeeVaultJetton',
     hash: '01be8cfa5a62c758fbd7e5602b598cdcbbd1f6bd050397f8b4b959c016e71244',
-    isSwapAllowed: true,
   },
   // `oldHash` should no longer be used for new contracts; it is retained for backwards compatibility with
   // contracts for which retrieving the new hash is difficult due to missing address tracking in past.

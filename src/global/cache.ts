@@ -55,7 +55,7 @@ export function initCache() {
     clearPoisoningCache();
 
     if (payload?.shouldReset) {
-      preloadedData = pick(global, ['swapTokenInfo', 'tokenInfo', 'restrictions']);
+      preloadedData = pick(global, ['tokenInfo', 'restrictions']);
       clearCaching();
       localStorage.removeItem(GLOBAL_STATE_CACHE_KEY);
     }

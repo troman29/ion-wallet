@@ -7,8 +7,6 @@ import type { DropdownItem } from '../../../../ui/Dropdown';
 import { SettingsState } from '../../../../../global/types';
 
 import {
-  DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-  DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   STAKING_SLUG_PREFIX,
 } from '../../../../../config';
 import { vibrate } from '../../../../../util/haptics';
@@ -19,14 +17,13 @@ import { getIsServiceToken } from '../../../../../util/tokens';
 import useContextMenuHandlers from '../../../../../hooks/useContextMenuHandlers';
 import useLastCallback from '../../../../../hooks/useLastCallback';
 
-export type MenuHandler = 'add' | 'send' | 'swap' | 'stake' | 'pin' | 'settings'
+export type MenuHandler = 'add' | 'send' | 'exchange' | 'stake' | 'pin' | 'settings'
   | 'unstake' | 'stakeMore' | 'claimRewards';
 
 function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
   isPortrait?: boolean;
   withContextMenu?: boolean;
   token: UserToken;
-  isSwapDisabled?: boolean;
   isStakingAvailable?: boolean;
   isViewMode?: boolean;
   stakingState?: ApiStakingState;
@@ -35,7 +32,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
   const {
     openReceiveModal,
     startTransfer,
-    startSwap,
+    startExchange,
     startStaking,
     openSettingsWithState,
     pinToken,
@@ -49,7 +46,6 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
     isPortrait,
     withContextMenu,
     isStakingAvailable,
-    isSwapDisabled,
     isViewMode,
     stakingState,
     isPinned,
@@ -116,10 +112,10 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
         fontIcon: 'menu-send',
         value: 'send',
       } satisfies DropdownItem<MenuHandler>,
-      !isSwapDisabled && {
-        name: 'Swap',
-        fontIcon: 'menu-swap',
-        value: 'swap',
+      {
+        name: 'Exchange',
+        fontIcon: 'menu-send',
+        value: 'exchange',
       } satisfies DropdownItem<MenuHandler>,
       isStakingAvailable && {
         name: 'Stake',
@@ -129,7 +125,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
 
     return compact(result.concat(mandatoryItems));
   }, [
-    canBeClaimed, hasUnclaimedRewards, isStakingAvailable, isStakeMoreAllowed, isSwapDisabled, isViewMode,
+    canBeClaimed, hasUnclaimedRewards, isStakingAvailable, isStakeMoreAllowed, isViewMode,
     stakingId, isServiceToken, isPinned,
   ]);
 
@@ -147,13 +143,8 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
         });
         break;
 
-      case 'swap':
-        startSwap({
-          tokenInSlug: token.slug,
-          tokenOutSlug: token.slug === DEFAULT_SWAP_FIRST_TOKEN_SLUG
-            ? DEFAULT_SWAP_SECOND_TOKEN_SLUG
-            : DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-        });
+      case 'exchange':
+        startExchange();
         break;
 
       case 'stake':

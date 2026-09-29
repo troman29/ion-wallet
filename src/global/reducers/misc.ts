@@ -3,7 +3,6 @@ import type {
   ApiChain,
   ApiCurrencyRates,
   ApiNetwork,
-  ApiSwapAsset,
   ApiTokenWithPrice,
 } from '../../api/types';
 import type {
@@ -301,25 +300,6 @@ function applyTokenNameOverrides(tokens: Record<string, ApiTokenWithPrice>) {
       ...TOKEN_NAME_OVERRIDES[slug],
       localizedName: undefined,
     }])),
-  };
-}
-
-export function updateSwapTokens(
-  global: GlobalState,
-  partial: Record<string, ApiSwapAsset>,
-): GlobalState {
-  const currentTokens = global.swapTokenInfo?.bySlug;
-
-  return {
-    ...global,
-    swapTokenInfo: {
-      ...global.swapTokenInfo,
-      bySlug: {
-        ...currentTokens,
-        ...partial,
-      },
-      isLoaded: true,
-    },
   };
 }
 

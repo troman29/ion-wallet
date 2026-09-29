@@ -1,6 +1,6 @@
-import type { ApiChain, ApiSwapAsset, ApiToken, ApiTokenWithPrice } from '../api/types';
+import type { ApiChain, ApiToken, ApiTokenWithPrice } from '../api/types';
 import type { TokenWithId } from '../components/ui/TokenDropdown';
-import type { UserSwapToken, UserToken } from '../global/types';
+import type { UserToken } from '../global/types';
 import type { LangFn } from './langProvider';
 
 import {
@@ -42,18 +42,18 @@ export function findNativeToken(chain: string | undefined): ApiToken | undefined
   return findChainConfig(chain)?.nativeToken;
 }
 
-export function getIsRwaStockToken(token?: ApiToken | UserToken | UserSwapToken | ApiSwapAsset | TokenWithId) {
+export function getIsRwaStockToken(token?: ApiToken | UserToken | TokenWithId) {
   return token?.keywords?.includes(RWA_STOCK_KEYWORD) ?? false;
 }
 
 export function getTokenName(
-  lang: LangFn, token: UserSwapToken | ApiSwapAsset | ApiToken, areTokenNamesLocalized?: boolean,
+  lang: LangFn, token: ApiToken, areTokenNamesLocalized?: boolean,
 ): string;
 export function getTokenName(
-  lang: LangFn, token?: UserSwapToken | ApiSwapAsset | ApiToken, areTokenNamesLocalized?: boolean,
+  lang: LangFn, token?: ApiToken, areTokenNamesLocalized?: boolean,
 ): string | undefined;
 export function getTokenName(
-  lang: LangFn, token?: UserSwapToken | ApiSwapAsset | ApiToken, areTokenNamesLocalized?: boolean,
+  lang: LangFn, token?: ApiToken, areTokenNamesLocalized?: boolean,
 ) {
   if (!token) return undefined;
 

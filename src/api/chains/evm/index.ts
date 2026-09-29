@@ -79,9 +79,6 @@ class EVMChainSdk<T extends EVMChain> implements ChainSdk<T> {
   submitGasfullTransfer = this.#bindChain(submitGasfullTransfer);
   verifyLedgerWalletAddress = notSupported;
 
-  buildOnchainSwapTransfer = notSupported;
-  submitOnchainSwapTransfer = notSupported;
-
   fetchPrivateKeyString = this.#bindChain(fetchPrivateKeyString);
 
   getIsLedgerAppOpen = notSupported;

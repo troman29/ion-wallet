@@ -1306,7 +1306,6 @@ function reduceGlobalForDebug() {
   const reduced = cloneDeep(getGlobal());
 
   reduced.tokenInfo = {} as any;
-  reduced.swapTokenInfo = {} as any;
   Object.entries(reduced.byAccountId).forEach(([, state]) => {
     state.activities = {} as any;
   });

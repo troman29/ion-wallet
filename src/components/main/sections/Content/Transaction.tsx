@@ -19,7 +19,6 @@ import type { Color as PendingIndicatorColor } from './ActivityStatusIcon';
 import {
   FRACTION_DIGITS,
   NFT_MARKETPLACE_TITLES,
-  SWAP_DEX_LABELS,
   TRANSACTION_ADDRESS_SHIFT,
   UNKNOWN_TOKEN,
   WHOLE_PART_DELIMITER,
@@ -394,11 +393,10 @@ function Transaction({
     }
 
     if (shouldShowTransactionAddress(transaction).includes('list')) {
-      const dexName = extra?.dex && SWAP_DEX_LABELS[extra.dex];
       const marketplaceName = extra?.marketplace && NFT_MARKETPLACE_TITLES[extra.marketplace];
 
       children.push(delimiter, lang(
-        (dexName || marketplaceName) ? '$transaction_on' : isIncoming ? '$transaction_from' : '$transaction_to',
+        marketplaceName ? '$transaction_on' : isIncoming ? '$transaction_from' : '$transaction_to',
         {
           address: (
             <span className={styles.subheaderHighlight}>
@@ -408,7 +406,7 @@ function Transaction({
                   aria-label={getChainTitle(chain)}
                 />
               )}
-              {dexName || marketplaceName || addressName || shortenAddress(address, TRANSACTION_ADDRESS_SHIFT)}
+              {marketplaceName || addressName || shortenAddress(address, TRANSACTION_ADDRESS_SHIFT)}
             </span>
           ),
         },

@@ -1,7 +1,7 @@
 import React, { memo } from '../../lib/teact/teact';
 import { getActions, withGlobal } from '../../global';
 
-import type { UserSwapToken, UserToken } from '../../global/types';
+import type { UserToken } from '../../global/types';
 
 import { selectTokenInfoUserTokens } from '../../global/selectors';
 
@@ -32,8 +32,8 @@ function SettingsTokenList({
 
   const lang = useLang();
 
-  const handleTokenSelect = useLastCallback((token: UserToken | UserSwapToken) => {
-    addToken({ token: token as UserToken });
+  const handleTokenSelect = useLastCallback((token: UserToken) => {
+    addToken({ token });
   });
 
   useHistoryBack({

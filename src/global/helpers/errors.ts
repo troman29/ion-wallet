@@ -2,7 +2,6 @@ import {
   type ApiAnyDisplayError,
   ApiCommonError,
   ApiHardwareError,
-  ApiSwapError,
   ApiTokenImportError,
   ApiTransactionDraftError,
   ApiTransactionError,
@@ -103,9 +102,6 @@ export function errorCodeToMessage(error: ApiAnyDisplayError | string = ApiCommo
 
     case ApiTokenImportError.NotATokenAddress:
       return 'The address is not a token minter address';
-
-    case ApiSwapError.SlippageError:
-      return '$swap_slippage_violation';
 
     default:
       return error;

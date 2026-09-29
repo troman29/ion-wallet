@@ -129,7 +129,6 @@ export async function fetchBalances(
 
 export async function getContractInfo(network: ApiNetwork, address: string, signal?: AbortSignal): Promise<{
   isInitialized: boolean;
-  isSwapAllowed?: boolean;
   isWallet?: boolean;
   contractInfo?: ContractInfo;
   codeHash?: string;
@@ -149,12 +148,10 @@ export async function getContractInfo(network: ApiNetwork, address: string, sign
 
   const isInitialized = state === 'active';
   const isWallet = state === 'active' ? contractInfo?.type === ContractType.Wallet : undefined;
-  const isSwapAllowed = contractInfo?.isSwapAllowed;
 
   return {
     isInitialized,
     isWallet,
-    isSwapAllowed,
     contractInfo,
     codeHash,
     codeHashOld,

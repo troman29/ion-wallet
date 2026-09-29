@@ -1,21 +1,17 @@
 import type {
   ApiActivity,
   ApiChain,
-  ApiSwapActivity,
   ApiTransaction,
   ApiTransactionActivity,
   ApiTransactionType,
 } from '../../api/types';
 import type { LangFn } from '../langProvider';
-import { SwapType } from '../swap/types';
 
 import { ALL_STAKING_POOLS, BURN_ADDRESS } from '../../config';
-import { unique } from '../iteratees';
 import { getIsTransactionWithPoisoning } from '../poisoningHash';
-import { getSwapType } from '../swap/getSwapType';
 import { getChainBySlug } from '../tokens';
 
-type UnusualTxType = 'backend-swap' | 'local' | 'additional';
+type UnusualTxType = 'local' | 'additional';
 
 type TranslationTenses = [past: string, present: string, future: string];
 
@@ -77,14 +73,6 @@ export function getIsTxIdLocal(txId: string) {
   return txId.endsWith(':local');
 }
 
-export function getIsBackendSwapId(id: string) {
-  return id.endsWith(':backend-swap');
-}
-
-export function buildBackendSwapId(backendId: string) {
-  return buildTxId(backendId, undefined, 'backend-swap');
-}
-
 export function buildLocalTxId(hash: string, subId?: number) {
   return buildTxId(hash, subId, 'local');
 }
@@ -102,9 +90,6 @@ export function getActivityTokenSlugs(activity: ApiActivity): string[] {
       if (activity.nft) return []; // We don't want NFT activities to get into any token activity list
       return [activity.slug];
     }
-    case 'swap': {
-      return [activity.from, activity.to];
-    }
   }
 }
 
@@ -113,19 +98,12 @@ export function getActivityChains(activity: ApiActivity): ApiChain[] {
     case 'transaction': {
       return [getChainBySlug(activity.slug)];
     }
-    case 'swap': {
-      return unique([
-        getChainBySlug(activity.from),
-        getChainBySlug(activity.to),
-      ]);
-    }
   }
 }
 
 export function getIsActivitySuitableForFetchingTimestamp(activity: ApiActivity | undefined) {
   return !!activity
     && !getIsTxIdLocal(activity.id)
-    && !getIsBackendSwapId(activity.id)
     && !getIsActivityPending(activity);
 }
 
@@ -272,21 +250,9 @@ export function getIsActivityWithHash(activity: ApiTransactionActivity) {
 
 export function getIsActivityPending(activity: ApiActivity) {
   // "Pending" is a blockchain term. The activities originated by our backend are never considered pending in this sense.
-  return getIsActivityPendingForUser(activity) && !getIsBackendSwapId(activity.id);
+  return getIsActivityPendingForUser(activity);
 }
 
 export function getIsActivityPendingForUser(activity: ApiActivity) {
   return PENDING_STATUSES.has(activity.status);
-}
-
-/**
- * If the account has the "from" token chain, the swap "in" transaction has been performed by the app automatically
- * (see the `submitSwapCex` action code). So, if the Сhangelly status is "waiting", the UI shouldn't tell the user that
- * the app is waiting for their payment.
- */
-export function getShouldSkipSwapWaitingStatus(
-  { from, to }: ApiSwapActivity,
-  accountChains: Partial<Record<ApiChain, unknown>>,
-) {
-  return getSwapType(from, to, accountChains) !== SwapType.CrosschainToWallet;
 }

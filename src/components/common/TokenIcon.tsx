@@ -1,10 +1,10 @@
 import React, { memo, type TeactNode } from '../../lib/teact/teact';
 
-import type { ApiSwapAsset, ApiToken } from '../../api/types';
-import type { UserSwapToken, UserToken } from '../../global/types';
+import type { ApiToken } from '../../api/types';
+import type { UserToken } from '../../global/types';
 
 import buildClassName from '../../util/buildClassName';
-import getChainNetworkIcon from '../../util/swap/getChainNetworkIcon';
+import getChainNetworkIcon from '../../util/getChainNetworkIcon';
 import { getIsNativeStakedToken, getIsNativeToken, getIsRwaStockToken } from '../../util/tokens';
 
 import useFlag from '../../hooks/useFlag';
@@ -12,7 +12,7 @@ import useFlag from '../../hooks/useFlag';
 import styles from './TokenIcon.module.scss';
 
 interface OwnProps {
-  token: UserToken | UserSwapToken | ApiSwapAsset | ApiToken;
+  token: UserToken | ApiToken;
   withChainIcon?: boolean;
   size?: 'x-small' | 'small' | 'middle' | 'large' | 'x-large' | 'xx-large';
   className?: string;

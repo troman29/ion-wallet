@@ -3,9 +3,7 @@ import type {
   ApiDecryptCommentOptions,
   ApiFetchActivitySliceOptions,
   ApiNetwork,
-  ApiSwapActivity,
 } from '../../types';
-import type { AnyAction, CallContractAction, JettonTransferAction, SwapAction } from './toncenter/types';
 import type { ParsedAction, ParsedTrace, TraceOutput } from './types';
 
 import { TONCOIN } from '../../../config';
@@ -13,7 +11,7 @@ import { pauseWithAbortSignal, raceWithAbortSignal, throwIfAborted } from '../..
 import { parseAccountId } from '../../../util/account';
 import { getActivityTokenSlugs, getIsActivityPending } from '../../../util/activities';
 import { mergeSortedActivities } from '../../../util/activities/order';
-import { fromDecimal, toDecimal } from '../../../util/decimals';
+import { toDecimal } from '../../../util/decimals';
 import { extractKey, findDifference, split } from '../../../util/iteratees';
 import { logDebug, logDebugError } from '../../../util/logs';
 import withCacheAsync from '../../../util/withCacheAsync';
@@ -22,7 +20,6 @@ import { fetchTokenWalletAddress, resolveTokenWalletAddress } from './util/tonCo
 import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/accounts';
 import { getTokenBySlug, tokensPreload } from '../../common/tokens';
 import { SEC } from '../../constants';
-import { OpCode, OUR_FEE_PAYLOAD_BOC } from './constants';
 import { fetchActions, fetchTransactions, parseActionActivityId } from './toncenter';
 import { fetchAndParseTrace } from './traces';
 
@@ -222,13 +219,7 @@ export function fillActivityDetails(activity: ApiActivity, parsedTrace: ParsedTr
   const { action } = parsedAction;
   const { realFee } = traceOutput;
 
-  if (activity.kind === 'swap') {
-    const ourFee = getSwapOurFee(activity, parsedTrace.actions, action as SwapAction);
-    const networkFee = toDecimal(realFee, TONCOIN.decimals);
-    activity = { ...activity, ourFee, networkFee };
-  } else {
-    activity = { ...activity, fee: realFee };
-  }
+  activity = { ...activity, fee: realFee };
 
   activity = { ...activity, shouldLoadDetails: undefined };
 
@@ -259,33 +250,6 @@ function findParsedAction(parsedTrace: ParsedTrace, actionId: string): {
   return undefined;
 }
 
-function getSwapOurFee(activity: ApiSwapActivity, actions: AnyAction[], action: SwapAction): string {
-  let ourFee: bigint | undefined;
-  if (!action.details.asset_in) {
-    const ourFeeAction = actions.find((_action) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-      return _action.type === 'call_contract' && Number(_action.details.opcode) === OpCode.OurFee;
-    }) as CallContractAction | undefined;
-    if (ourFeeAction?.success) {
-      ourFee = BigInt(ourFeeAction.details.value);
-    }
-  } else {
-    const ourFeeAction = actions.find((_action) => {
-      return _action.type === 'jetton_transfer' && _action.details.forward_payload === OUR_FEE_PAYLOAD_BOC;
-    }) as JettonTransferAction | undefined;
-    if (ourFeeAction?.success) {
-      ourFee = BigInt(ourFeeAction.details.amount);
-    }
-  }
-
-  if (ourFee) {
-    const tokenIn = getTokenBySlug(activity.from);
-    return toDecimal(ourFee, tokenIn?.decimals);
-  } else {
-    return '0';
-  }
-}
-
 export function getActivityRealFee(activity: ApiActivity) {
-  return activity.kind === 'swap' ? fromDecimal(activity.networkFee, TONCOIN.decimals) : activity.fee;
+  return activity.fee;
 }

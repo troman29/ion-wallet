@@ -4,7 +4,7 @@ import React, {
 import { getActions, withGlobal } from '../../global';
 
 import type { ApiTokenWithPrice } from '../../api/types';
-import type { Account, UserSwapToken, UserToken } from '../../global/types';
+import type { Account, UserToken } from '../../global/types';
 
 import { DEFAULT_CHAIN, IS_CAPACITOR } from '../../config';
 import renderText from '../../global/helpers/renderText';
@@ -94,7 +94,7 @@ function InvoiceModal({
   const tokenAddress = 'tokenAddress' in selectedToken ? selectedToken?.tokenAddress : undefined;
   const invoiceUrl = address && formatTransferUrl ? formatTransferUrl(address, amount, comment, tokenAddress) : '';
 
-  const handleTokenSelect = useLastCallback((token: UserToken | UserSwapToken) => {
+  const handleTokenSelect = useLastCallback((token: UserToken) => {
     changeInvoiceToken({ tokenSlug: token.slug });
   });
 

@@ -28,12 +28,6 @@ import type {
 } from './misc';
 import type { ApiAccountWithChain, ApiWalletByChain } from './storage';
 import type {
-  ApiBuildOnchainSwapTransferOptions,
-  ApiBuildOnchainSwapTransferResult,
-  ApiSubmitOnchainSwapTransferOptions,
-  ApiSubmitOnchainSwapTransferResult,
-} from './swap';
-import type {
   ApiCheckTransactionDraftOptions,
   ApiCheckTransactionDraftResult,
   ApiSubmitGasfullTransferOptions,
@@ -226,19 +220,6 @@ export interface ChainSdk<T extends ApiChain> {
   submitGasfullTransfer(
     options: ApiSubmitGasfullTransferOptions,
   ): Promise<ApiSubmitGasfullTransferResult | { error: string }>;
-
-  //
-  // Onchain swap (DEX)
-  //
-
-  buildOnchainSwapTransfer(
-    options: ApiBuildOnchainSwapTransferOptions,
-  ): Promise<ApiBuildOnchainSwapTransferResult | { error: string }>;
-
-  submitOnchainSwapTransfer(
-    options: ApiSubmitOnchainSwapTransferOptions,
-    onUpdate: OnApiUpdate,
-  ): Promise<ApiSubmitOnchainSwapTransferResult>;
 
   //
   // Wallet info

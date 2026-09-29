@@ -45,7 +45,7 @@ export type OnLoadingChange = (isLoading: boolean) => void;
 
 /**
  * Streams the new activities (confirmed and pending) in the given TON wallet as they are received from the Toncenter
- * API (with no artificial activities like CEX swaps). Uses the socket, and fallbacks to HTTP polling when the socket is
+ * API. Uses the socket, and falls back to HTTP polling when the socket is
  * unavailable.
  */
 export class ActivityStream {

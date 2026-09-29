@@ -3,7 +3,6 @@ import type { ZerionNftTransfer, ZerionTokenTransfer, ZerionTransaction, ZerionT
 
 import { parseAccountId } from '../../../util/account';
 import { getChainConfig, getIsEvmChain, getIsSupportedChain } from '../../../util/chain';
-import { toDecimal } from '../../../util/decimals';
 import { fetchJson } from '../../../util/fetch';
 import { compact } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
@@ -264,67 +263,6 @@ function transformUnknownTx(
   });
 }
 
-function transformEvmSwap(
-  chain: EVMChain,
-  tx: ZerionTransaction,
-  address: string,
-): ApiActivity {
-  const nativeToken = getChainConfig(chain).nativeToken;
-  const zerionChain = getZerionChainByApiChain(chain);
-
-  const inAsset = tx.attributes.transfers.find((e) =>
-    e.direction === 'in'
-    && 'fungible_info' in e
-    && normalizeAddress(e.recipient) === address,
-  ) as ZerionTokenTransfer
-  || undefined;
-
-  const outAsset = tx.attributes.transfers.find((e) =>
-    e.direction === 'out'
-    && 'fungible_info' in e
-    && normalizeAddress(e.sender) === address,
-  ) as ZerionTokenTransfer
-  || undefined;
-
-  if (!inAsset || !outAsset) {
-    return transformUnknownTx(chain, tx, address);
-  }
-
-  const inTokenSlug = getZerionFungibleTokenSlug(chain, zerionChain, inAsset.fungible_info);
-  const outTokenSlug = getZerionFungibleTokenSlug(chain, zerionChain, outAsset.fungible_info);
-
-  const inToken = inTokenSlug === nativeToken.slug
-    ? nativeToken
-    : inTokenSlug ? getTokenBySlug(inTokenSlug) : undefined;
-
-  const outToken = outTokenSlug === nativeToken.slug
-    ? nativeToken
-    : outTokenSlug ? getTokenBySlug(outTokenSlug) : undefined;
-
-  if (!inToken || !outToken) {
-    return transformUnknownTx(chain, tx, address);
-  }
-
-  return updateActivityMetadata({
-    id: tx.attributes.hash,
-    kind: 'swap',
-    comment: undefined,
-    fromAddress: normalizeAddress(address),
-    timestamp: new Date(tx.attributes.mined_at).getTime(),
-    from: outToken.slug,
-    fromAmount: toDecimal(BigInt(outAsset.quantity.int || 0), outToken.decimals),
-    to: inToken.slug,
-    toAmount: toDecimal(BigInt(inAsset.quantity.int || 0), inToken.decimals),
-    networkFee: toDecimal(BigInt(tx.attributes.fee.quantity.int), nativeToken.decimals),
-    swapFee: '0',
-    status: 'completed',
-    hashes: [],
-    transactionIds: {},
-    externalMsgHashNorm: tx.attributes.hash,
-    isScam: tx.attributes.flags.is_trash,
-  });
-}
-
 function transformEvmTransfer(
   chain: EVMChain,
   tx: ZerionTransaction,
@@ -398,14 +336,6 @@ export function transformEvmTxToUnified(
   address: string,
 ): ApiActivity {
   address = normalizeAddress(address);
-
-  if (tx.attributes.transfers.length > 1) {
-    try {
-      return transformEvmSwap(chain, tx, address);
-    } catch (error) {
-      // Fallback
-    }
-  }
 
   const transfer = tx.attributes.transfers.find((e) =>
     e.direction === 'in'

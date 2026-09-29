@@ -7,7 +7,6 @@ import {
   ContentTab,
   DomainLinkingState,
   SettingsState,
-  SwapState,
   TransactionInfoState,
   TransferState,
 } from '../../types';
@@ -40,7 +39,6 @@ import { callApi } from '../../../api';
 import { closeAllOverlays, parsePlainAddressQr } from '../../helpers/misc';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
 import {
-  clearCurrentSwap,
   clearCurrentTransfer,
   clearIsPinAccepted,
   openSection,
@@ -50,8 +48,6 @@ import {
   updateAccounts,
   updateAuth,
   updateCurrentAccountState,
-  updateCurrentDomainLinking,
-  updateCurrentSwap,
   updateCurrentTransactionInfo,
   updateCurrentTransfer,
   updateDappConnectRequest,
@@ -79,16 +75,6 @@ addActionHandler('showAnyAccountTx', async (global, actions, { txId, accountId, 
     closeAllOverlays(),
     switchAccount(global, accountId, network),
   ]);
-
-  if (txId.startsWith('swap:')) {
-    const result = await callApi('fetchSwaps', accountId, [{ id: txId, chain }]);
-    const swapActivity = result?.swaps[0];
-
-    if (swapActivity) {
-      actions.openTransactionInfo({ txId, chain, activities: [swapActivity] });
-      return;
-    }
-  }
 
   const txHash = parseNotificationTxId(txId);
   actions.openTransactionInfo({ txHash, chain });
@@ -313,7 +299,6 @@ addActionHandler('addAccount2', (global, actions, { method, enclaveToken }) => {
   }
   global = updateAuth(global, { state: authState });
   global = clearCurrentTransfer(global);
-  global = clearCurrentSwap(global);
 
   setGlobal(global);
 
@@ -499,8 +484,6 @@ addActionHandler('requestOpenQrScanner', async (global, actions) => {
   let currentQrScan: GlobalState['currentQrScan'];
   if (global.currentTransfer.state === TransferState.Initial) {
     currentQrScan = { currentTransfer: global.currentTransfer };
-  } else if (global.currentSwap.state === SwapState.Blockchain) {
-    currentQrScan = { currentSwap: global.currentSwap };
   } else if (global.currentDomainLinking.state === DomainLinkingState.Initial) {
     currentQrScan = { currentDomainLinking: global.currentDomainLinking };
   }
@@ -533,7 +516,7 @@ addActionHandler('closeQrScanner', (global) => {
 });
 
 addActionHandler('handleQrCode', async (global, actions, { data }) => {
-  const { currentTransfer, currentSwap, currentDomainLinking } = global.currentQrScan || {};
+  const { currentTransfer } = global.currentQrScan || {};
 
   if (currentTransfer) {
     const transferParams = parseDeeplinkTransferParams(data, global);
@@ -549,17 +532,6 @@ addActionHandler('handleQrCode', async (global, actions, { data }) => {
     } else {
       // Assuming that the QR code content is a plain wallet address
       setGlobal(setCurrentTransferAddress(updateCurrentTransfer(global, currentTransfer), data));
-    }
-    return;
-  }
-
-  if (currentSwap || currentDomainLinking) {
-    const linkParams = parseDeeplinkTransferParams(data, global);
-    const toAddress = linkParams?.toAddress ?? data;
-    if (currentSwap) {
-      setGlobal(updateCurrentSwap(global, { ...currentSwap, toAddress }));
-    } else {
-      setGlobal(updateCurrentDomainLinking(global, { ...currentDomainLinking, walletAddress: toAddress }));
     }
     return;
   }

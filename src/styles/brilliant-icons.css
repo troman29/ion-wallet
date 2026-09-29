@@ -27,14 +27,8 @@ url("./brilliant-icons.woff2?2e431e1abefb9e480f539c154df27a51") format("woff2");
 .icon-action-send::before {
     content: "\f104";
 }
-.icon-action-swap::before {
-    content: "\f105";
-}
 .icon-arrow-down::before {
     content: "\f109";
-}
-.icon-arrow-up-swap::before {
-    content: "\f10a";
 }
 .icon-arrow-up::before {
     content: "\f10b";
@@ -309,9 +303,6 @@ url("./brilliant-icons.woff2?2e431e1abefb9e480f539c154df27a51") format("woff2");
 .icon-menu-send::before {
     content: "\f166";
 }
-.icon-menu-swap::before {
-    content: "\f167";
-}
 .icon-menu-trash::before {
     content: "\f168";
 }
@@ -431,9 +422,6 @@ url("./brilliant-icons.woff2?2e431e1abefb9e480f539c154df27a51") format("woff2");
 }
 .icon-subwallet-changed::before {
     content: "\f18f";
-}
-.icon-swap::before {
-    content: "\f190";
 }
 .icon-switch::before {
     content: "\f191";

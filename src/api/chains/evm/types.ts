@@ -1,4 +1,4 @@
-import type { BaseApiSwapHistoryItem, BaseApiTransaction, EVMChain, EvmNftInterface } from '../../types';
+import type { BaseApiTransaction, EVMChain, EvmNftInterface } from '../../types';
 
 export type ZerionFungibleInfo = {
   id: string;
@@ -415,11 +415,6 @@ export type AlchemyAssetChangesResponse = {
 };
 
 export type EvmTokenOperation = {
-  isSwap: true;
-  assets: string[];
-  swap: BaseApiSwapHistoryItem;
-} | {
-  isSwap: false;
   assets: string[];
   transfer: BaseApiTransaction;
 };

@@ -35,7 +35,7 @@ export async function callBackendPost<T>(path: string, data: AnyLiteral, options
     ? await fetchWithRetry(url, init, {
       timeouts: timeout,
       shouldSkipRetryFn: (message) => !message?.includes('signal is aborted'),
-      // Per-endpoint bucket: a slow /assets must not gate /swap or /currency-rates.
+      // Per-endpoint bucket: a slow /assets must not gate another endpoint or /currency-rates.
       bucketKey: bucketKey(url, { includePathPrefix: true }),
     })
     : await fetchWithTimeout(url.toString(), init, timeout);

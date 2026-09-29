@@ -1,4 +1,4 @@
-import type { ApiAnyDisplayError, ApiChain, ApiSwapAsset, ApiToken, ApiTokenWithPrice } from '../../../api/types';
+import type { ApiAnyDisplayError, ApiChain, ApiToken, ApiTokenWithPrice } from '../../../api/types';
 import { ApiHardwareError } from '../../../api/types';
 
 import { getLedgerAppName } from '../../../util/chain';
@@ -244,38 +244,6 @@ async function connectLedger(chain: ApiChain, noRetry?: boolean) {
 addActionHandler('setActiveContentTab', (global, actions, { tab }) => {
   return updateCurrentAccountState(global, {
     activeContentTab: tab,
-  });
-});
-
-addActionHandler('addSwapToken', (global, actions, { token }) => {
-  const isAlreadyExist = token.slug in global.swapTokenInfo.bySlug;
-
-  if (isAlreadyExist) {
-    return;
-  }
-
-  const apiSwapAsset: ApiSwapAsset = {
-    name: token.name,
-    symbol: token.symbol,
-    chain: token.chain,
-    slug: token.slug,
-    decimals: token.decimals,
-    image: token.image,
-    tokenAddress: token.tokenAddress,
-    keywords: token.keywords,
-    isPopular: false,
-    priceUsd: token.priceUsd,
-  };
-
-  setGlobal({
-    ...global,
-    swapTokenInfo: {
-      ...global.swapTokenInfo,
-      bySlug: {
-        ...global.swapTokenInfo.bySlug,
-        [apiSwapAsset.slug]: apiSwapAsset,
-      },
-    },
   });
 });
 

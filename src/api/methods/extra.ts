@@ -8,5 +8,4 @@
 export * from './exploreSites';
 export * from './notifications';
 export * from './staking';
-export * from './swap';
 export * from './walletConnectPay';

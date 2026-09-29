@@ -6,34 +6,20 @@ import { playIncomingTransactionSound } from '../../../util/notificationSound';
 import { getIsTransactionWithPoisoning, updatePoisoningCacheFromActivities } from '../../../util/poisoningHash';
 import { waitFor } from '../../../util/schedulers';
 import { getChainBySlug } from '../../../util/tokens';
-import { callApi } from '../../../api';
 import { SEC } from '../../../api/constants';
 import { getIsTinyOrScamTransaction } from '../../helpers';
 import { runActivityUpdateInOrder } from '../../helpers/activityUpdateQueue';
-import {
-  selectCexSwapRefreshContextActivities,
-} from '../../helpers/cexSwapRefresh';
 import { addActionHandler, getActions, getGlobal, setGlobal } from '../../index';
 import {
   addInitialActivities,
   addNewActivities,
-  applyActivitiesPatch,
   applyIncomingNftFromActivity,
   applyOutgoingNftFromActivity,
-  replaceCurrentActivityId,
-  replaceCurrentDomainLinkingId,
-  replaceCurrentDomainRenewalId,
-  replaceCurrentSwapId,
-  replaceCurrentTransferId,
   replacePendingActivities,
-  whitelistNft,
 } from '../../reducers';
 import {
   selectAccountState,
   selectAccountTokens,
-  selectLocalActivitiesSlow,
-  selectPendingActivitiesSlow,
-  selectRecentNonLocalActivitiesSlow,
 } from '../../selectors';
 
 const TX_AGE_TO_PLAY_SOUND = 60000; // 1 min
@@ -48,17 +34,8 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
 
       updatePoisoningCacheFromActivities(mainActivities);
 
-      const currentActivities = Object.values(selectAccountState(global, accountId)?.activities?.byId ?? {});
-      const duplicateIds = await callApi(
-        'getBackendDexSwapIdsDuplicatedByTonAggregates',
-        accountId,
-        [...currentActivities, ...mainActivities],
-      );
       global = getGlobal();
       global = addInitialActivities(global, accountId, mainActivities, bySlug, chain, mainHistoryHasMore);
-      if (duplicateIds?.length) {
-        global = applyActivitiesPatch(global, accountId, { upsert: [], removeIds: duplicateIds });
-      }
       setGlobal(global);
 
       void preloadTopTokenHistory(accountId, chain);
@@ -66,133 +43,35 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
     }
 
     case 'newLocalActivities': {
-      const {
-        accountId,
-        activities,
-      } = update;
-
+      const { accountId, activities } = update;
       await runActivityUpdateInOrder(accountId, async () => {
-        global = getGlobal();
-
-        const maxCheckDepth = activities.length + 20;
-        const chainActivities = selectRecentNonLocalActivitiesSlow(global, accountId, maxCheckDepth);
-        const reconciliation = await callApi(
-          'reconcileActivityUpdate',
-          accountId,
-          activities,
-          chainActivities,
-          undefined,
-        );
-        global = getGlobal();
-
-        let localActivities = activities;
-        if (reconciliation) {
-          const { patch } = reconciliation;
-          const replacedIds = patch.replacedIds ?? {};
-          const removeIds = new Set(patch.removeIds);
-          const localIds = new Set(activities.map(({ id }) => id));
-          const patchUpsertById = new Map(patch.upsert.map((activity) => [activity.id, activity]));
-
-          localActivities = activities
-            .filter(({ id }) => !removeIds.has(id))
-            .map((activity) => patchUpsertById.get(activity.id) ?? activity);
-
-          global = addNewActivities(
-            global,
-            accountId,
-            patch.upsert.filter(({ id }) => !localIds.has(id)),
-          );
-          global = replaceCurrentTransferId(global, replacedIds);
-          global = replaceCurrentDomainLinkingId(global, replacedIds);
-          global = replaceCurrentDomainRenewalId(global, replacedIds);
-          global = replaceCurrentSwapId(global, replacedIds);
-          global = replaceCurrentActivityId(global, accountId, replacedIds);
-        }
-
-        // If the SDK bridge is unavailable, keep local and chain rows separate. Native/app code must not infer identity.
-        global = addNewActivities(global, accountId, localActivities);
-        if (reconciliation) {
-          global = applyActivitiesPatch(global, accountId, reconciliation.patch);
-        }
-
-        setGlobal(global);
+        await Promise.resolve();
+        setGlobal(addNewActivities(getGlobal(), accountId, activities));
       });
       break;
     }
 
     case 'newActivities': {
-      const { accountId, activities: newConfirmedActivities, pendingActivities, chain } = update;
+      const { accountId, activities: confirmedActivities, pendingActivities, chain } = update;
       await runActivityUpdateInOrder(accountId, async () => {
-        global = getGlobal();
-        const { activities } = selectAccountState(global, accountId) ?? {};
-        const prevActivitiesForReplacement = [
-          ...selectLocalActivitiesSlow(global, accountId),
-          ...(chain ? selectPendingActivitiesSlow(global, accountId, chain) : []),
-        ];
-        const reconciliation = await callApi(
-          'reconcileActivityUpdate',
-          accountId,
-          prevActivitiesForReplacement,
-          newConfirmedActivities,
-          pendingActivities,
-          {
-            contextActivities: activities
-              ? selectCexSwapRefreshContextActivities(activities, [], newConfirmedActivities)
-              : newConfirmedActivities,
-          },
-        );
-        global = getGlobal();
-        const replacedIds = reconciliation?.patch.replacedIds ?? {};
-        const reconciledConfirmedActivities = reconciliation?.confirmedActivities ?? newConfirmedActivities;
-        const reconciledPendingActivities = reconciliation?.pendingActivities ?? pendingActivities;
-
-        if (chain && reconciledPendingActivities) {
-          global = replacePendingActivities(global, accountId, chain, reconciledPendingActivities);
+        await Promise.resolve();
+        let nextGlobal = getGlobal();
+        if (chain && pendingActivities) {
+          nextGlobal = replacePendingActivities(nextGlobal, accountId, chain, pendingActivities);
         }
-        // Fail closed on bridge errors: commit raw rows, but never infer replacements or visibility in app code.
-        global = addNewActivities(global, accountId, reconciledConfirmedActivities);
-        if (reconciliation) {
-          global = applyActivitiesPatch(global, accountId, reconciliation.patch);
-        }
-        global = replaceCurrentTransferId(global, replacedIds);
-        global = replaceCurrentDomainLinkingId(global, replacedIds);
-        global = replaceCurrentDomainRenewalId(global, replacedIds);
-        global = replaceCurrentSwapId(global, replacedIds);
-        global = replaceCurrentActivityId(global, accountId, replacedIds);
-
+        nextGlobal = addNewActivities(nextGlobal, accountId, confirmedActivities);
         notifyAboutNewActivities(
-          global,
-          accountId,
-          reconciledConfirmedActivities.filter(({ shouldHide }) => shouldHide !== true),
+          nextGlobal, accountId, confirmedActivities.filter(({ shouldHide }) => shouldHide !== true),
         );
-        updatePoisoningCacheFromActivities(newConfirmedActivities);
-
-        // NFT polling is executed at long intervals, so a transaction-event with an NFT can arrive
-        // long before the next polling round. Apply the change to local NFT state immediately so the UI
-        // reflects new ownership without waiting for polling.
-        // A subsequent `nftReceived`/`nftSent` socket update or polling round is idempotent here.
-        for (const activity of newConfirmedActivities) {
-          if (activity.kind !== 'transaction' || !activity.nft) continue;
-
-          // For `nftTrade` (marketplace buy/sell) `isIncoming` reflects the `TONCOIN` direction,
-          // not the NFT direction - so it must be inverted here
-          const isNftIncoming = activity.type === 'nftTrade' ? !activity.isIncoming : activity.isIncoming;
-
-          if (isNftIncoming) {
-            global = applyIncomingNftFromActivity(global, accountId, activity.nft);
-
-            if (activity.type === 'nftTrade') {
-              global = whitelistNft(global, accountId, activity.nft.address);
-            }
-          } else {
-            // `newOwnerAddress` is `unknown` from the sender's activity
-            global = applyOutgoingNftFromActivity(global, accountId, activity.nft);
-          }
+        updatePoisoningCacheFromActivities(confirmedActivities);
+        for (const activity of confirmedActivities) {
+          if (!activity.nft) continue;
+          nextGlobal = activity.isIncoming
+            ? applyIncomingNftFromActivity(nextGlobal, accountId, activity.nft)
+            : applyOutgoingNftFromActivity(nextGlobal, accountId, activity.nft);
         }
-
-        setGlobal(global);
+        setGlobal(nextGlobal);
       });
-
       break;
     }
   }

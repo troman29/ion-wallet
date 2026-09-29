@@ -10,7 +10,6 @@ import type {
   ApiEmulationResult,
   ApiNft,
   ApiStakingState,
-  ApiSwapAsset,
   ApiTokenWithPrice,
 } from '../../api/types';
 import type { Account, SavedAddress, Theme } from '../../global/types';
@@ -67,7 +66,6 @@ interface StateProps {
   dapp?: StoredDappConnection;
   isLoading?: boolean;
   tokensBySlug: Record<string, ApiTokenWithPrice>;
-  swapTokensBySlug?: Record<string, ApiSwapAsset>;
   theme: Theme;
   baseCurrency: ApiBaseCurrency;
   currencyRates: ApiCurrencyRates;
@@ -108,7 +106,6 @@ function DappTransferInitial({
   dapp,
   isLoading,
   tokensBySlug,
-  swapTokensBySlug,
   theme,
   baseCurrency,
   currencyRates,
@@ -274,7 +271,6 @@ function DappTransferInitial({
         realFee={emulation.realFee}
         feeToken={getChainConfig(chain || DEFAULT_CHAIN).nativeToken}
         tokensBySlug={tokensBySlug}
-        swapTokensBySlug={swapTokensBySlug}
         appTheme={appTheme}
         nftsByAddress={nftsByAddress}
         currentAccountId={currentAccountId}
@@ -339,7 +335,6 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     dapp,
     isLoading,
     tokensBySlug: global.tokenInfo.bySlug,
-    swapTokensBySlug: global.swapTokenInfo?.bySlug,
     theme: global.settings.theme,
     baseCurrency: global.settings.baseCurrency,
     currencyRates: global.currencyRates,

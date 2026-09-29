@@ -5,7 +5,6 @@ import type {
   ApiChain,
   ApiCurrencyRates,
   ApiNetwork,
-  ApiSwapAsset,
   ApiUpdateConfig,
   ApiUpdatingStatus,
   OnApiUpdate,
@@ -13,7 +12,6 @@ import type {
 
 import { NO_EXTRA_FEATURES } from '../../config';
 import { parseAccountId } from '../../util/account';
-import { omit } from '../../util/iteratees';
 import { logDebugError } from '../../util/logs';
 import { OrGate } from '../../util/orGate';
 import { forbidConcurrency } from '../../util/schedulers';
@@ -38,7 +36,7 @@ import {
 } from '../common/tokens';
 import { MINUTE, SEC } from '../constants';
 import { storage } from '../storages';
-import { requireStakingMethods, requireSwapMethods } from './optional';
+import { requireStakingMethods } from './optional';
 import { resolveDataPreloadPromise } from './preload';
 
 const BACKEND_INTERVAL = 30 * SEC;
@@ -62,7 +60,6 @@ export function initPolling(_onUpdate: OnApiUpdate) {
     tryUpdateKnownAddresses(),
     tryUpdateTokens(),
     tryUpdateCurrencyRates(),
-    !NO_EXTRA_FEATURES && tryUpdateSwapTokens(),
     !NO_EXTRA_FEATURES && requireStakingMethods().tryUpdateStakingCommonData(),
   ]).then(() => resolveDataPreloadPromise());
 
@@ -96,7 +93,6 @@ function setupCommonBackendPolling() {
           tryUpdateKnownAddresses(),
           !NO_EXTRA_FEATURES && requireStakingMethods().tryUpdateStakingCommonData(),
           tryUpdateConfig(),
-          !NO_EXTRA_FEATURES && tryUpdateSwapTokens(),
         ]);
       },
     }).stop,
@@ -130,34 +126,6 @@ async function tryUpdateCurrencyRates() {
     });
   } catch (err) {
     logDebugError('tryUpdateCurrencyRates', err);
-  }
-}
-
-async function tryUpdateSwapTokens() {
-  try {
-    const assets = await requireSwapMethods().swapGetAssets();
-
-    await tokensPreload.promise;
-
-    // FIXME: TON renaming
-    const tokens = assets.reduce((acc: Record<string, ApiSwapAsset>, asset) => {
-      acc[asset.slug] = {
-        // Fix legacy variable names
-        ...omit(asset as any, ['blockchain']) as ApiSwapAsset,
-        chain: 'blockchain' in asset ? asset.blockchain as string : asset.chain,
-        tokenAddress: 'contract' in asset && asset.contract !== 'TON'
-          ? asset.contract as string
-          : asset.tokenAddress,
-      };
-      return acc;
-    }, {});
-
-    onUpdate({
-      type: 'updateSwapTokens',
-      tokens,
-    });
-  } catch (err) {
-    logDebugError('tryUpdateSwapTokens', err);
   }
 }
 

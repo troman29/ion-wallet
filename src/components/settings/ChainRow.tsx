@@ -6,7 +6,7 @@ import type { ApiChain } from '../../api/types';
 import buildClassName from '../../util/buildClassName';
 import buildStyle from '../../util/buildStyle';
 import { getChainTitle } from '../../util/chain';
-import getChainNetworkIcon from '../../util/swap/getChainNetworkIcon';
+import getChainNetworkIcon from '../../util/getChainNetworkIcon';
 
 import useLastCallback from '../../hooks/useLastCallback';
 

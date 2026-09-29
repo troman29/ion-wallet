@@ -18,8 +18,8 @@ import {
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import { getChainTitle } from '../../util/chain';
+import getChainNetworkIcon from '../../util/getChainNetworkIcon';
 import { MEMO_EMPTY_ARRAY } from '../../util/memo';
-import getChainNetworkIcon from '../../util/swap/getChainNetworkIcon';
 
 import useHistoryBack from '../../hooks/useHistoryBack';
 import useLang from '../../hooks/useLang';

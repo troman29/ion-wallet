@@ -6,6 +6,8 @@ import { Cell } from '@ton/core/dist/boc/Cell';
 import { Slice } from '@ton/core/dist/boc/Slice';
 import { Dictionary } from '@ton/core/dist/dict/Dictionary';
 
+import type {
+  OtherOpCode } from '../constants';
 import type { JettonMetadata } from '../types';
 import {
   type ApiActivity,
@@ -37,7 +39,6 @@ import {
   LiquidStakingOpCode,
   NftOpCode,
   OpCode,
-  OtherOpCode,
   SingleNominatorOpCode,
   VestingV1OpCode,
 } from '../constants';
@@ -453,14 +454,7 @@ export async function parsePayloadSlice(
           };
         }
       }
-      case OtherOpCode.TokenBridgePaySwap: {
-        const swapId = slice.loadBuffer(32).toString('hex');
-        return {
-          type: 'token-bridge:pay-swap',
-          queryId,
-          swapId,
-        };
-      }
+
       case JettonStakingOpCode.UnstakeRequest: {
         const amount = slice.loadCoins();
         const isForce = slice.loadBoolean();

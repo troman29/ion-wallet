@@ -10,7 +10,6 @@ import {
   SettingsState,
   SignDataState,
   StakingState,
-  SwapState,
   TransactionInfoState,
   TransferState,
   WalletConnectPayState,
@@ -21,14 +20,12 @@ import {
   CURRENCIES,
   DEFAULT_AUTOLOCK_OPTION,
   DEFAULT_PRICE_CURRENCY,
-  DEFAULT_SLIPPAGE_VALUE,
   DEFAULT_STAKING_STATE,
   DEFAULT_TRANSFER_TOKEN_SLUG,
-  INIT_SWAP_ASSETS,
   THEME_DEFAULT,
 } from '../config';
 import { getTokenInfo } from '../util/chain';
-import { buildCollectionByKey, mapValues } from '../util/iteratees';
+import { mapValues } from '../util/iteratees';
 import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
 // First persisted-state schema for ION Wallet. Increment when adding a cache migration.
@@ -63,11 +60,6 @@ export const INITIAL_STATE: GlobalState = {
     state: DomainLinkingState.None,
   },
 
-  currentSwap: {
-    state: SwapState.None,
-    slippage: DEFAULT_SLIPPAGE_VALUE,
-  },
-
   currentDappTransfer: {
     state: TransferState.None,
   },
@@ -88,10 +80,6 @@ export const INITIAL_STATE: GlobalState = {
 
   tokenInfo: {
     bySlug: getTokenInfo(),
-  },
-
-  swapTokenInfo: {
-    bySlug: buildCollectionByKey(Object.values(INIT_SWAP_ASSETS), 'slug'),
   },
 
   tokenPriceHistory: {
@@ -124,7 +112,6 @@ export const INITIAL_STATE: GlobalState = {
 
   restrictions: {
     isLimitedRegion: false,
-    isSwapDisabled: IS_IOS_APP,
     isNftBuyingDisabled: IS_IOS_APP,
   },
 

@@ -460,7 +460,7 @@ export async function submitGasfullTransfer(
         }
 
         const client = getTonClient(network);
-        const { msgHash, msgHashNormalized } = await sendExternal(
+        const { msgHashNormalized } = await sendExternal(
           client,
           wallet,
           transaction,
@@ -478,7 +478,6 @@ export async function submitGasfullTransfer(
 
         return {
           txId: msgHashNormalized,
-          msgHashForCexSwap: msgHash,
           localActivityParams: {
             externalMsgHashNorm: msgHashNormalized,
             encryptedComment,
@@ -712,7 +711,7 @@ async function isTokenBalanceInsufficient(
     const availableBalance = tokenBalances[i];
 
     if (tokenAddress === STON_PTON_ADDRESS) {
-      continue; // PTON can be here from the built-in swaps
+      continue;
     }
 
     if (availableBalance < requiredAmount) {
@@ -833,7 +832,7 @@ async function submitMultiTransferInternal(
 // todo: Support submitting multiple transactions (not only multiple messages). The signing already supports that. It will allow to:
 //  1) send multiple NFTs with a single API call,
 //  2) renew multiple domains in a single function call,
-//  3) simplify the implementation of swapping with Ledger
+//  3) preserve Ledger transaction constraints
 export async function submitMultiTransfer({
   accountId, signer, messages, expireAt, noFeeCheck,
 }: SubmitMultiTransferOptions): Promise<ApiSubmitMultiTransferResult> {
