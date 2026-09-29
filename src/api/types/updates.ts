@@ -12,7 +12,6 @@ import type { UnifiedSignDataPayload } from '../dappProtocols/types';
 import type { ApiActivity } from './activities';
 import type {
   ApiSwapAsset,
-  ApiSwapVersion,
   ApiVestingInfo,
 } from './backend';
 import type { ApiEmulationResult } from './emulation';
@@ -373,11 +372,8 @@ export type ApiUpdateConfig = {
   type: 'updateConfig';
   isLimited: boolean;
   isCopyStorageEnabled: boolean;
-  supportAccountsCount?: number;
   countryCode?: ApiCountryCode;
   isAppUpdateRequired: boolean;
-  swapVersion?: ApiSwapVersion;
-  knowledgeBaseVersion?: string;
 };
 
 export type ApiUpdateWalletVersions = {

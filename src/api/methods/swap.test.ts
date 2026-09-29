@@ -62,10 +62,6 @@ jest.mock('../common/activities/reconciler/operationIntentStore', () => ({
   rememberWalletOperationSubmittedHashes: jest.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('../common/cache', () => ({
-  getBackendConfigCache: jest.fn(),
-}));
-
 jest.mock('../common/swap', () => ({
   convertSwapItemToTrusted: jest.fn(),
   getSwapItemSlug: jest.fn(),
@@ -142,11 +138,6 @@ const { convertSwapItemToTrusted } = require('../common/swap') as {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { getBackendConfigCache } = require('../common/cache') as {
-  getBackendConfigCache: jest.Mock;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { ApiServerError } = require('../errors') as {
   ApiServerError: typeof import('../errors').ApiServerError;
 };
@@ -200,7 +191,6 @@ describe('swapCexCreateTransaction', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     initSwap(jest.fn());
-    getBackendConfigCache.mockResolvedValue({ swapVersion: 1 });
     callBackendPost.mockResolvedValue({
       route: 'cex',
       swap: {

@@ -372,13 +372,9 @@ export type ApiSwapVersion = 2 | 3;
 export type ApiBackendConfig = {
   isLimited: boolean;
   isCopyStorageEnabled?: boolean;
-  supportAccountsCount?: number;
   now: number;
   country: ApiCountryCode;
   isUpdateRequired: boolean;
-  isVestingEnabled?: boolean;
   isWebSocketEnabled?: boolean;
-  swapVersion?: ApiSwapVersion;
-  knowledgeBaseVersion?: string;
   // Lower-case currency codes the on/off-ramp surfaces may offer; the client may only narrow its own baseline with it
 };

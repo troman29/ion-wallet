@@ -4,7 +4,6 @@ import type { AccountChain } from '../../types';
 import {
   DEFAULT_STAKING_STATE,
   STAKING_SLUG_PREFIX,
-  SWAP_API_VERSION,
 } from '../../../config';
 import { parseAccountId } from '../../../util/account';
 import { buildCollectionByKey, omitUndefined, unique } from '../../../util/iteratees';
@@ -282,10 +281,8 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       const {
         isLimited: isLimitedRegion,
         isCopyStorageEnabled,
-        supportAccountsCount,
         countryCode,
         isAppUpdateRequired,
-        swapVersion,
       } = update;
 
       const shouldRestrictRegionalFeatures = IS_IOS_APP && isLimitedRegion;
@@ -297,13 +294,11 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         // to survive a shallow merge with a cached state
         isNftBuyingDisabled: shouldRestrictRegionalFeatures,
         isCopyStorageEnabled,
-        supportAccountsCount,
         countryCode,
       });
       global = {
         ...global,
         isAppUpdateRequired,
-        swapVersion: swapVersion ?? SWAP_API_VERSION,
       };
       setGlobal(global);
       break;

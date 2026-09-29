@@ -173,23 +173,17 @@ export async function tryUpdateConfig() {
     const {
       isLimited,
       isCopyStorageEnabled = false,
-      supportAccountsCount = 1,
       now: serverUtc,
       country: countryCode,
-      swapVersion,
       isUpdateRequired: isAppUpdateRequired,
-      knowledgeBaseVersion,
     } = config;
 
     const updateConfig: ApiUpdateConfig = {
       type: 'updateConfig',
       isLimited,
       isCopyStorageEnabled,
-      supportAccountsCount,
       countryCode,
       isAppUpdateRequired,
-      swapVersion,
-      knowledgeBaseVersion,
     };
 
     onUpdate(updateConfig);

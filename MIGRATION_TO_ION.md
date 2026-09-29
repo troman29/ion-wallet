@@ -85,13 +85,10 @@
 - [ ] **Принять решение по каждому оставшемуся полю `/utils/get-config`.**
   - `isLimited` и `country`: нужны только для региональных ограничений iOS/Android; утвердить источник и правила ION или удалить ограничение.
   - `isCopyStorageEnabled`: разрешает экспорт диагностических данных; определить, нужен ли он в production и чем управляется.
-  - `supportAccountsCount`: лимит числа аккаунтов; утвердить продуктовый лимит или сделать локальной константой.
   - `now`: используется для предупреждения о неверном времени устройства; сохранить через ION time endpoint либо заменить локальной проверкой.
   - `isUpdateRequired`: обязательное обновление клиента; определить источник версии для App Store, Google Play и desktop.
-  - `swapVersion`: выбирает доступные swap-пары и backend-версию; решить вместе с заменой swap-инфраструктуры.
-  - `knowledgeBaseVersion`: инвалидация базы знаний; проверить потребителя и либо подключить ION help-центр, либо убрать поле.
-  - `isVestingEnabled` и `isWebSocketEnabled`: сейчас не читаются клиентом; удалить из контрактной схемы после решения, нужны ли vesting и live-обновления.
-  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry.
+  - `isWebSocketEnabled`: сейчас не читается клиентом; удалить из контрактной схемы после решения, нужны ли live-обновления.
+  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `supportAccountsCount`, `knowledgeBaseVersion`, `isVestingEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry. Swap всегда использует локально закреплённую последнюю версию `SWAP_API_VERSION`.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 

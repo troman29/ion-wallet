@@ -1,4 +1,4 @@
-import type { ApiChain, ApiSwapVersion } from '../../api/types';
+import type { ApiChain } from '../../api/types';
 import type { AssetPairs } from '../../global/types';
 
 import { getChainBySlug } from '../tokens';
@@ -7,7 +7,6 @@ export function isSwapPairValid(
   tokenInSlug: string,
   tokenOutSlug: string,
   pairsBySlug: Record<string, AssetPairs> | undefined,
-  swapVersion: ApiSwapVersion,
   accountChains: Partial<Record<ApiChain, unknown>>,
 ): boolean {
   const tokenInChain = getChainBySlug(tokenInSlug);
@@ -21,10 +20,10 @@ export function isSwapPairValid(
   }
 
   return !!pairsBySlug?.[tokenInSlug]?.[tokenOutSlug]
-    || isWellKnownAllowedPair(tokenInChain, tokenOutChain, swapVersion);
+    || isWellKnownAllowedPair(tokenInChain, tokenOutChain);
 }
 
 // TODO: implement chainAgnostic system
-function isWellKnownAllowedPair(tokenInChain: ApiChain, tokenOutChain: ApiChain, swapVersion: ApiSwapVersion) {
-  return swapVersion === 3 && tokenInChain === tokenOutChain && tokenInChain === 'ton';
+function isWellKnownAllowedPair(tokenInChain: ApiChain, tokenOutChain: ApiChain) {
+  return tokenInChain === tokenOutChain && tokenInChain === 'ton';
 }

@@ -40,7 +40,6 @@ import type {
   ApiSwapDexLabel,
   ApiSwapDexRouterLabel,
   ApiSwapRoute,
-  ApiSwapVersion,
   ApiTokenType,
   ApiTokenWithPrice,
   ApiUpdate,
@@ -889,8 +888,6 @@ export type GlobalState = {
     isLoaded?: true;
   };
 
-  swapVersion: ApiSwapVersion;
-
   swapPairs?: {
     bySlug: Record<string, AssetPairs>;
   };
@@ -981,7 +978,6 @@ export type GlobalState = {
     isSwapDisabled: boolean;
     isNftBuyingDisabled: boolean;
     isCopyStorageEnabled?: boolean;
-    supportAccountsCount?: number;
     countryCode?: ApiCountryCode;
   };
 

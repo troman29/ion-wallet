@@ -21,7 +21,6 @@ import { buildSwapOperationId, getWalletOperationIntents } from './activities/re
 import { reconcileTonAggregatorActivitiesForAccount } from './activities/reconciler/tonTraceReconciler';
 import { fetchStoredAccount } from './accounts';
 import { callBackendGet, callBackendPost } from './backend';
-import { getBackendConfigCache } from './cache';
 import { buildTokenSlug, getTokenByAddress, getTokenBySlug } from './tokens';
 
 type SwapHistoryAddressByChain = Partial<Record<ApiChain, string>>;
@@ -34,11 +33,9 @@ export async function swapGetHistory(address: string, params: {
   asset?: string;
   hashes?: string[];
 }, signal?: AbortSignal): Promise<ApiSwapHistoryItem[]> {
-  const { swapVersion } = await getBackendConfigCache();
-
   const items = await callBackendPost<ApiSwapHistoryItem[]>(`/swap/history/${address}`, {
     ...params,
-    swapVersion: swapVersion ?? SWAP_API_VERSION,
+    swapVersion: SWAP_API_VERSION,
   }, { signal });
 
   return items.map(convertSwapItemToTrusted);
@@ -51,12 +48,10 @@ export async function swapGetHistoryByAddresses(addressByChain: SwapHistoryAddre
   token?: string;
   hashes?: string[];
 }, signal?: AbortSignal): Promise<ApiSwapHistoryItem[]> {
-  const { swapVersion } = await getBackendConfigCache();
-
   const items = await callBackendPost<ApiSwapHistoryItem[]>('/swap/history/by-addresses', {
     ...params,
     addressByChain,
-    swapVersion: swapVersion ?? SWAP_API_VERSION,
+    swapVersion: SWAP_API_VERSION,
   }, { signal });
 
   return items.map(convertSwapItemToTrusted);
@@ -67,10 +62,8 @@ export async function swapGetHistoryItem(
   id: string,
   options: { authToken?: string; forceProviderRefresh?: boolean } = {},
 ): Promise<ApiSwapHistoryItem> {
-  const { swapVersion } = await getBackendConfigCache();
-
   const item = await callBackendGet<ApiSwapHistoryItem>(`/swap/history/${address}/${id}`, {
-    swapVersion: swapVersion ?? SWAP_API_VERSION,
+    swapVersion: SWAP_API_VERSION,
     forceProviderRefresh: options.forceProviderRefresh || undefined,
   }, options.authToken ? { 'X-Auth-Token': options.authToken } : undefined);
 
@@ -152,10 +145,8 @@ export async function patchSwapItem(options: {
     address, swapId, authToken, msgHash, msgHashNormalized, error,
   } = options;
 
-  const { swapVersion } = await getBackendConfigCache();
-
   await callBackendPost(`/swap/history/${address}/${swapId}/update`, {
-    swapVersion: swapVersion ?? SWAP_API_VERSION,
+    swapVersion: SWAP_API_VERSION,
     msgHash,
     msgHashNormalized,
     error,
