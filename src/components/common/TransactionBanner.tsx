@@ -2,12 +2,12 @@ import type { TeactNode } from '../../lib/teact/teact';
 import { useMemo } from '../../lib/teact/teact';
 import React, { memo } from '../../lib/teact/teact';
 
-import type { ApiSwapAsset, ApiToken } from '../../api/types';
-import type { UserSwapToken, UserToken } from '../../global/types';
+import type { ApiToken } from '../../api/types';
+import type { UserToken } from '../../global/types';
 
 import buildClassName from '../../util/buildClassName';
+import getChainNetworkIcon from '../../util/getChainNetworkIcon';
 import { compact, unique } from '../../util/iteratees';
-import getChainNetworkIcon from '../../util/swap/getChainNetworkIcon';
 import { getIsNativeToken } from '../../util/tokens';
 
 import useLang from '../../hooks/useLang';
@@ -17,13 +17,13 @@ import TokenIcon from './TokenIcon';
 import styles from './TransactionBanner.module.scss';
 
 interface OwnProps {
-  tokenIn?: UserToken | UserSwapToken | ApiSwapAsset | ApiToken;
+  tokenIn?: UserToken | ApiToken;
   imageUrl?: string | string[];
   /** Keeps the NFT presentation when every `imageUrl` is empty: a placeholder instead of the `tokenIn` icon */
   withNftPlaceholder?: boolean;
   text?: string | TeactNode[];
   withChainIcon?: boolean;
-  tokenOut?: UserToken | UserSwapToken | ApiSwapAsset | ApiToken;
+  tokenOut?: UserToken | ApiToken;
   secondText?: string;
   color?: 'purple' | 'green';
   className?: string;

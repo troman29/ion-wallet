@@ -11,7 +11,6 @@ import {
   selectCurrentAccountState,
   selectIsCurrentAccountViewMode,
   selectIsStakingDisabled,
-  selectIsSwapDisabled,
 } from '../../global/selectors';
 import { useAccentColor } from '../../util/accentColor';
 import buildClassName from '../../util/buildClassName';
@@ -25,7 +24,6 @@ import { useDeviceScreen } from '../../hooks/useDeviceScreen';
 import useEffectOnce from '../../hooks/useEffectOnce';
 import useElementVisibility from '../../hooks/useElementVisibility';
 import useFlag from '../../hooks/useFlag';
-import useInterval from '../../hooks/useInterval';
 import useLang from '../../hooks/useLang';
 import useLastCallback from '../../hooks/useLastCallback';
 import usePreventPinchZoomGesture from '../../hooks/usePreventPinchZoomGesture';
@@ -62,7 +60,6 @@ type StateProps = {
   isTestnet?: boolean;
   isViewMode: boolean;
   isStakingInfoModalOpen?: boolean;
-  isSwapDisabled?: boolean;
   isStakingDisabled?: boolean;
   isMediaViewerOpen?: boolean;
   isAppReady?: boolean;
@@ -70,16 +67,12 @@ type StateProps = {
   accentColorIndex?: number;
 };
 
-const UPDATE_SWAPS_INTERVAL_NOT_FOCUSED = 15000; // 15 sec
-const UPDATE_SWAPS_INTERVAL = 3000; // 3 sec
-
 function Main({
   isActive,
   stakingState,
   isTestnet,
   isViewMode,
   isStakingInfoModalOpen,
-  isSwapDisabled,
   isStakingDisabled,
   isMediaViewerOpen,
   isAppReady,
@@ -92,7 +85,6 @@ function Main({
     openStakingInfoOrStart,
     changeCurrentStaking,
     loadExploreSites,
-    updatePendingSwaps,
   } = getActions();
 
   const lang = useLang();
@@ -101,7 +93,7 @@ function Main({
   const landscapeContainerRef = useRef<HTMLDivElement>();
 
   const safeAreaTop = calcSafeAreaTop();
-  const [isFocused, markIsFocused, unmarkIsFocused] = useFlag(!isBackgroundModeActive());
+  const [_isFocused, markIsFocused, unmarkIsFocused] = useFlag(!isBackgroundModeActive());
   const [areTabsStuck, setAreTabsStuck] = useState(false);
   const intersectionRootMarginTop = HEADER_HEIGHT_REM * REM + safeAreaTop;
 
@@ -116,8 +108,6 @@ function Main({
   useEffectOnce(() => {
     loadExploreSites({ isLandscape, langCode: lang.code });
   });
-
-  useInterval(updatePendingSwaps, isFocused ? UPDATE_SWAPS_INTERVAL : UPDATE_SWAPS_INTERVAL_NOT_FOCUSED);
 
   // Use scroll detection for portrait mode
   const { isVisible: isPageAtTop } = useElementVisibility({
@@ -160,7 +150,6 @@ function Main({
             <PortraitActions
               stakingStatus={stakingStatus}
               isStakingDisabled={isStakingDisabled}
-              isSwapDisabled={isSwapDisabled}
               onEarnClick={handleEarnClick}
             />
           )}
@@ -234,7 +223,6 @@ export default memo(
         isViewMode: selectIsCurrentAccountViewMode(global),
         isStakingInfoModalOpen: global.isStakingInfoModalOpen,
         isMediaViewerOpen: Boolean(global.mediaViewer?.mediaId),
-        isSwapDisabled: selectIsSwapDisabled(global),
         isStakingDisabled: selectIsStakingDisabled(global),
         // Both labels stand for the ramps reachable from this account, so they read the very chain each would open
         isAppReady,

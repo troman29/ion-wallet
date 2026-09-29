@@ -12,7 +12,6 @@ import type {
   ApiCurrencyRates,
   ApiNft,
   ApiStakingState,
-  ApiSwapAsset,
   ApiTokenWithPrice,
 } from '../../../../api/types';
 import type { Account, SavedAddress, Theme } from '../../../../global/types';
@@ -85,7 +84,6 @@ type StateProps = {
   byId?: Record<string, ApiActivity>;
   allActivityIds?: string[];
   tokensBySlug: Record<string, ApiTokenWithPrice>;
-  swapTokensBySlug?: Record<string, ApiSwapAsset>;
   currentActivityId?: string;
   activityIdReplacements?: Record<string, string>;
   savedAddresses?: SavedAddress[];
@@ -135,7 +133,6 @@ function Activities({
   byId,
   allActivityIds,
   tokensBySlug,
-  swapTokensBySlug,
   areTinyTransfersHidden,
   areUnverifiedNftsHidden,
   currentActivityId,
@@ -353,7 +350,6 @@ function Activities({
             isLast={isLastInDay}
             isActive={isActivityActive}
             tokensBySlug={tokensBySlug}
-            swapTokensBySlug={swapTokensBySlug}
             appTheme={appTheme}
             isSensitiveDataHidden={isSensitiveDataHidden}
             nftsByAddress={nftsByAddress}
@@ -456,7 +452,6 @@ export default memo(
         byId,
         allActivityIds,
         tokensBySlug: global.tokenInfo.bySlug,
-        swapTokensBySlug: global.swapTokenInfo?.bySlug,
         areTinyTransfersHidden: global.settings.areTinyTransfersHidden,
         areUnverifiedNftsHidden: global.settings.areUnverifiedNftsHidden,
         savedAddresses: accountState?.savedAddresses,
@@ -505,24 +500,20 @@ function filterActivityIds(
     const activity = byId?.[id];
     if (!activity) return false;
 
-    if (activity?.shouldHide) return false;
+    if (activity.shouldHide) return false;
 
-    if (activity?.kind === 'swap') {
-      return !slug || activity.from === slug || activity.to === slug;
-    } else {
-      return activity?.slug
-        && (!slug || activity.slug === slug)
-        && (
-          !areTinyTransfersHidden
-          || (slug && tokensBySlug[activity.slug]?.priceUsd === 0)
-          || !getIsTinyOrScamTransaction(activity, tokensBySlug[activity.slug])
-          || alwaysShownSlugs?.includes(activity.slug)
-        )
-        && !getIsHiddenNftActivity(
-          activity, blacklistedNftAddresses, whitelistedNftAddresses, areUnverifiedNftsHidden,
-        )
-        && !getIsTransactionWithPoisoning(activity);
-    }
+    return activity.slug
+      && (!slug || activity.slug === slug)
+      && (
+        !areTinyTransfersHidden
+        || (slug && tokensBySlug[activity.slug]?.priceUsd === 0)
+        || !getIsTinyOrScamTransaction(activity, tokensBySlug[activity.slug])
+        || alwaysShownSlugs?.includes(activity.slug)
+      )
+      && !getIsHiddenNftActivity(
+        activity, blacklistedNftAddresses, whitelistedNftAddresses, areUnverifiedNftsHidden,
+      )
+      && !getIsTransactionWithPoisoning(activity);
   });
 }
 

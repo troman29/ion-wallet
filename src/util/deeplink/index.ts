@@ -8,9 +8,6 @@ import { DappProtocolType } from '../../api/dappProtocols/types';
 import { ContentTab, SettingsState } from '../../global/types';
 
 import {
-  DEFAULT_SWAP_AMOUNT,
-  DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-  DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   TONCOIN,
 } from '../../config';
 import {
@@ -586,7 +583,6 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
     const global = getGlobal();
     const { isTestnet } = global.settings;
     const currentNetwork: ApiNetwork = isTestnet ? 'testnet' : 'mainnet';
-    const isLedger = selectIsHardwareAccount(global);
 
     logDebug('Processing deeplink', deeplink);
 
@@ -603,51 +599,10 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         return true;
       }
 
-      case DeeplinkCommand.Swap: {
-        if (isTestnet) {
-          actions.showError({ error: 'Swap is not supported in Testnet.' });
-        } else if (isLedger) {
-          actions.showError({ error: 'Swap is not yet supported by Ledger.' });
-        } else {
-          const swapBySlug = global.swapTokenInfo?.bySlug;
-          const rawIn = searchParams.get('in');
-          const rawOut = searchParams.get('out');
-          let tokenInSlug = (rawIn && swapBySlug?.[rawIn]) ? rawIn : DEFAULT_SWAP_FIRST_TOKEN_SLUG;
-          let tokenOutSlug = (rawOut && swapBySlug?.[rawOut]) ? rawOut : DEFAULT_SWAP_SECOND_TOKEN_SLUG;
-
-          if (tokenInSlug === tokenOutSlug) {
-            tokenInSlug = DEFAULT_SWAP_FIRST_TOKEN_SLUG;
-            tokenOutSlug = DEFAULT_SWAP_SECOND_TOKEN_SLUG;
-          }
-
-          if ((rawIn && tokenInSlug !== rawIn) || (rawOut && tokenOutSlug !== rawOut)) {
-            actions.showError({ error: '$unknown_swap_token' });
-          }
-
-          actions.startSwap({
-            tokenInSlug,
-            tokenOutSlug,
-            amountIn: toNumberOrEmptyString(searchParams.get('amount')) || DEFAULT_SWAP_AMOUNT,
-          });
-        }
+      case DeeplinkCommand.Swap:
+      case DeeplinkCommand.BuyWithCrypto:
+        actions.startExchange();
         return true;
-      }
-
-      case DeeplinkCommand.BuyWithCrypto: {
-        if (isTestnet) {
-          actions.showError({ error: 'Swap is not supported in Testnet.' });
-        } else if (isLedger) {
-          actions.showError({ error: 'Swap is not yet supported by Ledger.' });
-        } else {
-          const { nativeToken, buySwap: defaultBuySwap } = getChainConfig('ton');
-          actions.startSwap({
-            tokenInSlug: searchParams.get('in') || defaultBuySwap!.tokenInSlug,
-            tokenOutSlug: searchParams.get('out') || nativeToken.slug,
-            amountIn: toNumberOrEmptyString(searchParams.get('amount')) || defaultBuySwap!.amountIn,
-          });
-        }
-        return true;
-      }
 
       case DeeplinkCommand.Stake: {
         if (isTestnet) {
@@ -1043,10 +998,6 @@ function omitProtocol(url: string) {
 
 function forceHttpsProtocol(url: string) {
   return url.replace(/^http:\/\//, 'https://');
-}
-
-function toNumberOrEmptyString(input?: string | null) {
-  return String(Number(input) || '');
 }
 
 function replaceAllSpacesWithPlus(value: string) {

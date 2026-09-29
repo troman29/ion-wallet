@@ -5,7 +5,6 @@ import {
   selectCurrentAccount,
   selectCurrentAccountId,
   selectHasMultipleAccounts,
-  selectIsHardwareAccount,
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
 import resolveSlideTransitionName from '../../util/resolveSlideTransitionName';
@@ -28,8 +27,6 @@ import styles from './ReceiveModal.module.scss';
 type StateProps = {
   isOpen?: boolean;
   isLedger?: boolean;
-  isTestnet?: boolean;
-  isSwapDisabled: boolean;
   currentAccountId?: string;
   accountTitle?: string;
   hasMultipleAccounts?: boolean;
@@ -37,9 +34,6 @@ type StateProps = {
 
 function ReceiveModal({
   isOpen,
-  isTestnet,
-  isLedger,
-  isSwapDisabled,
   currentAccountId,
   accountTitle,
   hasMultipleAccounts,
@@ -51,8 +45,7 @@ function ReceiveModal({
     renderingKey, nextKey, updateNextKey, openSelector, closeSelector,
   } = useAccountSwitcherScreen(isOpen, currentAccountId);
 
-  const isSwapAllowed = !isTestnet && !isLedger && !isSwapDisabled;
-  const modalTitle = lang(isSwapAllowed ? 'Fund' : 'Add');
+  const modalTitle = lang('Fund');
 
   const handleSelectAccount = useLastCallback((accountId: string) => {
     switchAccount({ accountId });
@@ -118,15 +111,8 @@ function ReceiveModal({
 }
 
 export default memo(withGlobal((global): StateProps => {
-  const { isSwapDisabled } = global.restrictions;
-  const isLedger = selectIsHardwareAccount(global);
-
   return {
     isOpen: global.isReceiveModalOpen,
-    isTestnet: global.settings.isTestnet,
-    isSwapDisabled,
-    // The title claims the modal can do more than receive, so it asks whether this account has a chain to buy on
-    isLedger,
     currentAccountId: selectCurrentAccountId(global),
     accountTitle: selectCurrentAccount(global)?.title,
     hasMultipleAccounts: selectHasMultipleAccounts(global),

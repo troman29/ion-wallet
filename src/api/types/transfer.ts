@@ -67,7 +67,6 @@ export interface ApiSubmitGasfullTransferResult {
    */
   localActivityParams?: Partial<Omit<ApiLocalTransactionParams, 'id' | 'normalizedAddress'>>;
   /** The backend requires it when selling TON or TON tokens currently */
-  msgHashForCexSwap?: string;
 }
 
 export type ApiSubmitNftTransferResult = {

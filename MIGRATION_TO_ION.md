@@ -45,6 +45,11 @@
 - [x] **Удалить gasless / Diesel.**
   - Удалены расчёт и оплата комиссий Diesel, backend-вызовы, платёжный шлюз и варианты интерфейса для переводов и свапов.
 
+- [x] **Удалить legacy swap и подготовить ION Exchange.**
+  - Удалены DEX/CEX swap: `/swap/*`, провайдеры, котировки, маршруты, slippage, комиссии, подпись swap-транзакций, история и reconciliation swap-активностей.
+  - Оставлена только оболочка окна **Exchange** с фиксированной парой `ION (ION Network) → ION (BNB Chain)`; она не создаёт транзакцию.
+  - После утверждения bridge-контракта, получателя и модели комиссии реализовать внутри этой оболочки обычный перевод ION на bridge-адрес и обработку его статуса (P1).
+
 - [x] **Завершить удаление Agent.**
   - Удалены продуктовые строки и storage keys Agent, CI-проверки и Chromium e2e-задача, иконки, анимации, CSS-классы и конфигурационные упоминания.
   - Нейтральные упоминания браузерного `userAgent` и стороннего dApp `agents.ton.org` сохранены: они не включают функциональность Agent.
@@ -76,7 +81,7 @@
   - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
     - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/utils/get-config`;
     - каталог и рынок: `/v2/dapp/catalog`, `/prices/chart/*`;
-    - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
+    - legacy swap: `/swap/*`, DEX/CEX маршрутизация и история swap удаляются; будущий ION bridge не использует эти endpoint-ы;
     - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;
     - уведомления и live-обновления: `/notifications/*`, WebSocket `/{testnet/}ws`;
     - proxy: `/proxy/download-json` и `/proxy/download-lottie` для внешних метаданных и анимаций.
@@ -88,7 +93,7 @@
   - `now`: используется для предупреждения о неверном времени устройства; сохранить через ION time endpoint либо заменить локальной проверкой.
   - `isUpdateRequired`: обязательное обновление клиента; определить источник версии для App Store, Google Play и desktop.
   - `isWebSocketEnabled`: сейчас не читается клиентом; удалить из контрактной схемы после решения, нужны ли live-обновления.
-  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `supportAccountsCount`, `knowledgeBaseVersion`, `isVestingEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry. Swap всегда использует локально закреплённую последнюю версию `SWAP_API_VERSION`.
+  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `supportAccountsCount`, `knowledgeBaseVersion`, `isVestingEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 
@@ -114,7 +119,9 @@
   - GitHub forks и npm scopes старого проекта пока сохранены только как закреплённые источники зависимостей; их нельзя переименовывать, пока не созданы эквивалентные ION forks.
 - [ ] Утвердить и заменить все иконки, logo, splash и store assets по [реестру ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
 - [ ] Поддерживать README без унаследованных непроверенных маркетинговых заявлений; добавить публичные ссылки только после их публикации.
-- [ ] Проверить BNB bridge/swap-путь для ION между ION/TON и BNB Chain.
+- [ ] Утвердить bridge-путь ION между ION Network и BNB Chain.
+  - Зафиксировать контракт/адрес получателя, сеть-источник и сеть-назначение, правила amount/fee и подтверждения.
+  - После этого включить создание обычной bridge-транзакции в сохранённом окне Exchange.
 - [ ] Подготовить Electron publish-конфигурацию к выпуску.
   - В `src/electron/config.yml` установить generic publish URL `https://s3.wallet.ice.io/public/desktop-beta` и versioned artifact name `IONWallet-${version}-${arch}.${ext}`.
   - Одновременно сверить update feed, `package-and-publish.yml` и публичную desktop download-страницу, чтобы имена файлов и URL совпадали.
@@ -136,7 +143,7 @@
 ### P2 — проверка перед выпуском
 
 - [ ] TypeScript, ESLint, Stylelint, Jest и production webpack build.
-- [ ] Web: создание и импорт кошелька, receive, send, swap, staking, история, токены и ION Gateway.
+- [ ] Web: создание и импорт кошелька, receive, send, Exchange shell, staking, история, токены и ION Gateway.
 - [ ] Extension и Electron: запуск и основные пользовательские сценарии.
 - [ ] Android Capacitor: `cap sync`, сборка, запуск, биометрия, QR, ссылки и уведомления.
 - [ ] iOS Capacitor: `cap sync`, Xcode build, запуск, биометрия, QR, ссылки и уведомления.

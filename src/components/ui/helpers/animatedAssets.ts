@@ -42,8 +42,6 @@ import iconSettingsDark from '../../../assets/lottie/settings_dark.tgs';
 import iconSettingsLight from '../../../assets/lottie/settings_light.tgs';
 import iconSettingsSolidDark from '../../../assets/lottie/settings_solid_dark.tgs';
 import iconSettingsSolidLight from '../../../assets/lottie/settings_solid_light.tgs';
-import iconSwapDark from '../../../assets/lottie/swap_dark.tgs';
-import iconSwapLight from '../../../assets/lottie/swap_light.tgs';
 import iconWalletDark from '../../../assets/lottie/wallet_dark.tgs';
 import iconWalletLight from '../../../assets/lottie/wallet_light.tgs';
 import iconWalletSolidDark from '../../../assets/lottie/wallet_solid_dark.tgs';
@@ -92,8 +90,6 @@ import iconSettingsPreviewDark from '../../../assets/lottiePreview/settings_dark
 import iconSettingsPreviewLight from '../../../assets/lottiePreview/settings_light.png';
 import iconSettingsSolidPreviewDark from '../../../assets/lottiePreview/settings_solid_dark.png';
 import iconSettingsSolidPreviewLight from '../../../assets/lottiePreview/settings_solid_light.png';
-import iconSwapPreviewDark from '../../../assets/lottiePreview/swap_dark.png';
-import iconSwapPreviewLight from '../../../assets/lottiePreview/swap_light.png';
 import iconWalletPreviewDark from '../../../assets/lottiePreview/wallet_dark.png';
 import iconWalletPreviewLight from '../../../assets/lottiePreview/wallet_light.png';
 import iconWalletSolidPreviewDark from '../../../assets/lottiePreview/wallet_solid_dark.png';
@@ -141,7 +137,6 @@ export const ANIMATED_STICKERS_PATHS = {
     iconSend: iconSendLight,
     iconSettings: iconSettingsLight,
     iconSettingsSolid: iconSettingsSolidLight,
-    iconSwap: iconSwapLight,
     iconWallet: iconWalletLight,
     iconWalletSolid: iconWalletSolidLight,
     preview: {
@@ -161,7 +156,6 @@ export const ANIMATED_STICKERS_PATHS = {
       iconSend: iconSendPreviewLight,
       iconSettings: iconSettingsPreviewLight,
       iconSettingsSolid: iconSettingsSolidPreviewLight,
-      iconSwap: iconSwapPreviewLight,
       iconWallet: iconWalletPreviewLight,
       iconWalletSolid: iconWalletSolidPreviewLight,
     },
@@ -183,7 +177,6 @@ export const ANIMATED_STICKERS_PATHS = {
     iconSend: iconSendDark,
     iconSettings: iconSettingsDark,
     iconSettingsSolid: iconSettingsSolidDark,
-    iconSwap: iconSwapDark,
     iconWallet: iconWalletDark,
     iconWalletSolid: iconWalletSolidDark,
     preview: {
@@ -203,7 +196,6 @@ export const ANIMATED_STICKERS_PATHS = {
       iconSend: iconSendPreviewDark,
       iconSettings: iconSettingsPreviewDark,
       iconSettingsSolid: iconSettingsSolidPreviewDark,
-      iconSwap: iconSwapPreviewDark,
       iconWallet: iconWalletPreviewDark,
       iconWalletSolid: iconWalletSolidPreviewDark,
     },

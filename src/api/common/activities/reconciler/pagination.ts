@@ -4,7 +4,7 @@ import { parseTxId } from '../../../../util/activities';
 
 /** Trace id used by the reconciler for page-boundary consistency checks. */
 export function getActivityTraceBoundaryId(activity: ApiActivity) {
-  return activity.extra?.mtwAggregator?.traceId ?? parseTxId(activity.id).hash;
+  return parseTxId(activity.id).hash;
 }
 
 export function getLastPageTraceBoundaryId(activities: readonly ApiActivity[]) {

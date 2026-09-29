@@ -21,7 +21,6 @@ import { logDebug, logDebugError } from '../../../util/logs';
 import { pause, throttle } from '../../../util/schedulers';
 import { shouldEmitNftFullLoadFinal } from './util/nft-polling-guards';
 import { fetchStoredAccount, fetchStoredWallet, updateStoredWallet } from '../../common/accounts';
-import { getLastPageTraceBoundaryId } from '../../common/activities/reconciler/pagination';
 import { getStakingCommonCache } from '../../common/cache';
 import { getConcurrencyLimiter } from '../../common/polling/setupInactiveChainPolling';
 import {
@@ -31,7 +30,6 @@ import {
   pollingLoop,
   withDoubleCheck,
 } from '../../common/polling/utils';
-import { swapReplaceActivities } from '../../common/swap';
 import { sendUpdateTokens } from '../../common/tokens';
 import { txCallbacks } from '../../common/txCallbacks';
 import { hexToBytes } from '../../common/utils';
@@ -412,17 +410,8 @@ function setupStakingPolling(accountId: string, getBalances: () => Promise<ApiBa
 
 async function loadInitialConfirmedActivities(accountId: string, onUpdate: OnApiUpdate) {
   try {
-    let mainActivities = await fetchActivitySlice({ accountId, limit: FIRST_TRANSACTIONS_LIMIT });
+    const mainActivities = await fetchActivitySlice({ accountId, limit: FIRST_TRANSACTIONS_LIMIT });
     const mainHistoryHasMore = mainActivities.length >= FIRST_TRANSACTIONS_LIMIT;
-    const incompleteTraceId = mainHistoryHasMore ? getLastPageTraceBoundaryId(mainActivities) : undefined;
-    mainActivities = await swapReplaceActivities(
-      accountId,
-      mainActivities,
-      undefined,
-      true,
-      { incompleteTonTraceIds: incompleteTraceId ? [incompleteTraceId] : [] },
-    );
-
     const bySlug = {
       // Loading the TON history is a side effect of loading the main history.
       // Because there is no way to load TON activities without loading activities of other tokens.

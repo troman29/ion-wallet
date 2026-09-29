@@ -8,14 +8,11 @@ import type {
   ApiCurrencyRates,
   ApiNft,
   ApiStakingState,
-  ApiSwapActivity,
-  ApiSwapAsset,
   ApiTokenWithPrice,
 } from '../../../../api/types';
 import type { Account, SavedAddress, Theme } from '../../../../global/types';
 import { TransactionInfoState } from '../../../../global/types';
 
-import { resolveSwapAsset } from '../../../../global/helpers';
 import {
   selectAccountStakingStatesBySlug,
   selectCurrentAccountId,
@@ -27,10 +24,8 @@ import {
 import { parseTxId } from '../../../../util/activities';
 import { getDoesUsePinPad } from '../../../../util/biometrics';
 import buildClassName from '../../../../util/buildClassName';
-import { getIsSupportedChain } from '../../../../util/chain';
 import resolveSlideTransitionName from '../../../../util/resolveSlideTransitionName';
 import { shareUrl } from '../../../../util/share';
-import { getSwapTransactionIdRows } from '../../../../util/swap/transactionIds';
 import { getChainBySlug } from '../../../../util/tokens';
 import { getViewTransactionUrl } from '../../../../util/url';
 
@@ -41,7 +36,6 @@ import useLastCallback from '../../../../hooks/useLastCallback';
 import useSyncEffect from '../../../../hooks/useSyncEffect';
 
 import PasswordSlide from '../../../common/PasswordSlide';
-import SwapActivityInfo from '../../../common/SwapActivityInfo';
 import TransactionHeader from '../../../common/TransactionHeader';
 import Modal from '../../../ui/Modal';
 import ModalHeader from '../../../ui/ModalHeader';
@@ -60,7 +54,6 @@ interface StateProps {
   selectedActivityIndex?: number;
   error?: string;
   tokensBySlug: Record<string, ApiTokenWithPrice>;
-  swapTokensBySlug?: Record<string, ApiSwapAsset>;
   theme: Theme;
   baseCurrency: ApiBaseCurrency;
   currencyRates: ApiCurrencyRates;
@@ -74,7 +67,6 @@ interface StateProps {
   isTestnet?: boolean;
   isHardwareAccount: boolean;
   isViewMode: boolean;
-  selectedExplorerIds?: Partial<Record<ApiChain, string>>;
 }
 
 const enum SLIDES {
@@ -89,7 +81,6 @@ function TransactionInfoModal({
   activities,
   selectedActivityIndex,
   tokensBySlug,
-  swapTokensBySlug,
   theme,
   baseCurrency,
   currencyRates,
@@ -103,7 +94,6 @@ function TransactionInfoModal({
   isTestnet,
   isHardwareAccount,
   isViewMode,
-  selectedExplorerIds,
 }: StateProps) {
   const {
     closeTransactionInfo,
@@ -127,10 +117,6 @@ function TransactionInfoModal({
   }, [activities, selectedActivityIndex]);
 
   const selectedTransactionActivity = selectedActivity?.kind === 'transaction'
-    ? selectedActivity
-    : undefined;
-
-  const selectedSwapActivity = selectedActivity?.kind === 'swap'
     ? selectedActivity
     : undefined;
 
@@ -193,9 +179,9 @@ function TransactionInfoModal({
 
   const selectedShareInfo = useMemo(() => {
     return selectedActivity
-      ? getActivityShareInfo(selectedActivity, swapTokensBySlug)
+      ? getActivityShareInfo(selectedActivity)
       : undefined;
-  }, [selectedActivity, swapTokensBySlug]);
+  }, [selectedActivity]);
 
   const handleDetailShareClick = useLastCallback(() => {
     const url = getViewTransactionUrl(selectedShareInfo!.chain, selectedShareInfo!.hash, isTestnet);
@@ -205,9 +191,9 @@ function TransactionInfoModal({
   const firstActivity = activities?.[0];
   const firstActivityShareInfo = useMemo(() => {
     return firstActivity
-      ? getActivityShareInfo(firstActivity, swapTokensBySlug)
+      ? getActivityShareInfo(firstActivity)
       : undefined;
-  }, [firstActivity, swapTokensBySlug]);
+  }, [firstActivity]);
 
   const handleListShareClick = useLastCallback(() => {
     const url = getViewTransactionUrl(firstActivityShareInfo!.chain, firstActivityShareInfo!.hash, isTestnet);
@@ -254,7 +240,6 @@ function TransactionInfoModal({
                   isLast={index === activities.length - 1}
                   className={styles.activity}
                   tokensBySlug={tokensBySlug}
-                  swapTokensBySlug={swapTokensBySlug}
                   appTheme={appTheme}
                   nftsByAddress={nftsByAddress}
                   currentAccountId={currentAccountId}
@@ -281,10 +266,6 @@ function TransactionInfoModal({
     if (!selectedActivity) return undefined;
 
     const backButton = activities && activities.length > 1 ? handleBackClick : undefined;
-
-    if (selectedSwapActivity) {
-      return renderSwapActivityDetail(selectedSwapActivity, backButton);
-    }
 
     if (selectedTransactionActivity) {
       return (
@@ -324,28 +305,6 @@ function TransactionInfoModal({
     }
 
     return undefined;
-  }
-
-  function renderSwapActivityDetail(activity: ApiSwapActivity, backButton?: NoneToVoidFunction) {
-    return (
-      <>
-        <ModalHeader
-          title={lang('Swap Details')}
-          className={styles.scrollableContent}
-          onBackButtonClick={backButton}
-          onShareClick={selectedShareInfo ? handleDetailShareClick : undefined}
-          onClose={handleClose}
-        />
-        <div className={buildClassName(modalStyles.transitionContent, styles.scrollableContent)}>
-          <SwapActivityInfo
-            activity={activity}
-            tokensBySlug={swapTokensBySlug}
-            isSensitiveDataHidden={isSensitiveDataHidden}
-            selectedExplorerIds={selectedExplorerIds}
-          />
-        </div>
-      </>
-    );
   }
 
   function renderPasswordSlideContent(isActive: boolean) {
@@ -413,7 +372,6 @@ export default memo(withGlobal((global): StateProps => {
     selectedActivityIndex: currentTransactionInfo.selectedActivityIndex,
     error: currentTransactionInfo.error,
     tokensBySlug: global.tokenInfo.bySlug,
-    swapTokensBySlug: global.swapTokenInfo.bySlug,
     theme: global.settings.theme,
     baseCurrency: global.settings.baseCurrency,
     currencyRates: global.currencyRates,
@@ -427,27 +385,11 @@ export default memo(withGlobal((global): StateProps => {
     isTestnet: global.settings.isTestnet,
     isHardwareAccount: selectIsHardwareAccount(global),
     isViewMode: selectIsCurrentAccountViewMode(global),
-    selectedExplorerIds: global.settings.selectedExplorerIds,
   };
 })(TransactionInfoModal));
 
-function getActivityShareInfo(
-  activity: ApiActivity,
-  swapTokensBySlug?: Record<string, ApiSwapAsset>,
-): { chain: ApiChain; hash: string } | undefined {
-  if (activity.kind === 'transaction') {
-    const chain = getChainBySlug(activity.slug);
-    const hash = parseTxId(activity.id).hash;
-    return chain && hash ? { chain, hash } : undefined;
-  }
-
-  const firstTransactionId = getSwapTransactionIdRows(activity)[0];
-  if (firstTransactionId) {
-    return { chain: firstTransactionId.chain, hash: firstTransactionId.hash };
-  }
-
-  const fromToken = swapTokensBySlug ? resolveSwapAsset(swapTokensBySlug, activity.from) : undefined;
-  const chain = fromToken?.chain && getIsSupportedChain(fromToken.chain) ? fromToken.chain : undefined;
+function getActivityShareInfo(activity: ApiActivity): { chain: ApiChain; hash: string } | undefined {
+  const chain = getChainBySlug(activity.slug);
   const hash = parseTxId(activity.id).hash;
   return chain && hash ? { chain, hash } : undefined;
 }

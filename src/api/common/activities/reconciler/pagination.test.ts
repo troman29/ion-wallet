@@ -30,20 +30,6 @@ describe('activity pagination reconciler', () => {
     expect(trimPageBoundaryTraceActivities([boundaryA, other, boundaryB])).toEqual([boundaryA, other]);
   });
 
-  it('uses SDK aggregator trace metadata as the page-boundary trace id', () => {
-    const boundaryA = makeTransaction({
-      id: 'chain-id-a',
-      extra: { mtwAggregator: { traceId: 'aggregator-trace', swapIds: [], from: 'toncoin', to: 'ton-usdt' } },
-    });
-    const other = makeTransaction({ id: 'other-trace:0' });
-    const boundaryB = makeTransaction({
-      id: 'chain-id-b',
-      extra: { mtwAggregator: { traceId: 'aggregator-trace', swapIds: [], from: 'toncoin', to: 'ton-usdt' } },
-    });
-
-    expect(trimPageBoundaryTraceActivities([boundaryA, other, boundaryB])).toEqual([boundaryA, other]);
-  });
-
   it('keeps the page when trimming would drop every activity', () => {
     const activities = [
       makeTransaction({ id: 'boundary-trace:0' }),

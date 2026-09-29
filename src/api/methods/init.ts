@@ -38,7 +38,6 @@ export default async function init(onUpdate: OnApiUpdate, args: ApiInitArgs) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const extra = require('./extra') as typeof import('./extra');
     extra.initStaking();
-    extra.initSwap(onUpdate);
   }
   await initProtocolManager(onUpdate, environment);
 

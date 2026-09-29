@@ -11,7 +11,6 @@ import {
 import { mergeSortedActivityIds } from '../../util/activities/order';
 import { getOrderedAccountChains } from '../../util/chain';
 import { extractKey, mapValues, unique } from '../../util/iteratees';
-import { preserveActivityStatusProgress } from '../../api/common/activities/reconciler/matcher';
 import { replaceActivityId } from '../helpers/misc';
 import { selectAccountOrAuthAccount, selectAccountState } from '../selectors';
 import { updateAccountState } from './misc';
@@ -259,11 +258,6 @@ export function addPastActivities(
 }
 
 function groupMainPastIdsByChain(pastActivities: ApiActivity[]) {
-  // A swap activity touches multiple chains, but it must be attributed to exactly one of them
-  // for boundary computation. Attributing it to all of its chains would push its timestamp into
-  // every chain's perceived "oldest loaded item", artificially advancing chains that haven't
-  // actually paginated that deep — breaking the invariant that the boundary represents a
-  // uniform depth across paginating chains and producing a feed with chain-shaped gaps.
   const byChain: Partial<Record<ApiChain, string[]>> = {};
   for (const activity of pastActivities) {
     const [primaryChain] = getActivityChains(activity);
@@ -290,7 +284,7 @@ function mergeActivitiesByIdPreservingStatusProgress(
 ) {
   const nextById = { ...byId };
   for (const activity of incomingActivities) {
-    nextById[activity.id] = preserveActivityStatusProgress(nextById[activity.id], activity);
+    nextById[activity.id] = { ...nextById[activity.id], ...activity };
   }
 
   return nextById;

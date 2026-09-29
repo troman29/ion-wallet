@@ -1,7 +1,6 @@
 import type { GlobalState } from '../types';
 
 import { updateCurrentAccountId } from './misc';
-import { clearCurrentSwap } from './swap';
 import { clearCurrentTransfer } from './transfer';
 
 export function updateCurrentSignature(global: GlobalState, update: Partial<GlobalState['currentSignature']>) {
@@ -25,5 +24,5 @@ export function switchAccountAndClearGlobal(global: GlobalState, accountId: stri
   let newGlobal = updateCurrentAccountId(global, accountId);
   newGlobal = clearCurrentTransfer(newGlobal);
 
-  return clearCurrentSwap(newGlobal);
+  return newGlobal;
 }

@@ -403,12 +403,6 @@ function isSimpleObject(obj: any) {
     && Object.getPrototypeOf(obj) === Object.prototype;
 }
 
-export function getOurFeePayload() {
-  return new Builder()
-    .storeUint(OpCode.OurFee, 32)
-    .endCell();
-}
-
 export function parseStateInitCell(stateInit: Cell | undefined): StateInit | undefined {
   return stateInit && loadStateInit(stateInit.asSlice());
 }

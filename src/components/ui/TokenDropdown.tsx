@@ -2,7 +2,7 @@ import React, { memo, useMemo } from '../../lib/teact/teact';
 
 import type { ApiTokenWithPrice } from '../../api/types';
 
-import getChainNetworkIcon from '../../util/swap/getChainNetworkIcon';
+import getChainNetworkIcon from '../../util/getChainNetworkIcon';
 import { getIsNativeToken, getIsRwaStockToken } from '../../util/tokens';
 
 import useLang from '../../hooks/useLang';

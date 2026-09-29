@@ -32,7 +32,6 @@ import {
 } from './nfts';
 import { getIsLedgerAppOpen } from './other';
 import { setupActivePolling, setupInactivePolling } from './polling';
-import { buildOnchainSwapTransfer, submitOnchainSwapTransfer } from './swap';
 import { fetchToken, importToken } from './tokens';
 import { fetchTransactionById } from './transactionInfo';
 import {
@@ -68,8 +67,6 @@ const tonSdk: ChainSdk<'ton'> = {
   importToken,
   checkTransactionDraft,
   submitGasfullTransfer,
-  buildOnchainSwapTransfer,
-  submitOnchainSwapTransfer,
   getAddressInfo: checkToAddress,
   getWalletBalance,
   getWalletAssets: fetchBalances,
@@ -148,6 +145,3 @@ export {
 export {
   insertMintlessPayload,
 } from './tokens';
-export {
-  validateDexSwapTransfers,
-} from './swap';

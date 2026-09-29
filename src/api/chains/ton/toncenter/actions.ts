@@ -6,9 +6,6 @@ import type {
   ApiNft,
   ApiNftAttribute,
   ApiNftSuperCollection,
-  ApiSwapActivity,
-  ApiSwapDexLabel,
-  ApiToken,
   ApiTransaction,
   ApiTransactionActivity,
   ApiTransactionType,
@@ -21,11 +18,9 @@ import type {
   CallContractAction,
   ContractDeployAction,
   DexDepositLiquidityAction,
-  DexSlug,
   DexWithdrawLiquidityAction,
   DnsAction,
   JettonBurnAction,
-  JettonMasterMetadata,
   JettonMintAction,
   JettonTransferAction,
   MetadataMap,
@@ -45,13 +40,11 @@ import {
   BURN_ADDRESS,
   DNS_IMAGE_GEN_URL,
   LIQUID_POOL,
-  STON_PTON_ADDRESS,
   TONCOIN,
 } from '../../../../config';
 import { buildTxId, parseTxId } from '../../../../util/activities';
 import { sortActivities } from '../../../../util/activities/order';
 import { toMilliseconds, toSeconds } from '../../../../util/datetime';
-import { toDecimal } from '../../../../util/decimals';
 import { getDnsDomainZone } from '../../../../util/dns';
 import { fixIpfsUrl, getProxiedLottieUrl } from '../../../../util/fetch';
 import { omitUndefined } from '../../../../util/iteratees';
@@ -65,15 +58,14 @@ import {
   getNftSuperCollectionsByCollectionAddress,
 } from '../../../common/addresses';
 import { updateActivityMetadata } from '../../../common/helpers';
-import { buildTokenSlug, getTokenBySlug } from '../../../common/tokens';
+import { buildTokenSlug } from '../../../common/tokens';
 import {
   EXCESS_OP_CODES,
   JettonStakingOpCode,
   OpCode,
-  OUR_FEE_PAYLOAD_BOC,
   TeleitemOpCode,
 } from '../constants';
-import { extractMetadata, getProxiedImage } from './metadata';
+import { extractMetadata } from './metadata';
 import { callToncenterV3 } from './other';
 
 type ActionsResponse = {
@@ -331,7 +323,7 @@ function parseCallContract(action: CallContractAction, options: ParseOptions): P
 
   const common = parseCommonFields(action, options, source, destination, value);
   const opCode = Number(details.opcode);
-  const shouldHide = !common.isIncoming && [OpCode.OurFee, TeleitemOpCode.Ok].includes(opCode);
+  const shouldHide = !common.isIncoming && opCode === Number(TeleitemOpCode.Ok);
 
   let type: ApiTransactionType | undefined;
   if (EXCESS_OP_CODES.includes(opCode)) {
@@ -350,10 +342,7 @@ function parseCallContract(action: CallContractAction, options: ParseOptions): P
     slug: TONCOIN.slug,
     type,
     shouldHide,
-    extra: omitUndefined({
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-      ...(opCode === OpCode.OurFee && { isOurSwapFee: true }),
-    }),
+
   };
 
   return {
@@ -392,7 +381,6 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
     details,
     details: {
       is_encrypted_comment: isEncrypted,
-      forward_payload: forwardPayload,
       sender,
       receiver,
       amount,
@@ -400,13 +388,12 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
   } = action;
 
   const common = parseCommonFields(action, options, sender, receiver, amount);
-  const { isIncoming, toAddress } = common;
+  const { toAddress } = common;
 
   const comment = (!isEncrypted && details.comment) || undefined;
   const encryptedComment = (isEncrypted && details.comment) || undefined;
   const tokenAddress = addressBook[details.asset].user_friendly;
   const slug = buildTokenSlug('ton', tokenAddress);
-  const isOurSwapFee = !isIncoming && forwardPayload === OUR_FEE_PAYLOAD_BOC;
 
   let type: ApiTransactionType;
   if (toAddress === BURN_ADDRESS) {
@@ -418,12 +405,8 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
     slug,
     comment,
     encryptedComment,
-    shouldHide: isOurSwapFee,
     type,
-    extra: omitUndefined({
-      queryId: details.query_id,
-      ...(isOurSwapFee && { isOurSwapFee: true }),
-    }),
+    extra: omitUndefined({ queryId: details.query_id }),
   };
 
   return {
@@ -656,71 +639,8 @@ function parseStakeWithdrawalRequest(action: StakeWithdrawalRequestAction, optio
 }
 
 function parseJettonSwap(action: SwapAction, options: ParseOptions): ParsedAction {
-  const { metadata, isPending } = options;
-  const {
-    end_utime: endUtime,
-    success: isSuccess,
-    details: {
-      dex_incoming_transfer: {
-        amount: fromAmount,
-        asset: fromAsset,
-      },
-      dex_outgoing_transfer: {
-        amount: toAmount,
-        asset: toAsset,
-      },
-      sender,
-    },
-  } = action;
-
-  const decimalsFrom = (fromAsset && parseToncenterJetton(fromAsset, metadata)?.decimals) || TONCOIN.decimals;
-  const decimalsTo = (toAsset && parseToncenterJetton(toAsset, metadata)?.decimals) || TONCOIN.decimals;
-
-  const fromTokenAddress = fromAsset ? toBase64Address(fromAsset, true) : undefined;
-  const toTokenAddress = toAsset ? toBase64Address(toAsset, true) : undefined;
-
-  let from: string;
-  let to: string;
-  let toncoinChange = 0n;
-
-  if (fromTokenAddress && fromTokenAddress !== STON_PTON_ADDRESS) {
-    from = buildTokenSlug('ton', fromTokenAddress);
-  } else {
-    from = TONCOIN.slug;
-    toncoinChange = -BigInt(fromAmount);
-  }
-
-  if (toTokenAddress && toTokenAddress !== STON_PTON_ADDRESS) {
-    to = buildTokenSlug('ton', toTokenAddress);
-  } else {
-    to = TONCOIN.slug;
-    toncoinChange = BigInt(toAmount);
-  }
-
-  const activity: ApiSwapActivity = {
-    kind: 'swap',
-    id: buildActionActivityId(action),
-    timestamp: toMilliseconds(endUtime),
-    from,
-    fromAmount: toDecimal(BigInt(fromAmount), decimalsFrom),
-    fromAddress: sender,
-    to,
-    toAmount: toDecimal(BigInt(toAmount), decimalsTo),
-    networkFee: '0',
-    swapFee: '0',
-    ourFee: '0',
-    status: resolveActivityStatus(isPending, isSuccess, options.finality),
-    hashes: [],
-    transactionIds: {},
-    externalMsgHashNorm: action.trace_external_hash_norm ?? action.trace_external_hash,
-    shouldLoadDetails: true,
-  };
-
-  return {
-    action,
-    activities: [activity],
-    toncoinChange,
-  };
+  void options;
+  return { action, activities: [], toncoinChange: 0n };
 }
 
 function parseDns(action: DnsAction, options: ParseOptions): ParsedAction {
@@ -806,88 +726,14 @@ function parseAuctionBid(action: AuctionBidAction, options: ParseOptions): Parse
   };
 }
 
-export function parseLiquidityDeposit(action: DexDepositLiquidityAction, options: ParseOptions): ParsedAction {
-  const { addressBook } = options;
-  const { details, details: { source, pool, destination_liquidity: destinationAddress, dex } } = action;
-
-  const common = parseCommonFields(action, options, source, pool ?? destinationAddress);
-
-  const partialExtended = {
-    ...common,
-    type: 'liquidityDeposit',
-    extra: {
-      dex: convertDexId(dex),
-    },
-  } as const;
-
-  const activities: ApiTransactionActivity[] = [{
-    ...partialExtended,
-    amount: -BigInt(details.amount_1 ?? 0n),
-    slug: getAssetSlug(addressBook, details.asset_1),
-  }];
-
-  // eslint-disable-next-line no-null/no-null
-  if (details.amount_2 !== null) {
-    const id = buildActionActivityId(action, 'additional');
-    activities.push({
-      ...partialExtended,
-      id,
-      amount: -BigInt(details.amount_2),
-      slug: getAssetSlug(addressBook, details.asset_2),
-    });
-  }
-
-  const toncoinChange = activities.find(({ slug }) => slug === TONCOIN.slug)?.amount;
-
-  return {
-    action,
-    activities,
-    toncoinChange,
-  };
+function parseLiquidityDeposit(action: DexDepositLiquidityAction, options: ParseOptions): ParsedAction {
+  void options;
+  return { action, activities: [], toncoinChange: 0n };
 }
 
 function parseLiquidityWithdraw(action: DexWithdrawLiquidityAction, options: ParseOptions): ParsedAction {
-  const { addressBook } = options;
-  const { details, details: { source, pool, dex } } = action;
-
-  const common = parseCommonFields(action, options, pool, source);
-
-  const partialExtended = {
-    ...common,
-    shouldLoadDetails: true,
-    type: 'liquidityWithdraw',
-    extra: {
-      dex: convertDexId(dex),
-    },
-  } as const;
-
-  const additionalId = buildActionActivityId(action, 'additional');
-
-  const activities: ApiTransactionActivity[] = [
-    {
-      ...partialExtended,
-      amount: BigInt(details.amount_1),
-      slug: getAssetSlug(addressBook, details.asset_1),
-    },
-    {
-      ...partialExtended,
-      id: additionalId,
-      amount: BigInt(details.amount_2),
-      slug: getAssetSlug(addressBook, details.asset_2),
-    },
-  ];
-
-  const toncoinChange = activities.find(({ slug }) => slug === TONCOIN.slug)?.amount;
-
-  return {
-    action,
-    activities,
-    toncoinChange,
-  };
-}
-
-function getAssetSlug(addressBook: AddressBook, rawAddress?: string | null) {
-  return rawAddress ? buildTokenSlug('ton', addressBook[rawAddress].user_friendly) : TONCOIN.slug;
+  void options;
+  return { action, activities: [], toncoinChange: 0n };
 }
 
 function parseCommonFields(
@@ -1060,32 +906,6 @@ export function parseToncenterNft(
   }
 }
 
-function parseToncenterJetton(rawAddress: string, metadata: MetadataMap): ApiToken | undefined {
-  const tokenAddress = toBase64Address(rawAddress, true);
-  const slug = buildTokenSlug('ton', tokenAddress);
-  const token = getTokenBySlug(slug);
-
-  if (token) {
-    return token;
-  }
-
-  const jettonMetadata = extractMetadata<JettonMasterMetadata>(rawAddress, metadata, 'jetton_masters');
-
-  if (!jettonMetadata) {
-    return undefined;
-  }
-
-  return {
-    tokenAddress,
-    slug,
-    chain: 'ton',
-    name: jettonMetadata.name!,
-    symbol: jettonMetadata.symbol!,
-    image: getProxiedImage(jettonMetadata),
-    decimals: Number(jettonMetadata.extra!.decimals),
-  };
-}
-
 function safeReadComment(payloadBase64: string) {
   return safeExec(() => {
     const cell = Cell.fromBase64(payloadBase64);
@@ -1109,16 +929,4 @@ export function parseActionActivityId(id: string) {
   const { hash: traceId, subId } = parseTxId(id);
   const [startLt, actionId] = subId!.split('-');
   return { traceId, startLt, actionId };
-}
-
-function convertDexId(toncenterDex: DexSlug | undefined): ApiSwapDexLabel | undefined {
-  switch (toncenterDex) {
-    case 'dedust':
-      return 'dedust';
-    case 'stonfi':
-    case 'stonfi_v2':
-      return 'ston';
-    default:
-      return undefined;
-  }
 }

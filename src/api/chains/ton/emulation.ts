@@ -6,7 +6,6 @@ import type {
   ApiEmulationResult,
   ApiNetwork,
   ApiNftSuperCollection,
-  ApiTransactionActivity,
 } from '../../types';
 import type { EmulationResponse } from './toncenter/emulation';
 import type { TonWallet } from './util/tonCore';
@@ -94,7 +93,7 @@ function addOrUpdateExcessActivity(walletAddress: string, activities: ApiActivit
   });
 
   if (index !== -1) {
-    const excessActivity = activities.splice(index, 1)[0] as ApiTransactionActivity;
+    const excessActivity = activities.splice(index, 1)[0];
     activities.push({
       ...excessActivity,
       amount: excess,

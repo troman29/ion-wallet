@@ -35,11 +35,6 @@ import type {
   ApiSiteCategory,
   ApiStakingHistory,
   ApiStakingState,
-  ApiSwapAsset,
-  ApiSwapCexLabel,
-  ApiSwapDexLabel,
-  ApiSwapDexRouterLabel,
-  ApiSwapRoute,
   ApiTokenType,
   ApiTokenWithPrice,
   ApiUpdate,
@@ -60,8 +55,6 @@ import type { AUTOLOCK_OPTIONS_LIST } from '../config';
 import type { CapacitorPlatform } from '../util/capacitor/platform';
 import type { ExplainedTransferFee } from '../util/fee/transferFee';
 import type { LedgerTransport } from '../util/ledger/types';
-
-export { SwapType } from '../util/swap/types';
 
 export type IAnchorPosition = {
   x: number;
@@ -250,34 +243,6 @@ export enum DomainLinkingState {
   Complete,
 }
 
-export enum SwapState {
-  None,
-  Initial,
-  Blockchain,
-  Password,
-  WaitTokens,
-  Complete,
-  SelectTokenFrom,
-  SelectTokenTo,
-  SelectAccount,
-}
-
-export enum SwapInputSource {
-  In,
-  Out,
-}
-
-export enum SwapErrorType {
-  UnexpectedError,
-  InvalidPair,
-  NotEnoughLiquidity,
-
-  ChangellyMinSwap,
-  ChangellyMaxSwap,
-  NotEnoughForFee,
-  TooSmallAmount,
-}
-
 export enum DappConnectState {
   Info,
   SelectAccount,
@@ -377,7 +342,6 @@ export type UserToken = {
   chain: ApiChain;
   tokenAddress?: string;
   isDisabled?: boolean;
-  canSwap?: boolean;
   keywords?: string[];
   cmcSlug?: string;
   totalValue: string;
@@ -389,11 +353,6 @@ export type UserToken = {
   /** True if this is a staking token (created from ApiStakingState) */
   isStaking?: boolean;
   stakingId?: string;
-};
-
-export type UserSwapToken = Omit<UserToken, 'change24h' | 'chain'> & {
-  chain: ApiChain | (string & {});
-  isPopular: boolean;
 };
 
 export type TokenPeriod = '1D' | '7D' | '1M' | '3M' | '1Y' | 'ALL';
@@ -673,61 +632,6 @@ export type GlobalState = {
     explainedFee?: ExplainedTransferFee;
   };
 
-  currentSwap: {
-    isMaxAmount?: boolean;
-    state: SwapState;
-    swapId?: string;
-    slippage: number;
-    tokenInSlug?: string;
-    tokenOutSlug?: string;
-    amountIn?: string;
-    amountOut?: string;
-    amountOutMin?: string;
-    priceImpact?: number;
-    activityId?: string;
-    error?: string;
-    errorType?: SwapErrorType;
-    isLoading?: boolean;
-    /**
-     * When is `true`, does several things: shows the estimating indicator in the UI, blocks the form submission, and
-     * instructs the UI and the actions to perform an estimation regardless.
-     */
-    isEstimating?: boolean;
-    inputSource?: SwapInputSource;
-    /**
-     * The output the last estimate priced. When the user fixes the output, the form keeps their
-     * figure and the estimate answers with what the venue could reach against it, so the two are
-     * not the same number and only this one matches the routes the swap will be built from.
-     */
-    quotedAmountOut?: string;
-    /** The address to send the "out" tokens to. Used only when the swap type is `CrosschainFromWallet`. */
-    toAddress?: string;
-    payinAddress?: string;
-    payoutAddress?: string;
-    payinExtraId?: string;
-    isManualDepositRequired?: boolean;
-    limits?: {
-      fromMin?: string;
-      fromMax?: string;
-    };
-    dexLabel?: ApiSwapDexLabel;
-    dexRouterLabel?: ApiSwapDexRouterLabel;
-    routes?: ApiSwapRoute[][];
-    currentCexLabel?: ApiSwapCexLabel;
-    currentCexProviderName?: string;
-    currentCexTermsOfUseUrl?: string;
-    currentCexPrivacyPolicyUrl?: string;
-    currentCexAmlKycPolicyUrl?: string;
-    maxAmountFromBackend?: string;
-    // Fees. Undefined values mean that these fields are unknown.
-    networkFee?: string;
-    realNetworkFee?: string;
-    swapFee?: string;
-    swapFeePercent?: number;
-    ourFee?: string;
-    ourFeePercent?: number;
-  };
-
   currentSignature?: {
     promiseId: string;
     dataHex: string;
@@ -882,16 +786,6 @@ export type GlobalState = {
 
   currencyRates: ApiCurrencyRates;
 
-  swapTokenInfo: {
-    bySlug: Record<string, ApiSwapAsset>;
-    /** Whether the API has loaded and provided the tokens */
-    isLoaded?: true;
-  };
-
-  swapPairs?: {
-    bySlug: Record<string, AssetPairs>;
-  };
-
   tokenPriceHistory: {
     bySlug: Record<string, PriceHistoryPeriods>;
   };
@@ -923,7 +817,7 @@ export type GlobalState = {
     areUnverifiedNftsHidden?: boolean;
     importToken?: {
       isLoading?: boolean;
-      token?: UserToken | UserSwapToken;
+      token?: UserToken;
       error?: string;
     };
     baseCurrency: ApiBaseCurrency;
@@ -940,6 +834,7 @@ export type GlobalState = {
   currentAccountId?: string;
   currentTemporaryViewAccountId?: string;
   isAccountSelectorOpen?: boolean;
+  isExchangeModalOpen?: boolean;
   walletRenameAccountId?: string;
   accountSelectorActiveTab?: number;
   accountSelectorViewMode?: 'cards' | 'list';
@@ -967,7 +862,6 @@ export type GlobalState = {
 
   currentQrScan?: {
     currentTransfer?: GlobalState['currentTransfer'];
-    currentSwap?: GlobalState['currentSwap'];
     currentDomainLinking?: GlobalState['currentDomainLinking'];
   };
 
@@ -975,7 +869,6 @@ export type GlobalState = {
   stateVersion: number;
   restrictions: {
     isLimitedRegion: boolean;
-    isSwapDisabled: boolean;
     isNftBuyingDisabled: boolean;
     isCopyStorageEnabled?: boolean;
     countryCode?: ApiCountryCode;
@@ -1370,32 +1263,9 @@ export interface ActionPayloads {
     subtitle?: string;
   };
 
-  // Swap
-  submitSwap: { enclaveToken: string };
-  startSwap: {
-    state?: SwapState;
-    tokenInSlug?: string;
-    tokenOutSlug?: string;
-    amountIn?: string;
-    toAddress?: string;
-  } | undefined;
-  cancelSwap: { shouldReset?: boolean } | undefined;
-  switchSwapAccount: { accountId: string };
-  setDefaultSwapParams: { tokenInSlug?: string; tokenOutSlug?: string; withResetAmount?: boolean } | undefined;
-  switchSwapTokens: undefined;
-  setSwapTokenIn: { tokenSlug: string };
-  setSwapTokenOut: { tokenSlug: string };
-  setSwapAmountIn: { amount?: string; isMaxAmount?: boolean };
-  setSwapAmountOut: { amount?: string };
-  setSlippage: { slippage: number };
-  estimateSwap: undefined;
-  setSwapScreen: { state: SwapState };
-  clearSwapError: undefined;
-  submitSwapCex: { enclaveToken: string };
-  setSwapCexAddress: { toAddress: string };
-  addSwapToken: { token: UserSwapToken };
-  toggleSwapSettingsModal: { isOpen: boolean };
-  updatePendingSwaps: { forceProviderRefresh?: boolean; contextActivities?: ApiActivity[] } | undefined;
+  // Exchange
+  startExchange: undefined;
+  closeExchange: undefined;
 
   // WalletConnect Pay
   apiUpdateWalletConnectPayLoading: { accountId: string };

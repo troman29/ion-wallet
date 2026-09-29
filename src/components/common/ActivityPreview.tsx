@@ -6,7 +6,6 @@ import type {
   ApiCurrencyRates,
   ApiNft,
   ApiStakingState,
-  ApiSwapAsset,
   ApiToken,
   ApiTokenWithPrice,
 } from '../../api/types';
@@ -28,7 +27,6 @@ type OwnProps = {
   realFee?: bigint;
   feeToken?: Pick<ApiToken, 'slug' | 'symbol' | 'decimals'>;
   tokensBySlug: Record<string, ApiTokenWithPrice>;
-  swapTokensBySlug?: Record<string, ApiSwapAsset>;
   appTheme: AppTheme;
   nftsByAddress?: Record<string, ApiNft>;
   currentAccountId: string;
@@ -46,7 +44,6 @@ function ActivityPreview({
   realFee,
   feeToken,
   tokensBySlug,
-  swapTokensBySlug,
   appTheme,
   nftsByAddress,
   currentAccountId,
@@ -84,7 +81,6 @@ function ActivityPreview({
             isFuture
             isLast={index === visibleActivities.length - 1}
             tokensBySlug={tokensBySlug}
-            swapTokensBySlug={swapTokensBySlug}
             appTheme={appTheme}
             nftsByAddress={nftsByAddress}
             currentAccountId={currentAccountId}

@@ -95,7 +95,6 @@ export type ContractInfo = {
   type?: ContractType;
   oldHash?: string;
   hash?: string;
-  isSwapAllowed?: boolean;
 };
 
 export type GetAddressInfoResponse = {
@@ -182,7 +181,7 @@ export type TraceOutput = {
 export type ParsedAction = {
   action: AnyAction;
   activities: ApiActivity[];
-  // Explicit incoming or outgoing Toncoin (deposit, send, staking withdrawal, sending or receiving in swap, etc.)
+  // Explicit incoming or outgoing Toncoin (deposit, send or staking withdrawal).
   // This is the Toncoin amount shown to the user in the displayed transaction/activity
   toncoinChange?: bigint;
 };

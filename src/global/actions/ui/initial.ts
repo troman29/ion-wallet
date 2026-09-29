@@ -4,14 +4,11 @@ import type {
 import { AppState, AuthState } from '../../types';
 
 import {
-  DEFAULT_SWAP_FIRST_TOKEN_SLUG,
-  DEFAULT_SWAP_SECOND_TOKEN_SLUG,
   DEFAULT_TRANSFER_TOKEN_SLUG,
   IS_CAPACITOR,
   IS_EXTENSION,
   TEST_MNEMONIC,
   TEST_PASSWORD,
-  TONCOIN,
 } from '../../../config';
 import { requestMutation } from '../../../lib/fasterdom/fasterdom';
 import { parseAccountId } from '../../../util/account';
@@ -55,7 +52,6 @@ import {
   selectNetworkAccounts,
   selectNetworkAccountsMemoized,
   selectNewestActivityTimestamps,
-  selectSwapTokens,
 } from '../../selectors';
 
 const ANIMATION_DELAY_MS = 320;
@@ -179,46 +175,17 @@ addActionHandler('dismissDialog', (global) => {
 
 addActionHandler('selectToken', (global, actions, { slug } = {}) => {
   if (slug) {
-    const isToncoin = slug === TONCOIN.slug;
-    const tokens = selectSwapTokens(global);
-
-    if (isToncoin || tokens?.some((token) => token.slug === slug)) {
-      if (isToncoin) {
-        actions.setDefaultSwapParams({ tokenInSlug: DEFAULT_SWAP_SECOND_TOKEN_SLUG, tokenOutSlug: slug });
-      } else {
-        actions.setDefaultSwapParams({ tokenOutSlug: slug });
-      }
-      actions.changeTransferToken({ tokenSlug: slug });
-    }
+    actions.changeTransferToken({ tokenSlug: slug });
   } else {
     const currentAccountId = selectCurrentAccountId(global);
     if (!currentAccountId) return;
 
     const currentActivityToken = global.byAccountId[currentAccountId].currentTokenSlug;
-
-    const isDefaultFirstTokenOutSwap = global.currentSwap.tokenOutSlug === DEFAULT_SWAP_FIRST_TOKEN_SLUG
-      && global.currentSwap.tokenInSlug === DEFAULT_SWAP_SECOND_TOKEN_SLUG;
-
-    const shouldResetSwap = global.currentSwap.tokenOutSlug === currentActivityToken
-      && (
-        (
-          global.currentSwap.tokenInSlug === DEFAULT_SWAP_FIRST_TOKEN_SLUG
-          && global.currentSwap.tokenOutSlug !== DEFAULT_SWAP_SECOND_TOKEN_SLUG
-        )
-        || isDefaultFirstTokenOutSwap
-      );
-
-    if (shouldResetSwap) {
-      actions.setDefaultSwapParams({ tokenInSlug: undefined, tokenOutSlug: undefined, withResetAmount: true });
-    }
-
-    const shouldResetTransfer = (
+    if (
       global.currentTransfer.tokenSlug === currentActivityToken
       && global.currentTransfer.tokenSlug !== DEFAULT_TRANSFER_TOKEN_SLUG
       && !global.currentTransfer.nfts?.length
-    );
-
-    if (shouldResetTransfer) {
+    ) {
       actions.changeTransferToken({ tokenSlug: DEFAULT_TRANSFER_TOKEN_SLUG, withResetAmount: true });
     }
   }

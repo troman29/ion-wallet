@@ -50,6 +50,5 @@ export type StorageKey = 'accounts'
   | 'headlessBalanceSnapshots'
   // SDK activity reconciliation
   | 'walletOperationIntents'
-  | 'activeCexSwapReconciliationState'
   | 'knownTonAggregatorTraceIds'
   | 'knownTonAggregatorTraceProjections';

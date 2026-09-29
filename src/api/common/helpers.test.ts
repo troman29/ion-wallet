@@ -148,26 +148,5 @@ describe('updateActivityMetadata - scam comment detection', () => {
       const result = updateActivityMetadata(activity);
       expect(result.metadata?.isScam).toBeUndefined();
     });
-
-    it('swap activity passes through unchanged', () => {
-      const swapActivity = {
-        kind: 'swap' as const,
-        id: 'swap-1',
-        timestamp: Date.now(),
-        from: 'TON',
-        fromAmount: '100',
-        fromAddress: 'addr1',
-        to: 'USDT',
-        toAmount: '200',
-        networkFee: '0.01',
-        swapFee: '0.001',
-        status: 'completed' as const,
-        hashes: [],
-        transactionIds: {},
-      };
-
-      const result = updateActivityMetadata(swapActivity);
-      expect(result).toEqual(swapActivity);
-    });
   });
 });

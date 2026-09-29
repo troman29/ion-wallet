@@ -56,7 +56,6 @@ interface OwnProps {
   withContextMenu?: boolean;
   isSensitiveDataHidden?: true;
   areTokenNamesLocalized?: boolean;
-  isSwapDisabled?: boolean;
   isStakingAvailable?: boolean;
   isViewMode?: boolean;
   isPinned?: boolean;
@@ -89,7 +88,6 @@ function Token({
   isSensitiveDataHidden,
   areTokenNamesLocalized,
   isStakingAvailable,
-  isSwapDisabled,
   isViewMode,
   isPinned,
   withPinTransition,
@@ -175,7 +173,6 @@ function Token({
     isPortrait,
     withContextMenu,
     isStakingAvailable,
-    isSwapDisabled,
     isViewMode,
     stakingState,
     isPinned,

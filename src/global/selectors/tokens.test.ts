@@ -45,16 +45,12 @@ function buildGlobal(): GlobalState {
         [TON_USDT_MAINNET.slug]: { ...TON_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
       },
     },
-    swapTokenInfo: {
-      bySlug: {
-        [TONCOIN.slug]: { ...TONCOIN, isPopular: true },
-      },
-    },
+
   } as GlobalState;
 }
 
 describe('selectTokenInfoUserTokens', () => {
-  it('uses tokenInfo, not swapTokenInfo, so Settings asset search can find EVM assets', () => {
+  it('uses tokenInfo so Settings asset search can find EVM assets', () => {
     const global = buildGlobal();
     const tokens = selectTokenInfoUserTokens(global)!;
     const tokensBySlug = Object.fromEntries(tokens.map((token) => [token.slug, token]));

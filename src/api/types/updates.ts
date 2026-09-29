@@ -10,10 +10,7 @@ import type {
 import type { StoredDappConnection } from '../dappProtocols/storage';
 import type { UnifiedSignDataPayload } from '../dappProtocols/types';
 import type { ApiActivity } from './activities';
-import type {
-  ApiSwapAsset,
-  ApiVestingInfo,
-} from './backend';
+import type { ApiVestingInfo } from './backend';
 import type { ApiEmulationResult } from './emulation';
 import type { ApiAnyDisplayError } from './errors';
 import type {
@@ -77,11 +74,6 @@ export type ApiUpdateTokens = {
   type: 'updateTokens';
   arePricesFresh: boolean;
   tokens: Record<string, ApiTokenWithPrice>;
-};
-
-export type ApiUpdateSwapTokens = {
-  type: 'updateSwapTokens';
-  tokens: Record<string, ApiSwapAsset>;
 };
 
 export type ApiUpdateCurrencyRates = {
@@ -436,7 +428,6 @@ export type ApiUpdate =
   | ApiUpdateNewActivities
   | ApiUpdateNewLocalActivities
   | ApiUpdateTokens
-  | ApiUpdateSwapTokens
   | ApiUpdateCurrencyRates
   | ApiUpdateCreateTransaction
   | ApiUpdateCompleteTransaction

@@ -27,7 +27,6 @@ import {
   updateNft,
   updateRestrictions,
   updateStakingDefault,
-  updateSwapTokens,
   updateTokens,
 } from '../../reducers';
 import {
@@ -116,13 +115,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       const { tokens, arePricesFresh } = update;
       global = updateTokens(global, tokens, true, !arePricesFresh);
       setGlobal(global);
-      break;
-    }
-
-    case 'updateSwapTokens': {
-      global = updateSwapTokens(global, update.tokens);
-      setGlobal(global);
-
       break;
     }
 
@@ -289,7 +281,6 @@ addActionHandler('apiUpdate', (global, actions, update) => {
 
       global = updateRestrictions(global, {
         isLimitedRegion,
-        isSwapDisabled: shouldRestrictRegionalFeatures,
         // The `restrictions` object is cached, so an excluded key will allow a stale value stored in an older build
         // to survive a shallow merge with a cached state
         isNftBuyingDisabled: shouldRestrictRegionalFeatures,

@@ -5,8 +5,6 @@ import type {
   ApiChain,
   ApiLiquidStakingState,
   ApiNftMarketplace,
-  ApiSwapAsset,
-  ApiSwapDexLabel,
   ApiToken,
 } from './api/types';
 import type { TOKEN_CARD_COLORS } from './components/main/helpers/cardColors';
@@ -419,26 +417,7 @@ export const PRIORITY_TOKENS = [
   BNB,
 ] as ApiToken[];
 
-export const INIT_SWAP_ASSETS: Record<'in' | 'out', ApiSwapAsset> = {
-  in: {
-    ...TONCOIN,
-    isPopular: true,
-  },
-  out: {
-    ...TON_USDT_MAINNET,
-    isPopular: true,
-  },
-};
-
-export const DEFAULT_SWAP_FIRST_TOKEN_SLUG = TONCOIN.slug;
-export const DEFAULT_SWAP_SECOND_TOKEN_SLUG = TON_USDT_MAINNET.slug;
-export const DEFAULT_SWAP_AMOUNT = '10';
 export const DEFAULT_TRANSFER_TOKEN_SLUG = TONCOIN.slug;
-
-export const SWAP_DEX_LABELS: Record<ApiSwapDexLabel, string> = {
-  dedust: 'DeDust',
-  ston: 'STON.fi',
-};
 
 export const ACTIVE_TAB_STORAGE_KEY = 'mtw-active-tab';
 

@@ -246,7 +246,7 @@ export async function submitGasfullTransfer(
 
     const response = await signer.sendTransaction(transaction);
 
-    return { txId: response.hash, msgHashForCexSwap: response.hash };
+    return { txId: response.hash };
   } catch (err) {
     logDebugError(`evm:${chain}:submitGasfullTransfer`, err);
 

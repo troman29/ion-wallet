@@ -32,20 +32,6 @@ export type WalletOperationIntent = {
   };
 };
 
-export type ActiveCexSwapReconciliationState = {
-  accountId: string;
-  backendSwapId: string;
-  cexTransactionId?: string;
-  provider?: string;
-  status: ReconciliationStatus | 'expired';
-  knownHashes: string[];
-  submittedHashes: string[];
-  from?: string;
-  to?: string;
-  createdAt: number;
-  updatedAt: number;
-};
-
 export type ReconciledActivitiesPatch = {
   accountId: string;
   upsert: ApiActivity[];

@@ -10,14 +10,6 @@
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 
-export function requireSwapMethods() {
-  if (process.env.NO_EXTRA_FEATURES !== '1') {
-    return require('./swap') as typeof import('./swap');
-  }
-
-  throw new Error('Swap is not supported in this build');
-}
-
 export function requireStakingMethods() {
   if (process.env.NO_EXTRA_FEATURES !== '1') {
     return require('./staking') as typeof import('./staking');

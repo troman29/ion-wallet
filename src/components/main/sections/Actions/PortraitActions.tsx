@@ -17,7 +17,6 @@ import styles from './PortraitActions.module.scss';
 interface OwnProps {
   isLedger?: boolean;
   stakingStatus: StakingStateStatus;
-  isSwapDisabled?: boolean;
   isStakingDisabled?: boolean;
   onEarnClick: NoneToVoidFunction;
 }
@@ -25,21 +24,20 @@ interface OwnProps {
 function PortraitActions({
   stakingStatus,
   isStakingDisabled,
-  isSwapDisabled,
   onEarnClick,
 }: OwnProps) {
   const {
-    startTransfer, startSwap, openReceiveModal,
+    startTransfer, startExchange, openReceiveModal,
   } = getActions();
 
   const lang = useLang();
 
-  const addBuyButtonName = isSwapDisabled ? lang('Add') : lang('Fund');
+  const addBuyButtonName = lang('Fund');
 
-  const handleStartSwap = useLastCallback(() => {
+  const handleStartExchange = useLastCallback(() => {
     void vibrate();
 
-    startSwap();
+    startExchange();
   });
 
   const handleStartTransfer = useLastCallback(() => {
@@ -79,16 +77,14 @@ function PortraitActions({
           <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
           {lang('Send')}
         </Button>
-        {!isSwapDisabled && (
-          <Button
-            isSimple
-            className={styles.button}
-            onClick={handleStartSwap}
-          >
-            <i className={buildClassName(styles.buttonIcon, 'icon-action-swap')} aria-hidden />
-            {lang('Swap')}
-          </Button>
-        )}
+        <Button
+          isSimple
+          className={styles.button}
+          onClick={handleStartExchange}
+        >
+          <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
+          {lang('Exchange')}
+        </Button>
         {!isStakingDisabled && (
           <Button
             isSimple

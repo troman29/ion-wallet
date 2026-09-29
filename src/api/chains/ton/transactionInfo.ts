@@ -1,6 +1,5 @@
-import type { ApiActivity, ApiFetchTransactionByIdOptions, ApiSwapActivity } from '../../types';
+import type { ApiActivity, ApiFetchTransactionByIdOptions } from '../../types';
 
-import { omit } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
 import { getNftSuperCollectionsByCollectionAddress } from '../../common/addresses';
 import { parseActionsToActivities } from './toncenter/actions';
@@ -73,7 +72,7 @@ export async function fetchTransactionById(
 
         const filledActivity = fillActivityDetails(activity, parsedTrace);
 
-        return omit(filledActivity as ApiSwapActivity, ['ourFee']);
+        return filledActivity;
       } catch (err) {
         logDebugError('fetchTransactionById.fillActivityDetails', activity.id, err);
 

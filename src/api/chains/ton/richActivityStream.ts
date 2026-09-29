@@ -8,7 +8,6 @@ import { areSortedArraysEqual, extractKey } from '../../../util/iteratees';
 import { OrGate } from '../../../util/orGate';
 import { throttle } from '../../../util/schedulers';
 import { fetchStoredWallet } from '../../common/accounts';
-import { swapReplaceActivities } from '../../common/swap';
 import { reloadIncompleteActivities } from './activities';
 
 /**
@@ -165,7 +164,6 @@ async function enrichActivities(accountId: string, activities: ApiActivity[]) {
   const { address } = await fetchStoredWallet(accountId, 'ton');
 
   activities = await reloadIncompleteActivities(network, address, activities);
-  activities = await swapReplaceActivities(accountId, activities, undefined, true);
 
   return activities;
 }

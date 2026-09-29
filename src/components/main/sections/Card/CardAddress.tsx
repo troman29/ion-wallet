@@ -14,9 +14,9 @@ import {
 import buildClassName from '../../../../util/buildClassName';
 import { getChainTitle } from '../../../../util/chain';
 import { copyTextToClipboard } from '../../../../util/clipboard';
+import getChainNetworkIcon from '../../../../util/getChainNetworkIcon';
 import { openUrl } from '../../../../util/openUrl';
 import { shortenAddress } from '../../../../util/shortenAddress';
-import getChainNetworkIcon from '../../../../util/swap/getChainNetworkIcon';
 import { getExplorerAddressUrl, getExplorerName } from '../../../../util/url';
 import { IS_TOUCH_ENV } from '../../../../util/windowEnvironment';
 import useAddressMenu from './addressMenu/useAddressMenu';

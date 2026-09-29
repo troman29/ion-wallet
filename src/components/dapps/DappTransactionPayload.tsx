@@ -79,12 +79,6 @@ function DappTransactionPayload({ transaction, tokensBySlug }: OwnProps) {
         }
       }
 
-      case 'token-bridge:pay-swap': {
-        return lang('$dapp_token_bridge_pay_swap_payload', {
-          swapId: payload.swapId,
-        });
-      }
-
       case 'liquid-staking:deposit': {
         return lang('$dapp_liquid_staking_deposit_payload');
       }

@@ -1,4 +1,4 @@
-import type { ApiSwapActivity, ApiTransactionActivity } from '../../src/api/types';
+import type { ApiTransactionActivity } from '../../src/api/types';
 
 import { BNB, BSC_USDT_MAINNET, TON_USDT_MAINNET, TONCOIN } from '../../src/config';
 import { buildTxId } from '../../src/util/activities';
@@ -27,29 +27,6 @@ export function makeMockTransactionActivity(partial: Partial<ApiTransactionActiv
     amount: BigInt((isIncoming ? -1 : 1) * random(1e7, 1e10)),
     slug: sample(slugs),
     status: 'completed',
-    ...partial,
-  };
-}
-
-export function makeMockSwapActivity(partial: Partial<ApiSwapActivity> = {}): ApiSwapActivity {
-  const from = sample(slugs);
-  let to = sample(slugs);
-  while (to === from) to = sample(slugs);
-
-  return {
-    kind: 'swap',
-    fromAddress: randomBase64(36),
-    id: buildTxId(randomBase64(32)),
-    timestamp: Date.now(),
-    from,
-    fromAmount: String(random(1e5, 1e8)),
-    to,
-    toAmount: String(random(1e5, 1e8)),
-    networkFee: String(random(1e2, 1e5)),
-    swapFee: String(random(1e2, 1e4)),
-    status: 'completed',
-    hashes: [],
-    transactionIds: {},
     ...partial,
   };
 }

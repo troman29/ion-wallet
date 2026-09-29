@@ -25,7 +25,6 @@ import {
   activeWalletTiming,
   inactiveWalletTiming,
 } from '../../common/polling/utils';
-import { swapReplaceActivities } from '../../common/swap';
 import { sendUpdateTokens } from '../../common/tokens';
 import { txCallbacks } from '../../common/txCallbacks';
 import { BalanceStream } from '../../common/websocket/balanceStream';
@@ -395,11 +394,7 @@ async function loadInitialActivities(
       undefined,
       FIRST_TRANSACTIONS_LIMIT,
     );
-    // Merge cross-chain CEX swaps into the feed, the way TON/Solana/Tron do on initial load. The
-    // on-chain leg of such a swap arrives here as a plain transfer; without this the live EVM feed
-    // shows it un-merged until the user paginates deep enough to hit the shared history path
-    // (`fetchPastActivities`), which already applies the same replacement.
-    const activities = await swapReplaceActivities(accountId, rawActivities, undefined, true);
+    const activities = rawActivities;
 
     activities
       .slice()
@@ -409,7 +404,7 @@ async function loadInitialActivities(
       });
 
     // Record the newest activity of every token slug, not just the native one. A token- or
-    // swap-led wallet can have no native-coin activity on its first page, so a native-only marker
+    // token-led wallet can have no native-coin activity on its first page, so a native-only marker
     // would stay unset and make every launch repeat the full initial fetch instead of an
     // incremental poll. An empty wallet still yields an empty `bySlug`, so the reducer's
     // empty-update guard short-circuits.
@@ -483,9 +478,7 @@ async function loadNewActivities(
   // Tron keeps its cursor on the raw slice for the same reason; the merge below is display-only.
   result[getChainConfig(chain).nativeToken.slug] = rawActivities[0].timestamp;
 
-  // Merge cross-chain CEX swaps so a freshly polled swap leg is shown as a swap, not a plain
-  // transfer, consistent with the initial load and the shared pagination path.
-  const activities = await swapReplaceActivities(accountId, rawActivities, undefined, true);
+  const activities = rawActivities;
 
   activities
     .slice()
