@@ -74,7 +74,7 @@
 - [ ] **Убрать зависимость preview от MyTonWallet backend.**
   - На 2026-09-29 `api.wallet.ice.io` не резолвится из среды сборки; fallback в `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` нельзя считать работающей ION-инфраструктурой.
   - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
-    - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
+    - кошелёк и безопасность: `GET /assets`, `/currency-rates`, `/known-addresses`, `/utils/get-config`;
     - каталог и рынок: `/v2/dapp/catalog`, `/prices/chart/*`;
     - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
     - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;
@@ -91,7 +91,7 @@
   - `swapVersion`: выбирает доступные swap-пары и backend-версию; решить вместе с заменой swap-инфраструктуры.
   - `knowledgeBaseVersion`: инвалидация базы знаний; проверить потребителя и либо подключить ION help-центр, либо убрать поле.
   - `isVestingEnabled` и `isWebSocketEnabled`: сейчас не читаются клиентом; удалить из контрактной схемы после решения, нужны ли vesting и live-обновления.
-  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `/account-config`, promotion UI, сезонные ресурсы, negative-verdict cache и TonConnect telemetry.
+  - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 

@@ -481,10 +481,6 @@ export interface AccountState {
     address: ApiNft['address'];
     name: ApiNft['name'];
   };
-  selectedNftToReport?: {
-    chain: ApiChain;
-    address: ApiNft['address'];
-  };
   currentNftForAttributes?: ApiNft;
   shouldShowOwnerInNftAttributes?: true;
   dappLastOpenedDatesByUrl?: Record<string, number>;
@@ -1207,12 +1203,6 @@ export interface ActionPayloads {
     isCollection: boolean;
   };
   closeHideNftModal: undefined;
-  openReportNftModal: {
-    chain: ApiChain;
-    address: ApiNft['address'];
-  };
-  closeReportNftModal: undefined;
-  hideNft: { shouldReport?: true } | undefined;
   openNftAttributesModal: { nft: ApiNft; withOwner?: true };
   closeNftAttributesModal: undefined;
 

@@ -118,11 +118,11 @@ export default function useNftMenu({
     selectNfts,
     openNftCollection,
     burnNfts,
+    addNftsToBlacklist,
     addNftsToWhitelist,
     closeMediaViewer,
     closeNftAttributesModal,
     openUnhideNftModal,
-    openReportNftModal,
     openDomainRenewalModal,
     openDomainLinkingModal,
   } = getActions();
@@ -190,7 +190,8 @@ export default function useNftMenu({
       }
 
       case 'hide': {
-        openReportNftModal({ chain: nft!.chain, address: nft!.address });
+        addNftsToBlacklist({ addresses: [nft!.address] });
+        closeOverlays();
 
         break;
       }

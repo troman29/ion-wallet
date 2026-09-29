@@ -1,35 +1,16 @@
-const mockCallBackendPost = jest.fn();
 const mockFetchNftByAddress = jest.fn();
-
-jest.mock('../common/backend', () => ({
-  callBackendPost: (...args: unknown[]) => mockCallBackendPost(...args),
-}));
 
 jest.mock('../chains/ton/toncenter/nfts', () => ({
   fetchNftByAddress: (...args: unknown[]) => mockFetchNftByAddress(...args),
 }));
 
-import { fetchNftByAddress, reportNft } from './nfts';
+import { fetchNftByAddress } from './nfts';
 
 const NFT_ADDRESS = 'EQBtqQlC09xW_oOHJOrMofDmFndOrY7zCjd7bYELIoabO9JC';
 
 describe('NFT methods', () => {
   afterEach(() => {
-    mockCallBackendPost.mockReset();
     mockFetchNftByAddress.mockReset();
-  });
-
-  it('sends a chain-qualified NFT report to the backend', async () => {
-    mockCallBackendPost.mockResolvedValue({ ok: true });
-    const options = {
-      chain: 'ton' as const,
-      network: 'mainnet' as const,
-      nftAddress: 'EQ-reported-nft',
-    };
-
-    await reportNft(options);
-
-    expect(mockCallBackendPost).toHaveBeenCalledWith('/nfts/report', options);
   });
 
   describe('fetchNftByAddress', () => {

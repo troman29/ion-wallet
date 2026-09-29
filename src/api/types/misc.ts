@@ -24,8 +24,6 @@ export interface ApiInitArgs {
   isIosApp?: boolean;
   isAndroidApp?: boolean;
   langCode?: LangCode;
-  referrer?: string;
-  channel?: string;
   accountIds?: string[];
   storage?: ApiStorageConfig;
 }
@@ -175,12 +173,6 @@ export interface ApiNft {
 export interface ApiNftCollection {
   chain: ApiChain;
   address: string;
-}
-
-export interface ApiReportNftOptions {
-  chain: ApiChain;
-  network: ApiNetwork;
-  nftAddress: string;
 }
 
 export interface ApiDomainData {
