@@ -11,7 +11,16 @@ This repository is in active migration. Public endpoints, wallet registries, mob
 - Self-custodial key management
 - Web, browser extension, Electron, and Capacitor mobile applications
 
-Removed product areas include the native Air client, Telegram Mini App integration, Telegram Gifts, gasless/Diesel, MFA, Agent, My Wallet Cards and Giveaway, and legacy networks outside the current scope.
+## Removed features
+
+The migration has removed these legacy product areas:
+
+- Native Adobe AIR client, Telegram Mini App integration, Telegram Gifts, MFA, Agent, gasless/Diesel, My Wallet Cards, and Giveaway
+- DEX/CEX swapping: providers, quotes, routing, slippage, fees, swap signing, swap history, and reconciliation
+- Portfolio and token net-worth views, multisend, MyCoin vesting, nominator staking, and bank-card purchase/sale flows
+- Tron and Solana support; from EVM chains, only BNB Chain remains
+
+The Exchange window remains as a non-transactional placeholder for the future ION Network ↔ BNB Chain bridge. It will send a standard transfer to an approved bridge address only after the bridge contract, recipient, and fee model are defined in [Migration to ION](MIGRATION_TO_ION.md).
 
 ## Development
 
