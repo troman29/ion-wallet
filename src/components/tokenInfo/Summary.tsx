@@ -1,6 +1,6 @@
 import React, { memo, useState } from '../../lib/teact/teact';
 
-import type { TokenChartMode, UserToken } from '../../global/types';
+import type { UserToken } from '../../global/types';
 import type { TokenPricePoint } from './sections/Chart';
 
 import buildClassName from '../../util/buildClassName';
@@ -18,7 +18,6 @@ interface OwnProps {
 }
 
 function Summary({ token, className }: OwnProps) {
-  const [chartMode, setChartMode] = useState<TokenChartMode>('price');
   // The balance follows the point under the cursor, so the chart reports the point up to here
   const [pricePoint, setPricePoint] = useState<TokenPricePoint>();
 
@@ -33,9 +32,7 @@ function Summary({ token, className }: OwnProps) {
       <div className={styles.panels}>
         <Chart
           token={token}
-          chartMode={chartMode}
           className={styles.panel}
-          onChartModeChange={setChartMode}
           onPricePointChange={setPricePoint}
         />
         <Info tokenSlug={slug} className={styles.panel} />

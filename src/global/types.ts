@@ -417,8 +417,6 @@ export type UserSwapToken = Omit<UserToken, 'change24h' | 'chain'> & {
 
 export type TokenPeriod = '1D' | '7D' | '1M' | '3M' | '1Y' | 'ALL';
 
-export type TokenChartMode = 'price' | 'netWorth';
-
 export type PriceHistoryPeriods = Partial<Record<ApiPriceHistoryPeriod, ApiHistoryList>>;
 
 /** Absent while the request is in flight; an entry with neither field means the backend has no info */
@@ -518,7 +516,6 @@ export interface AccountState {
   currentTokenSlug?: string;
   currentActivityId?: string;
   currentTokenPeriod?: TokenPeriod;
-  tokenNetWorthHistory?: Record<string, PriceHistoryPeriods>;
   savedAddresses?: SavedAddress[];
   activeContentTab?: ContentTab;
   activityReturnContentTab?: ContentTab;
@@ -1484,11 +1481,6 @@ export interface ActionPayloads {
   closeInvoiceModal: undefined;
 
   loadPriceHistory: { slug: string; period: ApiPriceHistoryPeriod; currency?: ApiBaseCurrency };
-  loadTokenNetWorthHistory: {
-    slug: string;
-    period: ApiPriceHistoryPeriod;
-    currency?: ApiBaseCurrency;
-  };
   loadTokenDetails: { slug: string };
 
   showIncorrectTimeError: undefined;

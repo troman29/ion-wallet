@@ -142,8 +142,6 @@ export interface ChainConfig {
   nftBatchLimit?: number;
   /** Pause in ms between NFT pagination batches (for NFT-supporting chains) */
   nftBatchPauseMs?: number;
-  /** Whether the chain supports net worth details */
-  isNetWorthSupported: boolean;
   /** Brand color used to represent the chain in charts and other multichain visualizations */
   displayColor: string;
   /** Builds a link to transfer assets in this chain. If not set, the chain won't have the Deposit Link modal. */
@@ -260,7 +258,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     }],
     nftBatchLimit: 500,
     nftBatchPauseMs: 1000,
-    isNetWorthSupported: true,
     formatTransferUrl: formatTonTransferUrl,
   },
   bnb: {
@@ -317,7 +314,6 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       },
       nft: '{base}item/{chain}/{address}',
     }],
-    isNetWorthSupported: false,
     doesSupportPushNotifications: false,
     isNftSupported: true,
   },
