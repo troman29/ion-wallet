@@ -322,20 +322,7 @@ Are you sure you want to disconnect all websites?: Are you sure you want to disc
 Logged in with %app_name%: Logged in with %app_name%
 No active connections: No active connections
 Other: Other
-Portfolio: Portfolio
-Performance, insights and P&L: Performance, insights and P&L
-Overview: Overview
-Total Balance: Total Balance
-Net Change: Net Change
 No data: No data
-Total Value: Total Value
-Tracked asset value over time.: Tracked asset value over time.
-Total P&L: Total P&L
-Daily P&L: Daily P&L
-Portfolio Share: Portfolio Share
-Current allocation across tracked assets.: Current allocation across tracked assets.
-Deep history analysis will be available in upcoming updates.: Deep history analysis will be available in upcoming updates.
-By Chain: By Chain
 No chain balances: No chain balances
 Native: Native
 Stablecoins: Stablecoins
@@ -944,7 +931,6 @@ Unstake %amount%: Unstake %amount%
 Request Unstaking: Request Unstaking
 Confirm Upgrading: Confirm Upgrading
 How does it work?: How does it work?
-Multisend: Multisend
 Renew All: Renew All
 Renew: Renew
 Renew Domain: Renew Domain

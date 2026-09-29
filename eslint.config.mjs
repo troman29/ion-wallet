@@ -21,7 +21,6 @@ export default tseslint.config(
     'headless/',
     'babel.config.js',
     'jest.config.js',
-    'playwright.agent-v2.config.ts',
     'postcss.config.js',
     'coverage',
     'trash',

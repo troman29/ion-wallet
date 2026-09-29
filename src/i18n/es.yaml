@@ -329,20 +329,7 @@ Other: Otros
 No price data: Sin datos de precio
 Price Copied: Precio copiado
 Not staked: No en staking
-Portfolio: Portafolio
-Performance, insights and P&L: Dinámica, perspectivas y P&L
-Overview: Resumen
-Total Balance: Saldo total
-Net Change: Variación de cartera
 No data: Sin datos
-Total Value: Valor total
-Tracked asset value over time.: Valor de los activos seguidos a lo largo del tiempo.
-Total P&L: Ganancias/pérdidas totales
-Daily P&L: Ganancias/pérdidas diarias
-Portfolio Share: Distribución del portafolio
-Current allocation across tracked assets.: Distribución actual entre los activos seguidos.
-Deep history analysis will be available in upcoming updates.: El análisis profundo del historial estará disponible en próximas actualizaciones.
-By Chain: Por red
 No chain balances: Sin balances por red
 Native: Nativo
 Stablecoins: Stablecoins
@@ -945,7 +932,6 @@ Unstake %amount%: Retirar %amount%
 Request Unstaking: Solicitar desestacado
 Confirm Upgrading: Confirmar actualización
 How does it work?: ¿Cómo funciona?
-Multisend: Multienvío
 Renew All: Renovar todo
 Renew: Renovar
 Renew Domain: Renovar dominio

@@ -325,20 +325,7 @@ Other: Diğer
 No price data: Fiyat verisi yok
 Price Copied: Fiyat kopyalandı
 Not staked: Stake edilmemiş
-Portfolio: Portföy
-Performance, insights and P&L: Performans, içgörüler ve K/Z
-Overview: Genel bakış
-Total Balance: Toplam bakiye
-Net Change: Portföy değişimi
 No data: Veri yok
-Total Value: Toplam değer
-Tracked asset value over time.: İzlenen varlıkların zaman içindeki değeri.
-Total P&L: Toplam Kâr/Zarar
-Daily P&L: Günlük Kâr/Zarar
-Portfolio Share: Portföy dağılımı
-Current allocation across tracked assets.: İzlenen varlıklar arasındaki mevcut dağılım.
-Deep history analysis will be available in upcoming updates.: Derin geçmiş analizi gelecek güncellemelerde kullanıma sunulacak.
-By Chain: Ağa göre
 No chain balances: Ağ bakiyesi yok
 Native: Yerel
 Stablecoins: Stablecoinler
@@ -942,7 +929,6 @@ Unstake %amount%: "%amount% unstake et"
 Request Unstaking: Stake Çekme Talebi
 Confirm Upgrading: Yükseltmeyi Onayla
 How does it work?: Nasıl çalışır?
-Multisend: Çoklu Gönder
 Renew All: Tümünü yenile
 Renew: Yenile
 Renew Domain: Alan adını yenile

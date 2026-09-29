@@ -322,20 +322,7 @@ Are you sure you want to disconnect all websites?: آیا مطمئن هستید 
 Logged in with %app_name%: واردشده با %app_name%
 No active connections: هیچ اتصال فعالی وجود ندارد
 Other: سایر
-Portfolio: سبد دارایی‌ها
-Performance, insights and P&L: عملکرد، بینش‌ها و سود و زیان
-Overview: نمای کلی
-Total Balance: موجودی کل
-Net Change: تغییر خالص
 No data: داده‌ای وجود ندارد
-Total Value: ارزش کل
-Tracked asset value over time.: ارزش دارایی پیگیری‌شده در طول زمان.
-Total P&L: سود و زیان کل
-Daily P&L: سود و زیان روزانه
-Portfolio Share: سهم در سبد دارایی‌ها
-Current allocation across tracked assets.: تخصیص فعلی بین دارایی‌های پیگیری‌شده.
-Deep history analysis will be available in upcoming updates.: تحلیل عمیق تاریخچه در به‌روزرسانی‌های آینده در دسترس خواهد بود.
-By Chain: بر اساس زنجیره
 No chain balances: موجودی زنجیره‌ای وجود ندارد
 Native: بومی
 Stablecoins: استیبل‌کوین‌ها
@@ -944,7 +931,6 @@ Unstake %amount%: برداشت استیک %amount%
 Request Unstaking: درخواست برداشت استیک
 Confirm Upgrading: تأیید ارتقا
 How does it work?: چگونه کار می‌کند؟
-Multisend: ارسال گروهی
 Renew All: تمدید همه
 Renew: تمدید
 Renew Domain: تمدید دامنه

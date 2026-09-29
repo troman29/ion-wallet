@@ -325,20 +325,7 @@ Other: อื่นๆ
 No price data: ไม่มีข้อมูลราคา
 Price Copied: คัดลอกราคาแล้ว
 Not staked: ยังไม่ได้สเตก
-Portfolio: พอร์ตโฟลิโอ
-Performance, insights and P&L: ประสิทธิภาพ ข้อมูลเชิงลึก และ P&L
-Overview: ภาพรวม
-Total Balance: ยอดคงเหลือรวม
-Net Change: การเปลี่ยนแปลงมูลค่าพอร์ต
 No data: ไม่มีข้อมูล
-Total Value: มูลค่ารวม
-Tracked asset value over time.: มูลค่าของสินทรัพย์ที่ติดตามตามช่วงเวลา
-Total P&L: กำไร/ขาดทุนรวม
-Daily P&L: กำไร/ขาดทุนรายวัน
-Portfolio Share: สัดส่วนพอร์ต
-Current allocation across tracked assets.: การกระจายปัจจุบันของสินทรัพย์ที่ติดตาม
-Deep history analysis will be available in upcoming updates.: การวิเคราะห์ประวัติเชิงลึกจะพร้อมใช้งานในการอัปเดตถัดไป
-By Chain: ตามเชน
 No chain balances: ไม่มียอดคงเหลือตามเชน
 Native: เนทีฟ
 Stablecoins: สเตเบิลคอยน์
@@ -942,7 +929,6 @@ Unstake %amount%: เลิกเดิมพัน %amount%
 Request Unstaking: ขอถอนการวางเดิมพัน
 Confirm Upgrading: ยืนยันการอัปเกรด
 How does it work?: ทำงานอย่างไร?
-Multisend: ส่งหลายรายการ
 Renew All: ต่ออายุทั้งหมด
 Renew: ต่ออายุ
 Renew Domain: ต่ออายุโดเมน

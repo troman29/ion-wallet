@@ -331,20 +331,7 @@ Other: Другие
 No price data: Нет данных о цене
 Price Copied: Цена скопирована
 Not staked: Не в стейкинге
-Portfolio: Портфель
-Performance, insights and P&L: Динамика, аналитика и P&L
-Overview: Обзор
-Total Balance: Общий баланс
-Net Change: Изменение стоимости портфеля
 No data: Нет данных
-Total Value: Общая стоимость
-Tracked asset value over time.: Стоимость отслеживаемых активов во времени.
-Total P&L: Общий P&L
-Daily P&L: P&L за сутки
-Portfolio Share: Структура портфеля
-Current allocation across tracked assets.: Текущее распределение отслеживаемых активов.
-Deep history analysis will be available in upcoming updates.: Глубокий анализ истории появится в следующих обновлениях.
-By Chain: По сетям
 No chain balances: Нет балансов по сетям
 Native: Нативные
 Stablecoins: Стейблкоины
@@ -956,7 +943,6 @@ Unstake %amount%: Вывести %amount%
 Request Unstaking: Запросить вывод
 Confirm Upgrading: Подтвердить улучшение
 How does it work?: Как это работает?
-Multisend: Мультиотправка
 Renew All: Продлить все
 Renew: Продлить
 Renew Domain: Продлить домен

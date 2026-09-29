@@ -322,20 +322,7 @@ Other: 其他的
 No price data: 暂无价格数据
 Price Copied: 价格已复制
 Not staked: 未质押
-Portfolio: 投资组合
-Performance, insights and P&L: 动态、洞察与盈亏
-Overview: 概览
-Total Balance: 总余额
-Net Change: 组合净变动
 No data: 暂无数据
-Total Value: 总价值
-Tracked asset value over time.: 跟踪资产价值随时间的变化。
-Total P&L: 总盈亏
-Daily P&L: 每日盈亏
-Portfolio Share: 投资组合占比
-Current allocation across tracked assets.: 当前跟踪资产的分配情况。
-Deep history analysis will be available in upcoming updates.: 深度历史分析将在后续更新中提供。
-By Chain: 按链
 No chain balances: 暂无链余额
 Native: 原生
 Stablecoins: 稳定币
@@ -937,7 +924,6 @@ Unstake %amount%: 解除质押 %amount%
 Request Unstaking: 申请取消质押
 Confirm Upgrading: 确认升级
 How does it work?: 它是如何运作的？
-Multisend: 批量发送
 Renew All: 全部续费
 Renew: 续费
 Renew Domain: 续费域名

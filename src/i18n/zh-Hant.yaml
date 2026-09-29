@@ -322,20 +322,7 @@ Other: 其他的
 No price data: 暫無價格資料
 Price Copied: 價格已複製
 Not staked: 未質押
-Portfolio: 投資組合
-Performance, insights and P&L: 動態、洞察與盈虧
-Overview: 概覽
-Total Balance: 總餘額
-Net Change: 組合淨變動
 No data: 暫無資料
-Total Value: 總價值
-Tracked asset value over time.: 追蹤資產價值隨時間的變化。
-Total P&L: 總盈虧
-Daily P&L: 每日盈虧
-Portfolio Share: 投資組合佔比
-Current allocation across tracked assets.: 目前追蹤資產的配置情況。
-Deep history analysis will be available in upcoming updates.: 深度歷史分析將在後續更新中提供。
-By Chain: 按鏈
 No chain balances: 暫無鏈餘額
 Native: 原生
 Stablecoins: 穩定幣
@@ -937,7 +924,6 @@ Unstake %amount%: 解除質押 %amount%
 Request Unstaking: 申請取消質押
 Confirm Upgrading: 確認升級
 How does it work?: 它是如何運作的？
-Multisend: 批量發送
 Renew All: 全部續費
 Renew: 續費
 Renew Domain: 續費域名

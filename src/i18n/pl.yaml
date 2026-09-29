@@ -331,20 +331,7 @@ Other: Inne
 No price data: Brak danych o cenie
 Price Copied: Cena skopiowana
 Not staked: Nie w stakingu
-Portfolio: Portfolio
-Performance, insights and P&L: Dynamika, spostrzeżenia i P&L
-Overview: Przegląd
-Total Balance: Łączne saldo
-Net Change: Zmiana wartości portfela
 No data: Brak danych
-Total Value: Łączna wartość
-Tracked asset value over time.: Wartość śledzonych aktywów w czasie.
-Total P&L: Łączny zysk/strata
-Daily P&L: Dzienny zysk/strata
-Portfolio Share: Udział w portfolio
-Current allocation across tracked assets.: Aktualny podział śledzonych aktywów.
-Deep history analysis will be available in upcoming updates.: Dogłębna analiza historii będzie dostępna w kolejnych aktualizacjach.
-By Chain: Według sieci
 No chain balances: Brak sald według sieci
 Native: Natywne
 Stablecoins: Stablecoiny
@@ -957,7 +944,6 @@ Unstake %amount%: Wycofać %amount%
 Request Unstaking: Żądaj odblokowania
 Confirm Upgrading: Potwierdź ulepszenie
 How does it work?: Jak to działa?
-Multisend: Multiwysyłka
 Renew All: Odnów wszystkie
 Renew: Odnów
 Renew Domain: Odnów domenę

@@ -324,20 +324,7 @@ Are you sure you want to disconnect all websites?: هل أنت متأكد أنك
 Logged in with %app_name%: تم تسجيل الدخول باستخدام %app_name%
 No active connections: لا توجد اتصالات نشطة
 Other: آخر
-Portfolio: مَلَفّ
-Performance, insights and P&L: الأداء والرؤى والأرباح والخسائر
-Overview: ملخص
-Total Balance: الرصيد الإجمالي
-Net Change: صافي التغيير
 No data: لا توجد بيانات
-Total Value: القيمة الإجمالية
-Tracked asset value over time.: تتبع قيمة الأصول مع مرور الوقت.
-Total P&L: إجمالي الربح والخسارة
-Daily P&L: الربح والخسارة اليومية
-Portfolio Share: حصة المحفظة
-Current allocation across tracked assets.: التخصيص الحالي عبر الأصول المتعقبة.
-Deep history analysis will be available in upcoming updates.: سيكون تحليل التاريخ العميق متاحًا في التحديثات القادمة.
-By Chain: بواسطة السلسلة
 No chain balances: لا أرصدة السلسلة
 Native: محلي
 Stablecoins: العملات المستقرة
@@ -925,7 +912,6 @@ Unstake %amount%: إلغاء تثبيت %amount%
 Request Unstaking: طلب غير ثابت
 Confirm Upgrading: تأكيد الترقية
 How does it work?: كيف يعمل؟
-Multisend: إرسال متعدد
 Renew All: تجديد الكل
 Renew: تجديد
 Renew Domain: تجديد المجال

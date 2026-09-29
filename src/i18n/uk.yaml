@@ -331,18 +331,7 @@ Other: Інші
 No price data: Немає даних про ціну
 Price Copied: Ціну скопійовано
 Not staked: Не в стейкінгу
-Portfolio: Портфель
-Performance, insights and P&L: Динаміка, аналітика і P&L
-Overview: Огляд
-Total Balance: Загальний баланс
-Net Change: Зміна вартості портфеля
 No data: Немає даних
-Total Value: Загальна вартість
-Tracked asset value over time.: Вартість відстежуваних активів у часі.
-Portfolio Share: Структура портфеля
-Current allocation across tracked assets.: Поточний розподіл відстежуваних активів.
-Deep history analysis will be available in upcoming updates.: Глибокий аналіз історії з’явиться в наступних оновленнях.
-By Chain: За мережами
 No chain balances: Немає балансів за мережами
 Native: Нативні
 Stablecoins: Стейблкоїни
@@ -953,7 +942,6 @@ Unstake %amount%: Вивести %amount%
 Request Unstaking: Запросити виведення
 Confirm Upgrading: Підтвердити оновлення
 How does it work?: Як це працює?
-Multisend: Мультинадсилання
 Renew All: Продовжити все
 Renew: Продовжити
 Renew Domain: Продовжити домен
@@ -1703,8 +1691,6 @@ $more_nfts:
 $subwallets_hint: Використовуйте субгаманці для отримання додаткових адрес без створення нових секретних слів.
 $subwallets_created_wallets: Якщо ви раніше створювали субгаманці, вони з'являться у списку нижче.
 $subwallets_none: Субгаманців поки немає.
-Daily P&L: Денний P&L
-Total P&L: Загальний P&L
 Limited history: Обмежена історія
 Tracked asset value over time: Вартість відстежуваних активів з часом
 Cumulative profit and loss over time: Сукупні прибутки та збитки з часом
