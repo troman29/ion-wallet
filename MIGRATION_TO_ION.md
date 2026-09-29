@@ -19,7 +19,7 @@
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
 | ION API и инфраструктура | ◐ | Runtime URL переведены на `wallet.ice.io`; в предпросмотре подключён ION RPC v2. Полноценного совместимого v3 indexer пока нет. Firebase использует безопасную заглушку до получения настоящих ключей. |
 | Agent | ✅ | Удалены оставшиеся ключи storage и локализаций, CI-задачи, иконки, анимации, CSS и комментарии. |
-| iOS-проект | ◐ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install` и `cap sync ios` проходят. Осталось проверить сборку на симуляторе или устройстве. |
+| iOS-проект | ✅ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install`, `cap sync ios` и сборка всех трёх схем для generic iOS Simulator проходят. |
 
 ## Решения, которые уже приняты
 
@@ -61,9 +61,10 @@
   - Удалены Fragment collections, NFT-меню, marketplace-метаданные и тестовые trace fixtures; Notcoin voucher exchange/burn flow; Ethena USDe/tsUSDe staking, контракты, backend-модели, activity parsing, интерфейс и локализации.
   - Обычные NFT, общий burn NFT, liquid staking и jetton staking сохранены.
 
-- [ ] **Проверить iOS Capacitor-проект.**
+- [x] **Проверить сборку iOS Capacitor-проекта.**
   - Удалены Air package products, `AirWidgetExtension`, Air-only target и ссылки на удалённые файлы.
-  - Проверить открытие проекта, `cap sync ios`, сборку и запуск на симуляторе или устройстве.
+  - Workspace разрешает зависимости; после `cap sync ios` собраны `IONWallet`, `IONWallet_NoExtensions` и `IONWallet_Preview` для generic iOS Simulator с отключённым code signing.
+  - Запуск на симуляторе или устройстве остаётся ручной проверкой из P2.
 
 - [ ] **Закрыть вопрос с ION activity API.**
   - ION RPC v2 отвечает на JSON-RPC вызовы и подходит для базовых операций.
@@ -130,7 +131,7 @@
 
 - Предпросмотр на Home Lab уже умеет проксировать ION RPC v2. В нём также устранены утечка basic-auth заголовка в upstream и ошибочный SPA fallback для отсутствующих API.
 - У ION пока нет совместимого v3 indexer. Без решения этого вопроса история операций не может считаться готовой.
-- Android: `:app:assembleIonwalletProdDebug` проходит с Firebase-заглушкой. iOS: `cap sync ios --deployment` и `pod install` проходят; полноценная Xcode-сборка всё ещё требует установленный iOS runtime или подключённое устройство.
+- Android: `:app:assembleIonwalletProdDebug` проходит с Firebase-заглушкой. iOS: `cap sync ios --deployment`, `pod install` и Xcode-сборка всех рабочих схем проходят; запуск требует совместимого iOS runtime или подключённого устройства.
 - В текущем checkout нет файла `AGENTS.md`. Запрошенная зачистка Agent относится к остаткам функциональности в коде и CI, перечисленным выше.
 
 ## Как обновлять план

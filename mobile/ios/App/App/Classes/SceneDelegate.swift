@@ -12,7 +12,7 @@ final class SceneDelegate: UIResponder, UISceneDelegate, UIWindowSceneDelegate {
         }
 
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = MTWCapacitorVC()
+        window.rootViewController = CAPBridgeViewController()
         window.makeKeyAndVisible()
         self.window = window
 

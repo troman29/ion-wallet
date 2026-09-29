@@ -19,7 +19,9 @@ final class IONWalletApp: UIApplication {
             return
         }
         #if canImport(Capacitor)
-        guard let vc = UIApplication.shared.sceneKeyWindow?.rootViewController as? CAPBridgeViewController else {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+              let vc = window.rootViewController as? CAPBridgeViewController else {
             return
         }
         lastTouchEventTimestamp = now
