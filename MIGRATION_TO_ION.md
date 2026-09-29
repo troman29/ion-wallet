@@ -8,7 +8,7 @@
 
 ## Текущее состояние
 
-Рабочая ветка: `ion/restore-capacitor`. Статус фиксируется вместе с каждым блоком миграции.
+Рабочая ветка фиксируется в текущем PR. Статус обновляется вместе с каждым блоком миграции.
 
 | Область | Статус | Что сделано |
 | --- | --- | --- |
@@ -72,8 +72,15 @@
   - Нужен совместимый ION v3 endpoint либо отдельная адаптация слоя активности. Подмена nginx не решает проблему.
 
 - [ ] **Убрать зависимость preview от MyTonWallet backend.**
-  - Проверить все запросы, которые ещё идут через `/api/` к MyTonWallet.
-  - Для каждого выбрать ION-аналог, собственный сервис или осознанно удалить функцию.
+  - На 2026-09-29 `api.wallet.ice.io` не резолвится из среды сборки; fallback в `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` нельзя считать работающей ION-инфраструктурой.
+  - Утвердить ION endpoint либо осознанно убрать зависимые функции, сгруппированные по назначению:
+    - кошелёк и безопасность: `/assets`, `POST /assets`, `/currency-rates`, `/known-addresses`, `/account-config`, `/utils/get-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`;
+    - каталог и рынок: `/v2/dapp/catalog`, `/market/assets`, `/prices/chart/*`, `/portfolio/net-worth-by-asset`;
+    - swap: `/swap/*` и история swap; отдельного ION-провайдера пока нет;
+    - staking и DNS: `/staking/*`, `/dns/getDomains` — требуют утверждённых ION контрактов и indexer;
+    - уведомления и live-обновления: `/notifications/*`, WebSocket `/{testnet/}ws`;
+    - proxy: `/proxy/download-json` и `/proxy/download-lottie` для внешних метаданных и анимаций.
+  - После решения проверить, что все runtime запросы к backend идут к утверждённому ION-сервису, а не к MyTonWallet; сами GitHub forks в `package.json` остаются закреплёнными исходниками зависимостей до появления ION forks.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 
