@@ -28,7 +28,7 @@ function AccentColorSelector({ accentColorIndex, theme }: OwnProps) {
   });
 
   return (
-    <div className={styles.colors}>
+    <div className={styles.colorList}>
       <button
         type="button"
         disabled={accentColorIndex === undefined}
