@@ -179,11 +179,13 @@ describe('auth setup over existing storage', () => {
   it('says the password is wrong when it does not open the existing auth', async () => {
     stubStorage({ authType: 'passcode', hasSecrets: true });
     (enclave.authorize as jest.Mock).mockResolvedValue(undefined);
+    const actions = { createAccount: jest.fn(), showError: jest.fn() };
 
-    const result = await createPassword();
+    const result = await createPassword(actions);
 
     expect(result.auth.error).toBe('Wrong password, please try again.');
     expect(result.auth.isLoading).toBe(false);
+    expect(actions.showError).toHaveBeenCalledWith({ error: 'Wrong password, please try again.' });
   });
 
   // An auth left behind by a setup that never imported anything guards nothing, and asking for the

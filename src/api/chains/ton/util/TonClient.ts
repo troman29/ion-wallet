@@ -53,7 +53,7 @@ export class TonClient {
 
   async sendFile(src: Buffer | string): Promise<void> {
     const boc = typeof src === 'object' ? src.toString('base64') : src;
-    await this.callRpc('sendBocReturnHashNoError', { boc });
+    await this.callRpc('sendBoc', { boc });
   }
 
   async sendRequest(apiUrl: string, request: any) {
