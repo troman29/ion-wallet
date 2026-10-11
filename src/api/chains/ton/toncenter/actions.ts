@@ -203,7 +203,8 @@ function parseAction(action: AnyAction, options: ParseOptions): ParsedAction {
   };
 
   switch (action.type) {
-    case 'ton_transfer': {
+    case 'ton_transfer':
+    case 'ion_transfer': {
       result = parseTonTransfer(action, options);
       break;
     }
@@ -601,7 +602,7 @@ function parseStakeWithdrawal(action: StakeWithdrawalAction, options: ParseOptio
     ...parseCommonFields(action, fixedOptions, pool, holder, amount),
     slug: TONCOIN.slug,
     type: 'unstake',
-    shouldLoadDetails: details.provider === 'tonstakers' && !details.payout_nft,
+    shouldLoadDetails: details.provider === 'ionstakers' && !details.payout_nft,
   };
 
   return {
