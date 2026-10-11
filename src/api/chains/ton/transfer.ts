@@ -25,6 +25,7 @@ import type { Signer } from './util/signer';
 import type { TonWallet } from './util/tonCore';
 import { ApiTransactionDraftError, ApiTransactionError } from '../../types';
 
+import { NO_TRACE_EMULATION } from '../../../config';
 import { raceWithAbortSignal, throwIfAborted } from '../../../util/abortSignal';
 import { parseAccountId } from '../../../util/account';
 import { bigintMultiplyToNumber } from '../../../util/bigint';
@@ -960,12 +961,14 @@ async function emulateTransactionWithFallback(
   isInitialized?: boolean,
   signal?: AbortSignal,
 ): Promise<ApiEmulationWithFallbackResult> {
-  try {
-    const emulation = await emulateTransaction(network, wallet, transaction, isInitialized, signal);
-    return { isFallback: false, ...emulation };
-  } catch (err) {
-    throwIfAborted(signal);
-    logDebugError('Failed to emulate a transaction', err);
+  if (!NO_TRACE_EMULATION) {
+    try {
+      const emulation = await emulateTransaction(network, wallet, transaction, isInitialized, signal);
+      return { isFallback: false, ...emulation };
+    } catch (err) {
+      throwIfAborted(signal);
+      logDebugError('Failed to emulate a transaction', err);
+    }
   }
 
   // Falling back to the legacy fee estimation method just in case.

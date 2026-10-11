@@ -312,6 +312,8 @@ addActionHandler('createPassword', async (global, actions, { password, isNumeric
     global = getGlobal();
     global = updateAuth(global, { isLoading: false, error });
     setGlobal(global);
+    // The password screen does not render `auth.error`
+    actions.showError({ error });
   }
 });
 
