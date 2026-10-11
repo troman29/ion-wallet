@@ -14,8 +14,6 @@
 }
 
 .colorButton {
-  --spinner-size: 1.25rem;
-
   cursor: var(--custom-cursor, pointer);
 
   display: flex;
@@ -41,15 +39,4 @@
   pointer-events: none;
   border-color: var(--color-background-first);
   outline: 0.125rem solid var(--current-accent-color, var(--color-default-accent));
-}
-
-.iconLock {
-  font-size: 1.25rem;
-  line-height: 1;
-  color: var(--color-card-second-text);
-  opacity: 0.6;
-}
-
-.iconLockInverted {
-  color: #000;
 }
