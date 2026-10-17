@@ -1,6 +1,4 @@
-$auth_intro: |
-  دارایی‌های رمزارزی را **به‌صورت امن** ذخیره کنید و پرداخت‌های بلاک‌چینی را
-  **با سرعت نور** انجام دهید.
+$auth_intro: "ION را در ION Network و BNB Chain مدیریت کنید."
 Create New Wallet: ساخت کیف پول جدید
 Import From %count% Secret Words: افزودن با %count% کلمه محرمانه
 More about %app_name%: اطلاعات بیشتر درباره %app_name%
@@ -83,8 +81,8 @@ Remove Wallets: حذف کیف پول‌ها
 Something went wrong.: مشکلی پیش آمد.
 Something went wrong: مشکلی پیش آمد
 Logo: لوگو
-$about_description1: دارایی‌های رمزارزی را به‌صورت امن ذخیره کنید، اپلیکیشن‌های غیرمتمرکز را کاوش کنید و پرداخت‌های بلاک‌چینی را **با سرعت نور** انجام دهید.
-$about_description2: این کیف پول **غیرامانی و امن** است. توسعه‌دهندگان به دارایی‌ها، تاریخچه مرورگر یا هیچ اطلاعات دیگر شما دسترسی **ندارند**.
+$about_description1: "ION را در ION Network و BNB Chain مدیریت کنید."
+$about_description2: "کلیدهای شما در دستگاهتان باقی می‌مانند. عبارت بازیابی خود را محرمانه نگه دارید."
 What is TON Proxy?: پروکسی TON چیست؟
 $about_extension_description1: پروکسی TON با امکان دسترسی ناشناس به سایت‌های TON، راهی به سوی **اینترنت غیرمتمرکز** باز می‌کند.
 More info and demo.: اطلاعات بیشتر و دموی نمایشی.

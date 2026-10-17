@@ -1,10 +1,10 @@
-import { ACTIVE_TAB_STORAGE_KEY } from '../config';
+import { ACTIVE_TAB_STORAGE_KEY, LEGACY_ACTIVE_TAB_STORAGE_KEY } from '../config';
 
 export type LocalStorageEntry = readonly [key: string, value: string];
 
 export function getRestorableLocalStorageEntries(localStorage: Record<string, any>): LocalStorageEntry[] {
   return Object.entries(localStorage)
-    .filter(([key]) => key !== ACTIVE_TAB_STORAGE_KEY)
+    .filter(([key]) => key !== ACTIVE_TAB_STORAGE_KEY && key !== LEGACY_ACTIVE_TAB_STORAGE_KEY)
     .map(([key, value]) => [key, String(value)] as const);
 }
 

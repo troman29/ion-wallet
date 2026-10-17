@@ -11,7 +11,7 @@ import styles from './ImageWithParticles.module.scss';
 
 export const PARTICLE_HEIGHT = 12.75 * REM;
 export const PARTICLE_LANDSCAPE_HEIGHT = 14.625 * REM;
-export const PARTICLE_COLORS_GREEN = [30 / 255, 193 / 255, 96 / 255] as [number, number, number]; // #1EC160
+export const PARTICLE_COLORS_ION = [139 / 255, 124 / 255, 224 / 255] as [number, number, number]; // #8B7CE0
 
 interface OwnProps {
   imgPath: string;

@@ -69,10 +69,10 @@ export function openWalletConnectPage(connector: TonConnect, walletInfo: WalletI
   }
 }
 
-export async function handleTonConnectButtonClick(tonConnect: TonConnect, mtwWalletInfo: WalletInfoRemote) {
+export async function handleTonConnectButtonClick(tonConnect: TonConnect, walletInfo: WalletInfoRemote) {
   if (tonConnect.connected) await tonConnect.disconnect();
 
-  openWalletConnectPage(tonConnect, mtwWalletInfo);
+  openWalletConnectPage(tonConnect, walletInfo);
 }
 
 export async function sendTransaction(tonConnect: TonConnect, options: SendTxOptions) {

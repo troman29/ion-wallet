@@ -12,7 +12,6 @@
   <string name="app_terms_of_use_url" translatable="false">https://wallet.ice.io/terms-of-use</string>
   <string name="app_privacy_policy_url" translatable="false">https://wallet.ice.io/privacy-policy</string>
   <string name="app_install_url" translatable="false">https://wallet.ice.io/android-store?utm_source=app_share</string>
-  <string name="bot_username" translatable="false">ION WalletBot</string>
   <string name="app_help_url" translatable="false">https://help.wallet.ice.io</string>
   <string name="app_help_scam_url_en" translatable="false">https://help.wallet.ice.io/intro/scams/leaked-seed-phrases</string>
   <string name="app_help_scam_url_ru" translatable="false">https://help.wallet.ice.io/ru/baza-znanii/moshennichestvo-i-skamy/slitye-sid-frazy</string>

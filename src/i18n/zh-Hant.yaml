@@ -1,6 +1,4 @@
-$auth_intro: |
-  **安全的**儲存加密貨幣，
-  並享有**光速的**區塊鏈支付速度。
+$auth_intro: "在 ION Network 和 BNB Chain 上管理 ION。"
 Create New Wallet: 創建新錢包
 Import From %count% Secret Words: 輸入 %count% 個註記詞
 More about %app_name%: 更多關於 %app_name%
@@ -84,8 +82,8 @@ Remove Wallets: 移除所有錢包
 Something went wrong.: 狀況異常。
 Something went wrong: 狀況異常
 Logo: Logo
-$about_description1: 安全地存儲加密貨幣、探索應用並以**光速**進行區塊鏈支付
-$about_description2: 錢包是**非託管且安全的**。開發人員無權使用您的資金、瀏覽器歷史記錄或任何其他資訊
+$about_description1: "在 ION Network 和 BNB Chain 上管理 ION。"
+$about_description2: "金鑰保存在您的裝置上。請勿向任何人透露復原助記詞。"
 What is TON Proxy?: 什麼是 TON Proxy?
 $about_extension_description1: TON Proxy 支援匿名訪問 TON Site ，這開啟了通往**去中心化網路**的新篇章
 More info and demo.: 更多資訊和範例.

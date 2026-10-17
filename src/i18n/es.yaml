@@ -1,7 +1,4 @@
-$auth_intro: |
-  **De forma segura** almacene criptomonedas
-  y realice pagos blockchain
-  a la **velocidad de la luz**.
+$auth_intro: "Gestiona ION en ION Network y BNB Chain."
 Create New Wallet: Crear un monedero nuevo
 Import From %count% Secret Words: Importar usando %count% palabras secretas
 More about %app_name%: Más sobre %app_name%
@@ -84,8 +81,8 @@ Remove Wallets: Eliminar billeteras
 Something went wrong.: Oops! Algo salió mal.
 Something went wrong: Oops! Algo salió mal
 Logo: Logotipo
-$about_description1: Almacene criptomonedas de forma segura, explore aplicaciones descentralizadas y realice pagos blockchain a la **velocidad de la luz**.
-$about_description2: Un monedero **sin custodia y seguro**. Los desarrolladores **no** tienen acceso a sus activos, historial del navegador o cualquier otra información.
+$about_description1: "Gestiona ION en ION Network y BNB Chain."
+$about_description2: "Tus claves permanecen en tu dispositivo. Mantén tu frase de recuperación en privado."
 What is TON Proxy?: ¿Qué es el TON Proxy?
 $about_extension_description1: TON Proxy abre un camino al **Internet descentralizado** al permitir acceder anónimamente a TON Sites.
 More info and demo.: Más información y demo.

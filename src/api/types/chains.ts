@@ -315,7 +315,7 @@ export interface ChainSdk<T extends ApiChain> {
   }) => Promise<ApiSubmitNftTransferResult>;
 
   /**
-   * Checks ownership of NFT, currently used in MW NFT-cards flow
+   * Checks ownership of NFT, currently used in wallet NFT-cards flow
    */
   checkNftOwnership: (accountId: string, nftAddress: string) => Promise<boolean>;
 

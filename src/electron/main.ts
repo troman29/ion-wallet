@@ -6,13 +6,13 @@ import { IS_PRODUCTION } from '../config';
 import { setupApplicationMenu } from './app-menu';
 import { initDeeplink } from './deeplink';
 import { setupSecrets } from './secrets';
-import { IS_LINUX, IS_MAC_OS, MTW_GTK_VERSION } from './utils';
+import { ION_GTK_VERSION, IS_LINUX, IS_MAC_OS } from './utils';
 import { setupWalletConnectPayCollectHandlers } from './walletConnectPayCollect';
 import { createWindow, setupCloseHandlers, setupElectronActionHandlers } from './window';
 
 // Must be set before app is ready
 if (IS_LINUX) {
-  app.commandLine.appendSwitch('gtk-version', MTW_GTK_VERSION);
+  app.commandLine.appendSwitch('gtk-version', ION_GTK_VERSION);
   if (process.env.XDG_SESSION_TYPE === 'wayland' || process.env.WAYLAND_DISPLAY) {
     app.commandLine.appendSwitch('enable-features', 'UseOzonePlatform');
     app.commandLine.appendSwitch('ozone-platform', 'wayland');

@@ -1,7 +1,7 @@
 {
   "name": "ion-wallet",
   "version": "26.9.0",
-  "description": "The most feature-rich web wallet and browser extension for TON – with support of multi-accounts, tokens (jettons), NFT, TON DNS, TON Sites, TON Proxy, and TON Magic.",
+  "description": "Self-custodial ION Wallet for ION Network and BNB Chain.",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env APP_ENV=development webpack serve --mode development",
@@ -43,7 +43,9 @@
     "i18n:build:default": "node ./dev/locales/buildDefault.js",
     "i18n:build:android": "node ./dev/locales/buildAndroidResources.js",
     "i18n:update": "node ./dev/locales/updateLocales.js",
-    "i18n:find-missing": "node ./dev/locales/findMissingKeys.js"
+    "i18n:find-missing": "node ./dev/locales/findMissingKeys.js",
+    "build:branding": "node dev/branding/generate.mjs .",
+    "check:branding": "node dev/branding/verify.cjs"
   },
   "engines": {
     "node": "^22.6 || ^24",
@@ -139,6 +141,7 @@
     "sass": "1.89.0",
     "sass-loader": "16.0.5",
     "script-loader": "0.7.2",
+    "sharp": "0.35.5",
     "source-map": "0.7.4",
     "stylelint": "16.19.1",
     "stylelint-config-clean-order": "7.0.0",

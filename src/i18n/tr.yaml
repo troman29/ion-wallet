@@ -1,7 +1,4 @@
-$auth_intro: |
-  Kriptolarınızı **güvenle** saklayın
-  ve blockchain ödemelerinizi
-  **ışık hızında** gerçekleştirin.
+$auth_intro: "ION Network ve BNB Chain üzerinde ION yönetin."
 Create New Wallet: Yeni cüzdan oluşturun
 Import From %count% Secret Words: "%count% Gizli Kelimeyi içe aktarın"
 More about %app_name%: "%app_name% hakkında daha fazla bilgi"
@@ -84,8 +81,8 @@ Remove Wallets: Cüzdanları kaldırın
 Something went wrong.: Bir şeyler ters gitti.
 Something went wrong: Bir şeyler ters gitti
 Logo: Logo
-$about_description1: Kriptoyu güvenle saklayın, merkeziyetsiz uygulamaları keşfedin ve **ışık hızında** blok zinciri ödemeleri yapın.
-$about_description2: Cüzdan **non-custodial ve güvenli** bir cüzdandır. Geliştiricilerin paranıza, tarayıcı geçmişinize veya diğer bilgilerinize erişimi **yoktur**.
+$about_description1: "ION Network ve BNB Chain üzerinde ION yönetin."
+$about_description2: "Anahtarlarınız cihazınızda kalır. Kurtarma ifadenizi gizli tutun."
 What is TON Proxy?: TON Proxy nedir?
 $about_extension_description1: TON Proxy, TON Sitelerine anonim şekilde erişmeolanağı sağlayarak **merkeziyetsizleştirilmiş internetin** yolunu açar.
 More info and demo.: Daha fazla bilgi ve demo.

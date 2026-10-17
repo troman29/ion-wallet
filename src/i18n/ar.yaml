@@ -1,6 +1,4 @@
-$auth_intro: |-
-  خزّن العملات المشفرة **بأمان** ونفّذ مدفوعات
-  البلوكتشين **بسرعة الضوء**.
+$auth_intro: "أدِر ION على ION Network وBNB Chain."
 Create New Wallet: إنشاء محفظة جديدة
 Import From %count% Secret Words: استيراد من %count% عبارة استرداد
 More about %app_name%: المزيد عن %app_name%
@@ -80,8 +78,8 @@ Remove Wallets: إزالة المحافظ
 Something went wrong.: حدث خطأ ما.
 Something went wrong: حدث خطأ ما
 Logo: الشعار
-$about_description1: قم بتخزين العملات المشفرة بشكل آمن، واستكشف التطبيقات اللامركزية، وقم بإجراء مدفوعات blockchain بسرعة **سرعة الضوء**.
-$about_description2: المحفظة **غير احتجازية وآمنة**. المطورون **لا يملكون** حق الوصول إلى أموالك أو سجل التصفح أو أي معلومات أخرى.
+$about_description1: "أدِر ION على ION Network وBNB Chain."
+$about_description2: "تبقى مفاتيحك على جهازك. حافظ على سرية عبارة الاسترداد."
 What is TON Proxy?: ما هو TON Proxy؟
 $about_extension_description1: يفتح TON Proxy طريقة **للإنترنت اللامركزي** من خلال السماح بالوصول المجهول إلى TON Sites.
 More info and demo.: مزيد من المعلومات والعرض التوضيحي.

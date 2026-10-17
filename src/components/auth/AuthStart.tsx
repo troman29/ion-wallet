@@ -47,6 +47,8 @@ const PARTICLE_PARAMS: Partial<ParticleConfig> = {
   width: 20.125 * REM,
   height: 12.75 * REM,
   particleCount: 35,
+  shape: 'ion',
+  baseSize: 18,
   centerShift: [0, 22] as const,
   distanceLimit: 0.75,
 };

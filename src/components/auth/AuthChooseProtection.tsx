@@ -13,7 +13,7 @@ import useLastCallback from '../../hooks/useLastCallback';
 
 import Button from '../ui/Button';
 import ImageWithParticles, {
-  PARTICLE_COLORS_GREEN,
+  PARTICLE_COLORS_ION,
   PARTICLE_HEIGHT,
   PARTICLE_LANDSCAPE_HEIGHT,
 } from '../ui/ImageWithParticles';
@@ -53,16 +53,20 @@ const AuthChooseProtection = ({ isActive, isLoading, isImporting }: OwnProps) =>
     if (!isActive) return;
 
     return setupParticles(canvasRef.current!, {
-      color: PARTICLE_COLORS_GREEN,
+      color: PARTICLE_COLORS_ION,
       ...PARTICLE_PARAMS,
+      shape: 'ion',
+      baseSize: 18,
       height: isLandscape ? PARTICLE_LANDSCAPE_HEIGHT : PARTICLE_HEIGHT,
     });
   }, [isActive, isLandscape]);
 
   const handleParticlesClick = useLastCallback(() => {
     setupParticles(canvasRef.current!, {
-      color: PARTICLE_COLORS_GREEN,
+      color: PARTICLE_COLORS_ION,
       ...PARTICLE_PARAMS,
+      shape: 'ion',
+      baseSize: 18,
       ...PARTICLE_BURST_PARAMS,
       height: isLandscape ? PARTICLE_LANDSCAPE_HEIGHT : PARTICLE_HEIGHT,
     });
