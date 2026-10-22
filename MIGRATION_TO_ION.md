@@ -8,22 +8,24 @@
 
 ## Текущее состояние
 
-Рабочая ветка фиксируется в текущем PR. Статус обновляется вместе с каждым блоком миграции.
+Состояние сверено с актуальным `master` (`3e2675ddf`, PR #28): основной набор ION-графики заменён; текущие статусы и оставшаяся работа приведены в [реестре ресурсов](REBRANDING_RESOURCE_REGISTRY.md). Повторно прошла только проверка `npm run check:branding`; описанные ниже сборки и UI-проверки относятся к предыдущим этапам.
+
+`ApiChain` содержит `ton` и `bnb`; внутренний ID `ton` обслуживает сеть ION. Остаются TON explorer/marketplace переходы в `src/util/chain.ts` и NFT UI.
 
 | Область | Статус | Что сделано |
 | --- | --- | --- |
 | Capacitor | ✅ | Восстановлены мобильные Android/iOS-обёртки Capacitor. Старое нативное Air-приложение удалено. |
 | Лишние продукты | ◐ | Удалены Portfolio, включая token net worth graph и его backend endpoint, а также POST-запрос ассетов и экран расширенной информации токена; Multisend, MyCoin и его vesting, nominator staking, покупка и продажа за банковские карты. Giveaway и модуль My Wallet Cards удалены; обычные карточки аккаунтов и палитры остаются. |
-| Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена только BNB Chain; из токенов BNB оставлен только ION. |
+| Сети | ✅ | Удалены Tron и Solana. Из EVM оставлена BNB Chain с ION BEP-20 и нативным BNB для газа. Внутренний ID сети ION — `ton`. |
 | Бренды и Explorer | ◐ | Удалены Gram Wallet и его iOS widget extension. Переименованы web/npm, Android и iOS targets, desktop-артефакты, package IDs, ION Gateway/EIP-6963 identifiers и основные deep link-схемы в ION Wallet. |
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
-| ION API и инфраструктура | ◐ | Runtime URL переведены на `wallet.ice.io`; в предпросмотре подключён ION RPC v2. ION v3 indexer совместим, кошельку нужен свой прокси Toncenter. Firebase использует безопасную заглушку до получения настоящих ключей. |
+| ION API и инфраструктура | ◐ | Клиент настроен на прямые ION indexer `/indexer/v3` и RPC `/http/v2/jsonRPC`. Deployment и end-to-end проверка wallet backend остаются открытыми. Firebase использует заглушки. |
 | Agent | ✅ | Удалены оставшиеся ключи storage и локализаций, CI-задачи, иконки, анимации, CSS и комментарии. |
 | iOS-проект | ✅ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install`, `cap sync ios` и сборка всех трёх схем для generic iOS Simulator проходят. |
 
-## Решения, которые уже приняты
+## Продуктовый объём
 
-- Поддерживаем только ION/TON и BNB Chain.
+- Поддерживаются сети ION и BNB Chain. Отдельная сеть TON не входит в продуктовый объём.
 - Нативный Air не возвращаем. Мобильные приложения работают через Capacitor.
 - Механизм миграций хранилища сохраняем, но проектные миграционные шаги не переносим.
 - Кастомизация кошелька без NFT Cards может остаться; My Wallet Cards и их minting удаляем полностью.
@@ -130,19 +132,20 @@
 - [ ] Включить обязательное обновление клиента через `isUpdateRequired` в `/utils/get-config`.
   - Определить источник минимальной версии для App Store, Google Play и desktop и сравнивать с `X-App-Version` клиента.
 - [ ] Подготовить Electron publish-конфигурацию к выпуску.
-  - В `src/electron/config.yml` установить generic publish URL `https://s3.wallet.ice.io/public/desktop-beta` и versioned artifact name `IONWallet-${version}-${arch}.${ext}`.
+  - Текущий `src/electron/config.yml`: generic publish URL `https://s3.wallet.ice.io/public/desktop`, artifact name `IONWallet-${arch}.${ext}`. Staging workflow при пустом `PUBLISH_REPO` переключает feed на `/desktop-beta` и задаёт versioned mac artifact name `IONWallet-${version}-${arch}.${ext}`. Подтвердить каналы выпуска, не подменяя production-конфигурацию staging-значениями без решения.
+  - Сохранить `extraMetadata.productName: IONWallet`: от него зависят userData и keychain; переименование требует отдельной миграции.
   - Одновременно сверить update feed, `package-and-publish.yml` и публичную desktop download-страницу, чтобы имена файлов и URL совпадали.
 - [x] Заменить `TON_DNS_ZONES` на единственную ION DNS-зону `.ion` (коллекция `EQD-T0TF…Fb5E`); картинки доменов — `dns.ice.io/meta/img`, «Configure DNS» открывает `dns.ice.io`, домены владельца бэкенд берёт из ION DNS API.
 - [ ] Проверить все жёстко заданные TON-адреса, token slug'и и идентификаторы коллекций.
   - Для каждого runtime-значения подтвердить ION-аналог; если аналога нет, удалить связанную функцию либо временно отключить её безопасной заглушкой до получения утверждённого значения.
   - ✅ `STON_PTON_ADDRESS`/`STON_PTON_SLUG` удалены вместе со специальной веткой; USDT (TON и BNB) удалён из конфигурации, scam-эвристики, выбора токена и комиссий.
-  - Осталось: `LIQUID_JETTON`/`STAKED_TON_SLUG` (stTON MyTonWallet), FIVA-хэши в `PRICELESS_TOKEN_HASHES`, контракты `PushEscrow*`.
+  - Осталось подтвердить назначение `LIQUID_JETTON`/`STAKED_TON_SLUG`, FIVA-хэшей в `PRICELESS_TOKEN_HASHES` и контрактов `PushEscrow*`. Имена констант сами по себе не доказывают принадлежность контрактов старой сети.
   - Отдельно отличать такие runtime-константы от тестовых fixtures: фикстуры сохраняются только там, где проверяют поддерживаемую ION-функцию.
 - [ ] Завершить переход публичного моста с TON Connect на ION Gateway после утверждения схемы и регистрации протокола.
   - Сейчас extension публикует один мост под `window.ionwallet.ionconnect` и временным совместимым alias `window.ionwallet.tonconnect`.
   - После фикса окончательных URI-схем, manifest/registry-записей и требований ION Gateway заменить или удалить legacy alias, старые bridge identifiers и пользовательские упоминания TON Connect.
 - [ ] Снять `NO_WEBSOCKET`, когда ION начнёт отдавать update-сокет.
-  - Пока сборки используют HTTP polling вместо Toncenter, EVM и backend WebSocket.
+  - `.env.example` рекомендует `NO_WEBSOCKET=1` и `NO_PENDING_ACTIVITIES=1`; код отключает их только при значении `1`, а webpack defaults — `0`. Проверять реальные env-параметры каждой сборки: отключение не гарантировано по умолчанию.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Попросить ION включить в индексаторе emulated traces (`/pendingActions`, `/pendingTraces`), `emulateTrace` и streaming WebSocket.
 - [ ] Перевести предпросмотр `wallet.lab.windbit.dev` на прямые адреса ION API (`/indexer/v3`, `/http/v2`) вместо nginx-маппинга `/ion/api/*`, и закоммитить оставшуюся nginx-конфигурацию, если она остаётся частью инфраструктуры.
