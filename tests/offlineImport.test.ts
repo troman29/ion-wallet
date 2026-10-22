@@ -88,6 +88,30 @@ describe('Offline wallet import fallbacks', () => {
     expect(wallets[0].derivation?.index).toBe(0);
   });
 
+  test('EVM: an RPC request that never settles does not block import', async () => {
+    const expected = await getEvmWalletFromBip39Mnemonic('bnb', 'mainnet', mnemonicBip39, undefined, true);
+    const balanceMock = getEvmWalletBalance as jest.Mock;
+    const original = balanceMock.getMockImplementation();
+    jest.useFakeTimers();
+    balanceMock.mockImplementation(() => new Promise(() => {}));
+    try {
+      const pending = getEvmWalletFromBip39Mnemonic('bnb', 'mainnet', mnemonicBip39);
+      await jest.advanceTimersByTimeAsync(10000);
+      await expect(pending).resolves.toEqual(expected);
+      expect(jest.getTimerCount()).toBe(0);
+    } finally {
+      balanceMock.mockImplementation(original);
+      jest.useRealTimers();
+    }
+  });
+
+  test('EVM: programming errors are not treated as an unavailable RPC', async () => {
+    (getEvmWalletBalance as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('boom');
+    });
+    await expect(getEvmWalletFromBip39Mnemonic('bnb', 'mainnet', mnemonicBip39)).rejects.toThrow('boom');
+  });
+
   test('TON: non-ApiServerError is not swallowed by offline fallback', async () => {
     const { pickBestWallet } = await import('../src/api/chains/ton/wallet');
     (pickBestWallet as unknown as jest.Mock).mockImplementationOnce(() => {

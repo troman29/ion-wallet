@@ -19,7 +19,7 @@ import { fetchStoredAccount } from '../../common/accounts';
 import { getKnownAddressInfo } from '../../common/addresses';
 import { getMnemonic } from '../../common/mnemonic';
 import { bytesToHex } from '../../common/utils';
-import { isWalletDiscoveryRecoverableTransportError } from '../../errors';
+import { ApiServerError, isWalletDiscoveryRecoverableTransportError } from '../../errors';
 import { isValidAddress } from './address';
 import { EVM_DERIVATION_PATHS } from './constants';
 import { getWalletBalance, getWalletLastTransaction } from './wallet';
@@ -27,6 +27,24 @@ import { getWalletBalance, getWalletLastTransaction } from './wallet';
 const MULTIWALLET_BY_PATH_DEFAULT_COUNT = 2;
 const SETTINGS_MULTIWALLET_BY_PATH_COUNT = 4;
 const MAX_NON_EMPTY_WALLETS_TO_SCAN = 20;
+const WALLET_DISCOVERY_TIMEOUT_MS = 10000;
+
+// Some RPC providers keep bootstrapping indefinitely instead of rejecting an offline request.
+function withDiscoveryTimeout<T>(request: Promise<T>): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new ApiServerError('Wallet discovery timed out')),
+      WALLET_DISCOVERY_TIMEOUT_MS,
+    );
+    request.then((result) => {
+      clearTimeout(timer);
+      resolve(result);
+    }, (error) => {
+      clearTimeout(timer);
+      reject(error);
+    });
+  });
+}
 
 type EvmWalletRaw = {
   address: string;
@@ -284,12 +302,12 @@ async function pickBestWallets(
   }
 
   try {
-    const withBalances = await Promise.all(
+    const withBalances = await withDiscoveryTimeout(Promise.all(
       variants.map(async (v) => ({
         ...v,
         balance: await getWalletBalance(chain, network, v.address),
       })),
-    );
+    ));
 
     const withPositive = withBalances.filter((v) => v.balance > 0n);
 

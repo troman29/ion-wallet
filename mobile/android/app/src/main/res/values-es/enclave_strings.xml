@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enclave_use_biometrics">Utilice la biometría</string>
+    <string name="enclave_enter_passcode_or_use_biometrics">Introduce el código o usa la huella</string>
+    <string name="enclave_use_pin">Usar PIN</string>
+    <string name="enclave_cancel">Cancelar</string>
+</resources>

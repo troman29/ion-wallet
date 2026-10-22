@@ -1,6 +1,6 @@
-package com.getcapacitor.myapp;
+package io.ice.wallet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,13 +14,17 @@ import org.junit.runner.RunWith;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class AppContextTest {
 
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.getcapacitor.app", appContext.getPackageName());
+        String packageName = appContext.getPackageName();
+        assertTrue("Unexpected wallet package: " + packageName,
+            packageName.equals("io.ice.wallet")
+                || packageName.equals("io.ice.wallet.debug")
+                || packageName.equals("io.ice.wallet.beta"));
     }
 }

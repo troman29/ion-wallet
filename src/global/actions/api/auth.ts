@@ -147,8 +147,23 @@ addActionHandler('resetAuth', (global) => {
   setGlobal(global);
 });
 
+// UI cache can be absent after interrupted onboarding while the Enclave still protects secrets.
+// Recover only auth metadata; never replace the master key to make a new-PIN screen succeed.
+async function restoreStoredAuthTypes(global: GlobalState) {
+  if (selectHasPassword(global) || !await enclave.hasStoredSecrets()) return getGlobal();
+
+  const authTypes: AuthType[] = [];
+  for (const type of ['passcode', 'biometric'] as const) {
+    if (await enclave.isAuthProvisioned(type)) authTypes.push(type);
+  }
+
+  global = getGlobal();
+  return !selectHasPassword(global) && authTypes.length ? { ...global, authTypes } : global;
+}
+
 addActionHandler('startCreatingWallet', async (global, actions, payload) => {
   const { enclaveToken } = payload ?? {};
+  global = await restoreStoredAuthTypes(global);
 
   const accounts = selectAccounts(global) ?? {};
   const isFirstAccount = isEmptyObject(accounts);
@@ -166,14 +181,13 @@ addActionHandler('startCreatingWallet', async (global, actions, payload) => {
             : AuthState.createPassword
     );
 
-  global = getGlobal();
-
   if (hasPassword && !enclaveToken && !selectIsEnclaveSessionValid(global)) {
     // The password screen lives in the auth flow, so the app has to be showing it - otherwise the request
     // for a password renders nowhere and the caller waits forever.
     global = { ...global, appState: AppState.Auth };
     setGlobal(updateAuth(global, {
       state: AuthState.checkPassword,
+      method: 'createAccount',
       error: undefined,
     }));
     return;
@@ -224,18 +238,18 @@ addActionHandler('createPin', (global, actions, { pin, isImporting }) => {
   global = updateAuth(global, {
     state: isImporting ? AuthState.importWalletConfirmPin : AuthState.confirmPin,
     pin,
+    error: undefined,
   });
   setGlobal(global);
 });
 
 addActionHandler('confirmPin', async (global, actions, { isImporting }) => {
   const pin = global.auth.pin!;
-  global = updateAuth(global, { pin: undefined });
+  global = updateAuth(global, { pin: undefined, error: undefined, isLoading: true });
   setGlobal(global);
 
   try {
-    const enclaveSession = await enclave.setupAuth('passcode', pin);
-    if (!enclaveSession) throw new Error('Failed to setup auth');
+    const enclaveSession = await setupPasscodeAuth(pin);
 
     global = getGlobal();
     global = updateAuth(global, { isLoading: false });
@@ -255,7 +269,7 @@ addActionHandler('confirmPin', async (global, actions, { isImporting }) => {
     const error = err?.message || 'Failed to setup auth';
 
     global = getGlobal();
-    global = updateAuth(global, { isLoading: false, error });
+    global = updateAuth(global, { pin, isLoading: false, error });
     setGlobal(global);
   }
 });
@@ -280,20 +294,26 @@ async function clearAuthGuardingNothing() {
   }
 }
 
+async function setupPasscodeAuth(passcode: string) {
+  await clearAuthGuardingNothing();
+
+  const isProvisioned = await enclave.isAuthProvisioned('passcode');
+  const session = isProvisioned
+    ? await enclave.authorize('passcode', false, passcode)
+    : await enclave.setupAuth('passcode', passcode);
+  if (!session) {
+    throw new Error(isProvisioned ? 'Wrong password, please try again.' : 'Failed to setup auth');
+  }
+
+  return session;
+}
+
 addActionHandler('createPassword', async (global, actions, { password, isNumeric }) => {
   global = updateAuth(global, { isLoading: true });
   setGlobal(global);
 
   try {
-    await clearAuthGuardingNothing();
-
-    const isProvisioned = await enclave.isAuthProvisioned('passcode');
-    const enclaveSession = isProvisioned
-      ? await enclave.authorize('passcode', false, password)
-      : await enclave.setupAuth('passcode', password);
-    if (!enclaveSession) {
-      throw new Error(isProvisioned ? 'Wrong password, please try again.' : 'Failed to setup auth');
-    }
+    const enclaveSession = await setupPasscodeAuth(password);
 
     global = getGlobal();
     global = { ...global, authTypes: ['passcode'], enclaveSession };
@@ -366,7 +386,6 @@ addActionHandler('createAccount', async (global, actions) => {
   setGlobal(updateAuth(global, { isLoading: true }));
 
   const enclaveToken = selectEnclaveToken(global);
-  if (!enclaveToken) throw new Error('Missing authorization');
 
   const isImporting = global.auth.method !== 'createAccount';
   const mnemonic = global.auth.mnemonic!;
@@ -374,10 +393,33 @@ addActionHandler('createAccount', async (global, actions) => {
   const networks: ApiNetwork[] = [mainNetwork];
 
   const isPrivateKeyBased = isMnemonicPrivateKey(mnemonic);
-  const accounts = isPrivateKeyBased
-    // TODO: Create a separate screen for private key importing, where users will choose the chain
-    ? await callApi('importPrivateKey', 'ton', networks, mnemonic[0])
-    : await callApi('importMnemonic', networks, mnemonic, !isImporting);
+  const handleImportError = (error: string) => {
+    let nextGlobal = updateAuth(getGlobal(), { isLoading: undefined });
+    if (nextGlobal.auth.state === AuthState.importWalletConfirmPin
+      || nextGlobal.auth.state === AuthState.confirmPin) {
+      nextGlobal = updateAuth(nextGlobal, {
+        state: isImporting ? AuthState.importWalletCreatePin : AuthState.createPin,
+      });
+    }
+    setGlobal(updateAccounts(nextGlobal, { isLoading: undefined }));
+    actions.showError({ error });
+  };
+
+  if (!enclaveToken) {
+    handleImportError(ApiCommonError.InvalidPassword);
+    return;
+  }
+
+  let accounts;
+  try {
+    accounts = isPrivateKeyBased
+      // TODO: Create a separate screen for private key importing, where users will choose the chain
+      ? await callApi('importPrivateKey', 'ton', networks, mnemonic[0])
+      : await callApi('importMnemonic', networks, mnemonic, !isImporting);
+  } catch {
+    handleImportError(ApiCommonError.Unexpected);
+    return;
+  }
 
   global = getGlobal();
 
@@ -389,8 +431,8 @@ addActionHandler('createAccount', async (global, actions) => {
     if (global.dappConnectRequest?.isCreatingAccount) {
       global = clearDappConnectRequest(global);
     }
-    setGlobal(updateAuth(global, { isLoading: undefined }));
-    actions.showError({ error: accounts?.error });
+    setGlobal(global);
+    handleImportError(accounts?.error ?? ApiCommonError.Unexpected);
     return;
   }
 
@@ -409,10 +451,7 @@ addActionHandler('createAccount', async (global, actions) => {
     // Both loading flags have to go: the auth flow and the account selector each own one.
     logDebugError('createAccount', err);
 
-    global = updateAuth(getGlobal(), { isLoading: undefined });
-    global = updateAccounts(global, { isLoading: undefined });
-    setGlobal(global);
-    actions.showError({ error: ApiCommonError.Unexpected });
+    handleImportError(ApiCommonError.Unexpected);
     return;
   }
 
@@ -551,8 +590,9 @@ addActionHandler('skipCheckMnemonic', (global, actions) => {
   }
 });
 
-addActionHandler('startImportingWallet', (global, actions, payload) => {
+addActionHandler('startImportingWallet', async (global, actions, payload) => {
   const { enclaveToken } = payload ?? {};
+  global = await restoreStoredAuthTypes(global);
   const hasPassword = selectHasPassword(global);
   const state = hasPassword && !enclaveToken && !selectIsEnclaveSessionValid(global)
     ? AuthState.importWalletCheckPassword

@@ -25,6 +25,7 @@ interface OwnProps {
 
 interface StateProps {
   pin: string;
+  authError?: string;
 }
 
 const SUBMIT_PAUSE_MS = 1500;
@@ -33,6 +34,7 @@ const AuthConfirmPin = ({
   isActive,
   method,
   pin,
+  authError,
 }: OwnProps & StateProps) => {
   const { confirmPin, cancelConfirmPin } = getActions();
 
@@ -60,6 +62,14 @@ const AuthConfirmPin = ({
       setIsConfirmed(false);
     }
   }, [isActive]);
+
+  useEffect(() => {
+    if (authError) {
+      setIsConfirmed(false);
+      setPinConfirm('');
+      setError(lang(authError));
+    }
+  }, [authError, lang]);
 
   const handleChange = useLastCallback((value: string) => {
     setPinConfirm(value);
@@ -113,5 +123,6 @@ const AuthConfirmPin = ({
 export default memo(withGlobal<OwnProps>((global) => {
   return {
     pin: global.auth.pin,
+    authError: global.auth.error,
   };
 })(AuthConfirmPin));

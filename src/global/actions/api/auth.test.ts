@@ -58,6 +58,8 @@ describe('add-account routing', () => {
   let store: GlobalState;
 
   beforeEach(() => {
+    (enclave.hasStoredSecrets as jest.Mock).mockResolvedValue(true);
+    (enclave.isAuthProvisioned as jest.Mock).mockImplementation(() => Promise.resolve(false));
     (setGlobal as jest.Mock).mockClear();
     (getGlobal as jest.Mock).mockImplementation(() => store);
     (setGlobal as jest.Mock).mockImplementation((next: GlobalState) => {
@@ -89,6 +91,23 @@ describe('add-account routing', () => {
     } finally {
       jest.useRealTimers();
     }
+  });
+
+  it.each(['startImportingWallet', 'startCreatingWallet'])('recovers stored protection before %s', async (action) => {
+    (enclave.isAuthProvisioned as jest.Mock).mockImplementation((type: string) => Promise.resolve(type === 'passcode'));
+    const result = await run(action, makeGlobal({ authTypes: undefined }));
+    expect(result.authTypes).toEqual(['passcode']);
+    expect(result.auth.state).toBe(action === 'startImportingWallet'
+      ? AuthState.importWalletCheckPassword : AuthState.checkPassword);
+    expect(result.auth.method).toBe(action === 'startImportingWallet' ? 'importMnemonic' : 'createAccount');
+  });
+
+  it('does not ask for an old PIN when stored protection guards no secrets', async () => {
+    (enclave.hasStoredSecrets as jest.Mock).mockResolvedValue(false);
+    (enclave.isAuthProvisioned as jest.Mock).mockResolvedValue(true);
+    const result = await run('startImportingWallet', makeGlobal({ authTypes: undefined }));
+    expect(result.auth.state).toBe(AuthState.importWallet);
+    expect(result.authTypes).toBeUndefined();
   });
 
   // A password entered in the "Add Wallet" modal yields a usage-counted session, which global state
@@ -182,6 +201,41 @@ describe('auth setup over existing storage', () => {
     expect(result.enclaveSession).toEqual({ token: 'passcode:new' });
   });
 
+  async function confirmPin() {
+    store = makeGlobal({ auth: { pin: PASSWORD, state: AuthState.importWalletConfirmPin } });
+    await getHandler('confirmPin')(store, { skipBiometrics: jest.fn() }, { isImporting: true });
+    return store;
+  }
+
+  it('authorizes an existing passcode when confirming a mobile PIN', async () => {
+    stubStorage({ authType: 'passcode', hasSecrets: true });
+    (enclave.authorize as jest.Mock).mockResolvedValue({ token: 'passcode:resumed' });
+    const result = await confirmPin();
+    expect(enclave.setupAuth).not.toHaveBeenCalled();
+    expect(enclave.reset).not.toHaveBeenCalled();
+    expect(enclave.authorize).toHaveBeenCalledWith('passcode', false, PASSWORD);
+    expect(result.enclaveSession).toEqual({ token: 'passcode:resumed' });
+  });
+
+  it('restores the mobile PIN for retry when existing protection rejects it', async () => {
+    stubStorage({ authType: 'passcode', hasSecrets: true });
+    (enclave.authorize as jest.Mock).mockResolvedValue(undefined);
+    const result = await confirmPin();
+    expect(result.auth.error).toBe('Wrong password, please try again.');
+    expect(result.auth.pin).toBe(PASSWORD);
+    expect(result.auth.isLoading).toBe(false);
+    expect(enclave.setupAuth).not.toHaveBeenCalled();
+    expect(enclave.reset).not.toHaveBeenCalled();
+  });
+
+  it('clears only empty leftover protection when confirming a mobile PIN', async () => {
+    stubStorage({ authType: 'passcode', hasSecrets: false });
+    (enclave.setupAuth as jest.Mock).mockResolvedValue({ token: 'passcode:fresh' });
+    await confirmPin();
+    expect(enclave.reset).toHaveBeenCalledTimes(1);
+    expect(enclave.setupAuth).toHaveBeenCalledWith('passcode', PASSWORD);
+  });
+
   // Setting an auth up a second time mints a fresh master key and seals every stored secret under a key
   // nothing can reproduce, so a storage that is already configured has to be authorized against
   it('authorizes against an auth the storage already holds', async () => {
@@ -264,5 +318,25 @@ describe('auth setup over existing storage', () => {
 
     expect(result.auth.error).toBe('Biometric confirmation failed.');
     expect(result.auth.isLoading).toBe(false);
+  });
+});
+
+describe('mobile import failures', () => {
+  it.each(['reject', 'result'])('leaves PIN success and allows retry after an API failure: %s', async (kind) => {
+    let store = makeGlobal({
+      auth: { method: 'importMnemonic', state: AuthState.importWalletConfirmPin, mnemonic: Array(12).fill('test') },
+      enclaveSession: { token: 'passcode:aa' },
+    });
+    (getGlobal as jest.Mock).mockImplementation(() => store);
+    (setGlobal as jest.Mock).mockImplementation((next: GlobalState) => {
+      store = next;
+    });
+    if (kind === 'reject') (callApi as jest.Mock).mockRejectedValueOnce(new TypeError('Failed to fetch'));
+    else (callApi as jest.Mock).mockResolvedValueOnce({ error: 'ServerError' });
+    const actions = { showError: jest.fn() };
+    await getHandler('createAccount')(store, actions);
+    expect(store.auth.isLoading).toBeUndefined();
+    expect(store.auth.state).toBe(AuthState.importWalletCreatePin);
+    expect(actions.showError).toHaveBeenCalledTimes(1);
   });
 });
