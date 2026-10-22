@@ -31,7 +31,6 @@ import type {
   StakeDepositAction,
   StakeWithdrawalAction,
   StakeWithdrawalRequestAction,
-  SwapAction,
   TonTransferAction,
 } from './types';
 
@@ -68,7 +67,7 @@ import { callToncenterV3 } from './other';
 
 type ActionsResponse = {
   actions: AnyAction[];
-  address_book: AddressBook;
+  address_book?: AddressBook;
   metadata?: MetadataMap;
 };
 
@@ -139,7 +138,7 @@ export async function fetchActions(options: FetchActionsOptions): Promise<ApiAct
   // That is, the actions are grouped by the trace, and sorted by the time inside the groups.
   const {
     actions,
-    address_book: addressBook,
+    address_book: addressBook = {},
     metadata = {},
   } = await callToncenterV3<ActionsResponse>(network, '/actions', data, signal);
 
@@ -158,7 +157,7 @@ export async function fetchActions(options: FetchActionsOptions): Promise<ApiAct
 export async function fetchPendingActions(network: ApiNetwork, address: string): Promise<ApiActivity[]> {
   const {
     actions,
-    address_book: addressBook,
+    address_book: addressBook = {},
     metadata = {},
   } = await callToncenterV3<ActionsResponse>(network, '/pendingActions', {
     account: address,
@@ -177,9 +176,13 @@ export function parseActionsToActivities(actions: AnyAction[], options: ParseOpt
   const activities: ApiActivity[] = [];
 
   for (const action of actions) {
-    const parsedAction = parseAction(action, options);
-    for (const activity of parsedAction.activities) {
-      activities.push(activity);
+    try {
+      const parsedAction = parseAction(action, options);
+      activities.push(...parsedAction.activities);
+    } catch (err) {
+      // An incompatible action must not discard the rest of the history page.
+      // Keep trace parsing strict: silently losing actions there would affect fee accounting.
+      logDebugError('Failed to parse Toncenter history action', action?.type, action?.action_id, err);
     }
   }
 
@@ -243,7 +246,8 @@ function parseAction(action: AnyAction, options: ParseOptions): ParsedAction {
       break;
     }
     case 'jetton_swap': {
-      result = parseJettonSwap(action, options);
+      // Swaps have no wallet activity; keep zero native change for trace fee accounting.
+      result.toncoinChange = 0n;
       break;
     }
     case 'change_dns':
@@ -362,7 +366,6 @@ function parseContractDeploy(action: ContractDeployAction, options: ParseOptions
 }
 
 function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions): ParsedAction {
-  const { addressBook } = options;
   const {
     details,
     details: {
@@ -378,7 +381,7 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
 
   const comment = (!isEncrypted && details.comment) || undefined;
   const encryptedComment = (isEncrypted && details.comment) || undefined;
-  const tokenAddress = addressBook[details.asset].user_friendly;
+  const tokenAddress = resolveActionAddress(details.asset, options, true);
   const slug = buildTokenSlug('ton', tokenAddress);
 
   let type: ApiTransactionType;
@@ -402,7 +405,6 @@ function parseJettonTransfer(action: JettonTransferAction, options: ParseOptions
 }
 
 function parseJettonMint(action: JettonMintAction, options: ParseOptions): ParsedAction {
-  const { addressBook } = options;
   const {
     details,
     details: {
@@ -412,7 +414,7 @@ function parseJettonMint(action: JettonMintAction, options: ParseOptions): Parse
     },
   } = action;
 
-  const tokenAddress = addressBook[details.asset].user_friendly;
+  const tokenAddress = resolveActionAddress(details.asset, options, true);
   const slug = buildTokenSlug('ton', tokenAddress);
 
   const commonFields = parseCommonFields(action, options, jettonWalletRaw, receiver, amount);
@@ -452,7 +454,6 @@ function parseNftTransfer(action: NftTransferAction, options: ParseOptions): Par
     network,
     metadata,
     walletAddress,
-    addressBook,
   } = options;
 
   const {
@@ -482,8 +483,8 @@ function parseNftTransfer(action: NftTransferAction, options: ParseOptions): Par
   // These are actions where old_owner and new_owner are not the wallet address,
   // but wallet address is only in response_destination
   if (oldOwner && newOwner && responseDestination) {
-    const oldOwnerAddress = addressBook[oldOwner]?.user_friendly;
-    const newOwnerAddress = addressBook[newOwner]?.user_friendly;
+    const oldOwnerAddress = resolveActionAddress(oldOwner, options);
+    const newOwnerAddress = resolveActionAddress(newOwner, options);
 
     if (oldOwnerAddress !== walletAddress && newOwnerAddress !== walletAddress) {
       shouldHide = true;
@@ -504,7 +505,7 @@ function parseNftTransfer(action: NftTransferAction, options: ParseOptions): Par
   if (activity.toAddress === BURN_ADDRESS) {
     activity.type = 'burn';
   } else if (isPurchase && price) {
-    const isBuying = addressBook[newOwner]?.user_friendly === walletAddress;
+    const isBuying = resolveActionAddress(newOwner, options) === walletAddress;
     activity.type = 'nftTrade';
     activity.isIncoming = !isBuying;
     activity.amount = isBuying ? -BigInt(price) : BigInt(payoutAmount || price);
@@ -617,11 +618,6 @@ function parseStakeWithdrawalRequest(action: StakeWithdrawalRequestAction, optio
   };
 }
 
-function parseJettonSwap(action: SwapAction, options: ParseOptions): ParsedAction {
-  void options;
-  return { action, activities: [], toncoinChange: 0n };
-}
-
 function parseDns(action: DnsAction, options: ParseOptions): ParsedAction {
   const { network, metadata } = options;
   const { details: { source, asset } } = action;
@@ -710,6 +706,13 @@ function parseLiquidityWithdraw(action: DexWithdrawLiquidityAction, options: Par
   return { action, activities: [], toncoinChange: 0n };
 }
 
+function resolveActionAddress(rawAddress: string, options: ParseOptions, isBounceable = false) {
+  const address = options.addressBook[rawAddress]?.user_friendly
+    || toBase64Address(rawAddress, isBounceable, options.network);
+  // Bounceable and non-bounceable forms identify the same account.
+  return toRawAddress(address) === toRawAddress(options.walletAddress) ? options.walletAddress : address;
+}
+
 function parseCommonFields(
   action: AnyAction,
   options: ParseOptions,
@@ -719,8 +722,8 @@ function parseCommonFields(
 ) {
   const id = buildActionActivityId(action);
   const { walletAddress, network, addressBook, isPending, finality } = options;
-  const fromAddress = addressBook[rawFromAddress].user_friendly;
-  const toAddress = addressBook[rawToAddress].user_friendly;
+  const fromAddress = resolveActionAddress(rawFromAddress, options);
+  const toAddress = resolveActionAddress(rawToAddress, options);
   const isIncoming = toAddress === walletAddress;
   const normalizedAddress = toBase64Address(isIncoming ? fromAddress : toAddress, true, network);
   const amount = isIncoming ? BigInt(amountString) : -BigInt(amountString);

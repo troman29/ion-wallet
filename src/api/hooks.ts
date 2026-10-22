@@ -8,7 +8,6 @@ interface Hooks {
   onWindowNeeded: AnyFunction;
   onDappDisconnected: (accountId: string, dapp: StoredDappConnection) => any;
   onDappsChanged: AnyFunction;
-  onSwapCreated: (accountId: string, fromTimestamp: number) => any;
 }
 
 const hooks: Partial<{

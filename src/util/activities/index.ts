@@ -113,12 +113,9 @@ export function getIsActivitySuitableForFetchingTimestamp(activity: ApiActivity 
  * "from which moment do I continue" has one answer, and two call sites answering it differently
  * is what let the history loop.
  *
- * A local, pending or backend-swap activity is preferred against because its timestamp need not
- * sit where the chain would put it, so paging from it can step over real history. But when a page
- * holds nothing else - a wallet whose whole slice is swaps merged from our backend - the choice is
- * between an approximate cursor and no cursor at all. No cursor means the caller re-requests the
- * first page forever, so the oldest activity is used instead: it can only overlap what is already
- * held, and overlap is deduplicated while a missing cursor is not recoverable.
+ * Prefer an on-chain activity over local or pending transactions, whose timestamps may change
+ * before confirmation. If the slice has no suitable activity, use the oldest known timestamp so
+ * the caller can still advance instead of repeatedly loading the first page. Overlap is deduplicated.
  */
 export function getActivityContinuationTimestamp<T>(
   items: readonly T[],
@@ -249,7 +246,6 @@ export function getIsActivityWithHash(activity: ApiTransactionActivity) {
 }
 
 export function getIsActivityPending(activity: ApiActivity) {
-  // "Pending" is a blockchain term. The activities originated by our backend are never considered pending in this sense.
   return getIsActivityPendingForUser(activity);
 }
 

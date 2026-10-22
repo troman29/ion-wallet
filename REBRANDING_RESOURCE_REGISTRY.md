@@ -68,7 +68,7 @@
 - `npm run check:branding` — успешно: 13 анимаций, по 60 кадров, кадр 30 отрисован штатным RLottie; контактный лист просмотрен.
 - iOS PNG — 1024×1024 без alpha; выборочно проверены размеры web/PWA/Android PNG/WebP, все три icon path из manifest существуют.
 - Подтверждены отсутствие TON-партнёрских SVG, `duck_*`, `settings_mw-cards.svg` и удалённого `tonConnectFriendlyPatch.js`.
-- TypeScript/Jest/production build и native/device сценарии в этой сверке повторно не запускались. Исторические проверки описаны в [плане миграции](MIGRATION_TO_ION.md); их нельзя считать новой проверкой текущего релиза.
+- После локальной зачистки P0 проходят TypeScript/ESLint/Stylelint, все 981 Jest-тест в 115 suites, проверка 13 анимаций, генерация локализаций и production webpack (с предупреждениями о размере bundle). Native/device и реальные транзакции не проверялись; локальное прохождение команд workflow не подтверждает запуск GitHub Actions.
 
 ## Приоритет оставшейся работы
 

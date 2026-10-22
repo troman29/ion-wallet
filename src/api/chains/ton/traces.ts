@@ -75,7 +75,7 @@ export function parseTrace(options: {
     fixLiquidityActions(parsedActions, traceOutputs);
 
     for (const traceOutput of traceOutputs) {
-      fillTraceOutput(parsedActions, traceOutput, transactionByHash, walletAddress, addressBook);
+      fillTraceOutput(parsedActions, traceOutput, transactionByHash, walletAddress);
     }
   }
 
@@ -206,19 +206,12 @@ function fillTraceOutput(
   traceOutput: TraceOutput,
   txsByHash: Record<string, ApiTransactionExtended[]>,
   walletAddress: string,
-  addressBook: AddressBook,
 ) {
   const walletActions: ParsedAction[] = parsedActions.filter(({ action, activities }) => {
     const hasCommonTransactions = !!intersection(new Set(action.transactions), traceOutput.hashes).size;
-    const isWalletAction = activities.some((activity) => {
-      if (activity.kind === 'transaction') {
-        return activity.fromAddress === walletAddress || activity.toAddress === walletAddress;
-      } else if (activity.kind === 'swap') {
-        return addressBook[activity.fromAddress]?.user_friendly === walletAddress;
-      } else {
-        throw new Error(`Unknown activity kind: ${JSON.stringify(activity)}`);
-      }
-    });
+    const isWalletAction = activities.some((activity) => (
+      activity.fromAddress === walletAddress || activity.toAddress === walletAddress
+    ));
 
     return hasCommonTransactions && isWalletAction;
   });

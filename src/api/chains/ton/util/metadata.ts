@@ -6,8 +6,6 @@ import { Cell } from '@ton/core/dist/boc/Cell';
 import { Slice } from '@ton/core/dist/boc/Slice';
 import { Dictionary } from '@ton/core/dist/dict/Dictionary';
 
-import type {
-  OtherOpCode } from '../constants';
 import type { JettonMetadata } from '../types';
 import {
   type ApiActivity,
@@ -49,7 +47,7 @@ import {
 } from './tonCore';
 
 type OpCodes = OpCode | JettonOpCode | NftOpCode | LiquidStakingOpCode | VestingV1OpCode | SingleNominatorOpCode
-  | DnsOpCode | OtherOpCode | JettonStakingOpCode;
+  | DnsOpCode | JettonStakingOpCode;
 
 const OFFCHAIN_CONTENT_PREFIX = 0x01;
 const SNAKE_PREFIX = 0x00;

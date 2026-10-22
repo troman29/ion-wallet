@@ -125,16 +125,6 @@ $subheaderReleaseHeight: 1.25rem;
     }
   }
 
-  &:global(.icon-swap) {
-    $fontSize: 2rem;
-
-    font-size: $fontSize * $desktopIconScale;
-
-    @include mixins.respond-below(xs) {
-      font-size: $fontSize;
-    }
-  }
-
   &.dnsIcon {
     $fontSize: 0.9375rem;
 
@@ -485,17 +475,5 @@ $subheaderReleaseHeight: 1.25rem;
   &Negative {
     color: var(--color-activity-red-text);
     background-color: var(--color-activity-red-background);
-  }
-
-  &Swap {
-    background: linear-gradient(135deg, var(--color-activity-blue-background) 14%, var(--color-activity-green-background) 86%);
-
-    // Firefox (checked in v139) doesn't support `background-clip: text, border-box`, so we don't use a multi-layer background
-    &::before {
-      background: linear-gradient(85deg, var(--color-transaction-amount-text) 30%, var(--color-transaction-amount-green-text) 45%);
-      background-clip: text;
-
-      -webkit-text-fill-color: transparent;
-    }
   }
 }

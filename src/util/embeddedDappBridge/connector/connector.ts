@@ -305,7 +305,7 @@ export function initConnector(
     // Per-method TTLs (ms) for readonly RPC coalescing. Methods absent from this
     // map are NOT cached (params-keyed methods, balance/nonce/receipt-style data
     // that must stay fresh after sendTx, etc.). Sized to halve evmapi RPS for the
-    // most-polled methods without affecting swap UX (Ethereum block time ~12s, so
+    // most-polled methods without delaying dApp updates (Ethereum block time ~12s, so
     // 1.5s = ~12% of a block).
     const READ_CACHE_TTL_MS: Record<string, number> = {
       eth_blockNumber: 1500,

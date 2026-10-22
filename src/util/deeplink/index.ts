@@ -788,13 +788,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
           return true;
         }
 
-        // Get address from the first activity (toAddress for transactions, fromAddress for swaps)
-        const activity = activities[0];
-        const viewAddress = activity.kind === 'transaction'
-          ? activity.toAddress
-          : activity.kind === 'swap'
-            ? activity.fromAddress
-            : undefined;
+        const viewAddress = activities[0].toAddress;
 
         if (!viewAddress) {
           actions.showError({ error: '$could_not_determine_address' });

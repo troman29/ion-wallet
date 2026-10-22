@@ -47,8 +47,4 @@ export type StorageKey = 'accounts'
   // For TonConnect SSE
   | 'sseLastEventId'
   // For Headless
-  | 'headlessBalanceSnapshots'
-  // SDK activity reconciliation
-  | 'walletOperationIntents'
-  | 'knownTonAggregatorTraceIds'
-  | 'knownTonAggregatorTraceProjections';
+  | 'headlessBalanceSnapshots';

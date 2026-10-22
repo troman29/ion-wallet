@@ -6,23 +6,6 @@ Creating Wallet...: در حال ساخت کیف پول...
 On the count of three...: با شمارش تا سه...
 $back_up_auth: پشتیبان‌گیری
 $back_up_security: پشتیبان‌گیری
-Confirm with: تأیید با
-Add an extra layer of security for your wallet in TON network.: یک لایه امنیتی اضافی برای کیف پول خود در شبکه ION اضافه کنید.
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: انتقال‌ها و اقدامات مهم را با رمز عبور خود امضا کنید، سپس آن‌ها را در تلگرام تأیید نمایید.
-This helps protect your funds even if your recovery phrase or keys are compromised.: این کار حتی در صورت لو رفتن عبارت بازیابی یا کلیدهای شما، از دارایی‌هایتان محافظت می‌کند.
-"Connection Fee:": "کارمزد اتصال:"
-Connect Telegram: اتصال تلگرام
-Add in Gram Wallet: افزودن در ION Wallet
-Telegram will be used to confirm transfers and important actions.: از تلگرام برای تأیید انتقال‌ها و اقدامات مهم استفاده خواهد شد.
-My Telegram Account: حساب تلگرام من
-Without username: بدون نام کاربری
-Unlink Account: قطع اتصال حساب
-An extra security layer requires confirming actions in Telegram after signing.: یک لایه امنیتی اضافی نیازمند تأیید اقدامات در تلگرام پس از امضا است.
-Confirm Connection: تأیید اتصال
-Confirm Disconnection: تأیید قطع اتصال
-$2fa_security: احراز هویت دومرحله‌ای با تلگرام
-2FA with Telegram: احراز هویت دومرحله‌ای با تلگرام
-Confirm operations in Telegram as a second step.: عملیات‌ها را به‌عنوان مرحله دوم در تلگرام تأیید کنید.
 Passwords must be equal.: رمزهای عبور باید یکسان باشند.
 To protect your wallet as much as possible, use a password with: برای محافظت هرچه بیشتر از کیف پول خود، از رمز عبوری استفاده کنید که شامل
 $auth_password_rule_8chars: حداقل ۸ کاراکتر
@@ -93,7 +76,6 @@ $about_wallet_github: بله، همین‌طور است. می‌توانید %gi
 $about_github_link_text: "**مخزن گیت‌هاب**"
 Is there a community?: آیا انجمنی وجود دارد؟
 $about_wallet_community: البته، به %community_link% ما خوش آمدید.
-$about_community_link_text: "**کانال تلگرام**"
 Currency History: تاریخچه ارز
 Price: قیمت
 Enter Password: رمز عبور را وارد کنید
@@ -138,7 +120,6 @@ Create TON-Only Wallet: ساخت کیف پول فقط ION
 Confirmation: تأیید
 Signing Data: امضای داده
 Contract Initialization Data: داده مقداردهی اولیه قرارداد
-$dont_have_required_token: شما توکن مورد نیاز برای ارسال را ندارید، اما می‌توان آن را مبادله کرد.
 $unknown_token_address: آدرس توکن ناشناخته.
 $dont_have_required_nft: شما NFT مورد نیاز برای ارسال را ندارید.
 $state_init_invalid: داده مقداردهی اولیه قرارداد نامعتبر است.
@@ -349,29 +330,15 @@ Decrypt: رمزگشایی
 Encrypted Message: پیام رمزگذاری‌شده
 Message is encrypted: پیام رمزگذاری شده است
 Agree: موافقم
-$swap_action: مبادله
-$swap_activity_title: مبادله
-Swap: مبادله
 You sell: شما می‌فروشید
 You buy: شما می‌خرید
-Swap Details: جزئیات مبادله
 Blockchain Fee: کارمزد بلاک‌چین
 Included: شامل
 Price Impact: تأثیر قیمت
 Minimum Received: حداقل دریافتی
-Slippage: لغزش قیمت
-$swap_from_to: مبادله %from% %icon% %to%
 The exchange rate is below market value!: نرخ مبادله %value% کمتر از ارزش بازار است!
 Invalid Pair: جفت‌ارز نامعتبر
 We do not recommend to perform an exchange, try to specify a lower amount.: انجام این مبادله را توصیه نمی‌کنیم، مبلغ کمتری را امتحان کنید.
-$swap_minimum_received_tooltip1: این کمترین مقدار توکن جدیدی است که از این مبادله دریافت خواهید کرد، با در نظر گرفتن شرایط فعلی بازار، تحمل لغزش قیمت و تأثیر احتمالی قیمت.
-$swap_minimum_received_tooltip2: این یک حداقل مورد انتظار است، اما اگر شرایط در حین پردازش مبادله شما به‌شدت تغییر کند، مبلغ نهایی ممکن است کمتر باشد.
-$swap_price_impact_tooltip1: این نشان می‌دهد که معامله شما چقدر ممکن است قیمت توکن را تغییر دهد.
-$swap_price_impact_tooltip2: معاملات بزرگ می‌توانند قیمت را بیشتر بالا یا پایین ببرند. معمولاً کمتر بهتر است.
-$swap_slippage_tooltip1: این تعیین می‌کند که قیمت قبل از پردازش مبادله شما چقدر مجاز به تغییر است.
-$swap_slippage_tooltip2: اگر در حین پردازش مبادله شما قیمت بیش از این مقدار تغییر کند، سفارش شما لغو خواهد شد.
-Slippage not specified: لغزش قیمت مشخص نشده است
-Slippage too high: لغزش قیمت بیش از حد بالا است
 Not Enough %symbol%: مقدار %symbol% کافی نیست
 Use Responsibly: مسئولانه استفاده کنید
 $auth_responsibly_description1: |
@@ -386,10 +353,6 @@ Start Wallet: شروع کیف پول
 $auth_backup_warning_notice: |
   اکنون باید به‌صورت دستی از **کلیدهای محرمانه** پشتیبان بگیرید تا در صورت فراموشی رمز عبور یا از دست دادن دسترسی به این دستگاه آماده باشید.
 Invalid address format. Only URL Safe Base64 format is allowed.: قالب آدرس نامعتبر است. تنها قالب URL Safe Base64 مجاز است.
-Swap Placed: مبادله ثبت شد
-Swapping: در حال مبادله
-Swapped: مبادله‌شده
-Swap Again: مبادله دوباره
 Terms of Use: شرایط استفاده
 Privacy Policy: سیاست حفظ حریم خصوصی
 Insufficient liquidity: نقدینگی ناکافی
@@ -410,19 +373,10 @@ Your address on another blockchain: آدرس شما در یک بلاک‌چین 
 Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: لطفاً آدرس کیف پول خود در بلاک‌چین %blockchain% را برای دریافت توکن‌های خریداری‌شده ارائه دهید.
 The time for sending coins is over.: زمان ارسال کوین‌ها به پایان رسیده است.
 You have not sent the coins to the specified address.: شما کوین‌ها را به آدرس مشخص‌شده ارسال نکرده‌اید.
-$swap_cex_to_wallet_description: مبلغ %value% را ظرف %time% به این آدرس در بلاک‌چین %blockchain% ارسال کنید
 Exchange failed and coins were refunded to your wallet.: مبادله ناموفق بود و کوین‌ها به کیف پول شما بازپرداخت شدند.
-Swap Expired: مبادله منقضی شد
 Address for %blockchain% transfer: آدرس برای انتقال %blockchain%
-Cross-chain exchange provided by %provider%: مبادله بین‌زنجیره‌ای ارائه‌شده توسط %provider%
-$swap_cex_terms_of_use: شرایط استفاده
-$swap_cex_privacy_policy: سیاست حفظ حریم خصوصی
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: "با ادامه دادن، شما با %terms% و %policy% موافقت می‌کنید."
-$swap_cex_legal_message_with_aml: با ادامه دادن، شما با %terms% و %policy% موافقت می‌کنید و می‌پذیرید که انتقال ممکن است طبق %aml% فرآیند تأیید را آغاز کند.
 Password must contain %length% digits.: رمز عبور باید شامل %length% رقم باشد.
 Deposit Link: لینک واریز
-$swap_cex_from_wallet_description: "توکن‌ها به‌زودی به آدرس شما در بلاک‌چین %blockchain% ارسال خواهند شد:"
 Please note that it may take up to a few hours for tokens to appear in your wallet.: لطفاً توجه داشته باشید که ممکن است چند ساعت طول بکشد تا توکن‌ها در کیف پول شما ظاهر شوند.
 Minimum amount: حداقل %value%
 Maximum amount: حداکثر %value%
@@ -528,7 +482,6 @@ Incorrect code, please try again.: رمز عبور نادرست است، لطف�
 Correct: درست
 Confirm Action: تأیید اقدام
 $classic_confirm_actions: تأیید اقدامات
-Confirm Swap: تأیید مبادله
 Confirm Rewards Claim: تأیید دریافت پاداش‌ها
 "%amount% to %address%": "%amount% به %address%"
 "%amount_from% to %amount_to%": "%amount_from% به %amount_to%"
@@ -579,7 +532,6 @@ $dapp_dns_set_wallet_payload: تغییر کیف پول مرتبط دامنه %do
 $dapp_dns_delete_wallet_payload: حذف کیف پول مرتبط دامنه %domain%
 $dapp_dns_change_record_payload: تغییر رکورد "%category%" دامنه %domain% به %value%
 $dapp_dns_delete_record_payload: حذف رکورد "%category%" دامنه %domain%
-$dapp_token_bridge_pay_swap_payload: تأیید مبادله از طریق پل بین‌زنجیره‌ای
 $dapp_liquid_staking_deposit_payload: واریز به استیکینگ نقدی
 $dapp_liquid_staking_vote_payload: رأی "%vote%" برای پیشنهاد %votingAddress%
 $dapp_single_nominator_change_validator_payload: تغییر آدرس اعتبارسنج قرارداد استیکینگ SingleNominator به %address%
@@ -607,7 +559,6 @@ Cannot be sent: قابل ارسال نیست
 NFT is for sale: "\u200FNFT برای فروش گذاشته شده است"
 More actions: اقدامات بیشتر
 Open on %explorer_name%: باز کردن در %explorer_name%
-Swap is not supported in Testnet.: مبادله در تست‌نت پشتیبانی نمی‌شود.
 Buying with card is not supported in Testnet.: خرید با کارت در تست‌نت پشتیبانی نمی‌شود.
 Staking is not supported in Testnet.: استیکینگ در تست‌نت پشتیبانی نمی‌شود.
 Get Support: دریافت پشتیبانی
@@ -652,9 +603,6 @@ Collection: مجموعه
 Unnamed Collection: مجموعه بدون نام
 Transaction ID Copied: شناسه تراکنش کپی شد
 External Exchange ID Copied: شناسه صرافی خارجی کپی شد
-$swap_cex_support: "در صورت بروز مشکل، با %support% تماس بگیرید و این **شناسه صرافی خارجی** را ارائه دهید:"
-$swap_cex_hold_support: "لطفاً با %support% تماس بگیرید و این **شناسه صرافی خارجی** را برای گذراندن بررسی ارائه‌دهنده ارائه دهید:"
-$swap_cex_provider_support: "پشتیبانی %provider%"
 Email: ایمیل
 Your %blockchain% Address: آدرس %blockchain% شما
 My %blockchain% Address: آدرس %blockchain% من
@@ -726,8 +674,6 @@ Switch to W5: تغییر به W5
 Not Scam: کلاهبرداری نیست
 Untitled: بدون عنوان
 Multichain: چندزنجیره‌ای
-$swap_too_small_amount: مبلغ بیش از حد کوچک
-$swap_slippage_violation: شبیه‌سازی مبادله به دلیل نقض لغزش قیمت ناموفق بود. لطفاً دوباره تلاش کنید.
 $not_enough_symbol_lowercase: مقدار %symbol% کافی نیست
 Enter Secret Words: کلمات محرمانه را وارد کنید
 Turn this off so you can manually download updates and verify signatures.: این را خاموش کنید تا بتوانید به‌صورت دستی به‌روزرسانی‌ها را دانلود و امضاها را تأیید کنید.
@@ -761,7 +707,6 @@ Sounds: صداها
 Push Notifications: اعلان‌های فوری
 Select up to %count% wallets for notifications: تا %count% کیف پول را برای اعلان‌ها انتخاب کنید
 Accumulated Rewards: پاداش‌های انباشته
-$swap_reverse_prohibited: تعیین مبلغ خرید برای این جفت توکن ممکن نیست
 Blockchain Fee Details: جزئیات کارمزد بلاک‌چین
 Final Fee: کارمزد نهایی
 Excess: مازاد
@@ -1190,7 +1135,6 @@ Pulse: نبض
 Edit Message: ویرایش پیام
 Toggle Hints: تغییر وضعیت راهنمایی‌ها
 Scroll To Bottom: پیمایش به پایین
-$unknown_swap_token: توکن ناشناخته در لینک مبادله. از توکن‌های پیش‌فرض استفاده شد.
 $action_not_available_view_mode: این اقدام برای کیف پول‌های مشاهده در دسترس نیست
 Deposit: واریز
 Trade: معامله
@@ -1276,12 +1220,7 @@ Share QR Code: اشتراک‌گذاری کد QR
 $send_only_ton: تنها ION یا دارایی‌های مبتنی بر ION را به این آدرس ارسال کنید. ارسال توکن‌های دیگر منجر به از دست رفتن آن‌ها خواهد شد.
 $send_only_chain: تنها %chain% (%symbol%) یا دارایی‌های مبتنی بر %chain% را به این آدرس ارسال کنید. ارسال توکن‌های دیگر منجر به از دست رفتن آن‌ها خواهد شد.
 Buying with card is not supported for this account.: خرید با کارت برای این حساب پشتیبانی نمی‌شود.
-Swapped at: مبادله‌شده در
 Price per: قیمت هر واحد
-Swap ID: شناسه مبادله
-Swap ID for %provider%: شناسه مبادله برای %provider%
-Copy Swap ID: کپی شناسه مبادله
-Swap ID Copied: شناسه مبادله کپی شد
 from: از
 to: به
 Currency: ارز
@@ -1333,7 +1272,6 @@ Current APR: نرخ درصد سالانه فعلی
 in: در
 Network Error: خطای شبکه
 Enter Amount: مبلغ را وارد کنید
-"Swap %from% to %to%": "مبادله %from% به %to%"
 "%from% to %to%": "%from% به %to%"
 "Max %amount%": "حداکثر %amount%"
 "Authorize %token% fee": "تأیید کارمزد %token%"
@@ -1342,7 +1280,6 @@ AML/KYC: AML/KYC
 Receive to: دریافت به
 Enter %token% address: آدرس %token% را وارد کنید
 "Send %token% this address:": "%token% را به این آدرس ارسال کنید:"
-Swap is not supported on this account.: مبادله در این حساب پشتیبانی نمی‌شود.
 "%amount% will be returned": "%amount% بازگردانده خواهد شد"
 Connecting your wallet: در حال اتصال کیف پول شما
 Action is not possible on a view-only wallet.: این اقدام روی کیف پول فقط‌مشاهده ممکن نیست.
@@ -1415,7 +1352,6 @@ Set a passcode: یک رمز عبور تنظیم کنید
 "There is no activity history for this wallet yet.": "هنوز هیچ تاریخچه فعالیتی برای این کیف پول وجود ندارد."
 Discovering wallets: در حال کشف کیف پول‌ها
 Address not resolved: آدرس تشخیص داده نشد
-Sending more than one NFT isn't supported by Ledger: ارسال بیش از یک NFT توسط لجر پشتیبانی نمی‌شود
 "Updating…": "در حال به‌روزرسانی…"
 This is how the TON Blockchain works.: این نحوه کار بلاک‌چین ION است.
 "Waiting for network…": "در انتظار شبکه…"
@@ -1436,7 +1372,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: آیا مطمئن هستید که می‌خواهید سنجاق %tab% را بردارید؟
 add: افزودن
 send: ارسال
-swap: مبادله
 earn: کسب درآمد
 Actions: اقدامات
 $actions_description: به رایج‌ترین اقدامات به‌سرعت دسترسی پیدا کنید.
@@ -1502,7 +1437,6 @@ just now: همین الان
 "No": "خیر"
 Search: جستجو
 State init supplied without message body: داده مقداردهی اولیه بدون بدنه پیام ارائه شد
-Swap Failed: مبادله ناموفق بود
 The wallet is ready: کیف پول آماده است
 Unexpected error. Please let the support know.: خطای غیرمنتظره. لطفاً پشتیبانی را مطلع کنید.
 Unlock it and open the TON App: آن را باز کنید و اپلیکیشن TON را اجرا کنید
@@ -1546,10 +1480,6 @@ push_activity_dns_renewed: "\u200FDNS تمدید شد"
 push_activity_subscription_started: اشتراک آغاز شد
 push_activity_subscription_payment_received: دریافت پرداخت اشتراک %amount% %symbol%
 push_activity_subscription_canceled: اشتراک لغو شد
-push_activity_swap_completed: مبادله %from_symbol% → %to_symbol%
-push_activity_swap_failed: مبادله %from_symbol% → %to_symbol% ناموفق بود
-push_activity_swap_expired: مبادله %from_symbol% → %to_symbol% منقضی شد
-push_activity_swap_pending: مبادله %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: سود استیکینگ %amount% ION
 push_activity_staking_loyalty_profit: سود وفاداری استیکینگ %amount% ION
 push_domain_title_renew: دامنه خود را تمدید کنید
@@ -1577,7 +1507,6 @@ $relative_tomorrow: فردا
 P&L Change: تغییر سود و زیان
 Choose Token: انتخاب توکن
 You don't have any eligible tokens for this payment: توکن واجد شرایطی برای این پرداخت ندارید
-Buy, swap, or receive a supported token to continue.: برای ادامه، یک توکن پشتیبانی‌شده بخرید، مبادله یا دریافت کنید.
 Are you sure you want to cancel the payment?: آیا مطمئن هستید که می‌خواهید پرداخت را لغو کنید؟
 Cancel Payment: لغو پرداخت
 Paid: پرداخت شد
@@ -1663,7 +1592,6 @@ $token_info_collapse_hint: اطلاعات توکن را می‌بندد.
 $token_info_open_in_browser_hint: در مرورگر باز می‌کند.
 $token_info_fallback_description: اطلاعات عمومی در دسترس نیست
 $token_info_no_description: توضیحی در دسترس نیست
-$swap_cex_aml_kyc_policy_with_provider: AML/KYC %provider%
 Hide Unverified NFTs: پنهان کردن NFTهای تأییدنشده
 Unverified: تأییدنشده
 Switched to %account%: به %account% تغییر یافت
@@ -1671,7 +1599,6 @@ See All: مشاهده همه
 Add an **extra layer of security** for your wallet in TON network.: یک **لایه امنیتی اضافی** برای کیف پول خود در شبکه ION اضافه کنید.
 Another transaction was sent from this wallet simultaneously. Please try again.: تراکنش دیگری به‌طور همزمان از این کیف پول ارسال شد. لطفاً دوباره تلاش کنید.
 Buying with card is not supported for this chain.: خرید با کارت برای این شبکه پشتیبانی نمی‌شود.
-Confirm with Telegram: تأیید با تلگرام
 Couldn't open support chat. Please try again.: گفتگوی پشتیبانی باز نشد. لطفاً دوباره تلاش کنید.
 Couldn't prepare logs for export. Please try again.: گزارش‌ها برای خروجی گرفتن آماده نشدند. لطفاً دوباره تلاش کنید.
 Disconnect Dapps: قطع اتصال اپلیکیشن‌ها
@@ -1681,17 +1608,13 @@ Export Logs: خروجی گرفتن از گزارش‌ها
 Failed to load chat: بارگذاری گفتگو ناموفق بود
 Gram: ION
 More Details: جزئیات بیشتر
-Open Telegram: باز کردن تلگرام
 Open addresses: آدرس‌ها را باز می‌کند
 SDK is not ready. Please try again.: SDK آماده نیست. لطفاً دوباره تلاش کنید.
 Selected NFTs must use the same network: NFTهای انتخاب‌شده همگی باید از یک شبکه استفاده کنند
 Selling is not supported for this token.: فروش این توکن پشتیبانی نمی‌شود.
 Shows more information: اطلاعات بیشتری نشان می‌دهد
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: انتقال‌ها و اقدامات مهم را با رمز عبور خود امضا کنید، **سپس آن‌ها را در تلگرام تأیید نمایید**.
-Telegram Account: حساب تلگرام
 This action cannot be undone.: این اقدام قابل بازگشت نیست.
 This action is no longer available.: این اقدام دیگر در دسترس نیست.
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: این کار حتی در صورت لو رفتن عبارت بازیابی یا کلیدهای شما، از **دارایی‌هایتان محافظت می‌کند**.
 Transaction is not ready: تراکنش آماده نیست
 Unsupported Wallet Version: نسخه پشتیبانی‌نشده کیف پول
 Unsupported version: نسخه پشتیبانی‌نشده
@@ -1701,3 +1624,4 @@ Popular Tokens: توکن‌های محبوب
 Tokenized Stocks: سهام توکن‌شده
 Tokenized Gold: طلای توکن‌شده
 Index Funds: صندوق‌های شاخص
+"Receive a supported token to continue.": "برای ادامه، یک توکن پشتیبانی‌شده دریافت کنید."

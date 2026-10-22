@@ -15,7 +15,7 @@ function makeActivity(
     fromAddress: 'from',
     toAddress: 'to',
     normalizedAddress: 'to',
-    slug: 'eth',
+    slug: 'toncoin',
     isIncoming: true,
     status,
     timestamp,
@@ -23,25 +23,39 @@ function makeActivity(
 }
 
 describe('getActivityContinuationTimestamp', () => {
-  it('takes the oldest activity that can serve as a cursor', () => {
+  it('uses the oldest confirmed transaction as the cursor', () => {
     const activities: ApiActivity[] = [
       makeActivity('a', 300),
       makeActivity('b', 200),
-      makeActivity('c:backend-swap', 100),
+      makeActivity('c', 100),
     ];
 
-    expect(getActivityContinuationTimestamp(activities, (activity) => activity)).toBe(200);
+    expect(getActivityContinuationTimestamp(activities, (activity) => activity)).toBe(100);
   });
 
-  it('falls back to the oldest activity when nothing can serve as a cursor', () => {
-    // The whole slice is swaps merged from our backend. Preferring a cursor that does not exist
-    // leaves the caller with no anchor at all, which is what makes it re-request the first page
-    // forever. An approximate cursor only overlaps what is already held.
+  it('skips older local and pending transactions when an on-chain cursor is available', () => {
     const activities: ApiActivity[] = [
-      makeActivity('a:backend-swap', 300),
+      makeActivity('confirmed', 400),
+      makeActivity('local:local', 300),
+      makeActivity('pending', 200, 'pending'),
+      makeActivity('pending-trusted', 100, 'pendingTrusted'),
+    ];
+
+    expect(getActivityContinuationTimestamp(activities, (activity) => activity)).toBe(400);
+  });
+
+  it('falls back to the oldest known activity when all transactions are local or pending', () => {
+    const activities: ApiActivity[] = [
+      makeActivity('a', 300, 'pendingTrusted'),
       makeActivity('b:local', 200),
       makeActivity('c', 100, 'pending'),
     ];
+
+    expect(getActivityContinuationTimestamp(activities, (activity) => activity)).toBe(100);
+  });
+
+  it('can continue from a finalized failed transaction', () => {
+    const activities = [makeActivity('completed', 200), makeActivity('failed', 100, 'failed')];
 
     expect(getActivityContinuationTimestamp(activities, (activity) => activity)).toBe(100);
   });
@@ -60,7 +74,7 @@ describe('getActivityContinuationTimestamp reading through ids', () => {
     const byId: Record<string, ApiActivity> = {
       a: makeActivity('a', 300),
       b: makeActivity('b', 200),
-      c: makeActivity('c:backend-swap', 100),
+      c: makeActivity('c', 100, 'pending'),
     };
 
     expect(getActivityContinuationTimestamp(['a', 'b', 'c'], (id) => byId[id])).toBe(200);

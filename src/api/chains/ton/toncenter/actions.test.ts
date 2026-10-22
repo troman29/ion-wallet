@@ -1,7 +1,8 @@
 import type { AnyAction } from './types';
 
 import { TONCOIN } from '../../../../config';
-import { parseActionsToActivities } from './actions';
+import { toBase64Address } from '../util/tonCore';
+import { parseActions, parseActionsToActivities } from './actions';
 
 const SENDER_RAW = '0:23D691D27F1A8B11658D78C7FA416F071ED01A981D70C2338A3B23017DDF84D7';
 const SENDER = 'UQAj1pHSfxqLEWWNeMf6QW8HHtAamB1wwjOKOyMBfd-E18BE';
@@ -33,6 +34,68 @@ const ION_TRANSFER = {
 } as AnyAction;
 
 describe('parseActionsToActivities', () => {
+  const options = {
+    network: 'mainnet' as const,
+    walletAddress: WALLET,
+    metadata: {},
+    addressBook: {},
+  };
+
+  it.each(['ion_transfer', 'ton_transfer'])('reads %s without address book entries', (type) => {
+    const [activity] = parseActionsToActivities([{ ...ION_TRANSFER, type } as AnyAction], options);
+    expect(activity).toMatchObject({
+      fromAddress: SENDER,
+      toAddress: WALLET,
+      isIncoming: true,
+      amount: 50_000_000_000_000_000n,
+      status: 'completed',
+    });
+  });
+
+  it('keeps valid history around unknown and incompatible actions', () => {
+    const unknown = { ...ION_TRANSFER, type: 'unsupported_legacy_action' } as unknown as AnyAction;
+    const missingDetails = { ...ION_TRANSFER, details: undefined } as unknown as AnyAction;
+    const invalidAmount = {
+      ...ION_TRANSFER,
+      details: { ...ION_TRANSFER.details, value: 'invalid' },
+    } as AnyAction;
+    const activities = parseActionsToActivities([
+      ION_TRANSFER, unknown, missingDetails, invalidAmount, ION_TRANSFER,
+    ], options);
+    expect(activities).toHaveLength(2);
+    expect(activities.every((activity) => activity.kind === 'transaction'
+      && activity.amount === 50_000_000_000_000_000n)).toBe(true);
+  });
+
+  it('recognizes an outgoing testnet transfer with a bounceable wallet address', () => {
+    const walletAddress = toBase64Address(SENDER_RAW, true, 'testnet');
+    const [activity] = parseActionsToActivities([{ ...ION_TRANSFER, success: false }], {
+      ...options, network: 'testnet', walletAddress,
+    });
+    expect(activity).toMatchObject({
+      fromAddress: walletAddress,
+      toAddress: toBase64Address(WALLET_RAW, false, 'testnet'),
+      isIncoming: false,
+      amount: -50_000_000_000_000_000n,
+      status: 'failed',
+    });
+  });
+
+  it('keeps trace parsing strict when a known action is incompatible', () => {
+    const action = { ...ION_TRANSFER, details: undefined } as unknown as AnyAction;
+    expect(() => parseActions([action], options)).toThrow();
+  });
+
+  it('reads a jetton transfer without token or owner address book entries', () => {
+    const action = {
+      ...ION_TRANSFER,
+      type: 'jetton_transfer',
+      details: { sender: SENDER_RAW, receiver: WALLET_RAW, asset: SENDER_RAW, amount: '123' },
+    } as AnyAction;
+    const [activity] = parseActionsToActivities([action], options);
+    expect(activity).toMatchObject({ isIncoming: true, amount: 123n });
+  });
+
   it('reads an ION native transfer', () => {
     const [activity] = parseActionsToActivities([ION_TRANSFER], {
       network: 'mainnet',

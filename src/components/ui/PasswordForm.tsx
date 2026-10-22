@@ -39,7 +39,7 @@ import PinPad from './PinPad';
 import modalStyles from './Modal.module.scss';
 import styles from './PasswordForm.module.scss';
 
-type OperationType = 'transfer' | 'sending' | 'staking' | 'unstaking' | 'swap'
+type OperationType = 'transfer' | 'sending' | 'staking' | 'unstaking'
   | 'unfreeze' | 'passcode' | 'unlock' | 'claim' | 'turnOnBiometrics' | 'mintCard';
 
 interface OwnProps {
@@ -293,8 +293,6 @@ function PasswordForm({
         return 'Confirm Staking';
       case 'unstaking':
         return 'Confirm Unstaking';
-      case 'swap':
-        return 'Confirm Swap';
       case 'unlock':
         return undefined;
       case 'claim':

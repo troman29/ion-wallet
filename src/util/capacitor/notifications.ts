@@ -16,7 +16,7 @@ import { logDebugError } from '../logs';
 import { getCapacitorPlatform } from './platform';
 
 interface ShowTxMessageData {
-  action: 'swap' | 'nativeTx';
+  action: 'nativeTx';
   address: string;
   txId: string;
   chain?: ApiChain; // `ton` by default
@@ -125,7 +125,7 @@ function handlePushNotificationActionPerformed(notification: ActionPerformed) {
 
   if (!accountId) return;
 
-  if (action === 'nativeTx' || action === 'swap') {
+  if (action === 'nativeTx') {
     const { txId } = notificationData;
     showAnyAccountTx({ accountId, txId, network, chain });
   } else if (action === 'jettonTx') {

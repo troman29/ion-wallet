@@ -16,7 +16,6 @@ concurrency:
 env:
   PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
-  SWAP_FEE_ADDRESS: ${{ vars.SWAP_FEE_ADDRESS }}
 
 jobs:
   build-web:

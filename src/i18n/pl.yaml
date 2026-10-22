@@ -6,23 +6,6 @@ Creating Wallet...: Tworzenie portfela...
 On the count of three...: Na trzy, ruszamy...
 $back_up_auth: Kopia zapasowa
 $back_up_security: Kopia zapasowa
-$2fa_security: 2FA z Telegramem
-2FA with Telegram: 2FA z Telegramem
-Confirm operations in Telegram as a second step.: Potwierdzaj operacje w Telegramie jako drugi krok.
-Confirm with: Potwierdź przez
-Add an extra layer of security for your wallet in TON network.: Dodaj dodatkową warstwę zabezpieczeń dla swojego portfela w sieci ION.
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: Podpisuj przelewy i ważne działania kodem dostępu, a następnie potwierdzaj je w Telegramie.
-This helps protect your funds even if your recovery phrase or keys are compromised.: To pomaga chronić środki nawet wtedy, gdy fraza odzyskiwania lub klucze zostaną przejęte.
-"Connection Fee:": "Opłata za połączenie:"
-Connect Telegram: Połącz Telegram
-Add in Gram Wallet: Dodaj w ION Wallet
-Telegram will be used to confirm transfers and important actions.: Telegram będzie używany do potwierdzania przelewów i ważnych działań.
-My Telegram Account: Moje konto Telegram
-Without username: Bez nazwy użytkownika
-Unlink Account: Odłącz konto
-An extra security layer requires confirming actions in Telegram after signing.: Dodatkowa warstwa zabezpieczeń wymaga potwierdzania działań w Telegramie po podpisaniu.
-Confirm Connection: Potwierdź połączenie
-Confirm Disconnection: Potwierdź rozłączenie
 Passwords must be equal.: Hasła muszą być równe.
 To protect your wallet as much as possible, use a password with: Aby chronić swój portfel w jak największym stopniu, używaj hasła z
 $auth_password_rule_8chars: co najmniej 8 znaków
@@ -95,7 +78,6 @@ $about_wallet_github: Tak, to prawda. Zapraszamy do zapoznania się z naszym %gi
 $about_github_link_text: "**Repozytorium GitHub**"
 Is there a community?: Czy istnieje społeczność?
 $about_wallet_community: Jasne, witamy w naszej %community_link%.
-$about_community_link_text: "**Telegram channel**"
 Currency History: Historia walut
 Price: Cena
 Enter Password: Wprowadź hasło
@@ -140,7 +122,6 @@ Create TON-Only Wallet: Utwórz portfel tylko ION
 Confirmation: Potwierdzenie
 Signing Data: Dane do Podpisu
 Contract Initialization Data: Dane Inicjalizacji Kontraktu
-$dont_have_required_token: Nie masz wymaganego tokena, ale można go wymienić.
 $unknown_token_address: Nieznany adres tokena.
 $dont_have_required_nft: Nie masz wymaganego NFT do wysłania.
 $state_init_invalid: Nieprawidłowe dane inicjalizacji kontraktu.
@@ -360,29 +341,15 @@ Decrypt: Odszyfruj
 Encrypted Message: Zaszyfrowana Wiadomość
 Message is encrypted: Wiadomość jest zaszyfrowana
 Agree: Zgadzam się
-$swap_action: Wymieniać
-$swap_activity_title: Wymiana
-Swap: Wymieniać
 You sell: Sprzedajesz
 You buy: Kupujesz
-Swap Details: Szczegóły wymiany
 Blockchain Fee: Opłata blockchain
 Included: Włączone
 Price Impact: Wpływ na cenę
 Minimum Received: Minimalna otrzymana ilość
-Slippage: Poślizg
-$swap_from_to: Zamień %from% %icon% %to%
 The exchange rate is below market value!: Kurs wymiany wynosi %value% poniżej wartości rynkowej!
 Invalid Pair: Nieprawidłowa para
 We do not recommend to perform an exchange, try to specify a lower amount.: Nie zalecamy dokonywania wymiany, spróbuj podać niższą kwotę.
-$swap_minimum_received_tooltip1: To jest najmniejsza ilość nowych tokenów, jakie otrzymasz z tej wymiany, biorąc pod uwagę aktualne warunki rynkowe, tolerancję poślizgu i potencjalny wpływ na cenę.
-$swap_minimum_received_tooltip2: To oczekiwane minimum, ale jeśli warunki zmienią się znacznie podczas przetwarzania twojej wymiany, końcowa kwota może być mniejsza.
-$swap_price_impact_tooltip1: Pokazuje, jak bardzo twoja transakcja może zmienić cenę tokena.
-$swap_price_impact_tooltip2: Duże transakcje mogą spowodować większy wzrost lub spadek ceny. Zazwyczaj niższa wartość jest lepsza.
-$swap_slippage_tooltip1: Ustawia, o ile cena może się zmienić przed przetworzeniem twojej wymiany.
-$swap_slippage_tooltip2: Jeśli podczas przetwarzania twojej wymiany cena zmieni się bardziej niż ta wartość, twoje zamówienie zostanie anulowane.
-Slippage not specified: Poślizg nie został określony
-Slippage too high: Poślizg jest zbyt duży
 Not Enough %symbol%: Niewystarczająca ilość %symbol%
 Use Responsibly: Używaj odpowiedzialnie
 $auth_responsibly_description1: |
@@ -397,10 +364,6 @@ Start Wallet: Uruchom portfel
 $auth_backup_warning_notice: |
   Teraz musisz ręcznie zrobić kopię zapasową kluczy prywatnych, aby w razie zapomnienia hasła lub utraty dostępu do tego urządzenia.
 Invalid address format. Only URL Safe Base64 format is allowed.: Nieprawidłowy format adresu. Dozwolony jest tylko format URL Safe Base64.
-Swap Placed: Wymiana złożona
-Swapping: Wymienianie
-Swapped: Wymienione
-Swap Again: Wymień ponownie
 Terms of Use: Warunki korzystania
 Privacy Policy: Polityka prywatności
 Insufficient liquidity: Niewystarczająca płynność
@@ -421,19 +384,10 @@ Your address on another blockchain: Twój adres na innym blockchainie
 Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: Podaj adres swojego portfela w blockchainie %blockchain%, aby otrzymać zakupione tokeny.
 The time for sending coins is over.: Czas wysyłki monet minął.
 You have not sent the coins to the specified address.: Nie wysłałeś monet na podany adres.
-$swap_cex_to_wallet_description: Wyślij %value% na ten adres w blockchainie %blockchain% w ciągu %time%
 Exchange failed and coins were refunded to your wallet.: Wymiana nie powiodła się, a monety zostały zwrócone na twój portfel.
-Swap Expired: Wymiana wygasła
 Address for %blockchain% transfer: Adres do przelewu %blockchain%
-Cross-chain exchange provided by %provider%: Wymiana międzyłańcuchowa dostarczana przez %provider%
-$swap_cex_terms_of_use: warunki korzystania
-$swap_cex_privacy_policy: polityka prywatności
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: "Kontynuując, zgadzasz się na %terms% i %policy%."
-$swap_cex_legal_message_with_aml: Kontynuując, zgadzasz się na %terms% i %policy% i rozumiesz, że transfer może uruchomić weryfikację zgodnie z %aml%.
 Password must contain %length% digits.: Hasło musi zawierać %length% cyfr.
 Deposit Link: Link depozytowy
-$swap_cex_from_wallet_description: "Tokeny zostaną wysłane na twój adres w blockchainie %blockchain% w ciągu kilku chwil:"
 Please note that it may take up to a few hours for tokens to appear in your wallet.: Proszę zauważyć, że może to potrwać kilka godzin, zanim tokeny pojawią się na twoim koncie.
 Minimum amount: Minimalna kwota %value%
 Maximum amount: Maksymalna kwota %value%
@@ -539,7 +493,6 @@ Incorrect code, please try again.: Nieprawidłowy kod, spróbuj ponownie.
 Correct: Poprawny
 Confirm Action: Potwierdź działanie
 $classic_confirm_actions: Potwierdź działania
-Confirm Swap: Potwierdź wymianę
 Confirm Rewards Claim: Potwierdź odbiór nagród
 "%amount% to %address%": "%amount% do %address%"
 "%amount_from% to %amount_to%": "%amount_from% do %amount_to%"
@@ -590,7 +543,6 @@ $dapp_dns_set_wallet_payload: Zmiana połączonego portfela domeny %domain% na %
 $dapp_dns_delete_wallet_payload: Usuwanie połączonego portfela domeny %domain%
 $dapp_dns_change_record_payload: Zmiana rekordu „%category%” domeny %domain% na %value%
 $dapp_dns_delete_record_payload: Usuwanie rekordu „%category%” domeny %domain%
-$dapp_token_bridge_pay_swap_payload: Potwierdzenie wymiany poprzez most krzyżowo-łańcuchowy
 $dapp_liquid_staking_deposit_payload: Wpłać do płynnego stakingu
 $dapp_liquid_staking_vote_payload: Głosowanie „%vote%” na propozycję %votingAddress%
 $dapp_single_nominator_change_validator_payload: Zmiana adresu walidatora umowy stakingowej SingleNominator na %address%
@@ -619,7 +571,6 @@ Cannot be sent: Nie można wysłać
 NFT is for sale: NFT jest na sprzedaż
 More actions: Więcej działań
 Open on %explorer_name%: Otwórz na %explorer_name%
-Swap is not supported in Testnet.: Swap nie jest obsługiwany w sieci testowej.
 Buying with card is not supported in Testnet.: Zakup za pomocą karty nie jest obsługiwany w sieci testowej.
 Staking is not supported in Testnet.: Staking nie jest obsługiwany w sieci testowej.
 Get Support: Uzyskaj pomoc
@@ -738,8 +689,6 @@ Switch to W5: Przełącz na W5
 Not Scam: Nie oszustwo
 Untitled: Bez tytułu
 Multichain: Multichain
-$swap_too_small_amount: Zbyt mała kwota
-$swap_slippage_violation: Emulacja wymiany nie powiodła się z powodu przekroczenia poślizgu. Spróbuj ponownie.
 $not_enough_symbol_lowercase: Za mało %symbol%
 Enter Secret Words: Wprowadź Tajne Słowa
 Turn this off so you can manually download updates and verify signatures.: Wyłącz to, aby móc ręcznie pobierać aktualizacje i weryfikować podpisy.
@@ -773,7 +722,6 @@ Sounds: Dźwięki
 Push Notifications: Powiadomienia Push
 Select up to %count% wallets for notifications: Wybierz do %count% portfeli do powiadomień
 Accumulated Rewards: Nagromadzone nagrody
-$swap_reverse_prohibited: Ustawienie kwoty zakupu jest niemożliwe dla tej pary tokenów
 Blockchain Fee Details: Szczegóły opłaty blockchain
 Final Fee: Opłata końcowa
 Excess: Reszta
@@ -1223,7 +1171,6 @@ Pulse: Puls
 Edit Message: Edytuj wiadomość
 Toggle Hints: Przełącz wskazówki
 Scroll To Bottom: Przewiń na dół
-$unknown_swap_token: Nieznany token w linku wymiany. Użyto domyślnych tokenów.
 $action_not_available_view_mode: Ta akcja jest niedostępna dla portfeli podglądu
 Deposit: Wpłać
 Trade: Handluj
@@ -1314,12 +1261,7 @@ Share QR Code: Udostępnij kod QR
 $send_only_ton: Wysyłaj na ten adres wyłącznie ION lub aktywa sieci ION. Wysłanie innych tokenów spowoduje ich utratę.
 $send_only_chain: Wysyłaj na ten adres wyłącznie %chain% (%symbol%) lub aktywa sieci %chain%. Wysłanie innych tokenów spowoduje ich utratę.
 Buying with card is not supported for this account.: Zakup kartą nie jest obsługiwany dla tego konta.
-Swapped at: Zamieniono o
 Price per: Cena za
-Swap ID: ID wymiany
-Swap ID for %provider%: ID wymiany %provider%
-Copy Swap ID: Kopiuj ID wymiany
-Swap ID Copied: Skopiowano ID wymiany
 from: z
 to: do
 Currency: Waluta
@@ -1371,7 +1313,6 @@ Current APR: Bieżący APR
 in: w
 Network Error: Błąd sieci
 Enter Amount: Wpisz kwotę
-"Swap %from% to %to%": Zamień %from% na %to%
 "%from% to %to%": "%from% na %to%"
 "Max %amount%": Maks. %amount%
 "Authorize %token% fee": Zatwierdź opłatę %token%
@@ -1380,7 +1321,6 @@ AML/KYC: AML/KYC
 Receive to: Odbierz na
 Enter %token% address: Wpisz adres %token%
 "Send %token% this address:": "Wyślij %token% na ten adres:"
-Swap is not supported on this account.: Wymiana nie jest dostępna na tym koncie.
 "%amount% will be returned": "%amount% zostanie zwrócone"
 Connecting your wallet: Łączenie portfela
 Action is not possible on a view-only wallet.: To działanie nie jest dostępne w portfelu tylko do podglądu.
@@ -1459,7 +1399,6 @@ Set a passcode: Ustaw kod
 "This is how the TON Blockchain works.": "Tak działa blockchain TON."
 Discovering wallets: Wyszukiwanie portfeli
 Address not resolved: Nie udało się rozpoznać adresu
-Sending more than one NFT isn't supported by Ledger: Wysyłanie więcej niż jednego NFT nie jest obsługiwane przez Ledger
 "Updating…": "Aktualizowanie…"
 "Waiting for network…": "Oczekiwanie na sieć…"
 Wallet is Locked: Portfel jest zablokowany
@@ -1479,7 +1418,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: "Czy na pewno chcesz odpiąć kartę %tab%?"
 add: dodaj
 send: wyślij
-swap: zamień
 earn: zarabiaj
 Actions: Działania
 $actions_description: Szybki dostęp do najczęściej używanych działań.
@@ -1546,7 +1484,6 @@ just now: przed chwilą
 "No": "Nie"
 Search: Szukaj
 State init supplied without message body: Stan init przekazano bez treści wiadomości
-Swap Failed: Wymiana nie powiodła się
 The wallet is ready: Portfel jest gotowy
 Unexpected error. Please let the support know.: Nieoczekiwany błąd. Skontaktuj się z pomocą techniczną.
 Unlock it and open the TON App: Odblokuj go i otwórz aplikację TON
@@ -1599,10 +1536,6 @@ push_activity_dns_renewed: Odnowiono DNS
 push_activity_subscription_started: Rozpoczęto subskrypcję
 push_activity_subscription_payment_received: Otrzymano płatność subskrypcji %amount% %symbol%
 push_activity_subscription_canceled: Anulowano subskrypcję
-push_activity_swap_completed: Zamieniono %from_symbol% → %to_symbol%
-push_activity_swap_failed: Wymiana %from_symbol% → %to_symbol% nie powiodła się
-push_activity_swap_expired: Wymiana %from_symbol% → %to_symbol% wygasła
-push_activity_swap_pending: Wymiana %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: Zysk ze stakingu %amount% ION
 push_activity_staking_loyalty_profit: Zysk lojalnościowy ze stakingu %amount% ION
 push_domain_title_renew: Odnów swoją domenę
@@ -1641,14 +1574,10 @@ This action is not supported in explorer mode.: Ta akcja nie jest obsługiwana w
 $relative_today: dziś
 $relative_tomorrow: jutro
 P&L Change: Zmiana zysku/straty
-$swap_cex_support: "Jeśli coś poszło nie tak, skontaktuj się z %support% i podaj ten **zewnętrzny identyfikator wymiany**:"
-$swap_cex_hold_support: "Skontaktuj się z %support% i podaj ten **zewnętrzny identyfikator wymiany**, aby przejść weryfikację dostawcy:"
-$swap_cex_provider_support: "wsparciem %provider%"
 External Exchange ID Copied: Skopiowano zewnętrzny identyfikator wymiany
 Email: Email
 Choose Token: Wybierz token
 You don't have any eligible tokens for this payment: Nie masz odpowiednich tokenów do tej płatności
-Buy, swap, or receive a supported token to continue.: Kup, wymień lub odbierz obsługiwany token, aby kontynuować.
 Copy Wallet Link: Kopiuj link
 Are you sure you want to cancel the payment?: Czy na pewno chcesz anulować płatność?
 Cancel Payment: Anuluj płatność
@@ -1703,7 +1632,6 @@ $token_info_collapse_hint: Zwija informacje o tokenie.
 $token_info_open_in_browser_hint: Otwiera w przeglądarce.
 $token_info_fallback_description: Brak dostępnych informacji publicznych
 $token_info_no_description: Brak dostępnego opisu
-$swap_cex_aml_kyc_policy_with_provider: AML/KYC %provider%
 EIP-712 typed data: Dane typowane EIP-712
 Primary type: Typ główny
 Deprecated Website: Nieaktualna strona internetowa
@@ -1717,7 +1645,6 @@ See All: Zobacz wszystkie
 Add an **extra layer of security** for your wallet in TON network.: Dodaj **dodatkową warstwę zabezpieczeń** dla swojego portfela w sieci ION.
 Another transaction was sent from this wallet simultaneously. Please try again.: Z tego portfela wysłano jednocześnie inną transakcję. Spróbuj ponownie.
 Buying with card is not supported for this chain.: Zakup kartą nie jest obsługiwany w tej sieci.
-Confirm with Telegram: Potwierdź przez Telegram
 Couldn't open support chat. Please try again.: Nie udało się otworzyć czatu pomocy technicznej. Spróbuj ponownie.
 Couldn't prepare logs for export. Please try again.: Nie udało się przygotować logów do eksportu. Spróbuj ponownie.
 Disconnect Dapps: Rozłącz aplikacje
@@ -1727,17 +1654,13 @@ Export Logs: Eksportuj logi
 Failed to load chat: Nie udało się załadować czatu
 Gram: ION
 More Details: Więcej szczegółów
-Open Telegram: Otwórz Telegram
 Open addresses: Otwiera adresy
 SDK is not ready. Please try again.: SDK nie jest gotowe. Spróbuj ponownie.
 Selected NFTs must use the same network: Wybrane NFT muszą korzystać z tej samej sieci
 Selling is not supported for this token.: Sprzedaż tego tokena nie jest obsługiwana.
 Shows more information: Wyświetla więcej informacji
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: Podpisuj przelewy i ważne działania kodem dostępu, **a następnie potwierdzaj je w Telegramie**.
-Telegram Account: Konto Telegram
 This action cannot be undone.: Tej czynności nie można cofnąć.
 This action is no longer available.: Ta czynność nie jest już dostępna.
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: To pomaga **chronić środki** nawet wtedy, gdy fraza odzyskiwania lub klucze zostaną przejęte.
 Transaction is not ready: Transakcja nie jest gotowa
 Unsupported Wallet Version: Nieobsługiwana wersja portfela
 Unsupported version: Nieobsługiwana wersja
@@ -1747,3 +1670,4 @@ Popular Tokens: Popularne tokeny
 Tokenized Stocks: Tokenizowane akcje
 Tokenized Gold: Tokenizowane złoto
 Index Funds: Fundusze indeksowe
+"Receive a supported token to continue.": "Odbierz obsługiwany token, aby kontynuować."

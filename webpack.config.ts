@@ -426,7 +426,6 @@ export default function createConfig(
         IS_FIREFOX_EXTENSION: 'false',
         IS_CAPACITOR: 'false',
         IS_HEADLESS: '', // Empty string for the same reason as IS_EXTENSION above
-        SWAP_FEE_ADDRESS: '',
         GIVEAWAY_CHECKIN_URL: '',
         PROXY_API_BASE_URL: '',
         WALLET_CONNECT_PROJECT_ID: '',
@@ -435,6 +434,7 @@ export default function createConfig(
         NO_EVM: '0',
         NO_PENDING_ACTIVITIES: '0',
         NO_WEBSOCKET: '0',
+        NO_TRACE_EMULATION: '0',
         NO_EXTRA_FEATURES: '0',
       }),
       new ProvidePlugin({

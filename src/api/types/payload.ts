@@ -92,12 +92,6 @@ export type ApiLiquidStakingWithdrawalPayload = {
   queryId: bigint;
 };
 
-export type ApiTokenBridgePaySwap = {
-  type: 'token-bridge:pay-swap';
-  queryId: bigint;
-  swapId: string;
-};
-
 export type ApiDnsChangeRecord = {
   type: 'dns:change-record';
   queryId: bigint;
@@ -159,7 +153,6 @@ export type ApiParsedPayload = ApiCommentPayload
   | ApiLiquidStakingDepositPayload
   | ApiLiquidStakingWithdrawalPayload
   | ApiLiquidStakingWithdrawalNftPayload
-  | ApiTokenBridgePaySwap
   | ApiDnsChangeRecord
   | ApiVestingAddWhitelistPayload
   | ApiSingleNominatorWithdrawPayload

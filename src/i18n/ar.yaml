@@ -6,23 +6,6 @@ Creating Wallet...: جارٍ إنشاء المحفظة...
 On the count of three...: عند العد لثلاثة...
 $back_up_auth: النسخ الاحتياطي
 $back_up_security: النسخ الاحتياطي
-Confirm with: تأكيد مع
-Add an extra layer of security for your wallet in TON network.: أضف طبقة إضافية من الأمان لمحفظتك في شبكة ION.
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: قم بتسجيل عمليات النقل والإجراءات المهمة باستخدام رمز المرور الخاص بك، ثم قم بتأكيدها في Telegram.
-This helps protect your funds even if your recovery phrase or keys are compromised.: وهذا يساعد على حماية أموالك حتى لو تعرضت عبارة الاسترداد أو المفاتيح الخاصة بك للاختراق.
-"Connection Fee:": "رسوم الاتصال:"
-Connect Telegram: قم بتوصيل Telegram
-Add in Gram Wallet: أضف في ION Wallet
-Telegram will be used to confirm transfers and important actions.: سيتم استخدام Telegram لتأكيد عمليات النقل والإجراءات المهمة.
-My Telegram Account: حساب Telegram الخاص بي
-Without username: بدون اسم المستخدم
-Unlink Account: إلغاء ربط الحساب
-An extra security layer requires confirming actions in Telegram after signing.: تتطلب طبقة الأمان الإضافية تأكيد الإجراءات في Telegram بعد التوقيع.
-Confirm Connection: تأكيد الاتصال
-Confirm Disconnection: تأكيد قطع الاتصال
-$2fa_security: 2FA مع Telegram
-2FA with Telegram: 2FA مع Telegram
-Confirm operations in Telegram as a second step.: قم بتأكيد العمليات في Telegram كخطوة ثانية.
 Passwords must be equal.: يجب أن تكون كلمات المرور متساوية.
 To protect your wallet as much as possible, use a password with: لحماية محفظتك قدر الإمكان، استخدم كلمة مرور مع
 $auth_password_rule_8chars: 8 أحرف على الأقل
@@ -90,7 +73,6 @@ $about_wallet_github: نعم إنه كذلك. لا تتردد في استكشا�
 $about_github_link_text: "**مستودع جيثب**"
 Is there a community?: هل هناك مجتمع؟
 $about_wallet_community: بالتأكيد، مرحبًا بك في %community_link%.
-$about_community_link_text: "**قناة Telegram**"
 Currency History: تاريخ العملة
 Price: سعر
 Enter Password: أدخل كلمة المرور
@@ -135,7 +117,6 @@ Create TON-Only Wallet: إنشاء محفظة ION فقط
 Confirmation: تأكيد
 Signing Data: بيانات التوقيع
 Contract Initialization Data: بيانات تهيئة العقد
-$dont_have_required_token: ليس لديك التوكن المطلوب لإرساله، ولكن يمكن استبداله.
 $unknown_token_address: عنوان رمزي غير معروف.
 $dont_have_required_nft: ليس لديك NFT المطلوب لإرساله.
 $state_init_invalid: بيانات تهيئة العقد غير صالحة.
@@ -351,28 +332,15 @@ Decrypt: فك التشفير
 Encrypted Message: رسالة مشفرة
 Message is encrypted: الرسالة مشفرة
 Agree: يوافق
-$swap_action: تبديل
-Swap: تبديل
 You sell: أنت تبيع
 You buy: تشتري
-Swap Details: تفاصيل المبادلة
 Blockchain Fee: رسوم البلوكشين
 Included: متضمنة
 Price Impact: تأثير السعر
 Minimum Received: الحد الأدنى المستلم
-Slippage: الانزلاق
-$swap_from_to: قم بتبديل %from% %icon% %to%
 The exchange rate is below market value!: سعر الصرف %value% أقل من القيمة السوقية!
 Invalid Pair: زوج غير صالح
 We do not recommend to perform an exchange, try to specify a lower amount.: لا ننصح بإجراء عملية تبادل، حاول تحديد مبلغ أقل.
-$swap_minimum_received_tooltip1: هذا هو أقل قدر من الرموز الجديدة التي ستحصل عليها من هذه المبادلة، مع الأخذ في الاعتبار ظروف السوق الحالية، وتحمل الانزلاق، والتأثير المحتمل على السعر.
-$swap_minimum_received_tooltip2: إنه الحد الأدنى المتوقع، ولكن إذا تغيرت الظروف كثيرًا أثناء معالجة المبادلة الخاصة بك، فقد يكون المبلغ النهائي أقل.
-$swap_price_impact_tooltip1: يوضح هذا مقدار تأثير تجارتك على سعر التوكن.
-$swap_price_impact_tooltip2: الصفقات الكبيرة يمكن أن تجعل السعر يرتفع أو ينخفض ​​أكثر. أقل عادة ما يكون أفضل.
-$swap_slippage_tooltip1: يحدد هذا المبلغ المسموح للسعر بالتغيير قبل معالجة المبادلة الخاصة بك.
-$swap_slippage_tooltip2: إذا تغير السعر أكثر من هذه القيمة أثناء معالجة المبادلة الخاصة بك، فسيتم إلغاء طلبك.
-Slippage not specified: الانزلاق غير محدد
-Slippage too high: الانزلاق مرتفع جدًا
 Not Enough %symbol%: لا يكفي %symbol%
 Use Responsibly: استخدم بمسؤولية
 $auth_responsibly_description1: "%app_name% هي محفظة **ذاتية الحراسة**، مما يعني أنك **أنت فقط** تتمتع بالتحكم الكامل، والأهم من ذلك، **المسؤولية الكاملة** عن أموالك."
@@ -382,10 +350,6 @@ $auth_responsibly_description4: "**لا تخزّن أبدًا** كل أموال�
 Start Wallet: ابدأ المحفظة
 $auth_backup_warning_notice: تحتاج الآن إلى **نسخ المفاتيح السرية احتياطيًا** يدويًا في حال نسيت كلمة المرور أو فقدت الوصول إلى هذا الجهاز.
 Invalid address format. Only URL Safe Base64 format is allowed.: تنسيق العنوان غير صالح. يُسمح فقط بتنسيق URL Safe Base64.
-Swap Placed: تم وضع المبادلة
-Swapping: مبادلة
-Swapped: مبادلة
-Swap Again: مبادلة مرة أخرى
 Terms of Use: شروط الاستخدام
 Privacy Policy: سياسة الخصوصية
 Insufficient liquidity: سيولة غير كافية
@@ -405,7 +369,6 @@ Please provide an address of your wallet in %blockchain% blockchain to receive b
 The time for sending coins is over.: لقد انتهى وقت إرسال العملات المعدنية.
 You have not sent the coins to the specified address.: لم تقم بإرسال العملات المعدنية إلى العنوان المحدد.
 Exchange failed and coins were refunded to your wallet.: فشل التبادل وتم رد العملات المعدنية إلى محفظتك.
-Swap Expired: انتهت صلاحية المبادلة
 Address for %blockchain% transfer: عنوان نقل %blockchain%
 Password must contain %length% digits.: يجب أن تحتوي كلمة المرور على أرقام %length%.
 Deposit Link: رابط الإيداع
@@ -513,7 +476,6 @@ Incorrect code, please try again.: الرمز غير صحيح، يرجى الم�
 Correct: صحيح
 Confirm Action: تأكيد الإجراء
 $classic_confirm_actions: تأكيد الإجراءات
-Confirm Swap: تأكيد المبادلة
 Confirm Rewards Claim: تأكيد المطالبة بالمكافآت
 "%amount% to %address%": "%amount% إلى %address%"
 "%amount_from% to %amount_to%": "%amount_from% إلى %amount_to%"
@@ -563,7 +525,6 @@ $dapp_dns_set_wallet_payload: تغيير المحفظة المرتبطة للم�
 $dapp_dns_delete_wallet_payload: حذف المحفظة المرتبطة للمجال %domain%
 $dapp_dns_change_record_payload: تغيير سجل "%category%" للمجال %domain% إلى %value%
 $dapp_dns_delete_record_payload: حذف سجل "%category%" للمجال %domain%
-$dapp_token_bridge_pay_swap_payload: تأكيد التبادل عبر جسر عبر السلسلة
 $dapp_liquid_staking_deposit_payload: إيداع في عمادا السائل
 $dapp_liquid_staking_vote_payload: التصويت بـ "%vote%" لاقتراح %votingAddress%
 $dapp_single_nominator_change_validator_payload: تغيير عنوان مدقق عقد التوقيع المساحي SingleNominator إلى %address%
@@ -591,7 +552,6 @@ Cannot be sent: لا يمكن إرسالها
 NFT is for sale: "\u200FNFT للبيع"
 More actions: المزيد من الإجراءات
 Open on %explorer_name%: مفتوح على %explorer_name%
-Swap is not supported in Testnet.: المبادلة غير مدعومة في Testnet.
 Buying with card is not supported in Testnet.: الشراء باستخدام البطاقة غير مدعوم في Testnet.
 Staking is not supported in Testnet.: التوقيع المساحي غير مدعوم في Testnet.
 Get Support: احصل على الدعم
@@ -709,8 +669,6 @@ Switch to W5: قم بالتبديل إلى W5
 Not Scam: لا احتيال
 Untitled: بدون عنوان
 Multichain: متعدد السلاسل
-$swap_too_small_amount: كمية صغيرة جدًا
-$swap_slippage_violation: فشلت محاكاة المبادلة بسبب انتهاك الانزلاق. يرجى المحاولة مرة أخرى.
 $not_enough_symbol_lowercase: لا يكفي %symbol%
 Enter Secret Words: أدخل عبارات الاسترداد
 Turn this off so you can manually download updates and verify signatures.: قم بإيقاف تشغيل هذا حتى تتمكن من تنزيل التحديثات يدويًا والتحقق من التوقيعات.
@@ -744,7 +702,6 @@ Sounds: يبدو
 Push Notifications: الإشعارات الفورية
 Select up to %count% wallets for notifications: حدد ما يصل إلى محافظ %count% للإشعارات
 Accumulated Rewards: المكافآت المتراكمة
-$swap_reverse_prohibited: من المستحيل تحديد مبلغ الشراء لهذا الزوج من الرموز المميزة
 Blockchain Fee Details: تفاصيل رسوم البلوكشين
 Final Fee: الرسوم النهائية
 Excess: إفراط
@@ -1151,7 +1108,6 @@ Pulse: نبض
 Edit Message: تحرير الرسالة
 Toggle Hints: تبديل التلميحات
 Scroll To Bottom: قم بالتمرير إلى الأسفل
-$unknown_swap_token: رمز غير معروف في رابط المبادلة. تم استخدام الرموز الافتراضية.
 $action_not_available_view_mode: هذا الإجراء غير متاح لعرض المحافظ
 Deposit: إيداع
 Trade: تجارة
@@ -1236,7 +1192,6 @@ Share QR Code: مشاركة رمز الاستجابة السريعة
 $send_only_ton: أرسل فقط الأصول المستندة إلى ION أو ION إلى هذا العنوان. إرسال الرموز الأخرى سيؤدي إلى الخسارة.
 $send_only_chain: أرسل فقط الأصول المستندة إلى %chain% (%symbol%) أو %chain% إلى هذا العنوان. إرسال الرموز الأخرى سيؤدي إلى الخسارة.
 Buying with card is not supported for this account.: الشراء باستخدام البطاقة غير مدعوم لهذا الحساب.
-Swapped at: تم المبادلة عند
 Price per: السعر لكل
 from: من
 to: ل
@@ -1289,7 +1244,6 @@ Current APR: أبريل الحالي
 in: في
 Network Error: خطأ في الشبكة
 Enter Amount: أدخل المبلغ
-"Swap %from% to %to%": قم بتبديل %from% إلى %to%
 "%from% to %to%": "%from% إلى %to%"
 "Max %amount%": ماكس %amount%
 "Authorize %token% fee": تفويض رسوم %token%
@@ -1298,7 +1252,6 @@ AML/KYC: مكافحة غسل الأموال/اعرف عميلك
 Receive to: تلقي ل
 Enter %token% address: أدخل عنوان %token%
 "Send %token% this address:": "أرسل %token% هذا العنوان:"
-Swap is not supported on this account.: المبادلة غير مدعومة في هذا الحساب.
 "%amount% will be returned": سيتم إرجاع %amount%
 Connecting your wallet: ربط محفظتك
 Action is not possible on a view-only wallet.: الإجراء غير ممكن على محفظة العرض فقط.
@@ -1370,7 +1323,6 @@ Tap to reveal: انقر للكشف
 There is no activity history for this wallet yet.: لا يوجد سجل نشاط لهذه المحفظة حتى الآن.
 Discovering wallets: اكتشاف المحافظ
 Address not resolved: لم يتم حل العنوان
-Sending more than one NFT isn't supported by Ledger: لا يدعم Ledger إرسال أكثر من NFT
 Updating…: جارٍ التحديث…
 This is how the TON Blockchain works.: هذه هي الطريقة التي تعمل بها سلسلة ION Blockchain.
 Waiting for network…: في انتظار الشبكة...
@@ -1391,7 +1343,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: هل أنت متأكد أنك تريد إلغاء تثبيت %tab%؟
 add: يضيف
 send: يرسل
-swap: تبديل
 earn: يكسب
 Actions: الإجراءات
 $actions_description: الوصول بسرعة إلى الإجراءات الأكثر شيوعا.
@@ -1457,7 +1408,6 @@ just now: الآن
 "No": لا
 Search: يبحث
 State init supplied without message body: تم توفير الحالة init بدون نص الرسالة
-Swap Failed: فشل المبادلة
 The wallet is ready: المحفظة جاهزة
 Unexpected error. Please let the support know.: خطأ غير متوقع. يرجى إعلام الدعم.
 Unlock it and open the TON App: افتحه وافتح تطبيق TON
@@ -1501,10 +1451,6 @@ push_activity_dns_renewed: تجديد DNS
 push_activity_subscription_started: بدأ الاشتراك
 push_activity_subscription_payment_received: تم استلام دفعة الاشتراك %amount% %symbol%
 push_activity_subscription_canceled: تم إلغاء الاشتراك
-push_activity_swap_completed: تم تبديل %from_symbol% → %to_symbol%
-push_activity_swap_failed: تبديل %from_symbol% → فشل %to_symbol%
-push_activity_swap_expired: مبادلة %from_symbol% → انتهت صلاحية %to_symbol%
-push_activity_swap_pending: مبادلة %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: تكديس الأرباح %amount% ION
 push_activity_staking_loyalty_profit: تكديس أرباح الولاء %amount% ION
 push_domain_title_renew: تجديد المجال الخاص بك
@@ -1528,23 +1474,11 @@ Day-by-day profit and loss: الربح والخسارة يوما بعد يوم
 This action is not supported in explorer mode.: هذا الإجراء غير مدعوم في وضع المستكشف.
 $relative_today: اليوم
 $relative_tomorrow: غداً
-$swap_activity_title: مبادلة
 Processing Payment: جارٍ معالجة الدفع
 It may take a few seconds: قد يستغرق ذلك بضع ثوانٍ
-$swap_cex_to_wallet_description: أرسل %value% إلى هذا العنوان في بلوكتشين %blockchain% خلال %time%
-Cross-chain exchange provided by %provider%: مبادلة عبر السلاسل مقدَّمة من %provider%
-$swap_cex_terms_of_use: شروط الاستخدام
-$swap_cex_privacy_policy: سياسة الخصوصية
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: بالمتابعة، أنت توافق على %terms% و%policy%.
-$swap_cex_legal_message_with_aml: بالمتابعة، أنت توافق على %terms% و%policy% وتدرك أن التحويل قد يستدعي التحقق وفقًا لسياسة %aml%.
-$swap_cex_from_wallet_description: "سيتم إرسال التوكنات إلى عنوانك في بلوكتشين %blockchain% قريبًا:"
 $available_balance: "المتاح: %balance%"
 $dapp_insufficient_network_fee_warning: لا يوجد %token% كافٍ لتغطية رسوم الشبكة
 External Exchange ID Copied: تم نسخ معرّف المنصة الخارجية
-$swap_cex_support: "إذا حدث خطأ ما، تواصل مع %support% وقدّم **معرّف المنصة الخارجية** هذا:"
-$swap_cex_hold_support: "يرجى التواصل مع %support% وتقديم **معرّف المنصة الخارجية** هذا لاجتياز مراجعة المزوّد:"
-$swap_cex_provider_support: دعم %provider%
 Email: البريد الإلكتروني
 The NFT has been hidden: تم إخفاء NFT
 The NFT is no longer hidden: لم يعد NFT مخفيًا
@@ -1570,15 +1504,10 @@ Are you sure you want to revoke approval for %token%?: هل أنت متأكد أ
 Confirm Revoking: تأكيد الإلغاء
 Unknown Plugin: إضافة غير معروفة
 $address_suggestion_no_chain: بدون %chain%
-Swap ID: معرّف المبادلة
-Swap ID for %provider%: معرّف المبادلة لدى %provider%
-Copy Swap ID: نسخ معرّف المبادلة
-Swap ID Copied: تم نسخ معرّف المبادلة
 Payment Address: عنوان الدفع
 P&L Change: تغيّر الربح والخسارة
 Choose Token: اختيار التوكن
 You don't have any eligible tokens for this payment: ليس لديك أي توكنات مؤهلة لهذا الدفع
-Buy, swap, or receive a supported token to continue.: اشترِ أو بادل أو استلم توكنًا مدعومًا للمتابعة.
 Are you sure you want to cancel the payment?: هل أنت متأكد أنك تريد إلغاء الدفع؟
 Cancel Payment: إلغاء الدفع
 Paid: تم الدفع
@@ -1670,7 +1599,6 @@ $token_info_collapse_hint: يطوي معلومات الرمز.
 $token_info_open_in_browser_hint: يفتح في المتصفح.
 $token_info_fallback_description: لا تتوفر معلومات عامة
 $token_info_no_description: لا يتوفر وصف
-$swap_cex_aml_kyc_policy_with_provider: AML/KYC الخاصة بـ %provider%
 Hide Unverified NFTs: إخفاء NFTs غير الموثّقة
 Unverified: غير موثّقة
 Switched to %account%: تم التبديل إلى %account%
@@ -1678,7 +1606,6 @@ See All: عرض الكل
 Add an **extra layer of security** for your wallet in TON network.: أضف **طبقة إضافية من الأمان** لمحفظتك على شبكة ION.
 Another transaction was sent from this wallet simultaneously. Please try again.: تم إرسال معاملة أخرى من هذه المحفظة في الوقت نفسه. يرجى المحاولة مرة أخرى.
 Buying with card is not supported for this chain.: الشراء باستخدام البطاقة غير مدعوم لهذه الشبكة.
-Confirm with Telegram: التأكيد عبر Telegram
 Couldn't open support chat. Please try again.: تعذر فتح محادثة الدعم. يرجى المحاولة مرة أخرى.
 Couldn't prepare logs for export. Please try again.: تعذر إعداد السجلات للتصدير. يرجى المحاولة مرة أخرى.
 Disconnect Dapps: افصل التطبيقات
@@ -1688,17 +1615,13 @@ Export Logs: تصدير السجلات
 Failed to load chat: تعذر تحميل الدردشة
 Gram: ION
 More Details: مزيد من التفاصيل
-Open Telegram: فتح Telegram
 Open addresses: يفتح العناوين
 SDK is not ready. Please try again.: حزمة SDK غير جاهزة. يرجى المحاولة مرة أخرى.
 Selected NFTs must use the same network: يجب أن تستخدم رموز NFT المحددة الشبكة نفسها
 Selling is not supported for this token.: بيع هذا الرمز غير مدعوم.
 Shows more information: يعرض المزيد من المعلومات
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: وقّع عمليات النقل والإجراءات المهمة باستخدام رمز المرور، **ثم أكّدها في Telegram**.
-Telegram Account: حساب Telegram
 This action cannot be undone.: لا يمكن التراجع عن هذا الإجراء.
 This action is no longer available.: لم يعد هذا الإجراء متاحًا.
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: وهذا يساعد على **حماية أموالك** حتى لو تعرضت عبارة الاسترداد أو المفاتيح الخاصة بك للاختراق.
 Transaction is not ready: المعاملة غير جاهزة
 Unsupported Wallet Version: إصدار المحفظة غير مدعوم
 Unsupported version: إصدار غير مدعوم
@@ -1708,3 +1631,4 @@ Popular Tokens: الرموز الشائعة
 Tokenized Stocks: الأسهم المرمّزة
 Tokenized Gold: الذهب المرمّز
 Index Funds: صناديق المؤشرات
+"Receive a supported token to continue.": "استلم رمزًا مدعومًا للمتابعة."

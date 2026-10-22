@@ -2,7 +2,7 @@ import type { ApiActivity } from '../../../types';
 
 import { parseTxId } from '../../../../util/activities';
 
-/** Trace id used by the reconciler for page-boundary consistency checks. */
+/** Trace id used for page-boundary consistency checks. */
 export function getActivityTraceBoundaryId(activity: ApiActivity) {
   return parseTxId(activity.id).hash;
 }
@@ -32,7 +32,7 @@ export function trimPageBoundaryTraceActivities(
   const trimmedCount = activities.length - trimmed.length;
 
   // Returning an empty page causes pagination flicker/retries with no progress. If the entire page is one large trace,
-  // keep it raw and let the conservative TON reconciler refuse unsafe aggregation unless the slice proves a clean route.
+  // keep it intact so the next request still has a usable cursor.
   if (trimmed.length === 0) return [...activities];
 
   // A very large boundary trace is likely an unusually busy block/trace or malformed input. Keep it raw rather than

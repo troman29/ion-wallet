@@ -692,7 +692,7 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
       }
 
       if (SHOULD_SHOW_LOADER_ON_SSE_START) {
-        // Open the placeholder request modal; the SSE request event types it (fill or swap) and clears its timer
+        // Open the placeholder request modal; the SSE request event fills it and clears its timer
         this.onUpdate({
           type: 'dappLoading',
           connectionType: 'sendTransaction',

@@ -471,11 +471,7 @@ async function loadNewActivities(
   const result: ApiActivityTimestamps = {};
   if (!rawActivities.length) return result;
 
-  // Advance the polling cursor from the RAW on-chain slice, before the swap merge. A merged
-  // cross-chain CEX swap can carry a backend timestamp newer than every on-chain leg in this slice;
-  // anchoring the cursor on it would push `min_mined_at` past a genuine on-chain tx whose timestamp
-  // falls in between, so that tx is never fetched on the next poll and silently misses the live feed.
-  // Tron keeps its cursor on the raw slice for the same reason; the merge below is display-only.
+  // Anchor the next poll on the newest on-chain activity.
   result[getChainConfig(chain).nativeToken.slug] = rawActivities[0].timestamp;
 
   const activities = rawActivities;

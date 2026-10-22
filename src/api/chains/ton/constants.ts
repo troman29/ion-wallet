@@ -149,10 +149,6 @@ export enum TeleitemOpCode {
   Ok = 0xa37a0983,
 }
 
-export enum OtherOpCode {
-  TokenBridgePaySwap = 0x8,
-}
-
 export enum BidaskOpCode {
   Swap = 0xc09da84e,
   NativeTransferNotification = 0x6edd65f0,

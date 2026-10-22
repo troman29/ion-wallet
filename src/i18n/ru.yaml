@@ -6,23 +6,6 @@ Creating Wallet...: Создаём кошелёк...
 On the count of three...: Сосчитайте до трёх...
 $back_up_auth: Показать слова
 $back_up_security: Резервное копирование
-$2fa_security: 2FA с Telegram
-2FA with Telegram: 2FA с Telegram
-Confirm operations in Telegram as a second step.: Подтверждайте операции в Telegram вторым шагом.
-Confirm with: Подтвердить через
-Add an extra layer of security for your wallet in TON network.: Добавьте дополнительный уровень безопасности для кошелька в сети ION.
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: Подписывайте переводы и важные действия кодом доступа, а затем подтверждайте их в Telegram.
-This helps protect your funds even if your recovery phrase or keys are compromised.: Это помогает защитить ваши средства, даже если сид-фраза или ключи скомпрометированы.
-"Connection Fee:": "Комиссия за подключение:"
-Connect Telegram: Подключить Telegram
-Add in Gram Wallet: Добавить в ION Wallet
-Telegram will be used to confirm transfers and important actions.: Telegram будет использоваться для подтверждения переводов и важных действий.
-My Telegram Account: Мой аккаунт Telegram
-Without username: Без username
-Unlink Account: Отвязать аккаунт
-An extra security layer requires confirming actions in Telegram after signing.: Дополнительный уровень безопасности требует подтверждать действия в Telegram после подписания.
-Confirm Connection: Подтвердить подключение
-Confirm Disconnection: Подтвердить отключение
 Passwords must be equal.: Пароли не совпадают.
 To protect your wallet as much as possible, use a password with: Для обеспечения максимальной безопасности кошелька пароль должен содержать
 $auth_password_rule_8chars: не менее 8 символов
@@ -96,7 +79,6 @@ $about_wallet_github: Да, вот наш %github_link%.
 $about_github_link_text: "**репозиторий в GitHub**"
 Is there a community?: Существует ли комьюнити?
 $about_wallet_community: А как же, добро пожаловать в наш %community_link%.
-$about_community_link_text: "**Telegram-канал**"
 Currency History: График курса
 Price: Цена
 Enter Password: Введите пароль
@@ -142,7 +124,6 @@ Create TON-Only Wallet: Создать ION-кошелёк
 Confirmation: Подтверждение
 Signing Data: Данные для подписи
 Contract Initialization Data: Данные для инициализации контракта
-$dont_have_required_token: У вас нет необходимого токена для отправки, но его можно обменять.
 $unknown_token_address: Неизвестный адрес токена.
 $dont_have_required_nft: У вас нет необходимого NFT для отправки.
 $state_init_invalid: Неверные данные инициализации контракта.
@@ -360,29 +341,15 @@ Decrypt: Расшифровать
 Encrypted Message: Зашифрованное сообщение
 Message is encrypted: Сообщение зашифровано
 Agree: Согласен
-$swap_action: Обмен
-$swap_activity_title: Обмен
-Swap: Обменять
 You sell: Вы продаёте
 You buy: Вы покупаете
-Swap Details: Детали обмена
 Blockchain Fee: Комиссия блокчейна
 Included: Вкл. в цену
 Price Impact: Влияние на цену
 Minimum Received: Минимально получите
-Slippage: Проскальзывание
-$swap_from_to: Обменять %from% %icon% %to%
 The exchange rate is below market value!: Курс обмена на %value% ниже рыночной стоимости!
 Invalid Pair: Недопустимая пара
 We do not recommend to perform an exchange, try to specify a lower amount.: Не рекомендуем выполнять обмен, попробуйте указать меньшую сумму.
-$swap_minimum_received_tooltip1: Это наименьшее количество новых токенов, которое вы получите от этого обмена, учитывая текущие условия рынка, допустимое проскальзывание и потенциальное влияние на цену.
-$swap_minimum_received_tooltip2: Это ожидаемое минимальное значение, но, если условия сильно изменятся во время обработки вашего обмена, итоговая сумма может быть меньше.
-$swap_price_impact_tooltip1: Это показывает, насколько ваша сделка может изменить цену токена.
-$swap_price_impact_tooltip2: Большие сделки могут сильнее повлиять на цену. В целом, меньшее значение лучше.
-$swap_slippage_tooltip1: Здесь устанавливается, насколько цена может измениться, прежде чем ваш обмен будет обработан.
-$swap_slippage_tooltip2: Если во время обработки вашего обмена цена изменится больше, чем на это значение, ваш заказ будет отменён.
-Slippage not specified: Проскальзывание не указано
-Slippage too high: Проскальзывание слишком большое
 Not Enough %symbol%: Недостаточно %symbol%
 Use Responsibly: Используйте ответственно
 $auth_responsibly_description1: |
@@ -397,10 +364,6 @@ Start Wallet: Начать использование
 $auth_backup_warning_notice: |
   Теперь вам нужно вручную **сделать резервную копию** секретных слов на случай, если вы забудете пароль или потеряете доступ к этому устройству.
 Invalid address format. Only URL Safe Base64 format is allowed.: Некорректный формат адреса. Разрешен только URL Safe Base64 формат.
-Swap Placed: Обмен размещён
-Swapping: Идёт обмен
-Swapped: Обмен
-Swap Again: Повторить обмен
 Terms of Use: Условия использования
 Privacy Policy: Политика конфиденциальности
 Insufficient liquidity: Недостаточно ликвидности
@@ -421,19 +384,10 @@ Your address on another blockchain: Ваш адрес в другом блокч
 Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: Пожалуйста, укажите адрес вашего кошелька в блокчейне %blockchain% для получения купленных токенов.
 The time for sending coins is over.: Время отправки монет истекло.
 You have not sent the coins to the specified address.: Вы не отправили монеты на указанный адрес.
-$swap_cex_to_wallet_description: Отправьте %value% на этот адрес в блокчейне %blockchain% в течение %time%
 Exchange failed and coins were refunded to your wallet.: Обмен не удался и монеты были возвращены на ваш кошелёк.
-Swap Expired: Обмен истёк
 Address for %blockchain% transfer: Адрес для перевода %blockchain%
-Cross-chain exchange provided by %provider%: Сервис предоставлен %provider%
-$swap_cex_terms_of_use: условиями использования
-$swap_cex_privacy_policy: политикой конфиденциальности
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: "Продолжая, вы соглашаетесь с %terms% и %policy%."
-$swap_cex_legal_message_with_aml: Продолжая, вы соглашаетесь с %terms% и %policy% и понимаете, что перевод может вызвать проверку согласно %aml%.
 Password must contain %length% digits.: Пароль должен содержать %length% цифры.
 Deposit Link: Ссылка для пополнения
-$swap_cex_from_wallet_description: "Токены скоро будут отправлены на ваш адрес в блокчейне %blockchain%:"
 Please note that it may take up to a few hours for tokens to appear in your wallet.: Появление купленных токенов в вашем кошельке может занять до нескольких часов.
 Minimum amount: Минимум %value%
 Maximum amount: Максимум %value%
@@ -539,7 +493,6 @@ Incorrect code, please try again.: Неверный код, пожалуйста
 Correct: Правильно
 Confirm Action: Подтвердить действие
 $classic_confirm_actions: Подтвердить действия
-Confirm Swap: Подтвердите обмен
 Confirm Rewards Claim: Подтвердите вывод наград
 "%amount% to %address%": "%amount% на %address%"
 "%amount_from% to %amount_to%": "%amount_from% на %amount_to%"
@@ -587,7 +540,6 @@ $dapp_dns_set_wallet_payload: Изменение привязанного кош
 $dapp_dns_delete_wallet_payload: Удаление привязанного кошелька домена %domain%
 $dapp_dns_change_record_payload: Изменение %category% записи домена %domain% на %value%
 $dapp_dns_delete_record_payload: Удаление %category% записи домена %domain%
-$dapp_token_bridge_pay_swap_payload: Подтверждение обмена через кроссчейн-мост
 $dapp_liquid_staking_deposit_payload: Депозит в ликвидный стейкинг
 $dapp_liquid_staking_vote_payload: Голосование "%vote%" за предложение %votingAddress%
 $dapp_single_nominator_change_validator_payload: Изменение адреса валидатора стейкинг-контракта SingleNominator на %address%
@@ -616,7 +568,6 @@ Cannot be sent: Нельзя отправить
 NFT is for sale: NFT на продаже
 More actions: Больше действий
 Open on %explorer_name%: Открыть на %explorer_name%
-Swap is not supported in Testnet.: Обмен не поддерживается в Testnet.
 Buying with card is not supported in Testnet.: Покупка с помощью карты не поддерживается в Testnet.
 Staking is not supported in Testnet.: Стейкинг не поддерживается в Testnet.
 Get Support: Поддержка
@@ -664,9 +615,6 @@ Collection: Коллекция
 Unnamed Collection: Безымянная коллекция
 Transaction ID Copied: Идентификатор транзакции скопирован
 External Exchange ID Copied: ID внешнего обмена скопирован
-$swap_cex_support: "Если что-то пошло не так, обратитесь в %support% и сообщите этот **ID внешнего обмена**:"
-$swap_cex_hold_support: "Пожалуйста, обратитесь в %support% и сообщите этот **ID внешнего обмена**, чтобы пройти проверку провайдера:"
-$swap_cex_provider_support: "поддержку %provider%"
 Email: Email
 Your %blockchain% Address: Ваш адрес %blockchain%
 My %blockchain% Address: Мой адрес %blockchain%
@@ -737,8 +685,6 @@ Switch to W5: Версия W5
 Not Scam: Не скам
 Untitled: Без названия
 Multichain: Мультичейн
-$swap_too_small_amount: Слишком маленькая сумма
-$swap_slippage_violation: Эмуляция обмена не прошла из-за превышения проскальзывания. Попробуйте ещё раз.
 $not_enough_symbol_lowercase: Недостаточно %symbol%
 Enter Secret Words: Введите секретные слова
 Turn this off so you can manually download updates and verify signatures.: Отключите это, чтобы вручную загружать обновления и проверять подписи.
@@ -772,7 +718,6 @@ Sounds: Звуки
 Push Notifications: Уведомления
 Select up to %count% wallets for notifications: Выберите до %count% кошельков
 Accumulated Rewards: Накопленные награды
-$swap_reverse_prohibited: Указание суммы покупки невозможно для этой пары токенов
 Blockchain Fee Details: Детали комиссии блокчейна
 Final Fee: Итоговая комиссия
 Excess: Сдача
@@ -1222,7 +1167,6 @@ Ask anything: Задайте любой вопрос
 Edit Message: Редактировать сообщение
 Toggle Hints: Переключить подсказки
 Scroll To Bottom: Прокрутить вниз
-$unknown_swap_token: Неизвестный токен в ссылке обмена. Были использованы токены по умолчанию.
 $action_not_available_view_mode: Это действие недоступно для кошельков в режиме просмотра
 Deposit: Пополнить
 Trade: Торговля
@@ -1312,12 +1256,7 @@ Share QR Code: Поделиться QR кодом
 $send_only_ton: Отправляйте только ION или активы на базе ION на этот адрес. Отправка других токенов приведёт к их потере.
 $send_only_chain: Отправляйте только %chain% (%symbol%) или активы на базе %chain% на этот адрес. Отправка других токенов приведёт к их потере.
 Buying with card is not supported for this account.: Покупка с карты не поддерживается для этого аккаунта.
-Swapped at: Обмен выполнен в
 Price per: Цена за
-Swap ID: ID обмена
-Swap ID for %provider%: ID обмена %provider%
-Copy Swap ID: Скопировать ID обмена
-Swap ID Copied: ID обмена скопирован
 from: от
 to: на
 Currency: Валюта
@@ -1369,7 +1308,6 @@ Current APR: Текущий APR
 in: в
 Network Error: Ошибка сети
 Enter Amount: Введите сумму
-"Swap %from% to %to%": Обменять %from% на %to%
 "%from% to %to%": "%from% на %to%"
 "Max %amount%": Максимум %amount%
 "Authorize %token% fee": Авторизовать комиссию %token%
@@ -1378,7 +1316,6 @@ AML/KYC: AML/KYC
 Receive to: Получить на
 Enter %token% address: Введите адрес %token%
 "Send %token% this address:": "Отправить %token% на этот адрес:"
-Swap is not supported on this account.: Обмен не поддерживается на этом аккаунте.
 "%amount% will be returned": "%amount% будет возвращено"
 Connecting your wallet: Подключение кошелька
 Action is not possible on a view-only wallet.: Действие невозможно на кошельке только для просмотра.
@@ -1457,7 +1394,6 @@ Set a passcode: Установить код
 "This is how the TON Blockchain works.": "Так работает блокчейн TON."
 Discovering wallets: Поиск кошельков
 Address not resolved: Не удалось определить адрес
-Sending more than one NFT isn't supported by Ledger: Отправка более одного NFT не поддерживается Ledger
 "Updating…": "Обновление…"
 "Waiting for network…": "Ожидание сети…"
 Wallet is Locked: Кошелёк заблокирован
@@ -1477,7 +1413,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: "Вы уверены, что хотите открепить вкладку %tab%?"
 add: добавить
 send: отправить
-swap: oбменять
 earn: стейкинг
 Actions: Действия
 $actions_description: Быстрый доступ к наиболее часто используемым действиям.
@@ -1544,7 +1479,6 @@ just now: только что
 "No": "Нет"
 Search: Поиск
 State init supplied without message body: Инициализация состояния передана без тела сообщения
-Swap Failed: Обмен не выполнен
 The wallet is ready: Кошелёк готов
 Unexpected error. Please let the support know.: Непредвиденная ошибка. Пожалуйста, сообщите в поддержку.
 Unlock it and open the TON App: Разблокируйте устройство и откройте приложение TON
@@ -1597,10 +1531,6 @@ push_activity_dns_renewed: DNS продлен
 push_activity_subscription_started: Подписка оформлена
 push_activity_subscription_payment_received: Получен платеж по подписке %amount% %symbol%
 push_activity_subscription_canceled: Подписка отменена
-push_activity_swap_completed: Обмен %from_symbol% → %to_symbol% выполнен
-push_activity_swap_failed: Обмен %from_symbol% → %to_symbol% не выполнен
-push_activity_swap_expired: Обмен %from_symbol% → %to_symbol% истек
-push_activity_swap_pending: Обмен %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: Доход от стейкинга %amount% ION
 push_activity_staking_loyalty_profit: Доход от стейкинга за лояльность %amount% ION
 push_domain_title_renew: Продлите ваш домен
@@ -1641,7 +1571,6 @@ $relative_tomorrow: завтра
 P&L Change: Изменение P&L
 Choose Token: Выберите токен
 You don't have any eligible tokens for this payment: У вас нет подходящих токенов для этого платежа
-Buy, swap, or receive a supported token to continue.: Купите, обменяйте или получите поддерживаемый токен, чтобы продолжить.
 Copy Wallet Link: Скопировать ссылку
 Are you sure you want to cancel the payment?: Вы уверены, что хотите отменить оплату?
 Cancel Payment: Отменить оплату
@@ -1696,7 +1625,6 @@ $token_info_collapse_hint: Сворачивает информацию о ток
 $token_info_open_in_browser_hint: Открывает в браузере.
 $token_info_fallback_description: Публичная информация отсутствует
 $token_info_no_description: Описание отсутствует
-$swap_cex_aml_kyc_policy_with_provider: AML/KYC %provider%
 Unexpected: Непредвиденная ошибка
 Bitcoin: Биткоин
 $dapp_transfer_tokens_burn: Сжигание %amount%
@@ -1713,7 +1641,6 @@ See All: Показать все
 Add an **extra layer of security** for your wallet in TON network.: Добавьте **дополнительный уровень безопасности** для кошелька в сети ION.
 Another transaction was sent from this wallet simultaneously. Please try again.: Одновременно из этого кошелька была отправлена другая транзакция. Пожалуйста, попробуйте ещё раз.
 Buying with card is not supported for this chain.: Покупка с карты не поддерживается для этой сети.
-Confirm with Telegram: Подтвердить через Telegram
 Couldn't open support chat. Please try again.: Не удалось открыть чат поддержки. Пожалуйста, попробуйте ещё раз.
 Couldn't prepare logs for export. Please try again.: Не удалось подготовить логи к экспорту. Пожалуйста, попробуйте ещё раз.
 Disconnect Dapps: Отключить приложения
@@ -1723,17 +1650,13 @@ Export Logs: Экспортировать логи
 Failed to load chat: Не удалось загрузить чат
 Gram: ION
 More Details: Подробнее
-Open Telegram: Открыть Telegram
 Open addresses: Открывает адреса
 SDK is not ready. Please try again.: SDK не готов. Пожалуйста, попробуйте ещё раз.
 Selected NFTs must use the same network: Выбранные NFT должны быть в одной сети
 Selling is not supported for this token.: Продажа этого токена не поддерживается.
 Shows more information: Показывает дополнительную информацию
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: Подписывайте переводы и важные действия кодом доступа, **а затем подтверждайте их в Telegram**.
-Telegram Account: Аккаунт Telegram
 This action cannot be undone.: Это действие нельзя отменить.
 This action is no longer available.: Это действие больше недоступно.
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: Это помогает **защитить ваши средства**, даже если сид-фраза или ключи скомпрометированы.
 Transaction is not ready: Транзакция не готова
 Unsupported Wallet Version: Версия кошелька не поддерживается
 Unsupported version: Версия не поддерживается
@@ -1745,3 +1668,4 @@ Tokenized Gold: Токенизированное золото
 Index Funds: Индексные фонды
 Exchange: Обмен
 Allow App Lock: Разрешить блокировку приложения
+"Receive a supported token to continue.": "Получите поддерживаемый токен, чтобы продолжить."

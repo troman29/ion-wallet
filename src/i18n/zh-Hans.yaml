@@ -6,23 +6,6 @@ Creating Wallet...: 正在创建钱包...
 On the count of three...: 倒数三个数···
 $back_up_auth: 备份
 $back_up_security: 备份安全
-$2fa_security: Telegram 2FA
-2FA with Telegram: Telegram 2FA
-Confirm operations in Telegram as a second step.: 在 Telegram 中作为第二步确认操作。
-Confirm with: 通过以下方式确认
-Add an extra layer of security for your wallet in TON network.: 为你在 ION 网络中的钱包添加额外安全层。
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: 使用密码签署转账和重要操作，然后在 Telegram 中确认。
-This helps protect your funds even if your recovery phrase or keys are compromised.: 即使你的助记词或密钥泄露，这也有助于保护你的资金。
-"Connection Fee:": "连接费用："
-Connect Telegram: 连接 Telegram
-Add in Gram Wallet: 在 ION Wallet 中添加
-Telegram will be used to confirm transfers and important actions.: Telegram 将用于确认转账和重要操作。
-My Telegram Account: 我的 Telegram 账户
-Without username: 无用户名
-Unlink Account: 解绑账户
-An extra security layer requires confirming actions in Telegram after signing.: 额外安全层要求在签名后于 Telegram 中确认操作。
-Confirm Connection: 确认连接
-Confirm Disconnection: 确认断开连接
 Passwords must be equal.: 密码必须相同。
 To protect your wallet as much as possible, use a password with: 为了尽可能的保障您钱包的安全，密码请遵循下列规则
 $auth_password_rule_8chars: 至少8位字符
@@ -94,7 +77,6 @@ $about_wallet_github: 是的，欢迎查看我们的 %github_link%
 $about_github_link_text: "**GitHub 仓库**"
 Is there a community?: 有社区吗？
 $about_wallet_community: 当然，欢迎来到我们的社区 %community_link%.
-$about_community_link_text: "**Telegram 频道**"
 Currency History: 代币历史记录
 Price: 价格
 Enter Password: 输入密码
@@ -137,7 +119,6 @@ Create TON-Only Wallet: 创建纯TON钱包
 Confirmation: 确认
 Signing Data: 签名数据
 Contract Initialization Data: 合约初始化数据
-$dont_have_required_token: 您没有所需的代币，但可以交换。
 $unknown_token_address: 未知的代币地址。
 $dont_have_required_nft: 您没有所需的NFT来发送。
 $state_init_invalid: 无效的合同初始化数据。
@@ -352,29 +333,15 @@ Decrypt: 解密
 Encrypted Message: 加密消息
 Message is encrypted: 消息已加密
 Agree: 同意
-$swap_action: 交换
-$swap_activity_title: 交换
-Swap: 交换
 You sell: 您卖出
 You buy: 您购买
-Swap Details: 交换详情
 Blockchain Fee: 区块链费用
 Included: 包括
 Price Impact: 价格影响
 Minimum Received: 最低接收数量
-Slippage: 下单误差
-$swap_from_to: 兑换 %from% %icon% %to%
 The exchange rate is below market value!: 汇率低于市场价值 %value%！
 Invalid Pair: 无效交易对
 We do not recommend to perform an exchange, try to specify a lower amount.: 我们不建议进行交换，请尝试指定较小的金额。
-$swap_minimum_received_tooltip1: 这是您从此次交换中可能获得的最少新代币数量，考虑了目前市场条件、滑点容忍度和潜在价格影响。
-$swap_minimum_received_tooltip2: 这是预期的最低值，但如果在处理您的交换时条件发生很大变化，最终金额可能会较少。
-$swap_price_impact_tooltip1: 这显示了您的交易可能对代币价格造成的影响。
-$swap_price_impact_tooltip2: 大型交易可能会使价格上涨或下跌得更多。较低的值通常较好。
-$swap_slippage_tooltip1: 设置此值可以允许价格在进行交换前发生变化的程度。
-$swap_slippage_tooltip2: 如果在处理您的交换时，价格变化超过此值，您的订单将被取消。
-Slippage not specified: 未指定下单误差
-Slippage too high: 下单误差过高
 Not Enough %symbol%: "%symbol% 不足"
 Use Responsibly: 负责任地使用
 $auth_responsibly_description1: |
@@ -389,10 +356,6 @@ Start Wallet: 启动钱包
 $auth_backup_warning_notice: |
   现在，您需要手动**备份密钥**，以防忘记密码或无法访问该设备。
 Invalid address format. Only URL Safe Base64 format is allowed.: 地址格式无效。 仅允许使用 URL Safe Base64 格式。
-Swap Placed: 已提交交换
-Swapping: 进行交换
-Swapped: 已交换
-Swap Again: 再次进行交换
 Terms of Use: 使用条款
 Privacy Policy: 隐私政策
 Insufficient liquidity: 流动性不足
@@ -413,19 +376,10 @@ Your address on another blockchain: 您在另一个区块链上的地址
 Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: 请提供您在%blockchain%区块链中的钱包地址，以接收购买的代币。
 The time for sending coins is over.: 发送硬币的时间已结束。
 You have not sent the coins to the specified address.: 您尚未将硬币发送到指定地址。
-$swap_cex_to_wallet_description: 您必须在 %time% 内将 %value% 发送到此地址 在 %blockchain% 区块链中
 Exchange failed and coins were refunded to your wallet.: 交换失败，硬币已退还到您的钱包。
-Swap Expired: 交换已过期
 Address for %blockchain% transfer: "%blockchain% 传输地址"
-Cross-chain exchange provided by %provider%: 由%provider%提供的跨链交换
-$swap_cex_terms_of_use: 使用条款
-$swap_cex_privacy_policy: 隐私政策
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: "继续即表示您同意 %terms% 和 %policy%。"
-$swap_cex_legal_message_with_aml: 继续即表示您同意 %terms% 和 %policy%，并理解该转账可能会根据 %aml% 触发验证。
 Password must contain %length% digits.: 密码必须包含%length%位数字。
 Deposit Link: 充值链接
-$swap_cex_from_wallet_description: 代币将很快发送到您在%blockchain%区块链中的地址：
 Please note that it may take up to a few hours for tokens to appear in your wallet.: 请注意，代币显示在您的钱包中可能需要几个小时。
 Minimum amount: 最低 %value%
 Maximum amount: 最高 %value%
@@ -530,7 +484,6 @@ Incorrect code, please try again.: 不正确的代码，请重试。
 Correct: 正确
 Confirm Action: 确认操作
 $classic_confirm_actions: 确认所有操作
-Confirm Swap: 确认兑换
 Confirm Rewards Claim: 确认奖励提取
 "%amount% to %address%": "%amount% 至 %address%"
 "%amount_from% to %amount_to%": "%amount_from% 至 %amount_to%"
@@ -581,7 +534,6 @@ $dapp_dns_set_wallet_payload: 将域 %domain% 的链接钱包更改为 %address%
 $dapp_dns_delete_wallet_payload: 删除域 %domain% 的链接钱包
 $dapp_dns_change_record_payload: 将域 %domain% 的“%category%”记录更改为 %value%
 $dapp_dns_delete_record_payload: 删除域 %domain% 的“%category%”记录
-$dapp_token_bridge_pay_swap_payload: 通过跨链桥确认交易
 $dapp_liquid_staking_deposit_payload: 存款到流动质押
 $dapp_liquid_staking_vote_payload: 对提案 %votingAddress% 投票“%vote%”
 $dapp_single_nominator_change_validator_payload: 将 SingleNominator 质押合约验证者的地址更改为 %address%
@@ -608,7 +560,6 @@ Cannot be sent: 无法发送
 NFT is for sale: NFT 正在出售
 More actions: 更多操作
 Open on %explorer_name%: 在 %explorer_name% 上打开
-Swap is not supported in Testnet.: 测试网不支持共享。
 Buying with card is not supported in Testnet.: 测试网不支持刷卡购买。
 Staking is not supported in Testnet.: 测试网不支持质押。
 Get Support: 得到支持
@@ -719,8 +670,6 @@ Switch to W5: 切换到 W5
 Not Scam: 不是骗局
 Untitled: 未命名
 Multichain: 多链
-$swap_too_small_amount: 金额太小
-$swap_slippage_violation: 交换模拟因滑点超出限制而失败。请重试。
 $not_enough_symbol_lowercase: "%symbol% 不足"
 Enter Secret Words: 输入密语
 Turn this off so you can manually download updates and verify signatures.: 关闭此功能以便手动下载更新并验证签名。
@@ -754,7 +703,6 @@ Sounds: 声音
 Push Notifications: 推送通知
 Select up to %count% wallets for notifications: 选择最多 %count% 个钱包接收通知
 Accumulated Rewards: 累积奖励
-$swap_reverse_prohibited: 无法为这对代币设置购买金额
 Blockchain Fee Details: 区块链费用详情
 Final Fee: 最终费用
 Excess: 多余款项
@@ -1195,7 +1143,6 @@ Pulse: 脉搏
 Edit Message: 编辑消息
 Toggle Hints: 切换提示
 Scroll To Bottom: 滚动到底部
-$unknown_swap_token: 交换链接中的代币未知。已使用默认代币。
 $action_not_available_view_mode: 此操作不适用于查看钱包
 Deposit: 存入
 Trade: 交易
@@ -1279,12 +1226,7 @@ Share QR Code: 分享二维码
 $send_only_ton: 仅向此地址发送 ION 或 ION 网络资产。发送其他代币会导致丢失。
 $send_only_chain: 仅向此地址发送 %chain% (%symbol%) 或 %chain% 网络资产。发送其他代币会导致丢失。
 Buying with card is not supported for this account.: 此账户不支持银行卡购买。
-Swapped at: 兑换时间
 Price per: 单价
-Swap ID: 兑换 ID
-Swap ID for %provider%: "%provider% 兑换 ID"
-Copy Swap ID: 复制兑换 ID
-Swap ID Copied: 已复制兑换 ID
 from: 来自
 to: 至
 Currency: 货币
@@ -1336,7 +1278,6 @@ Current APR: 当前 APR
 in: 于
 Network Error: 网络错误
 Enter Amount: 输入金额
-"Swap %from% to %to%": "将 %from% 兑换为 %to%"
 "%from% to %to%": "%from% → %to%"
 "Max %amount%": "最大 %amount%"
 "Authorize %token% fee": "授权 %token% 手续费"
@@ -1345,7 +1286,6 @@ AML/KYC: AML/KYC
 Receive to: 接收至
 Enter %token% address: "输入 %token% 地址"
 "Send %token% this address:": "向此地址发送 %token%："
-Swap is not supported on this account.: 此账户不支持兑换。
 "%amount% will be returned": "%amount% 将被退回"
 Connecting your wallet: 正在连接你的钱包
 Action is not possible on a view-only wallet.: 只读钱包无法执行此操作。
@@ -1419,7 +1359,6 @@ Set a passcode: 设置 PIN 码
 "This is how the TON Blockchain works.": TON 区块链就是这样运作的。
 Discovering wallets: 正在发现钱包
 Address not resolved: 地址无法解析
-Sending more than one NFT isn't supported by Ledger: Ledger 不支持一次发送多个 NFT
 "Updating…": 正在更新…
 "Waiting for network…": 正在等待网络…
 Wallet is Locked: 钱包已锁定
@@ -1439,7 +1378,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: 确定要取消固定 %tab% 吗？
 add: 添加
 send: 发送
-swap: 兑换
 earn: 质押
 Actions: 操作
 $actions_description: 快速访问最常用的操作。
@@ -1505,7 +1443,6 @@ just now: 刚刚
 "No": 否
 Search: 搜索
 State init supplied without message body: 已发送不含正文的状态初始化
-Swap Failed: 兑换失败
 The wallet is ready: 钱包已准备就绪
 Unexpected error. Please let the support know.: 出现意外错误，请告知客服。
 Unlock it and open the TON App: 请解锁并打开 TON 应用
@@ -1558,10 +1495,6 @@ push_activity_dns_renewed: 已续期 DNS
 push_activity_subscription_started: 已开始订阅
 push_activity_subscription_payment_received: 已收到订阅付款 %amount% %symbol%
 push_activity_subscription_canceled: 已取消订阅
-push_activity_swap_completed: 兑换 %from_symbol% → %to_symbol% 已完成
-push_activity_swap_failed: 兑换 %from_symbol% → %to_symbol% 失败
-push_activity_swap_expired: 兑换 %from_symbol% → %to_symbol% 已过期
-push_activity_swap_pending: 兑换 %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: 质押收益 %amount% ION
 push_activity_staking_loyalty_profit: 质押忠诚度收益 %amount% ION
 push_domain_title_renew: 续订您的域名
@@ -1596,14 +1529,10 @@ This action is not supported in explorer mode.: 此操作在浏览器模式下�
 $relative_today: 今天
 $relative_tomorrow: 明天
 P&L Change: 盈亏变动
-$swap_cex_support: "如果出现问题，请联系 %support% 并提供此**外部兑换 ID**："
-$swap_cex_hold_support: "请联系 %support% 并提供此**外部兑换 ID**以通过提供商审核："
-$swap_cex_provider_support: "%provider% 支持"
 External Exchange ID Copied: 已复制外部兑换 ID
 Email: 电子邮件
 Choose Token: 选择代币
 You don't have any eligible tokens for this payment: 您没有适用于此次支付的代币
-Buy, swap, or receive a supported token to continue.: 购买、兑换或接收受支持的代币以继续。
 Copy Wallet Link: 复制钱包链接
 Are you sure you want to cancel the payment?: 您确定要取消付款吗？
 Cancel Payment: 取消付款
@@ -1658,7 +1587,6 @@ $token_info_collapse_hint: 折叠代币信息。
 $token_info_open_in_browser_hint: 在浏览器中打开。
 $token_info_fallback_description: 暂无公开信息
 $token_info_no_description: 暂无描述
-$swap_cex_aml_kyc_policy_with_provider: "%provider% AML/KYC"
 Unexpected: 预期外的错误
 Bitcoin: 比特币
 EIP-712 typed data: EIP-712 类型化数据
@@ -1674,7 +1602,6 @@ See All: 查看全部
 Add an **extra layer of security** for your wallet in TON network.: 为你在 ION 网络中的钱包添加**额外安全层**。
 Another transaction was sent from this wallet simultaneously. Please try again.: 此钱包同时发送了另一笔交易。请重试。
 Buying with card is not supported for this chain.: 此网络不支持银行卡购买。
-Confirm with Telegram: 通过 Telegram 确认
 Couldn't open support chat. Please try again.: 无法打开客服聊天。请重试。
 Couldn't prepare logs for export. Please try again.: 无法准备要导出的日志。请重试。
 Disconnect Dapps: 断开应用
@@ -1684,17 +1611,13 @@ Export Logs: 导出日志
 Failed to load chat: 无法加载聊天
 Gram: ION
 More Details: 更多详情
-Open Telegram: 打开 Telegram
 Open addresses: 打开地址列表
 SDK is not ready. Please try again.: SDK 尚未就绪。请重试。
 Selected NFTs must use the same network: 所选 NFT 必须使用同一网络
 Selling is not supported for this token.: 不支持出售此代币。
 Shows more information: 显示更多信息
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: 使用密码签署转账和重要操作，**然后在 Telegram 中确认**。
-Telegram Account: Telegram 账户
 This action cannot be undone.: 此操作无法撤销。
 This action is no longer available.: 此操作已不可用。
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: 即使你的助记词或密钥泄露，这也有助于**保护你的资金**。
 Transaction is not ready: 交易尚未就绪
 Unsupported Wallet Version: 不支持的钱包版本
 Unsupported version: 不支持的版本
@@ -1704,3 +1627,4 @@ Popular Tokens: 热门代币
 Tokenized Stocks: 代币化股票
 Tokenized Gold: 代币化黄金
 Index Funds: 指数基金
+"Receive a supported token to continue.": "接收受支持的代币以继续。"

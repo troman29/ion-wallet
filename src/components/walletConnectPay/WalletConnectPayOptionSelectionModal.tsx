@@ -314,7 +314,7 @@ function WalletConnectPayOptionSelectionModal({
           <p className={styles.optionSelectionEmptyHint}>
             {lang(shouldSwitchWallet
               ? 'Please upgrade to multichain to use this app.'
-              : 'Buy, swap, or receive a supported token to continue.')}
+              : 'Receive a supported token to continue.')}
           </p>
         </div>
       </div>

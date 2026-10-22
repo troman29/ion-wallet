@@ -8,7 +8,7 @@
 
 ## Текущее состояние
 
-Состояние сверено с актуальным `master` (`3e2675ddf`, PR #28): основной набор ION-графики заменён; текущие статусы и оставшаяся работа приведены в [реестре ресурсов](REBRANDING_RESOURCE_REGISTRY.md). Повторно прошла только проверка `npm run check:branding`; описанные ниже сборки и UI-проверки относятся к предыдущим этапам.
+Базовый код сверён с origin/master (3e2675ddf, PR #28). Локально завершена зачистка остатков MFA, legacy swap и Ledger; типы, линтеры, все 981 Jest-тест и production webpack проходят. Подробные статусы — ниже и в [реестре ресурсов](REBRANDING_RESOURCE_REGISTRY.md). Native-сборки и внешние интеграции требуют отдельной проверки.
 
 `ApiChain` содержит `ton` и `bnb`; внутренний ID `ton` обслуживает сеть ION. Остаются TON explorer/marketplace переходы в `src/util/chain.ts` и NFT UI.
 
@@ -21,7 +21,7 @@
 | История релизов и CI | ✅ | Удалены changelogs и неактуальные build/deploy-пайплайны. |
 | ION API и инфраструктура | ◐ | Клиент настроен на прямые ION indexer `/indexer/v3` и RPC `/http/v2/jsonRPC`. Deployment и end-to-end проверка wallet backend остаются открытыми. Firebase использует заглушки. |
 | Agent | ✅ | Удалены оставшиеся ключи storage и локализаций, CI-задачи, иконки, анимации, CSS и комментарии. |
-| iOS-проект | ✅ | Удалены Air-only targets, Gram Wallet и widget extension; рабочие схемы — `IONWallet`, `IONWallet_NoExtensions`, `IONWallet_Preview`. `pod install`, `cap sync ios` и сборка всех трёх схем для generic iOS Simulator проходят. |
+| iOS-проект | ◐ | IONWallet targets присутствуют, но остаются AirWidget-ссылки на отсутствующий файл; актуальная Xcode-сборка не подтверждена. См. P0. |
 
 ## Продуктовый объём
 
@@ -39,16 +39,19 @@
 
 - [x] **Удалить MFA / Telegram 2FA.**
   - Удалены отдельная сборка, npm-команды, экран настроек, ассеты, контракты, сетевые обращения, состояния интерфейса, локализации и каталог `src/mfa`.
-  - Обычные пароль/PIN и биометрия сохраняются.
+  - Удалены оставшиеся строки Telegram 2FA и устаревшие обещания защиты после компрометации seed, а также неиспользуемая иконка Telegram-меню. Обычные пароль/PIN, биометрия и антифишинг Telegram-ссылок сохранены.
 
 - [x] **Удалить Telegram Mini App.**
-  - Удалены отдельные сборки и CI-задача, SDK, Telegram-биометрия, полноэкранный режим, haptics, элементы интерфейса Mini App и специальная поддержка Telegram Gifts.
+  - Удалены отдельные сборки и CI-задача, SDK, Telegram-биометрия, полноэкранный режим и элементы интерфейса Mini App и специальная поддержка Telegram Gifts.
   - Удалены продуктовые ссылки на Telegram support, news и tips; антифишинговая проверка внешних `t.me` ссылок сохранена.
 
 - [x] **Удалить gasless / Diesel.**
   - Удалены расчёт и оплата комиссий Diesel, backend-вызовы, платёжный шлюз и варианты интерфейса для переводов и свапов.
 
 - [x] **Удалить legacy swap и подготовить ION Exchange.**
+  - Удалены неиспользуемые swap hooks, intent/match модели, storage keys и очередь записи reconciler, Swap-стили, режим PasswordForm, swap-push, недостижимые ветки activity, fee address, slippage и legacy переменные workflow/webpack.
+  - Из каждого из 12 словарей удалено по 77 неиспользуемых строк MFA/Telegram, Ledger и legacy swap. Текст WalletConnect Pay больше не предлагает удалённые buy/swap-функции.
+  - Ссылки ion://swap открывают только оболочку Exchange. Wire-типы indexer, обработка сторонних on-chain DEX/liquidity сообщений и пагинация обычной истории сохранены.
   - Удалены DEX/CEX swap: `/swap/*`, провайдеры, котировки, маршруты, slippage, комиссии, подпись swap-транзакций, история и reconciliation swap-активностей.
   - Оставлена только оболочка окна **Exchange** с фиксированной парой `ION (ION Network) → ION (BNB Chain)`; она не создаёт транзакцию.
   - После утверждения bridge-контракта, получателя и модели комиссии реализовать внутри этой оболочки обычный перевод ION на bridge-адрес и обработку его статуса (P1).
@@ -59,13 +62,14 @@
   - Критерий выполнен: в пользовательском интерфейсе, сборках и CI Agent больше не существует.
 
 - [x] **Удалить My Wallet Cards.**
-  - Удалены NFT collection, minting, CDN, кастомные NFT-фоны, меню, локализации и неиспользуемые ассеты Cards. Старые значения в storage очищаются миграцией.
+  - Удалены NFT collection, minting, CDN, кастомные NFT-фоны, меню, локализации и неиспользуемые ассеты Cards. Отдельной очистки старых Cards-полей в migrateCache сейчас нет; обычные фоны и оставшиеся специальные ресурсы проверяются по реестру ресурсов.
   - Обычные карточки аккаунтов, темы и палитры сохранены; палитры больше не требуют NFT Cards.
 
 - [x] **Проверить Giveaway.**
   - Поиск по `src`, `mobile` и `public` не находит оставшегося Giveaway-кода; `app_giveaway_url` удалён из Android ресурсов.
 
 - [x] **Удалить интеграцию с аппаратными кошельками Ledger.**
+  - Удалены оставшиеся settings_ledger.svg и строка ограничения Ledger из всех 12 словарей.
   - Удалены SDK и транспорты (WebHID, WebUSB, BLE, USB HID), подпись TON через Ledger, тип аккаунта `hardware`, шаги подключения и подтверждения во всех сценариях, отдельная вкладка расширения, vesting-подпись, Capacitor-плагины, Bluetooth-разрешения Android/iOS, HID-доступ Electron (теперь явно запрещён), иконки, ассеты и локализации.
   - Кэш не мигрируется: у ION Wallet ещё нет выпущенных пользователей.
 
@@ -73,12 +77,12 @@
   - Удалены Fragment collections, NFT-меню, marketplace-метаданные и тестовые trace fixtures; Notcoin voucher exchange/burn flow; Ethena USDe/tsUSDe staking, контракты, backend-модели, activity parsing, интерфейс и локализации.
   - Обычные NFT, общий burn NFT, liquid staking и jetton staking сохранены.
 
-- [x] **Проверить сборку iOS Capacitor-проекта.**
-  - Удалены Air package products, `AirWidgetExtension`, Air-only target и ссылки на удалённые файлы.
-  - Workspace разрешает зависимости; после `cap sync ios` собраны `IONWallet`, `IONWallet_NoExtensions` и `IONWallet_Preview` для generic iOS Simulator с отключённым code signing.
-  - Запуск на симуляторе или устройстве остаётся ручной проверкой из P2.
+- [ ] **Подтвердить сборку текущего iOS Capacitor-проекта.**
+  - В project.pbxproj остаются PBXFileReference/PBXGroup AirWidgetBundle.swift/AirWidget на отсутствующий файл. Это не доказывает падение сборки, но зачистка ссылок не завершена.
+  - Прежние CocoaPods/Xcode проверки требуют повторения на macOS для актуальных IONWallet targets; native-сборки и запуск на устройствах в этой зачистке не выполнялись.
 
-- [x] **Закрыть вопрос с ION activity API.**
+- [ ] **Подтвердить ION activity API в целевой сборке.**
+  - Read-only проверка 22.10.2026: actions/traces отвечают HTTP 200, RPC getMasterchainInfo — ok: true, pending API — HTTP 500. Полный сценарий history/send и env-параметры release/preview требуют проверки.
   - ION v3 indexer (`https://api.mainnet.ice.io/indexer/v3`) совместим: `/actions` (включая `action_id` и фильтры), `/traces` по `trace_id`/`msg_hash`/`tx_hash`, `/messages`, `/transactions`, `/jetton/wallets`, `/nft/items`, `/nft/transfers`, `/addressBook`, `/walletStates`, `/accountStates`, `/metadata` отвечают в формате, который ждёт клиент. RPC v2 — `https://api.mainnet.ice.io/http/v2`.
   - Отличия ION учтены в клиенте: нативный перевод называется `ion_transfer`, провайдер ликвидного стейкинга — `ionstakers`.
   - Кошелёк ходит в ION API напрямую: пути `/indexer/v3` и `/http/v2`, без Toncenter-заголовков `X-Actions-Version` и `X-App-Origin`, которые не пропускает CORS ION.
@@ -98,6 +102,8 @@
   - `isCopyStorageEnabled`: `false`, экспорт диагностических данных выключен.
   - `isUpdateRequired`: пока `false`. Перед релизом нужен источник версий для App Store, Google Play и desktop (P1).
   - Уже удалены без замены: `seasonalTheme`, `isNegVerdictCacheEnabled`, `isTonConnectAnalyticsEnabled`, `supportAccountsCount`, `knowledgeBaseVersion`, `isVestingEnabled`, `/account-config`, `/referrer/get`, `/attribution/claim`, `/nfts/report`, promotion UI, сезонные ресурсы, install attribution, NFT reporting, negative-verdict cache и TonConnect telemetry.
+
+Локальные проверки зачистки P0 (22.10.2026): npm run check — успешно; Jest — **981 passed, 115 suites, 0 failed**. Тесты курсора истории покрывают confirmed/failed, local, pending/pendingTrusted, fallback и пропущенные ID вместо backend-swap сценариев. check:branding, генерация default/Android локализаций и production webpack проходят; у webpack только предупреждения о размере bundle. CI больше не вызывает отсутствующий sdk:build:slim: используются актуальные типы/линтеры, Jest, проверка графики и production webpack. Все npm script references в workflow проверены локально; запуск GitHub Actions этим проходом не подтверждается.
 
 ### P1 — подготовка продукта к ребрендингу и выпуску
 
@@ -152,7 +158,7 @@
 
 ### P2 — проверка перед выпуском
 
-- [ ] TypeScript, ESLint, Stylelint, Jest и production webpack build.
+- [x] TypeScript, ESLint, Stylelint, Jest и production webpack build — локально 22.10.2026, 981 тест, без падений; повторять для release commit.
 - [ ] Web: создание и импорт кошелька, receive, send, Exchange shell, staking, история, токены и ION Gateway.
 - [ ] Extension и Electron: запуск и основные пользовательские сценарии.
 - [ ] Android Capacitor: `cap sync`, сборка, запуск, биометрия, QR, ссылки и уведомления.
@@ -163,7 +169,7 @@
 
 - Предпросмотр на Home Lab уже умеет проксировать ION RPC v2. В нём также устранены утечка basic-auth заголовка в upstream и ошибочный SPA fallback для отсутствующих API.
 - ION v3 indexer совместим с клиентом, но без emulated traces, `emulateTrace` и streaming. Подробности — в P0 «ION activity API».
-- Android: `:app:assembleIonwalletProdDebug` проходит с Firebase-заглушкой. iOS: `cap sync ios --deployment`, `pod install` и Xcode-сборка всех рабочих схем проходят; запуск требует совместимого iOS runtime или подключённого устройства.
+- Прежние native-проверки: Android `:app:assembleIonwalletProdDebug` с Firebase-заглушкой; iOS `cap sync ios --deployment`, CocoaPods и Xcode. В текущей локальной зачистке native-сборки не повторялись; актуальная iOS-проверка открыта в P0.
 - В текущем checkout нет файла `AGENTS.md`. Запрошенная зачистка Agent относится к остаткам функциональности в коде и CI, перечисленным выше.
 
 ## Как обновлять план

@@ -18,7 +18,7 @@ export const APP_COMMIT_HASH = process.env.APP_COMMIT_HASH!;
 export const APP_ENV_MARKER = APP_ENV === 'staging' ? 'Beta' : APP_ENV === 'development' ? 'Dev' : undefined;
 export const EXTENSION_NAME = 'ION Wallet • Crypto & Web3';
 export const EXTENSION_DESCRIPTION = 'Self-custodial wallet for ION and BNB. '
-  + 'Swap, stake, manage NFTs and explore dapps.';
+  + 'Send, stake, manage NFTs and explore dapps.';
 
 export const DEBUG = APP_ENV !== 'production' && APP_ENV !== 'perf' && APP_ENV !== 'test';
 export const DEBUG_MORE = false;
@@ -65,8 +65,6 @@ export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
 
 export const BOT_USERNAME = process.env.BOT_USERNAME || 'IONWalletBot';
 
-export const SWAP_FEE_ADDRESS = process.env.SWAP_FEE_ADDRESS || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
-
 export const STRICTERDOM_ENABLED = DEBUG && !IS_PACKAGED_ELECTRON;
 
 export const DEBUG_ALERT_MSG = 'Shoot!\nSomething went wrong, please see the error details in Dev Tools Console.';
@@ -105,8 +103,6 @@ export const DEFAULT_LANDSCAPE_WINDOW_SIZE = { width: 980, height: 788 };
 export const TRANSACTION_ADDRESS_SHIFT = 4;
 
 export const WHOLE_PART_DELIMITER = ' '; // https://www.compart.com/en/unicode/U+202F
-
-export const DEFAULT_SLIPPAGE_VALUE = 5;
 
 export const GLOBAL_STATE_CACHE_DISABLED = false;
 export const GLOBAL_STATE_CACHE_KEY = 'ionwallet-global-state';
@@ -187,8 +183,6 @@ export const IFRAME_WHITELIST = [
   'https://testnet.tonviewer.com',
 ];
 export const SUBPROJECT_URL_MASK = 'https://*.wallet.ice.io';
-
-export const CEX_WAITING_DEADLINE = 3 * 60 * 60 * 1000; // 3 hours
 
 export const PROXY_HOSTS = process.env.PROXY_HOSTS;
 
@@ -275,12 +269,14 @@ export const NO_EVM = process.env.NO_EVM === '1';
 export const NO_PENDING_ACTIVITIES = process.env.NO_PENDING_ACTIVITIES === '1';
 /** Disables unavailable ION WebSockets; data uses HTTP polling. */
 export const NO_WEBSOCKET = process.env.NO_WEBSOCKET === '1';
+/** Uses legacy fee estimation when the trace emulation service is unavailable. */
+export const NO_TRACE_EMULATION = process.env.NO_TRACE_EMULATION === '1';
 /**
  * Standalone SDK builds, embedded by third-party apps that ship their own UI, so nothing in the UI layer
  * reads this flag.
  *
  * What stays is a plain wallet: accounts, transfers, tokens, activities, NFTs, domains and TON Connect.
- * Swap, staking, WalletConnect, the explore catalogue, portfolio history, push notifications, legacy
+ * Staking, WalletConnect, the explore catalogue, portfolio history, push notifications, legacy
  * (pre-Enclave) auth, encrypted comments and the receive-screen backgrounds all go — their
  * methods leave the dispatch table and their modules leave the bundle.
  */
@@ -495,9 +491,6 @@ export const STAKED_TOKEN_SLUGS = new Set([
   STAKED_TON_SLUG,
 ]);
 
-export const DEFAULT_OUR_SWAP_FEE = 0.875;
-export const AGGREGATOR_QUERY_ID = '4246015164496276000';
-
 export const DEFAULT_STAKING_STATE: ApiLiquidStakingState = {
   type: 'liquid',
   id: 'liquid',
@@ -515,7 +508,6 @@ export const DEFAULT_STAKING_STATE: ApiLiquidStakingState = {
   totalStakers: 0,
 };
 
-export const SWAP_API_VERSION = 3;
 export const TONCENTER_ACTIONS_VERSION = 'v1';
 
 export const JVAULT_URL = 'https://jvault.xyz';

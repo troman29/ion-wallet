@@ -6,23 +6,6 @@ Creating Wallet...: Cüzdan oluşturuluyor...
 On the count of three...: Üçe kadar saydığınızda...
 $back_up_auth: Yedekle
 $back_up_security: Yedekleme güvenliği
-$2fa_security: Telegram ile 2FA
-2FA with Telegram: Telegram ile 2FA
-Confirm operations in Telegram as a second step.: İşlemleri ikinci adım olarak Telegram’da onaylayın.
-Confirm with: Şununla onayla
-Add an extra layer of security for your wallet in TON network.: ION ağındaki cüzdanınız için ekstra bir güvenlik katmanı ekleyin.
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: Transferleri ve önemli işlemleri şifrenizle imzalayın, ardından Telegram’da onaylayın.
-This helps protect your funds even if your recovery phrase or keys are compromised.: Bu, kurtarma ifadeniz veya anahtarlarınız ele geçirilse bile fonlarınızı korumaya yardımcı olur.
-"Connection Fee:": "Bağlantı Ücreti:"
-Connect Telegram: Telegram’ı Bağla
-Add in Gram Wallet: ION Wallet’ta ekle
-Telegram will be used to confirm transfers and important actions.: Telegram, transferleri ve önemli işlemleri onaylamak için kullanılacak.
-My Telegram Account: Telegram Hesabım
-Without username: Kullanıcı adı yok
-Unlink Account: Hesabın Bağlantısını Kaldır
-An extra security layer requires confirming actions in Telegram after signing.: Ek güvenlik katmanı, imzalamadan sonra işlemleri Telegram’da onaylamayı gerektirir.
-Confirm Connection: Bağlantıyı Onayla
-Confirm Disconnection: Bağlantıyı Kesmesini Onayla
 Passwords must be equal.: Parolalar eşleşmelidir.
 To protect your wallet as much as possible, use a password with: Cüzdanınızı mümkün olduğunca korumak için en az
 $auth_password_rule_8chars: 8 karakterli bir şifre kullanın
@@ -93,7 +76,6 @@ $about_wallet_github: Evet, öyledir. %github_link% sayfamızı inceleyebilirsin
 $about_github_link_text: "**GitHub reposu**"
 Is there a community?: Topluluğunuz var mı?
 $about_wallet_community: Elbette, topluluğumuza %community_link% üzerinden erişebilirsiniz.
-$about_community_link_text: "**Telegram kanalı**"
 Currency History: Para birimi geçmişi
 Price: Fiyat
 Enter Password: Şifre girin
@@ -138,7 +120,6 @@ Create TON-Only Wallet: Sadece ION cüzdanı oluştur
 Confirmation: Onay
 Signing Data: İmza Verisi
 Contract Initialization Data: Sözleşme Başlatma Verileri
-$dont_have_required_token: Gerekli tokena sahip değilsiniz, ancak takas edilebilir.
 $unknown_token_address: Bilinmeyen token adresi.
 $dont_have_required_nft: Göndermek için gerekli NFT'ye sahip değilsiniz.
 $state_init_invalid: Geçersiz sözleşme başlatma verileri.
@@ -354,29 +335,15 @@ Decrypt: Şifre çöz
 Encrypted Message: Şifrelenmiş Mesaj
 Message is encrypted: Mesaj şifrelenmiştir
 Agree: Kabul et
-$swap_action: Takas
-$swap_activity_title: Takas
-Swap: Takas
 You sell: Satıyorsunuz
 You buy: Alıyorsunuz
-Swap Details: Takas bilgileri
 Blockchain Fee: Blockchain Ücreti
 Included: Dahil edildi
 Price Impact: Fiyat etkisi
 Minimum Received: Minimum alınan
-Slippage: Kayma toleransı
-$swap_from_to: "%from% %icon% %to% değiştirin"
 The exchange rate is below market value!: Takas oranı piyasa değerinin %value% altındadır!
 Invalid Pair: Geçersiz işlem çifti
 We do not recommend to perform an exchange, try to specify a lower amount.: Takas yapmanızı tavsiye etmiyoruz, daha düşük bir tutar belirtmeye çalışın.
-$swap_minimum_received_tooltip1: Mevcut piyasa koşulları, kayma toleransı ve potansiyel fiyat etkisi göz önüne alındığında, bu takastan elde edeceğiniz en az yeni token miktarı budur.
-$swap_minimum_received_tooltip2: Bu beklenen minimum tutardır, ancak takasınız işleme konurken koşullar çok değişirse, nihai tutar daha az olabilir.
-$swap_price_impact_tooltip1: Bu, işleminizin token fiyatını ne kadar değiştirebileceğini gösterir.
-$swap_price_impact_tooltip2: Yüksek hacimli alım satımlar fiyatın daha fazla yükselmesine veya düşmesine neden olabilir. Daha düşük tutarlar genellikle daha iyidir.
-$swap_slippage_tooltip1: Bu, takas talebinizin işleme alınmadan önce fiyatın ne kadar değişmesine izin verileceğini belirler.
-$swap_slippage_tooltip2: Takas işleminiz sırasında fiyat bu değerden daha fazla değişirse, emriniz iptal edilecektir.
-Slippage not specified: Kayma toleransı belirtilmemiş
-Slippage too high: Kayma toleransı çok yüksek
 Not Enough %symbol%: Yeterli miktarda %symbol% bulunmuyor
 Use Responsibly: Bilinçli kullanın
 $auth_responsibly_description1: |
@@ -391,10 +358,6 @@ Start Wallet: Cüzdanı Başlat
 $auth_backup_warning_notice: |
   Artık şifrenizi unutmanız veya bu cihaza erişiminizi kaybetmeniz ihtimaline karşı **gizli anahtarları** manuel olarak **yedeklemeniz** gerekmektedir.
 Invalid address format. Only URL Safe Base64 format is allowed.: Geçersiz adres formatı. Yalnızca URL Safe Base64 formatına izin verilmektedir.
-Swap Placed: Takas emri gönderildi
-Swapping: Takas devam ediyor
-Swapped: Takas gerçekleşti
-Swap Again: Yeniden takas edin
 Terms of Use: Kullanım Şartları
 Privacy Policy: Gizlilik Politikası
 Insufficient liquidity: Yetersiz likidite
@@ -415,19 +378,10 @@ Your address on another blockchain: Başka bir blockchaindeki adresiniz
 Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: Satın alınan jetonları almak için lütfen %blockchain% blockchain'deki cüzdanınızın adresini girin.
 The time for sending coins is over.: Coin'leri gönderme süresi sona erdi.
 You have not sent the coins to the specified address.: Coin'leri belirtilen adrese göndermediniz.
-$swap_cex_to_wallet_description: "%value% tutarını %time% içinde %blockchain% blok zincirindeki bu adrese göndermelisiniz"
 Exchange failed and coins were refunded to your wallet.: Takas başarısız oldu ve işlem tutarı cüzdanınıza iade edildi.
-Swap Expired: Takas işleminin süresi doldu
 Address for %blockchain% transfer: "%blockchain% aktarımının adresi"
-Cross-chain exchange provided by %provider%: "%provider% tarafından sağlanan cross-chain takası"
-$swap_cex_terms_of_use: kullanım şartları
-$swap_cex_privacy_policy: gizlilik politikası
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: "%terms% ve %policy%'yi kabul ederek devam edersiniz."
-$swap_cex_legal_message_with_aml: Devam ederek, %terms% ve %policy%'yi kabul etmiş olursunuz ve transferin %aml%'ye göre doğrulama tetikleyebileceğini anlarsınız.
 Password must contain %length% digits.: Parola %length% hane içermelidir.
 Deposit Link: Para yatırma bağlantısı
-$swap_cex_from_wallet_description: "Yakında %blockchain% blockchain'deki adresinize jetonlar gönderilecek:"
 Please note that it may take up to a few hours for tokens to appear in your wallet.: Lütfen, token'ların cüzdanınızda görünmesinin birkaç saat sürebileceğini unutmayın.
 Minimum amount: Minimum %value%
 Maximum amount: Maksimum %value%
@@ -533,7 +487,6 @@ Incorrect code, please try again.: Hatalı kod, lütfen tekrar deneyin.
 Correct: Doğru
 Confirm Action: İşlemi onayla
 $classic_confirm_actions: İşlemleri onayla
-Confirm Swap: Takası onaylayın
 Confirm Rewards Claim: Ödül Talebini Onayla
 "%amount% to %address%": "%address% numaralı adrese %amount%"
 "%amount_from% to %amount_to%": "%amount_from%'den' %amount_to%'e"
@@ -584,7 +537,6 @@ $dapp_dns_set_wallet_payload: "%domain% alanının bağlı cüzdanını %address
 $dapp_dns_delete_wallet_payload: Deleting linked wallet of domain %domain%
 $dapp_dns_change_record_payload: "%domain% alanının \"%category%\" kaydı %value% olarak değiştiriliyor"
 $dapp_dns_delete_record_payload: "%domain% alan adının \"%category%\" kaydı siliniyor"
-$dapp_token_bridge_pay_swap_payload: Zincirler arası köprü aracılığıyla değişim onayı
 $dapp_liquid_staking_deposit_payload: Likit staking'e para yatırma
 $dapp_liquid_staking_vote_payload: "%votingAddress% teklifi için \"%vote%\" oyu veriliyor"
 $dapp_single_nominator_change_validator_payload: SingleNominator staking sözleşmesi doğrulayıcısının adresi %address% olarak değiştiriliyor
@@ -611,7 +563,6 @@ Cannot be sent: Gönderilemiyor
 NFT is for sale: NFT satılık
 More actions: Daha fazla hareket
 Open on %explorer_name%: "%explorer_name%'da aç"
-Swap is not supported in Testnet.: Takas Testnet'te desteklenmemektedir.
 Buying with card is not supported in Testnet.: Testnet'te kartla satın alma desteklenmemektedir.
 Staking is not supported in Testnet.: Staking Testnet'te desteklenmemektedir.
 Get Support: Destek almak
@@ -723,8 +674,6 @@ Switch to W5: W5'e Geç
 Not Scam: Dolandırıcılık Değil
 Untitled: Başlıksız
 Multichain: Multichain
-$swap_too_small_amount: Çok küçük miktar
-$swap_slippage_violation: Takas emülasyonu kayma ihlali nedeniyle başarısız oldu. Lütfen tekrar deneyin.
 $not_enough_symbol_lowercase: Yeterli %symbol% yok
 Enter Secret Words: Gizli Kelimeleri Girin
 Turn this off so you can manually download updates and verify signatures.: Bunu kapatın, böylece güncellemeleri manuel olarak indirip imzaları doğrulayabilirsiniz.
@@ -758,7 +707,6 @@ Sounds: Sesler
 Push Notifications: Anlık Bildirimler
 Select up to %count% wallets for notifications: Bildirimler için en fazla %count% cüzdan seçin
 Accumulated Rewards: Birikmiş ödüller
-$swap_reverse_prohibited: Bu token çifti için satın alma miktarını ayarlamak imkansız
 Blockchain Fee Details: Blockchain Ücret Detayları
 Final Fee: Nihai Ücret
 Excess: Fazlalık
@@ -1200,7 +1148,6 @@ Pulse: Nabız
 Edit Message: Mesajı düzenle
 Toggle Hints: İpuçlarını değiştir
 Scroll To Bottom: Alta kaydır
-$unknown_swap_token: Swap bağlantısında bilinmeyen token. Varsayılan tokenlar kullanıldı.
 $action_not_available_view_mode: Bu işlem Görüntüleme Cüzdanları için kullanılamaz
 Deposit: Yatır
 Trade: Ticaret
@@ -1285,12 +1232,7 @@ Share QR Code: QR kodu paylaş
 $send_only_ton: Bu adrese yalnızca ION veya ION tabanlı varlıklar gönderin. Diğer tokenlar kaybolur.
 $send_only_chain: Bu adrese yalnızca %chain% (%symbol%) veya %chain% tabanlı varlıklar gönderin. Diğer tokenlar kaybolur.
 Buying with card is not supported for this account.: Bu hesap kartla satın almayı desteklemiyor.
-Swapped at: Takas zamanı
 Price per: Birim fiyat
-Swap ID: Takas ID’si
-Swap ID for %provider%: "%provider% takası ID'si"
-Copy Swap ID: Takas ID’sini kopyala
-Swap ID Copied: Takas ID’si kopyalandı
 from: kimden
 to: kime
 Currency: Para birimi
@@ -1342,7 +1284,6 @@ Current APR: Güncel APR
 in: içinde
 Network Error: Ağ hatası
 Enter Amount: Tutar girin
-"Swap %from% to %to%": "%from%'ı %to% ile değiştir"
 "%from% to %to%": "%from% → %to%"
 "Max %amount%": "Maks. %amount%"
 "Authorize %token% fee": "%token% ücretini onayla"
@@ -1351,7 +1292,6 @@ AML/KYC: AML/KYC
 Receive to: Şuraya al
 Enter %token% address: "%token% adresi girin"
 "Send %token% this address:": "Bu adrese %token% gönderin:"
-Swap is not supported on this account.: Bu hesapta takas desteklenmiyor.
 "%amount% will be returned": "%amount% iade edilecek"
 Connecting your wallet: Cüzdanınız bağlanıyor
 Action is not possible on a view-only wallet.: Salt okunur cüzdanda bu işlem yapılamaz.
@@ -1425,7 +1365,6 @@ Set a passcode: Geçiş kodu ayarla
 "This is how the TON Blockchain works.": TON blok zinciri bu şekilde çalışır.
 Discovering wallets: Cüzdanlar aranıyor
 Address not resolved: Adres çözümlenemedi
-Sending more than one NFT isn't supported by Ledger: Birden fazla NFT göndermek Ledger tarafından desteklenmiyor
 "Updating…": Güncelleniyor…
 "Waiting for network…": Ağ bekleniyor…
 Wallet is Locked: Cüzdan kilitli
@@ -1445,7 +1384,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: "%tab% sekmesinin sabitlemesini kaldırmak istediğinizden emin misiniz?"
 add: ekle
 send: gönder
-swap: takas et
 earn: kazan
 Actions: İşlemler
 $actions_description: En sık kullanılan işlemlere hızlı erişin.
@@ -1511,7 +1449,6 @@ just now: az önce
 "No": Hayır
 Search: Ara
 State init supplied without message body: Mesaj gövdesi olmadan durum başlatması gönderildi
-Swap Failed: Takas başarısız oldu
 The wallet is ready: Cüzdan hazır
 Unexpected error. Please let the support know.: Beklenmeyen bir hata oluştu. Lütfen destek ekibine bildirin.
 Unlock it and open the TON App: Cihazın kilidini açın ve TON uygulamasını başlatın
@@ -1564,10 +1501,6 @@ push_activity_dns_renewed: DNS yenilendi
 push_activity_subscription_started: Abonelik başlatıldı
 push_activity_subscription_payment_received: "%amount% %symbol% abonelik ödemesi alındı"
 push_activity_subscription_canceled: Abonelik iptal edildi
-push_activity_swap_completed: Takas %from_symbol% → %to_symbol% tamamlandı
-push_activity_swap_failed: Takas %from_symbol% → %to_symbol% başarısız oldu
-push_activity_swap_expired: Takas %from_symbol% → %to_symbol% süresi doldu
-push_activity_swap_pending: Takas %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: Staking karı %amount% ION
 push_activity_staking_loyalty_profit: Staking sadakat karı %amount% ION
 push_domain_title_renew: Alan adınızı yenileyin
@@ -1602,14 +1535,10 @@ This action is not supported in explorer mode.: Bu işlem kaşif modunda destekl
 $relative_today: bugün
 $relative_tomorrow: yarın
 P&L Change: Kâr/Zarar değişimi
-$swap_cex_support: "Bir şeyler ters giderse %support% ile iletişime geçin ve bu **harici takas ID’sini** sağlayın:"
-$swap_cex_hold_support: "Sağlayıcı incelemesini geçmek için lütfen %support% ile iletişime geçin ve bu **harici takas ID’sini** sağlayın:"
-$swap_cex_provider_support: "%provider% desteği"
 External Exchange ID Copied: Harici takas ID’si kopyalandı
 Email: E-posta
 Choose Token: Token seçin
 You don't have any eligible tokens for this payment: Bu ödeme için uygun token'ınız yok
-Buy, swap, or receive a supported token to continue.: Devam etmek için desteklenen bir token satın alın, takas edin veya alın.
 Copy Wallet Link: Bağlantıyı kopyala
 Are you sure you want to cancel the payment?: Ödemeyi iptal etmek istediğinizden emin misiniz?
 Cancel Payment: Ödemeyi iptal et
@@ -1664,7 +1593,6 @@ $token_info_collapse_hint: Token bilgilerini daraltır.
 $token_info_open_in_browser_hint: Tarayıcıda açar.
 $token_info_fallback_description: Kamuya açık bilgi mevcut değil
 $token_info_no_description: Açıklama mevcut değil
-$swap_cex_aml_kyc_policy_with_provider: "%provider% AML/KYC"
 EIP-712 typed data: EIP-712 tipli veri
 Primary type: Birincil tür
 Deprecated Website: Kullanımdan Kaldırılmış Web Sitesi
@@ -1678,7 +1606,6 @@ See All: Tümünü Gör
 Add an **extra layer of security** for your wallet in TON network.: ION ağındaki cüzdanınıza **ekstra bir güvenlik katmanı** ekleyin.
 Another transaction was sent from this wallet simultaneously. Please try again.: Bu cüzdandan aynı anda başka bir işlem gönderildi. Lütfen tekrar deneyin.
 Buying with card is not supported for this chain.: Bu ağ kartla satın almayı desteklemiyor.
-Confirm with Telegram: Telegram ile onayla
 Couldn't open support chat. Please try again.: Destek sohbeti açılamadı. Lütfen tekrar deneyin.
 Couldn't prepare logs for export. Please try again.: Günlükler dışa aktarma için hazırlanamadı. Lütfen tekrar deneyin.
 Disconnect Dapps: Uygulamaların bağlantısını kes
@@ -1688,17 +1615,13 @@ Export Logs: Günlükleri Dışa Aktar
 Failed to load chat: Sohbet yüklenemedi
 Gram: ION
 More Details: Daha Fazla Detay
-Open Telegram: Telegram'ı aç
 Open addresses: Adresleri açar
 SDK is not ready. Please try again.: SDK hazır değil. Lütfen tekrar deneyin.
 Selected NFTs must use the same network: Seçilen NFT'ler aynı ağı kullanmalıdır
 Selling is not supported for this token.: Bu token için satış desteklenmiyor.
 Shows more information: Daha fazla bilgi gösterir
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: Transferleri ve önemli işlemleri şifrenizle imzalayın, **ardından Telegram’da onaylayın**.
-Telegram Account: Telegram Hesabı
 This action cannot be undone.: Bu işlem geri alınamaz.
 This action is no longer available.: Bu işlem artık kullanılamıyor.
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: Bu, kurtarma ifadeniz veya anahtarlarınız ele geçirilse bile **fonlarınızı korumaya** yardımcı olur.
 Transaction is not ready: İşlem hazır değil
 Unsupported Wallet Version: Desteklenmeyen Cüzdan Sürümü
 Unsupported version: Desteklenmeyen sürüm
@@ -1708,3 +1631,4 @@ Popular Tokens: Popüler Tokenler
 Tokenized Stocks: Tokenize Hisse Senetleri
 Tokenized Gold: Tokenize Altın
 Index Funds: Endeks Fonları
+"Receive a supported token to continue.": "Devam etmek için desteklenen bir token alın."

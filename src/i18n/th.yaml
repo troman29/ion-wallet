@@ -6,23 +6,6 @@ Creating Wallet...: กำลังสร้างวอลเล็ต...
 On the count of three...: จากการแค่นับถึงสาม...
 $back_up_auth: สำรองข้อมูล
 $back_up_security: การสำรองข้อมูล
-$2fa_security: 2FA ด้วย Telegram
-2FA with Telegram: 2FA ด้วย Telegram
-Confirm operations in Telegram as a second step.: ยืนยันการดำเนินการใน Telegram เป็นขั้นตอนที่สอง.
-Confirm with: ยืนยันด้วย
-Add an extra layer of security for your wallet in TON network.: เพิ่มชั้นความปลอดภัยพิเศษให้วอลเล็ตของคุณบนเครือข่าย ION.
-Sign transfers and important actions with your passcode, then confirm them in Telegram.: ลงนามการโอนและการดำเนินการสำคัญด้วยรหัสผ่าน จากนั้นยืนยันใน Telegram.
-This helps protect your funds even if your recovery phrase or keys are compromised.: วิธีนี้ช่วยปกป้องเงินของคุณ แม้ว่าวลีกู้คืนหรือคีย์จะถูกบุกรุก.
-"Connection Fee:": "ค่าธรรมเนียมการเชื่อมต่อ:"
-Connect Telegram: เชื่อมต่อ Telegram
-Add in Gram Wallet: เพิ่มใน ION Wallet
-Telegram will be used to confirm transfers and important actions.: Telegram จะถูกใช้เพื่อยืนยันการโอนและการดำเนินการสำคัญ.
-My Telegram Account: บัญชี Telegram ของฉัน
-Without username: ไม่มีชื่อผู้ใช้
-Unlink Account: ยกเลิกการเชื่อมโยงบัญชี
-An extra security layer requires confirming actions in Telegram after signing.: ชั้นความปลอดภัยเพิ่มเติมต้องยืนยันการดำเนินการใน Telegram หลังจากลงนาม.
-Confirm Connection: ยืนยันการเชื่อมต่อ
-Confirm Disconnection: ยืนยันการตัดการเชื่อมต่อ
 Passwords must be equal.: รหัสผ่านจะต้องเหมือนกัน.
 To protect your wallet as much as possible, use a password with: เพื่อที่จะปกป้องวอลเล็ตของคุณให้ได้มากที่สุด, โปรดตั้งรหัสผ่านด้วย
 $auth_password_rule_8chars: อย่างน้อย 8 ตัวอักษร
@@ -93,7 +76,6 @@ $about_wallet_github: ใช่, เราเป็นโอเพนซอร�
 $about_github_link_text: "**GitHub repository**"
 Is there a community?: แล้วมีกลุ่มชุมชนหรือไม่?
 $about_wallet_community: แน่นอน, สามารถสื่อสารกับเราได้ที่ %community_link%.
-$about_community_link_text: "**Telegram channel**"
 Currency History: ประวัติทางการเงิน
 Price: ราคา
 Enter Password: กรอกรหัสผ่าน
@@ -138,7 +120,6 @@ Create TON-Only Wallet: สร้างกระเป๋าเงิน ION เ
 Confirmation: การยืนยัน
 Signing Data: ข้อมูลการลงนาม
 Contract Initialization Data: ข้อมูลการเริ่มต้นสัญญา
-$dont_have_required_token: คุณไม่มีโทเค็นที่ต้องการ แต่สามารถแลกเปลี่ยนได้.
 $unknown_token_address: ที่อยู่โทเค็นไม่ถูกต้อง.
 $dont_have_required_nft: คุณไม่มี NFT ที่ต้องการเพื่อส่ง.
 $state_init_invalid: ข้อมูลการเริ่มต้นสัญญาไม่ถูกต้อง.
@@ -354,29 +335,15 @@ Decrypt: ถอดรหัส
 Encrypted Message: ข้อความที่ถูกเข้ารหัส
 Message is encrypted: ข้อความถูกเข้ารหัสแล้ว
 Agree: ยอมรับ
-$swap_action: สับเปลี่ยน
-$swap_activity_title: การสับเปลี่ยน
-Swap: สับเปลี่ยน
 You sell: การขายของคุณ
 You buy: การซื้อของคุณ
-Swap Details: รายละเอียดการสับเปลี่ยน
 Blockchain Fee: ค่าธรรมเนียมบล็อกเชน
 Included: รวมอยู่ด้วย
 Price Impact: ผลกระทบด้านราคา
 Minimum Received: ขั้นต่ำที่ได้รับ
-Slippage: ค่าความคลาดเคลื่อน
-$swap_from_to: แลก %from% %icon% %to%
 The exchange rate is below market value!: อัตราการแลกเปลี่ยนที่ %value% ต่ำกว่ามูลค่าตลาด!
 Invalid Pair: การจับคู่ไม่ถูกต้อง
 We do not recommend to perform an exchange, try to specify a lower amount.: เราไม่แนะนำให้ทำการแลกเปลี่ยน, โปรดระบุจำนวนที่ต่ำกว่านี้.
-$swap_minimum_received_tooltip1: นี่คือจำนวนโทเค็นใหม่ที่ตำ่สุดที่คุณจะได้รับจากการแลกเปลี่ยนนี้ โดยพิจารณาจากสภาวะตลาดในปัจจุบัน การยอมรับความคลาดเคลื่อนของราคา และผลกระทบด้านราคาที่อาจเกิดขึ้น.
-$swap_minimum_received_tooltip2: ซึ่งเป็นจำนวนขั้นต่ำที่คาดไว้, แต่อาจจะเงื่อนไขเปลี่ยนแปลงไปในขณะที่กำลังประมวลผลระหว่างสับเปลี่ยน จำนวนมูลค่าที่ได้รับอาจจะลดลง.
-$swap_price_impact_tooltip1: นี่แสดงให้เห็นว่าการแลกเปลี่ยนของคุณอาจเปลี่ยนแปลงราคาโทเค็นได้มากเพียงใด.
-$swap_price_impact_tooltip2: หากมีซื้อขายขนาดใหญ่เกิดขึ้นอาจทำให้ราคาขึ้นหรือลงอย่างรวดเร็ว, ซื้อขายขนาดเล็กจะมีผลดีกว่า.
-$swap_slippage_tooltip1: นี่เป็นราคาที่กำหนดที่อนุญาตให้เปลี่ยนแปลงได้ก่อนที่การสับเปลี่ยนของคุณจะถูกประมวลผล.
-$swap_slippage_tooltip2: หากระหว่างการประมวลผลสับเปลี่ยนของคุณ, แล้วมีราคาเปลี่ยนแปลงเกิดขึ้น, ออเดอร์ของคุณจะถูกยกเลิก.
-Slippage not specified: ค่าความคลาดเคลื่อนไม่ได้ถูกระบุ
-Slippage too high: ค่าความคลาดเคลื่อนสูงเกินไป
 Not Enough %symbol%: "%symbol% มีไม่เพียงพอ"
 Use Responsibly: ใช้อย่างมีความรับผิดชอบ
 $auth_responsibly_description1: |
@@ -391,10 +358,6 @@ Start Wallet: เริ่มใช้งานวอลเล็ต
 $auth_backup_warning_notice: |
   Now you need to manually **back up secret keys** in case you forget your password or lose access to this device.
 Invalid address format. Only URL Safe Base64 format is allowed.: รูปแบบที่กรอกไม่ถูกต้อง. กรอกเฉพาะ URL Safe Base64 ที่อนุญาตเท่านั้น.
-Swap Placed: สับเปลี่ยนการวางแล้ว
-Swapping: กำลังสับเปลี่ยน
-Swapped: สับเปลี่ยนแล้ว
-Swap Again: สับเปลี่ยนอีกครั้ง
 Terms of Use: ข้อกำหนดการใช้งาน
 Privacy Policy: นโยบายความเป็นส่วนตัว
 Insufficient liquidity: สภาพคล่องไม่เพียงพอ
@@ -415,19 +378,10 @@ Your address on another blockchain: ที่อยู่ของคุณบ�
 Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: โปรดระบุที่อยู่กระเป๋าเงินของคุณใน %blockchain% blockchain เพื่อรับโทเค็นที่ซื้อ
 The time for sending coins is over.: เวลาส่งโทเคนหมดลงแล้ว.
 You have not sent the coins to the specified address.: คุณยังไม่ได้ส่งโทเคนไปยังที่อยู่ที่กำหนดไว้.
-$swap_cex_to_wallet_description: ส่ง %value% ไปยังที่อยู่นี้ใน %blockchain% บล็อกเชนภายใน %time%
 Exchange failed and coins were refunded to your wallet.: การแลกเปลี่ยนไม่สำเร็จและโทเคนถูกคืนเงินไปยังวอลเล็ตของคุณ.
-Swap Expired: การสับเปลี่ยนได้หมดอายุ
 Address for %blockchain% transfer: ที่อยู่สำหรับการโอน %blockchain%
-Cross-chain exchange provided by %provider%: การแลกเปลี่ยนระหว่างเชนทำอยู่บน %provider%
-$swap_cex_terms_of_use: ข้อกำหนดการใช้งาน
-$swap_cex_privacy_policy: นโยบายความเป็นส่วนตัว
-$swap_cex_aml_kyc_policy: AML/KYC
-$swap_cex_legal_message: "โดยการดำเนินการต่อ คุณตกลงตาม %terms% และ %policy%"
-$swap_cex_legal_message_with_aml: โดยการดำเนินการต่อ คุณตกลงตาม %terms% และ %policy% และเข้าใจว่าการโอนอาจกระตุ้นการตรวจสอบตาม %aml%
 Password must contain %length% digits.: รหัสผ่านต้องมีอย่างน้อย %length% หลัก.
 Deposit Link: ลิงก์การฝาก
-$swap_cex_from_wallet_description: "โทเค็นจะถูกส่งไปยังที่อยู่ %blockchain% ของคุณเร็วๆ นี้:"
 Please note that it may take up to a few hours for tokens to appear in your wallet.: โปรดทราบว่าอาจใช้เวลาสองสามชั่วโมงก่อนที่โทเค็นจะปรากฏในวอลเล็ตของคุณ.
 Minimum amount: ขั้นต่ำที่ %value%
 Maximum amount: สูงสุดที่ %value%
@@ -533,7 +487,6 @@ Incorrect code, please try again.: รหัสผ่านไม่ถูกต
 Correct: ถูกต้อง
 Confirm Action: ยืนยันการดำเนินการ
 $classic_confirm_actions: ยืนยันการดำเนินการทั้งหมด
-Confirm Swap: ยืนยันการสับเปลี่ยน
 Confirm Rewards Claim: ยืนยันการถอนรางวัล
 "%amount% to %address%": "%amount% ไปที่ %address%"
 "%amount_from% to %amount_to%": "%amount_from% ไปที่ %amount_to%"
@@ -584,7 +537,6 @@ $dapp_dns_set_wallet_payload: การเปลี่ยนกระเป๋�
 $dapp_dns_delete_wallet_payload: กำลังลบกระเป๋าเงินที่เชื่อมโยงของโดเมน %domain%
 $dapp_dns_change_record_payload: การเปลี่ยนบันทึก "%category%" ของโดเมน %domain% เป็น %value%
 $dapp_dns_delete_record_payload: กำลังลบบันทึก "%category%" ของโดเมน %domain%
-$dapp_token_bridge_pay_swap_payload: การยืนยันการแลกเปลี่ยนผ่านสะพานข้ามสายโซ่
 $dapp_liquid_staking_deposit_payload: ฝากเพื่อปักหลักของเหลว
 $dapp_liquid_staking_vote_payload: กำลังโหวต "%vote%" สำหรับข้อเสนอ %votingAddress%
 $dapp_single_nominator_change_validator_payload: การเปลี่ยนที่อยู่ของผู้ตรวจสอบสัญญาการปักหลัก SingleNominator เป็น %address%
@@ -610,7 +562,6 @@ Cannot be sent: ไม่สามารถส่งได้
 NFT is for sale: NFT สำหรับขาย
 More actions: เพิ่มเติม
 Open on %explorer_name%: เปิดบน %explorer_name%
-Swap is not supported in Testnet.: การสับเปลี่ยนยังไม่รองรับบน Testnet.
 Buying with card is not supported in Testnet.: การซื้อด้วยบัตรยังไม่รองรับบน Testnet.
 Staking is not supported in Testnet.: การสเต็กยังไม่รองรับบน Testnet.
 Get Support: ขอความช่วยเหลือ
@@ -723,8 +674,6 @@ Switch to W5: เปลี่ยนเป็น W5
 Not Scam: ไม่ใช่การหลอกลวง
 Untitled: ไม่มีชื่อ
 Multichain: มัลติเชน
-$swap_too_small_amount: จำนวนเงินน้อยเกินไป
-$swap_slippage_violation: การจำลองการสวอปล้มเหลวเนื่องจากเกินค่า slippage ที่กำหนด โปรดลองอีกครั้ง
 $not_enough_symbol_lowercase: "%symbol% ไม่เพียงพอ"
 Enter Secret Words: ป้อนคำลับ
 Turn this off so you can manually download updates and verify signatures.: ปิดสิ่งนี้เพื่อให้คุณสามารถดาวน์โหลดการอัปเดตด้วยตนเองและตรวจสอบลายเซ็น
@@ -758,7 +707,6 @@ Sounds: เสียง
 Push Notifications: การแจ้งเตือนแบบพุช
 Select up to %count% wallets for notifications: เลือกกระเป๋าเงินได้สูงสุด %count% ใบสำหรับการแจ้งเตือน
 Accumulated Rewards: รางวัลที่สะสม
-$swap_reverse_prohibited: การตั้งค่าจำนวนซื้อเป็นไปไม่ได้สำหรับคู่โทเค็นนี้
 Blockchain Fee Details: รายละเอียดค่าธรรมเนียมบล็อกเชน
 Final Fee: ค่าธรรมเนียมสุดท้าย
 Excess: เงินส่วนเกิน
@@ -1194,7 +1142,6 @@ Pulse: ชีพจร
 Edit Message: แก้ไขข้อความ
 Toggle Hints: เปิด/ปิดคำแนะนำ
 Scroll To Bottom: เลื่อนลงล่างสุด
-$unknown_swap_token: ไม่รู้จักโทเค็นในลิงก์สวอป ใช้โทเค็นเริ่มต้นแทน
 $action_not_available_view_mode: การดำเนินการนี้ไม่สามารถใช้ได้สำหรับวอลเล็ตสำหรับดู
 Deposit: ฝากเงิน
 Trade: เทรด
@@ -1278,12 +1225,7 @@ Share QR Code: แชร์ QR โค้ด
 $send_only_ton: ส่ง ION หรือสินทรัพย์บน ION เท่านั้นไปยังที่อยู่นี้ การส่งโทเคนอื่นจะทำให้สูญหาย
 $send_only_chain: ส่ง %chain% (%symbol%) หรือสินทรัพย์บน %chain% เท่านั้นไปยังที่อยู่นี้ การส่งโทเคนอื่นจะทำให้สูญหาย
 Buying with card is not supported for this account.: บัญชีนี้ไม่รองรับการซื้อด้วยบัตร
-Swapped at: แลกเปลี่ยนเมื่อ
 Price per: ราคาต่อ
-Swap ID: ID การสวอป
-Swap ID for %provider%: ID การสวอปของ %provider%
-Copy Swap ID: คัดลอก ID การสวอป
-Swap ID Copied: คัดลอก ID การสวอปแล้ว
 from: จาก
 to: ถึง
 Currency: สกุลเงิน
@@ -1335,7 +1277,6 @@ Current APR: APR ปัจจุบัน
 in: ใน
 Network Error: ข้อผิดพลาดของเครือข่าย
 Enter Amount: ใส่จำนวน
-"Swap %from% to %to%": "แลก %from% เป็น %to%"
 "%from% to %to%": "%from% เป็น %to%"
 "Max %amount%": "สูงสุด %amount%"
 "Authorize %token% fee": "อนุมัติค่าธรรมเนียม %token%"
@@ -1344,7 +1285,6 @@ AML/KYC: AML/KYC
 Receive to: รับที่
 Enter %token% address: ใส่ที่อยู่ %token%
 "Send %token% this address:": "ส่ง %token% ไปยังที่อยู่นี้:"
-Swap is not supported on this account.: บัญชีนี้ไม่รองรับการแลก
 "%amount% will be returned": จะคืน %amount%
 Connecting your wallet: กำลังเชื่อมต่อกระเป๋าของคุณ
 Action is not possible on a view-only wallet.: ไม่สามารถทำรายการนี้ในกระเป๋าแบบดูข้อมูลเท่านั้น
@@ -1418,7 +1358,6 @@ Set a passcode: ตั้งรหัสปลดล็อก
 "This is how the TON Blockchain works.": บล็อกเชน TON ทำงานเช่นนี้
 Discovering wallets: กำลังค้นหาวอลเล็ต
 Address not resolved: ไม่สามารถตรวจสอบที่อยู่ได้
-Sending more than one NFT isn't supported by Ledger: Ledger ยังไม่รองรับการส่ง NFT มากกว่าหนึ่งรายการ
 "Updating…": กำลังอัปเดต...
 "Waiting for network…": กำลังรอสัญญาณเครือข่าย...
 Wallet is Locked: กระเป๋าถูกล็อก
@@ -1438,7 +1377,6 @@ $n_wallets_selected:
 Are you sure you want to unpin %tab%?: ต้องการยกเลิกปักหมุด %tab% ใช่ไหม?
 add: เพิ่ม
 send: ส่ง
-swap: แลก
 earn: รับผลตอบแทน
 Actions: การทำรายการ
 $actions_description: เข้าถึงการทำรายการที่ใช้บ่อยได้อย่างรวดเร็ว
@@ -1504,7 +1442,6 @@ just now: เมื่อครู่
 "No": ไม่
 Search: ค้นหา
 State init supplied without message body: ส่งการตั้งค่าสถานะโดยไม่มีเนื้อหาข้อความ
-Swap Failed: การแลกไม่สำเร็จ
 The wallet is ready: กระเป๋าพร้อมใช้งานแล้ว
 Unexpected error. Please let the support know.: เกิดข้อผิดพลาดที่ไม่คาดคิด โปรดแจ้งฝ่ายสนับสนุน
 Unlock it and open the TON App: ปลดล็อกและเปิดแอป TON
@@ -1557,10 +1494,6 @@ push_activity_dns_renewed: ต่ออายุ DNS แล้ว
 push_activity_subscription_started: เริ่มการสมัครสมาชิกแล้ว
 push_activity_subscription_payment_received: ได้รับการชำระค่าสมัครสมาชิก %amount% %symbol%
 push_activity_subscription_canceled: ยกเลิกการสมัครสมาชิกแล้ว
-push_activity_swap_completed: สลับ %from_symbol% → %to_symbol% สำเร็จ
-push_activity_swap_failed: สลับ %from_symbol% → %to_symbol% ล้มเหลว
-push_activity_swap_expired: สลับ %from_symbol% → %to_symbol% หมดอายุ
-push_activity_swap_pending: สลับ %from_symbol% → %to_symbol% %status%
 push_activity_staking_profit: กำไรจากการสเตก %amount% ION
 push_activity_staking_loyalty_profit: กำไรจากความภักดีในการสเตก %amount% ION
 push_domain_title_renew: ต่ออายุโดเมนของคุณ
@@ -1595,14 +1528,10 @@ This action is not supported in explorer mode.: การกระทำนี�
 $relative_today: วันนี้
 $relative_tomorrow: พรุ่งนี้
 P&L Change: การเปลี่ยนแปลงกำไร/ขาดทุน
-$swap_cex_support: "หากมีบางอย่างผิดพลาด โปรดติดต่อ %support% และแจ้ง **ID การแลกเปลี่ยนภายนอก** นี้:"
-$swap_cex_hold_support: "โปรดติดต่อ %support% และแจ้ง **ID การแลกเปลี่ยนภายนอก** นี้เพื่อผ่านการตรวจสอบของผู้ให้บริการ:"
-$swap_cex_provider_support: "ฝ่ายสนับสนุน %provider%"
 External Exchange ID Copied: คัดลอก ID การแลกเปลี่ยนภายนอกแล้ว
 Email: อีเมล
 Choose Token: เลือกโทเคน
 You don't have any eligible tokens for this payment: คุณไม่มีโทเคนที่ใช้ได้สำหรับการชำระเงินนี้
-Buy, swap, or receive a supported token to continue.: ซื้อ แลกเปลี่ยน หรือรับโทเคนที่รองรับเพื่อดำเนินการต่อ
 Copy Wallet Link: คัดลอกลิงก์วอลเล็ต
 Are you sure you want to cancel the payment?: คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการชำระเงิน?
 Cancel Payment: ยกเลิกการชำระเงิน
@@ -1657,7 +1586,6 @@ $token_info_collapse_hint: ยุบข้อมูลโทเค็น
 $token_info_open_in_browser_hint: เปิดในเบราว์เซอร์
 $token_info_fallback_description: ไม่มีข้อมูลสาธารณะ
 $token_info_no_description: ไม่มีคำอธิบาย
-$swap_cex_aml_kyc_policy_with_provider: AML/KYC ของ %provider%
 Insufficient %token% for fee.%fee%: มี %token% ไม่เพียงพอสำหรับค่าธรรมเนียม%fee%
 EIP-712 typed data: ข้อมูลแบบระบุชนิด EIP-712
 Primary type: ประเภทหลัก
@@ -1672,7 +1600,6 @@ See All: ดูทั้งหมด
 Add an **extra layer of security** for your wallet in TON network.: เพิ่ม **ชั้นความปลอดภัยพิเศษ** ให้วอลเล็ตของคุณบนเครือข่าย ION
 Another transaction was sent from this wallet simultaneously. Please try again.: มีการส่งธุรกรรมอื่นจากวอลเล็ตนี้พร้อมกัน โปรดลองอีกครั้ง
 Buying with card is not supported for this chain.: เครือข่ายนี้ไม่รองรับการซื้อด้วยบัตร
-Confirm with Telegram: ยืนยันด้วย Telegram
 Couldn't open support chat. Please try again.: ไม่สามารถเปิดแชทช่วยเหลือได้ โปรดลองอีกครั้ง
 Couldn't prepare logs for export. Please try again.: ไม่สามารถเตรียมบันทึกสำหรับการส่งออกได้ โปรดลองอีกครั้ง
 Disconnect Dapps: ยกเลิกการเชื่อมต่อแอป
@@ -1682,17 +1609,13 @@ Export Logs: ส่งออกบันทึก
 Failed to load chat: โหลดแชทไม่สำเร็จ
 Gram: ION
 More Details: รายละเอียดเพิ่มเติม
-Open Telegram: เปิด Telegram
 Open addresses: เปิดรายการที่อยู่
 SDK is not ready. Please try again.: SDK ยังไม่พร้อม โปรดลองอีกครั้ง
 Selected NFTs must use the same network: NFT ที่เลือกต้องใช้เครือข่ายเดียวกัน
 Selling is not supported for this token.: ไม่รองรับการขายโทเคนนี้
 Shows more information: แสดงข้อมูลเพิ่มเติม
-Sign transfers and important actions with your passcode, **then confirm them in Telegram**.: ลงนามการโอนและการดำเนินการสำคัญด้วยรหัสผ่าน **จากนั้นยืนยันใน Telegram**
-Telegram Account: บัญชี Telegram
 This action cannot be undone.: ไม่สามารถย้อนกลับการดำเนินการนี้ได้
 This action is no longer available.: การดำเนินการนี้ไม่พร้อมใช้งานแล้ว
-This helps **protect your funds** even if your recovery phrase or keys are compromised.: วิธีนี้ช่วย **ปกป้องเงินของคุณ** แม้ว่าวลีกู้คืนหรือคีย์จะถูกบุกรุก
 Transaction is not ready: ธุรกรรมยังไม่พร้อม
 Unsupported Wallet Version: เวอร์ชันวอลเล็ตที่ไม่รองรับ
 Unsupported version: เวอร์ชันที่ไม่รองรับ
@@ -1702,3 +1625,4 @@ Popular Tokens: โทเคนยอดนิยม
 Tokenized Stocks: หุ้นโทเคนไนซ์
 Tokenized Gold: ทองโทเคนไนซ์
 Index Funds: กองทุนดัชนี
+"Receive a supported token to continue.": "รับโทเค็นที่รองรับเพื่อดำเนินการต่อ"
