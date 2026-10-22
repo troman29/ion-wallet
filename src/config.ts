@@ -55,7 +55,7 @@ export const LEGACY_APP_HOSTS: string[] = [];
 // under `X-Frame-Options: Deny`. `utm_source` attributes the migrated traffic.
 export const NEW_APP_URL = `${PRODUCTION_URL}?utm_source=legacy_web`;
 export const APP_INSTALL_URL = 'https://wallet.ice.io/download';
-export const APP_REPO_URL = 'https://wallet.ice.io';
+export const APP_REPO_URL = 'https://github.com/troman29/ion-wallet';
 export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
 export const APP_WEBSITE_URL = 'https://wallet.ice.io';
 export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
@@ -161,7 +161,7 @@ export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
   getgems: 'Getgems',
   opensea: 'OpenSea',
 };
-export const MW_STATIC_BASE_URL = 'https://static.wallet.ice.io';
+export const ION_STATIC_BASE_URL = 'https://static.wallet.ice.io';
 export const APP_PROMO_URL = 'https://wallet.ice.io/';
 export const APP_WEBSITE_HOST = 'wallet.ice.io';
 export const APP_TERMS_OF_USE_URL = 'https://wallet.ice.io/terms-of-use';
@@ -194,8 +194,8 @@ export const PROXY_HOSTS = process.env.PROXY_HOSTS;
 
 export const TINY_TRANSFER_MAX_COST = 0.01;
 
-export const IMAGE_CACHE_NAME = 'mtw-image';
-export const LANG_CACHE_NAME = 'mtw-lang-354';
+export const IMAGE_CACHE_NAME = 'ion-image';
+export const LANG_CACHE_NAME = 'ion-lang-1';
 
 export const LANG_LIST: LangItem[] = [{
   langCode: 'en',
@@ -370,7 +370,9 @@ export const PRIORITY_TOKENS = [
 
 export const DEFAULT_TRANSFER_TOKEN_SLUG = TONCOIN.slug;
 
-export const ACTIVE_TAB_STORAGE_KEY = 'mtw-active-tab';
+export const ACTIVE_TAB_STORAGE_KEY = 'ion-active-tab';
+// Kept while older tabs can still be open on the same origin.
+export const LEGACY_ACTIVE_TAB_STORAGE_KEY = 'mtw-active-tab';
 
 export const INDEXED_DB_NAME = 'keyval-store';
 export const INDEXED_DB_STORE_NAME = 'keyval';
@@ -494,7 +496,7 @@ export const STAKED_TOKEN_SLUGS = new Set([
 ]);
 
 export const DEFAULT_OUR_SWAP_FEE = 0.875;
-export const MW_AGGREGATOR_QUERY_ID = '4246015164496276000';
+export const AGGREGATOR_QUERY_ID = '4246015164496276000';
 
 export const DEFAULT_STAKING_STATE: ApiLiquidStakingState = {
   type: 'liquid',

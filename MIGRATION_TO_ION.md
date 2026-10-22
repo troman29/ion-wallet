@@ -120,6 +120,9 @@
   - Опубликовать доменные association-файлы (`apple-app-site-association`, `assetlinks.json`) и рабочие ION backend endpoint-ы.
   - GitHub forks и npm scopes старого проекта пока сохранены только как закреплённые источники зависимостей; их нельзя переименовывать, пока не созданы эквивалентные ION forks.
 - [ ] Утвердить и заменить все иконки, logo, splash и store assets по [реестру ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
+  - 17.10.2026, ветка `rebrand/ion-ui`: выполнен проход по UI — логотипы, web/PWA/QR/dApp icons, Electron ICO/ICNS, Android launcher/splash/notifications, iOS AppIcon/intro, карточки и иллюстрации заменены на ION. About и onboarding обновлены на 12 языках. Экспорт воспроизводится через `npm run build:branding`, анимации проверяются штатным RLottie через `npm run check:branding`.
+  - Проверены TypeScript/ESLint/Stylelint, production webpack и onboarding/About в светлой/тёмной теме. Jest: 973 passed, 3 failed в неизменённом `continuationTimestamp.test.ts`. Окончательное утверждение графики, store assets, native-device и backend-сценарии остаются открытыми.
+  - Production Capacitor web-бандл собран; `cap copy android` и `cap copy ios` прошли. Нативные сборки и запуск на устройствах здесь не выполнялись.
 - [ ] Поддерживать README без унаследованных непроверенных маркетинговых заявлений; добавить публичные ссылки только после их публикации.
 - [ ] Утвердить bridge-путь ION между ION Network и BNB Chain.
   - Зафиксировать контракт/адрес получателя, сеть-источник и сеть-назначение, правила amount/fee и подтверждения.

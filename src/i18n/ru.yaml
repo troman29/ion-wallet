@@ -1,7 +1,4 @@
-$auth_intro: |
-  **Безопасно** храните криптовалюту и
-  совершайте платежи в блокчейне
-  **со скоростью света**.
+$auth_intro: "Управляйте ION в сетях ION Network и BNB Chain."
 Create New Wallet: Создать новый кошелёк
 Import From %count% Secret Words: Восстановить из %count% секретных слов
 More about %app_name%: Подробнее о %app_name%
@@ -87,8 +84,8 @@ Remove Wallets: Удалить кошельки
 Something went wrong.: Упс, что-то пошло не так.
 Something went wrong: Упс, что-то пошло не так
 Logo: Логотип
-$about_description1: Безопасно храните криптовалюту, пользуйтесь децентрализованными приложениями и совершайте платежи в блокчейне **со скоростью света**.
-$about_description2: Кошелёк **управляется только вами**. Разработчики **не имеют доступа** к вашим средствам, истории браузера или любой другой информации.
+$about_description1: "Управляйте ION в сетях ION Network и BNB Chain."
+$about_description2: "Ваши ключи хранятся на вашем устройстве. Никому не сообщайте секретную фразу."
 What is TON Proxy?: Что такое TON Proxy?
 $about_extension_description1: TON Proxy предоставляет доступ к **децентрализованному интернету** и сайтам TON.
 More info and demo.: Больше информации и демо-версия.
@@ -1746,3 +1743,5 @@ Popular Tokens: Популярные токены
 Tokenized Stocks: Токенизированные акции
 Tokenized Gold: Токенизированное золото
 Index Funds: Индексные фонды
+Exchange: Обмен
+Allow App Lock: Разрешить блокировку приложения

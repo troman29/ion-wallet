@@ -1,6 +1,6 @@
 import { Script } from 'vm';
 
-import { ACTIVE_TAB_STORAGE_KEY } from '../config';
+import { ACTIVE_TAB_STORAGE_KEY, LEGACY_ACTIVE_TAB_STORAGE_KEY } from '../config';
 import { buildRestoreLocalStorageScript, getRestorableLocalStorageEntries } from './storageScripts';
 
 function runRestoreLocalStorageScript(script: string) {
@@ -55,6 +55,7 @@ describe('storageScripts', () => {
   it('excludes the active tab marker from restorable entries', () => {
     const entries = getRestorableLocalStorageEntries({
       [ACTIVE_TAB_STORAGE_KEY]: 'active-tab',
+      [LEGACY_ACTIVE_TAB_STORAGE_KEY]: 'legacy-active-tab',
       settings: '{"theme":"dark"}',
     });
 

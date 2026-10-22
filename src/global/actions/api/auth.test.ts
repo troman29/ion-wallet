@@ -3,6 +3,7 @@ import './auth';
 import type { GlobalState } from '../../types';
 import { AppState, AuthState } from '../../types';
 
+import { callApi } from '../../../api';
 import { enclave } from '../../../enclave';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
 
@@ -69,6 +70,26 @@ describe('add-account routing', () => {
     await getHandler(name)(store, actions, payload);
     return store;
   }
+
+  it('moves to protection setup as soon as the mnemonic is ready, without a countdown', async () => {
+    jest.useFakeTimers();
+    const mnemonic = Array(12).fill('test');
+    (callApi as jest.Mock).mockResolvedValueOnce(mnemonic);
+
+    try {
+      const result = await run('startCreatingWallet', makeGlobal({
+        accounts: { byId: {} },
+      } as Partial<GlobalState>));
+
+      expect(result.auth.mnemonic).toEqual(mnemonic);
+      expect([
+        AuthState.createPin, AuthState.createPassword, AuthState.createBiometrics,
+      ]).toContain(result.auth.state);
+      // No fake timers are advanced: a decorative delay would prevent completion.
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 
   // A password entered in the "Add Wallet" modal yields a usage-counted session, which global state
   // cannot recognise as valid. The token it produced is what proves the flow is already authorized.

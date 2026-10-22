@@ -1,4 +1,4 @@
-import { ACTIVE_TAB_STORAGE_KEY } from '../config';
+import { ACTIVE_TAB_STORAGE_KEY, LEGACY_ACTIVE_TAB_STORAGE_KEY } from '../config';
 import { IS_ELECTRON } from './windowEnvironment';
 
 const IS_DISABLED = IS_ELECTRON;
@@ -9,12 +9,14 @@ const tabKey = String(Date.now() + Math.random());
 
 if (!IS_DISABLED) {
   localStorage.setItem(ACTIVE_TAB_STORAGE_KEY, tabKey);
+  localStorage.setItem(LEGACY_ACTIVE_TAB_STORAGE_KEY, tabKey);
 }
 
 let callback: NoneToVoidFunction;
 
 const interval = window.setInterval(() => {
-  if (!IS_DISABLED && callback && localStorage.getItem(ACTIVE_TAB_STORAGE_KEY) !== tabKey) {
+  if (!IS_DISABLED && callback && (localStorage.getItem(ACTIVE_TAB_STORAGE_KEY) !== tabKey
+    || localStorage.getItem(LEGACY_ACTIVE_TAB_STORAGE_KEY) !== tabKey)) {
     callback();
     clearInterval(interval);
   }

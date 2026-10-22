@@ -1,7 +1,4 @@
-$auth_intro: |
-  เก็บคริปโต **อย่างปลอดภัย**
-  และ ชำระผ่านบล็อกเชน
-  ด้วย **ความเร็วแสง**.
+$auth_intro: "จัดการ ION บน ION Network และ BNB Chain"
 Create New Wallet: สร้างวอลเล็ตใหม่
 Import From %count% Secret Words: นำเข้าด้วย %count% ซีเคร็ทเวิร์ด
 More about %app_name%: เพิ่มเติมเกี่ยวกับ %app_name%
@@ -84,8 +81,8 @@ Remove Wallets: ลบวอลเล็ตทั้งหมด
 Something went wrong.: เกิดข้อผิดพลาดบางอย่าง.
 Something went wrong: เกิดข้อผิดพลาดบางอย่าง
 Logo: โลโก้
-$about_description1: เก็บคริปโตอย่างปลอดภัย และ ชำระผ่านผ่านบล็อกเชนด้วย **ความเร็วแสง**.
-$about_description2: วอลเล็ตนี้ **ไม่เป็นแบบผู้ให้บริการ และ ปลอดภัย**. ผู้พัฒนา **ไม่สามารถ**เข้าถึงที่อยู่บัญชีของคุณ, ประวัติการเข้าชมเว็บหรือข้อมูลอื่นๆ.
+$about_description1: "จัดการ ION บน ION Network และ BNB Chain"
+$about_description2: "คีย์ของคุณอยู่บนอุปกรณ์ของคุณ เก็บวลีกู้คืนไว้เป็นความลับ"
 What is TON Proxy?: TON Proxy คืออะไร?
 $about_extension_description1: TON Proxy ช่วยให้คุณสามารถเข้าถึง *เครือข่ายแบบกระจายศูนย์* โดยอนุญาตให้เข้าถึงไซต์ของ TON โดยไม่เปิดเผยตัวตน.
 More info and demo.: ข้อมูลเพิ่มเติมและการสาธิต.

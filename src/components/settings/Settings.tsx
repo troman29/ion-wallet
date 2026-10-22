@@ -18,7 +18,6 @@ import {
   PROXY_HOSTS,
   TONCOIN,
 } from '../../config';
-import { getHelpCenterUrl } from '../../global/helpers/getHelpCenterUrl';
 import {
   selectAccount,
   selectAccountStakingStates,
@@ -87,7 +86,6 @@ import assetsActivityImg from '../../assets/settings/settings_assets-activity.sv
 import connectedDappsImg from '../../assets/settings/settings_connected-dapps.svg';
 import disclaimerImg from '../../assets/settings/settings_disclaimer.svg';
 import exitImg from '../../assets/settings/settings_exit.svg';
-import helpcenterImg from '../../assets/settings/settings_helpcenter.svg';
 import installAppImg from '../../assets/settings/settings_install-app.svg';
 import installDesktopImg from '../../assets/settings/settings_install-desktop.svg';
 import installMobileImg from '../../assets/settings/settings_install-mobile.svg';
@@ -555,17 +553,6 @@ function Settings({
           </p>
 
           <div className={styles.block}>
-            <a
-              href={getHelpCenterUrl(langCode, 'home')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buildClassName(styles.item, styles.itemMenu)}
-            >
-              <img className={styles.menuIcon} src={helpcenterImg} alt={lang('Help Center')} />
-              <span className={styles.itemTitle}>{lang('Help Center')}</span>
-
-              <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-            </a>
             <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleDisclaimerOpen}>
               <img className={styles.menuIcon} src={disclaimerImg} alt={lang('Use Responsibly')} />
               <span className={styles.itemTitle}>{lang('Use Responsibly')}</span>

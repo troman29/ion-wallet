@@ -17,7 +17,7 @@ export const IS_WINDOWS = process.platform === 'win32';
 export const IS_LINUX = process.platform === 'linux';
 export const IS_PREVIEW = process.env.IS_PREVIEW === 'true';
 export const IS_FIRST_RUN = !fs.existsSync(`${app.getPath('userData')}/${WINDOW_STATE_FILE}`);
-export const MTW_GTK_VERSION = process.env.MTW_GTK_VERSION ?? '3'; // GTK version (3) to use on Linux
+export const ION_GTK_VERSION = process.env.ION_GTK_VERSION ?? process.env.MTW_GTK_VERSION ?? '3'; // GTK version (3) to use on Linux
 
 export function checkIsWebContentsUrlAllowed(url: string): boolean {
   if (!app.isPackaged) {

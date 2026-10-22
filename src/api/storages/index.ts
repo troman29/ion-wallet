@@ -16,7 +16,8 @@ const storages = {
 
 // These singletons live on globalThis so that duplicated bundle chunks share the same state.
 // Without this, split chunks each get their own module-local copies and storage context is lost.
-const STORAGE_GLOBALS_KEY = '__mtwStorageGlobals';
+const STORAGE_GLOBALS_KEY = '__ionStorageGlobals';
+const LEGACY_STORAGE_GLOBALS_KEY = '__mtwStorageGlobals';
 
 type NodeFileStorageFactory = (config: NodeFileStorageConfig) => Storage;
 
@@ -29,11 +30,13 @@ type StorageGlobals = {
 function getStorageGlobals(): StorageGlobals {
   const g = globalThis as Record<string, unknown>;
 
-  if (!g[STORAGE_GLOBALS_KEY]) {
-    g[STORAGE_GLOBALS_KEY] = {};
-  }
+  // Reuse the old object if an older bundle initialized storage first. Both names
+  // must refer to the same object so mixed chunks retain the context and factory.
+  const globals = g[STORAGE_GLOBALS_KEY] ?? g[LEGACY_STORAGE_GLOBALS_KEY] ?? {};
+  g[STORAGE_GLOBALS_KEY] = globals;
+  g[LEGACY_STORAGE_GLOBALS_KEY] = globals;
 
-  return g[STORAGE_GLOBALS_KEY] as StorageGlobals;
+  return globals as StorageGlobals;
 }
 
 const NODE_FILE_STORAGE_NOT_REGISTERED_ERROR = 'Node file storage was requested, but no factory is registered';
@@ -188,7 +191,7 @@ function createNodeFileStorage(storageConfig: NodeFileStorageConfig) {
 }
 
 function loadBundledNodeFileStorageModule() {
-  const payloadDir = process.env.MTW_HEADLESS_BUNDLE_PAYLOAD_DIR;
+  const payloadDir = process.env.ION_HEADLESS_BUNDLE_PAYLOAD_DIR ?? process.env.MTW_HEADLESS_BUNDLE_PAYLOAD_DIR;
 
   if (!payloadDir) {
     return undefined;
@@ -237,7 +240,7 @@ function isBrowserSingleRuntimeStorageAllowed() {
     || typeof document !== 'undefined'
     || typeof importScripts === 'function'
     || typeof WorkerGlobalScope !== 'undefined'
-    || Boolean(process.env.MTW_HEADLESS_BUNDLE_PAYLOAD_DIR);
+    || Boolean(process.env.ION_HEADLESS_BUNDLE_PAYLOAD_DIR ?? process.env.MTW_HEADLESS_BUNDLE_PAYLOAD_DIR);
 }
 
 function getOptionalRequire() {

@@ -1,7 +1,4 @@
-$auth_intro: |
-  **Sicher** Krypto speichern
-  und Blockchain-Zahlungen mit der
-  **Geschwindigkeit des Lichts** durchführen.
+$auth_intro: "Verwalte ION in ION Network und BNB Chain."
 Create New Wallet: Neue Wallet erstellen
 Import From %count% Secret Words: Importieren von %count% Geheimwörtern
 More about %app_name%: Mehr über %app_name%
@@ -84,8 +81,8 @@ Remove Wallets: Wallets entfernen
 Something went wrong.: Etwas ist schiefgegangen.
 Something went wrong: Etwas ist schiefgegangen
 Logo: Logo
-$about_description1: Kryptowährungen sicher speichern, dezentrale Apps erkunden und Blockchain-Zahlungen mit der **Geschwindigkeit des Lichts** durchführen.
-$about_description2: Die wallet ist **nicht treuhänderisch und sicher**. Die Entwickler haben **keinen** Zugriff auf Ihre Gelder, Browserverlauf oder andere Informationen.
+$about_description1: "Verwalte ION in ION Network und BNB Chain."
+$about_description2: "Deine Schlüssel bleiben auf deinem Gerät. Halte deine Wiederherstellungsphrase geheim."
 What is TON Proxy?: Was ist TON Proxy?
 $about_extension_description1: TON Proxy eröffnet einen Weg zum **dezentralen Internet**, indem es ermöglicht, TON Sites anonym zu besuchen.
 More info and demo.: Mehr Informationen und Demo.

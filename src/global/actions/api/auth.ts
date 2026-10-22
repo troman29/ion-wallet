@@ -18,7 +18,6 @@ import { cloneDeep, compact, unique } from '../../../util/iteratees';
 import { getTranslation } from '../../../util/langProvider';
 import { logDebugError } from '../../../util/logs';
 import { clearPoisoningCache, updatePoisoningCacheFromGlobalState } from '../../../util/poisoningHash';
-import { pause } from '../../../util/schedulers';
 import {
   CAN_AUTHENTICATE_WITH_BIOMETRIC_ONLY,
   IS_ANDROID,
@@ -67,7 +66,6 @@ import {
 
 import { getIsPortrait } from '../../../hooks/useDeviceScreen';
 
-const CREATING_DURATION = 3300;
 const SWITHCHING_ACCOUNT_DURATION_MS = IS_IOS ? 450 : IS_ANDROID ? 350 : 300;
 
 export async function switchAccount(global: GlobalState, accountId: string, newNetwork?: ApiNetwork) {
@@ -193,9 +191,7 @@ addActionHandler('startCreatingWallet', async (global, actions, payload) => {
     }),
   );
 
-  const [mnemonic] = await Promise.all(
-    hasPassword ? [generateMnemonicPromise] : [generateMnemonicPromise, pause(CREATING_DURATION)],
-  );
+  const mnemonic = await generateMnemonicPromise;
 
   if (takeAbortDappConnectWalletCreationIfRequested()) {
     finalizeDappConnectWalletCreationAbort();

@@ -1,6 +1,4 @@
-$auth_intro: |
-  **Securely** store crypto and make blockchain
-  payments at the **speed of light**.
+$auth_intro: "Manage ION on ION Network and BNB Chain."
 Create New Wallet: Create New Wallet
 Import From %count% Secret Words: Import From %count% Secret Words
 More about %app_name%: More about %app_name%
@@ -83,8 +81,8 @@ Remove Wallets: Remove Wallets
 Something went wrong.: Something went wrong.
 Something went wrong: Something went wrong
 Logo: Logo
-$about_description1: Securely store crypto, explore decentralized apps, and make blockchain payments at the **speed of light**.
-$about_description2: The wallet is **non-custodial and safe**. The developers **do not** have access to your funds, browser history or any other information.
+$about_description1: "Manage ION on ION Network and BNB Chain."
+$about_description2: "Your keys stay on your device. Keep your recovery phrase private."
 What is TON Proxy?: What is TON Proxy?
 $about_extension_description1: TON Proxy opens a way to **decentralized internet** by allowing to anonymously access TON Sites.
 More info and demo.: More info and demo.
@@ -1711,3 +1709,5 @@ Tokenized Gold: Tokenized Gold
 Index Funds: Index Funds
 
 Exchange will be available after the ION bridge is configured.: Exchange will be available after the ION bridge is configured.
+Exchange: Exchange
+Allow App Lock: Allow App Lock

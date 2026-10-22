@@ -13,7 +13,7 @@ if (!isIosCapacitorBuild) {
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const iosPublicDir = path.join(rootDir, 'mobile', 'ios', 'App', 'App', 'public');
-const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mtw-ios-icons-'));
+const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ion-ios-icons-'));
 const fantasticonBin = path.join(rootDir, 'node_modules', '@twbs', 'fantasticon', 'bin', 'fantasticon');
 
 try {

@@ -26,6 +26,7 @@ import {
   EXTENSION_NAME,
   GLOBAL_STATE_CACHE_KEY,
   IFRAME_WHITELIST,
+  ION_STATIC_BASE_URL,
   IPFS_GATEWAY_BASE_URL,
   IS_CAPACITOR,
   IS_EXTENSION,
@@ -34,7 +35,6 @@ import {
   IS_OPERA_EXTENSION,
   IS_PACKAGED_ELECTRON,
   LANG_LIST,
-  MW_STATIC_BASE_URL,
   PROXY_API_BASE_URL,
   SSE_BRIDGE_URL,
   SUBPROJECT_URL_MASK,
@@ -76,7 +76,7 @@ const cspConnectSrcHosts = Array.from(new Set([
   BRILLIANT_API_BASE_URL,
   BRILLIANT_API_BASE_URL.replace(/^http(s?):/, 'ws$1:'),
   ensureTrailingSlash(PROXY_API_BASE_URL),
-  MW_STATIC_BASE_URL,
+  ION_STATIC_BASE_URL,
   TONCENTER_MAINNET_URL,
   TONCENTER_MAINNET_URL.replace(/^http(s?):/, 'ws$1:'),
   TONCENTER_TESTNET_URL,
@@ -92,7 +92,7 @@ const cspConnectSrcHosts = Array.from(new Set([
 ])).join(' ');
 
 const cspImageSrcHosts = [
-  MW_STATIC_BASE_URL,
+  ION_STATIC_BASE_URL,
   'https://imgproxy.wallet.ice.io',
   'https://dns-image.wallet.ice.io',
   'https://web-api.changelly.com',
@@ -383,7 +383,7 @@ export default function createConfig(
       new PreloadWebpackPlugin({
         include: 'allAssets',
         fileWhitelist: [
-          /duck_.*?\.png/, // Lottie thumbs
+          /ion_.*?\.png/, // Lottie thumbs
           /coin_.*?\.png/, // Coin icons
           /theme_.*?\.png/, // Theme icons
           /chain_.*?\.png/, // Chain icons

@@ -1,7 +1,4 @@
-$auth_intro: |
-  **Bezpiecznie** przechowuj kryptowaluty
-  i dokonuj płatności blockchain
-  z **prędkością światła**.
+$auth_intro: "Zarządzaj ION w sieciach ION Network i BNB Chain."
 Create New Wallet: Utwórz nowy portfel
 Import From %count% Secret Words: Importuj z %count% tajnych słów
 More about %app_name%: Więcej informacji o %app_name%
@@ -86,8 +83,8 @@ Remove Wallets: Usuń portfele
 Something went wrong.: Coś poszło nie tak.
 Something went wrong: Coś poszło nie tak
 Logo: Logo
-$about_description1: Bezpiecznie przechowuj kryptowaluty, odkrywaj zdecentralizowane aplikacje i dokonuj płatności blockchain z **prędkością światła**.
-$about_description2: Portfel jest **bezprawny i bezpieczny**. Deweloperzy **nie** mają dostępu do twoich środków, historii przeglądarki ani żadnych innych informacji.
+$about_description1: "Zarządzaj ION w sieciach ION Network i BNB Chain."
+$about_description2: "Twoje klucze pozostają na Twoim urządzeniu. Nie udostępniaj frazy odzyskiwania."
 What is TON Proxy?: Czym jest TON Proxy?
 $about_extension_description1: TON Proxy otwiera drogę do **zdecentralizowanego Internetu**, umożliwiając anonimowy dostęp do stron TON.
 More info and demo.: Więcej informacji i demo.

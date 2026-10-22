@@ -1,7 +1,4 @@
-$auth_intro: |
-  **Безпечно** зберігайте криптовалюту і
-  здійснюйте платежі в блокчейні
-  **зі швидкістю світла**.
+$auth_intro: "Керуйте ION у мережах ION Network і BNB Chain."
 Create New Wallet: Створити новий гаманець
 Import From %count% Secret Words: Відновити з %count% секретних слів
 More about %app_name%: Детальніше про %app_name%
@@ -87,8 +84,8 @@ Remove Wallets: Видалити гаманці
 Something went wrong.: Упс, щось пішло не так.
 Something went wrong: Упс, щось пішло не так
 Logo: Логотип
-$about_description1: Безпечно зберігайте криптовалюту, користуйтеся децентралізованими додатками та здійснюйте платежі в блокчейні **зі швидкістю світла**.
-$about_description2: Гаманець **керується тільки вами**. Розробники **не мають доступу** до ваших коштів, історії браузера або будь-якої іншої інформації.
+$about_description1: "Керуйте ION у мережах ION Network і BNB Chain."
+$about_description2: "Ваші ключі зберігаються на вашому пристрої. Нікому не повідомляйте секретну фразу."
 What is TON Proxy?: Що таке TON Proxy?
 $about_extension_description1: TON Proxy надає доступ до **децентралізованого інтернету** і сайтів TON.
 More info and demo.: Більше інформації та демо-версія.

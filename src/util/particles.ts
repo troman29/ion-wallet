@@ -2,6 +2,7 @@
 
 import { suppressStrict } from '../lib/fasterdom/fasterdom';
 import { COLOR_COUNT, QUALITY } from './accentColor/constants';
+import createIonParticleTexture from './createIonParticleTexture';
 import generateUniqueId from './generateUniqueId';
 import { getCachedImageUrl } from './getCachedImageUrl';
 import { requestMediaWorker } from './launchMediaWorkers';
@@ -10,6 +11,7 @@ import { logDebugError } from './logs';
 import { getIsInBackground } from '../hooks/useBackgroundMode';
 
 export interface ParticleConfig {
+  shape?: 'square' | 'ion';
   width?: number;
   height?: number;
   particleCount?: number;
@@ -40,6 +42,7 @@ interface Locations {
     baseOpacity: number;
   };
   uniforms: {
+    ionShape: WebGLUniformLocation | null;
     resolution: WebGLUniformLocation | null;
     time: WebGLUniformLocation | null;
     color: WebGLUniformLocation | null;
@@ -97,6 +100,7 @@ class SeededRandom {
 }
 
 const DEFAULT_CONFIG: Required<ParticleConfig> = {
+  shape: 'square',
   width: 400,
   height: 250,
   particleCount: 19,
@@ -216,6 +220,7 @@ function createParticleSystemManager(canvas: HTMLCanvasElement) {
     throw new Error('Failed to create shader program');
   }
 
+  const ionTexture = createIonParticleTexture(gl);
   const dpr = window.devicePixelRatio || 1;
   const systems = new Map<string, ParticleSystem>();
 
@@ -229,6 +234,7 @@ function createParticleSystemManager(canvas: HTMLCanvasElement) {
       baseOpacity: gl.getAttribLocation(program, 'a_baseOpacity'),
     },
     uniforms: {
+      ionShape: gl.getUniformLocation(program, 'u_ionShape'),
       resolution: gl.getUniformLocation(program, 'u_resolution'),
       time: gl.getUniformLocation(program, 'u_time'),
       color: gl.getUniformLocation(program, 'u_color'),
@@ -366,6 +372,7 @@ function createParticleSystemManager(canvas: HTMLCanvasElement) {
       const systemTime = (currentTime - system.startTime) / 1000;
 
       // Set uniforms for this system
+      gl.uniform1f(locations.uniforms.ionShape, system.config.shape === 'ion' ? 1 : 0);
       gl.uniform1f(locations.uniforms.time, systemTime);
       gl.uniform3fv(locations.uniforms.color, system.config.color);
       gl.uniform1f(locations.uniforms.canvasWidth, system.config.width * dpr);
@@ -491,6 +498,7 @@ function createParticleSystemManager(canvas: HTMLCanvasElement) {
 
     systems.clear();
 
+    gl.deleteTexture(ionTexture);
     gl.deleteProgram(program);
     gl.deleteShader(vertexShader!);
     gl.deleteShader(fragmentShader!);
@@ -521,6 +529,7 @@ const VERTEX_SHADER_SOURCE = `
     uniform vec2 u_spawnCenter;
 
     varying float v_opacity;
+    varying float v_rotation;
 
     void main() {
         float totalAge = u_time - a_startTime;
@@ -573,6 +582,7 @@ const VERTEX_SHADER_SOURCE = `
         gl_Position = vec4(clipSpace, 0, 1);
         gl_PointSize = a_size;
         v_opacity = opacity;
+        v_rotation = sin(a_startTime * 6.283185 + age * 0.7) * 0.15;
     }
 `;
 
@@ -580,7 +590,10 @@ const FRAGMENT_SHADER_SOURCE = `
     precision mediump float;
 
     uniform vec3 u_color;
+    uniform float u_ionShape;
+    uniform sampler2D u_ionTexture;
     varying float v_opacity;
+    varying float v_rotation;
 
     void main() {
         vec2 coord = gl_PointCoord - vec2(0.5);
@@ -596,6 +609,13 @@ const FRAGMENT_SHADER_SOURCE = `
 
         // Use smoothstep for anti-aliasing to reduce subpixel artifacts
         float alpha = 1.0 - smoothstep(radius - 0.05, radius + 0.05, dist);
+
+        if (u_ionShape > 0.5) {
+            float c = cos(v_rotation);
+            float s = sin(v_rotation);
+            vec2 uv = mat2(c, -s, s, c) * coord + vec2(0.5);
+            alpha = texture2D(u_ionTexture, uv).a;
+        }
 
         if (alpha <= 0.0) {
             discard;
