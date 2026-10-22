@@ -23,7 +23,7 @@ export type ExplorerLink = {
 export interface BaseExplorerConfig {
   id: string;
   name: string;
-  baseUrl: Record<ApiNetwork, ExplorerLink>;
+  baseUrl: Partial<Record<ApiNetwork, ExplorerLink>>;
 }
 export interface ExplorerConfig extends BaseExplorerConfig {
   /** Use `{base}` as the base URL placeholder and `{address}` as the wallet address placeholder */
@@ -173,46 +173,18 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       testnet: [TONCOIN.slug],
     },
     tokenInfo: [TONCOIN],
-    explorers: [
-      {
-        id: 'tonscan',
-        name: 'Tonscan',
-        baseUrl: {
-          mainnet: 'https://tonscan.org/',
-          testnet: 'https://testnet.tonscan.org/',
-        },
-        address: '{base}address/{address}',
-        token: '{base}jetton/{address}',
-        transaction: '{base}tx/{hash}',
-        nft: '{base}nft/{address}',
-        nftCollection: '{base}collection/{address}',
-        doConvertHashFromBase64: true,
-      },
-      {
-        id: 'tonviewer',
-        name: 'Tonviewer',
-        baseUrl: {
-          mainnet: 'https://tonviewer.com/',
-          testnet: 'https://testnet.tonviewer.com/',
-        },
-        address: '{base}{address}?address',
-        token: '{base}{address}?jetton',
-        transaction: '{base}transaction/{hash}',
-        nft: '{base}{address}?nft',
-        nftCollection: '{base}{address}?collection',
-        doConvertHashFromBase64: true,
-      },
-    ],
-    marketplaces: [{
-      id: 'getgems',
-      name: 'Getgems',
-      baseUrl: {
-        mainnet: 'https://getgems.io/',
-        testnet: 'https://testnet.getgems.io/',
-      },
+    explorers: [{
+      id: 'ion',
+      name: 'ION Explorer',
+      baseUrl: { mainnet: 'https://explorer.ice.io/' },
+      address: '{base}address/{address}',
+      token: '{base}jetton/{address}',
+      transaction: '{base}transaction/{hash}',
       nft: '{base}nft/{address}',
       nftCollection: '{base}collection/{address}',
+      doConvertHashFromBase64: true,
     }],
+    marketplaces: [],
     nftBatchLimit: 500,
     nftBatchPauseMs: 1000,
     formatTransferUrl: formatTonTransferUrl,
@@ -320,7 +292,7 @@ export function getExplorer(chain: ApiChain, explorerId?: string): ExplorerConfi
   return explorers[0];
 }
 
-export function getMarketplace(chain: ApiChain, id?: string): MarketplaceConfig {
+export function getMarketplace(chain: ApiChain, id?: string): MarketplaceConfig | undefined {
   const marketplaces = getAvailableMarketplaces(chain);
 
   if (id) {

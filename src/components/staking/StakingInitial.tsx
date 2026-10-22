@@ -9,7 +9,6 @@ import { StakingState } from '../../global/types';
 
 import {
   DEFAULT_PRICE_CURRENCY,
-  JVAULT_URL,
   TONCOIN,
 } from '../../config';
 import renderText from '../../global/helpers/renderText';
@@ -290,11 +289,7 @@ function StakingInitial({
     return (
       <>
         <p className={modalStyles.text}>
-          {renderText(lang('$safe_staking_description_jetton1', {
-            jvault_link: (
-              <a href={JVAULT_URL} target="_blank" rel="noreferrer"><b>JVault</b></a>
-            ),
-          }))}
+          {renderText(lang('$safe_staking_description_jetton1'))}
         </p>
         <p className={modalStyles.text}>
           {renderText(lang('$safe_staking_description_jetton2'))}

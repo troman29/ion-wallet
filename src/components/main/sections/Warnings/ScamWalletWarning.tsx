@@ -2,7 +2,6 @@ import React, { memo } from '../../../../lib/teact/teact';
 import { withGlobal } from '../../../../global';
 
 import { APP_NAME } from '../../../../config';
-import { getHelpCenterUrl } from '../../../../global/helpers/getHelpCenterUrl';
 import { selectIsCurrentAccountViewMode, selectIsMultisigAccount } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 
@@ -24,8 +23,6 @@ function ScamWalletWarning({ isMultisig, isViewMode }: StateProps) {
 
   const isShown = isMultisig && !isViewMode;
 
-  const helpCenterLink = getHelpCenterUrl(lang.code, 'seedScam');
-
   return (
     <Collapsible isShown={isShown}>
       <div className={buildClassName(styles.wrapper, isLandscape && styles.wrapper_landscape)}>
@@ -33,14 +30,6 @@ function ScamWalletWarning({ isMultisig, isViewMode }: StateProps) {
         <p className={styles.text}>
           {lang('$multisig_warning_text', {
             app_name: APP_NAME,
-            multisig_warning_link: (
-              <span className={styles.linkContainer}>
-                <i className={buildClassName(styles.link, 'icon-chevron-right')} aria-hidden />
-                <a href={helpCenterLink} className={styles.link} target="_blank" rel="noreferrer">
-                  {lang('$multisig_warning_link')}
-                </a>
-              </span>
-            ),
           })}
         </p>
       </div>

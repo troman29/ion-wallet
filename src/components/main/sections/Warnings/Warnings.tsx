@@ -1,7 +1,7 @@
 import React, { memo } from '../../../../lib/teact/teact';
 import { withGlobal } from '../../../../global';
 
-import { IS_EXTENSION } from '../../../../config';
+import { APP_INSTALL_URL, IS_EXTENSION } from '../../../../config';
 import {
   selectCurrentAccountId,
   selectCurrentAccountState,
@@ -64,7 +64,7 @@ function Warnings({
         </>
       )}
       {/* On the legacy host, "install the native app" only competes with the migration notice above */}
-      {IS_UNSAFE_WEB && !IS_LEGACY_APP_HOST && <SecurityWarning />}
+      {IS_UNSAFE_WEB && !IS_LEGACY_APP_HOST && APP_INSTALL_URL && <SecurityWarning />}
     </>
   );
 }

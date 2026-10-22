@@ -100,13 +100,15 @@ function NftCollectionHeader({
         name: 'Send All',
         value: 'sendAll',
       } satisfies DropdownItem<MenuHandler>,
-      getMarketplaceNftCollectionUrl(collection.chain, collection.address) && {
-        name: getMarketplaceName(collection.chain, collection.address),
+      getMarketplaceNftCollectionUrl(collection.chain, collection.address, isTestnet) && {
+        name: getMarketplaceName(collection.chain)!,
         value: 'marketplace',
         fontIcon: 'external',
       },
-      {
-        name: getExplorerName(collection.chain),
+      getExplorerNftCollectionUrl(
+        collection.chain, collection.address, isTestnet, selectedExplorerIds?.[collection.chain],
+      ) && {
+        name: getExplorerName(collection.chain, selectedExplorerIds?.[collection.chain]),
         value: 'explorer',
         fontIcon: 'external',
       },
@@ -137,7 +139,7 @@ function NftCollectionHeader({
         value: isInTabs ? 'removeTab' : 'addTab',
       },
     ]);
-  }, [collectionNfts, collectionTabs, collection, dnsExpireInDays, isViewMode, lang]);
+  }, [collectionNfts, collectionTabs, collection, dnsExpireInDays, isViewMode, lang, isTestnet, selectedExplorerIds]);
 
   useHistoryBack({
     isActive: true,
@@ -166,7 +168,6 @@ function NftCollectionHeader({
           collection.chain,
           collection.address,
           isTestnet,
-          selectedExplorerIds?.ton,
         );
         if (url) {
           void openUrl(url);

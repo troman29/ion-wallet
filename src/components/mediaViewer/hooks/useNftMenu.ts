@@ -41,7 +41,7 @@ const SEND_ITEM: DropdownItem<NftMenuHandler> = {
   withDelimiter: true,
 };
 const getMarketplaceItem = (chain: ApiChain): DropdownItem<NftMenuHandler> => ({
-  name: getMarketplaceName(chain),
+  name: getMarketplaceName(chain)!,
   value: 'marketplace',
   fontIcon: 'external',
 });
@@ -128,6 +128,7 @@ export default function useNftMenu({
   } = getActions();
 
   const lang = useLang();
+  const { selectedExplorerIds } = getGlobal().settings;
 
   function closeOverlays() {
     closeMediaViewer();
@@ -156,10 +157,10 @@ export default function useNftMenu({
           nft!.chain,
           nft!.address,
           isTestnet,
-          selectedExplorerIds?.ton,
+          selectedExplorerIds?.[nft!.chain],
         )!;
 
-        void openUrl(url, { isExternal });
+        if (url) void openUrl(url, { isExternal });
         break;
       }
 
@@ -258,8 +259,10 @@ export default function useNftMenu({
           ? 'Expired'
           : lang('$one_domain_expires %days%', { days: formatRelativeDays(lang, dnsExpireInDays) }),
       },
-      getMarketplaceItem(nft.chain),
-      getExplorerItem(nft.chain),
+      getMarketplaceNftUrl(nft.chain, nft.address, isTestnet) && getMarketplaceItem(nft.chain),
+      getExplorerNftUrl(nft.chain, nft.address, isTestnet, selectedExplorerIds?.[nft.chain]) && {
+        ...getExplorerItem(nft.chain), name: getExplorerName(nft.chain, selectedExplorerIds?.[nft.chain]),
+      },
       SHARE_LINK_ITEM,
       collectionAddress && COLLECTION_ITEM,
       ((!isScam && !isNftBlacklisted) || isNftWhitelisted) && HIDE_ITEM,
@@ -272,7 +275,7 @@ export default function useNftMenu({
     ]);
   }, [
     nft, isViewMode, isWidget, dnsExpireInDays, lang, linkedAddress, isNftBlacklisted,
-    isNftWhitelisted,
+    isNftWhitelisted, isTestnet, selectedExplorerIds,
   ]);
 
   return { menuItems, handleMenuItemSelect };

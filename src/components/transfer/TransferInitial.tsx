@@ -10,7 +10,6 @@ import type { FeePrecision, FeeTerms } from '../../util/fee/types';
 import { ScamWarningType, TransferState } from '../../global/types';
 
 import { DEFAULT_PRICE_CURRENCY, UNKNOWN_TOKEN } from '../../config';
-import { getHelpCenterUrl } from '../../global/helpers/getHelpCenterUrl';
 import {
   selectCurrentAccount,
   selectCurrentAccountId,
@@ -674,17 +673,7 @@ function getScamWarning(lang: LangFn, scamWarning: ScamWarningType | undefined) 
 
   return lang(scamWarning === ScamWarningType.DomainLike
     ? '$domain_like_scam_warning'
-    : '$seed_phrase_scam_warning', {
-    help_center_link: (
-      <a
-        href={getHelpCenterUrl(lang.code, scamWarning === ScamWarningType.DomainLike ? 'domainScam' : 'seedScam')}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <b>{lang('$help_center_prepositional')}</b>
-      </a>
-    ),
-  });
+    : '$seed_phrase_scam_warning');
 }
 
 // Calculates fee in the token currency to keep abstraction from SDK native fee values

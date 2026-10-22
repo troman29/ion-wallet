@@ -4,7 +4,7 @@
 
 ## Текущее состояние
 
-Состояние сверено с актуальным `master` (`3e2675ddf`, PR #28). Внешние сервисы, кабинеты магазинов, сертификаты и опубликованные association-файлы не проверены. «Требует регистрации» означает, что в репозитории нет подтверждения готовой интеграции; фактическое состояние кабинета нужно уточнить у владельца.
+Состояние сверено с текущим деревом master на базе `4c6a70954` (22.10.2026). Результаты read-only проверки URL/контрактов P1 приведены ниже. Кабинеты магазинов, сертификаты и association-файлы не проверялись.
 
 Основной набор графики заменён на ION. Остаются утверждение графики, проверка остальных экранов и платформ, а также внешняя инфраструктура.
 
@@ -22,9 +22,9 @@
 
 | Ресурс | Места в репозитории | Статус | До релиза |
 | --- | --- | --- | --- |
-| Основной сайт, blog, terms, privacy | Android `strings.xml`, `src/config.ts`, `src/components/settings/SettingsAbout.tsx` | частично готово в коде / требует решения | About уже ссылается на `ice.io` и репозиторий ION Wallet; ссылка на блог из About убрана. URL legal-страниц и старые blog-маршруты остаются в конфигурации/Android resources. Подтвердить каждое назначение, опубликовать нужные страницы или убрать используемые ссылки. |
-| Help Center и anti-scam статьи | `HELP_CENTER_URL` в `src/config.ts`, `ScamWalletWarning.tsx`, `TransferInitial.tsx`, Android `strings.xml` | частично очищено / требует решения | Пункт Help Center убран из Settings, но предупреждения о мошенничестве всё ещё открывают `help.wallet.ice.io`; domain-scam пути содержат `.ton`. Нужны утверждённые ION EN/RU статьи или изменение этих переходов. |
-| Загрузка Android/desktop и `IONWallet.apk` | Android `strings.xml`, Electron/webpack URL | требует решения | Настроить подписанные артефакты, загрузку, обновления и проверить ссылки с чистого устройства. |
+| Основной сайт, blog, terms, privacy | `src/config.ts`, Android resources, About | публикация отдельно | About открывает ice.io и GitHub ION Wallet. Blog URL очищены. Terms/privacy и onboarding consent сохранены; страницы публикуются отдельно. |
+| Help Center и anti-scam статьи | config, warnings, Android resources | переходы удалены | Предупреждения сохранены в 12 языках без dangling CTA. Новые статьи требуют утверждения и публикации. |
+| Install/download/update | `APP_DOWNLOAD_URLS`, Settings, UpdateAvailable, UpdateApp | скрыто до публикации каналов | Явные optional URL по платформам; обязательное обновление блокирует приложение даже без download URL. См. P1 ниже. |
 | Runtime API, RPC, indexer, static CDN, ION Gateway bridge | `src/config.ts`, `webpack.config.ts`, `src/api/chains/ton/toncenter/other.ts`, `src/api/chains/ton/util/tonCore.ts` | готово в коде частично / требует проверки сервиса | Клиент уже использует ION indexer `/indexer/v3` и RPC `/http/v2/jsonRPC` на `api.mainnet.ice.io`; отсутствие v3 indexer больше не является открытым пунктом. Backend по умолчанию — `api.wallet.ice.io`, CDN — `static.wallet.ice.io`. Подтвердить deployment, доступность и контракт каждого сервиса, отдельно BNB RPC/indexer. Bridge пока `https://tonconnectbridge.wallet.ice.io/bridge/`; новый адрес вводить после подготовки сервиса и интеграционной проверки. |
 | Universal Links / App Links | `mobile/ios/App/Entitlements/IONWallet*.entitlements`, `mobile/android/app/src/ionwallet/AndroidManifest.xml` | требует регистрации | Опубликовать `apple-app-site-association` и `assetlinks.json` на `wallet.ice.io`, `connect.wallet.ice.io`, `go.wallet.ice.io`; в файлах указать реальные App ID, signing certificate SHA-256 и пути. |
 | Firebase | Android `google-services.json`, iOS `GoogleService-Info.plist` | требует регистрации | Создать production-проекты ION в Firebase Console, добавить Android `io.ice.wallet` и iOS bundle IDs, включить нужные сервисы и заменить текущие безопасные заглушки. |
@@ -57,8 +57,8 @@
 
 ## Оставшиеся задачи в коде
 
-1. **Внешние переходы сети ION.** В `src/util/chain.ts` для ION пока настроены Tonscan/Tonviewer и Getgems. В NFT UI остаются переходы на Getgems/OpenSea, в staking — JVault (`StakingInitial.tsx`). Подтвердить применимость каждого сервиса к ION, заменить или убрать переход. Простого переименования подписи недостаточно.
-2. **Help и публичные URL.** Согласовать legal/help/download URL и убрать неработающие переходы из предупреждений. `public/site.webmanifest` содержит `gcm_sender_id: 122867383838`; подтвердить назначение этого значения до настройки ION push.
+1. **Контрактные подтверждения.** URL-часть P1 выполнена; оставшиеся неподтверждённые deployments перечислены ниже.
+2. **Публикация каналов.** Нужны подтверждённые help/download/store URL и updater feeds. До публикации соответствующие CTA скрыты. Legal публикуется отдельно. `gcm_sender_id: 122867383838` в manifest требует проверки при настройке push.
 3. **Протоколы dApp.** Публичное имя ION Gateway уже используется, но реальная реализация — адаптер TON Connect, extension alias `ionconnect`/`tonconnect`, embedded bridge и SSE URL. Проверить end-to-end и согласовать протокол/registry до удаления совместимых alias.
 4. **Технические имена.** Новые cache names — `ion-image`, `ion-lang-1`; ION globals/env и active-tab marker введены. Старые `mtw-active-tab`, `__mtwStorageGlobals`, `MTW_*` оставлены как alias совместимости. В Android assets ещё есть `assets/js/index.html` со ссылкой на `mytonwallet-sdk.js`; проверить эту SDK-цепочку отдельно. Закреплённые dependency forks не переименовывать без готовой замены.
 5. **Оставшиеся строки.** Legacy-названия встречаются в ключах локализаций, хотя значения уже содержат ION Wallet. Проверять отображаемые значения и достижимые экраны, а не считать каждое совпадение старым брендом в UI. Удалённый Telegram support не заменён новым каналом без решения продукта.
@@ -68,11 +68,11 @@
 - `npm run check:branding` — успешно: 13 анимаций, по 60 кадров, кадр 30 отрисован штатным RLottie; контактный лист просмотрен.
 - iOS PNG — 1024×1024 без alpha; выборочно проверены размеры web/PWA/Android PNG/WebP, все три icon path из manifest существуют.
 - Подтверждены отсутствие TON-партнёрских SVG, `duck_*`, `settings_mw-cards.svg` и удалённого `tonConnectFriendlyPatch.js`.
-- После локальной зачистки P0 проходят TypeScript/ESLint/Stylelint, все 981 Jest-тест в 115 suites, проверка 13 анимаций, генерация локализаций и production webpack (с предупреждениями о размере bundle). Native/device и реальные транзакции не проверялись; локальное прохождение команд workflow не подтверждает запуск GitHub Actions.
+- Текущее дерево: `npm run check` — успешно; Jest — 1004 passed / 120 suites; `npm run check:branding` — 13 анимаций и iOS icon; генерация default и Android локализаций — успешно; production webpack — успешно, 2 предупреждения о размере bundle. Native/device проверки и реальные транзакции не выполнялись.
 
 ## Приоритет оставшейся работы
 
-- **До рабочего продукта:** ION explorer/marketplace/help переходы; проверка ION/BNB backend и dApp-подключений. Интеграцию BSC indexer согласовать с ведущимся backend-блоком.
+- **До рабочего продукта:** подтверждение оставшихся контрактов; проверка ION/BNB backend и dApp-подключений. Интеграцию BSC indexer согласовать с ведущимся backend-блоком.
 - **До публикации:** legal/help/download, Firebase/push, domain associations, project IDs/registries, signing/update feeds, store listing и screenshots.
 - **Финальная приёмка:** утверждение графики, web/extension/Electron и Android/iOS на устройствах, QR/deep links, создание/импорт/receive/send/staking. Exchange пока оболочка — bridge требует отдельного согласованного контракта и реализации.
 
@@ -84,3 +84,66 @@
 2. Открыть приложение на web, Android, iOS, extension и Electron и проверить logo, icon, splash, QR, deep links и внешние переходы.
 3. Выполнить поиск `mytonwallet`, `my wallet`, `gram`, `mtw`, `giveaway` и список отключённых продуктов. Совпадения в закреплённых зависимостях и тестовых данных оформлять отдельно с обоснованием.
 4. Сверить store/registry metadata с package IDs: `io.ice.wallet`, iOS IONWallet targets, `ion://`, `ion-gateway://`, `ion-wc://` и стандартным URI ION Gateway `tc://`.
+
+## P1: внешние переходы — 22.10.2026
+
+Назначение [ION Explorer](https://explorer.ice.io/) подтверждено [официальной страницей staking](https://ice.io/staking). Публичный bundle `/application.d4056359.js` содержит маршруты `address/:address`, `jetton/:address`, `transaction/:hash`, `nft/:address`, `collection/:address`; они используются в `src/util/chain.ts`. Hash переводится из base64 в hex; готовый hex сохраняется. Старые explorer ID в settings используют fallback без миграции кошельков. Testnet explorer не подтверждён: переходы скрыты, mainnet fallback не применяется. Выбранный ID передаётся и в template, и в base URL.
+
+ION marketplace не настроен. Getgems и глобальный выбор OpenSea по multichain-признаку удалены. NFT, коллекции и описания остаются без кнопки покупки; BNB BSCScan/OpenSea routes сохранены. BNB testnet marketplace и collection route отсутствуют. JVault link/атрибуция и неподтверждённое утверждение об аудите token staking удалены; операции не изменены. Legacy `toncoin` не открывает CoinMarketCap TON. Из UI выбора субкошелька удалён переход на TON documentation.
+
+Explorer открывается внешне, включая Capacitor; TON origins удалены из iframe whitelist, новый origin туда не добавлен. Help/anti-scam links удалены, предупреждения во всех 12 локализациях сохранены без dangling «узнать больше». Неизвестный dApp source предлагает проверить адрес сайта вместо установки по неподтверждённым ссылкам.
+
+`APP_DOWNLOAD_URLS` задаёт необязательные URL явно по каналам: landing, desktop, mobile, Android direct, Play, iOS, Chrome, Edge, Firefox. Сейчас карта пуста: install предложения в Settings, security warning и legacy banners скрыты. Legacy banner оставляет имя домена обычным текстом. Electron manual update больше не открывает `/get`; конкатенации download URL удалены. Обязательное обновление блокирует всё приложение, включая auth и Electron, даже без download URL. Electron сохраняет updater и оконные кнопки в AppShell: скачанное штатное обновление устанавливается прямо с обязательного экрана, в том числе после события загрузки во время блокировки. При включённом автообновлении доступный новый web-интерфейс Electron загружается перезагрузкой, даже при ошибке нативного updater; скачанный установщик имеет приоритет. При выключенном автообновлении перезагрузка локального bundle не предлагается. При отсутствии рабочего канала показывается сообщение о его недоступности. Web предлагает перезагрузку.
+
+Неподтверждённые Android blog/install/help/scam/APK resources удалены (активных native consumers не найдено). Terms/privacy, onboarding consent, package IDs и association-конфигурация сохранены. Blog map очищен; helper возвращает undefined.
+
+Workflow/config audit: production updater feed `https://s3.wallet.ice.io/public/desktop`, staging `https://s3.wallet.ice.io/public/desktop-beta`, desktop artifact `IONWallet-${arch}.${ext}`, mac staging `IONWallet-${version}-${arch}.${ext}`. Это настройки публикации, не подтверждение готового канала; signing, feeds и stores требуют release smoke test. TON-сервисы остались в protocol comments и fixtures; OpenSea runtime URL относится только к BNB. Dependencies и bridge identifiers не менялись.
+
+Read-only доступность из этой среды: `wallet.ice.io` — DNS не вернул адрес; help, DNS metadata и desktop feed — timeout. Это не доказательство глобальной недоступности. Эти результаты не использованы как подтверждение каналов.
+
+## Реестр контрактов и runtime-идентификаторов
+
+Проверка 22.10.2026: только GET/read-only JSON-RPC, без транзакций, deploy и подписей. Адреса и операции сохранены. Существование аккаунта, интерфейс и имя токена сами по себе не подтверждают официальное назначение. ION использует внутренний chain ID `ton`.
+
+| Значение | Сеть / класс | Назначение, места использования | Источник подтверждения и результат read-only проверки |
+| --- | --- | --- | --- |
+| `LIQUID_POOL = EQAYI9vwZ3K5y9n_9-E8F_e3JzMzNNyEib0ddBlfAWOOsh_c` | ION mainnet production default; env override `LIQUID_POOL` | Liquid stake destination/state; `src/config.ts`, `src/api/chains/ton/staking.ts`, `toncenter/actions.ts`, `ALL_STAKING_POOLS` | **Назначение подтверждено** официальным [staking bundle](https://stake.ice.io/assets/index-1df23664.js), константа `POOL_ADDRESS`. ION `/indexer/v3/accountStates?address=...`: active, `ionstake_pool`, code hash `K75frMqVhyVpqyDgGdTSvKF4rHBdgRE/ImFELu+9E54=`. Testnet и overrides не подтверждены. |
+| `LIQUID_JETTON = EQACbwI38RnvclU5Wv6H9zDr8Ao_tq9NWilXxBmoE8yroZlF` | ION mainnet default; env override `LIQUID_JETTON` | Liquid asset, unstake token wallet; `staking.ts`, `util/metadata.ts`, `src/config.ts` | **Назначение подтверждено** тем же официальным bundle, `JETTON_MASTER_ADDRESS`. `/indexer/v3/jetton/masters?address=...`: active jetton master, admin соответствует pool, metadata LION; code hash `pGh4ZFUmXoM8Cep2WYHVKvzWegCDjboxt3AJsWzwhlo=`. Имя LION не было основанием подтверждения. Testnet/overrides не проверены. |
+| `STAKED_TON_SLUG = ton-EQACbwI38RnvclU5Wv6H9zDr8Ao_tq9NWilXxBmoE8yroZlF` | Производный от effective jetton | Token lookup/styles, `STAKED_TOKEN_SLUGS`; `src/config.ts`, `staking.ts`, selectors | **Локально подтверждено**: `ton-${LIQUID_JETTON}` совпадает с `buildTokenSlug`. Slug не отдельный контракт. При env override значение меняется. |
+| `ION_BNB_MAINNET = 0xE1ab61f7b093435204dF32F5b3A405de55445Ea8`, slug `bnb-0xE1ab61f7b093435204dF32F5b3A405de55445Ea8` | BNB mainnet default, без override | Default/kept assets: `src/config.ts`, `src/util/chain.ts`, `src/api/chains/evm/wallet.ts` | **Issuer/bridge ION не подтверждены владельцем в этой сверке.** `eth_getCode(address,latest)` через `https://bsc-rpc.publicnode.com` вернул код (17 724 hex-символа с `0x`). Binance RPC/BSCScan — timeout. Код и имя не доказывают происхождение; нужен официальный deployment record для chain 56. |
+| `TON_DNS_ZONES[0].resolver = EQD-T0TFfemKkgq2GCuKfsuCJhs56wVDfqXSCi65TrzZFb5E`, suffix `ion` | Config default, применяется к mainnet/testnet | DNS resolve/renew/link и NFT metadata; `src/config.ts`, `src/util/dns.ts`, `src/api/chains/ton/domains.ts`, `util/metadata.ts` | **Назначение ION требует подтверждения владельца.** Mainnet API: active, `dns`/`nft_collection`, code hash `qKrrA+3IU9O/cnfYRCXVjCv7aIw7Ecx2iP9COiBS8l8=`. Data содержит `https://dns.ice.io/meta/collection.json`; GET metadata — timeout. Интерфейс/URI не доказывают официальную зону. Testnet не проверен. |
+| `feeCheckAddress = UQBE5NzPPnfb6KAy7Rba2yQiuUnihrfcFw96T-p5JtZjAl_c` | ION config default, без override | `src/util/chain.ts`: адрес оценки комиссии по описанию; активных consumers поля в `src` нет | **Локально валиден**, raw `0:44e4dccf3e77dbe8a032ed16dadb2422b949e286b7dc170f7a4fea7926d66302`. Mainnet API: accounts=[]; это не доказательство отсутствия аккаунта вне indexer. Не подтверждённый контракт/получатель. |
+| BNB `feeCheckAddress = 0x0000000000000000000000000000000000000000` | BNB config default | То же поле, активных consumers нет | **Локально валиден**, нулевой 20-byte адрес. Не deployment и не подтверждённый получатель. |
+| `BURN_ADDRESS = UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ` | ION default, mainnet/testnet | NFT burn destination: `src/api/chains/ton/nfts.ts`; detection `toncenter/actions.ts`; emulation placeholder `emulation.ts` | **Локально подтверждён** checksum и raw `0:` + 64 нуля. Mainnet API: uninit, code_hash=null. Sentinel, не deployed contract; необратимость на уровне протокола ION и testnet требуют отдельного подтверждения. |
+| `PushEscrow.ts`, `PushEscrowV3.ts`, `PushEscrowJwt.ts` | Библиотечные wrappers; сеть не зафиксирована | `src/api/chains/ton/contracts/`; createFromAddress и производный `contractAddress(workchain,{code,data})`. Config sudoer; V3 добавляет instanceId; Jwt — pubkeyHashes | **Runtime импортов и configured deployment в src не найдено.** Фиксированного адреса/кода для сетевого запроса нет; ION deployment не подтверждён. Wrappers сохранены. |
+
+### FIVA/Affluent: runtime code hashes
+
+Production defaults `PRICELESS_TOKEN_HASHES` в `src/config.ts`, без env override. Все десять значений локально проверены как 64 hex-символа. Это code hashes, а не адреса получателей; `src/api/chains/ton/priceless.ts` переводит полученные base64 code_hash в hex для этих фильтров. Используются в token filters `src/global/selectors/tokens.ts` и `src/util/tokens.ts`. Ни один не подтверждён владельцем ION. Для каждого проверен mainnet `GET https://api.mainnet.ice.io/indexer/v3/accountStates?address=<адрес из комментария>`. Пустой ответ не доказывает отсутствия всех контрактов с таким кодом в сети. Фильтры и значения не изменены.
+
+| Code hash, hex | Комментарий / адрес запроса | Read-only результат; статус назначения ION |
+| --- | --- | --- |
+| `173e31eee054cb0c76f77edc7956bed766bf48a1f63bd062d87040dcd3df700f` | FIVA SY tsTON; `EQAxGi9Al7hamLAORroxGkvfap6knGyzI50ThkP3CLPLTtOZ` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `5226dd4e6db9af26b24d5ca822bc4053b7e08152f923932abf25030c7e38bb42` | FIVA PT tsTON; `EQAkxIRGXgs2vD2zjt334MBjD3mXg2GsyEZHfzuYX_trQkFL` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `fea2c08a704e5192b7f37434927170440d445b87aab865c3ea2a68abe7168204` | FIVA YT tsTON; `EQAcy60qg22RCq87A_qgYK8hooEgjCZ44yxhdnKYdlWIfKXL` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `e691cf9081a8aeb22ed4d94829f6626c9d822752e035800b5543c43f83d134b5` | FIVA LP tsTON; `EQD3BjCjxuf8mu5kvxajVbe-Ila1ScZZlAi03oS7lMmAJjM3` | Timeout 5 s; **не подтверждено**. |
+| `301ce25925830d713b326824e552e962925c4ff45b1e3ea21fc363a459a49b43` | FIVA SY eUSDT; `EQDi9blCcyT-k8iMpFMYY0t7mHVyiCB50ZsRgyUECJDuGvIl` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `02250f83fbb8624d859c2c045ac70ee2b3b959688c3d843aec773be9b36dbfc3` | FIVA PT eUSDT; `EQBzVrYkYPHx8D_HPfQacm1xONa4XSRxl826vHkx_laP2HOe` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `dba3adb2c917db80fd71a6a68c1fc9e12976491a8309d5910f9722efc084ce4d` | FIVA YT eUSDT; `EQCwUSc2qrY5rn9BfFBG9ARAHePTUvITDl97UD0zOreWzLru` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `7da9223b90984d6a144e71611a8d7c65a6298cad734faed79438dc0f7a8e53d1` | FIVA LP eUSDT; `EQBNlIZxIbQGQ78cXgG3VRcyl8A0kLn_6BM9kabiHHhWC4qY` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `eb9d9891a32ec94425c09735f6ade73f4c171da0091f874d6e9d25247d583990` | Affluent TON Lending Vault; `EQADQ6JcK0NMuNM5uwCcS9bjcn2RTvcxYIZjNlhIhywUrfBN` | HTTP 200, accounts=[]; **не подтверждено**. |
+| `bca42dbdcbc0d885aaffb1eeeb027d9f338c2dd68701a05641c1d1c3171a7400` | Affluent TON Multiply Vault; `EQDtxQqkgIRQQR5hWlrQxiJMtLwjR3rEYNUBbEcvPDwCs1Ng` | HTTP 200, accounts=[]; **не подтверждено**. |
+
+### Defaults, overrides, производные значения и fixtures
+
+`LIQUID_POOL`/`LIQUID_JETTON` берутся из env с fallback; webpack объявляет пустые defaults. Проверены приведённые mainnet defaults, не произвольные deployment overrides. Mainnet подтверждение не распространяется на testnet. Token wallets для unstake вычисляются через `resolveTokenWalletAddress(network,owner,LIQUID_JETTON)`; PushEscrow addresses — из workchain/code/config. Это производные адреса.
+
+Legacy TON адреса в `tests/mocks/tokens.ts`, unit fixtures, URL-тестах и protocol comments отделены от production defaults. FIVA/Affluent набор реально участвует в runtime filters. Read-only проверка не является аудитом безопасности, доходности или проверкой stake/unstake транзакций.
+
+## Проверки P1
+
+`npm run check`, Jest (1004 tests / 120 suites), `npm run i18n:build:default`, `npm run i18n:build:android`, `npm run check:branding` и production webpack проходят. У webpack остаются 2 предупреждения о размере bundle. URL-тесты покрывают все ION routes, base64/hex hash, legacy IDs, отсутствие testnet/marketplace, выбор base URL по ID и сохранение BNB routes. UI-тесты проверяют отсутствие NFT buy CTA/пустых ссылок, все 12 переводов и обязательный update screen без URL и возможности отменить блокировку. Отдельно проверены установка Electron-обновления, скачанного до/после блокировки, ошибка updater, отсутствие канала, ручной подтверждённый URL и сохранение оконных кнопок. Интеграционный тест меню адреса проверяет встроенное открытие BNB на Capacitor и внешнее открытие ION.
+
+Проверка исправления Electron: 11 тестов AppShell/UpdateAvailable проходят, включая перезагрузку доступного web-интерфейса до/после блокировки, ошибку нативного updater, запрет перезагрузки локального bundle и приоритет скачанного установщика. В полном Jest-прогоне прошёл 1001 тест; три теста файлового хранилища получили EPERM на rename в системной TEMP-папке песочницы и успешно прошли повторно с TEMP/TMP внутри проекта. `npm run check` проходит.
+
+Браузерная проверка частичная: проверены пустое NFT-состояние, отсутствие install/help-предложений в Settings и исчезновение install security banner; backup warning сохранён. На публичном ION pool в режиме просмотра загрузились баланс и история, открыт receive с ION-адресом, explorer-кнопкой и предупреждением «это НЕ ваш кошелёк». Пустое NFT-состояние не содержит purchase CTA. Подробности истории открыты с explorer-действиями. Коллекции с данными, staking descriptions и scam conditions требуют дополнительного браузерного прохода: повторяющийся BNB RPC Failed to fetch перекрывает интерфейс dev-уведомлениями. Это не отмечено как успешный end-to-end тест. Транзакции и подписи не выполнялись.

@@ -170,12 +170,12 @@ Incorrect address.: Falsche Adresse.
 Paste: Einfügen
 Insufficient balance: Unzureichendes Guthaben
 Insufficient Balance: Unzureichendes Guthaben
-$seed_phrase_scam_warning: |
+$seed_phrase_scam_warning: |-
   Dieser Wallet hat nicht genügend Guthaben, um die Gebühren für den Token-Transfer zu decken.
 
   Dies scheint ein typischer **BETRUG** zu sein, bei dem Sie aufgefordert werden, eigene Mittel für die Gebühren einzuzahlen.
 
-  **Zahlen Sie keine** eigenen Mittel ein, da Sie diese verlieren könnten! Mehr über diesen und andere Betrugsmethoden erfahren Sie in unserem %help_center_link%.
+  **Zahlen Sie keine** eigenen Mittel ein, da Sie diese verlieren könnten!
 $help_center_prepositional: Wissensdatenbank
 Optional: Optional
 $send_token_symbol: Senden von %symbol%
@@ -222,7 +222,7 @@ Why this is safe: Warum ist dies sicher
 $safe_staking_description1: Das Staken erfolgt **vollständig dezentral** und wird von den **offiziellen ION Liquid Staking**-Smart Contracts betrieben.
 $safe_staking_description2: Der hinterlegte Einsatz wird für die Validierung des %chain%-Netzwerks als Teil seiner **Proof-of-Stake**-Essenz verwendet.
 $safe_staking_description3: Sie können Ihren Einsatz **jederzeit** abheben, und er wird innerhalb von **zwei Tagen** wieder auf Ihr Konto eingezahlt.
-$safe_staking_description_jetton1: Das Token-Staking ist **vollständig dezentralisiert** und wird von den **Open-Source**-Smart-Contracts betrieben, die von %jvault_link% entwickelt und einer **Sicherheitsprüfung** unterzogen wurden.
+$safe_staking_description_jetton1: Token-Staking wird durch Smart Contracts verwaltet. Prüfen Sie die Pool-Bedingungen und Risiken vor dem Staking.
 $safe_staking_description_jetton2: Sie können Ihren Einsatz **jederzeit** abheben, und er wird **sofort** auf Ihr Konto zurückgebucht.
 $min_value: Mindestens %value%
 Est. balance in a year: Geschätztes Guthaben in einem Jahr
@@ -919,16 +919,16 @@ You can rename this wallet for easier identification.: Sie können dieses Wallet
 Collectibles: Sammlerstücke
 Canceled by the user: Vom Benutzer abgebrochen
 The proof for signing provided by the app is too large: Der von der App bereitgestellte Signaturnachweis ist zu groß
-$domain_like_scam_warning: |
+$domain_like_scam_warning: |-
   Die eingegebene Adresse ist wahrscheinlich ein **BETRUG**. Dies ist **KEINE** Adresse einer Börse oder Ihres Token-Wallets.
 
   Dies ist eine lange **Domain**, die **Betrüger** verwenden, um Menschen zu überzeugen, dass sie Token an eine bekannte Adresse senden.
 
-  **Brechen Sie** diese Überweisung ab und **vertrauen Sie niemals** Fremden. Erfahren Sie mehr über diesen und andere Betrugsmethoden in unserem %help_center_link%.
+  **Brechen Sie** diese Überweisung ab und **vertrauen Sie niemals** Fremden.
 Allow Suspicious Actions: Verdächtige Aktionen erlauben
 $allow_suspicious_actions_description: Erlaubt das Senden an verdächtige Adressen und die Interaktion mit potenziell unsicheren Verträgen.
 Multisig Wallet Detected: Multisig-Wallet erkannt
-$multisig_warning_text: "**Geld abheben** aus dieser Wallet über %app_name% ist **nicht möglich**. Stellen Sie sicher, dass es wirklich Ihre ist — andernfalls könnte es ein Betrug sein. %multisig_warning_link%"
+$multisig_warning_text: "**Geld abheben** aus dieser Wallet über %app_name% ist **nicht möglich**. Stellen Sie sicher, dass es wirklich Ihre ist — andernfalls könnte es ein Betrug sein."
 $multisig_warning_link: Klicken Sie, um mehr zu erfahren
 Multisig sending disabled: Kein Senden von Multisig
 $accept_terms_with_link: Ich stimme zu, %link%
@@ -1640,3 +1640,11 @@ Tokenized Stocks: Tokenisierte Aktien
 Tokenized Gold: Tokenisiertes Gold
 Index Funds: Indexfonds
 "Receive a supported token to continue.": "Empfange einen unterstützten Token, um fortzufahren."
+
+$unverified_source_warning: Diese Quelle wurde nicht verifiziert. Prüfen Sie die Website-Adresse, bevor Sie Ihre Wallet verbinden.
+
+$update_required: Ein Update ist erforderlich, um die App weiter zu nutzen.
+
+$update_channel_unavailable: Ein Update ist erforderlich, aber der Download-Kanal ist derzeit nicht verfügbar. Versuchen Sie es später erneut.
+
+This version is deprecated. Re-import your wallets on %new_domain%.: Diese Version ist veraltet. Importieren Sie Ihre Wallets erneut auf %new_domain%.

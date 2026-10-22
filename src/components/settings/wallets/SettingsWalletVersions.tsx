@@ -116,15 +116,6 @@ function SettingsWalletVersions({
           })}
         </div>
 
-        <div className={styles.blockWalletVersionReadMore}>
-          {lang('$read_more_about_wallet_version', {
-            link: (
-              <a href="https://docs.ton.org/participate/wallets/contracts" target="_blank" rel="noreferrer">
-                ton.org
-              </a>
-            ),
-          })}
-        </div>
       </div>
     </div>
   );

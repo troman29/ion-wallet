@@ -91,13 +91,18 @@ function CardAddress({
     const hiddenChains = (orderedChains ?? EMPTY_CHAINS).filter((chain) => !chains.includes(chain));
 
     return {
-      menuItems: chains.map((chain) => buildMenuItem(lang, chain, byChain[chain]!)),
-      hiddenMenuItems: hiddenChains.map((chain) => buildMenuItem(lang, chain, byChain[chain]!)),
+      menuItems: chains.map((chain) => (
+        buildMenuItem(lang, chain, byChain[chain]!, isTestnet, selectedExplorerIds?.[chain])
+      )),
+      hiddenMenuItems: hiddenChains.map((chain) => (
+        buildMenuItem(lang, chain, byChain[chain]!, isTestnet, selectedExplorerIds?.[chain])
+      )),
     };
-  }, [byChain, chains, orderedChains, lang]);
+  }, [byChain, chains, orderedChains, lang, isTestnet, selectedExplorerIds]);
 
   const handleExplorerClick = useLastCallback((chain: ApiChain, address: string) => {
-    void openUrl(getExplorerAddressUrl(chain, address, isTestnet, selectedExplorerIds?.[chain])!);
+    const url = getExplorerAddressUrl(chain, address, isTestnet, selectedExplorerIds?.[chain]);
+    if (url) void openUrl(url);
     closeMenu();
   });
 
@@ -168,6 +173,8 @@ function buildMenuItem(
   lang: LangFn,
   chain: ApiChain,
   wallet: NonNullable<Account['byChain'][ApiChain]>,
+  isTestnet?: boolean,
+  explorerId?: string,
 ): AddressMenuItem {
   return {
     chain,
@@ -176,9 +183,11 @@ function buildMenuItem(
     ...(wallet.domain && { domain: wallet.domain }),
     icon: getChainNetworkIcon(chain),
     title: getChainTitle(chain),
-    label: (lang('View address on %explorer_name%', {
-      explorer_name: getExplorerName(chain),
-    }) as string[]
-    ).join(''),
+    label: getExplorerAddressUrl(chain, wallet.address, isTestnet, explorerId) ? (lang(
+      'View address on %explorer_name%', {
+        explorer_name: getExplorerName(chain, explorerId),
+      },
+    ) as string[]
+    ).join('') : undefined,
   };
 }

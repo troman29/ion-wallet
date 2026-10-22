@@ -3,9 +3,6 @@ import React, { memo } from '../../lib/teact/teact';
 
 import type { ApiDappurlTrustStatusStatus } from '../../api/types';
 
-import { APP_INSTALL_URL, APP_NAME } from '../../config';
-import renderText from '../../global/helpers/renderText';
-
 import useLang from '../../hooks/useLang';
 
 import IconWithTooltip from '../ui/IconWithTooltip';
@@ -26,32 +23,6 @@ function DappHostWarning({ url, iconClassName, urlTrustStatus = 'unknown' }: Own
     return;
   }
 
-  const reopenBody = (
-    <p className={styles.dappHostWarningText}>
-      {renderText(lang('$reopen_in_iab', {
-        app_name: APP_NAME,
-        mobileAppButton: (
-          <a
-            href={`${APP_INSTALL_URL}/mobile`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {lang('mobile app')}
-          </a>
-        ),
-        browserExtensionButton: (
-          <a
-            href={`${APP_INSTALL_URL}/chrome-extension`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {lang('browser extension')}
-          </a>
-        ),
-      }))}
-    </p>
-  );
-
   let title: string;
   let body: TeactNode;
 
@@ -63,7 +34,7 @@ function DappHostWarning({ url, iconClassName, urlTrustStatus = 'unknown' }: Own
     body = <p className={styles.dappHostWarningText}>{lang('$DappurlTrustStatusDangerousHelp')}</p>;
   } else {
     title = lang('Unverified Source');
-    body = reopenBody;
+    body = <p className={styles.dappHostWarningText}>{lang('$unverified_source_warning')}</p>;
   }
 
   return (

@@ -174,7 +174,7 @@ $seed_phrase_scam_warning: |-
 
   يبدو أن هذه عملية **احتيال** شائعة حيث يتم تشجيعك على إيداع أموالك الخاصة لتغطية الرسوم.
 
-  **لا تقم بإيداع** أموالك الخاصة، فقد تخسرها! تعرف على المزيد حول هذا الأمر وغيره من عمليات الاحتيال في %help_center_link% الخاص بنا.
+  **لا تقم بإيداع** أموالك الخاصة، فقد تخسرها!
 $help_center_prepositional: مركز المساعدة
 Optional: خياري
 $send_token_symbol: أرسل %symbol%
@@ -220,7 +220,7 @@ Why this is safe: لماذا هذا آمن
 $safe_staking_description1: الستاكينغ **لامركزي بالكامل** ويتم تشغيله بواسطة العقود الذكية **ION Liquid Scking** الرسمية.
 $safe_staking_description2: سيتم استخدام الحصة المودعة للتحقق من صحة شبكة %chain% كجزء من جوهر **إثبات الحصة**.
 $safe_staking_description3: يمكنك سحب حصتك في **أي وقت** وسيتم إيداعها مرة أخرى في حسابك خلال **يومين**.
-$safe_staking_description_jetton1: إن تخزين الرموز المميزة **لامركزي بالكامل** ويتم تشغيله بواسطة العقود الذكية **مفتوحة المصدر** التي طورتها %jvault_link% واجتازت **عمليات التدقيق الأمني**.
+$safe_staking_description_jetton1: تدير العقود الذكية عملية تخزين الرموز. راجع شروط المجمع والمخاطر قبل التخزين.
 $safe_staking_description_jetton2: يمكنك سحب حصتك في **أي وقت** وسيتم إيداعها مرة أخرى في حسابك **على الفور**.
 $min_value: الحد الأدنى %value%
 Est. balance in a year: "\u200FEST. الرصيد في السنة"
@@ -915,11 +915,11 @@ $domain_like_scam_warning: |-
 
   هذا **نطاق** طويل يستخدمه **المحتالون** لإقناع الأشخاص بأنهم يرسلون رموزًا مميزة إلى عنوان معروف.
 
-  **ألغِ** عملية النقل هذه و **لا** تثق أبدًا في الغرباء. تعرف على المزيد حول هذا الأمر وغيره من عمليات الاحتيال في %help_center_link% الخاص بنا.
+  **ألغِ** عملية النقل هذه و **لا** تثق أبدًا في الغرباء.
 Allow Suspicious Actions: السماح بالإجراءات المشبوهة
 $allow_suspicious_actions_description: السماح بالإرسال إلى عناوين مشبوهة والتفاعل مع العقود التي قد تكون غير آمنة.
 Multisig Wallet Detected: تم اكتشاف محفظة Multisig
-$multisig_warning_text: تتطلب هذه المحفظة توقيعات متعددة لإجراء التحويلات. **لا يمكنك سحب** أي أموال هنا باستخدام %app_name%. تأكد من أنها ملكك، وإلا فقد تكون جزءًا من عملية احتيال. %multisig_warning_link%
+$multisig_warning_text: تتطلب هذه المحفظة توقيعات متعددة لإجراء التحويلات. **لا يمكنك سحب** أي أموال هنا باستخدام %app_name%. تأكد من أنها ملكك، وإلا فقد تكون جزءًا من عملية احتيال.
 $multisig_warning_link: انقر لمعرفة المزيد
 Multisig sending disabled: تم تعطيل إرسال Multisig
 $accept_terms_with_link: أنا أوافق على %link%
@@ -1632,3 +1632,11 @@ Tokenized Stocks: الأسهم المرمّزة
 Tokenized Gold: الذهب المرمّز
 Index Funds: صناديق المؤشرات
 "Receive a supported token to continue.": "استلم رمزًا مدعومًا للمتابعة."
+
+$unverified_source_warning: لم يتم التحقق من هذا المصدر. تحقق من عنوان الموقع قبل ربط محفظتك.
+
+$update_required: يلزم تحديث التطبيق للمتابعة.
+
+$update_channel_unavailable: يلزم تحديث التطبيق، لكن قناة التنزيل غير متاحة حاليًا. حاول لاحقًا.
+
+This version is deprecated. Re-import your wallets on %new_domain%.: هذا الإصدار قديم. أعد استيراد محافظك على %new_domain%.

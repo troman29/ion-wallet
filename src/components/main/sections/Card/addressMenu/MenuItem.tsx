@@ -16,7 +16,7 @@ export interface AddressMenuItem {
   domain?: string;
   icon: string;
   title: string;
-  label: string;
+  label?: string;
 }
 
 interface OwnProps {
@@ -71,19 +71,21 @@ function MenuItem({
         )}
         aria-hidden
       />
-      <i
-        tabIndex={0}
-        role="button"
-        className={buildClassName('icon-explorer-small', styles.itemExplorerIcon)}
-        aria-label={item.label}
-        onClick={(e: React.MouseEvent<HTMLElement>) => { onExplorerClick(e, item); }}
-        onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-          if (e.code !== 'Enter' && e.code !== 'Space') return;
-          // Space scrolls the page by default
-          if (e.code === 'Space') e.preventDefault();
-          onExplorerClick(e, item);
-        }}
-      />
+      {item.label && (
+        <i
+          tabIndex={0}
+          role="button"
+          className={buildClassName('icon-explorer-small', styles.itemExplorerIcon)}
+          aria-label={item.label}
+          onClick={(e: React.MouseEvent<HTMLElement>) => { onExplorerClick(e, item); }}
+          onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+            if (e.code !== 'Enter' && e.code !== 'Space') return;
+            // Space scrolls the page by default
+            if (e.code === 'Space') e.preventDefault();
+            onExplorerClick(e, item);
+          }}
+        />
+      )}
     </div>
   );
 }

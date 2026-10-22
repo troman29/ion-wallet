@@ -171,12 +171,12 @@ Incorrect address.: Dirección incorrecta.
 Paste: Pegar
 Insufficient balance: Saldo insuficiente
 Insufficient Balance: Saldo insuficiente
-$seed_phrase_scam_warning: |
+$seed_phrase_scam_warning: |-
   Esta billetera no tiene fondos suficientes para cubrir las tarifas de retiro de tokens.
 
   Esto parece ser un **ESTAFA** común donde se te anima a depositar tus propios fondos para cubrir las tarifas.
 
-  **No deposites** tus propios fondos, ¡podrías perderlos! Más información sobre esta y otras estafas en nuestro %help_center_link%.
+  **No deposites** tus propios fondos, ¡podrías perderlos!
 $help_center_prepositional: Base de conocimientos
 Optional: Opcional
 $send_token_symbol: Enviar %symbol%
@@ -222,7 +222,7 @@ Why this is safe: Por qué esto es seguro
 $safe_staking_description1: El staking es **totalmente descentralizado** y operado por los **ION Liquid Staking smart contracts**.
 $safe_staking_description2: La participación depositada se utilizará para la validación de la red %chain% como parte de su esencia de **prueba de participación**.
 $safe_staking_description3: Puede retirar su apuesta en **cualquier momento** y se depositará de nuevo en su cuenta dentro de **dos días**.
-$safe_staking_description_jetton1: El staking de tokens es **completamente descentralizado** y operado por contratos inteligentes de **código abierto** desarrollados por %jvault_link% y que han pasado **auditorías de seguridad**.
+$safe_staking_description_jetton1: El staking de tokens se gestiona mediante contratos inteligentes. Revisa las condiciones del pool y los riesgos antes de participar.
 $safe_staking_description_jetton2: Puede retirar su participación en **cualquier momento** y se depositará de nuevo en su cuenta **al instante**.
 $min_value: Min %value%
 Est. balance in a year: Saldo estimado en un año
@@ -917,16 +917,16 @@ You can rename this wallet for easier identification.: Puedes renombrar este mon
 Collectibles: Coleccionables
 Canceled by the user: Cancelado por el usuario
 The proof for signing provided by the app is too large: La prueba para firmar proporcionada por la app es demasiado grande
-$domain_like_scam_warning: |
+$domain_like_scam_warning: |-
   La dirección ingresada probablemente sea una **ESTAFA**. Esta **NO** es una dirección de ningún exchange o de tu monedero de tokens.
 
   Este es un **dominio** largo que los **estafadores** usan para convencer a las personas de que están enviando tokens a una dirección conocida.
 
-  **Cancela** esta transferencia y **nunca** confíes en extraños. Más información sobre esta y otras estafas en nuestro %help_center_link%.
+  **Cancela** esta transferencia y **nunca** confíes en extraños.
 Allow Suspicious Actions: Permitir acciones sospechosas
 $allow_suspicious_actions_description: Permitir el envío a direcciones sospechosas y la interacción con contratos potencialmente inseguros.
 Multisig Wallet Detected: Cartera Multisig Detectada
-$multisig_warning_text: "**Retirar fondos** de esta cartera a través de %app_name% es **imposible**. Asegúrate de que realmente sea tuya — de lo contrario podría ser una estafa. %multisig_warning_link%"
+$multisig_warning_text: "**Retirar fondos** de esta cartera a través de %app_name% es **imposible**. Asegúrate de que realmente sea tuya — de lo contrario podría ser una estafa."
 $multisig_warning_link: Haz clic para saber más
 Multisig sending disabled: No se puede enviar multisig
 $accept_terms_with_link: Acepto %link%
@@ -1638,3 +1638,11 @@ Tokenized Stocks: Acciones tokenizadas
 Tokenized Gold: Oro tokenizado
 Index Funds: Fondos indexados
 "Receive a supported token to continue.": "Recibe un token compatible para continuar."
+
+$unverified_source_warning: Esta fuente no está verificada. Comprueba la dirección del sitio antes de conectar tu monedero.
+
+$update_required: Es necesario actualizar la aplicación para continuar.
+
+$update_channel_unavailable: Es necesario actualizar, pero el canal de descarga no está disponible. Inténtalo más tarde.
+
+This version is deprecated. Re-import your wallets on %new_domain%.: Esta versión está obsoleta. Vuelve a importar tus monederos en %new_domain%.

@@ -172,12 +172,12 @@ Incorrect address.: Nieprawidłowy adres.
 Paste: Pasta
 Insufficient balance: Niewystarczająca równowaga
 Insufficient Balance: Niewystarczająca równowaga
-$seed_phrase_scam_warning: |
+$seed_phrase_scam_warning: |-
   Ten portfel nie ma wystarczających środków na pokrycie opłat za wypłatę tokenów.
 
   To wygląda na typową **OSZUSTWO**, gdzie zachęca się Cię do wpłacenia własnych środków na pokrycie opłat.
 
-  **Nie wpłacaj** własnych środków, ponieważ możesz je stracić! Dowiedz się więcej o tym i innych oszustwach w naszym %help_center_link%.
+  **Nie wpłacaj** własnych środków, ponieważ możesz je stracić!
 $help_center_prepositional: Bazie Wiedzy
 Optional: Opcjonalnie
 $send_token_symbol: Wyślij %symbol%
@@ -223,7 +223,7 @@ Why this is safe: Dlaczego to jest bezpieczne
 $safe_staking_description1: Staking jest w pełni zdecentralizowany i działa za pomocą oficjalnych kontraktów inteligentnych ION Liquid Staking.
 $safe_staking_description2: Wpłacona stawka będzie wykorzystywana do walidacji sieci %chain% jako część jej zasady proof-of-stake.
 $safe_staking_description3: Możesz wypłacić swoją stawkę w dowolnym momencie, a zostanie ona zdeponowana z powrotem na Twoje konto w ciągu dwóch dni.
-$safe_staking_description_jetton1: Stakowanie tokenów jest **w pełni zdecentralizowane** i obsługiwane przez **open-source** smart kontrakty opracowane przez %jvault_link% i które przeszły **audyt bezpieczeństwa**.
+$safe_staking_description_jetton1: Staking tokenów jest zarządzany przez inteligentne kontrakty. Przed stakingiem sprawdź warunki puli i ryzyko.
 $safe_staking_description_jetton2: Możesz wypłacić swoje stakowane środki **w dowolnym momencie**, a środki zostaną **natychmiast** zwrócone na Twoje konto.
 $min_value: Min. %value%
 Est. balance in a year: Szacowane saldo za rok
@@ -935,16 +935,16 @@ You can rename this wallet for easier identification.: Możesz zmienić nazwę t
 Collectibles: Kolekcjonerskie
 Canceled by the user: Anulowano przez użytkownika
 The proof for signing provided by the app is too large: Dowód do podpisu dostarczony przez aplikację jest zbyt duży
-$domain_like_scam_warning: |
+$domain_like_scam_warning: |-
   Wprowadzony adres to prawdopodobnie **OSZUSTWO**. To **NIE** jest adres żadnej giełdy ani Twojego portfela tokenów.
 
   To długa **domena**, której **oszuści** używają, by przekonać ludzi, że wysyłają tokeny na znany adres.
 
-  **Anuluj** ten transfer i **nigdy** nie ufaj nieznajomym. Dowiedz się więcej o tym i innych oszustwach w naszym %help_center_link%.
+  **Anuluj** ten transfer i **nigdy** nie ufaj nieznajomym.
 Allow Suspicious Actions: Zezwalaj na podejrzane działania
 $allow_suspicious_actions_description: Zezwalaj na wysyłanie do podejrzanych adresów i interakcję z potencjalnie niebezpiecznymi kontraktami.
 Multisig Wallet Detected: Wykryto portfel Multisig
-$multisig_warning_text: "**Wypłacenie środków** z tego portfela przez %app_name% jest **niemożliwe**. Upewnij się, że naprawdę jest Twój — inaczej może to być oszustwo. %multisig_warning_link%"
+$multisig_warning_text: "**Wypłacenie środków** z tego portfela przez %app_name% jest **niemożliwe**. Upewnij się, że naprawdę jest Twój — inaczej może to być oszustwo."
 $multisig_warning_link: Kliknij, aby dowiedzieć się więcej
 Multisig sending disabled: Nie można z multisig
 $accept_terms_with_link: Zgadzam się %link%
@@ -1671,3 +1671,11 @@ Tokenized Stocks: Tokenizowane akcje
 Tokenized Gold: Tokenizowane złoto
 Index Funds: Fundusze indeksowe
 "Receive a supported token to continue.": "Odbierz obsługiwany token, aby kontynuować."
+
+$unverified_source_warning: To źródło nie zostało zweryfikowane. Sprawdź adres strony przed połączeniem portfela.
+
+$update_required: Aby kontynuować, zaktualizuj aplikację.
+
+$update_channel_unavailable: Aktualizacja jest wymagana, ale kanał pobierania jest obecnie niedostępny. Spróbuj później.
+
+This version is deprecated. Re-import your wallets on %new_domain%.: Ta wersja jest przestarzała. Zaimportuj ponownie portfele na %new_domain%.

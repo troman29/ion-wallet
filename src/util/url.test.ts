@@ -1,4 +1,9 @@
-import { convertExplorerUrl, getViewAccountUrl, isInIframeWhitelist, isValidUrl, normalizeUrl } from './url';
+import { getChainConfig } from './chain';
+import {
+  convertExplorerUrl, getExplorerAddressUrl, getExplorerName, getExplorerNftCollectionUrl, getExplorerNftUrl,
+  getExplorerTokenUrl, getExplorerTransactionUrl, getMarketplaceNftCollectionUrl, getMarketplaceNftUrl,
+  getViewAccountUrl, isInIframeWhitelist, isValidUrl, normalizeUrl,
+} from './url';
 
 // Test constants
 const TEST_TON_ADDRESS = 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S';
@@ -79,152 +84,63 @@ describe('getViewAccountUrl', () => {
   });
 });
 
-describe('convertExplorerUrl', () => {
-  describe('TON explorer conversions (mainnet)', () => {
-    it('should convert address URL from Tonscan to Tonviewer', () => {
-      const input = `https://tonscan.org/address/${TEST_TON_ADDRESS}`;
-      const expected = `https://tonviewer.com/${TEST_TON_ADDRESS}?address`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should convert address URL from Tonviewer to Tonscan', () => {
-      const input = `https://tonviewer.com/${TEST_TON_ADDRESS}?address`;
-      const expected = `https://tonscan.org/address/${TEST_TON_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(expected);
-    });
-
-    it('should convert transaction URL from Tonscan to Tonviewer', () => {
-      const input = `https://tonscan.org/tx/${TEST_TON_HASH}`;
-      const expected = `https://tonviewer.com/transaction/${TEST_TON_HASH}`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should convert transaction URL from Tonviewer to Tonscan', () => {
-      const input = `https://tonviewer.com/transaction/${TEST_TON_HASH}`;
-      const expected = `https://tonscan.org/tx/${TEST_TON_HASH}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(expected);
-    });
-
-    it('should convert NFT URL from Tonscan to Tonviewer', () => {
-      const input = `https://tonscan.org/nft/${TEST_NFT_ADDRESS}`;
-      const expected = `https://tonviewer.com/${TEST_NFT_ADDRESS}?nft`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should convert NFT URL from Tonviewer to Tonscan', () => {
-      const input = `https://tonviewer.com/${TEST_NFT_ADDRESS}?nft`;
-      const expected = `https://tonscan.org/nft/${TEST_NFT_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(expected);
-    });
-
-    it('should convert NFT collection URL from Tonscan to Tonviewer', () => {
-      const input = `https://tonscan.org/collection/${TEST_NFT_COLLECTION_ADDRESS}`;
-      const expected = `https://tonviewer.com/${TEST_NFT_COLLECTION_ADDRESS}?collection`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should convert NFT collection URL from Tonviewer to Tonscan', () => {
-      const input = `https://tonviewer.com/${TEST_NFT_COLLECTION_ADDRESS}?collection`;
-      const expected = `https://tonscan.org/collection/${TEST_NFT_COLLECTION_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(expected);
-    });
-
-    it('should convert token/jetton URL from Tonscan to Tonviewer', () => {
-      const input = `https://tonscan.org/jetton/${TEST_TON_ADDRESS}`;
-      const expected = `https://tonviewer.com/${TEST_TON_ADDRESS}?jetton`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should convert token/jetton URL from Tonviewer to Tonscan', () => {
-      const input = `https://tonviewer.com/${TEST_TON_ADDRESS}?jetton`;
-      const expected = `https://tonscan.org/jetton/${TEST_TON_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(expected);
-    });
+describe('ION external links', () => {
+  const base = 'https://explorer.ice.io/';
+  it.each(['ion', 'tonscan', 'tonviewer', 'unknown'])('resolves explorer ID %s without migrating settings', (id) => {
+    expect(getExplorerName('ton', id)).toBe('ION Explorer');
+    expect(getExplorerAddressUrl('ton', TEST_TON_ADDRESS, false, id)).toBe(base + 'address/' + TEST_TON_ADDRESS);
   });
-
-  describe('TON explorer conversions (testnet)', () => {
-    it('should convert testnet address URL from Tonscan to Tonviewer', () => {
-      const input = `https://testnet.tonscan.org/address/${TEST_TON_ADDRESS}`;
-      const expected = `https://testnet.tonviewer.com/${TEST_TON_ADDRESS}?address`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should convert testnet address URL from Tonviewer to Tonscan', () => {
-      const input = `https://testnet.tonviewer.com/${TEST_TON_ADDRESS}?address`;
-      const expected = `https://testnet.tonscan.org/address/${TEST_TON_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(expected);
-    });
-
-    it('should convert testnet transaction URL', () => {
-      const input = `https://testnet.tonscan.org/tx/${TEST_TON_HASH}`;
-      const expected = `https://testnet.tonviewer.com/transaction/${TEST_TON_HASH}`;
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
+  it('uses all five public routes', () => {
+    expect(getExplorerTokenUrl('ton', undefined, TEST_TON_ADDRESS)).toBe(base + 'jetton/' + TEST_TON_ADDRESS);
+    expect(getExplorerNftUrl('ton', TEST_NFT_ADDRESS)).toBe(base + 'nft/' + TEST_NFT_ADDRESS);
+    expect(getExplorerNftCollectionUrl('ton', TEST_NFT_COLLECTION_ADDRESS))
+      .toBe(base + 'collection/' + TEST_NFT_COLLECTION_ADDRESS);
+    expect(getExplorerTransactionUrl('ton', TEST_TON_HASH)).toBe(base + 'transaction/' + TEST_TON_HASH);
+    expect(getExplorerTransactionUrl('ton', Buffer.from(TEST_TON_HASH, 'hex').toString('base64')))
+      .toBe(base + 'transaction/' + TEST_TON_HASH);
   });
-
-  describe('URLs with query strings and fragments', () => {
-    it('should preserve query string when converting address URL', () => {
-      const input = `https://tonscan.org/address/${TEST_TON_ADDRESS}?tab=tokens`;
-      const expected = `https://tonviewer.com/${TEST_TON_ADDRESS}?address`;
-      // Query string is not preserved in the converted URL (identifier extraction stops at ?)
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
-
-    it('should handle URLs with hash fragments', () => {
-      const input = `https://tonscan.org/address/${TEST_TON_ADDRESS}#section`;
-      const expected = `https://tonviewer.com/${TEST_TON_ADDRESS}?address`;
-      // Hash fragment is not preserved (identifier extraction stops at #)
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
+  it('does not send testnet objects to mainnet or offer an ION marketplace', () => {
+    expect(getExplorerAddressUrl('ton', TEST_TON_ADDRESS, true)).toBeUndefined();
+    expect(getExplorerTokenUrl('ton', undefined, TEST_TON_ADDRESS, true)).toBeUndefined();
+    expect(getExplorerTransactionUrl('ton', TEST_TON_HASH, true)).toBeUndefined();
+    expect(getExplorerNftUrl('ton', TEST_NFT_ADDRESS, true)).toBeUndefined();
+    expect(getExplorerNftCollectionUrl('ton', TEST_NFT_COLLECTION_ADDRESS, true)).toBeUndefined();
+    for (const testnet of [true, false]) {
+      expect(getMarketplaceNftUrl('ton', TEST_NFT_ADDRESS, testnet)).toBeUndefined();
+      expect(getMarketplaceNftCollectionUrl('ton', TEST_NFT_COLLECTION_ADDRESS, testnet)).toBeUndefined();
+    }
+    expect(getExplorerTokenUrl('ton', 'toncoin')).toBeUndefined();
+    expect(getExplorerTokenUrl('ton', 'unconfirmed-ion-page')).toBeUndefined();
   });
-
-  describe('Edge cases', () => {
-    it('should return the same URL if already on target explorer', () => {
-      const input = `https://tonscan.org/address/${TEST_TON_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBe(input);
-    });
-
-    it('should return undefined for non-explorer URLs', () => {
-      expect(convertExplorerUrl('https://google.com', 'tonscan')).toBeUndefined();
-      expect(convertExplorerUrl('https://example.com/path', 'tonviewer')).toBeUndefined();
-    });
-
-    it('should return undefined for invalid explorer ID', () => {
-      const input = `https://tonscan.org/address/${TEST_TON_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'nonexistent')).toBeUndefined();
-    });
-
-    it('should return undefined for cross-chain conversion attempts', () => {
-      const bnbUrl = `https://bscscan.com/address/${TEST_EVM_ADDRESS}`;
-      expect(convertExplorerUrl(bnbUrl, 'tonscan')).toBeUndefined();
-    });
-
-    it('should use fallback for URLs that do not match any pattern', () => {
-      // Create a URL that starts with explorer base but doesn't match any pattern
-      const input = 'https://tonscan.org/unknown/path';
-      const expected = 'https://tonviewer.com/unknown/path';
-      expect(convertExplorerUrl(input, 'tonviewer')).toBe(expected);
-    });
+  it('forwards the selected explorer ID to the base URL and template', () => {
+    const explorers = getChainConfig('ton').explorers;
+    explorers.push({ ...explorers[0], id: 'fixture', name: 'Fixture', baseUrl: { mainnet: 'https://example.org/' } });
+    try {
+      expect(getExplorerAddressUrl('ton', 'address', false, 'fixture')).toBe('https://example.org/address/address');
+      expect(getExplorerTokenUrl('ton', undefined, 'address', false, 'fixture'))
+        .toBe('https://example.org/jetton/address');
+    } finally { explorers.pop(); }
   });
-
-  describe('BNB explorer (single explorer, no conversion)', () => {
-    it('should return the same URL for the BNB explorer (only one explorer available)', () => {
-      const input = `https://bscscan.com/address/${TEST_EVM_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'bsctrace')).toBe(input);
-    });
-
-    it('should return undefined when trying to convert BNB to a non-existent explorer', () => {
-      const input = `https://bscscan.com/address/${TEST_EVM_ADDRESS}`;
-      expect(convertExplorerUrl(input, 'tonscan')).toBeUndefined();
-    });
+  it('keeps BNB links and hides its unsupported marketplace testnet', () => {
+    expect(getExplorerAddressUrl('bnb', TEST_EVM_ADDRESS)).toBe('https://bscscan.com/address/' + TEST_EVM_ADDRESS);
+    expect(getExplorerTransactionUrl('bnb', '0x123', true)).toBe('https://testnet.bscscan.com/tx/0x123');
+    expect(getMarketplaceNftUrl('bnb', TEST_EVM_ADDRESS)).toBe('https://opensea.io/item/bnb/' + TEST_EVM_ADDRESS);
+    expect(getMarketplaceNftUrl('bnb', TEST_EVM_ADDRESS, true)).toBeUndefined();
+    expect(getMarketplaceNftCollectionUrl('bnb', TEST_EVM_ADDRESS)).toBeUndefined();
+    expect(convertExplorerUrl('https://bscscan.com/address/' + TEST_EVM_ADDRESS, 'bsctrace'))
+      .toBe('https://bscscan.com/address/' + TEST_EVM_ADDRESS);
+  });
+  it('does not reinterpret legacy TON URLs as ION addresses', () => {
+    expect(convertExplorerUrl('https://tonscan.org/address/' + TEST_TON_ADDRESS, 'ion')).toBeUndefined();
   });
 });
 
 describe('isInIframeWhitelist', () => {
-  it('accepts the whitelisted explorers', () => {
-    expect(isInIframeWhitelist('https://tonscan.org')).toBe(true);
-    expect(isInIframeWhitelist('https://tonscan.org/address/EQ123')).toBe(true);
-    expect(isInIframeWhitelist('https://testnet.tonviewer.com/')).toBe(true);
+  it('keeps explorers outside the embedded bridge whitelist', () => {
+    expect(isInIframeWhitelist('https://tonscan.org')).toBe(false);
+    expect(isInIframeWhitelist('https://explorer.ice.io/address/test')).toBe(false);
+    expect(isInIframeWhitelist('https://tonscan.org/address/EQ123')).toBe(false);
+    expect(isInIframeWhitelist('https://testnet.tonviewer.com/')).toBe(false);
   });
 
   it('accepts localhost on any port', () => {
@@ -259,7 +175,7 @@ describe('isInIframeWhitelist', () => {
   // The bare origin carries an implicit default port, so the explicit form has to resolve to the same
   // whitelisted page, and localhost stays http-only because that is the single entry the list grants.
   it('normalizes the default port and keeps localhost http-only', () => {
-    expect(isInIframeWhitelist('https://tonscan.org:443/address/EQ123')).toBe(true);
+    expect(isInIframeWhitelist('https://tonscan.org:443/address/EQ123')).toBe(false);
     expect(isInIframeWhitelist('https://localhost:4321')).toBe(false);
   });
 });

@@ -9,7 +9,7 @@ import type { Wallet } from './wallets/SettingsWalletVariants';
 import { SettingsState } from '../../global/types';
 
 import {
-  APP_ENV_MARKER, APP_INSTALL_URL,
+  APP_DOWNLOAD_URLS, APP_ENV_MARKER, APP_INSTALL_URL,
   APP_NAME,
   APP_VERSION,
   IS_CAPACITOR,
@@ -291,15 +291,15 @@ function Settings({
   });
 
   function handleClickInstallApp() {
-    void openUrl(APP_INSTALL_URL, { isExternal: true });
+    if (APP_INSTALL_URL) void openUrl(APP_INSTALL_URL, { isExternal: true });
   }
 
   function handleClickInstallOnDesktop() {
-    void openUrl(`${APP_INSTALL_URL}desktop`, { isExternal: true });
+    if (APP_DOWNLOAD_URLS.desktop) void openUrl(APP_DOWNLOAD_URLS.desktop, { isExternal: true });
   }
 
   function handleClickInstallOnMobile() {
-    void openUrl(`${APP_INSTALL_URL}mobile`, { isExternal: true });
+    if (APP_DOWNLOAD_URLS.mobile) void openUrl(APP_DOWNLOAD_URLS.mobile, { isExternal: true });
   }
 
   const [isTrayIconEnabled, setIsTrayIconEnabled] = useState(false);
@@ -419,7 +419,7 @@ function Settings({
             />
           )}
 
-          {IS_WEB && (
+          {IS_WEB && APP_INSTALL_URL && (
             <div className={styles.block}>
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallApp}>
                 <img className={styles.menuIcon} src={installAppImg} alt={lang('Install App')} />
@@ -563,7 +563,7 @@ function Settings({
 
           <p className={buildClassName(styles.blockTitle, styles.blockTitleSmall)}>{lang('About')}</p>
           <div className={styles.block}>
-            {IS_EXTENSION && (
+            {IS_EXTENSION && APP_INSTALL_URL && (
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallApp}>
                 <img className={styles.menuIcon} src={installAppImg} alt={lang('Install App')} />
                 <span className={styles.itemTitle}>{lang('Install App')}</span>
@@ -571,7 +571,7 @@ function Settings({
                 <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
               </div>
             )}
-            {IS_CAPACITOR && (
+            {IS_CAPACITOR && APP_DOWNLOAD_URLS.desktop && (
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallOnDesktop}>
                 <img className={styles.menuIcon} src={installDesktopImg} alt={lang('Install on Desktop')} />
                 <span className={styles.itemTitle}>{lang('Install on Desktop')}</span>
@@ -579,7 +579,7 @@ function Settings({
                 <i className={buildClassName(styles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
               </div>
             )}
-            {IS_ELECTRON && (
+            {IS_ELECTRON && APP_DOWNLOAD_URLS.mobile && (
               <div className={buildClassName(styles.item, styles.itemMenu)} onClick={handleClickInstallOnMobile}>
                 <img className={styles.menuIcon} src={installMobileImg} alt={lang('Install on Mobile')} />
                 <span className={styles.itemTitle}>{lang('Install on Mobile')}</span>

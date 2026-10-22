@@ -28,7 +28,6 @@ interface StateProps {
 type MenuHandler = 'reload' | 'openInBrowser' | 'copyUrl' | 'close';
 
 const TITLES: Record<string, string> = {
-  'tonscan.org': 'TON Explorer',
   'localhost:4323': 'Multi-Send',
 };
 

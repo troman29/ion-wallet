@@ -37,13 +37,13 @@ import useTimeout from '../hooks/useTimeout';
 import AppEmpty from './AppEmpty';
 import AppInactive from './AppInactive';
 import AppLocked from './appLocked/AppLocked';
+import AppShell from './AppShell';
 import Auth from './auth/Auth';
 import AuthImportWalletModal from './auth/AuthImportWalletModal';
 import DappConnectModal from './dapps/DappConnectModal';
 import DappSignDataModal from './dapps/DappSignDataModal';
 import DappTransferModal from './dapps/DappTransferModal';
 import Dialogs from './Dialogs';
-import ElectronHeader from './electron/ElectronHeader';
 import ExchangeModal from './exchange/ExchangeModal';
 import Explore from './explore/Explore';
 import Main from './main/Main';
@@ -63,6 +63,7 @@ import ConfettiContainer from './ui/ConfettiContainer';
 import InAppBrowser from './ui/InAppBrowser';
 import LoadingOverlay from './ui/LoadingOverlay';
 import Transition from './ui/Transition';
+import UpdateAvailable from './ui/UpdateAvailable';
 import WalletConnectPayDataCollectionModal from './walletConnectPay/WalletConnectPayDataCollectionModal';
 import WalletConnectPayModal from './walletConnectPay/WalletConnectPayModal';
 import WalletConnectPayOptionSelectionModal from './walletConnectPay/WalletConnectPayOptionSelectionModal';
@@ -82,6 +83,7 @@ interface StateProps {
   theme: Theme;
   accentColorIndex?: number;
   isAppReady?: boolean;
+  isAppUpdateRequired?: boolean;
 }
 
 const APP_STATES_WITH_BOTTOM_BAR = new Set([
@@ -107,6 +109,7 @@ function App({
   theme,
   accentColorIndex,
   isAppReady,
+  isAppUpdateRequired,
 }: StateProps) {
   const {
     closeBackupWalletModal,
@@ -218,9 +221,7 @@ function App({
   }
 
   return (
-    <>
-      {IS_ELECTRON && <ElectronHeader withTitle />}
-
+    <AppShell isUpdateRequired={isAppUpdateRequired}>
       <Transition
         name={transitionName}
         activeKey={renderingKey}
@@ -271,13 +272,15 @@ function App({
         </>
       )}
       {withBottomBar && <BottomBar />}
-    </>
+      <UpdateAvailable />
+    </AppShell>
   );
 }
 
 export default memo(withGlobal((global): StateProps => {
   return {
     appState: global.appState,
+    isAppUpdateRequired: global.isAppUpdateRequired,
     accountId: selectCurrentAccountId(global),
     isBackupWalletModalOpen: global.isBackupWalletModalOpen,
     isExploreOpen: global.isExploreOpen,

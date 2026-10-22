@@ -1,9 +1,10 @@
 import React, { memo, useMemo } from '../../lib/teact/teact';
 import { getActions, getGlobal } from '../../global';
 
+import type { ApiChain } from '../../api/types';
 import { MediaType, type NftTransfer } from '../../global/types';
 
-import { ANIMATED_STICKER_TINY_SIZE_PX } from '../../config';
+import { ANIMATED_STICKER_TINY_SIZE_PX, DEFAULT_CHAIN } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import { openUrl } from '../../util/openUrl';
 import { shortenAddress } from '../../util/shortenAddress';
@@ -19,35 +20,31 @@ import styles from './NftInfo.module.scss';
 
 interface OwnProps {
   nft?: NftTransfer;
+  chain?: ApiChain;
   withTonExplorer?: boolean;
   // Currently, MediaViewer can only display NFTs that are owned by the user
   withMediaViewer?: boolean;
 }
 
 function NftInfo({
-  nft, withTonExplorer, withMediaViewer,
+  nft, withTonExplorer, withMediaViewer, chain = DEFAULT_CHAIN,
 }: OwnProps) {
   const { openMediaViewer } = getActions();
   const lang = useLang();
+  const { isTestnet, selectedExplorerIds } = getGlobal().settings;
+  const explorerId = selectedExplorerIds?.[chain];
+  const explorerUrl = getExplorerNftUrl(chain, nft?.address, isTestnet, explorerId);
 
   const tonExplorerTitle = useMemo(() => {
     return (lang('Open on %explorer_name%', {
-      explorer_name: getExplorerName(),
+      explorer_name: getExplorerName(chain, explorerId),
     }) as string[]
     ).join('');
-  }, [lang]);
+  }, [lang, chain, explorerId]);
 
   const handleClickInfo = (event: React.MouseEvent) => {
     event.stopPropagation();
-    const global = getGlobal();
-    const url = getExplorerNftUrl(
-      undefined,
-      nft!.address,
-      global.settings.isTestnet,
-      global.settings.selectedExplorerIds?.ton,
-    )!;
-
-    void openUrl(url);
+    if (explorerUrl) void openUrl(explorerUrl);
   };
 
   const handleClick = useLastCallback(() => {
@@ -89,7 +86,7 @@ function NftInfo({
           <div className={styles.title}>
             {name}
             {
-              withTonExplorer && (
+              withTonExplorer && explorerUrl && (
                 <i
                   className={buildClassName(styles.icon, 'icon-explorer-small')}
                   onClick={handleClickInfo}

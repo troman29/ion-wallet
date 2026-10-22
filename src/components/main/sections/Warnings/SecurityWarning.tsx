@@ -1,7 +1,7 @@
 import React, { memo } from '../../../../lib/teact/teact';
 import { getActions, withGlobal } from '../../../../global';
 
-import { APP_PROMO_URL, TEST_MNEMONIC } from '../../../../config';
+import { APP_INSTALL_URL, TEST_MNEMONIC } from '../../../../config';
 import buildClassName from '../../../../util/buildClassName';
 import { openUrl } from '../../../../util/openUrl';
 
@@ -29,7 +29,7 @@ function SecurityWarning({ isSecurityWarningHidden }: StateProps) {
   const lang = useLang();
 
   function handleClick() {
-    void openUrl(APP_PROMO_URL);
+    if (APP_INSTALL_URL) void openUrl(APP_INSTALL_URL, { isExternal: true });
   }
 
   const handleClose = useLastCallback((e: React.MouseEvent<HTMLButtonElement>) => {

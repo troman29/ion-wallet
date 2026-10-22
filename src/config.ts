@@ -54,7 +54,11 @@ export const LEGACY_APP_HOSTS: string[] = [];
 // the wallet context (addresses included) and open it in the in-app iframe browser - where the site renders blank
 // under `X-Frame-Options: Deny`. `utm_source` attributes the migrated traffic.
 export const NEW_APP_URL = `${PRODUCTION_URL}?utm_source=legacy_web`;
-export const APP_INSTALL_URL = 'https://wallet.ice.io/download';
+// Add only published, verified URLs. Never derive store or installer URLs from the website.
+export const APP_DOWNLOAD_URLS: Partial<Record<
+  'landing' | 'desktop' | 'mobile' | 'android' | 'androidStore' | 'ios' | 'chrome' | 'edge' | 'firefox', string
+>> = {};
+export const APP_INSTALL_URL = APP_DOWNLOAD_URLS.landing;
 export const APP_REPO_URL = 'https://github.com/troman29/ion-wallet';
 export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
 export const APP_WEBSITE_URL = 'https://wallet.ice.io';
@@ -158,29 +162,15 @@ export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
   opensea: 'OpenSea',
 };
 export const ION_STATIC_BASE_URL = 'https://static.wallet.ice.io';
-export const APP_PROMO_URL = 'https://wallet.ice.io/';
 export const APP_WEBSITE_HOST = 'wallet.ice.io';
 export const APP_TERMS_OF_USE_URL = 'https://wallet.ice.io/terms-of-use';
 export const APP_PRIVACY_POLICY_URL = 'https://wallet.ice.io/privacy-policy';
-export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {
-  en: 'https://wallet.ice.io/en/blog/',
-  ru: 'https://wallet.ice.io/ru/blog/',
-};
+export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {};
 
-export const NFT_MARKETPLACE_URL = 'https://opensea.io/';
-export const NFT_MARKETPLACE_TITLE = NFT_MARKETPLACE_TITLES.opensea;
-export const TON_NFT_MARKETPLACE_URL = 'https://getgems.io/';
-export const TON_NFT_MARKETPLACE_TITLE = NFT_MARKETPLACE_TITLES.getgems;
-export const GETGEMS_BASE_MAINNET_URL = 'https://getgems.io/';
-export const GETGEMS_BASE_TESTNET_URL = 'https://testnet.getgems.io/';
 export const EMPTY_HASH_VALUE = 'NOHASH';
 
 export const IFRAME_WHITELIST = [
   'http://localhost:*',
-  'https://tonscan.org',
-  'https://testnet.tonscan.org',
-  'https://tonviewer.com',
-  'https://testnet.tonviewer.com',
 ];
 export const SUBPROJECT_URL_MASK = 'https://*.wallet.ice.io';
 
@@ -324,8 +314,7 @@ export const NEW_STAKE_DISABLED_TOKEN_SLUGS: ReadonlySet<string> = new Set();
 
 export const DNS_IMAGE_GEN_URL = 'https://dns.ice.io/meta/img?d=';
 
-// Wrapped ION on BNB Smart Chain: the bridged form of the native coin, verified on-chain
-// (symbol ION, name "Ice Open Network", 9 decimals).
+// Configured ION BEP-20. Deployment provenance and read-only checks are tracked in the resource registry.
 export const ION_BNB_MAINNET = {
   name: 'Ice Open Network',
   symbol: 'ION',
@@ -510,21 +499,8 @@ export const DEFAULT_STAKING_STATE: ApiLiquidStakingState = {
 
 export const TONCENTER_ACTIONS_VERSION = 'v1';
 
-export const JVAULT_URL = 'https://jvault.xyz';
-
-export const HELP_CENTER_URL = {
-  home: {
-    en: 'https://help.wallet.ice.io/',
-    ru: 'https://help.wallet.ice.io/ru',
-  },
-  domainScam: {
-    en: 'https://help.wallet.ice.io/intro/scams/.ton-domain-scams',
-    ru: 'https://help.wallet.ice.io/ru/baza-znanii/moshennichestvo-i-skamy/moshennichestvo-s-ispolzovaniem-domenov-.ton',
-  },
-  seedScam: {
-    en: 'https://help.wallet.ice.io/intro/scams/leaked-seed-phrases',
-    ru: 'https://help.wallet.ice.io/ru/baza-znanii/moshennichestvo-i-skamy/slitye-sid-frazy',
-  },
+export const HELP_CENTER_URL: Record<'home' | 'domainScam' | 'seedScam', Partial<Record<LangCode, string>>> = {
+  home: {}, domainScam: {}, seedScam: {},
 };
 
 export const TON_DNS_ZONES = [

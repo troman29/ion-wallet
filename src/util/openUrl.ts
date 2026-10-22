@@ -4,7 +4,7 @@ import { getActions, getGlobal } from '../global';
 import { IFRAME_WHITELIST, IS_CAPACITOR, SUBPROJECT_URL_MASK } from '../config';
 import { closeAllOverlays } from '../global/helpers/misc';
 import { selectCurrentAccount } from '../global/selectors';
-import { isTelegramUrl } from './url';
+import { getExplorerByUrl, isTelegramUrl } from './url';
 
 const [, SUBPROJECT_HOST_ENDING] = SUBPROJECT_URL_MASK.split('*');
 
@@ -16,6 +16,7 @@ export type OpenUrlOptions = {
 };
 
 export async function openUrl(url: string, options?: OpenUrlOptions) {
+  if (getExplorerByUrl(url)?.chain === 'ton') options = { ...options, isExternal: true };
   if (isSubproject(url)) {
     url = `${url}#${buildSubprojectContext()}`;
   }
@@ -77,7 +78,7 @@ export function handleUrlClick(
   e.preventDefault();
   void openUrl(e.currentTarget.href, {
     ...options,
-    isExternal: e.shiftKey || e.ctrlKey || e.metaKey,
+    isExternal: options?.isExternal || e.shiftKey || e.ctrlKey || e.metaKey,
   });
 }
 

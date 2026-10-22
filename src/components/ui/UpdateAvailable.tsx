@@ -1,90 +1,51 @@
 import React, { memo } from '../../lib/teact/teact';
 import { withGlobal } from '../../global';
 
-import {
-  APP_INSTALL_URL,
-  APP_NAME,
-  IS_ANDROID_DIRECT,
-  IS_FIREFOX_EXTENSION,
-} from '../../config';
-import buildClassName from '../../util/buildClassName';
+import { APP_DOWNLOAD_URLS, APP_NAME, IS_ANDROID_DIRECT, IS_FIREFOX_EXTENSION } from '../../config';
 import { openUrl } from '../../util/openUrl';
-import {
-  IS_ANDROID_APP,
-  IS_CHROME_EXTENSION,
-  IS_EDGE,
-  IS_IOS_APP,
-  IS_WEB,
-} from '../../util/windowEnvironment';
+import { IS_ANDROID_APP, IS_CHROME_EXTENSION, IS_EDGE, IS_IOS_APP, IS_WEB } from '../../util/windowEnvironment';
 
 import useLang from '../../hooks/useLang';
-import useShowTransition from '../../hooks/useShowTransition';
+
+import Button from './Button';
+import Modal from './Modal';
 
 import styles from './UpdateAvailable.module.scss';
 
 interface StateProps {
   isAppUpdateAvailable?: boolean;
   isAppUpdateRequired?: boolean;
-  newAppVersion?: string;
 }
 
-function UpdateAvailable({ isAppUpdateAvailable, newAppVersion, isAppUpdateRequired }: StateProps) {
+function UpdateAvailable({ isAppUpdateAvailable, isAppUpdateRequired }: StateProps) {
   const lang = useLang();
-
-  const { shouldRender, ref } = useShowTransition<HTMLButtonElement>({
-    isOpen: (IS_ANDROID_DIRECT && isAppUpdateAvailable) || isAppUpdateRequired,
-    withShouldRender: true,
-  });
-
+  const url = IS_ANDROID_DIRECT ? APP_DOWNLOAD_URLS.android
+    : IS_ANDROID_APP ? APP_DOWNLOAD_URLS.androidStore
+      : IS_IOS_APP ? APP_DOWNLOAD_URLS.ios
+        : IS_CHROME_EXTENSION ? APP_DOWNLOAD_URLS[IS_EDGE ? 'edge' : 'chrome']
+          : IS_FIREFOX_EXTENSION ? APP_DOWNLOAD_URLS.firefox : APP_DOWNLOAD_URLS.desktop;
+  const canUpdate = IS_WEB || Boolean(url);
   const handleClick = () => {
-    if (IS_WEB) {
-      window.location.reload();
-      return;
-    }
-
-    void openUrl(getUrl(newAppVersion), { isExternal: true });
+    if (IS_WEB) window.location.reload();
+    else if (url) void openUrl(url, { isExternal: true });
   };
+  const label = lang('Update %app_name%', { app_name: APP_NAME });
 
-  if (!shouldRender) {
-    return undefined;
+  if (isAppUpdateRequired) {
+    return (
+      <Modal isOpen noBackdropClose title={label} onClose={() => undefined}>
+        <p>{lang(canUpdate ? '$update_required' : '$update_channel_unavailable')}</p>
+        {canUpdate && <Button onClick={handleClick}>{label}</Button>}
+      </Modal>
+    );
   }
 
-  return (
-    <button ref={ref} type="button" className={styles.wrapper} onClick={handleClick}>
-      <i className={buildClassName('icon icon-download-filled', styles.icon)} aria-hidden />
-      {lang('Update %app_name%', { app_name: APP_NAME })}
-    </button>
-  );
+  return IS_ANDROID_DIRECT && isAppUpdateAvailable && url ? (
+    <button type="button" className={styles.wrapper} onClick={handleClick}>{label}</button>
+  ) : undefined;
 }
 
 export default memo(withGlobal((global): StateProps => ({
   isAppUpdateAvailable: global.isAppUpdateAvailable,
-  newAppVersion: global.latestAppVersion,
   isAppUpdateRequired: global.isAppUpdateRequired,
 }))(UpdateAvailable));
-
-function getUrl(appVersion?: string) {
-  if (IS_ANDROID_DIRECT) {
-    return appVersion
-      ? `${APP_INSTALL_URL}IONWallet-${encodeURIComponent(appVersion)}.apk`
-      : `${APP_INSTALL_URL}android`;
-  }
-
-  if (IS_ANDROID_APP) {
-    return `${APP_INSTALL_URL}android-store`;
-  }
-
-  if (IS_IOS_APP) {
-    return `${APP_INSTALL_URL}ios`;
-  }
-
-  if (IS_CHROME_EXTENSION) {
-    return `${APP_INSTALL_URL}${IS_EDGE ? 'edge-extension' : 'chrome-extension'}`;
-  }
-
-  if (IS_FIREFOX_EXTENSION) {
-    return `${APP_INSTALL_URL}firefox-extension`;
-  }
-
-  return APP_INSTALL_URL;
-}

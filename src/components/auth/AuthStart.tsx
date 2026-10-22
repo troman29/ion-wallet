@@ -4,7 +4,7 @@ import { getActions, withGlobal } from '../../global';
 import { type Theme } from '../../global/types';
 
 import {
-  APP_INSTALL_URL, APP_NAME, NEW_APP_URL,
+  APP_NAME,
   PRODUCTION_URL,
 } from '../../config';
 import renderText from '../../global/helpers/renderText';
@@ -112,17 +112,8 @@ function AuthStart({
     <>
       {IS_LEGACY_APP_HOST && (
         <div className={styles.legacyBar}>
-          {lang('This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.', {
-            new_domain: (
-              <a href={NEW_APP_URL} target="_blank" rel="noopener noreferrer" className={styles.legacyBarLink}>
-                {NEW_DOMAIN}
-              </a>
-            ),
-            download_app: (
-              <a href={APP_INSTALL_URL} target="_blank" rel="noopener noreferrer" className={styles.legacyBarLink}>
-                {lang('download the app')}
-              </a>
-            ),
+          {lang('This version is deprecated. Re-import your wallets on %new_domain%.', {
+            new_domain: NEW_DOMAIN,
           })}
         </div>
       )}

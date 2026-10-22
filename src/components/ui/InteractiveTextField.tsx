@@ -165,11 +165,11 @@ function InteractiveTextField({
   });
 
   const handleExplorerOpen = useLastCallback(() => {
-    if (!chain) return;
+    if (!chain || !resolvedAddressUrl) return;
 
-    void openUrl(resolvedAddressUrl!, {
+    void openUrl(resolvedAddressUrl, {
       title: getExplorerName(chain, selectedExplorerId),
-      subtitle: getHostnameFromUrl(resolvedAddressUrl!),
+      subtitle: getHostnameFromUrl(resolvedAddressUrl),
       shouldSkipOverlayClose: true,
     });
   });

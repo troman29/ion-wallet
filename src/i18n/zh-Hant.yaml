@@ -169,12 +169,12 @@ Incorrect address.: 錯誤的地址。
 Paste: 貼上
 Insufficient balance: 餘額不足
 Insufficient Balance: 餘額不足
-$seed_phrase_scam_warning: |
+$seed_phrase_scam_warning: |-
   該錢包沒有足夠的資金支付代幣提現費用。
 
   這似乎是一種常見的**騙局**，誘使您存入自己的資金來支付費用。
 
-  **不要存入**您自己的資金，否則可能會損失資金！在我們的%help_center_link%中了解有關此騙局和其他騙局的更多信息。
+  **不要存入**您自己的資金，否則可能會損失資金！
 $help_center_prepositional: 知識庫
 Optional: 選項
 $send_token_symbol: 發送 %symbol%
@@ -220,7 +220,7 @@ Why this is safe: 為什麼這是安全的
 $safe_staking_description1: Staking 是**完全去中心化的**，由官方 ION Liquid Staking 智能合約運作。
 $safe_staking_description2: 作為其 **權益證明** 本質的一部分，存入的代幣將用於 %chain% 網路驗證。
 $safe_staking_description3: 您可以在**任何時候**提取您的質押資產，它會在**2 天內**存入您的帳戶。
-$safe_staking_description_jetton1: 代幣質押是 **完全去中心化的**，由 %jvault_link% 開發的 **開源** 智能合約操作，並已通過 **安全審計**。
+$safe_staking_description_jetton1: 代幣質押由智能合約管理。質押前請了解資金池條款和風險。
 $safe_staking_description_jetton2: 您可以在 **任何時候** 提取您的質押，並會 **立即** 存入您的賬戶。
 $min_value: 最少 %value%
 Est. balance in a year: 預估 1 年後的資產餘額
@@ -909,16 +909,16 @@ You can rename this wallet for easier identification.: 您可以重新命名該�
 Collectibles: 收藏品
 Canceled by the user: 用戶已取消
 The proof for signing provided by the app is too large: 應用提供的簽名證明過大
-$domain_like_scam_warning: |
+$domain_like_scam_warning: |-
   輸入的地址很可能是一個**騙局**。這**不是**任何交易所或您的代幣錢包地址。
 
   這是一個**騙子**用來讓人們相信他們正在向已知地址發送代幣的長**網域**。
 
-  **取消**此轉賬並且**永遠不要**信任陌生人。在我們的%help_center_link%中了解有關此騙局和其他騙局的更多信息。
+  **取消**此轉賬並且**永遠不要**信任陌生人。
 Allow Suspicious Actions: 允許可疑操作
 $allow_suspicious_actions_description: 允許傳送至可疑地址並與潛在不安全的合約交互。
 Multisig Wallet Detected: 檢測到多重簽名錢包
-$multisig_warning_text: 透過 %app_name% **提取資金**是**不可能的**。請確認這真的是您的錢包——否則可能是詐騙。%multisig_warning_link%
+$multisig_warning_text: 透過 %app_name% **提取資金**是**不可能的**。請確認這真的是您的錢包——否則可能是詐騙。
 $multisig_warning_link: 點擊了解更多
 Multisig sending disabled: 無法從多重簽名發送
 $accept_terms_with_link: 我同意 %link%
@@ -1620,3 +1620,11 @@ Tokenized Stocks: 代幣化股票
 Tokenized Gold: 代幣化黃金
 Index Funds: 指數基金
 "Receive a supported token to continue.": "接收支援的代幣以繼續。"
+
+$unverified_source_warning: 此來源尚未驗證。連接錢包前請核對網站地址。
+
+$update_required: 需要更新應用程式才能繼續使用。
+
+$update_channel_unavailable: 需要更新，但下載管道暫不可用。請稍後再試。
+
+This version is deprecated. Re-import your wallets on %new_domain%.: 此版本已過時。請在 %new_domain% 重新匯入錢包。

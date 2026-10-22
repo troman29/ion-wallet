@@ -83,7 +83,7 @@ export function getHostnameFromUrl(url: string) {
 }
 
 export function getMarketplaceName(chain: ApiChain = DEFAULT_CHAIN, id?: string) {
-  return getMarketplace(chain, id).name;
+  return getMarketplace(chain, id)?.name;
 }
 
 export function getExplorerName(chain: ApiChain = DEFAULT_CHAIN, explorerId?: string) {
@@ -95,21 +95,25 @@ export function getExplorerBaseUrl(chain: ApiChain = DEFAULT_CHAIN, isTestnet = 
 }
 
 export function getMarketplaceBaseUrl(chain: ApiChain = DEFAULT_CHAIN, isTestnet = false, id?: string) {
-  return getMarketplace(chain, id).baseUrl[isTestnet ? 'testnet' : 'mainnet'];
+  return getMarketplace(chain, id)?.baseUrl[isTestnet ? 'testnet' : 'mainnet'];
 }
 
 function parseBaseUrl(chain: ApiChain, config: 'explorer' | 'marketplace', isTestnet = false, explorerId?: string) {
   const baseUrl = config === 'explorer'
     ? getExplorerBaseUrl(chain, isTestnet, explorerId)
     : getMarketplaceBaseUrl(chain, isTestnet, explorerId);
+  if (!baseUrl) return undefined;
   const parsedBaseUrl = typeof baseUrl === 'string' ? baseUrl : baseUrl.url;
+  if (!parsedBaseUrl) return undefined;
   const parsedUrlParam = typeof baseUrl === 'string' ? '' : baseUrl.param;
 
   return { parsedBaseUrl, parsedUrlParam };
 }
 
 function getTokenExplorerBaseUrl(chain: ApiChain, isTestnet = false, explorerId?: string) {
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'explorer', isTestnet, explorerId);
+  const base = parseBaseUrl(chain, 'explorer', isTestnet, explorerId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
 
   return getExplorer(chain, explorerId).token.replace('{base}', parsedBaseUrl) + parsedUrlParam;
 }
@@ -123,11 +127,16 @@ export function getExplorerTransactionUrl(
   if (!transactionHash || transactionHash === EMPTY_HASH_VALUE) return undefined;
 
   const explorer = getExplorer(chain, explorerId);
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'explorer', isTestnet);
+  const base = parseBaseUrl(chain, 'explorer', isTestnet, explorerId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
+
+  const hash = explorer.doConvertHashFromBase64 && !/^[a-f\d]{64}$/i.test(transactionHash)
+    ? base64ToHex(transactionHash) : transactionHash;
 
   return explorer.transaction
     .replace('{base}', parsedBaseUrl)
-    .replace('{hash}', explorer.doConvertHashFromBase64 ? base64ToHex(transactionHash) : transactionHash)
+    .replace('{hash}', hash)
     + parsedUrlParam;
 }
 
@@ -139,7 +148,9 @@ export function getExplorerAddressUrl(
 ) {
   if (!address) return undefined;
 
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'explorer', isTestnet);
+  const base = parseBaseUrl(chain, 'explorer', isTestnet, explorerId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
 
   return getExplorer(chain, explorerId).address
     .replace('{base}', parsedBaseUrl)
@@ -157,7 +168,9 @@ export function getExplorerNftCollectionUrl(
 
   const explorer = getExplorer(chain, explorerId);
   if (!explorer.nftCollection) return undefined;
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'explorer', isTestnet);
+  const base = parseBaseUrl(chain, 'explorer', isTestnet, explorerId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
 
   return explorer.nftCollection
     .replace('{base}', parsedBaseUrl)
@@ -175,7 +188,9 @@ export function getExplorerNftUrl(
 
   const explorer = getExplorer(chain, explorerId);
   if (!explorer.nft) return undefined;
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'explorer', isTestnet);
+  const base = parseBaseUrl(chain, 'explorer', isTestnet, explorerId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
 
   return explorer.nft
     .replace('{base}', parsedBaseUrl)
@@ -193,8 +208,8 @@ export function getExplorerTokenUrl(
   if (!slug && !address) return undefined;
 
   return address
-    ? getTokenExplorerBaseUrl(chain, isTestnet, explorerId).replace('{address}', address)
-    : `https://coinmarketcap.com/currencies/${slug}/`;
+    ? getTokenExplorerBaseUrl(chain, isTestnet, explorerId)?.replace('{address}', address)
+    : chain === 'ton' ? undefined : `https://coinmarketcap.com/currencies/${slug}/`;
 }
 
 export function getMarketplaceNftCollectionUrl(
@@ -206,8 +221,10 @@ export function getMarketplaceNftCollectionUrl(
   if (!nftCollectionAddress) return undefined;
 
   const marketplace = getMarketplace(chain, marketplaceId);
-  if (!marketplace.nftCollection) return undefined;
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'marketplace', isTestnet);
+  if (!marketplace?.nftCollection) return undefined;
+  const base = parseBaseUrl(chain, 'marketplace', isTestnet, marketplaceId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
 
   return marketplace.nftCollection
     .replace('{base}', parsedBaseUrl)
@@ -220,13 +237,15 @@ export function getMarketplaceNftUrl(
   chain: ApiChain = DEFAULT_CHAIN,
   nftAddress?: string,
   isTestnet?: boolean,
-  explorerId?: string,
+  marketplaceId?: string,
 ) {
   if (!nftAddress) return undefined;
 
-  const marketplace = getMarketplace(chain, explorerId);
-  if (!marketplace.nft) return undefined;
-  const { parsedBaseUrl, parsedUrlParam } = parseBaseUrl(chain, 'marketplace', isTestnet);
+  const marketplace = getMarketplace(chain, marketplaceId);
+  if (!marketplace?.nft) return undefined;
+  const base = parseBaseUrl(chain, 'marketplace', isTestnet, marketplaceId);
+  if (!base) return undefined;
+  const { parsedBaseUrl, parsedUrlParam } = base;
 
   return marketplace.nft
     .replace('{base}', parsedBaseUrl)
@@ -260,8 +279,8 @@ export function isInIframeWhitelist(url: string) {
   });
 }
 
-export function getBlogUrl(lang: LangCode): string {
-  return MY_WALLET_BLOG[lang] || MY_WALLET_BLOG.en!;
+export function getBlogUrl(lang: LangCode): string | undefined {
+  return MY_WALLET_BLOG[lang] || MY_WALLET_BLOG.en;
 }
 
 export function getViewTransactionUrl(chain: ApiChain, txId: string, isTestnet?: boolean): string {
@@ -315,8 +334,10 @@ export function getExplorerByUrl(url: string): { chain: ApiChain; explorerId: st
     const explorers = getAvailableExplorers(chain);
 
     for (const explorer of explorers) {
-      const mainnetHost = getHostnameFromUrl(parseBaseUrl(chain, 'explorer', false, explorer.id).parsedBaseUrl);
-      const testnetHost = getHostnameFromUrl(parseBaseUrl(chain, 'explorer', true, explorer.id).parsedBaseUrl);
+      const mainnet = parseBaseUrl(chain, 'explorer', false, explorer.id);
+      const testnet = parseBaseUrl(chain, 'explorer', true, explorer.id);
+      const mainnetHost = mainnet && getHostnameFromUrl(mainnet.parsedBaseUrl);
+      const testnetHost = testnet && getHostnameFromUrl(testnet.parsedBaseUrl);
 
       if (hostname === mainnetHost || hostname === testnetHost) {
         return { chain, explorerId: explorer.id };
@@ -347,9 +368,11 @@ export function convertExplorerUrl(url: string, toExplorerId: string): string | 
   if (!fromExplorer || !toExplorer) return undefined;
 
   // Determine network by checking which base URL the input starts with
-  const isTestnet = url.startsWith(parseBaseUrl(chain, 'explorer', true, fromExplorerId).parsedBaseUrl);
-  const fromBaseUrl = parseBaseUrl(chain, 'explorer', isTestnet, fromExplorerId).parsedBaseUrl;
-  const toBaseUrl = parseBaseUrl(chain, 'explorer', isTestnet, toExplorer.id).parsedBaseUrl;
+  const testnetBase = parseBaseUrl(chain, 'explorer', true, fromExplorerId)?.parsedBaseUrl;
+  const isTestnet = Boolean(testnetBase && url.startsWith(testnetBase));
+  const fromBaseUrl = parseBaseUrl(chain, 'explorer', isTestnet, fromExplorerId)?.parsedBaseUrl;
+  const toBaseUrl = parseBaseUrl(chain, 'explorer', isTestnet, toExplorer.id)?.parsedBaseUrl;
+  if (!fromBaseUrl || !toBaseUrl) return undefined;
 
   // Extract path after base URL (e.g., "address/EQAbc..." or "EQAbc...?address")
   const pathAfterBase = url.slice(fromBaseUrl.length);

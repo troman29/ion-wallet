@@ -207,3 +207,25 @@ describe('Nfts without a proxied preview', () => {
     expect(getRenderedImageUrls()).toContain(PROXIED_IMAGE_URL);
   });
 });
+
+describe('ION marketplace availability', () => {
+  it('shows the empty collection without a purchase action or empty links', async () => {
+    TeactDOM.render(<Nfts isActive isWidget collection={COLLECTION} />, root);
+    emitTerminalNftUpdate();
+    await flushUpdates();
+    expect(getIsEmptyStateShown()).toBe(true);
+    expect(root.textContent).not.toMatch(/Getgems|OpenSea|Open .*marketplace/);
+    expect(root.querySelector('a:not([href]), a[href=""], button')).toBeNull();
+  });
+  it('does not choose OpenSea merely because the account is multichain', async () => {
+    const global = getGlobal();
+    global.accounts!.byId[ACCOUNT_ID].byChain.bnb = { address: '0x0000000000000000000000000000000000000001' };
+    setGlobal({ ...global });
+    renderWidget();
+    emitTerminalNftUpdate();
+    await flushUpdates();
+    expect(getIsEmptyStateShown()).toBe(true);
+    expect(root.textContent).not.toMatch(/OpenSea|Getgems/);
+    expect(root.querySelector('button')).toBeNull();
+  });
+});

@@ -8,10 +8,6 @@ import {
   ANIMATED_STICKER_BIG_SIZE_PX,
   ANIMATED_STICKER_SMALL_SIZE_PX,
   ANIMATION_LEVEL_MIN,
-  NFT_MARKETPLACE_TITLE,
-  NFT_MARKETPLACE_URL,
-  TON_NFT_MARKETPLACE_TITLE,
-  TON_NFT_MARKETPLACE_URL,
 } from '../../../../config';
 import { getIsNftVisible } from '../../../../global/helpers/nfts';
 import renderText from '../../../../global/helpers/renderText';
@@ -23,6 +19,7 @@ import {
 } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import captureEscKeyListener from '../../../../util/captureEscKeyListener';
+import { getAvailableMarketplaces } from '../../../../util/chain';
 import { openUrl } from '../../../../util/openUrl';
 import { getHostnameFromUrl } from '../../../../util/url';
 import { ANIMATED_STICKERS_PATHS } from '../../../ui/helpers/animatedAssets';
@@ -41,18 +38,6 @@ import NftList from './NftList';
 import styles from './Nft.module.scss';
 
 const SLIDE_TRANSITION_DURATION_MS = 300;
-
-function getNftEmptyStateMarketplace(isMultichainAccount?: boolean) {
-  return isMultichainAccount
-    ? {
-      title: NFT_MARKETPLACE_TITLE,
-      url: NFT_MARKETPLACE_URL,
-    }
-    : {
-      title: TON_NFT_MARKETPLACE_TITLE,
-      url: TON_NFT_MARKETPLACE_URL,
-    };
-}
 
 interface OwnProps {
   isActive?: boolean;
@@ -74,6 +59,7 @@ interface StateProps {
   isViewAccount?: boolean;
   isMultichainAccount?: boolean;
   isLoading?: boolean;
+  isTestnet?: boolean;
   theme: Theme;
   animationDuration: number;
 }
@@ -96,6 +82,7 @@ function Nfts({
   isMultichainAccount,
   isLoading,
   theme,
+  isTestnet,
   animationDuration,
 }: OwnProps & StateProps) {
   const { fetchNftsFromCollection, clearNftsSelection } = getActions();
@@ -107,7 +94,10 @@ function Nfts({
   const appTheme = useAppTheme(theme);
 
   const hasSelection = Boolean(selectedNfts?.length);
-  const nftMarketplace = getNftEmptyStateMarketplace(isMultichainAccount);
+  const marketplace = collection && getAvailableMarketplaces(collection.chain)[0];
+  const marketplaceBase = marketplace?.baseUrl[isTestnet ? 'testnet' : 'mainnet'];
+  const nftMarketplace = useMemo(() => (marketplace && typeof marketplaceBase === 'string' && marketplaceBase
+    ? { title: marketplace.name, url: marketplaceBase } : undefined), [marketplace, marketplaceBase]);
 
   // In compact mode (`LandscapeWalletOverview`) NFTs are already in global state - no need to fetch
   useEffect(() => {
@@ -161,6 +151,7 @@ function Nfts({
   ]);
 
   const handleNftMarketplaceClick = useLastCallback(() => {
+    if (!nftMarketplace) return;
     void openUrl(nftMarketplace.url, {
       title: nftMarketplace.title,
       subtitle: getHostnameFromUrl(nftMarketplace.url),
@@ -168,10 +159,10 @@ function Nfts({
   });
 
   const fullDescription = useMemo(
-    () => (isNftBuyingDisabled
+    () => (isNftBuyingDisabled || !nftMarketplace
       ? undefined
       : renderText(lang('$nft_explore_offer'), isPortrait ? ['simple_markdown'] : undefined)),
-    [isNftBuyingDisabled, isPortrait, lang],
+    [isNftBuyingDisabled, isPortrait, lang, nftMarketplace],
   );
 
   if (nftAddresses === undefined || (!isWidget && nftAddresses.length === 0 && isLoading)) {
@@ -189,13 +180,13 @@ function Nfts({
         isStickerActive={isWidget ? undefined : isActive}
         title={lang('No collectibles yet')}
         description={isWidget
-          ? (!isNftBuyingDisabled ? lang('$nft_explore_offer') : undefined)
+          ? (!isNftBuyingDisabled && !!nftMarketplace ? lang('$nft_explore_offer') : undefined)
           : fullDescription}
         className="content-centered"
-        actionText={!isNftBuyingDisabled
+        actionText={!isNftBuyingDisabled && !!nftMarketplace
           ? lang('Open %nft_marketplace%', { nft_marketplace: nftMarketplace.title })
           : undefined}
-        onActionClick={!isNftBuyingDisabled ? handleNftMarketplaceClick : undefined}
+        onActionClick={!isNftBuyingDisabled && !!nftMarketplace ? handleNftMarketplaceClick : undefined}
       />
     );
   }
@@ -268,6 +259,7 @@ export default memo(
       const accountId = selectCurrentAccountId(global);
 
       return {
+        isTestnet: global.settings.isTestnet,
         orderedAddresses,
         selectedNfts,
         byAddress,

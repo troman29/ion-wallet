@@ -169,12 +169,12 @@ Incorrect address.: 地址错误。
 Paste: 粘贴
 Insufficient balance: 余额不足
 Insufficient Balance: 余额不足
-$seed_phrase_scam_warning: |
+$seed_phrase_scam_warning: |-
   该钱包没有足够的资金支付代币提现费用。
 
   这似乎是一种常见的**骗局**，诱使您存入自己的资金来支付费用。
 
-  **不要存入**您自己的资金，否则可能会损失资金！在我们的%help_center_link%中了解有关此骗局和其他骗局的更多信息。
+  **不要存入**您自己的资金，否则可能会损失资金！
 $help_center_prepositional: 知识库
 Optional: 选项
 $send_token_symbol: 发送 %symbol%
@@ -220,7 +220,7 @@ Why this is safe: 为什么这很安全
 $safe_staking_description1: ION 质押是**完全去中心化的**，由官方 ION Liquid Staking 智能合约运营。
 $safe_staking_description2: 作为其 **权益证明** 的一部分，您存入的 ION 将用于 %chain% 区块网络验证。
 $safe_staking_description3: 您可以在 **任何时候** 解除您 ION 的质押，它会在 **36小时** 内存入您的账户。
-$safe_staking_description_jetton1: 代币质押是 **完全去中心化的**，由 %jvault_link% 开发的 **开源** 智能合约操作，并已通过 **安全审计**。
+$safe_staking_description_jetton1: 代币质押由智能合约管理。质押前请了解资金池条款和风险。
 $safe_staking_description_jetton2: 您可以在 **任何时候** 提取您的质押，并会 **立即** 存入您的账户。
 $min_value: 最小 %value%
 Est. balance in a year: 年平均预期回报
@@ -909,16 +909,16 @@ You can rename this wallet for easier identification.: 您可以重命名该钱�
 Collectibles: 收藏品
 Canceled by the user: 用户已取消
 The proof for signing provided by the app is too large: 应用提供的签名证明过大
-$domain_like_scam_warning: |
+$domain_like_scam_warning: |-
   输入的地址很可能是一个**骗局**。这**不是**任何交易所或您的代币钱包地址。
 
   这是一个**骗子**用来让人们相信他们正在向已知地址发送代币的长**域名**。
 
-  **取消**此转账并且**永远不要**信任陌生人。在我们的%help_center_link%中了解有关此骗局和其他骗局的更多信息。
+  **取消**此转账并且**永远不要**信任陌生人。
 Allow Suspicious Actions: 允许可疑操作
 $allow_suspicious_actions_description: 允许发送至可疑地址并与潜在不安全的合约交互。
 Multisig Wallet Detected: 检测到多重签名钱包
-$multisig_warning_text: 通过 %app_name% **提取资金**是**不可能的**。请确认这真的是您的钱包——否则可能是诈骗。%multisig_warning_link%
+$multisig_warning_text: 通过 %app_name% **提取资金**是**不可能的**。请确认这真的是您的钱包——否则可能是诈骗。
 $multisig_warning_link: 点击了解更多
 Multisig sending disabled: 无法从多签发送
 $accept_terms_with_link: 我同意 %link%
@@ -1628,3 +1628,11 @@ Tokenized Stocks: 代币化股票
 Tokenized Gold: 代币化黄金
 Index Funds: 指数基金
 "Receive a supported token to continue.": "接收受支持的代币以继续。"
+
+$unverified_source_warning: 此来源尚未验证。连接钱包前请核对网站地址。
+
+$update_required: 需要更新应用才能继续使用。
+
+$update_channel_unavailable: 需要更新，但下载渠道暂不可用。请稍后重试。
+
+This version is deprecated. Re-import your wallets on %new_domain%.: 此版本已过时。请在 %new_domain% 重新导入钱包。

@@ -170,12 +170,12 @@ Incorrect address.: Hatalı adres.
 Paste: Yapıştır
 Insufficient balance: Yetersiz bakiye
 Insufficient Balance: Yetersiz Bakiye
-$seed_phrase_scam_warning: |
+$seed_phrase_scam_warning: |-
   Bu cüzdan, token çekme ücretlerini karşılayacak kadar fon içermiyor.
 
   Bu, ücretleri karşılamak için kendi fonlarınızı yatırmanızın istendiği yaygın bir **DOLANDIRICILIK** gibi görünüyor.
 
-  Kendi fonlarınızı **yatırmayın**, çünkü kaybedebilirsiniz! Bu ve diğer dolandırıcılık yöntemleri hakkında daha fazla bilgi için %help_center_link%'mizi ziyaret edin.
+  Kendi fonlarınızı **yatırmayın**, çünkü kaybedebilirsiniz!
 $help_center_prepositional: Bilgi Tabanımız
 Optional: Opsiyonel
 $send_token_symbol: "%symbol% gönder"
@@ -222,7 +222,7 @@ Why this is safe: Neden güvenlidir?
 $safe_staking_description1: Staking **tamamen merkeziyetsiz** bir işlemdir ve **resmi ION Likit Staking** akıllı sözleşmeleri tarafından yürütülür.
 $safe_staking_description2: Stake edilen tutar, **hisse kanıtı** esası kapsamında %chain% ağındaki işlemlerin doğrulanması için kullanılacaktır.
 $safe_staking_description3: Stake edilen tutarı **istediğiniz zaman** çekebilirsiniz; bu tutar **iki gün** içinde hesabınıza geri yatırılacaktır.
-$safe_staking_description_jetton1: Token stake etme işlemi **tamamen merkeziyetsizdir** ve %jvault_link% tarafından geliştirilen, **açık kaynaklı** akıllı sözleşmelerle gerçekleştirilir ve **güvenlik denetimlerinden** geçmiştir.
+$safe_staking_description_jetton1: Token staking akıllı sözleşmeler tarafından yönetilir. Staking yapmadan önce havuz koşullarını ve riskleri inceleyin.
 $safe_staking_description_jetton2: Stake'inizi **herhangi bir zamanda** çekebilirsiniz ve miktar **anında** hesabınıza yatırılır.
 $min_value: Min. %value%
 Est. balance in a year: Bir yıl içindeki tahmini bakiye
@@ -914,16 +914,16 @@ You can rename this wallet for easier identification.: Bu cüzdanı daha kolay t
 Collectibles: Koleksiyonlar
 Canceled by the user: Kullanıcı tarafından iptal edildi
 The proof for signing provided by the app is too large: Uygulama tarafından sağlanan imzalama kanıtı çok büyük
-$domain_like_scam_warning: |
+$domain_like_scam_warning: |-
   Girilen adres büyük olasılıkla bir **DOLANDIRICILIKTIR**. Bu, herhangi bir borsanın veya token cüzdanınızın adresi **DEĞİLDİR**.
 
   Bu, dolandırıcıların insanları tokenları bilinen bir adrese gönderdiklerine inandırmak için kullandıkları uzun bir **alandır**.
 
-  Bu transferi **İptal edin** ve yabancılara asla **güvenmeyin**. Bu ve diğer dolandırıcılık yöntemleri hakkında daha fazla bilgi için %help_center_link%'mizi ziyaret edin.
+  Bu transferi **İptal edin** ve yabancılara asla **güvenmeyin**.
 Allow Suspicious Actions: Şüpheli Eylemlere İzin Ver
 $allow_suspicious_actions_description: Şüpheli adreslere göndermeye ve potansiyel olarak güvenli olmayan kontratlarla etkileşime izin verir.
 Multisig Wallet Detected: Multisig Cüzdan Tespit Edildi
-$multisig_warning_text: Bu cüzdandan %app_name% üzerinden **para çekmek** **imkansızdır**. Gerçekten sizin olduğundan emin olun — aksi takdirde bir dolandırıcılık olabilir. %multisig_warning_link%
+$multisig_warning_text: Bu cüzdandan %app_name% üzerinden **para çekmek** **imkansızdır**. Gerçekten sizin olduğundan emin olun — aksi takdirde bir dolandırıcılık olabilir.
 $multisig_warning_link: Daha fazla öğrenmek için tıklayın
 Multisig sending disabled: Multisig'den olmaz
 $accept_terms_with_link: "%link% kabul ediyorum"
@@ -1632,3 +1632,11 @@ Tokenized Stocks: Tokenize Hisse Senetleri
 Tokenized Gold: Tokenize Altın
 Index Funds: Endeks Fonları
 "Receive a supported token to continue.": "Devam etmek için desteklenen bir token alın."
+
+$unverified_source_warning: Bu kaynak doğrulanmadı. Cüzdanınızı bağlamadan önce web sitesi adresini kontrol edin.
+
+$update_required: Uygulamayı kullanmaya devam etmek için güncelleme gereklidir.
+
+$update_channel_unavailable: Güncelleme gereklidir, ancak indirme kanalı şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.
+
+This version is deprecated. Re-import your wallets on %new_domain%.: Bu sürüm eskidi. Cüzdanlarınızı %new_domain% üzerinde yeniden içe aktarın.
