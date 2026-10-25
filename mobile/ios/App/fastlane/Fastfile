@@ -33,7 +33,7 @@ end
 $variant = env_value('APP_VARIANT', 'ionwallet').downcase
 $variant_config = {
   'ionwallet' => {
-    app_identifier: 'io.ice.wallet',
+    app_identifier: 'io.ionwallet',
     profile_name: 'ION Wallet Production profile',
     scheme: 'IONWallet',
     plist_path: '../../App/App/Resources/IONWallet/Info.plist',
@@ -46,33 +46,21 @@ raise "Unknown APP_VARIANT: #{$variant}" unless $variant_config.key?($variant)
 $config = $variant_config[$variant]
 $plist_path = env_value('IOS_PLIST_PATH', $config[:plist_path])
 
-$team_id = env_value('IOS_TEAM_ID', CredentialsManager::AppfileConfig.try_fetch_value(:team_id))
+$team_id = env_value('IOS_TEAM_ID')
 $app_identifier = env_value('IOS_APP_IDENTIFIER', $config[:app_identifier])
 $profile_name = env_value('IOS_PROFILE_NAME', $config[:profile_name])
 $scheme = env_value('IOS_SCHEME', $config[:scheme])
-$app_identifier_widget = env_value('IOS_APP_IDENTIFIER_WIDGET', $config[:app_identifier_widget])
-$profile_name_widget = env_value('IOS_PROFILE_NAME_WIDGET', $config[:profile_name_widget])
-$scheme_widget = env_value('IOS_WIDGET_SCHEME', $config[:scheme_widget])
-$app_identifier_notification = env_value('IOS_APP_IDENTIFIER_NOTIFICATION', $config[:app_identifier_notification])
-$profile_name_notification = env_value('IOS_PROFILE_NAME_NOTIFICATION', $config[:profile_name_notification])
-$scheme_notification = env_value('IOS_NOTIFICATION_SCHEME', $config[:scheme_notification])
 $testflight_group = env_value('IOS_TESTFLIGHT_GROUP', $config[:testflight_group])
 $external_beta_enabled = env_value('IOS_EXTERNAL_BETA_ENABLED', 'false') == 'true'
 $metadata_path = env_value('IOS_METADATA_PATH')
-$asc_key_id = env_value('APP_STORE_CONNECT_KEY_ID', 'TL49GJ73DP')
-$asc_issuer_id = env_value('APP_STORE_CONNECT_ISSUER_ID', '519080b4-bc5f-4d06-a889-a69254108348')
+$asc_key_id = env_value('APP_STORE_CONNECT_KEY_ID')
+$asc_issuer_id = env_value('APP_STORE_CONNECT_ISSUER_ID')
 $asc_key_path = env_value('APP_STORE_CONNECT_KEY_PATH', './AuthKey.p8')
 
 puts "$variant: #{$variant}"
 puts "$app_identifier: #{$app_identifier}"
 puts "$profile_name: #{$profile_name}"
 puts "$scheme: #{$scheme}"
-puts "$app_identifier_widget: #{$app_identifier_widget}" if $app_identifier_widget
-puts "$profile_name_widget: #{$profile_name_widget}" if $profile_name_widget
-puts "$scheme_widget: #{$scheme_widget}" if $scheme_widget
-puts "$app_identifier_notification: #{$app_identifier_notification}"
-puts "$profile_name_notification: #{$profile_name_notification}"
-puts "$scheme_notification: #{$scheme_notification}"
 puts "$testflight_group: #{$testflight_group}"
 puts "$external_beta_enabled: #{$external_beta_enabled}"
 
@@ -216,6 +204,10 @@ platform :ios do
   before_all do |lane|
     read_files
 
+    UI.user_error!('IOS_TEAM_ID is required for ION Wallet') unless $team_id
+    UI.user_error!('APP_STORE_CONNECT_KEY_ID is required for ION Wallet') unless $asc_key_id
+    UI.user_error!('APP_STORE_CONNECT_ISSUER_ID is required for ION Wallet') unless $asc_issuer_id
+
     app_store_connect_api_key(
       key_id: $asc_key_id,
       issuer_id: $asc_issuer_id,
@@ -234,27 +226,6 @@ platform :ios do
       code_sign_identity: "iPhone Distribution"
     )
 
-    if $scheme_widget
-      update_code_signing_settings(
-        path: "App.xcodeproj",
-        use_automatic_signing: false,
-        profile_name: $profile_name_widget,
-        sdk: "iphoneos*",
-        team_id: $team_id,
-        targets: [$scheme_widget],
-        code_sign_identity: "iPhone Distribution"
-      )
-    end
-
-    update_code_signing_settings(
-      path: "App.xcodeproj",
-      use_automatic_signing: false,
-      profile_name: $profile_name_notification,
-      sdk: "iphoneos*",
-      team_id: $team_id,
-      targets: [$scheme_notification],
-      code_sign_identity: "iPhone Distribution"
-    )
   end
 
   lane :beta do
@@ -267,8 +238,6 @@ platform :ios do
       export_options: {
         provisioningProfiles: {
           $app_identifier => $profile_name,
-          **($app_identifier_widget ? { $app_identifier_widget => $profile_name_widget } : {}),
-          $app_identifier_notification => $profile_name_notification,
         }
       },
       xcargs: "-skipMacroValidation",
@@ -317,8 +286,6 @@ platform :ios do
       export_options: {
         provisioningProfiles: {
           $app_identifier => $profile_name,
-          **($app_identifier_widget ? { $app_identifier_widget => $profile_name_widget } : {}),
-          $app_identifier_notification => $profile_name_notification,
         }
       },
       xcargs: "-skipMacroValidation",

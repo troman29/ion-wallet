@@ -8,7 +8,7 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:000000000000:android:0000000000000001",
-        "android_client_info": { "package_name": "io.ice.wallet" }
+        "android_client_info": { "package_name": "io.ionwallet" }
       },
       "oauth_client": [],
       "api_key": [{ "current_key": "REPLACE_WITH_ION_FIREBASE_API_KEY" }],
@@ -17,7 +17,7 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:000000000000:android:0000000000000002",
-        "android_client_info": { "package_name": "io.ice.wallet.beta" }
+        "android_client_info": { "package_name": "io.ionwallet.beta" }
       },
       "oauth_client": [],
       "api_key": [{ "current_key": "REPLACE_WITH_ION_FIREBASE_API_KEY" }],
@@ -26,7 +26,7 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:000000000000:android:0000000000000003",
-        "android_client_info": { "package_name": "io.ice.wallet.debug" }
+        "android_client_info": { "package_name": "io.ionwallet.debug" }
       },
       "oauth_client": [],
       "api_key": [{ "current_key": "REPLACE_WITH_ION_FIREBASE_API_KEY" }],

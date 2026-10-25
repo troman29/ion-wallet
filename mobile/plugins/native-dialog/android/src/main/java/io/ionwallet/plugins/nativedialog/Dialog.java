@@ -1,4 +1,4 @@
-package io.ice.wallet.plugins.nativedialog;
+package io.ionwallet.plugins.nativedialog;
 
 import android.app.AlertDialog;
 import android.content.Context;

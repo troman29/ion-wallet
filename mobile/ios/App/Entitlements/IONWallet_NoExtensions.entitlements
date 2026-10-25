@@ -6,10 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:connect.wallet.ice.io</string>
-		<string>applinks:connect.wallet.ice.io</string>
-		<string>applinks:go.wallet.ice.io</string>
-		<string>applinks:wallet.ice.io</string>
+		<string>applinks:connect.ionwallet.io</string>
 	</array>
 </dict>
 </plist>

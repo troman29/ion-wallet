@@ -725,7 +725,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 30
-    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' || (startsWith(github.ref, 'refs/heads/release/') && vars.PUBLISH_REPO == '')) && needs.detect-changes.outputs.ios-only != 'true' && needs.detect-changes.outputs.android-variants != '[]'
+    if: github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.ios-only != 'true' && needs.detect-changes.outputs.android-variants != '[]'
     strategy:
       fail-fast: false
       matrix:
@@ -743,7 +743,7 @@ jobs:
           case "$APP_VARIANT" in
             ionwallet)
               echo "ANDROID_APP_NAME=ION Wallet" >> "$GITHUB_ENV"
-              echo "ANDROID_PACKAGE_NAME=io.ice.wallet" >> "$GITHUB_ENV"
+              echo "ANDROID_PACKAGE_NAME=io.ionwallet" >> "$GITHUB_ENV"
               echo "ANDROID_ARTIFACT_NAME=${{ env.ARTIFACT_NAME_BASE }}.apk" >> "$GITHUB_ENV"
               ;;
             *)
@@ -801,11 +801,26 @@ jobs:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE64 }}
+          ANDROID_FIREBASE_APP_ID: ${{ vars.ANDROID_FIREBASE_APP_ID }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Empty on a push, where there are no inputs - the lane then falls back to its own default.
           ANDROID_ROLLOUT: ${{ inputs.android_rollout || vars.ANDROID_ROLLOUT }}
         run: |
           cd mobile/android
+
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ] || [ -z "$ANDROID_KEYSTORE_PASSWORD" ]; then
+            echo "::error::Missing ION Wallet Android signing key"
+            exit 1
+          fi
+          if [ -z "$PUBLISH_REPO" ]; then
+            if [ -z "$FIREBASE_SERVICE_ACCOUNT_BASE64" ] || [ -z "$ANDROID_FIREBASE_APP_ID" ]; then
+              echo "::error::Missing ION Wallet Firebase Distribution credentials"
+              exit 1
+            fi
+          elif [ -z "$ANDROID_API_KEY_BASE64" ]; then
+            echo "::error::Missing ION Wallet Google Play API key"
+            exit 1
+          fi
 
           echo -n "$ANDROID_API_KEY_BASE64" | base64 --decode > ./api-key.json
           echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ./android.keystore
@@ -865,7 +880,7 @@ jobs:
     environment: production
     # The ionwallet variant takes 30+ minutes on slow runners; v26.7.1 needed 3 attempts against a 30-minute cap
     timeout-minutes: 45
-    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' || (startsWith(github.ref, 'refs/heads/release/') && vars.PUBLISH_REPO == '')) && needs.detect-changes.outputs.android-only != 'true' && needs.detect-changes.outputs.ios-variants != '[]'
+    if: github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.android-only != 'true' && needs.detect-changes.outputs.ios-variants != '[]'
     strategy:
       fail-fast: false
       matrix:
@@ -887,16 +902,20 @@ jobs:
           case "$APP_VARIANT" in
             ionwallet)
               echo "IOS_APP_NAME=ION Wallet" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER=io.ice.wallet" >> "$GITHUB_ENV"
+              echo "IOS_APP_IDENTIFIER=io.ionwallet" >> "$GITHUB_ENV"
               echo "IOS_SCHEME=IONWallet" >> "$GITHUB_ENV"
               echo "IOS_PLIST_PATH=../../App/App/Resources/IONWallet/Info.plist" >> "$GITHUB_ENV"
-              echo "IOS_TESTFLIGHT_GROUP=${IOS_TESTFLIGHT_GROUP:-MTW external group}" >> "$GITHUB_ENV"
+              echo "IOS_TESTFLIGHT_GROUP=${IOS_TESTFLIGHT_GROUP:-ION Wallet external group}" >> "$GITHUB_ENV"
               ;;
             *)
               echo "::error::Unknown APP_VARIANT: $APP_VARIANT"
               exit 1
               ;;
           esac
+          if [ -z "$IOS_TEAM_ID" ]; then
+            echo "::error::Set APPLE_TEAM_ID for the new Apple team"
+            exit 1
+          fi
 
       - name: Prepare the Node environment
         uses: mytonwallet-org/shared-actions/prepare_node@master
@@ -925,7 +944,6 @@ jobs:
           IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
           IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
-          IOS_PROVISION_PROFILE_NOTIFICATION_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_NOTIFICATION_BASE64 }}
           IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
         run: |
           set -euo pipefail
@@ -933,7 +951,6 @@ jobs:
           CERTIFICATE_BASE64="$IOS_CERTIFICATE_BASE64"
           CERTIFICATE_PASSWORD="$IOS_CERTIFICATE_PASSWORD"
           PROVISION_PROFILE_BASE64="$IOS_PROVISION_PROFILE_BASE64"
-          PROVISION_PROFILE_NOTIFICATION_BASE64="$IOS_PROVISION_PROFILE_NOTIFICATION_BASE64"
 
           if [ -z "$CERTIFICATE_BASE64" ]; then
             echo "::error::Missing iOS distribution certificate for $APP_VARIANT"
@@ -943,21 +960,23 @@ jobs:
             echo "::error::Missing iOS distribution certificate password for $APP_VARIANT"
             exit 1
           fi
-          if [ -z "$PROVISION_PROFILE_BASE64" ] || [ -z "$PROVISION_PROFILE_NOTIFICATION_BASE64" ]; then
-            echo "::error::Missing iOS provisioning profiles for $APP_VARIANT"
+          if [ -z "$IOS_KEYCHAIN_PASSWORD" ]; then
+            echo "::error::Missing ION Wallet iOS keychain password"
+            exit 1
+          fi
+          if [ -z "$PROVISION_PROFILE_BASE64" ]; then
+            echo "::error::Missing iOS provisioning profile for $APP_VARIANT"
             exit 1
           fi
 
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          PP_NOTIFICATION_PATH=$RUNNER_TEMP/build_pp_notification.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n "$CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-          echo -n "$PROVISION_PROFILE_NOTIFICATION_BASE64" | base64 --decode -o $PP_NOTIFICATION_PATH
 
           # create temporary keychain
           security create-keychain -p "$IOS_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -971,19 +990,20 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_NOTIFICATION_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
           # print keychain contents
           security find-identity -v -p codesigning "$KEYCHAIN_PATH" || true
           security cms -D -i "$PP_PATH" > /tmp/app_profile.plist
-          security cms -D -i "$PP_NOTIFICATION_PATH" > /tmp/notification_profile.plist
+          PROFILE_TEAM_ID=$(/usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' /tmp/app_profile.plist)
+          PROFILE_APP_ID_PREFIX=$(/usr/libexec/PlistBuddy -c 'Print :ApplicationIdentifierPrefix:0' /tmp/app_profile.plist)
+          PROFILE_APP_ID=$(/usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' /tmp/app_profile.plist)
+          if [ "$PROFILE_TEAM_ID" != "$IOS_TEAM_ID" ] || [ "$PROFILE_APP_ID" != "$PROFILE_APP_ID_PREFIX.$IOS_APP_IDENTIFIER" ]; then
+            echo "::error::iOS profile does not match the ION Wallet team and app ID"
+            exit 1
+          fi
           APP_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' /tmp/app_profile.plist)
-          NOTIFICATION_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' /tmp/notification_profile.plist)
           echo "IOS_PROFILE_NAME=$APP_PROFILE_NAME" >> "$GITHUB_ENV"
-          echo "IOS_PROFILE_NAME_NOTIFICATION=$NOTIFICATION_PROFILE_NAME" >> "$GITHUB_ENV"
-          /usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' /tmp/app_profile.plist
           /usr/libexec/PlistBuddy -c 'Print :Name' /tmp/app_profile.plist
-          /usr/libexec/PlistBuddy -c 'Print :Name' /tmp/notification_profile.plist
 
       - name: "iOS: Package and publish"
         env:
@@ -1013,14 +1033,14 @@ jobs:
             echo "::error::Missing App Store Connect auth key for $APP_VARIANT"
             exit 1
           fi
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ]; then
+            echo "::error::Set ION Wallet App Store Connect key and issuer IDs"
+            exit 1
+          fi
 
           echo -n "$AUTH_KEY_BASE64" | base64 --decode -o ./AuthKey.p8
-          if [ -n "$ASC_KEY_ID" ]; then
-            export APP_STORE_CONNECT_KEY_ID="$ASC_KEY_ID"
-          fi
-          if [ -n "$ASC_ISSUER_ID" ]; then
-            export APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID"
-          fi
+          export APP_STORE_CONNECT_KEY_ID="$ASC_KEY_ID"
+          export APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID"
           if [ -n "$METADATA_PATH" ]; then
             export IOS_METADATA_PATH="$METADATA_PATH"
           fi

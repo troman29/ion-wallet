@@ -610,7 +610,7 @@ export function initEvmConnect(apiConnector: Connector) {
       uuid: crypto.randomUUID(),
       name: APP_NAME,
       icon: `data:image/svg+xml,${encodeURIComponent(INJECTED_ICON)}`,
-      rdns: 'io.ice.wallet',
+      rdns: 'io.ionwallet',
     },
     provider: evm.provider,
   });

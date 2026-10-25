@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 import type { KeyboardResize } from '@capacitor/keyboard';
 
 const { APP_ENV = 'production' } = process.env;
-const APP_ID = 'io.ice.wallet';
+const APP_ID = 'io.ionwallet';
 const APP_NAME = 'ION Wallet';
 
 const COMMON_PLUGINS = [
@@ -32,7 +32,7 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   server: {
     // Native WebView origin. This is intentionally not the public website:
-    // Universal Links and App Links use wallet.ice.io independently.
+    // Universal Links and App Links use connect.ionwallet.io independently.
     androidScheme: 'https',
     hostname: 'ionwallet.local',
   },

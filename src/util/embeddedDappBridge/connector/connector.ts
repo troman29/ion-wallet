@@ -830,7 +830,7 @@ export function initConnector(
           : `evm-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`,
         name: appName,
         icon: `data:image/svg+xml,${encodeURIComponent(icon)}`,
-        rdns: 'io.ice.wallet',
+        rdns: 'io.ionwallet',
       },
       provider: evm.provider,
     });
