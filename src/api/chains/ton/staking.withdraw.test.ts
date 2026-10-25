@@ -5,6 +5,11 @@ import { buildLiquidStakingWithdraw } from './staking';
 jest.spyOn(tonCore, 'resolveTokenWalletAddress').mockResolvedValue('test-jetton-wallet');
 
 describe('liquid staking withdrawal', () => {
+  it('reserves 4 ION for liquid staking in either direction', () => {
+    expect(TON_GAS.stakeLiquid).toBe(4_000_000_000n);
+    expect(TON_GAS.unstakeLiquid).toBe(4_000_000_000n);
+  });
+
   it('attaches the ION amount used by successful withdrawals', async () => {
     const result = await buildLiquidStakingWithdraw(
       'mainnet',
