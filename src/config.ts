@@ -130,7 +130,7 @@ export const ELECTRON_TONCENTER_TESTNET_KEY = process.env.ELECTRON_TONCENTER_TES
 export const BRILLIANT_API_BASE_URL = process.env.BRILLIANT_API_BASE_URL || 'https://api.wallet.ice.io';
 export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api.wallet.ice.io';
 export const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
-export const SSE_BRIDGE_URL = 'https://ion.windbit.dev/bridge/';
+export const SSE_BRIDGE_URL = 'https://bridge.ionwallet.io/bridge/';
 
 export const WALLET_CONNECT_BRIDGE_PATTERNS = 'https://*.walletconnect.com https://*.walletconnect.org wss://*.walletconnect.com wss://*.walletconnect.org';
 
