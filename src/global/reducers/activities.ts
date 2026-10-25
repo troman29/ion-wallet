@@ -13,9 +13,7 @@ import { getOrderedAccountChains } from '../../util/chain';
 import { extractKey, mapValues, unique } from '../../util/iteratees';
 import { replaceActivityId } from '../helpers/misc';
 import { selectAccountOrAuthAccount, selectAccountState } from '../selectors';
-import { replaceCurrentDomainLinkingId, replaceCurrentDomainRenewalId } from './domains';
 import { updateAccountState } from './misc';
-import { replaceCurrentTransferId } from './transfer';
 
 const MAX_ACTIVITY_ID_REPLACEMENTS = 500;
 
@@ -117,7 +115,7 @@ export function addInitialActivities(
     global = addPastActivities(global, accountId, slug, activities, activities.length === 0);
   }
 
-  return replaceMatchedLocalActivities(global, accountId, [mainActivities, ...Object.values(bySlug)].flat());
+  return global;
 }
 
 /**
@@ -180,36 +178,7 @@ export function addNewActivities(
     },
   });
 
-  return replaceMatchedLocalActivities(global, accountId, newActivities);
-}
-
-function replaceMatchedLocalActivities(global: GlobalState, accountId: string, confirmed: readonly ApiActivity[]) {
-  const { byId, localActivityIds } = selectAccountState(global, accountId)?.activities ?? {};
-  if (!localActivityIds?.length || !byId) return global;
-
-  const byHash = new Map<string, ApiActivity[]>();
-  for (const activity of confirmed) {
-    if (!activity.externalMsgHashNorm || getIsTxIdLocal(activity.id)
-      || (activity.status !== 'completed' && activity.status !== 'failed')) continue;
-    const matches = byHash.get(activity.externalMsgHashNorm) ?? [];
-    matches.push(activity);
-    byHash.set(activity.externalMsgHashNorm, matches);
-  }
-
-  const replacements: Record<string, string> = {};
-  for (const id of localActivityIds) {
-    const local = byId[id];
-    const matches = local?.externalMsgHashNorm ? byHash.get(local.externalMsgHashNorm) : undefined;
-    const match = matches?.find((activity) => activity.type === local.type) ?? matches?.[0];
-    if (match) replacements[id] = match.id;
-  }
-
-  if (!Object.keys(replacements).length) return global;
-  global = removeActivities(global, accountId, Object.keys(replacements));
-  global = replaceCurrentActivityId(global, accountId, replacements);
-  global = replaceCurrentTransferId(global, replacements);
-  global = replaceCurrentDomainRenewalId(global, replacements);
-  return replaceCurrentDomainLinkingId(global, replacements);
+  return global;
 }
 
 export function addPastActivities(
