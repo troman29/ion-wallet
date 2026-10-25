@@ -1,4 +1,4 @@
-package io.ice.wallet;
+package io.ionwallet;
 
 import com.capacitorjs.plugins.statusbar.StatusBarPluginDelegate;
 

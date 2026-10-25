@@ -33,7 +33,7 @@ end
 $variant = env_value('APP_VARIANT', 'ionwallet').downcase
 $variant_config = {
   'ionwallet' => {
-    app_identifier: 'io.ice.wallet',
+    app_identifier: 'io.ionwallet',
     profile_name: 'ION Wallet Production profile',
     scheme: 'IONWallet',
     plist_path: '../../App/App/Resources/IONWallet/Info.plist',

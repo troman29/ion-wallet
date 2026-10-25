@@ -9,7 +9,7 @@
   <key>PLIST_VERSION</key>
   <string>1</string>
   <key>BUNDLE_ID</key>
-  <string>io.ice.wallet</string>
+  <string>io.ionwallet</string>
   <key>PROJECT_ID</key>
   <string>ion-wallet-placeholder</string>
   <key>STORAGE_BUCKET</key>

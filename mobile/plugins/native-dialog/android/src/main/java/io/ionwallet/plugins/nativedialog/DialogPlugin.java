@@ -1,4 +1,4 @@
-package io.ice.wallet.plugins.nativedialog;
+package io.ionwallet.plugins.nativedialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.JSObject;

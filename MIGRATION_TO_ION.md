@@ -108,20 +108,22 @@
 ### P1 — подготовка продукта к ребрендингу и выпуску
 
 - [x] Переименовать основные пакеты, артефакты и нативные цели в **ION Wallet**.
-  - npm package: `ion-wallet`; Capacitor app ID: `io.ice.wallet`; Android flavor: `ionwallet`; iOS schemes: `IONWallet*`.
+  - npm package: `ion-wallet`; Capacitor app ID: `io.ionwallet`; Android flavor: `ionwallet`; iOS schemes: `IONWallet*`.
   - Desktop-артефакты: `IONWallet-*`; Android direct APK: `IONWallet.apk`.
   - Удалён iOS target и ресурсы Gram Wallet, включая widget extension.
-  - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
+  - После смены app ID повторить Android `:app:assembleIonwalletProdDebug` и iOS native build на машине с JDK/CocoaPods.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
-  - Для собственного ION Gateway-канала используется `ion-gateway://`. Стандартный входящий URI ION Gateway `tc://` сохранён для совместимости с официальным SDK; public links используют `wallet.ice.io`.
+  - Для собственного ION Gateway-канала используется `ion-gateway://`. Стандартный входящий URI ION Gateway `tc://` сохранён для совместимости с официальным SDK; public links ION Gateway перенесены на `connect.ionwallet.io`.
 - [x] Сохранить отдельный Capacitor WebView origin `https://ionwallet.local`.
-  - Это технический локальный origin native-обёртки; он не заменяет публичные Universal Links и App Links на `wallet.ice.io`.
+  - Это технический локальный origin native-обёртки; он не заменяет публичные Universal Links и App Links на `connect.ionwallet.io`.
 - [x] Удалить перенос legacy auth в Enclave.
   - ION Wallet создаётся сразу с Enclave: старые encrypted mnemonic, legacy biometric storage, rollback и recovery UI не поддерживаются.
 - [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
+  - Новый отдельный домен кошелька — `ionwallet.io`; ION Gateway bridge — `bridge.ionwallet.io`, Universal Links и App Links — `connect.ionwallet.io`. До переключения production bridge нужны DNS, TLS и проверка SSE через новый адрес. Пока рабочий bridge доступен по `ion.windbit.dev/bridge/`.
+  - Опубликовать на `connect.ionwallet.io` `apple-app-site-association`, `assetlinks.json` и маршруты ION Gateway/WalletConnect. Сверить домен и package ID `io.ionwallet` с ION Gateway registry, WalletConnect и store metadata.
   - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
   - Неподтверждённые Android blog/install/help/scam/APK URL удалены. Website, terms/privacy и association-конфигурация ожидают публикации; signing и stores проверяются отдельно.
-  - Перед Android-релизом установить настоящий `mobile/android/app/src/ionwallet/google-services.json` из ION Firebase Console и проверить соответствие `io.ice.wallet`, release signing certificate и Firebase-проекту ION Wallet.
+  - Перед Android-релизом установить настоящий `mobile/android/app/src/ionwallet/google-services.json` из ION Firebase Console и проверить соответствие `io.ionwallet`, release signing certificate и Firebase-проекту ION Wallet. Для Firebase Distribution также требуется `ANDROID_FIREBASE_APP_ID` нового приложения.
   - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.
   - Зарегистрировать и проверить ION Wallet в ION Connect и WalletConnect, включая metadata, package IDs, deep links, icon и policy URL.
   - Создать и оформить App Store Connect и Google Play Console приложения: signing, privacy/data disclosure, store listing, screenshots, support/policy URLs и тестовые каналы.

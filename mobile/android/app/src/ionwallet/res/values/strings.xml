@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="app_name" translatable="false">ION Wallet</string>
-  <string name="package_name" translatable="false">io.ice.wallet</string>
+  <string name="package_name" translatable="false">io.ionwallet</string>
   <string name="ion_url_scheme" translatable="false">ion</string>
   <string name="ion_gateway_url_scheme" translatable="false">tc</string>
   <string name="app_ion_gateway_url_scheme" translatable="false">ion-gateway</string>

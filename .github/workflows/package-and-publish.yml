@@ -743,7 +743,7 @@ jobs:
           case "$APP_VARIANT" in
             ionwallet)
               echo "ANDROID_APP_NAME=ION Wallet" >> "$GITHUB_ENV"
-              echo "ANDROID_PACKAGE_NAME=io.ice.wallet" >> "$GITHUB_ENV"
+              echo "ANDROID_PACKAGE_NAME=io.ionwallet" >> "$GITHUB_ENV"
               echo "ANDROID_ARTIFACT_NAME=${{ env.ARTIFACT_NAME_BASE }}.apk" >> "$GITHUB_ENV"
               ;;
             *)
@@ -887,7 +887,7 @@ jobs:
           case "$APP_VARIANT" in
             ionwallet)
               echo "IOS_APP_NAME=ION Wallet" >> "$GITHUB_ENV"
-              echo "IOS_APP_IDENTIFIER=io.ice.wallet" >> "$GITHUB_ENV"
+              echo "IOS_APP_IDENTIFIER=io.ionwallet" >> "$GITHUB_ENV"
               echo "IOS_SCHEME=IONWallet" >> "$GITHUB_ENV"
               echo "IOS_PLIST_PATH=../../App/App/Resources/IONWallet/Info.plist" >> "$GITHUB_ENV"
               echo "IOS_TESTFLIGHT_GROUP=${IOS_TESTFLIGHT_GROUP:-MTW external group}" >> "$GITHUB_ENV"
