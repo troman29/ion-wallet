@@ -119,7 +119,7 @@
 - [x] Удалить перенос legacy auth в Enclave.
   - ION Wallet создаётся сразу с Enclave: старые encrypted mnemonic, legacy biometric storage, rollback и recovery UI не поддерживаются.
 - [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
-  - Новый отдельный домен кошелька — `ionwallet.io`; ION Gateway bridge — `bridge.ionwallet.io`, Universal Links и App Links — `connect.ionwallet.io`. До переключения production bridge нужны DNS, TLS и проверка SSE через новый адрес. Пока рабочий bridge доступен по `ion.windbit.dev/bridge/`.
+  - Новый отдельный домен кошелька — `ionwallet.io`; ION Gateway bridge — `bridge.ionwallet.io`, Universal Links и App Links — `connect.ionwallet.io`. DNS, TLS и обмен сообщением через SSE на `bridge.ionwallet.io/bridge/` проверены; `connect.ionwallet.io` ещё требует исправить TLS и опубликовать маршруты.
   - Опубликовать на `connect.ionwallet.io` `apple-app-site-association`, `assetlinks.json` и маршруты ION Gateway/WalletConnect. Сверить домен и package ID `io.ionwallet` с ION Gateway registry, WalletConnect и store metadata.
   - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
   - Неподтверждённые Android blog/install/help/scam/APK URL удалены. Website, terms/privacy и association-конфигурация ожидают публикации; signing и stores проверяются отдельно.
