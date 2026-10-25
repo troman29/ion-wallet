@@ -13,6 +13,7 @@ import { FallbackPollingScheduler } from '../../../common/polling/fallbackPollin
 import { periodToMs } from '../../../common/polling/utils';
 import { FIRST_TRANSACTIONS_LIMIT } from '../../../constants';
 import { fetchActions, fetchPendingActions } from './actions';
+import { projectActivitiesWithTraceOutputs } from './projectActivitiesWithTraceOutputs';
 import { getToncenterSocket } from './socket';
 import { throttleToncenterSocketActions } from './throttleSocketActions';
 
@@ -69,6 +70,8 @@ export class ActivityStream {
 
   /** Sorted by timestamp descending */
   #socketConfirmedActionsStash: ApiActivity[] = [];
+
+  #socketUpdates = Promise.resolve();
 
   #isDestroyed = false;
 
@@ -136,13 +139,28 @@ export class ActivityStream {
   };
 
   #handleSocketNewActivities = (updates: DefaultActivitiesUpdate[]) => {
+    this.#socketUpdates = this.#socketUpdates
+      .then(() => this.#applySocketNewActivities(updates))
+      .catch((err) => logDebugError('Failed to process TON socket activities', err));
+  };
+
+  #applySocketNewActivities = async (updates: DefaultActivitiesUpdate[]) => {
     if (this.#isDestroyed) return;
     this.#fallbackPollingScheduler.onSocketMessage();
+
+    const projectedUpdates = await Promise.all(updates.map(async (update) => {
+      if (update.finality !== 'finalized' || !update.activities.length) return update;
+      return {
+        ...update,
+        activities: await projectActivitiesWithTraceOutputs(this.#network, this.#address, update.activities),
+      };
+    }));
+    if (this.#isDestroyed) return;
 
     // Split updates into two streams:
     // - finalizedActivities: finality='finalized' with actual activities - these are immutable
     // - pendingUpdates: everything else (pending/confirmed finality, or invalidations with empty activities)
-    const { pendingUpdates, finalizedActivities } = splitSocketUpdates(updates);
+    const { pendingUpdates, finalizedActivities } = splitSocketUpdates(projectedUpdates);
 
     const instantFinalizedActivities = this.#doesNeedToRestoreHistory ? [] : finalizedActivities;
     const stashedFinalizedActivities = this.#doesNeedToRestoreHistory ? finalizedActivities : [];
@@ -184,13 +202,14 @@ export class ActivityStream {
   async #loadNewFinalizedActivities() {
     while (!this.#isDestroyed) {
       try {
-        return await fetchActions({
+        const activities = await fetchActions({
           network: this.#network,
           filter: { address: this.#address },
           walletAddress: this.#address,
           fromTimestamp: this.#newestConfirmedActivityTimestamp,
           limit: FIRST_TRANSACTIONS_LIMIT,
         });
+        return await projectActivitiesWithTraceOutputs(this.#network, this.#address, activities);
       } catch (err) {
         logDebugError('loadNewFinalizedActivities', err);
 

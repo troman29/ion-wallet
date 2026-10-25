@@ -58,7 +58,6 @@ import { updateActivityMetadata } from '../../../common/helpers';
 import { buildTokenSlug } from '../../../common/tokens';
 import {
   EXCESS_OP_CODES,
-  JettonOpCode,
   JettonStakingOpCode,
   OpCode,
   TeleitemOpCode,
@@ -175,23 +174,10 @@ export async function fetchPendingActions(network: ApiNetwork, address: string):
 
 export function parseActionsToActivities(actions: AnyAction[], options: ParseOptions): ApiActivity[] {
   const activities: ApiActivity[] = [];
-  const failedWithdrawals = new Map<string, string>();
-
-  for (const action of actions) {
-    if (action.type === 'stake_withdrawal_request' && !action.success && action.trace_id) {
-      failedWithdrawals.set(action.trace_id, action.details.stake_holder);
-    }
-  }
 
   for (const action of actions) {
     try {
-      if (action.type === 'call_contract' && action.trace_id
-        && action.details.destination === failedWithdrawals.get(action.trace_id)
-        && [JettonOpCode.TransferNotification, JettonOpCode.Excesses].includes(Number(action.details.opcode))) {
-        continue;
-      }
-      const parsedAction = parseAction(action, options);
-      activities.push(...parsedAction.activities);
+      activities.push(...parseAction(action, options).activities);
     } catch (err) {
       // An incompatible action must not discard the rest of the history page.
       // Keep trace parsing strict: silently losing actions there would affect fee accounting.

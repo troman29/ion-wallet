@@ -195,9 +195,10 @@ export function addPastActivities(
   } = activities || {};
 
   byId = mergeActivitiesByIdPreservingStatusProgress(byId, pastActivities);
+  const visiblePastActivities = pastActivities.filter(({ shouldHide }) => shouldHide !== true);
 
   if (tokenSlug) {
-    idsBySlug = mergeIdsBySlug(idsBySlug, { [tokenSlug]: extractKey(pastActivities, 'id') }, byId);
+    idsBySlug = mergeIdsBySlug(idsBySlug, { [tokenSlug]: extractKey(visiblePastActivities, 'id') }, byId);
     newestActivitiesBySlug = getNewestActivitiesBySlug({ byId, idsBySlug, newestActivitiesBySlug }, [tokenSlug]);
 
     if (isEndReached) {
@@ -236,7 +237,7 @@ export function addPastActivities(
       const untrackedIdsMain = (idsMain ?? []).filter((id) => !trackedIds.has(id));
       idsMain = mergeSortedActivityIds(byId, recomputedMainIds, untrackedIdsMain);
     } else {
-      idsMain = mergeSortedActivityIds(byId, idsMain ?? [], extractKey(pastActivities, 'id'));
+      idsMain = mergeSortedActivityIds(byId, idsMain ?? [], extractKey(visiblePastActivities, 'id'));
     }
 
     if (isEndReached) {
@@ -576,5 +577,8 @@ function buildMainActivityIds(
     return chainIds.filter((id) => (byId[id]?.timestamp ?? -Infinity) >= paginationBoundary);
   });
 
-  return mergeSortedActivityIds(byId, ...idLists);
+  return mergeSortedActivityIds(
+    byId,
+    ...idLists.map((ids) => ids.filter((id) => byId[id]?.shouldHide !== true)),
+  );
 }

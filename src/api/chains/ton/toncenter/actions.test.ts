@@ -116,7 +116,7 @@ describe('parseActionsToActivities', () => {
     });
   });
 
-  it('shows one failed withdrawal without its jetton gas returns', () => {
+  it('keeps raw actions until their trace outputs are known', () => {
     const traceId = 'failed-withdrawal';
     const failedWithdrawal = {
       ...ION_TRANSFER,
@@ -140,7 +140,7 @@ describe('parseActionsToActivities', () => {
       { ...ION_TRANSFER, action_id: 'independent', trace_id: 'another-trace' },
     ], options);
 
-    expect(activities).toHaveLength(2);
-    expect(activities.map(({ status }) => status)).toEqual(['failed', 'completed']);
+    expect(activities).toHaveLength(4);
+    expect(activities.map(({ status }) => status)).toEqual(['completed', 'completed', 'failed', 'completed']);
   });
 });
