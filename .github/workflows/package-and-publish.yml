@@ -797,15 +797,30 @@ jobs:
 
       - name: Package and publish
         env:
-          ANDROID_API_KEY_BASE64: ${{ secrets.ANDROID_API_KEY_BASE64 }}
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE64 }}
+          ANDROID_API_KEY_BASE64: ${{ secrets.ION_WALLET_ANDROID_API_KEY_BASE64 }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ION_WALLET_ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ION_WALLET_ANDROID_KEYSTORE_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.ION_WALLET_FIREBASE_SERVICE_ACCOUNT_BASE64 }}
+          ANDROID_FIREBASE_APP_ID: ${{ vars.ION_WALLET_ANDROID_FIREBASE_APP_ID }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Empty on a push, where there are no inputs - the lane then falls back to its own default.
           ANDROID_ROLLOUT: ${{ inputs.android_rollout || vars.ANDROID_ROLLOUT }}
         run: |
           cd mobile/android
+
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ] || [ -z "$ANDROID_KEYSTORE_PASSWORD" ]; then
+            echo "::error::Missing ION Wallet Android signing key"
+            exit 1
+          fi
+          if [ -z "$PUBLISH_REPO" ]; then
+            if [ -z "$FIREBASE_SERVICE_ACCOUNT_BASE64" ] || [ -z "$ANDROID_FIREBASE_APP_ID" ]; then
+              echo "::error::Missing ION Wallet Firebase Distribution credentials"
+              exit 1
+            fi
+          elif [ -z "$ANDROID_API_KEY_BASE64" ]; then
+            echo "::error::Missing ION Wallet Google Play API key"
+            exit 1
+          fi
 
           echo -n "$ANDROID_API_KEY_BASE64" | base64 --decode > ./api-key.json
           echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ./android.keystore
@@ -841,8 +856,8 @@ jobs:
 
       - name: Build direct apk
         env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ION_WALLET_ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ION_WALLET_ANDROID_KEYSTORE_PASSWORD }}
         run: |
           export ANDROID_APK_OUTPUT_PATH_FILE="$RUNNER_TEMP/android-apk-path.txt"
           rm -f "$ANDROID_APK_OUTPUT_PATH_FILE"
@@ -872,7 +887,7 @@ jobs:
         app_variant: ${{ fromJSON(needs.detect-changes.outputs.ios-variants) }}
     env:
       APP_VARIANT: ${{ matrix.app_variant }}
-      IOS_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+      IOS_TEAM_ID: ${{ vars.ION_WALLET_APPLE_TEAM_ID }}
       IOS_EXTERNAL_BETA_ENABLED: "true"
       IS_RELEASE_CANDIDATE: ${{ startsWith(github.ref, 'refs/heads/release/') && '1' || '' }}
       RC_NUMBER: ${{ needs.detect-changes.outputs.rc-number }}
@@ -882,7 +897,7 @@ jobs:
 
       - name: Configure iOS variant
         env:
-          IOS_TESTFLIGHT_GROUP: ${{ vars.IOS_TESTFLIGHT_GROUP }}
+          IOS_TESTFLIGHT_GROUP: ${{ vars.ION_WALLET_IOS_TESTFLIGHT_GROUP }}
         run: |
           case "$APP_VARIANT" in
             ionwallet)
@@ -898,7 +913,7 @@ jobs:
               ;;
           esac
           if [ -z "$IOS_TEAM_ID" ]; then
-            echo "::error::Set APPLE_TEAM_ID for the ION Wallet Apple team"
+            echo "::error::Set ION_WALLET_APPLE_TEAM_ID for the new Apple team"
             exit 1
           fi
 
@@ -926,10 +941,10 @@ jobs:
 
       - name: Install the Apple certificate and provisioning profile
         env:
-          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
-          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
-          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
-          IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+          IOS_CERTIFICATE_BASE64: ${{ secrets.ION_WALLET_IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.ION_WALLET_IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.ION_WALLET_IOS_PROVISION_PROFILE_BASE64 }}
+          IOS_KEYCHAIN_PASSWORD: ${{ secrets.ION_WALLET_IOS_KEYCHAIN_PASSWORD }}
         run: |
           set -euo pipefail
 
@@ -943,6 +958,10 @@ jobs:
           fi
           if [ -z "$CERTIFICATE_PASSWORD" ]; then
             echo "::error::Missing iOS distribution certificate password for $APP_VARIANT"
+            exit 1
+          fi
+          if [ -z "$IOS_KEYCHAIN_PASSWORD" ]; then
+            echo "::error::Missing ION Wallet iOS keychain password"
             exit 1
           fi
           if [ -z "$PROVISION_PROFILE_BASE64" ]; then
@@ -988,9 +1007,9 @@ jobs:
 
       - name: "iOS: Package and publish"
         env:
-          IOS_AUTH_KEY_BASE64: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-          IOS_AUTH_KEY_ID: ${{ vars.IOS_AUTH_KEY_ID }}
-          IOS_AUTH_KEY_ISSUER_ID: ${{ vars.IOS_AUTH_KEY_ISSUER_ID }}
+          IOS_AUTH_KEY_BASE64: ${{ secrets.ION_WALLET_IOS_AUTH_KEY_BASE64 }}
+          IOS_AUTH_KEY_ID: ${{ vars.ION_WALLET_IOS_AUTH_KEY_ID }}
+          IOS_AUTH_KEY_ISSUER_ID: ${{ vars.ION_WALLET_IOS_AUTH_KEY_ISSUER_ID }}
           IOS_METADATA_PATH: ${{ vars.IOS_METADATA_PATH }}
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 300
         run: |
