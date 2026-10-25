@@ -2,7 +2,7 @@ import type { ApiTransactionActivity } from '../../api/types';
 import type { GlobalState } from '../types';
 
 import { INITIAL_STATE } from '../initialState';
-import { addInitialActivities, addPastActivities } from './activities';
+import { addInitialActivities, addNewActivities, addPastActivities } from './activities';
 
 const ACCOUNT_ID = 'test-account';
 
@@ -37,7 +37,8 @@ function activity(id: string, shouldHide = false): ApiTransactionActivity {
 it('keeps hidden output actions for details and pagination without listing them', () => {
   const failedRequest = activity('trace:request');
   const refund = activity('trace:refund', true);
-  let global = addInitialActivities(buildGlobal(), ACCOUNT_ID, [refund, failedRequest], {}, 'ton', false);
+  let global = addNewActivities(buildGlobal(), ACCOUNT_ID, [activity(refund.id)]);
+  global = addInitialActivities(global, ACCOUNT_ID, [refund, failedRequest], {}, 'ton', false);
 
   expect(global.byAccountId[ACCOUNT_ID].activities?.idsMain).toEqual([failedRequest.id]);
   expect(global.byAccountId[ACCOUNT_ID].activities?.mainActivityIdsByChain?.ton)
