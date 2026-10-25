@@ -1,11 +1,11 @@
 import {
   ION_GATEWAY_PROTOCOL,
   ION_GATEWAY_PROTOCOL_SELF,
-  ION_GATEWAY_UNIVERSAL_URL,
   SELF_PROTOCOL,
   SELF_UNIVERSAL_URLS,
   TON_PROTOCOL,
 } from '../../util/deeplink/constants';
+import { isIonGatewayUniversalLink, isWalletConnectUniversalLink } from '../../util/deeplink/urlMatchers';
 import { callApi } from '../../api/providers/extension/connectorForPageScript';
 
 const originalOpenFn = window.open;
@@ -65,14 +65,15 @@ function patchedOpenFn(url?: string | URL, ...args: any[]) {
 }
 
 function isDeeplink(url: string) {
-  url = url.replace(/^http:\/\//, 'https://');
+  const normalizedUrl = url.replace(/^http:\/\//, 'https://');
 
   return (
     url.startsWith(TON_PROTOCOL)
     || url.startsWith(SELF_PROTOCOL)
     || url.startsWith(ION_GATEWAY_PROTOCOL)
     || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
-    || SELF_UNIVERSAL_URLS.some((universalUrl) => url.startsWith(universalUrl))
-    || url.startsWith(ION_GATEWAY_UNIVERSAL_URL)
+    || SELF_UNIVERSAL_URLS.some((universalUrl) => normalizedUrl.startsWith(universalUrl))
+    || isIonGatewayUniversalLink(url)
+    || isWalletConnectUniversalLink(url)
   );
 }

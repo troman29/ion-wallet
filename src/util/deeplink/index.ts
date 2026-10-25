@@ -38,14 +38,13 @@ import {
   CHECKIN_URL,
   ION_GATEWAY_PROTOCOL,
   ION_GATEWAY_PROTOCOL_SELF,
-  ION_GATEWAY_UNIVERSAL_URL,
   SELF_PROTOCOL,
   SELF_UNIVERSAL_URLS,
   TON_PROTOCOL,
   WALLETCONNECT_DEEPLINK,
   WALLETCONNECT_PROTOCOL,
-  WALLETCONNECT_UNIVERSAL_URLS,
 } from './constants';
+import { isIonGatewayUniversalLink, isWalletConnectUniversalLink } from './urlMatchers';
 
 export const enum DeeplinkCommand {
   CheckinWithR = 'r',
@@ -463,14 +462,14 @@ function rawParseTonDeeplink(value?: string) {
 function isIonGatewayDeeplink(url: string) {
   return url.startsWith(ION_GATEWAY_PROTOCOL)
     || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
-    || omitProtocol(url).startsWith(omitProtocol(ION_GATEWAY_UNIVERSAL_URL));
+    || isIonGatewayUniversalLink(url);
 }
 
 function isWalletConnectDeeplink(url: string) {
   return url.startsWith(WALLETCONNECT_PROTOCOL)
     || url.startsWith(WALLETCONNECT_DEEPLINK)
     || url.startsWith('https://walletconnect.com/wc')
-    || WALLETCONNECT_UNIVERSAL_URLS.some((prefix) => url.startsWith(prefix));
+    || isWalletConnectUniversalLink(url);
 }
 
 function normalizeWalletConnectDeeplink(url: string): string {
@@ -982,10 +981,6 @@ function convertSelfUrlToTonDeeplink(deeplink: string) {
   }
 
   return deeplink;
-}
-
-function omitProtocol(url: string) {
-  return url.replace(/^https?:\/\//, '');
 }
 
 function forceHttpsProtocol(url: string) {
