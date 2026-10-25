@@ -127,8 +127,8 @@ export const TONCENTER_TESTNET_URL = process.env.TONCENTER_TESTNET_URL || 'https
 export const TONCENTER_TESTNET_KEY = process.env.TONCENTER_TESTNET_KEY;
 export const ELECTRON_TONCENTER_TESTNET_KEY = process.env.ELECTRON_TONCENTER_TESTNET_KEY;
 
-export const BRILLIANT_API_BASE_URL = process.env.BRILLIANT_API_BASE_URL || 'https://api.wallet.ice.io';
-export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api.wallet.ice.io';
+export const BRILLIANT_API_BASE_URL = process.env.BRILLIANT_API_BASE_URL || 'https://api.ionwallet.io';
+export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api.ionwallet.io';
 export const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
 export const SSE_BRIDGE_URL = 'https://tonconnectbridge.wallet.ice.io/bridge/';
 
@@ -370,7 +370,7 @@ export const PORTRAIT_MIN_ASSETS_TAB_VIEW = 6;
 export const DEFAULT_PRICE_CURRENCY = 'USD';
 export const CURRENCIES: Record<
   ApiBaseCurrency,
-  // Get the fallback rates at https://api.wallet.ice.io/currency-rates
+  // Get the fallback rates at https://api.ionwallet.io/currency-rates
   { name: string; decimals: number; shortSymbol?: string; shortSymbolPosition?: 'start' | 'end'; fallbackRate: string }
 > = {
   USD: {
