@@ -110,6 +110,8 @@
 
 Кошелёк ходит в ION напрямую: indexer — `/indexer/v3`, RPC — `/http/v2/jsonRPC`. Всё ниже совместимо, кроме `/pendingActions` и `/pendingTraces` (на стороне ION не включены emulated traces); `emulateTrace` и streaming у ION нет.
 
+- [x] Отправка BOC использует стандартный RPC `sendBocReturnHash`; кастомный метод Toncenter `sendBocReturnHashNoError` удалён из клиента.
+
 | Endpoint v3 | Зачем |
 | --- | --- |
 | `/actions`, `/pendingActions` | История и ожидающие операции. |
