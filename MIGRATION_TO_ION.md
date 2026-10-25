@@ -111,7 +111,7 @@
   - npm package: `ion-wallet`; Capacitor app ID: `io.ionwallet`; Android flavor: `ionwallet`; iOS schemes: `IONWallet*`.
   - Desktop-артефакты: `IONWallet-*`; Android direct APK: `IONWallet.apk`.
   - Удалён iOS target и ресурсы Gram Wallet, включая widget extension.
-  - Android `:app:assembleIonwalletProdDebug` после смены ID проходит; APK имеет `io.ionwallet.debug`. iOS native build ещё требуется.
+  - Android `:app:assembleIonwalletProdDebug` и iOS `IONWallet` Simulator build проходят; APK имеет `io.ionwallet.debug`, iOS app — `io.ionwallet`.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
   - Для собственного ION Gateway-канала используется `ion-gateway://`. Стандартный входящий URI ION Gateway `tc://` сохранён для совместимости с официальным SDK; public links ION Gateway перенесены на `connect.ionwallet.io`.
 - [x] Сохранить отдельный Capacitor WebView origin `https://ionwallet.local`.
