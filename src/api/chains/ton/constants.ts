@@ -44,7 +44,7 @@ export const NFT_PAYLOAD_SAFE_MARGIN = 14 * 8;
 
 export const TON_GAS = {
   stakeLiquid: ONE_TON,
-  unstakeLiquid: ONE_TON,
+  unstakeLiquid: 4n * ONE_TON,
   stakeJettonsForward: JettonStakingGas.STAKE_JETTONS,
   stakeJettons: JettonStakingGas.STAKE_JETTONS + TOKEN_TRANSFER_AMOUNT,
   unstakeJettons: JettonStakingGas.UNSTAKE_JETTONS,

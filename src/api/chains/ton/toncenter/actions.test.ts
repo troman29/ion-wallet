@@ -115,4 +115,32 @@ describe('parseActionsToActivities', () => {
       amount: 50_000_000_000_000_000n,
     });
   });
+
+  it('shows one failed withdrawal without its jetton gas returns', () => {
+    const traceId = 'failed-withdrawal';
+    const failedWithdrawal = {
+      ...ION_TRANSFER,
+      trace_id: traceId,
+      type: 'stake_withdrawal_request',
+      success: false,
+      details: { provider: 'ionstakers', stake_holder: WALLET_RAW, pool: SENDER_RAW, payout_nft: null }, // eslint-disable-line no-null/no-null
+    } as AnyAction;
+    const gasReturn = (opcode: string, actionId: string) => ({
+      ...ION_TRANSFER,
+      trace_id: traceId,
+      action_id: actionId,
+      type: 'call_contract',
+      details: { opcode, source: SENDER_RAW, destination: WALLET_RAW, value: '100000000' },
+    }) as AnyAction;
+
+    const activities = parseActionsToActivities([
+      gasReturn('0x7362d09c', 'notification'),
+      gasReturn('0xd53276db', 'excess'),
+      failedWithdrawal,
+      { ...ION_TRANSFER, action_id: 'independent', trace_id: 'another-trace' },
+    ], options);
+
+    expect(activities).toHaveLength(2);
+    expect(activities.map(({ status }) => status)).toEqual(['failed', 'completed']);
+  });
 });
