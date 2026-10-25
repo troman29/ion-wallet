@@ -1,7 +1,7 @@
 import type { ParsedAction, ParsedTrace, TraceOutput } from '../types';
 
 import { TRACE_ACTIVITY_RULES } from './technicalChildRules';
-import { getHiddenActivityIdsFromTrace } from './traceActivityProjection';
+import { getHiddenActivityIdsByOutput } from './traceActivityProjection';
 
 const HOLDER = '0:wallet';
 
@@ -34,7 +34,7 @@ function trace(outputs: ParsedAction[][]): ParsedTrace {
 
 describe('trace output activity projection', () => {
   it('hides technical returns belonging to the same output as a failed request', () => {
-    const hiddenIds = getHiddenActivityIdsFromTrace(trace([[
+    const hiddenIds = getHiddenActivityIdsByOutput(trace([[
       request(),
       refund('notification', '0x7362d09c'),
       refund('excess', '0xd53276db'),
@@ -44,7 +44,7 @@ describe('trace output activity projection', () => {
   });
 
   it('keeps an action in another output of the same trace', () => {
-    const hiddenIds = getHiddenActivityIdsFromTrace(trace([
+    const hiddenIds = getHiddenActivityIdsByOutput(trace([
       [request()],
       [refund('excess', '0xd53276db')],
     ]), TRACE_ACTIVITY_RULES);
@@ -54,7 +54,7 @@ describe('trace output activity projection', () => {
 
   it('keeps an action that is also visible in another output', () => {
     const excess = refund('excess', '0xd53276db');
-    const hiddenIds = getHiddenActivityIdsFromTrace(trace([
+    const hiddenIds = getHiddenActivityIdsByOutput(trace([
       [request(), excess],
       [excess],
     ]), TRACE_ACTIVITY_RULES);

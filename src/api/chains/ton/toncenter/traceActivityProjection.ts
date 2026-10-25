@@ -6,7 +6,7 @@ export type TraceActivityRule = {
   isTechnicalChild: (primary: ParsedAction, child: ParsedAction) => boolean;
 };
 
-export function getHiddenActivityIdsFromTrace(
+export function getHiddenActivityIdsByOutput(
   parsedTrace: ParsedTrace,
   rules: readonly TraceActivityRule[],
 ): Set<string> {

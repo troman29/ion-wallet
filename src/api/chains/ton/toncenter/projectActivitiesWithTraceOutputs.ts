@@ -4,7 +4,7 @@ import { throwIfAborted } from '../../../../util/abortSignal';
 import { logDebugError } from '../../../../util/logs';
 import { fetchAndParseTrace } from '../traces';
 import { TRACE_ACTIVITY_RULES } from './technicalChildRules';
-import { getHiddenActivityIdsFromTrace } from './traceActivityProjection';
+import { getHiddenActivityIdsByOutput } from './traceActivityProjection';
 
 export async function projectActivitiesWithTraceOutputs(
   network: ApiNetwork,
@@ -27,7 +27,7 @@ export async function projectActivitiesWithTraceOutputs(
     try {
       const parsedTrace = await fetchAndParseTrace(network, walletAddress, messageHash, false, signal);
       if (!parsedTrace) continue;
-      for (const id of getHiddenActivityIdsFromTrace(parsedTrace, TRACE_ACTIVITY_RULES)) hiddenIds.add(id);
+      for (const id of getHiddenActivityIdsByOutput(parsedTrace, TRACE_ACTIVITY_RULES)) hiddenIds.add(id);
     } catch (err) {
       throwIfAborted(signal);
       logDebugError('Failed to project TON trace activities', messageHash, err);

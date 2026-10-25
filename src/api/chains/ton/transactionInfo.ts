@@ -3,7 +3,7 @@ import type { ApiActivity, ApiFetchTransactionByIdOptions } from '../../types';
 import { logDebugError } from '../../../util/logs';
 import { parseActionsToActivities } from './toncenter/actions';
 import { TRACE_ACTIVITY_RULES } from './toncenter/technicalChildRules';
-import { getHiddenActivityIdsFromTrace } from './toncenter/traceActivityProjection';
+import { getHiddenActivityIdsByOutput } from './toncenter/traceActivityProjection';
 import { fetchTraceByIdOrHash, fetchTraceByTxHash } from './toncenter/traces';
 import { fillActivityDetails } from './activities';
 import { parseTrace } from './traces';
@@ -45,7 +45,7 @@ export async function fetchTransactionById(
         metadata,
         transactions: trace.transactions,
       });
-      const hiddenIds = getHiddenActivityIdsFromTrace(parsedTrace, TRACE_ACTIVITY_RULES);
+      const hiddenIds = getHiddenActivityIdsByOutput(parsedTrace, TRACE_ACTIVITY_RULES);
       activities = activities.filter(({ id }) => !hiddenIds.has(id));
     } catch (err) {
       logDebugError('fetchTransactionById.projectTraceActivities', err);
