@@ -7,7 +7,7 @@
   <string name="app_ion_gateway_url_scheme" translatable="false">ion-gateway</string>
   <string name="app_url_scheme" translatable="false">ion</string>
   <string name="wc_url_scheme" translatable="false">wc</string>
-  <string name="app_website_url" translatable="false">https://wallet.ice.io</string>
-  <string name="app_terms_of_use_url" translatable="false">https://wallet.ice.io/terms-of-use</string>
-  <string name="app_privacy_policy_url" translatable="false">https://wallet.ice.io/privacy-policy</string>
+  <string name="app_website_url" translatable="false"></string>
+  <string name="app_terms_of_use_url" translatable="false"></string>
+  <string name="app_privacy_policy_url" translatable="false"></string>
 </resources>

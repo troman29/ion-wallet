@@ -29,16 +29,6 @@
           android:host="connect.ionwallet.io"
           android:scheme="https" />
       </intent-filter>
-      <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-
-        <data
-          android:host="go.wallet.ice.io"
-          android:scheme="https" />
-      </intent-filter>
     </activity>
   </application>
 </manifest>

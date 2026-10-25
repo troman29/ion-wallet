@@ -7,8 +7,6 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:connect.ionwallet.io</string>
-		<string>applinks:go.wallet.ice.io</string>
-		<string>applinks:wallet.ice.io</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
