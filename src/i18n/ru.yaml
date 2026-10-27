@@ -247,6 +247,9 @@ at %annual_yield%: при %annual_yield%
 Staked: Стейкинг
 $stake_action: Стейкинг
 Unstaked: Вывод стейка
+Withdrawal from Staking: Вывод из стейкинга
+Withdrawing from Staking: Вывод из стейкинга
+$withdraw_from_staking_action: Вывести из стейкинга
 Unstaking: Вывод стейка
 $unstake_action: Вывод стейка
 The network fee has slightly changed, try sending again.: Комиссия за сеть немного изменилась, попробуйте отправить ещё раз.

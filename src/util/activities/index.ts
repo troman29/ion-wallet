@@ -17,7 +17,7 @@ type TranslationTenses = [past: string, present: string, future: string];
 
 const TRANSACTION_TYPE_TITLES: Partial<Record<ApiTransactionType & keyof any, TranslationTenses>> = {
   stake: ['Staked', 'Staking', '$stake_action'],
-  unstake: ['Unstaked', 'Unstaking', '$unstake_action'],
+  unstake: ['Withdrawal from Staking', 'Withdrawing from Staking', '$withdraw_from_staking_action'],
   unstakeRequest: ['Requested Unstake', 'Requesting Unstake', '$request_unstake_action'],
   callContract: ['Called Contract', 'Calling Contract', '$call_contract_action'],
   excess: ['Excess', 'Excess', 'Excess'],
