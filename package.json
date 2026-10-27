@@ -1,6 +1,6 @@
 {
   "name": "ion-wallet",
-  "version": "26.9.0",
+  "version": "1.0.0",
   "description": "Self-custodial ION Wallet for ION Network and BNB Chain.",
   "main": "index.js",
   "scripts": {
