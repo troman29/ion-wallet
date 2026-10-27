@@ -89,7 +89,7 @@ interface SortedDappTransfer extends ApiDappTransfer {
 }
 
 const NFT_FAKE_COST_USD = 1_000_000_000;
-const NOT_RESPONDING_DELAY_MS = 7000;
+const NOT_RESPONDING_DELAY_MS = 20000;
 
 const skeletonRows: DappSkeletonRow[] = [
   { isLarge: false, hasFee: false },
