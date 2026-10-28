@@ -1,1 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 128 128"><rect width="128" height="128" rx="27" fill="#11073C"/><g transform="translate(0 0) scale(1)"><path fill="#fff" transform="translate(22.9 23.8) scale(2.01)" d="M20.4513 0L18.5391 12.4776L20.4513 18.744L22.3637 12.4776L20.4513 0ZM20.4513 40.0019L22.3637 27.5243L20.4513 21.2578L18.5391 27.5243L20.4513 40.0019ZM40.9064 20.0008L28.1464 18.1309L21.7383 20.0008L28.1464 21.8707L40.9064 20.0008ZM0 20.0008L12.76 21.8707L19.1682 20.0008L12.76 18.1309L0 20.0008ZM34.8268 5.77344L24.4988 13.3357L21.3555 19.1078L27.2196 15.9641L34.8268 5.77344ZM6.07812 34.2289L16.4061 26.6667L19.5494 20.8945L13.6854 24.0382L6.07812 34.2289ZM35.0034 34.0579L27.27 23.9585L21.3672 20.8848L24.582 26.6189L35.0034 34.0579ZM5.90234 5.94531L13.6358 16.0448L19.5385 19.1185L16.3237 13.3842L5.90234 5.94531Z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 128 128"><rect width="128" height="128" rx="27" fill="#11073C"/><g transform="translate(0 0) scale(1)"><svg x="9" y="9" width="110" height="110" viewBox="180 150 900 900">
+<title id="title">ION — silver star and translucent curved ribbons</title>
+<desc id="desc">Eight silver rays with separately traced open ribbon surfaces and short blue return curves. Transparent background.</desc>
+<defs><linearGradient xmlns="http://www.w3.org/2000/svg" id="silver-light" x1="0" y1="0" x2="0.85" y2="1">
+      <stop stop-color="#FFFFFF" />
+      <stop offset="0.4" stop-color="#E5F5FF" />
+      <stop offset="0.72" stop-color="#A9D2F2" />
+      <stop offset="1" stop-color="#F4FAFF" />
+    </linearGradient>
+    <linearGradient xmlns="http://www.w3.org/2000/svg" id="silver-shade" x1="0" y1="0" x2="0.8" y2="1">
+      <stop stop-color="#EEE7ED" />
+      <stop offset="0.32" stop-color="#8E8EA8" />
+      <stop offset="0.68" stop-color="#354778" />
+      <stop offset="1" stop-color="#C9D9F1" />
+    </linearGradient>
+  <radialGradient id="blue-tip" gradientUnits="userSpaceOnUse" cx="944" cy="789" r="64"><stop stop-color="#D4F1FF" stop-opacity="0.9"/><stop offset="1" stop-color="#628EFF" stop-opacity="0"/></radialGradient><radialGradient id="bottom-curl-tip" gradientUnits="userSpaceOnUse" cx="932" cy="885" r="45"><stop stop-color="#D5E5FF" stop-opacity="0.98"/><stop offset="0.35" stop-color="#D5E5FF" stop-opacity="0.98"/><stop offset="1" stop-color="#9EBCF8" stop-opacity="0"/></radialGradient><linearGradient id="rise-blue" gradientUnits="userSpaceOnUse" x1="560" y1="392" x2="944" y2="258"><stop offset="0" stop-color="#071E79" stop-opacity="0.45"/><stop offset="0.3" stop-color="#1546C9" stop-opacity="0.68"/><stop offset="0.59" stop-color="#388AF2" stop-opacity="0.82"/><stop offset="0.84" stop-color="#9DEAFF" stop-opacity="0.94"/><stop offset="1" stop-color="#EBFCFF" stop-opacity="0.98"/></linearGradient><linearGradient id="right-violet" gradientUnits="userSpaceOnUse" x1="987" y1="292" x2="891" y2="539"><stop offset="0" stop-color="#D6E2FF" stop-opacity="0.95"/><stop offset="0.24" stop-color="#949FFF" stop-opacity="0.83"/><stop offset="0.63" stop-color="#4935D9" stop-opacity="0.68"/><stop offset="1" stop-color="#3320B0" stop-opacity="0.61"/></linearGradient><linearGradient id="left-fold" gradientUnits="userSpaceOnUse" x1="293" y1="354" x2="443" y2="524"><stop offset="0" stop-color="#EEFFFF" stop-opacity="0.98"/><stop offset="0.19" stop-color="#C1EAFF" stop-opacity="0.92"/><stop offset="0.42" stop-color="#5194F4" stop-opacity="0.83"/><stop offset="0.68" stop-color="#1540C8" stop-opacity="0.72"/><stop offset="1" stop-color="#071B7E" stop-opacity="0.6"/></linearGradient><linearGradient id="hook-violet" gradientUnits="userSpaceOnUse" x1="710" y1="427" x2="1024" y2="683"><stop offset="0" stop-color="#152195" stop-opacity="0.42"/><stop offset="0.35" stop-color="#2720BB" stop-opacity="0.55"/><stop offset="0.66" stop-color="#5B2BD7" stop-opacity="0.66"/><stop offset="0.85" stop-color="#9560ED" stop-opacity="0.8"/><stop offset="1" stop-color="#E4B9FF" stop-opacity="0.95"/></linearGradient><linearGradient id="blue-return" gradientUnits="userSpaceOnUse" x1="815" y1="804" x2="973" y2="733"><stop offset="0" stop-color="#092475" stop-opacity="0.4"/><stop offset="0.38" stop-color="#0C2DA7" stop-opacity="0.58"/><stop offset="0.77" stop-color="#1B54E4" stop-opacity="0.8"/><stop offset="1" stop-color="#2755D9" stop-opacity="0.7"/></linearGradient><linearGradient id="cyan-bow" gradientUnits="userSpaceOnUse" x1="334" y1="648" x2="277" y2="848"><stop offset="0" stop-color="#132759" stop-opacity="0.57"/><stop offset="0.27" stop-color="#3159B8" stop-opacity="0.7"/><stop offset="0.58" stop-color="#7EBEE6" stop-opacity="0.88"/><stop offset="0.87" stop-color="#C7F2FF" stop-opacity="0.95"/><stop offset="1" stop-color="#E5FFFF" stop-opacity="0.98"/></linearGradient><linearGradient id="bottom-blue" gradientUnits="userSpaceOnUse" x1="314" y1="888" x2="603" y2="915"><stop offset="0" stop-color="#D4FCFF" stop-opacity="0.98"/><stop offset="0.22" stop-color="#78BFFD" stop-opacity="0.88"/><stop offset="0.49" stop-color="#275CE0" stop-opacity="0.79"/><stop offset="0.8" stop-color="#142D9F" stop-opacity="0.65"/><stop offset="1" stop-color="#0A1C6A" stop-opacity="0.5"/></linearGradient><linearGradient id="low-return" gradientUnits="userSpaceOnUse" x1="908" y1="812" x2="939" y2="887"><stop offset="0" stop-color="#08206F" stop-opacity="0.32"/><stop offset="0.5" stop-color="#0B35A7" stop-opacity="0.6"/><stop offset="0.82" stop-color="#134ED0" stop-opacity="0.79"/><stop offset="1" stop-color="#B9D5FF" stop-opacity="0.95"/></linearGradient><linearGradient id="front-lavender" gradientUnits="userSpaceOnUse" x1="395" y1="663" x2="939" y2="898"><stop offset="0" stop-color="#2834BF" stop-opacity="0.3"/><stop offset="0.21" stop-color="#5446DC" stop-opacity="0.43"/><stop offset="0.43" stop-color="#8E74E8" stop-opacity="0.38"/><stop offset="0.65" stop-color="#6237D9" stop-opacity="0.62"/><stop offset="0.87" stop-color="#A0B0F5" stop-opacity="0.85"/><stop offset="1" stop-color="#E4F2FF" stop-opacity="0.98"/></linearGradient><linearGradient id="upper-rim" gradientUnits="userSpaceOnUse" x1="337" y1="340" x2="969" y2="380"><stop offset="0" stop-color="#E8FFFF" stop-opacity="0.9"/><stop offset="0.3" stop-color="#4783F7" stop-opacity="0.4"/><stop offset="0.72" stop-color="#B2EEFF" stop-opacity="0.82"/><stop offset="1" stop-color="#F2FBFF" stop-opacity="0.95"/></linearGradient><linearGradient id="lower-rim" gradientUnits="userSpaceOnUse" x1="295" y1="881" x2="939" y2="895"><stop offset="0" stop-color="#C3F9FF" stop-opacity="0.95"/><stop offset="0.3" stop-color="#4778E5" stop-opacity="0.45"/><stop offset="0.68" stop-color="#8C70F7" stop-opacity="0.5"/><stop offset="1" stop-color="#E5F4FF" stop-opacity="0.85"/></linearGradient></defs>
+<g id="visible-curves-behind"><path id="upper-rise" d="M548 361 L657 302 C797 223 905 236 949 274 C927 245 800 299 676 379 L573 425 Z" fill="url(#rise-blue)"/><path id="upper-right-turn" d="M949 274 C1004 325 989 440 942 565 C940 586 938 604 942 620 L832 580 C854 555 877 530 895 506 C947 406 975 303 949 274 Z" fill="url(#right-violet)"/><path id="upper-left-fold" d="M605 371 C492 342 444 326 395 329 C319 327 269 375 281 449 C286 490 314 540 345 580 L448 557 C386 496 325 419 337 374 C381 367 486 395 590 423 Z" fill="url(#left-fold)"/><path id="right-blue-return" d="M939 628 C983 684 986 722 941 762 C898 789 731 837 632 870 L630 930 C794 861 902 822 941 783 C978 757 997 695 939 628 Z" fill="url(#blue-return)"/><path id="right-blue-tip" d="M939 628 C983 684 986 722 941 762 C898 789 731 837 632 870 L630 930 C794 861 902 822 941 783 C978 757 997 695 939 628 Z" fill="url(#blue-tip)"/><path id="middle-violet-hook" d="M685 406 C820 457 961 546 1008 606 C1050 673 1024 743 941 783 C975 747 989 698 967 652 C947 602 863 540 794 499 L685 447 Z" fill="url(#hook-violet)"/><path id="lower-left-bow" d="M334 638 C270 696 234 760 263 814 C282 861 302 872 318 880 L309 870 C290 830 334 744 393 658 Z" fill="url(#cyan-bow)"/><path id="lower-blue-sweep" d="M318 880 C387 950 504 941 601 919 L584 837 C484 881 365 906 309 870 Z" fill="url(#bottom-blue)"/><path id="lower-right-return" d="M912 808 C934 841 942 865 933 895 L919 880 C943 862 939 840 912 808 Z" fill="url(#low-return)"/><path id="lower-right-highlight" d="M912 808 C934 841 942 865 933 895 L919 880 C943 862 939 840 912 808 Z" fill="url(#bottom-curl-tip)"/><g fill="none" stroke="url(#upper-rim)" stroke-width="1.3">
+<path d="M657 302 C797 223 905 236 949 274"/>
+<path d="M574 371 C492 342 444 326 395 329 C319 327 269 375 281 449 C286 490 314 540 345 580"/>
+<path d="M685 406 C820 457 961 546 1008 606 C1050 673 1024 743 941 783"/>
+</g></g>
+<g xmlns="http://www.w3.org/2000/svg" id="star" transform="translate(627 612)" stroke="#E3F0FF" stroke-width="1" stroke-opacity="0.8" stroke-linejoin="miter">
+    <g id="ray-0" transform="rotate(0)">
+      <path d="M 0 -6 L -66 -168 L 0 -426 Z" fill="url(#silver-light)" />
+      <path d="M 0 -6 L 0 -426 L 66 -168 Z" fill="url(#silver-shade)" />
+    </g>
+    <g id="ray-45" transform="rotate(45)">
+      <path d="M 0 -6 L -43 -165 L 0 -335 Z" fill="url(#silver-light)" />
+      <path d="M 0 -6 L 0 -335 L 43 -165 Z" fill="url(#silver-shade)" />
+    </g>
+    <g id="ray-90" transform="rotate(90)">
+      <path d="M 0 -6 L -61 -166 L 0 -386 Z" fill="url(#silver-light)" />
+      <path d="M 0 -6 L 0 -386 L 61 -166 Z" fill="url(#silver-shade)" />
+    </g>
+    <g id="ray-135" transform="rotate(135)">
+      <path d="M 0 -6 L -43 -164 L 0 -326 Z" fill="url(#silver-light)" />
+      <path d="M 0 -6 L 0 -326 L 43 -164 Z" fill="url(#silver-shade)" />
+    </g>
+    <g id="ray-180" transform="rotate(180)">
+      <path d="M 0 -6 L -66 -155 L 0 -393 Z" fill="url(#silver-shade)" />
+      <path d="M 0 -6 L 0 -393 L 66 -155 Z" fill="url(#silver-light)" />
+    </g>
+    <g id="ray-225" transform="rotate(225)">
+      <path d="M 0 -6 L -43 -164 L 0 -330 Z" fill="url(#silver-shade)" />
+      <path d="M 0 -6 L 0 -330 L 43 -164 Z" fill="url(#silver-light)" />
+    </g>
+    <g id="ray-270" transform="rotate(270)">
+      <path d="M 0 -6 L -61 -166 L 0 -390 Z" fill="url(#silver-shade)" />
+      <path d="M 0 -6 L 0 -390 L 61 -166 Z" fill="url(#silver-light)" />
+    </g>
+    <g id="ray-315" transform="rotate(315)">
+      <path d="M 0 -6 L -43 -164 L 0 -330 Z" fill="url(#silver-shade)" />
+      <path d="M 0 -6 L 0 -330 L 43 -164 Z" fill="url(#silver-light)" />
+    </g>
+  </g>
+
+<g id="foreground-curve"><path id="foreground-sweep" d="M391 658 C455 723 514 752 562 780 C694 855 866 923 919 880 L933 895 C906 982 708 896 562 814 C482 766 419 704 391 658 Z" fill="url(#front-lavender)"/><path id="foreground-curl-highlight" d="M391 658 C455 723 514 752 562 780 C694 855 866 923 919 880 L933 895 C906 982 708 896 562 814 C482 766 419 704 391 658 Z" fill="url(#bottom-curl-tip)"/><g fill="none" stroke="url(#lower-rim)" stroke-width="1.1">
+<path d="M391 658 C455 723 514 752 562 780 C694 855 866 923 919 880"/>
+<path d="M933 895 C906 982 708 896 562 814"/>
+</g></g>
+</svg>
+</g></svg>

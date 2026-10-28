@@ -1,10 +1,7 @@
 # ION Wallet visual assets
 
-The app uses the eight-ray ION mark on `#11073C`. It matches the mark on the
-[official ION website](https://ice.io/) and its
-[touch icon](https://ice.io/apple-touch-icon.png), checked on 2026-10-17.
-The vector geometry was already present in `src/assets/blockchain/chain_ton.svg`.
-The generated `ion-mark.svg` provides a transparent version for inspection.
+The wallet app icon uses `dev/branding/ion-wallet-arcs.svg` on `#11073C`.
+This source is separate from the ION coin and chain icons.
 
 ## Rebuild
 
@@ -23,7 +20,7 @@ palette names and image dimensions are preserved.
 - Android adaptive foregrounds keep the mark inside the safe zone. Notification
   images are white on transparent; splash includes a dark disk for contrast.
 - iOS app icons are opaque 1024 × 1024. The Icon Composer bundle contains one
-  vector ION layer instead of the inherited foreground layers.
+  vector wallet layer.
 - ICO contains 16–256 px PNG frames; ICNS contains 16–1024 px PNG representations.
 - The previously referenced but missing Electron `icon-256x256.png` is exported.
 - Animations and matching PNG previews use `ion_*` filenames describing their
