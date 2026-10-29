@@ -4,6 +4,7 @@ import { ApiAuthError, ApiCommonError } from '../../../api/types';
 import { AppState, AuthState, BiometricsState } from '../../types';
 
 import {
+  CREATE_MULTICHAIN_WALLET,
   MNEMONIC_CHECK_COUNT,
   MNEMONIC_COUNT,
   TEMPORARY_ACCOUNT_NAME,
@@ -194,7 +195,7 @@ addActionHandler('startCreatingWallet', async (global, actions, payload) => {
   }
 
   const generateMnemonicPromise = callApi(
-    'generateMnemonic', !global.auth.forceAddingTonOnlyAccount,
+    'generateMnemonic', CREATE_MULTICHAIN_WALLET && !global.auth.forceAddingTonOnlyAccount,
   );
 
   setGlobal(
