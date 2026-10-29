@@ -361,6 +361,7 @@ export type ApiUpdateConfig = {
   type: 'updateConfig';
   isLimited: boolean;
   isCopyStorageEnabled: boolean;
+  isLegacyIonRecoveryEnabled: boolean;
   isAppUpdateRequired: boolean;
 };
 

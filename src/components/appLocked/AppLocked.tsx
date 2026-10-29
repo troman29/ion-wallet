@@ -331,7 +331,7 @@ function AppLocked({
 }
 
 export default memo(withGlobal((global): StateProps => {
-  const { authTypes, settings: { autolockValue, isAppLockEnabled } } = global;
+  const { authTypes, ionDerivationMigrationCount, settings: { autolockValue, isAppLockEnabled } } = global;
   const hasPassword = selectHasPassword(global);
   // Must follow the same source of truth as `canRender`: a not-yet-migrated user has no `authTypes` yet
   // still unlocks with biometrics, and the password form has nothing to offer them
@@ -340,7 +340,7 @@ export default memo(withGlobal((global): StateProps => {
   return {
     isBiometricOnly,
     autolockValue,
-    canRender: Boolean(isAppLockEnabled && hasPassword),
+    canRender: Boolean(hasPassword && (isAppLockEnabled || ionDerivationMigrationCount)),
     isAppLockEnabled,
     isManualLockActive: global.isManualLockActive,
     shouldHideBiometrics: global.appLockHideBiometrics,

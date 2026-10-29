@@ -3,6 +3,8 @@ import '../../util/bigintPatch';
 export { destroy } from './init';
 export * from './activities';
 export * from './auth';
+export * from './ionDerivationMigration';
+export * from './ionLegacyRecovery';
 export * from './wallet';
 export * from './transfer';
 export * from './nfts';

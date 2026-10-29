@@ -1007,6 +1007,27 @@ addActionHandler('upgradeMultichainAccounts', async (global, actions, { enclaveT
   }
 });
 
+addActionHandler('migrateLegacyIonDerivations', async (global, actions, { enclaveToken }) => {
+  const count = global.ionDerivationMigrationCount;
+  if (!count) return;
+  setGlobal({ ...global, ionDerivationMigrationCount: undefined });
+  holdEnclaveSession(enclaveToken);
+  try {
+    const failures = await callApi('migrateLegacyIonDerivations', enclaveToken);
+    const remaining = await callApi('getLegacyIonDerivationCandidateIds');
+    setGlobal({ ...getGlobal(), ionDerivationMigrationCount: remaining?.length || undefined });
+    if (!failures) {
+      logDebugError('migrateLegacyIonDerivations: worker unavailable');
+      actions.showToast({ message: 'ION address migration could not start. Your wallet is unchanged.' });
+    } else if (Object.keys(failures).length) {
+      logDebugError('migrateLegacyIonDerivations', failures);
+      actions.showToast({ message: 'ION address migration is pending. Your old address remains accessible.' });
+    }
+  } finally {
+    if (dropEnclaveSessionHold(enclaveToken)) actions.releaseEnclaveSession({ enclaveToken });
+  }
+});
+
 addActionHandler('addSubWallet', async (global, actions, { group }) => {
   const accountId = selectCurrentAccountId(global)!;
 
