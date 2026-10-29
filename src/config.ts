@@ -164,7 +164,7 @@ export const NFT_MARKETPLACE_TITLES: Record<ApiNftMarketplace, string> = {
 export const ION_STATIC_BASE_URL = 'https://static.wallet.ice.io';
 export const APP_WEBSITE_HOST = 'wallet.ice.io';
 export const APP_TERMS_OF_USE_URL = '';
-export const APP_PRIVACY_POLICY_URL = '';
+export const APP_PRIVACY_POLICY_URL = 'https://ionwallet.io/privacy-policy/';
 export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {};
 
 export const EMPTY_HASH_VALUE = 'NOHASH';

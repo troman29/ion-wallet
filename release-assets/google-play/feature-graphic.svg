@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">
+  <rect width="1024" height="500" fill="#11073c"/>
+  <circle cx="900" cy="180" r="390" fill="#25479b" opacity=".45"/>
+  <circle cx="920" cy="420" r="290" fill="#1355b7" opacity=".25"/>
+  <circle cx="824" cy="228" r="216" fill="none" stroke="#a1b9ff" stroke-opacity=".25" stroke-width="2"/>
+  <circle cx="824" cy="228" r="268" fill="none" stroke="#a1b9ff" stroke-opacity=".12" stroke-width="2"/>
+  <text x="72" y="183" fill="#d1defe" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" letter-spacing="2">ICE OPEN NETWORK</text>
+  <text x="68" y="270" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700">ION Wallet</text>
+  <text x="72" y="330" fill="#e1e9ff" font-family="Arial, Helvetica, sans-serif" font-size="31">Your ION. Right at home.</text>
+  <rect x="72" y="370" width="76" height="4" rx="2" fill="#88d2ff"/>
+  <text x="72" y="417" fill="#c6d5fa" font-family="Arial, Helvetica, sans-serif" font-size="19">Self-custodial wallet for ION</text>
+</svg>
