@@ -11,6 +11,7 @@ import type {
   ApiSignedTransfer,
   ApiSubmitGasfullTransferOptions,
   ApiSubmitGasfullTransferResult,
+  ApiTonWallet,
   ApiWalletInfo,
 } from '../../types';
 import type {
@@ -350,7 +351,7 @@ export async function checkToAddress(network: ApiNetwork, toAddress: string, sig
 }
 
 export async function submitGasfullTransfer(
-  options: CustomTransactionOptions<ApiSubmitGasfullTransferOptions>,
+  options: CustomTransactionOptions<ApiSubmitGasfullTransferOptions> & { sourceWallet?: ApiTonWallet },
 ): Promise<ApiSubmitGasfullTransferResult | { error: string }> {
   const {
     accountId,
@@ -368,7 +369,11 @@ export async function submitGasfullTransfer(
   const { network } = parseAccountId(accountId);
 
   try {
-    const account = await fetchStoredChainAccount(accountId, 'ton');
+    const storedAccount = await fetchStoredChainAccount(accountId, 'ton');
+    const account = options.sourceWallet ? {
+      ...storedAccount,
+      byChain: { ...storedAccount.byChain, ton: options.sourceWallet },
+    } : storedAccount;
     const { address: fromAddress } = account.byChain.ton;
     const wallet = getTonWallet(account.byChain.ton);
     const signer = getSigner(accountId, account, enclaveToken);

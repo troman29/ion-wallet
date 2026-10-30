@@ -209,8 +209,19 @@ function updateCache(force?: boolean) {
     return;
   }
 
-  const global = getGlobalWithoutTemporaryAccount();
+  writeCache(getGlobalWithoutTemporaryAccount());
+}
 
+export function saveGlobalCacheNow(global: GlobalState) {
+  if (GLOBAL_STATE_CACHE_DISABLED) return;
+  writeCache(global);
+  const saved = localStorage.getItem(GLOBAL_STATE_CACHE_KEY);
+  if (!saved || JSON.parse(saved).accounts?.byId === undefined) {
+    throw new Error('Failed to verify wallet cache');
+  }
+}
+
+function writeCache(global: GlobalState) {
   const accountsById = global.accounts?.byId || {};
   const accountIds = Object.keys(accountsById);
   const reducedGlobal: GlobalState = {

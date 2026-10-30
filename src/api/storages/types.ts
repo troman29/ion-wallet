@@ -33,6 +33,7 @@ export interface Storage {
 }
 
 export type StorageKey = 'accounts'
+  | 'ionDerivationMigrations'
   | 'stateVersion'
   | 'currentAccountId'
   | 'clientId'

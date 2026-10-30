@@ -136,6 +136,7 @@ function PasswordForm({
     setIsAutoConfirmEnabled,
     setEnclaveSession,
     upgradeMultichainAccounts,
+    migrateLegacyIonDerivations,
   } = getActions();
 
   const lang = useLang();
@@ -166,8 +167,11 @@ function PasswordForm({
   const usageCount = extraUsages ? 1 + extraUsages : undefined;
 
   const handleAuthorized = useLastCallback((enclaveToken: string) => {
-    // The handler is a no-op when there is nothing to upgrade
-    upgradeMultichainAccounts({ enclaveToken });
+    if (operationType === 'unlock' && getGlobal().ionDerivationMigrationCount) {
+      migrateLegacyIonDerivations({ enclaveToken });
+    } else {
+      upgradeMultichainAccounts({ enclaveToken });
+    }
     onAuthorize(enclaveToken);
   });
 

@@ -7,7 +7,7 @@ import {
   TONCOIN,
 } from '../config';
 import { EVM_DERIVATION_PATHS } from '../api/chains/evm/constants';
-import { TON_BIP39_PATH } from '../api/chains/ton/derivationConstants';
+import { ION_BIP39_PATH } from '../api/chains/ton/derivationConstants';
 import formatTonTransferUrl from './ton/formatTransferUrl';
 import { buildCollectionByKey } from './iteratees';
 import withCache from './withCache';
@@ -157,7 +157,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     isEncryptedCommentSupported: true,
     canTransferFullNativeBalance: true,
     isSubwalletsSupported: true,
-    defaultDerivationPath: TON_BIP39_PATH,
+    defaultDerivationPath: ION_BIP39_PATH,
     isNftSupported: true,
     addressRegex: /^([-\w_]{48}|0:[\da-h]{64})$/i,
     addressPrefixRegex: /^([-\w_]{1,48}|0:[\da-h]{0,64})$/i,

@@ -119,6 +119,11 @@ Hide Tiny Transfers: Скрывать мелкие переводы
 Toggle Hide Tiny Transfers: Переключить отображение мелких переводов
 Network: Сеть
 Developer Options: Инструменты разработчика
+Recover funds from %address%: Вывести средства с %address%
+Recover LION and ION: Вывести LION и ION
+Legacy funds recovered: Средства со старого адреса выведены
+Transfer pending. Try again after confirmation.: Перевод ещё подтверждается. Повторите позже.
+Unable to recover legacy funds: Не удалось вывести средства со старого адреса
 All Wallet Versions: Все версии кошелька
 Create TON-Only Wallet: Создать ION-кошелёк
 Confirmation: Подтверждение

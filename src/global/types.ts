@@ -325,6 +325,7 @@ export type AccountType = 'mnemonic' | 'view';
 
 export interface AccountChain {
   address: string;
+  legacyIonAddress?: string;
   domain?: string;
   isMultisig?: true;
   derivation?: ApiDerivation;
@@ -529,6 +530,7 @@ export type GlobalState = {
    * it has not run yet.
    */
   multichainUpgradeCount?: number;
+  ionDerivationMigrationCount?: number;
 
   biometrics: {
     state: BiometricsState;
@@ -835,6 +837,7 @@ export type GlobalState = {
   };
 
   isAppLockActive?: boolean;
+  isLegacyIonRecoveryEnabled?: boolean;
   isManualLockActive?: boolean;
   appLockHideBiometrics?: boolean;
   isFullscreen?: boolean;
@@ -888,6 +891,7 @@ export interface ActionPayloads {
   addAllFoundSubwallets: { foundSubwallets: ApiGroupedWalletVariant[] };
   createSubWallet: { enclaveToken: string };
   upgradeMultichainAccounts: { enclaveToken: string };
+  migrateLegacyIonDerivations: { enclaveToken: string };
   importViewAccount: { addressByChain: ApiImportAddressByChain };
   openTemporaryViewAccount: { addressByChain: Partial<Record<ApiChain, string>> };
   saveTemporaryAccount: undefined;

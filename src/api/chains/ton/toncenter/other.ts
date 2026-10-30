@@ -59,7 +59,7 @@ export async function getWalletInfos(
   const { wallets: states, address_book: addressBook } = await callToncenterV3<{
     address_book: AddressBook;
     wallets: WalletState[];
-  }>(network, '/walletStates', { address: addresses.join(',') }, signal);
+  }>(network, '/walletStates', { address: addresses.map(toRawAddress).join(',') }, signal);
 
   const walletInfoByRawAddress = Object.fromEntries(states.map((state) => [
     state.address.toLowerCase(),
