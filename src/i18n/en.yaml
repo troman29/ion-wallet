@@ -246,6 +246,9 @@ Est. %annual_yield%: Est. %annual_yield%
 Staked: Staked
 $stake_action: Stake
 Unstaked: Unstaked
+Withdrawal from Staking: Withdrawal from Staking
+Withdrawing from Staking: Withdrawing from Staking
+$withdraw_from_staking_action: Withdraw from Staking
 Not staked: Not staked
 Unstaking: Unstaking
 $unstake_action: Unstake
@@ -864,6 +867,9 @@ $domains_amount %count%:
   oneValue: "%count% domain"
   otherValue: "%count% domains"
 Stake: Stake
+Attached to Contract: Attached to contract
+Estimated Unstake: Estimated unstake
+Burned Staking Tokens: Burned staking tokens
 Manage Tokens: Manage Tokens
 Claim Rewards: Claim Rewards
 Configure DNS: Configure DNS

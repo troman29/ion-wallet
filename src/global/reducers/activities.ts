@@ -82,7 +82,9 @@ export function addInitialActivities(
   if (areAllLoaded) {
     const initialIdsMain = buildMainActivityIds(byId, mainActivityIdsByChain, mainHistoryHasMoreByChain);
     const initialIds = new Set(Object.values(mainActivityIdsByChain).flat());
-    const nonInitialIdsMain = (idsMain ?? []).filter((id) => !initialIds.has(id));
+    const nonInitialIdsMain = (idsMain ?? []).filter((id) => {
+      return !initialIds.has(id) && byId[id]?.shouldHide !== true;
+    });
 
     idsMain = mergeSortedActivityIds(byId, initialIdsMain, nonInitialIdsMain);
 
@@ -95,7 +97,9 @@ export function addInitialActivities(
     // Keep local/pending activities visible while initial multi-chain history is still loading;
     // initial ids are dropped to avoid showing partial history before all chains report in.
     const initialIds = new Set(Object.values(mainActivityIdsByChain).flat());
-    const nonInitialIdsMain = (idsMain ?? []).filter((id) => !initialIds.has(id));
+    const nonInitialIdsMain = (idsMain ?? []).filter((id) => {
+      return !initialIds.has(id) && byId[id]?.shouldHide !== true;
+    });
     idsMain = nonInitialIdsMain.length > 0 ? nonInitialIdsMain : undefined;
   }
 
@@ -166,7 +170,7 @@ export function addNewActivities(
     };
   }
 
-  return updateAccountState(global, accountId, {
+  global = updateAccountState(global, accountId, {
     activities: {
       ...activities,
       idsMain,
@@ -177,6 +181,8 @@ export function addNewActivities(
       pendingActivityIds,
     },
   });
+
+  return global;
 }
 
 export function addPastActivities(
@@ -193,9 +199,10 @@ export function addPastActivities(
   } = activities || {};
 
   byId = mergeActivitiesByIdPreservingStatusProgress(byId, pastActivities);
+  const visiblePastActivities = pastActivities.filter(({ shouldHide }) => shouldHide !== true);
 
   if (tokenSlug) {
-    idsBySlug = mergeIdsBySlug(idsBySlug, { [tokenSlug]: extractKey(pastActivities, 'id') }, byId);
+    idsBySlug = mergeIdsBySlug(idsBySlug, { [tokenSlug]: extractKey(visiblePastActivities, 'id') }, byId);
     newestActivitiesBySlug = getNewestActivitiesBySlug({ byId, idsBySlug, newestActivitiesBySlug }, [tokenSlug]);
 
     if (isEndReached) {
@@ -231,10 +238,16 @@ export function addPastActivities(
         mainHistoryHasMoreByChain ?? {},
       );
       const trackedIds = new Set(Object.values(mainActivityIdsByChain).flat());
-      const untrackedIdsMain = (idsMain ?? []).filter((id) => !trackedIds.has(id));
+      const untrackedIdsMain = (idsMain ?? []).filter((id) => {
+        return !trackedIds.has(id) && byId[id]?.shouldHide !== true;
+      });
       idsMain = mergeSortedActivityIds(byId, recomputedMainIds, untrackedIdsMain);
     } else {
-      idsMain = mergeSortedActivityIds(byId, idsMain ?? [], extractKey(pastActivities, 'id'));
+      idsMain = mergeSortedActivityIds(
+        byId,
+        (idsMain ?? []).filter((id) => byId[id]?.shouldHide !== true),
+        extractKey(visiblePastActivities, 'id'),
+      );
     }
 
     if (isEndReached) {
@@ -514,7 +527,8 @@ function mergeIdsBySlug(
     ...oldIdsBySlug,
     ...mapValues(newIdsBySlug, (newIds, slug) => {
       // There may be newer local transactions in `idsBySlug`, so a sorting is needed
-      return mergeSortedActivityIds(activityById, newIds, oldIdsBySlug?.[slug] ?? []);
+      return mergeSortedActivityIds(activityById, newIds, oldIdsBySlug?.[slug] ?? [])
+        .filter((id) => activityById[id]?.shouldHide !== true);
     }),
   };
 }
@@ -574,5 +588,8 @@ function buildMainActivityIds(
     return chainIds.filter((id) => (byId[id]?.timestamp ?? -Infinity) >= paginationBoundary);
   });
 
-  return mergeSortedActivityIds(byId, ...idLists);
+  return mergeSortedActivityIds(
+    byId,
+    ...idLists.map((ids) => ids.filter((id) => byId[id]?.shouldHide !== true)),
+  );
 }

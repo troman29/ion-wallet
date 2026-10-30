@@ -1,0 +1,8 @@
+.git
+.env*
+node_modules
+dist
+mobile/android/.gradle
+mobile/android/app/build
+mobile/ios/Pods
+release-assets

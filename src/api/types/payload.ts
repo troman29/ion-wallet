@@ -82,6 +82,14 @@ export type ApiLiquidStakingDepositPayload = {
   appId?: bigint;
 };
 
+export type ApiLiquidStakingWithdrawPayload = {
+  type: 'liquid-staking:withdraw';
+  queryId: bigint;
+  jettonAmount: bigint;
+  fromAddress: string;
+  responseAddress: string;
+};
+
 export type ApiLiquidStakingWithdrawalNftPayload = {
   type: 'liquid-staking:withdrawal-nft';
   queryId: bigint;
@@ -151,6 +159,7 @@ export type ApiParsedPayload = ApiCommentPayload
   | ApiUnknownPayload
   | ApiTokensBurnPayload
   | ApiLiquidStakingDepositPayload
+  | ApiLiquidStakingWithdrawPayload
   | ApiLiquidStakingWithdrawalPayload
   | ApiLiquidStakingWithdrawalNftPayload
   | ApiDnsChangeRecord

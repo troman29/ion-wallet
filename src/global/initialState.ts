@@ -28,7 +28,7 @@ import { mapValues } from '../util/iteratees';
 import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
 // First persisted-state schema for ION Wallet. Increment when adding a cache migration.
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 
 export const INITIAL_STATE: GlobalState = {
   appState: AppState.Auth,
@@ -84,7 +84,7 @@ export const INITIAL_STATE: GlobalState = {
     state: SettingsState.Initial,
     theme: THEME_DEFAULT,
     animationLevel: ANIMATION_LEVEL_DEFAULT,
-    areTinyTransfersHidden: true,
+    areTinyTransfersHidden: false,
     areUnverifiedNftsHidden: true,
     areTokenNamesLocalized: true,
     canPlaySounds: true,

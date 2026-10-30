@@ -1,0 +1,33 @@
+FROM node:22-alpine AS build
+WORKDIR /app
+ENV HUSKY=0
+RUN apk add --no-cache bash
+COPY package.json package-lock.json ./
+COPY patches ./patches
+RUN npm ci
+COPY . .
+
+ARG APP_COMMIT_HASH=unknown
+ARG BRANCH=unknown
+ARG BRILLIANT_API_BASE_URL=https://api.ionwallet.io
+ARG PROXY_API_BASE_URL=https://api.ionwallet.io
+ARG NO_PENDING_ACTIVITIES=1
+ARG NO_TRACE_EMULATION=1
+ARG NO_WEBSOCKET=1
+ARG CREATE_MULTICHAIN_WALLET=0
+ARG ENABLE_EXCHANGE=0
+ENV APP_COMMIT_HASH=$APP_COMMIT_HASH \
+    BRANCH=$BRANCH \
+    BRILLIANT_API_BASE_URL=$BRILLIANT_API_BASE_URL \
+    PROXY_API_BASE_URL=$PROXY_API_BASE_URL \
+    NO_PENDING_ACTIVITIES=$NO_PENDING_ACTIVITIES \
+    NO_TRACE_EMULATION=$NO_TRACE_EMULATION \
+    NO_WEBSOCKET=$NO_WEBSOCKET \
+    CREATE_MULTICHAIN_WALLET=$CREATE_MULTICHAIN_WALLET \
+    ENABLE_EXCHANGE=$ENABLE_EXCHANGE
+RUN npm run build:production
+
+FROM nginx:1.27-alpine
+COPY deploy/nginx-web.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/ /usr/share/nginx/html/
+EXPOSE 80

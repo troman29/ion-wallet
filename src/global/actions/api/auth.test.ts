@@ -95,6 +95,43 @@ describe('add-account routing', () => {
     }
   });
 
+  it('keeps the forced ION-only wallet native when multichain creation is enabled', async () => {
+    (callApi as jest.Mock).mockResolvedValueOnce(Array(24).fill('test'));
+
+    await run('startCreatingWallet', makeGlobal({
+      auth: { forceAddingTonOnlyAccount: true },
+      accounts: { byId: {} },
+    } as Partial<GlobalState>));
+
+    expect(callApi).toHaveBeenLastCalledWith('generateMnemonic', false);
+  });
+
+  it.each(['startCreatingWallet', 'startImportingWallet'])(
+    'uses fresh state after storage checks in %s', async (action) => {
+      (enclave.hasStoredSecrets as jest.Mock).mockResolvedValue(false);
+      (callApi as jest.Mock).mockResolvedValueOnce(Array(12).fill('test'));
+
+      let version = 1;
+      store = makeGlobal({ accounts: { byId: {} }, DEBUG_randomId: version } as Partial<GlobalState>);
+      (getGlobal as jest.Mock).mockImplementation(() => {
+        const current = { ...store, DEBUG_randomId: version };
+        queueMicrotask(() => {
+          version += 1;
+        });
+        return current;
+      });
+      (setGlobal as jest.Mock).mockImplementation((next: GlobalState) => {
+        expect(next.DEBUG_randomId).toBe(version);
+        store = next;
+        version += 1;
+      });
+
+      await getHandler(action)(store, {});
+
+      expect(store.auth.method).toBe(action === 'startCreatingWallet' ? 'createAccount' : 'importMnemonic');
+    },
+  );
+
   it.each(['startImportingWallet', 'startCreatingWallet'])('recovers stored protection before %s', async (action) => {
     (enclave.isAuthProvisioned as jest.Mock).mockImplementation((type: string) => Promise.resolve(type === 'passcode'));
     const result = await run(action, makeGlobal({ authTypes: undefined }));

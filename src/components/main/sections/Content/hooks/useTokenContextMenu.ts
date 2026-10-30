@@ -7,6 +7,7 @@ import type { DropdownItem } from '../../../../ui/Dropdown';
 import { SettingsState } from '../../../../../global/types';
 
 import {
+  ENABLE_EXCHANGE,
   STAKING_SLUG_PREFIX,
 } from '../../../../../config';
 import { vibrate } from '../../../../../util/haptics';
@@ -112,7 +113,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
         fontIcon: 'menu-send',
         value: 'send',
       } satisfies DropdownItem<MenuHandler>,
-      {
+      ENABLE_EXCHANGE && {
         name: 'Exchange',
         fontIcon: 'menu-send',
         value: 'exchange',

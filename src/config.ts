@@ -42,8 +42,8 @@ export const IS_HEADLESS = process.env.IS_HEADLESS === '1';
 
 export const ELECTRON_HOST_URL = 'https://dumb-host';
 export const INACTIVE_MARKER = '[Inactive]';
-export const PRODUCTION_URL = 'https://wallet.ice.io';
-export const BETA_URL = 'https://beta.wallet.ice.io';
+export const PRODUCTION_URL = 'https://web.ionwallet.io';
+export const BETA_URL = 'https://web.ionwallet.io';
 // Beta desktop auto-update feed base. This is BOTH the staging gate poll base and the value baked
 // into app-update.yml by the generic electron-builder provider - the two must agree.
 export const BETA_UPDATE_URL = 'https://s3.wallet.ice.io/public/desktop-beta';
@@ -60,9 +60,9 @@ export const APP_DOWNLOAD_URLS: Partial<Record<
 >> = {};
 export const APP_INSTALL_URL = APP_DOWNLOAD_URLS.landing;
 export const APP_REPO_URL = 'https://github.com/troman29/ion-wallet';
-export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
-export const APP_WEBSITE_URL = 'https://wallet.ice.io';
-export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
+export const SELF_UNIVERSAL_HOST_URL = 'https://web.ionwallet.io';
+export const APP_WEBSITE_URL = 'https://ionwallet.io';
+export const APP_ICON_URL = 'https://web.ionwallet.io/icon-512x512.png';
 
 // GitHub workflow uses an empty string as the default value if it's not in repository variables, so we cannot define a default value here
 export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
@@ -84,6 +84,7 @@ export const NATIVE_BIOMETRICS_SERVER = 'https://wallet.ice.io';
 export const MNEMONIC_COUNT = 24;
 export const MNEMONIC_COUNTS = [12, 24];
 export const CREATE_MULTICHAIN_WALLET = process.env.CREATE_MULTICHAIN_WALLET === '1';
+export const ENABLE_EXCHANGE = process.env.ENABLE_EXCHANGE === '1';
 
 export const PRIVATE_KEY_HEX_LENGTH = 64;
 export const MNEMONIC_CHECK_COUNT = 3;
@@ -131,7 +132,7 @@ export const ELECTRON_TONCENTER_TESTNET_KEY = process.env.ELECTRON_TONCENTER_TES
 export const BRILLIANT_API_BASE_URL = process.env.BRILLIANT_API_BASE_URL || 'https://api.ionwallet.io';
 export const PROXY_API_BASE_URL = process.env.PROXY_API_BASE_URL || 'https://api.ionwallet.io';
 export const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
-export const SSE_BRIDGE_URL = 'https://tonconnectbridge.wallet.ice.io/bridge/';
+export const SSE_BRIDGE_URL = 'https://bridge.ionwallet.io/bridge/';
 
 export const WALLET_CONNECT_BRIDGE_PATTERNS = 'https://*.walletconnect.com https://*.walletconnect.org wss://*.walletconnect.com wss://*.walletconnect.org';
 

@@ -1,11 +1,18 @@
 import type { ApiNft } from '../../api/types';
 
 import { makeMockTransactionActivity } from '../../../tests/mocks';
-import { getIsHiddenNftActivity, isScamTransaction } from '.';
+import { getIsHiddenNftActivity, getTransactionTitle, isScamTransaction } from '.';
 
 const WHITELISTED_ADDRESS = 'EQNft_Whitelisted_0000000000000000000000000000000000000';
 const BLACKLISTED_ADDRESS = 'EQNft_Blacklisted_0000000000000000000000000000000000000';
 const PLAIN_ADDRESS = 'EQNft_Plain_00000000000000000000000000000000000000000000';
+
+describe('getTransactionTitle', () => {
+  it('identifies a staking withdrawal in activity history', () => {
+    const activity = makeMockTransactionActivity({ type: 'unstake', isIncoming: true });
+    expect(getTransactionTitle(activity, 'past', (key) => key)).toBe('Withdrawal from Staking');
+  });
+});
 
 function makeNft(partial: Partial<ApiNft> = {}): ApiNft {
   return {

@@ -150,21 +150,24 @@ addActionHandler('resetAuth', (global) => {
 
 // UI cache can be absent after interrupted onboarding while the Enclave still protects secrets.
 // Recover only auth metadata; never replace the master key to make a new-PIN screen succeed.
-async function restoreStoredAuthTypes(global: GlobalState) {
-  if (selectHasPassword(global) || !await enclave.hasStoredSecrets()) return getGlobal();
+async function getStoredAuthTypes(global: GlobalState): Promise<AuthType[] | undefined> {
+  if (selectHasPassword(global) || !await enclave.hasStoredSecrets()) return undefined;
 
   const authTypes: AuthType[] = [];
   for (const type of ['passcode', 'biometric'] as const) {
     if (await enclave.isAuthProvisioned(type)) authTypes.push(type);
   }
 
-  global = getGlobal();
-  return !selectHasPassword(global) && authTypes.length ? { ...global, authTypes } : global;
+  return authTypes.length ? authTypes : undefined;
 }
 
 addActionHandler('startCreatingWallet', async (global, actions, payload) => {
   const { enclaveToken } = payload ?? {};
-  global = await restoreStoredAuthTypes(global);
+  const storedAuthTypes = await getStoredAuthTypes(global);
+  global = getGlobal();
+  if (!selectHasPassword(global) && storedAuthTypes) {
+    global = { ...global, authTypes: storedAuthTypes };
+  }
 
   const accounts = selectAccounts(global) ?? {};
   const isFirstAccount = isEmptyObject(accounts);
@@ -593,7 +596,11 @@ addActionHandler('skipCheckMnemonic', (global, actions) => {
 
 addActionHandler('startImportingWallet', async (global, actions, payload) => {
   const { enclaveToken } = payload ?? {};
-  global = await restoreStoredAuthTypes(global);
+  const storedAuthTypes = await getStoredAuthTypes(global);
+  global = getGlobal();
+  if (!selectHasPassword(global) && storedAuthTypes) {
+    global = { ...global, authTypes: storedAuthTypes };
+  }
   const hasPassword = selectHasPassword(global);
   const state = hasPassword && !enclaveToken && !selectIsEnclaveSessionValid(global)
     ? AuthState.importWalletCheckPassword

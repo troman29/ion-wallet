@@ -56,19 +56,25 @@ export const selectAccountTokensMemoizedFor = withCache((accountId: string) => m
   areTokensWithNoCostHidden: boolean = false,
   baseCurrency: ApiBaseCurrency,
   currencyRates: ApiCurrencyRates,
-  hasActivities: boolean = false,
-  accountChains?: readonly ApiChain[],
+  hasActivities: boolean,
+  accountByChain: Account['byChain'],
 ) => {
   const { network } = parseAccountId(accountId);
   const shouldShowOnlyDefaultTokens = !hasActivities && getAreAllBalancesNearZero(balancesBySlug, tokenInfo);
   // Balances are seeded for every default slug regardless of the account, so a single-chain account
   // would otherwise be offered rows it cannot use
-  const defaultEnabledSlugs = getDefaultEnabledSlugs(network, accountChains);
+  const defaultEnabledSlugs = getDefaultEnabledSlugs(
+    network, Object.keys(accountByChain) as ApiChain[],
+  );
   const pinnedSlugs = accountSettings.pinnedSlugs ?? [];
 
   const tokens = Object
     .entries(balancesBySlug)
-    .filter(([slug]) => (slug in tokenInfo.bySlug && !accountSettings.deletedSlugs?.includes(slug)))
+    .filter(([slug]) => {
+      const token = tokenInfo.bySlug[slug];
+      return token && token.chain in accountByChain
+        && !accountSettings.deletedSlugs?.includes(slug);
+    })
     .map(([slug, balance]): UserToken => {
       const {
         symbol, name, localizedName, image, decimals, cmcSlug, color, chain, tokenAddress, codeHash,
@@ -134,7 +140,8 @@ export function selectCurrentToncoinBalance(global: GlobalState) {
 export function selectAccountTokens(global: GlobalState, accountId: string) {
   const accountState = selectAccountState(global, accountId);
   const balancesBySlug = accountState?.balances?.bySlug;
-  if (!balancesBySlug || !global.tokenInfo) {
+  const account = selectAccount(global, accountId);
+  if (!balancesBySlug || !global.tokenInfo || !account) {
     return undefined;
   }
 
@@ -148,7 +155,7 @@ export function selectAccountTokens(global: GlobalState, accountId: string) {
     baseCurrency,
     global.currencyRates,
     getHasConfirmedActivities(accountState?.activities),
-    Object.keys(selectAccount(global, accountId)?.byChain ?? {}) as ApiChain[],
+    account.byChain,
   );
 }
 
@@ -287,7 +294,7 @@ export function selectMultipleAccountsTokensSlow(
       baseCurrency,
       currencyRates,
       getHasConfirmedActivities(accountState?.activities),
-      Object.keys(networkAccounts[accountId].byChain) as ApiChain[],
+      networkAccounts[accountId].byChain,
     );
   }
 

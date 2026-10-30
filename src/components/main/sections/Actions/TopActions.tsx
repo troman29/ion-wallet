@@ -4,7 +4,7 @@ import { getActions, withGlobal } from '../../../../global';
 import type { Theme } from '../../../../global/types';
 import type { StakingStateStatus } from '../../../../util/staking';
 
-import { ANIMATED_STICKER_ICON_PX } from '../../../../config';
+import { ANIMATED_STICKER_ICON_PX, ENABLE_EXCHANGE } from '../../../../config';
 import {
   selectAccountStakingState,
   selectAccountStakingStatesBySlug,
@@ -129,13 +129,15 @@ function TopActions({
         accentColor={accentColor}
         onClick={handleSendClick}
       />
-      <ActionButton
-        label={lang('Exchange')}
-        tgsUrl={stickerPaths.iconSend}
-        previewUrl={stickerPaths.preview.iconSend}
-        accentColor={accentColor}
-        onClick={handleTradeClick}
-      />
+      {ENABLE_EXCHANGE && (
+        <ActionButton
+          label={lang('Exchange')}
+          tgsUrl={stickerPaths.iconSend}
+          previewUrl={stickerPaths.preview.iconSend}
+          accentColor={accentColor}
+          onClick={handleTradeClick}
+        />
+      )}
       {!isEarnHidden && (
         <ActionButton
           label={lang(STAKING_TAB_TEXT_VARIANTS[stakingStatus])}

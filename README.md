@@ -34,6 +34,8 @@ npm run dev
 
 New wallets use a 24-word ION-only recovery phrase by default. Set `CREATE_MULTICHAIN_WALLET=1` at build time to create 12-word multichain wallets. Existing wallets can be imported with either format.
 
+Exchange is hidden by default while its ION bridge flow is unfinished. Set `ENABLE_EXCHANGE=1` at build time to show it.
+
 Useful checks:
 
 ```sh

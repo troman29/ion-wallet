@@ -3,7 +3,7 @@ import type { GlobalState } from '../types';
 import { BNB, TONCOIN } from '../../config';
 import { BSC_USDT_MAINNET, TON_USDT_MAINNET } from '../../../tests/mocks/tokens';
 import { INITIAL_STATE } from '../initialState';
-import { selectTokenInfoUserTokens } from './tokens';
+import { selectAccountTokens, selectTokenInfoUserTokens } from './tokens';
 
 const ACCOUNT_ID = 'mainnet-0';
 
@@ -71,5 +71,31 @@ describe('selectTokenInfoUserTokens', () => {
       ...global,
       isBackupWalletModalOpen: true,
     })).toBe(selectTokenInfoUserTokens(global));
+  });
+});
+
+describe('selectAccountTokens', () => {
+  it('hides tokens from chains missing from the account, even when balances are seeded', () => {
+    const global = buildGlobal();
+    delete global.accounts!.byId[ACCOUNT_ID].byChain.bnb;
+
+    const tokens = selectAccountTokens(global, ACCOUNT_ID)!;
+
+    expect(tokens.map(({ slug }) => slug)).toContain(TONCOIN.slug);
+    expect(tokens.every(({ chain }) => chain === 'ton')).toBe(true);
+    expect(tokens.some(({ slug }) => slug === BNB.slug)).toBe(false);
+  });
+
+  it('keeps BNB tokens available in a multichain account', () => {
+    const global = buildGlobal();
+
+    expect(selectAccountTokens(global, ACCOUNT_ID)?.some(({ slug }) => slug === BNB.slug)).toBe(true);
+  });
+
+  it('memoizes account tokens across unrelated global changes', () => {
+    const global = buildGlobal();
+
+    expect(selectAccountTokens({ ...global, isBackupWalletModalOpen: true }, ACCOUNT_ID))
+      .toBe(selectAccountTokens(global, ACCOUNT_ID));
   });
 });

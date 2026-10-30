@@ -22,16 +22,17 @@ export const NETWORK_CONFIG = {
 };
 
 export const ONE_TON = 1_000_000_000n;
-export const TOKEN_TRANSFER_AMOUNT = 50000000n; // 0.05 TON
-export const TINY_TOKEN_TRANSFER_AMOUNT = 18000000n; // 0.018 TON
+const ATTACHED_GAS_MULTIPLIER = 4n;
+export const TOKEN_TRANSFER_AMOUNT = ATTACHED_GAS_MULTIPLIER * 50000000n;
+export const TINY_TOKEN_TRANSFER_AMOUNT = ATTACHED_GAS_MULTIPLIER * 18000000n;
 export const TOKEN_TRANSFER_REAL_AMOUNT = 32100000n; // 0.0321 TON
 export const TINY_TOKEN_TRANSFER_REAL_AMOUNT = 8000000n; // 0.008 TON
 export const TINIEST_TOKEN_TRANSFER_REAL_AMOUNT = 3000000n; // 0.003 TON
 export const TOKEN_TRANSFER_FORWARD_AMOUNT = 1n; // 0.000000001 TON
-export const CLAIM_MINTLESS_AMOUNT = 20000000n; // 0.02 TON
+export const CLAIM_MINTLESS_AMOUNT = ATTACHED_GAS_MULTIPLIER * 20000000n;
+export const CLAIM_MINTLESS_REAL_AMOUNT = 20000000n;
 
-/** The amount that My Wallet attaches to NFT transfers */
-export const NFT_TRANSFER_AMOUNT = 100000000n; // 0.1 TON
+export const NFT_TRANSFER_AMOUNT = ATTACHED_GAS_MULTIPLIER * 100000000n;
 export const NFT_TRANSFER_REAL_AMOUNT = 5000000n; // 0.005 TON
 export const NFT_TRANSFER_FORWARD_AMOUNT = 1n; // 0.000000001 TON
 
@@ -43,13 +44,15 @@ export const NFT_TRANSFER_FORWARD_AMOUNT = 1n; // 0.000000001 TON
 export const NFT_PAYLOAD_SAFE_MARGIN = 14 * 8;
 
 export const TON_GAS = {
-  stakeLiquid: 4n * ONE_TON,
-  unstakeLiquid: 4n * ONE_TON,
-  stakeJettonsForward: JettonStakingGas.STAKE_JETTONS,
-  stakeJettons: JettonStakingGas.STAKE_JETTONS + TOKEN_TRANSFER_AMOUNT,
-  unstakeJettons: JettonStakingGas.UNSTAKE_JETTONS,
-  claimJettons: JettonStakingGas.JETTON_TRANSFER + JettonStakingGas.SIMPLE_UPDATE_REQUEST,
-  changeDns: 15_000_000n, // 0.015 TON
+  stakeLiquid: ATTACHED_GAS_MULTIPLIER * ONE_TON,
+  unstakeLiquid: ATTACHED_GAS_MULTIPLIER * ONE_TON,
+  stakeJettonsForward: ATTACHED_GAS_MULTIPLIER * JettonStakingGas.STAKE_JETTONS,
+  stakeJettons: ATTACHED_GAS_MULTIPLIER * JettonStakingGas.STAKE_JETTONS + TOKEN_TRANSFER_AMOUNT,
+  unstakeJettons: ATTACHED_GAS_MULTIPLIER * JettonStakingGas.UNSTAKE_JETTONS,
+  claimJettons: ATTACHED_GAS_MULTIPLIER * (
+    JettonStakingGas.JETTON_TRANSFER + JettonStakingGas.SIMPLE_UPDATE_REQUEST
+  ),
+  changeDns: ATTACHED_GAS_MULTIPLIER * 15_000_000n,
 } as const;
 
 export const TON_GAS_REAL = {

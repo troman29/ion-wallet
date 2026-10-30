@@ -91,6 +91,14 @@ jest.mock('../../../hooks', () => ({
   callHook: jest.fn(),
 }));
 
+it('accepts only ION Gateway links', () => {
+  const adapter = createTonConnectAdapter();
+
+  expect(adapter.canHandleDeepLink('ion-gateway://connect')).toBe(true);
+  expect(adapter.canHandleDeepLink('https://connect.ionwallet.io/?v=2')).toBe(true);
+  expect(adapter.canHandleDeepLink('tc://connect')).toBe(false);
+});
+
 describe('TonConnectAdapter.connect', () => {
   const activeAccountId = '0-mainnet';
   const selectedAccountId = '1-mainnet';
