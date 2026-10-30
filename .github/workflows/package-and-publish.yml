@@ -743,6 +743,7 @@ jobs:
         app_variant: ${{ fromJSON(needs.detect-changes.outputs.android-variants) }}
     env:
       APP_VARIANT: ${{ matrix.app_variant }}
+      CAP_PLATFORM: android
       IS_RELEASE_CANDIDATE: ${{ startsWith(github.ref, 'refs/heads/release/') && '1' || '' }}
       RC_NUMBER: ${{ needs.detect-changes.outputs.rc-number }}
     steps:

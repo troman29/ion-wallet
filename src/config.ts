@@ -42,8 +42,8 @@ export const IS_HEADLESS = process.env.IS_HEADLESS === '1';
 
 export const ELECTRON_HOST_URL = 'https://dumb-host';
 export const INACTIVE_MARKER = '[Inactive]';
-export const PRODUCTION_URL = 'https://wallet.ice.io';
-export const BETA_URL = 'https://beta.wallet.ice.io';
+export const PRODUCTION_URL = 'https://web.ionwallet.io';
+export const BETA_URL = 'https://web.ionwallet.io';
 // Beta desktop auto-update feed base. This is BOTH the staging gate poll base and the value baked
 // into app-update.yml by the generic electron-builder provider - the two must agree.
 export const BETA_UPDATE_URL = 'https://s3.wallet.ice.io/public/desktop-beta';
@@ -60,9 +60,9 @@ export const APP_DOWNLOAD_URLS: Partial<Record<
 >> = {};
 export const APP_INSTALL_URL = APP_DOWNLOAD_URLS.landing;
 export const APP_REPO_URL = 'https://github.com/troman29/ion-wallet';
-export const SELF_UNIVERSAL_HOST_URL = 'https://wallet.ice.io';
-export const APP_WEBSITE_URL = 'https://wallet.ice.io';
-export const APP_ICON_URL = 'https://wallet.ice.io/icon-512x512.png';
+export const SELF_UNIVERSAL_HOST_URL = 'https://web.ionwallet.io';
+export const APP_WEBSITE_URL = 'https://ionwallet.io';
+export const APP_ICON_URL = 'https://web.ionwallet.io/icon-512x512.png';
 
 // GitHub workflow uses an empty string as the default value if it's not in repository variables, so we cannot define a default value here
 export const BASE_URL = process.env.BASE_URL || PRODUCTION_URL;
