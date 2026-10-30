@@ -19,11 +19,15 @@ on:
         options:
           - both
           - none
-      android_build_only:
-        description: Build Android artifacts without publishing
+      android_destination:
+        description: Android destination
         required: true
-        type: boolean
-        default: false
+        type: choice
+        default: build_only
+        options:
+          - build_only
+          - firebase
+          - play
       ios_variant:
         description: Release the iOS app
         required: true
@@ -70,6 +74,8 @@ env:
   NO_WEBSOCKET: ${{ vars.NO_WEBSOCKET }}
   CREATE_MULTICHAIN_WALLET: ${{ vars.CREATE_MULTICHAIN_WALLET }}
   ENABLE_EXCHANGE: ${{ vars.ENABLE_EXCHANGE }}
+  ANDROID_KEYSTORE_ALIAS: ${{ vars.ANDROID_KEYSTORE_ALIAS }}
+  ANDROID_PLAY_TRACK: ${{ vars.ANDROID_PLAY_TRACK }}
   WALLET_CONNECT_PROJECT_ID: ${{ vars.WALLET_CONNECT_PROJECT_ID }}
   WALLET_CONNECT_PAY_APP_ID: ${{ vars.WALLET_CONNECT_PAY_APP_ID }}
 
@@ -771,10 +777,10 @@ jobs:
 
       - name: Build and sync mobile project
         run: |
-          if [ "${{ inputs.android_build_only }}" = "true" ] || [ -n "$PUBLISH_REPO" ]; then
-            npm run mobile:build:production
-          else
+          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
             npm run mobile:build:staging
+          else
+            npm run mobile:build:production
           fi
 
       - name: Use Ruby and install dependencies
@@ -785,7 +791,7 @@ jobs:
           working-directory: mobile
 
       - name: Set up JDK 21 (release)
-        if: env.PUBLISH_REPO != ''
+        if: inputs.android_destination == 'play'
         uses: actions/setup-java@v4
         with:
           java-version: "21"
@@ -793,27 +799,38 @@ jobs:
           cache: gradle
 
       - name: Set up JDK 21 (staging)
-        if: env.PUBLISH_REPO == ''
+        if: inputs.android_destination != 'play'
         uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
 
       - name: Set up Gradle with build cache (staging only)
-        if: env.PUBLISH_REPO == ''
+        if: inputs.android_destination != 'play'
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run Android JVM tests
         working-directory: mobile/android
         run: ./gradlew testDebugUnitTest
 
-      - name: Verify Android release and debug packages
-        if: inputs.android_build_only
+      - name: Verify signed Android release and debug packages
+        if: inputs.android_destination == 'build_only'
         working-directory: mobile/android
-        run: ./gradlew bundleIonwalletProdRelease assembleIonwalletProdDebug
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ] || [ -z "$ANDROID_KEYSTORE_PASSWORD" ]; then
+            echo "::error::Missing ION Wallet Android signing key"
+            exit 1
+          fi
+          echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ./android.keystore
+          bundle exec fastlane verify
+          ./gradlew assembleIonwalletProdDebug
+          jarsigner -verify -strict app/build/outputs/bundle/ionwalletProdRelease/*.aab
 
       - name: Upload verification artifacts
-        if: inputs.android_build_only
+        if: inputs.android_destination == 'build_only'
         uses: actions/upload-artifact@v4
         with:
           name: IONWallet-android-verification
@@ -823,7 +840,7 @@ jobs:
           if-no-files-found: error
 
       - name: Package and publish
-        if: ${{ !inputs.android_build_only }}
+        if: inputs.android_destination != 'build_only'
         env:
           ANDROID_API_KEY_BASE64: ${{ secrets.ANDROID_API_KEY_BASE64 }}
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -840,12 +857,12 @@ jobs:
             echo "::error::Missing ION Wallet Android signing key"
             exit 1
           fi
-          if [ -z "$PUBLISH_REPO" ]; then
+          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
             if [ -z "$FIREBASE_SERVICE_ACCOUNT_BASE64" ] || [ -z "$ANDROID_FIREBASE_APP_ID" ]; then
               echo "::error::Missing ION Wallet Firebase Distribution credentials"
               exit 1
             fi
-          elif [ -z "$ANDROID_API_KEY_BASE64" ]; then
+          elif [ "${{ inputs.android_destination }}" = "play" ] && [ -z "$ANDROID_API_KEY_BASE64" ]; then
             echo "::error::Missing ION Wallet Google Play API key"
             exit 1
           fi
@@ -854,7 +871,7 @@ jobs:
           echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ./android.keystore
           echo -n "$FIREBASE_SERVICE_ACCOUNT_BASE64" | base64 --decode > ./firebase-service-account.json
 
-          if [ -z "$PUBLISH_REPO" ]; then
+          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
             bundle exec fastlane beta
           else
             bundle exec fastlane release
@@ -867,25 +884,25 @@ jobs:
       # here breaks that loop; the following step starts a fresh daemon in a few seconds and reads the
       # same on-disk build cache.
       - name: Stop the JVM daemons before the second web build
-        if: ${{ !inputs.android_build_only }}
+        if: inputs.android_destination != 'build_only'
         run: |
           (cd mobile/android && ./gradlew --stop) || true
           pkill -f KotlinCompileDaemon || true
           free -m
 
       - name: Build project for direct apk
-        if: ${{ !inputs.android_build_only }}
+        if: inputs.android_destination != 'build_only'
         env:
           IS_ANDROID_DIRECT: 1
         run: |
-          if [ -z "$PUBLISH_REPO" ]; then
+          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
             npm run mobile:build:staging
           else
             npm run mobile:build:production
           fi
 
       - name: Build direct apk
-        if: ${{ !inputs.android_build_only }}
+        if: inputs.android_destination != 'build_only'
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -899,7 +916,7 @@ jobs:
           cp "$APK_PATH" "$ANDROID_ARTIFACT_NAME"
 
       - name: Upload APK artifact
-        if: ${{ !inputs.android_build_only }}
+        if: inputs.android_destination != 'build_only'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ANDROID_ARTIFACT_NAME }}

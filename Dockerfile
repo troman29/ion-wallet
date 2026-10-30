@@ -8,7 +8,7 @@ RUN npm ci
 COPY . .
 
 ARG APP_COMMIT_HASH=unknown
-ARG BRANCH=master
+ARG BRANCH=unknown
 ARG BRILLIANT_API_BASE_URL=https://api.ionwallet.io
 ARG PROXY_API_BASE_URL=https://api.ionwallet.io
 ARG NO_PENDING_ACTIVITIES=1

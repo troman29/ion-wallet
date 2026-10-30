@@ -1,3 +1,5 @@
+require 'json'
+
 default_platform(:android)
 
 def env_value(name, fallback = nil)
@@ -6,7 +8,7 @@ def env_value(name, fallback = nil)
 end
 
 def android_version_name
-  env_value('ANDROID_VERSION_NAME', '1.0.0')
+  env_value('ANDROID_VERSION_NAME', JSON.parse(File.read(File.expand_path('../../../package.json', __dir__)))['version'])
 end
 
 # RC_NUMBER must be a bare integer; anything else (empty, or an API error body that slipped
@@ -96,7 +98,7 @@ def signing_properties
   {
     "android.injected.signing.store.file" => $keystore_path,
     "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
-    "android.injected.signing.key.alias" => "key0",
+    "android.injected.signing.key.alias" => env_value('ANDROID_KEYSTORE_ALIAS', 'upload'),
     "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"]
   }
 end
@@ -114,14 +116,7 @@ end
 def update_version_and_build_number
   version = android_version_name
 
-  # Version code = the identity of this CI execution plus a fixed offset, so it is monotonic by
-  # construction instead of by asking Play what is taken. Play never surrenders a code it has
-  # accepted - including into an edit that is never committed, where the code then appears in NO
-  # listing, neither in the tracks nor in the artifact library - so any floor derived from what
-  # Play reports is a lower bound that eventually collides. Nothing here is looked up, so nothing
-  # can be silently out of date. The offset lifts the series clear of every code the packages have
-  # already used; the highest was 3077 in the previous app.
-  version_code_offset = 4000
+  version_code_offset = 0
 
   # The identity is the pair (run, attempt), not the run alone. GITHUB_RUN_NUMBER deliberately
   # does not change when a run is re-run, so a job that dies after Play has already accepted the
@@ -136,7 +131,7 @@ def update_version_and_build_number
   # ever renamed; GitHub offers no way to restore it. That would hand Play a code below what it
   # already serves, which Play refuses by complaining that existing users could not upgrade -
   # unreadable unless you already suspect the rename. Fail here instead, where the cause is named.
-  run_number_floor = 390
+  run_number_floor = 33
 
   run_number = env_value('GITHUB_RUN_NUMBER')
   UI.user_error!('GITHUB_RUN_NUMBER is not set - the version code can only be derived in CI') if run_number.nil?
@@ -172,8 +167,6 @@ def update_version_and_build_number
 end
 
 platform :android do
-  desc "Deploy a new Beta Build to the Google Play"
-
   $gradle_data = nil
 
   before_all do |lane|
@@ -182,6 +175,13 @@ platform :android do
 
   $keystore_path = android_path('./android.keystore')
 
+  desc "Build a signed AAB without publishing"
+  lane :verify do
+    update_version_and_build_number
+    gradle(task: $release_gradle_task, properties: signing_properties)
+  end
+
+  desc "Deploy a new Beta Build to Firebase"
   lane :beta do
     update_version_and_build_number
 
@@ -239,7 +239,7 @@ platform :android do
     play_store_options = {
       package_name: $package_name,
       json_key: $play_json_key_file,
-      track: "production",
+      track: env_value('ANDROID_PLAY_TRACK', 'alpha'),
       skip_upload_apk: true,
       aab: lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
     }
