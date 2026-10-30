@@ -8,12 +8,12 @@ import { fetchBalances, getWalletInfo } from '../chains/ton/wallet';
 import { fetchStoredAccount, fetchStoredAccounts, getCurrentAccountId } from '../common/accounts';
 import { getBackendConfigCacheSync } from '../common/cache';
 import { getMnemonic } from '../common/mnemonic';
+import { recoverLegacyIonFunds } from '../methods/ionLegacyRecovery';
 import { storage } from '../storages';
 import {
   initIonDerivationMigration, migrateLegacyIonDerivations,
   reconcileIonDerivationMigrations,
-} from './ionDerivationMigration';
-import { recoverLegacyIonFunds } from './ionLegacyRecovery';
+} from './ionDerivation';
 
 jest.mock('../../util/windowProvider/connector', () => ({ callWindow: jest.fn() }));
 jest.mock('../../util/schedulers', () => ({
@@ -31,8 +31,8 @@ jest.mock('../common/accounts', () => ({
 jest.mock('../common/cache', () => ({ getBackendConfigCacheSync: jest.fn() }));
 jest.mock('../common/mnemonic', () => ({ getMnemonic: jest.fn(), validateBip39Mnemonic: jest.fn(() => true) }));
 jest.mock('../storages', () => ({ storage: { getItem: jest.fn(), mutateItem: jest.fn() } }));
-jest.mock('./auth', () => ({ buildTonBackendAuthToken: jest.fn() }));
-jest.mock('./polling', () => ({
+jest.mock('../methods/auth', () => ({ buildTonBackendAuthToken: jest.fn() }));
+jest.mock('../methods/polling', () => ({
   addPollingAccount: jest.fn(), removePollingAccount: jest.fn(), setActivePollingAccount: jest.fn(),
 }));
 

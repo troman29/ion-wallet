@@ -7,9 +7,9 @@ import { getWalletFromBip39Mnemonic } from '../chains/ton/auth';
 import { ION_BIP39_PATH, TON_BIP39_PATH } from '../chains/ton/derivationConstants';
 import { fetchStoredAccount, fetchStoredAccounts, getCurrentAccountId } from '../common/accounts';
 import { getMnemonic, validateBip39Mnemonic } from '../common/mnemonic';
+import { buildTonBackendAuthToken } from '../methods/auth';
+import { addPollingAccount, removePollingAccount, setActivePollingAccount } from '../methods/polling';
 import { storage } from '../storages';
-import { buildTonBackendAuthToken } from './auth';
-import { addPollingAccount, removePollingAccount, setActivePollingAccount } from './polling';
 
 export type Migration = {
   oldWallet: ApiTonWallet;

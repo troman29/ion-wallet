@@ -1,5 +1,5 @@
+import type { Migration } from '../migrations/ionDerivation';
 import type { ApiBip39Account } from '../types';
-import type { Migration } from './ionDerivationMigration';
 
 import { LIQUID_JETTON, TONCOIN } from '../../config';
 import { parseAccountId } from '../../util/account';
@@ -12,7 +12,7 @@ import { getBackendConfigCacheSync } from '../common/cache';
 import { getMnemonic, validateBip39Mnemonic } from '../common/mnemonic';
 import { buildTokenSlug } from '../common/tokens';
 import { bytesToHex } from '../common/utils';
-import { getMigrations, saveMigration } from './ionDerivationMigration';
+import { getMigrations, saveMigration } from '../migrations/ionDerivation';
 
 async function getBalances(accountId: string, address: string) {
   const { network } = parseAccountId(accountId);
