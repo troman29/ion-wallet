@@ -936,3 +936,24 @@ describe('View-only mode deeplink blocking', () => {
     });
   });
 });
+
+describe('ION Wallet connection link routing', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (getGlobal as jest.Mock).mockReturnValue(createMockGlobalState());
+    (getActions as jest.Mock).mockReturnValue({ showError: jest.fn() });
+    (callApi as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  it('sends /wc links to WalletConnect', async () => {
+    const url = 'https://connect.ionwallet.io/wc?uri=invalid';
+
+    expect(await processDeeplink(url)).toBe(true);
+    expect(callApi).toHaveBeenCalledWith('walletConnect_handleDeepLink', url, false);
+  });
+
+  it('ignores a lookalike host', async () => {
+    expect(await processDeeplink('https://connect.ionwallet.io.evil.example/?v=2')).toBe(false);
+    expect(callApi).not.toHaveBeenCalled();
+  });
+});

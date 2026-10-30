@@ -8,7 +8,7 @@ android {
       useLegacyPackaging = true
     }
   }
-  namespace = "io.ice.wallet"
+  namespace = "io.ionwallet"
   compileSdk = rootProject.ext.compileSdkVersion
   // Source compatibility moved here from the (no-longer-applied) generated
   // capacitor.build.gradle.
@@ -19,7 +19,7 @@ android {
   defaultConfig {
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 2
+    versionCode 3
     versionName "1.0.1"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     aaptOptions {
@@ -52,7 +52,7 @@ android {
   productFlavors {
     ionwallet {
       dimension "brand"
-      applicationId "io.ice.wallet"
+      applicationId "io.ionwallet"
       getIsDefault().set(true)
     }
     prod {

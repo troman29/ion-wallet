@@ -65,30 +65,36 @@ function AuthDisclaimer({ isActive }: OwnProps) {
           <p className={styles.text}>{renderText(lang('$auth_responsibly_description3', { app_name: APP_NAME }))}</p>
           <p className={styles.text}>{renderText(lang('$auth_responsibly_description4'))}</p>
         </div>
-        <div className={buildClassName(settingsStyles.block, styles.lawBlock)}>
-          <a
-            href={APP_TERMS_OF_USE_URL}
-            target="_blank"
-            rel="noreferrer"
-            className={settingsStyles.item}
-            onClick={handleUrlClick}
-          >
-            <img className={settingsStyles.menuIcon} src={listImg} alt={lang('Terms of Use')} />
-            {lang('Terms of Use')}
-            <i className={buildClassName(settingsStyles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-          </a>
-          <a
-            href={APP_PRIVACY_POLICY_URL}
-            target="_blank"
-            rel="noreferrer"
-            className={settingsStyles.item}
-            onClick={handleUrlClick}
-          >
-            <img className={settingsStyles.menuIcon} src={lockImg} alt={lang('Privacy Policy')} />
-            {lang('Privacy Policy')}
-            <i className={buildClassName(settingsStyles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
-          </a>
-        </div>
+        {(APP_TERMS_OF_USE_URL || APP_PRIVACY_POLICY_URL) && (
+          <div className={buildClassName(settingsStyles.block, styles.lawBlock)}>
+            {APP_TERMS_OF_USE_URL && (
+              <a
+                href={APP_TERMS_OF_USE_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={settingsStyles.item}
+                onClick={handleUrlClick}
+              >
+                <img className={settingsStyles.menuIcon} src={listImg} alt={lang('Terms of Use')} />
+                {lang('Terms of Use')}
+                <i className={buildClassName(settingsStyles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
+              </a>
+            )}
+            {APP_PRIVACY_POLICY_URL && (
+              <a
+                href={APP_PRIVACY_POLICY_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={settingsStyles.item}
+                onClick={handleUrlClick}
+              >
+                <img className={settingsStyles.menuIcon} src={lockImg} alt={lang('Privacy Policy')} />
+                {lang('Privacy Policy')}
+                <i className={buildClassName(settingsStyles.iconChevronRight, 'icon-chevron-right')} aria-hidden />
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

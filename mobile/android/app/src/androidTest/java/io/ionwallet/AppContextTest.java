@@ -1,4 +1,4 @@
-package io.ice.wallet;
+package io.ionwallet;
 
 import static org.junit.Assert.assertTrue;
 
@@ -23,8 +23,8 @@ public class AppContextTest {
 
         String packageName = appContext.getPackageName();
         assertTrue("Unexpected wallet package: " + packageName,
-            packageName.equals("io.ice.wallet")
-                || packageName.equals("io.ice.wallet.debug")
-                || packageName.equals("io.ice.wallet.beta"));
+            packageName.equals("io.ionwallet")
+                || packageName.equals("io.ionwallet.debug")
+                || packageName.equals("io.ionwallet.beta"));
     }
 }

@@ -2,29 +2,29 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>API_KEY</key>
-  <string>REPLACE_WITH_ION_FIREBASE_API_KEY</string>
-  <key>GCM_SENDER_ID</key>
-  <string>000000000000</string>
-  <key>PLIST_VERSION</key>
-  <string>1</string>
-  <key>BUNDLE_ID</key>
-  <string>io.ice.wallet</string>
-  <key>PROJECT_ID</key>
-  <string>ion-wallet-placeholder</string>
-  <key>STORAGE_BUCKET</key>
-  <string>ion-wallet-placeholder.firebasestorage.app</string>
-  <key>IS_ADS_ENABLED</key>
-  <false/>
-  <key>IS_ANALYTICS_ENABLED</key>
-  <false/>
-  <key>IS_APPINVITE_ENABLED</key>
-  <false/>
-  <key>IS_GCM_ENABLED</key>
-  <true/>
-  <key>IS_SIGNIN_ENABLED</key>
-  <false/>
-  <key>GOOGLE_APP_ID</key>
-  <string>1:000000000000:ios:0000000000000001</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDSc8Uns--JqGOfc7NZROfY4rN1CbBUGyg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>69898768954</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>io.ionwallet</string>
+	<key>PROJECT_ID</key>
+	<string>ionwallet-io</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ionwallet-io.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:69898768954:ios:8268ded3afbc8f88bc9b03</string>
 </dict>
 </plist>

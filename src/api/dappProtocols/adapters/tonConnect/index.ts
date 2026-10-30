@@ -73,8 +73,9 @@ import { parseAccountId } from '../../../../util/account';
 import { bigintDivideToNumber, bigintMultiplyToNumber } from '../../../../util/bigint';
 import {
   ION_GATEWAY_PROTOCOL,
-  ION_GATEWAY_UNIVERSAL_URL,
+  ION_GATEWAY_PROTOCOL_SELF,
 } from '../../../../util/deeplink/constants';
+import { isIonGatewayUniversalLink } from '../../../../util/deeplink/urlMatchers';
 import { fetchJsonWithProxy, handleFetchErrors } from '../../../../util/fetch';
 import { getDappConnectionUniqueId } from '../../../../util/getDappConnectionUniqueId';
 import { extractKey, pick } from '../../../../util/iteratees';
@@ -663,7 +664,8 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
 
   canHandleDeepLink(url: string): boolean {
     return url.startsWith(ION_GATEWAY_PROTOCOL)
-      || omitProtocol(url).startsWith(omitProtocol(ION_GATEWAY_UNIVERSAL_URL));
+      || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
+      || isIonGatewayUniversalLink(url);
   }
 
   async handleDeepLink(
@@ -1387,8 +1389,4 @@ function formatConnectError(id: number, error: unknown): {
       message,
     },
   };
-}
-
-function omitProtocol(url: string) {
-  return url.replace(/^https?:\/\//, '');
 }

@@ -5,6 +5,10 @@ def env_value(name, fallback = nil)
   value.nil? || value.empty? ? fallback : value
 end
 
+def android_version_name
+  env_value('ANDROID_VERSION_NAME', '1.0.0')
+end
+
 # RC_NUMBER must be a bare integer; anything else (empty, or an API error body that slipped
 # through the workflow) is treated as absent so it can never reach the version name or notes.
 def rc_ordinal
@@ -39,8 +43,7 @@ end
 $variant = env_value('APP_VARIANT', 'ionwallet').downcase
 $variant_config = {
   'ionwallet' => {
-    package_name: 'io.ice.wallet',
-    firebase_app_id: '1:155616896352:android:2d448728d65b6d277eaa05',
+    package_name: 'io.ionwallet',
     beta_gradle_task: 'assembleIonwalletBetaRelease',
     release_gradle_task: 'bundleIonwalletProdRelease',
     direct_gradle_task: 'assembleIonwalletProdRelease',
@@ -109,9 +112,7 @@ def write_apk_output_path
 end
 
 def update_version_and_build_number
-  require 'json'
-
-  version = JSON.parse(File.read("../../../package.json"))["version"]
+  version = android_version_name
 
   # Version code = the identity of this CI execution plus a fixed offset, so it is monotonic by
   # construction instead of by asking Play what is taken. Play never surrenders a code it has
@@ -119,7 +120,7 @@ def update_version_and_build_number
   # listing, neither in the tracks nor in the artifact library - so any floor derived from what
   # Play reports is a lower bound that eventually collides. Nothing here is looked up, so nothing
   # can be silently out of date. The offset lifts the series clear of every code the packages have
-  # already used; the highest was 3077, on io.ice.wallet.
+  # already used; the highest was 3077 in the previous app.
   version_code_offset = 4000
 
   # The identity is the pair (run, attempt), not the run alone. GITHUB_RUN_NUMBER deliberately
@@ -194,8 +195,10 @@ platform :android do
     # Prepend the compact provenance line to the Firebase notes so a tester can pin down the
     # exact build (RC ordinal, build time, commit). Applies to every build; RC builds lead
     # with the RC label and go to the same tester groups as any other build.
-    version = JSON.parse(File.read("../../../package.json"))["version"]
+    version = android_version_name
     release_notes = "#{build_meta_line(version)}\n\n#{release_notes}"
+
+    UI.user_error!('ANDROID_FIREBASE_APP_ID is required for ION Wallet') unless $firebase_app_id
 
     firebase_app_distribution(
       app: $firebase_app_id,

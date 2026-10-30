@@ -1,36 +1,66 @@
 {
   "project_info": {
-    "project_number": "000000000000",
-    "project_id": "ion-wallet-placeholder",
-    "storage_bucket": "ion-wallet-placeholder.firebasestorage.app"
+    "project_number": "69898768954",
+    "project_id": "ionwallet-io",
+    "storage_bucket": "ionwallet-io.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:0000000000000001",
-        "android_client_info": { "package_name": "io.ice.wallet" }
+        "mobilesdk_app_id": "1:69898768954:android:67d96257123ec1fabc9b03",
+        "android_client_info": {
+          "package_name": "io.ionwallet"
+        }
       },
       "oauth_client": [],
-      "api_key": [{ "current_key": "REPLACE_WITH_ION_FIREBASE_API_KEY" }],
-      "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+      "api_key": [
+        {
+          "current_key": "AIzaSyAagBppMsvokZEZiEFxyDOXKdr-NmoX2Vs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:0000000000000002",
-        "android_client_info": { "package_name": "io.ice.wallet.beta" }
+        "mobilesdk_app_id": "1:69898768954:android:85f24dd42d5d95ccbc9b03",
+        "android_client_info": {
+          "package_name": "io.ionwallet.beta"
+        }
       },
       "oauth_client": [],
-      "api_key": [{ "current_key": "REPLACE_WITH_ION_FIREBASE_API_KEY" }],
-      "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+      "api_key": [
+        {
+          "current_key": "AIzaSyAagBppMsvokZEZiEFxyDOXKdr-NmoX2Vs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:0000000000000003",
-        "android_client_info": { "package_name": "io.ice.wallet.debug" }
+        "mobilesdk_app_id": "1:69898768954:android:6d981ca333850040bc9b03",
+        "android_client_info": {
+          "package_name": "io.ionwallet.debug"
+        }
       },
       "oauth_client": [],
-      "api_key": [{ "current_key": "REPLACE_WITH_ION_FIREBASE_API_KEY" }],
-      "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+      "api_key": [
+        {
+          "current_key": "AIzaSyAagBppMsvokZEZiEFxyDOXKdr-NmoX2Vs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"
