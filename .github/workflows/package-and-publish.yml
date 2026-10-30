@@ -4,7 +4,7 @@
 # "publish" - Send a package to corresponding store and GitHub release page.
 # "release" - build + package + publish
 #
-# Jobs in this workflow will skip the "publish" step when `PUBLISH_REPO` is not set.
+# Desktop release publishing requires `PUBLISH_REPO`; Android Play publishing does not.
 
 name: Package and publish
 
@@ -83,6 +83,7 @@ jobs:
   detect-changes:
     name: Detect changed paths
     runs-on: ubuntu-latest
+    environment: production
     outputs:
       android-only: ${{ steps.filter.outputs.android-only }}
       ios-only: ${{ steps.filter.outputs.ios-only }}
@@ -90,11 +91,79 @@ jobs:
       android-variants: ${{ steps.filter.outputs.android-variants }}
       ios-variants: ${{ steps.filter.outputs.ios-variants }}
       rc-number: ${{ steps.rc.outputs.rc-number }}
+      desktop-ready: ${{ steps.signing.outputs.desktop-ready }}
+      windows-ready: ${{ steps.signing.outputs.windows-ready }}
+      ios-ready: ${{ steps.signing.outputs.ios-ready }}
+      chrome-store-ready: ${{ steps.signing.outputs.chrome-store-ready }}
+      firefox-store-ready: ${{ steps.signing.outputs.firefox-store-ready }}
+      edge-store-ready: ${{ steps.signing.outputs.edge-store-ready }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
+
+      - name: Check available signing keys
+        id: signing
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          SM_CLIENT_CERT_FILE_B64: ${{ secrets.SM_CLIENT_CERT_FILE_B64 }}
+          SM_HOST: ${{ secrets.SM_HOST }}
+          SM_API_KEY: ${{ secrets.SM_API_KEY }}
+          SM_CLIENT_CERT_PASSWORD: ${{ secrets.SM_CLIENT_CERT_PASSWORD }}
+          KEYPAIR_ALIAS: ${{ secrets.KEYPAIR_ALIAS }}
+          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
+          IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+          IOS_AUTH_KEY_BASE64: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          FIREFOX_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
+          FIREFOX_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}
+          EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+          EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          IOS_AUTH_KEY_ID: ${{ vars.IOS_AUTH_KEY_ID }}
+          IOS_AUTH_KEY_ISSUER_ID: ${{ vars.IOS_AUTH_KEY_ISSUER_ID }}
+          CHROME_EXTENSION_ID: ${{ vars.CHROME_EXTENSION_ID }}
+          FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
+        run: |
+          if [[ -n "$APPLE_CERTIFICATE_BASE64" && -n "$APPLE_CERTIFICATE_PASSWORD" ]] && { [[ -z "$PUBLISH_REPO" ]] || [[ -n "$APPLE_ID" && -n "$APPLE_APP_SPECIFIC_PASSWORD" && -n "$APPLE_TEAM_ID" ]]; }; then
+            echo 'desktop-ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'desktop-ready=false' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "$SM_CLIENT_CERT_FILE_B64" && -n "$SM_HOST" && -n "$SM_API_KEY" && -n "$SM_CLIENT_CERT_PASSWORD" && -n "$KEYPAIR_ALIAS" ]]; then
+            echo 'windows-ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'windows-ready=false' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "$IOS_CERTIFICATE_BASE64" && -n "$IOS_CERTIFICATE_PASSWORD" && -n "$IOS_PROVISION_PROFILE_BASE64" && -n "$IOS_KEYCHAIN_PASSWORD" && -n "$IOS_AUTH_KEY_BASE64" && -n "$APPLE_TEAM_ID" && -n "$IOS_AUTH_KEY_ID" && -n "$IOS_AUTH_KEY_ISSUER_ID" ]]; then
+            echo 'ios-ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ios-ready=false' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "$GOOGLE_CLIENT_ID" && -n "$GOOGLE_CLIENT_SECRET" && -n "$GOOGLE_REFRESH_TOKEN" && -n "$CHROME_EXTENSION_ID" ]]; then
+            echo 'chrome-store-ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'chrome-store-ready=false' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "$FIREFOX_API_KEY" && -n "$FIREFOX_API_SECRET" && -n "$FIREFOX_EXTENSION_ID" ]]; then
+            echo 'firefox-store-ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'firefox-store-ready=false' >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -n "$EDGE_PRODUCT_ID" && -n "$EDGE_CLIENT_ID" && -n "$EDGE_API_KEY" ]]; then
+            echo 'edge-store-ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'edge-store-ready=false' >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Compute RC ordinal
         id: rc
@@ -206,7 +275,7 @@ jobs:
   electron-release:
     name: Build, package and publish Electron
     needs: detect-changes
-    if: needs.detect-changes.outputs.electron-changed == 'true'
+    if: needs.detect-changes.outputs.electron-changed == 'true' && needs.detect-changes.outputs.desktop-ready == 'true'
     runs-on: macos-15
     environment: production
     timeout-minutes: 30
@@ -343,11 +412,11 @@ jobs:
 
   electron-sign-for-windows:
     name: Sign and re-publish Windows package
-    needs: electron-release
+    needs: [detect-changes, electron-release]
     runs-on: windows-latest
     environment: production
     timeout-minutes: 10
-    if: vars.PUBLISH_REPO != ''
+    if: vars.PUBLISH_REPO != '' && needs.detect-changes.outputs.windows-ready == 'true'
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -571,14 +640,20 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Build and package
+        env:
+          FIREFOX_READY: ${{ needs.detect-changes.outputs.firefox-store-ready }}
         run: |
           export APP_COMMIT_HASH=${{ github.sha }}
-          if [ -z "$PUBLISH_REPO" ]; then
-            npm run extension-chrome:package:staging
-            npm run extension-firefox:package:staging
-          else
+          if [ "$GITHUB_REF" = 'refs/heads/master' ] || [ -n "$PUBLISH_REPO" ]; then
             npm run extension-chrome:package:production
-            npm run extension-firefox:package:production
+            if [ "$FIREFOX_READY" = 'true' ]; then
+              npm run extension-firefox:package:production
+            fi
+          else
+            npm run extension-chrome:package:staging
+            if [ "$FIREFOX_READY" = 'true' ]; then
+              npm run extension-firefox:package:staging
+            fi
           fi
 
       - name: Upload Chrome extension artifact
@@ -588,6 +663,7 @@ jobs:
           path: ${{ env.ARTIFACT_NAME_BASE }}-chrome.zip
 
       - name: Upload Firefox extension artifact
+        if: needs.detect-changes.outputs.firefox-store-ready == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME_BASE }}-firefox.zip
@@ -595,11 +671,11 @@ jobs:
 
   chrome-publish:
     name: Publish Chrome extension
-    needs: extensions-package
+    needs: [detect-changes, extensions-package]
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 5
-    if: vars.PUBLISH_REPO != ''
+    if: vars.PUBLISH_REPO != '' && needs.detect-changes.outputs.chrome-store-ready == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -630,11 +706,11 @@ jobs:
 
   firefox-publish:
     name: Publish Firefox extension
-    needs: extensions-package
+    needs: [detect-changes, extensions-package]
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 5
-    if: vars.PUBLISH_REPO != ''
+    if: vars.PUBLISH_REPO != '' && needs.detect-changes.outputs.firefox-store-ready == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -674,10 +750,10 @@ jobs:
 
   edge-publish:
     name: Publish Edge extension
-    needs: extensions-package
+    needs: [detect-changes, extensions-package]
     runs-on: ubuntu-latest
     environment: production
-    if: vars.PUBLISH_REPO != ''
+    if: vars.PUBLISH_REPO != '' && needs.detect-changes.outputs.edge-store-ready == 'true'
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -742,7 +818,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 30
-    if: github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.ios-only != 'true' && needs.detect-changes.outputs.android-variants != '[]'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.ios-only != 'true' && needs.detect-changes.outputs.android-variants != '[]')
     strategy:
       fail-fast: false
       matrix:
@@ -752,6 +828,7 @@ jobs:
       CAP_PLATFORM: android
       IS_RELEASE_CANDIDATE: ${{ startsWith(github.ref, 'refs/heads/release/') && '1' || '' }}
       RC_NUMBER: ${{ needs.detect-changes.outputs.rc-number }}
+      ANDROID_DESTINATION: ${{ github.event_name == 'push' && 'play' || inputs.android_destination }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -777,7 +854,7 @@ jobs:
 
       - name: Build and sync mobile project
         run: |
-          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
+          if [ "$ANDROID_DESTINATION" = "firebase" ]; then
             npm run mobile:build:staging
           else
             npm run mobile:build:production
@@ -791,7 +868,7 @@ jobs:
           working-directory: mobile
 
       - name: Set up JDK 21 (release)
-        if: inputs.android_destination == 'play'
+        if: env.ANDROID_DESTINATION == 'play'
         uses: actions/setup-java@v4
         with:
           java-version: "21"
@@ -799,14 +876,14 @@ jobs:
           cache: gradle
 
       - name: Set up JDK 21 (staging)
-        if: inputs.android_destination != 'play'
+        if: env.ANDROID_DESTINATION != 'play'
         uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
 
       - name: Set up Gradle with build cache (staging only)
-        if: inputs.android_destination != 'play'
+        if: env.ANDROID_DESTINATION != 'play'
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run Android JVM tests
@@ -814,7 +891,7 @@ jobs:
         run: ./gradlew testDebugUnitTest
 
       - name: Verify signed Android release and debug packages
-        if: inputs.android_destination == 'build_only'
+        if: env.ANDROID_DESTINATION == 'build_only'
         working-directory: mobile/android
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -831,7 +908,7 @@ jobs:
           grep -Fq 'jar verified.' "$RUNNER_TEMP/aab-signature.log"
 
       - name: Upload verification artifacts
-        if: inputs.android_destination == 'build_only'
+        if: env.ANDROID_DESTINATION == 'build_only'
         uses: actions/upload-artifact@v4
         with:
           name: IONWallet-android-verification
@@ -841,7 +918,7 @@ jobs:
           if-no-files-found: error
 
       - name: Package and publish
-        if: inputs.android_destination != 'build_only'
+        if: env.ANDROID_DESTINATION != 'build_only'
         env:
           ANDROID_API_KEY_BASE64: ${{ secrets.ANDROID_API_KEY_BASE64 }}
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -858,12 +935,12 @@ jobs:
             echo "::error::Missing ION Wallet Android signing key"
             exit 1
           fi
-          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
+          if [ "$ANDROID_DESTINATION" = "firebase" ]; then
             if [ -z "$FIREBASE_SERVICE_ACCOUNT_BASE64" ] || [ -z "$ANDROID_FIREBASE_APP_ID" ]; then
               echo "::error::Missing ION Wallet Firebase Distribution credentials"
               exit 1
             fi
-          elif [ "${{ inputs.android_destination }}" = "play" ] && [ -z "$ANDROID_API_KEY_BASE64" ]; then
+          elif [ "$ANDROID_DESTINATION" = "play" ] && [ -z "$ANDROID_API_KEY_BASE64" ]; then
             echo "::error::Missing ION Wallet Google Play API key"
             exit 1
           fi
@@ -872,7 +949,7 @@ jobs:
           echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ./android.keystore
           echo -n "$FIREBASE_SERVICE_ACCOUNT_BASE64" | base64 --decode > ./firebase-service-account.json
 
-          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
+          if [ "$ANDROID_DESTINATION" = "firebase" ]; then
             bundle exec fastlane beta
           else
             bundle exec fastlane release
@@ -885,25 +962,25 @@ jobs:
       # here breaks that loop; the following step starts a fresh daemon in a few seconds and reads the
       # same on-disk build cache.
       - name: Stop the JVM daemons before the second web build
-        if: inputs.android_destination != 'build_only'
+        if: env.ANDROID_DESTINATION != 'build_only'
         run: |
           (cd mobile/android && ./gradlew --stop) || true
           pkill -f KotlinCompileDaemon || true
           free -m
 
       - name: Build project for direct apk
-        if: inputs.android_destination != 'build_only'
+        if: env.ANDROID_DESTINATION != 'build_only'
         env:
           IS_ANDROID_DIRECT: 1
         run: |
-          if [ "${{ inputs.android_destination }}" = "firebase" ]; then
+          if [ "$ANDROID_DESTINATION" = "firebase" ]; then
             npm run mobile:build:staging
           else
             npm run mobile:build:production
           fi
 
       - name: Build direct apk
-        if: inputs.android_destination != 'build_only'
+        if: env.ANDROID_DESTINATION != 'build_only'
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -917,7 +994,7 @@ jobs:
           cp "$APK_PATH" "$ANDROID_ARTIFACT_NAME"
 
       - name: Upload APK artifact
-        if: inputs.android_destination != 'build_only'
+        if: env.ANDROID_DESTINATION != 'build_only'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ANDROID_ARTIFACT_NAME }}
@@ -930,7 +1007,7 @@ jobs:
     environment: production
     # The ionwallet variant takes 30+ minutes on slow runners; v26.7.1 needed 3 attempts against a 30-minute cap
     timeout-minutes: 45
-    if: github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.android-only != 'true' && needs.detect-changes.outputs.ios-variants != '[]'
+    if: github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.android-only != 'true' && needs.detect-changes.outputs.ios-variants != '[]' && needs.detect-changes.outputs.ios-ready == 'true'
     strategy:
       fail-fast: false
       matrix:
