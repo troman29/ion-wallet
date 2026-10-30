@@ -5,6 +5,10 @@ def env_value(name, fallback = nil)
   value.nil? || value.empty? ? fallback : value
 end
 
+def android_version_name
+  env_value('ANDROID_VERSION_NAME', '1.0.0')
+end
+
 # RC_NUMBER must be a bare integer; anything else (empty, or an API error body that slipped
 # through the workflow) is treated as absent so it can never reach the version name or notes.
 def rc_ordinal
@@ -108,9 +112,7 @@ def write_apk_output_path
 end
 
 def update_version_and_build_number
-  require 'json'
-
-  version = JSON.parse(File.read("../../../package.json"))["version"]
+  version = android_version_name
 
   # Version code = the identity of this CI execution plus a fixed offset, so it is monotonic by
   # construction instead of by asking Play what is taken. Play never surrenders a code it has
@@ -193,7 +195,7 @@ platform :android do
     # Prepend the compact provenance line to the Firebase notes so a tester can pin down the
     # exact build (RC ordinal, build time, commit). Applies to every build; RC builds lead
     # with the RC label and go to the same tester groups as any other build.
-    version = JSON.parse(File.read("../../../package.json"))["version"]
+    version = android_version_name
     release_notes = "#{build_meta_line(version)}\n\n#{release_notes}"
 
     UI.user_error!('ANDROID_FIREBASE_APP_ID is required for ION Wallet') unless $firebase_app_id
