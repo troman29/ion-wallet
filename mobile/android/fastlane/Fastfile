@@ -212,6 +212,7 @@ platform :android do
 
   desc "Release a new version to the Google Play"
   lane :release do
+    track = env_value('ANDROID_PLAY_TRACK', 'alpha')
     # Validate before the build: a malformed value would otherwise surface only at
     # upload time, after the whole Gradle build. Play accepts a userFraction strictly
     # between 0 and 1, and a full rollout is not the fraction 1.0 - it is a `completed`
@@ -220,7 +221,7 @@ platform :android do
     rollout = env_value("ANDROID_ROLLOUT", "0.1")
     full_rollout = rollout == "full"
     rollout_fraction = full_rollout ? nil : Float(rollout, exception: false)
-    if !full_rollout && (rollout_fraction.nil? || rollout_fraction <= 0 || rollout_fraction >= 1)
+    if track == 'production' && !full_rollout && (rollout_fraction.nil? || rollout_fraction <= 0 || rollout_fraction >= 1)
       UI.user_error!("ANDROID_ROLLOUT must be `full` or a fraction strictly between 0 and 1, got #{rollout.inspect}")
     end
 
@@ -239,12 +240,12 @@ platform :android do
     play_store_options = {
       package_name: $package_name,
       json_key: $play_json_key_file,
-      track: env_value('ANDROID_PLAY_TRACK', 'alpha'),
+      track: track,
       skip_upload_apk: true,
       aab: lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
     }
 
-    if full_rollout
+    if track != 'production' || full_rollout
       play_store_options[:release_status] = "completed"
     else
       play_store_options[:release_status] = "inProgress"

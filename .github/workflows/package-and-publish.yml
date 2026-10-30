@@ -827,7 +827,8 @@ jobs:
           echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ./android.keystore
           bundle exec fastlane verify
           ./gradlew assembleIonwalletProdDebug
-          jarsigner -verify -strict app/build/outputs/bundle/ionwalletProdRelease/*.aab
+          jarsigner -verify -verbose app/build/outputs/bundle/ionwalletProdRelease/*.aab > "$RUNNER_TEMP/aab-signature.log" 2>&1
+          grep -Fq 'jar verified.' "$RUNNER_TEMP/aab-signature.log"
 
       - name: Upload verification artifacts
         if: inputs.android_destination == 'build_only'

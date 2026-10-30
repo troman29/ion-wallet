@@ -14,7 +14,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
   PROXY_API_BASE_URL: ${{ vars.PROXY_API_BASE_URL }}
   NO_PENDING_ACTIVITIES: ${{ vars.NO_PENDING_ACTIVITIES }}
@@ -36,12 +35,7 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Build
-        run: |
-          if [ -z "$PUBLISH_REPO" ]; then
-            npm run build:staging
-          else
-            npm run build:production
-          fi
+        run: npm run build:production
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
