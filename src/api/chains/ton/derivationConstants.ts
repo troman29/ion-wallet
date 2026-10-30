@@ -6,6 +6,6 @@
  * `NO_TON`.
  */
 
-/** TON BIP39 derivation path template (`{index}` is replaced with the account index) */
-export const LEGACY_TON_BIP39_PATH = `m/44'/607'/{index}'`;
-export const TON_BIP39_PATH = `m/44'/696365'/{index}'`;
+/** BIP39 derivation path templates (`{index}` is replaced with the account index) */
+export const TON_BIP39_PATH = `m/44'/607'/{index}'`;
+export const ION_BIP39_PATH = `m/44'/696365'/{index}'`;

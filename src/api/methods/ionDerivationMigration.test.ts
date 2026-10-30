@@ -2,6 +2,7 @@ import { LIQUID_JETTON } from '../../config';
 import { pause } from '../../util/schedulers';
 import { callWindow } from '../../util/windowProvider/connector';
 import { getKeyPairFromStoredMnemonic, getWalletFromBip39Mnemonic } from '../chains/ton/auth';
+import { ION_BIP39_PATH, TON_BIP39_PATH } from '../chains/ton/derivationConstants';
 import { submitGasfullTransfer } from '../chains/ton/transfer';
 import { fetchBalances, getWalletInfo } from '../chains/ton/wallet';
 import { fetchStoredAccount, fetchStoredAccounts, getCurrentAccountId } from '../common/accounts';
@@ -96,6 +97,8 @@ beforeEach(() => {
 });
 
 it('changes the account address without broadcasting or moving either balance', async () => {
+  expect(TON_BIP39_PATH).toBe(oldWallet.derivation.path);
+  expect(ION_BIP39_PATH).toBe(newWallet.derivation.path);
   expect(await migrateLegacyIonDerivations('unlocked-token')).toEqual({});
   expect(records.accounts[accountId].byChain.ton.address).toBe(newWallet.address);
   expect(records.ionDerivationMigrations[accountId].committed).toBe(true);

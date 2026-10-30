@@ -23,7 +23,7 @@ import { getMnemonic, validateBip39Mnemonic } from '../../common/mnemonic';
 import { bytesToHex, hexToBytes } from '../../common/utils';
 import { ApiServerError } from '../../errors';
 import { resolveAddress } from './address';
-import { LEGACY_TON_BIP39_PATH, TON_BIP39_PATH } from './derivationConstants';
+import { ION_BIP39_PATH, TON_BIP39_PATH } from './derivationConstants';
 import {
   getIsTestnetSubwalletId, getWalletInfo, pickBestWallet, pickBestWalletVersion, publicKeyToAddress,
 } from './wallet';
@@ -198,9 +198,9 @@ export async function getWalletFromBip39Mnemonic(
 
     const results = Array.from({ length: MULTIWALLET_BY_PATH_DEFAULT_COUNT }, (_, index) => {
       const current = walletResults.find((w) => w.derivation?.index === index
-        && w.derivation.path === TON_BIP39_PATH);
+        && w.derivation.path === ION_BIP39_PATH);
       const legacy = walletResults.find((w) => w.derivation?.index === index
-        && w.derivation.path === LEGACY_TON_BIP39_PATH);
+        && w.derivation.path === TON_BIP39_PATH);
       if (legacy && legacy.balance > 0n) return legacy;
       if (current && (current.balance > 0n || current.lastTxId)) return current;
       return legacy?.lastTxId ? legacy : current;
@@ -216,7 +216,7 @@ export async function getWalletFromBip39Mnemonic(
     const seed = bip39.mnemonicToSeedSync(mnemonic.join(' '));
     const keypair = getWalletVariantByIndex(seed.toString('hex'), 0);
 
-    return [buildOfflineWalletFromPublicKey(network, keypair.publicKey, { path: TON_BIP39_PATH, index: 0 })];
+    return [buildOfflineWalletFromPublicKey(network, keypair.publicKey, { path: ION_BIP39_PATH, index: 0 })];
   }
 }
 
@@ -277,7 +277,7 @@ export function getWalletVariantsByPath(
   seed: string,
   count: number = MULTIWALLET_BY_PATH_DEFAULT_COUNT,
   offset: number = 0,
-  pathTemplate: string = TON_BIP39_PATH,
+  pathTemplate: string = ION_BIP39_PATH,
 ) {
   const keypairs: { publicKey: Uint8Array; secretKey: Uint8Array; path: string; index: number }[] = [];
 
@@ -293,7 +293,7 @@ export function getWalletVariantsByPath(
   return keypairs;
 }
 
-function getWalletVariantByIndex(seed: string, index: number, pathTemplate: string = TON_BIP39_PATH) {
+function getWalletVariantByIndex(seed: string, index: number, pathTemplate: string = ION_BIP39_PATH) {
   const path = pathTemplate.replace('{index}', index.toString());
   const { key: privateKey } = HDKey.derivePath(path, seed);
   const keypair = nacl.sign.keyPair.fromSeed(privateKey);
@@ -313,7 +313,7 @@ function bip39MnemonicToKeyPairs(
     count,
   );
   if (!shouldSkipDiscovery) {
-    variants.push(...getWalletVariantsByPath(hexSeed.toString('hex'), count, 0, LEGACY_TON_BIP39_PATH));
+    variants.push(...getWalletVariantsByPath(hexSeed.toString('hex'), count, 0, TON_BIP39_PATH));
   }
 
   return variants.map((e) => ({

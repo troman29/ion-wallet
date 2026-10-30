@@ -4,7 +4,7 @@ import { parseAccountId } from '../../util/account';
 import { logDebugError } from '../../util/logs';
 import { callWindow } from '../../util/windowProvider/connector';
 import { getWalletFromBip39Mnemonic } from '../chains/ton/auth';
-import { LEGACY_TON_BIP39_PATH, TON_BIP39_PATH } from '../chains/ton/derivationConstants';
+import { ION_BIP39_PATH, TON_BIP39_PATH } from '../chains/ton/derivationConstants';
 import { fetchStoredAccount, fetchStoredAccounts, getCurrentAccountId } from '../common/accounts';
 import { getMnemonic, validateBip39Mnemonic } from '../common/mnemonic';
 import { storage } from '../storages';
@@ -45,14 +45,14 @@ export async function getLegacyIonDerivationCandidateIds() {
   const accounts = await fetchStoredAccounts();
   return Object.entries(accounts)
     .filter(([, account]) => account.type === 'bip39'
-      && account.byChain.ton?.derivation?.path === LEGACY_TON_BIP39_PATH)
+      && account.byChain.ton?.derivation?.path === TON_BIP39_PATH)
     .map(([accountId]) => accountId);
 }
 
 async function prepareMigration(accountId: string, account: ApiBip39Account, mnemonic: string[]) {
   const { network } = parseAccountId(accountId);
   const oldWallet = account.byChain.ton!;
-  const derivation = { path: TON_BIP39_PATH, index: oldWallet.derivation!.index };
+  const derivation = { path: ION_BIP39_PATH, index: oldWallet.derivation!.index };
   const [newWallet] = await getWalletFromBip39Mnemonic(network, mnemonic, derivation, true);
   if (!newWallet || newWallet.address === oldWallet.address) throw new Error('Invalid ION derivation target');
   const authAccount: ApiBip39Account = { ...account, byChain: { ...account.byChain, ton: newWallet } };
