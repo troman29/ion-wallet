@@ -12,13 +12,18 @@ on:
   workflow_dispatch:
     inputs:
       android_variant:
-        description: Release the Android app
+        description: Build the Android app
         required: true
         type: choice
         default: both
         options:
           - both
           - none
+      android_build_only:
+        description: Build Android artifacts without publishing
+        required: true
+        type: boolean
+        default: false
       ios_variant:
         description: Release the iOS app
         required: true
@@ -59,6 +64,12 @@ env:
   PROXY_HOSTS: ${{ vars.PROXY_HOSTS }}
   PUBLISH_REPO: ${{ vars.PUBLISH_REPO }}
   BRILLIANT_API_BASE_URL: ${{ vars.BRILLIANT_API_BASE_URL }}
+  PROXY_API_BASE_URL: ${{ vars.PROXY_API_BASE_URL }}
+  NO_PENDING_ACTIVITIES: ${{ vars.NO_PENDING_ACTIVITIES }}
+  NO_TRACE_EMULATION: ${{ vars.NO_TRACE_EMULATION }}
+  NO_WEBSOCKET: ${{ vars.NO_WEBSOCKET }}
+  CREATE_MULTICHAIN_WALLET: ${{ vars.CREATE_MULTICHAIN_WALLET }}
+  ENABLE_EXCHANGE: ${{ vars.ENABLE_EXCHANGE }}
   WALLET_CONNECT_PROJECT_ID: ${{ vars.WALLET_CONNECT_PROJECT_ID }}
   WALLET_CONNECT_PAY_APP_ID: ${{ vars.WALLET_CONNECT_PAY_APP_ID }}
 
@@ -759,10 +770,10 @@ jobs:
 
       - name: Build and sync mobile project
         run: |
-          if [ -z "$PUBLISH_REPO" ]; then
-            npm run mobile:build:staging
-          else
+          if [ "${{ inputs.android_build_only }}" = "true" ] || [ -n "$PUBLISH_REPO" ]; then
             npm run mobile:build:production
+          else
+            npm run mobile:build:staging
           fi
 
       - name: Use Ruby and install dependencies
@@ -795,7 +806,23 @@ jobs:
         working-directory: mobile/android
         run: ./gradlew testDebugUnitTest
 
+      - name: Verify Android release and debug packages
+        if: inputs.android_build_only
+        working-directory: mobile/android
+        run: ./gradlew bundleIonwalletProdRelease assembleIonwalletProdDebug
+
+      - name: Upload verification artifacts
+        if: inputs.android_build_only
+        uses: actions/upload-artifact@v4
+        with:
+          name: IONWallet-android-verification
+          path: |
+            mobile/android/app/build/outputs/bundle/ionwalletProdRelease/*.aab
+            mobile/android/app/build/outputs/apk/ionwalletProd/debug/*.apk
+          if-no-files-found: error
+
       - name: Package and publish
+        if: ${{ !inputs.android_build_only }}
         env:
           ANDROID_API_KEY_BASE64: ${{ secrets.ANDROID_API_KEY_BASE64 }}
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -839,12 +866,14 @@ jobs:
       # here breaks that loop; the following step starts a fresh daemon in a few seconds and reads the
       # same on-disk build cache.
       - name: Stop the JVM daemons before the second web build
+        if: ${{ !inputs.android_build_only }}
         run: |
           (cd mobile/android && ./gradlew --stop) || true
           pkill -f KotlinCompileDaemon || true
           free -m
 
       - name: Build project for direct apk
+        if: ${{ !inputs.android_build_only }}
         env:
           IS_ANDROID_DIRECT: 1
         run: |
@@ -855,6 +884,7 @@ jobs:
           fi
 
       - name: Build direct apk
+        if: ${{ !inputs.android_build_only }}
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -868,6 +898,7 @@ jobs:
           cp "$APK_PATH" "$ANDROID_ARTIFACT_NAME"
 
       - name: Upload APK artifact
+        if: ${{ !inputs.android_build_only }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ANDROID_ARTIFACT_NAME }}
