@@ -20,7 +20,6 @@ import {
   getLastPageTraceBoundaryId,
   trimPageBoundaryTraceActivities,
 } from '../common/activities/reconciler/pagination';
-import { reconcileNewActivitiesUpdate } from '../common/activities/reconciler/pendingReconciler';
 
 export type ActivitySliceResult = {
   activities: ApiActivity[];
@@ -63,7 +62,16 @@ export function reconcileActivityUpdate(
   pendingActivities?: readonly ApiActivity[],
 ) {
   void accountId;
-  return reconcileNewActivitiesUpdate(previousActivities, confirmedActivities, pendingActivities);
+  void previousActivities;
+
+  return {
+    confirmedActivities: [...confirmedActivities],
+    pendingActivities: pendingActivities ? [...pendingActivities] : undefined,
+    patch: {
+      upsert: [...confirmedActivities],
+      removeIds: [],
+    },
+  };
 }
 
 function fetchTokenActivitySlice(

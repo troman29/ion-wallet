@@ -18,7 +18,6 @@ import { fetchTokenWalletAddress, resolveTokenWalletAddress } from './util/tonCo
 import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/accounts';
 import { getTokenBySlug, tokensPreload } from '../../common/tokens';
 import { SEC } from '../../constants';
-import { projectActivitiesWithTraceOutputs } from './toncenter/projectActivitiesWithTraceOutputs';
 import { fetchActions, fetchTransactions, parseActionActivityId } from './toncenter';
 import { fetchAndParseTrace } from './traces';
 
@@ -87,12 +86,11 @@ export async function fetchActivitySlice({
       toTimestamp,
       signal,
     });
+
+    activities = activities.filter((activity) => getActivityTokenSlugs(activity).includes(tokenSlug));
   }
 
-  activities = await projectActivitiesWithTraceOutputs(network, address, activities, signal);
-  return tokenSlug
-    ? activities.filter((activity) => getActivityTokenSlugs(activity).includes(tokenSlug))
-    : activities;
+  return activities;
 }
 
 export async function decryptComment({ accountId, activity, enclaveToken }: ApiDecryptCommentOptions) {

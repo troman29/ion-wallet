@@ -2,8 +2,6 @@ import type { ApiActivity, ApiFetchTransactionByIdOptions } from '../../types';
 
 import { logDebugError } from '../../../util/logs';
 import { parseActionsToActivities } from './toncenter/actions';
-import { TRACE_ACTIVITY_RULES } from './toncenter/technicalChildRules';
-import { getHiddenActivityIdsByOutput } from './toncenter/traceActivityProjection';
 import { fetchTraceByIdOrHash, fetchTraceByTxHash } from './toncenter/traces';
 import { fillActivityDetails } from './activities';
 import { parseTrace } from './traces';
@@ -28,28 +26,12 @@ export async function fetchTransactionById(
       return [];
     }
 
-    let activities = parseActionsToActivities(trace.actions, {
+    const activities = parseActionsToActivities(trace.actions, {
       network,
       walletAddress,
       addressBook,
       metadata,
     });
-
-    try {
-      const parsedTrace = parseTrace({
-        network,
-        walletAddress,
-        actions: trace.actions,
-        traceDetail: trace.trace,
-        addressBook,
-        metadata,
-        transactions: trace.transactions,
-      });
-      const hiddenIds = getHiddenActivityIdsByOutput(parsedTrace, TRACE_ACTIVITY_RULES);
-      activities = activities.filter(({ id }) => !hiddenIds.has(id));
-    } catch (err) {
-      logDebugError('fetchTransactionById.projectTraceActivities', err);
-    }
 
     /*
       Populate fee details for activities that require them.
