@@ -1,6 +1,7 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 ENV HUSKY=0
+RUN apk add --no-cache bash
 COPY package.json package-lock.json ./
 COPY patches ./patches
 RUN npm ci
