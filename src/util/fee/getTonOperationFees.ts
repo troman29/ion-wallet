@@ -3,6 +3,7 @@ import type { ApiStakingType, ApiToken } from '../../api/types';
 import { DEFAULT_FEE } from '../../config';
 import {
   CLAIM_MINTLESS_AMOUNT,
+  CLAIM_MINTLESS_REAL_AMOUNT,
   TINY_TOKEN_TRANSFER_AMOUNT,
   TINY_TOKEN_TRANSFER_REAL_AMOUNT,
   TOKEN_TRANSFER_AMOUNT,
@@ -74,7 +75,7 @@ export function getToncoinAmountForTransfer(token: ApiToken, willClaimMintless: 
 
   if (willClaimMintless) {
     amount += CLAIM_MINTLESS_AMOUNT;
-    realAmount += CLAIM_MINTLESS_AMOUNT;
+    realAmount += CLAIM_MINTLESS_REAL_AMOUNT;
   }
 
   return {

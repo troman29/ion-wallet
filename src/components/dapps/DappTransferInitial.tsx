@@ -14,7 +14,7 @@ import type {
 } from '../../api/types';
 import type { Account, SavedAddress, Theme } from '../../global/types';
 
-import { DEFAULT_CHAIN, TONCOIN, UNKNOWN_TOKEN } from '../../config';
+import { DEFAULT_CHAIN, STAKED_TON_SLUG, TONCOIN, UNKNOWN_TOKEN } from '../../config';
 import renderText from '../../global/helpers/renderText';
 import {
   selectAccountStakingStatesBySlug,
@@ -204,7 +204,22 @@ function DappTransferInitial({
     const { payload } = transaction;
 
     const amountText: string[] = [];
-    if (isNftTransferPayload(payload)) {
+    if (transaction.stakingPreview) {
+      const { operation, amount, jettonAmount } = transaction.stakingPreview;
+      const label = operation === 'stake' ? lang('Stake') : lang('Unstake');
+      const stakedToken = tokensBySlug[STAKED_TON_SLUG];
+      const quantity = amount !== undefined
+        ? `${operation === 'unstake' ? '≈ ' : ''}${formatCurrency(toDecimal(amount), TONCOIN.symbol, 4, true)}`
+        : jettonAmount !== undefined
+          ? formatCurrency(
+            toDecimal(jettonAmount, stakedToken?.decimals ?? TONCOIN.decimals),
+            stakedToken?.symbol ?? 'LION',
+          )
+          : undefined;
+      amountText.push(`${label} ${quantity ?? ''}`);
+      const attachedAmount = formatCurrency(toDecimal(transaction.amount), TONCOIN.symbol);
+      amountText.push(`${lang('Attached to Contract')}: ${attachedAmount}`);
+    } else if (isNftTransferPayload(payload)) {
       amountText.push('1 NFT');
     } else if (isTokenTransferPayload(payload)) {
       const { slug: tokenSlug, amount } = payload;
@@ -212,7 +227,9 @@ function DappTransferInitial({
       amountText.push(formatCurrency(toDecimal(amount, decimals), symbol));
     }
 
-    amountText.push(formatCurrency(toDecimal(transaction.amount + transaction.networkFee), TONCOIN.symbol));
+    if (!transaction.stakingPreview) {
+      amountText.push(formatCurrency(toDecimal(transaction.amount + transaction.networkFee), TONCOIN.symbol));
+    }
 
     return (
       <div
@@ -222,7 +239,7 @@ function DappTransferInitial({
       >
         {transaction.isScam && <img src={scamImg} alt={lang('Scam')} className={styles.scamImage} />}
         <span className={buildClassName(styles.transactionRowAmount, transaction.isScam && styles.scam)}>
-          {amountText.join(' + ')}
+          {amountText.join(transaction.stakingPreview ? ' · ' : ' + ')}
         </span>
         {' '}
         <span className={buildClassName(styles.transactionRowAddress, transaction.isScam && styles.scam)}>

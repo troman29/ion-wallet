@@ -1,6 +1,6 @@
 {
   "name": "ion-wallet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Self-custodial ION Wallet for ION Network and BNB Chain.",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "mobile:build": "npm run i18n:build:android && cross-env IS_CAPACITOR=1 npm run build && cap sync ${CAP_PLATFORM} --deployment && cross-env IS_CAPACITOR=1 node ./dev/prepareIosIconFont.mjs",
     "mobile:build:dev": "cross-env APP_ENV=development npm run mobile:build",
     "mobile:build:staging": "cross-env APP_ENV=staging npm run mobile:build",
-    "mobile:build:production": "npm run mobile:build",
+    "mobile:build:production": "cross-env APP_ENV=production NO_EVM=1 npm run mobile:build",
     "mobile:run:android": "cross-env CAP_PLATFORM=android npm run mobile:build:dev && cap run android",
     "mobile:run:ios": "cross-env CAP_PLATFORM=ios npm run mobile:build:dev && cap run ios",
     "build:icons": "fantasticon",

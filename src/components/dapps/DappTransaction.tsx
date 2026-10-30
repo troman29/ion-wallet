@@ -2,7 +2,7 @@ import React, { memo, useMemo } from '../../lib/teact/teact';
 
 import type { ApiDappTransfer, ApiToken } from '../../api/types';
 
-import { TONCOIN } from '../../config';
+import { STAKED_TON_SLUG, TONCOIN } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import { getChainTitle } from '../../util/chain';
 import isEmptyObject from '../../util/isEmptyObject';
@@ -93,8 +93,21 @@ function DappTransactionContent({
       />
       {!isEmptyObject(amountBySlug) && (
         <DappAmountField
-          label={isNftTransferPayload(transaction.payload) ? lang('Additional Amount Sent') : lang('Amount')}
+          label={transaction.stakingPreview ? lang('Attached to Contract')
+            : isNftTransferPayload(transaction.payload) ? lang('Additional Amount Sent') : lang('Amount')}
           amountsBySlug={amountBySlug}
+        />
+      )}
+      {transaction.stakingPreview?.amount !== undefined && (
+        <DappAmountField
+          label={transaction.stakingPreview.operation === 'stake' ? lang('Stake') : lang('Estimated Unstake')}
+          amountsBySlug={{ [TONCOIN.slug]: transaction.stakingPreview.amount }}
+        />
+      )}
+      {transaction.stakingPreview?.jettonAmount !== undefined && (
+        <DappAmountField
+          label={lang('Burned Staking Tokens')}
+          amountsBySlug={{ [STAKED_TON_SLUG]: transaction.stakingPreview.jettonAmount }}
         />
       )}
       <DappAmountField label={lang('Fee')} amountsBySlug={feeBySlug} />

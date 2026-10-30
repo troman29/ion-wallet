@@ -30,7 +30,6 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>ion</string>
-				<string>tc</string>
 				<string>ion-gateway</string>
 				<string>ion-wc</string>
 				<string>wc</string>

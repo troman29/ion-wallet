@@ -153,6 +153,10 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     return;
   }
 
+  if (cached.stateVersion === 1) {
+    cached.settings.areTinyTransfersHidden = false;
+  }
+
   // ION Wallet starts with a clean storage namespace. Future persisted-state migrations belong here;
   // each must advance `stateVersion` to `STATE_VERSION` after transforming the cached data.
   cached.stateVersion = STATE_VERSION;

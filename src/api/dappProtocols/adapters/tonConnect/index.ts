@@ -41,6 +41,7 @@ import type {
   ApiNetwork,
   ApiParsedPayload,
   ApiSseOptions,
+  ApiStakingCommonResponse,
 } from '../../../types';
 import type { DappProtocolError } from '../../errors';
 import type { StoredDappConnection } from '../../storage';
@@ -69,10 +70,9 @@ import { CHAIN } from './types';
 
 import { IS_CAPACITOR, IS_EXTENSION, SSE_BRIDGE_URL, TONCOIN } from '../../../../config';
 import { parseAccountId } from '../../../../util/account';
-import { bigintDivideToNumber } from '../../../../util/bigint';
+import { bigintDivideToNumber, bigintMultiplyToNumber } from '../../../../util/bigint';
 import {
   ION_GATEWAY_PROTOCOL,
-  ION_GATEWAY_PROTOCOL_SELF,
   ION_GATEWAY_UNIVERSAL_URL,
 } from '../../../../util/deeplink/constants';
 import { fetchJsonWithProxy, handleFetchErrors } from '../../../../util/fetch';
@@ -82,6 +82,7 @@ import { logDebug, logDebugError } from '../../../../util/logs';
 import safeExec from '../../../../util/safeExec';
 import { getMaxMessagesInTransaction } from '../../../../util/ton/transfer';
 import { tonConnectGetDeviceInfo } from '../../../../util/tonConnectEnvironment';
+import { TON_GAS } from '../../../chains/ton/constants';
 import { checkMultiTransactionDraft, sendSignedTransactions } from '../../../chains/ton/transfer';
 import { parsePayloadBase64 } from '../../../chains/ton/util/metadata';
 import { getIsRawAddress, toBase64Address, toRawAddress } from '../../../chains/ton/util/tonCore';
@@ -94,6 +95,7 @@ import {
   waitLogin,
 } from '../../../common/accounts';
 import { getKnownAddressInfo } from '../../../common/addresses';
+import { callBackendGet } from '../../../common/backend';
 import { createDappPromise } from '../../../common/dappPromises';
 import { isUpdaterAlive } from '../../../common/helpers';
 import { bytesToHex } from '../../../common/utils';
@@ -131,6 +133,8 @@ import {
   transformTonConnectMessageToUnified,
   transformUnifiedMethodResponseToTonConnect,
 } from './utils';
+
+import { parseLiquidStakingRequest } from '../../../chains/ton/contracts/LiquidStaking';
 
 const BLANK_GIF_DATA_URL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
@@ -502,6 +506,7 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
 
       const transactionsForRequest = await prepareTransactionForRequest(
         network,
+        address,
         messages,
         checkResult.emulation,
         checkResult.parsedPayloads,
@@ -658,7 +663,6 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
 
   canHandleDeepLink(url: string): boolean {
     return url.startsWith(ION_GATEWAY_PROTOCOL)
-      || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
       || omitProtocol(url).startsWith(omitProtocol(ION_GATEWAY_UNIVERSAL_URL));
   }
 
@@ -1265,10 +1269,13 @@ async function checkTransactionMessages(
 
 function prepareTransactionForRequest(
   network: ApiNetwork,
+  walletAddress: string,
   messages: TonConnectTransactionMessage[],
   emulation: ApiEmulationWithFallbackResult,
   parsedPayloads?: (ApiParsedPayload | undefined)[],
 ) {
+  let liquidRatePromise: Promise<number | undefined> | undefined;
+
   return Promise.all(messages.map(
     async ({
       address,
@@ -1283,6 +1290,42 @@ function prepareTransactionForRequest(
       const payload = parsedPayloads?.[index]
         ?? (rawPayload ? await parsePayloadBase64(network, toAddress, rawPayload) : undefined);
       const { isScam } = getKnownAddressInfo(normalizedAddress) || {};
+      const stakingRequest = parseLiquidStakingRequest(toAddress, rawPayload, payload, walletAddress);
+      let stakingPreview: ApiDappTransfer['stakingPreview'];
+
+      if (stakingRequest?.operation === 'stake' && amount > TON_GAS.stakeLiquid) {
+        stakingPreview = {
+          operation: 'stake',
+          amount: amount - TON_GAS.stakeLiquid,
+          isEstimate: false,
+        };
+      } else if (stakingRequest?.operation === 'unstake' && stakingRequest.jettonAmount) {
+        if (network === 'mainnet') {
+          liquidRatePromise ??= (async () => {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 3000);
+            try {
+              const { liquid } = await callBackendGet<ApiStakingCommonResponse>(
+                '/staking/common', undefined, undefined, controller.signal,
+              );
+              return liquid.currentRate;
+            } catch {
+              return undefined;
+            } finally {
+              clearTimeout(timeout);
+            }
+          })();
+        }
+        const rate = await liquidRatePromise;
+        stakingPreview = {
+          operation: 'unstake',
+          jettonAmount: stakingRequest.jettonAmount,
+          amount: rate && Number.isFinite(rate) && rate > 0
+            ? bigintMultiplyToNumber(stakingRequest.jettonAmount, rate)
+            : undefined,
+          isEstimate: true,
+        };
+      }
 
       return {
         chain: 'ton',
@@ -1290,6 +1333,7 @@ function prepareTransactionForRequest(
         amount,
         rawPayload,
         payload,
+        stakingPreview,
         stateInit,
         normalizedAddress,
         isScam,

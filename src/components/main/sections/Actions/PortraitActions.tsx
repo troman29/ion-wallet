@@ -3,6 +3,7 @@ import { getActions } from '../../../../global';
 
 import type { StakingStateStatus } from '../../../../util/staking';
 
+import { ENABLE_EXCHANGE } from '../../../../config';
 import buildClassName from '../../../../util/buildClassName';
 import { vibrate } from '../../../../util/haptics';
 import { STAKING_TAB_TEXT_VARIANTS } from './helpers/stakingLabels';
@@ -76,14 +77,16 @@ function PortraitActions({
           <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
           {lang('Send')}
         </Button>
-        <Button
-          isSimple
-          className={styles.button}
-          onClick={handleStartExchange}
-        >
-          <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
-          {lang('Exchange')}
-        </Button>
+        {ENABLE_EXCHANGE && (
+          <Button
+            isSimple
+            className={styles.button}
+            onClick={handleStartExchange}
+          >
+            <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
+            {lang('Exchange')}
+          </Button>
+        )}
         {!isStakingDisabled && (
           <Button
             isSimple

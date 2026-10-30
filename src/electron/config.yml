@@ -36,8 +36,6 @@ protocols:
   - name: "ION Wallet"
     schemes: ["ion"]
   - name: "ION Gateway"
-    schemes: ["tc"]
-  - name: "ION Wallet ION Gateway"
     schemes: ["ion-gateway"]
   - name: "WalletConnect"
     schemes: ["wc"]

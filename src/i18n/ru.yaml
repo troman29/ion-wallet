@@ -875,6 +875,9 @@ $domains_amount %count%:
   fewValue: "%count% домена"
   manyValue: "%count% доменов"
 Stake: Стейкинг
+Attached to Contract: Приложено к контракту
+Estimated Unstake: Ожидаемый вывод
+Burned Staking Tokens: Сжигаемые токены стейкинга
 Manage Tokens: Управление токенами
 Claim Rewards: Получить награды
 Configure DNS: Настроить DNS

@@ -78,6 +78,7 @@ const AuthImportMnemonic = ({ isActive, isLoading, error }: OwnProps & StateProp
 
   const handleMnemonicSet = useLastCallback((pastedMnemonic: string[]) => {
     if (!MNEMONIC_COUNTS.includes(pastedMnemonic.length) && !isMnemonicPrivateKey(pastedMnemonic)) {
+      showToast({ message: lang('InvalidMnemonic') });
       return;
     }
 
@@ -118,10 +119,12 @@ const AuthImportMnemonic = ({ isActive, isLoading, error }: OwnProps & StateProp
     try {
       const { type, text } = await readClipboardContent();
 
-      if (type === 'text/plain') {
-        const newValue = text.trim();
-
-        handlePasteMnemonic(newValue);
+      if (!text.trim()) {
+        showToast({ message: lang('Clipboard empty') });
+      } else if (type === 'text/plain') {
+        handlePasteMnemonic(text.trim());
+      } else {
+        showToast({ message: lang('Error reading clipboard') });
       }
     } catch (err: any) {
       showToast({ message: lang('Error reading clipboard') });

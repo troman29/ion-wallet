@@ -251,6 +251,12 @@ export interface ApiTransferToSign {
 }
 
 export interface ApiDappTransfer extends ApiTransferToSign {
+  stakingPreview?: {
+    operation: 'stake' | 'unstake';
+    amount?: bigint;
+    jettonAmount?: bigint;
+    isEstimate: boolean;
+  };
   isScam?: boolean;
   /** Whether the transfer should be treated with cautiousness, because its payload is unclear */
   isDangerous: boolean;

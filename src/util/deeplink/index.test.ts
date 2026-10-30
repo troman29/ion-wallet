@@ -916,7 +916,6 @@ describe('View-only mode deeplink blocking', () => {
 
   describe('processDeeplink blocks dapp connector protocols', () => {
     it.each([
-      { name: 'ION Gateway (tc://)', url: 'tc://some-dapp-request' },
       { name: 'ION Gateway (ion-gateway://)', url: 'ion-gateway://some-dapp-request' },
       { name: 'WalletConnect (wc:)', url: 'wc:some-session-request' },
     ])('should block $name in view-only mode', async ({ url }) => {
@@ -926,6 +925,13 @@ describe('View-only mode deeplink blocking', () => {
       expect(mockActions.showError).toHaveBeenCalledWith({
         error: '$action_not_available_view_mode',
       });
+      expect(mockActions.openLoadingOverlay).not.toHaveBeenCalled();
+    });
+
+    it('does not accept the TON Connect tc:// scheme', async () => {
+      const result = await processDeeplink('tc://some-dapp-request');
+
+      expect(result).toBe(false);
       expect(mockActions.openLoadingOverlay).not.toHaveBeenCalled();
     });
   });

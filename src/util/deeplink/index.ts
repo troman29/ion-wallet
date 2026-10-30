@@ -37,7 +37,6 @@ import { isTelegramUrl } from '../url';
 import {
   CHECKIN_URL,
   ION_GATEWAY_PROTOCOL,
-  ION_GATEWAY_PROTOCOL_SELF,
   ION_GATEWAY_UNIVERSAL_URL,
   SELF_PROTOCOL,
   SELF_UNIVERSAL_URLS,
@@ -462,7 +461,6 @@ function rawParseTonDeeplink(value?: string) {
 
 function isIonGatewayDeeplink(url: string) {
   return url.startsWith(ION_GATEWAY_PROTOCOL)
-    || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
     || omitProtocol(url).startsWith(omitProtocol(ION_GATEWAY_UNIVERSAL_URL));
 }
 

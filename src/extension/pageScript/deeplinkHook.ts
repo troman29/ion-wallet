@@ -1,6 +1,5 @@
 import {
   ION_GATEWAY_PROTOCOL,
-  ION_GATEWAY_PROTOCOL_SELF,
   ION_GATEWAY_UNIVERSAL_URL,
   SELF_PROTOCOL,
   SELF_UNIVERSAL_URLS,
@@ -71,7 +70,6 @@ function isDeeplink(url: string) {
     url.startsWith(TON_PROTOCOL)
     || url.startsWith(SELF_PROTOCOL)
     || url.startsWith(ION_GATEWAY_PROTOCOL)
-    || url.startsWith(ION_GATEWAY_PROTOCOL_SELF)
     || SELF_UNIVERSAL_URLS.some((universalUrl) => url.startsWith(universalUrl))
     || url.startsWith(ION_GATEWAY_UNIVERSAL_URL)
   );

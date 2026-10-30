@@ -177,8 +177,7 @@ export function parseActionsToActivities(actions: AnyAction[], options: ParseOpt
 
   for (const action of actions) {
     try {
-      const parsedAction = parseAction(action, options);
-      activities.push(...parsedAction.activities);
+      activities.push(...parseAction(action, options).activities);
     } catch (err) {
       // An incompatible action must not discard the rest of the history page.
       // Keep trace parsing strict: silently losing actions there would affect fee accounting.

@@ -867,6 +867,9 @@ $domains_amount %count%:
   oneValue: "%count% domain"
   otherValue: "%count% domains"
 Stake: Stake
+Attached to Contract: Attached to contract
+Estimated Unstake: Estimated unstake
+Burned Staking Tokens: Burned staking tokens
 Manage Tokens: Manage Tokens
 Claim Rewards: Claim Rewards
 Configure DNS: Configure DNS

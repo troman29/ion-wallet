@@ -9,8 +9,7 @@ import {
 } from './utils';
 
 const ION_PROTOCOL = 'ion';
-const ION_GATEWAY_PROTOCOL = 'tc';
-const ION_GATEWAY_PROTOCOL_SELF = 'ion-gateway';
+const ION_GATEWAY_PROTOCOL = 'ion-gateway';
 const WALLETCONNECT_SCHEME = 'wc';
 const WALLETCONNECT_DEEPLINK_SCHEME = 'ion-wc';
 const WALLETCONNECT_DEEPLINK = 'ion-wc://';
@@ -21,13 +20,11 @@ export function initDeeplink() {
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
       app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL, process.execPath, [path.resolve(process.argv[1])]);
-      app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL_SELF, process.execPath, [path.resolve(process.argv[1])]);
       app.setAsDefaultProtocolClient(WALLETCONNECT_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
       app.setAsDefaultProtocolClient(WALLETCONNECT_DEEPLINK_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
     }
   } else {
     app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL);
-    app.setAsDefaultProtocolClient(ION_GATEWAY_PROTOCOL_SELF);
     app.setAsDefaultProtocolClient(WALLETCONNECT_SCHEME);
     app.setAsDefaultProtocolClient(WALLETCONNECT_DEEPLINK_SCHEME);
   }
@@ -102,7 +99,6 @@ function findDeeplink(args: string[]) {
 function getIsDeeplink(url: string) {
   return url.startsWith(`${ION_PROTOCOL}://`)
     || url.startsWith(`${ION_GATEWAY_PROTOCOL}://`)
-    || url.startsWith(`${ION_GATEWAY_PROTOCOL_SELF}://`)
     || url.startsWith(`${WALLETCONNECT_SCHEME}:`)
     || url.startsWith(WALLETCONNECT_DEEPLINK);
 }

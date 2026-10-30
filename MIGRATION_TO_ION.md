@@ -51,7 +51,7 @@
 - [x] **Удалить legacy swap и подготовить ION Exchange.**
   - Удалены неиспользуемые swap hooks, intent/match модели, storage keys и очередь записи reconciler, Swap-стили, режим PasswordForm, swap-push, недостижимые ветки activity, fee address, slippage и legacy переменные workflow/webpack.
   - Из каждого из 12 словарей удалено по 77 неиспользуемых строк MFA/Telegram, Ledger и legacy swap. Текст WalletConnect Pay больше не предлагает удалённые buy/swap-функции.
-  - Ссылки ion://swap открывают только оболочку Exchange. Wire-типы indexer, обработка сторонних on-chain DEX/liquidity сообщений и пагинация обычной истории сохранены.
+  - Оболочка Exchange скрыта по умолчанию через `ENABLE_EXCHANGE=0`, включая кнопки, меню токена и открытие по `ion://swap`; `ENABLE_EXCHANGE=1` включает её в сборке. Wire-типы indexer, обработка сторонних on-chain DEX/liquidity сообщений и пагинация обычной истории сохранены.
   - Удалены DEX/CEX swap: `/swap/*`, провайдеры, котировки, маршруты, slippage, комиссии, подпись swap-транзакций, история и reconciliation swap-активностей.
   - Оставлена только оболочка окна **Exchange** с фиксированной парой `ION (ION Network) → ION (BNB Chain)`; она не создаёт транзакцию.
   - После утверждения bridge-контракта, получателя и модели комиссии реализовать внутри этой оболочки обычный перевод ION на bridge-адрес и обработку его статуса (P1).
@@ -113,15 +113,19 @@
   - Удалён iOS target и ресурсы Gram Wallet, включая widget extension.
   - Android production-сборка проверена командой `:app:assembleIonwalletProdDebug`.
 - [x] Заменить локальные схемы `ton://` и `mtw://` на `ion://`.
-  - Для собственного ION Gateway-канала используется `ion-gateway://`. Стандартный входящий URI ION Gateway `tc://` сохранён для совместимости с официальным SDK; public links используют `wallet.ice.io`.
+  - ION Gateway принимает `ion-gateway://` и ссылки `connect.ionwallet.io`; TON Connect URI не принимается. Мост: `bridge.ionwallet.io/bridge/`.
 - [x] Сохранить отдельный Capacitor WebView origin `https://ionwallet.local`.
   - Это технический локальный origin native-обёртки; он не заменяет публичные Universal Links и App Links на `wallet.ice.io`.
 - [x] Удалить перенос legacy auth в Enclave.
   - ION Wallet создаётся сразу с Enclave: старые encrypted mnemonic, legacy biometric storage, rollback и recovery UI не поддерживаются.
 - [ ] Завершить внешнюю инфраструктуру и публикацию. См. [реестр ресурсов](REBRANDING_RESOURCE_REGISTRY.md).
+  - Страница `connect.ionwallet.io` опубликована через Dokploy из приватного `troman29/ion-sites`: передаёт запрос в `ion-gateway://` и показывает QR. Доменные App Links / Universal Links ожидают финальные идентификаторы и сертификаты мобильных приложений.
+  - [x] Лендинг `ionwallet.io` опубликован через Dokploy из того же репозитория. Ссылки App Store и Google Play ведут на работающие страницы «Coming soon» до появления приложений в магазинах; ссылка на стейкинг ведёт на `stake.ice.io`.
+  - [ ] После выпуска первой версии добавить на `ionwallet.io/download/android/` прямое скачивание подписанного release APK ION Wallet 1.0.0. Показать версию и SHA-256 файла, обновить Android-ссылку на лендинге; до готовности релиза оставить «Coming soon».
   - Текущие `wallet.ice.io` URL — временные кодовые значения, а не доказательство готового сайта, API, help-центра, legal-страниц, загрузок или CDN. Для каждого нужен опубликованный ресурс или удаление ссылки.
-  - Неподтверждённые Android blog/install/help/scam/APK URL удалены. Website, terms/privacy и association-конфигурация ожидают публикации; signing и stores проверяются отдельно.
-  - Перед Android-релизом установить настоящий `mobile/android/app/src/ionwallet/google-services.json` из ION Firebase Console и проверить соответствие `io.ice.wallet`, release signing certificate и Firebase-проекту ION Wallet.
+  - Неподтверждённые Android blog/install/help/scam/APK URL удалены. Terms/privacy и association-конфигурация ожидают публикации; signing и stores проверяются отдельно.
+  - Перед Android-релизом установить настоящий `mobile/android/app/src/ionwallet/google-services.json` из ION Firebase Console и проверить соответствие итоговому package ID, release signing certificate и Firebase-проекту ION Wallet.
+  - Перед регистрацией мобильных приложений заменить временный `io.ice.wallet` на согласованный для `ionwallet.io` идентификатор `io.ionwallet` и обновить Firebase и доменные association-файлы.
   - Firebase-конфигурация заменена на нерабочую ION-заглушку: Android собирается, а iOS не вызывает `FirebaseApp.configure()` до установки настоящего `GOOGLE_APP_ID`. Перед выпуском нужны конфиги из ION Firebase Console.
   - Зарегистрировать и проверить ION Wallet в ION Connect и WalletConnect, включая metadata, package IDs, deep links, icon и policy URL.
   - Создать и оформить App Store Connect и Google Play Console приложения: signing, privacy/data disclosure, store listing, screenshots, support/policy URLs и тестовые каналы.
@@ -156,7 +160,7 @@
   - `.env.example` рекомендует `NO_WEBSOCKET=1` и `NO_PENDING_ACTIVITIES=1`; код отключает их только при значении `1`, а webpack defaults — `0`. Проверять реальные env-параметры каждой сборки: отключение не гарантировано по умолчанию.
 - [ ] Пересмотреть CI после удаления Agent: оставить только проверки актуальных web и Capacitor целей.
 - [ ] Попросить ION включить в индексаторе emulated traces (`/pendingActions`, `/pendingTraces`), `emulateTrace` и streaming WebSocket.
-- [ ] Перевести предпросмотр `wallet.lab.windbit.dev` на прямые адреса ION API (`/indexer/v3`, `/http/v2`) вместо nginx-маппинга `/ion/api/*`, и закоммитить оставшуюся nginx-конфигурацию, если она остаётся частью инфраструктуры.
+- [ ] Перевести временный предпросмотр кошелька на прямые адреса ION API (`/indexer/v3`, `/http/v2`) вместо nginx-маппинга `/ion/api/*`, и закоммитить оставшуюся nginx-конфигурацию, если она остаётся частью инфраструктуры.
 
 ### P2 — проверка перед выпуском
 
@@ -165,6 +169,7 @@
 - [ ] Extension и Electron: запуск и основные пользовательские сценарии.
 - [ ] Android Capacitor: `cap sync`, сборка, запуск, биометрия, QR, ссылки и уведомления.
   - 23.10.2026: в отдельном worktree от `d8f41f205` собран production Capacitor web-бандл, выполнен `cap sync android` и успешно собран `:app:assembleIonwalletProdDebug` (362 задачи). APK: `io.ice.wallet.debug`, `1.0.debug`, minSdk 24, targetSdk 37; подпись v2 проверена apksigner. Firebase остаётся заглушкой. APK установлен и запущен на эмуляторе Google APIs x86_64 API 37. Проверены onboarding, прямой переход к PIN без отсчёта, ввод и подтверждение PIN, переход к экрану резервной копии. Секретные слова не открывались. Проверка аккаунта после backup, биометрия, QR, ссылки и push, а также физическое устройство остаются открытыми; в журнале WebView есть Failed to fetch. После sync сохранён исходный путь к собственному `native-dialog`; стандартный Capacitor sync его перезаписывает.
+  - 26.10.2026: на текущем рабочем дереве повторно прошли `mobile:build:production`, `cap sync android` и `:app:assembleIonwalletProdDebug`. APK `io.ice.wallet.debug` установлен и запущен на эмуляторе Android API 36; открылся onboarding и системный запрос уведомлений. Создание кошелька, сеть, биометрия, QR, deep links и push в этом проходе не проверялись.
 - [ ] iOS Capacitor: `cap sync`, Xcode build, запуск, биометрия, QR, ссылки и уведомления.
 - [ ] Ручная проверка с ION RPC и BNB Chain без обращений к удалённым сетям и продуктам MyTonWallet.
 

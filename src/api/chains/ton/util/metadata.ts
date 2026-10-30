@@ -1,4 +1,5 @@
 import type { DictionaryValue } from '@ton/core';
+import { Address } from '@ton/core';
 import { BitReader } from '@ton/core/dist/boc/BitReader';
 import { BitString } from '@ton/core/dist/boc/BitString';
 import { Builder } from '@ton/core/dist/boc/Builder';
@@ -18,11 +19,13 @@ import {
 import {
   DEBUG,
   LIQUID_JETTON,
+  LIQUID_POOL,
   TON_DNS_ZONES,
 } from '../../../../config';
 import { fetchJsonWithProxy } from '../../../../util/fetch';
 import { pick, range } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
+import { parsePoolWithdrawal } from '../contracts/LiquidStaking';
 import {
   checkIsTrustedCollection,
   getHasTrustedCollections,
@@ -332,6 +335,17 @@ export async function parsePayloadSlice(
           type: 'liquid-staking:deposit',
           queryId,
           appId,
+        };
+      }
+      case LiquidStakingOpCode.Withdraw: {
+        if (!Address.parse(address).equals(Address.parse(LIQUID_POOL))) return undefined;
+        const { jettonAmount, fromAddress, responseAddress } = parsePoolWithdrawal(slice);
+        return {
+          type: 'liquid-staking:withdraw',
+          queryId,
+          jettonAmount,
+          fromAddress: toBase64Address(fromAddress, undefined, network),
+          responseAddress: toBase64Address(responseAddress, undefined, network),
         };
       }
       case VestingV1OpCode.AddWhitelist: {
