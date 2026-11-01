@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
+import { generateActionIcons } from './actionIcons.mjs';
 import { generateIllustrations } from './illustrations.mjs';
 
 const root = process.argv[2];
@@ -85,10 +86,11 @@ cardFiles.push(...(await fs.readdir(path.join(root,'src/assets'))).filter((f)=>/
 for (const file of cardFiles) {
   const {width,height} = await sharp(await fs.readFile(path.join(root,file))).metadata();
   const key = path.basename(file).match(/^card_([^@.]+)/)?.[1];
-  const [light,dark] = palette[key] || ['#52b6f0','#1956b3'];
+  const [light,dark] = palette[key] || ['#8057d2','#6941c6'];
   const card = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 600 380" preserveAspectRatio="none"><defs><linearGradient id="card" x2="1" y2="1"><stop stop-color="${light}"/><stop offset="1" stop-color="${dark}"/></linearGradient></defs><path fill="url(#card)" d="M0 0h600v380H0z"/><circle cx="560" cy="-30" r="320" fill="white" opacity=".06"/><circle cx="580" cy="400" r="300" fill="none" stroke="white" stroke-width="1" opacity=".12"/><g transform="translate(370 80) scale(2.5)" opacity=".075">${symbol()}</g></svg>`;
   const img = sharp(Buffer.from(card));
   await write(file, await (file.endsWith('.avif') ? img.avif({quality:80}) : img.jpeg({quality:92})).toBuffer());
 }
 await generateIllustrations(root, mark);
+await generateActionIcons(root);
 console.log('Generated ION web, extension, QR, desktop, Android, iOS and illustration assets.');

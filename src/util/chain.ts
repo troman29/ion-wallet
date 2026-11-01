@@ -162,7 +162,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     addressRegex: /^([-\w_]{48}|0:[\da-h]{64})$/i,
     addressPrefixRegex: /^([-\w_]{1,48}|0:[\da-h]{0,64})$/i,
     nativeToken: TONCOIN,
-    displayColor: '#2C92F0',
+    displayColor: '#6941C6',
     doesBackendSocketSupport: true,
     canImportTokens: true,
     shouldShowScamWarningIfNotEnoughGas: false,

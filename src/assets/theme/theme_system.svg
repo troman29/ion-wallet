@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="224" viewBox="0 0 192 224">
+  <defs>
+    <linearGradient id="card" x2="1" y2="1"><stop stop-color="#8057D2"/><stop offset="1" stop-color="#6941C6"/></linearGradient>
+    <clipPath id="light"><path d="M0 0H144L48 224H0Z"/></clipPath>
+    <g id="tiles"><rect x="20" y="120" width="46" height="28" rx="14"/><rect x="73" y="120" width="46" height="28" rx="14"/><rect x="126" y="120" width="46" height="28" rx="14"/><rect x="16" y="156" width="160" height="52" rx="16"/></g>
+  </defs>
+  <rect width="192" height="224" rx="24" fill="#100D19"/>
+  <rect width="192" height="224" rx="24" fill="#F5F3FA" clip-path="url(#light)"/>
+  <rect x="16" y="16" width="160" height="96" rx="16" fill="url(#card)"/>
+  <use href="#tiles" fill="#1C172A"/><use href="#tiles" fill="#FFFFFF" clip-path="url(#light)"/>
+</svg>

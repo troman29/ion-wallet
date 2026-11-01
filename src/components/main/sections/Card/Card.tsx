@@ -154,6 +154,7 @@ function Card({
             cols={14}
             cellSize={13}
             align="center"
+            maskSkin="cardLightText"
             className={styles.sensitiveData}
             contentClassName={styles.sensitiveDataContent}
             maskClassName={styles.blurred}
@@ -198,6 +199,7 @@ function Card({
             cols={11}
             align="center"
             cellSize={14}
+            maskSkin="cardLightText"
             className={styles.changeSpoiler}
             contentClassName={styles.sensitiveDataContent}
             maskClassName={styles.blurred}
@@ -228,7 +230,6 @@ function Card({
                   ? formatCurrency(Math.abs(changeValue!), shortBaseSymbol)
                   : formatCurrencyExtended(changeValue!, shortBaseSymbol)}
                 />
-                <i className={buildClassName(styles.changeChevron, 'icon-chevron-right')} aria-hidden />
               </span>
             </div>
           </SensitiveData>
