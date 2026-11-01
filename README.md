@@ -36,6 +36,10 @@ New wallets use a 24-word ION-only recovery phrase by default. Set `CREATE_MULTI
 
 Exchange is hidden by default while its ION bridge flow is unfinished. Set `ENABLE_EXCHANGE=1` at build time to show it.
 
+Pending activities, WebSockets, and trace emulation are disabled by default because the ION backend does not support them.
+Unset or empty `NO_PENDING_ACTIVITIES`, `NO_WEBSOCKET`, and `NO_TRACE_EMULATION` values keep them disabled;
+set a flag to `0` only when the configured backend supports that capability.
+
 Useful checks:
 
 ```sh

@@ -434,9 +434,9 @@ export default function createConfig(
         NO_EVM: '0',
         CREATE_MULTICHAIN_WALLET: '0',
         ENABLE_EXCHANGE: '0',
-        NO_PENDING_ACTIVITIES: '0',
-        NO_WEBSOCKET: '0',
-        NO_TRACE_EMULATION: '0',
+        NO_PENDING_ACTIVITIES: '1',
+        NO_WEBSOCKET: '1',
+        NO_TRACE_EMULATION: '1',
         NO_EXTRA_FEATURES: '0',
       }),
       new ProvidePlugin({
