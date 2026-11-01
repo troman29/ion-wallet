@@ -25,6 +25,7 @@ function setThemeValue() {
 function handlePrefersColorSchemeChange() {
   setThemeValue();
   setStatusBarStyle();
+  setThemeColor();
 }
 
 function setThemeColor() {

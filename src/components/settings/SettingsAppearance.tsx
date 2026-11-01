@@ -24,9 +24,9 @@ import SettingsHeader from './SettingsHeader';
 
 import styles from './Settings.module.scss';
 
-import darkThemeImg from '../../assets/theme/theme_dark.png';
-import lightThemeImg from '../../assets/theme/theme_light.png';
-import systemThemeImg from '../../assets/theme/theme_system.png';
+import darkThemeImg from '../../assets/theme/theme_dark.svg';
+import lightThemeImg from '../../assets/theme/theme_light.svg';
+import systemThemeImg from '../../assets/theme/theme_system.svg';
 
 interface OwnProps {
   isActive?: boolean;
