@@ -4,6 +4,7 @@
     "stylelint-config-clean-order"
   ],
   "ignoreFiles": [
+    "work/**",
     "dist/*.css",
     "src/styles/brilliant-icons.css",
     "coverage/**",

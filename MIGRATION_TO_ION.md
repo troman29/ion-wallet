@@ -1,6 +1,6 @@
 # Migration to ION
 
-Единый рабочий план и реестр переезда MyTonWallet → ION Wallet. Сверено 25.10.2026 с историей задач «Очистка и ребрендинг Ion Wallet» и «Ion Wallet cleanup and rebrand», `origin/master` до `502dfff45` и ветками открытых PR. `README.md` остаётся публичным описанием проекта, а инструкции генератора графики — технической документацией.
+Единый рабочий план и реестр переезда MyTonWallet → ION Wallet. Код и CI пересверены 01.11.2026 с локальным `master` на `82e049e9a` и текущими изменениями конфигурации. Сведения о внешних сервисах, магазинах и сторонних PR сохранены из предыдущих проверок 22–30.10.2026; повторной проверки их текущего состояния не было. `README.md` остаётся публичным описанием проекта, а инструкции генератора графики — технической документацией.
 
 **Статусы:** `[x]` — изменение есть в указанной ветке/коммите либо внешний сервис проверен; это не означает готовность релиза. `[ ]` — работа, публикация или сквозная проверка ещё требуется. Для открытых PR явно указан их статус. Исторические проверки ниже не заменяют проверку release-сборки.
 
@@ -11,14 +11,13 @@
 - Оставляем обычные переводы, NFT, token/liquid staking и защиту от неподдерживаемых multisig-отправок. Не возвращаем Portfolio, Multisend, MFA, Agent, Telegram Mini App/Gifts, gasless/Diesel, Ledger, nominator staking и DEX/CEX swap.
 - Окно Exchange остаётся оболочкой для будущего переноса ION между ION Network и BNB Chain. Сейчас оно **не создаёт транзакцию**: нужны утверждённые bridge-контракт, получатель, комиссия и обработка статуса.
 
-## Состояние веток
+## Состояние кода и внешних зависимостей
 
-- `origin/master` (`502dfff45`) содержит подтянутые сегодня коммиты `4c6a70954` (зачистка legacy swap/MFA/Ledger и CI), `d8f41f205` (внешние ссылки, проверка контрактов), `502dfff45` (Android build, исправления создания кошелька). Отмеченные ниже пункты учитывают эти коммиты.
-- [PR кошелька #29](https://github.com/troman29/ion-wallet/pull/29) открыт: переключает SSE-мост на `https://bridge.ionwallet.io/bridge/`. В `master` и ветке PR #30 до его слияния всё ещё указан старый адрес.
-- [PR кошелька #30](https://github.com/troman29/ion-wallet/pull/30) — черновик: `io.ionwallet`, `connect.ionwallet.io`, мобильные release-переменные, защитные проверки подписания и маршрутизация ссылок. Этот документ обновляется в его ветке; после слияния статус пунктов нужно пересверить.
-- [PR инфраструктуры #1](https://github.com/troman29/homelab/pull/1) открыт; bridge, `connect.ionwallet.io` и временная страница `ionwallet.io` уже развёрнуты на infra.
-- [PR реестра ION Gateway #4](https://github.com/ice-blockchain/wallets-list/pull/4) — черновик. Запись кошелька подготовлена, подключение и подпись через staking dApp ещё не проверены.
-- В основной рабочей копии `codex/fix-web-wallet-creation` есть **незакоммиченные** изменения: создание 24-словного ION-only кошелька по умолчанию с env-переключателем, фильтрация BNB-токенов в ION-only аккаунте и выключение скрытия мелких переводов по умолчанию. Пока они не в `master` и не в PR #30, ниже они не отмечены выполненными.
+- Локальный `master` на `82e049e9a` содержит изменения [PR #29](https://github.com/troman29/ion-wallet/pull/29) (`da6c18522`, новый SSE bridge URL), [PR #30](https://github.com/troman29/ion-wallet/pull/30) (`63e34def5`, мобильные идентификаторы и ссылки), PR #31/#32/#36 (RPC, история и стейкинг), PR #37 (`c9b4bc95f`, Firebase) и PR #38 (`7961ed176`, Android/web release).
+- Создание ION-only кошелька на 24 слова, фильтрация токенов по сетям аккаунта, настройка мелких переводов и её миграция уже включены в `master` в `7961ed176`. Это не незакоммиченные изменения отдельной рабочей копии.
+- `82e049e9a` включает Android Play release при push в `master` и production-пакет Chrome; фактический результат GitHub Actions и доступность артефактов в магазинах здесь не подтверждены.
+- [PR инфраструктуры #1](https://github.com/troman29/homelab/pull/1): по предыдущей сверке bridge, `connect.ionwallet.io` и временная страница `ionwallet.io` развёрнуты; текущий статус PR требует внешней проверки.
+- [PR реестра ION Gateway #4](https://github.com/ice-blockchain/wallets-list/pull/4): по предыдущей сверке запись подготовлена как черновик. Публикация записи, подключение и подпись через staking dApp требуют сквозной проверки.
 
 ## 1. Код и продукт
 
@@ -26,11 +25,14 @@
 - [x] Удалены MFA/Telegram 2FA, Telegram Mini App/Gifts, Agent, gasless/Diesel, Giveaway, My Wallet Cards и связанные UI, API, CI, ассеты и локализации.
 - [x] Удалены legacy DEX/CEX swap, Ledger, Tron, Solana, TON-специфичные Fragment/Notcoin vouchers/Ethena, MyCoin/vesting и nominator staking. Сохранены общие NFT/jetton transfer, liquid/token staking, темы и палитры.
 - [x] Оставлена оболочка Exchange с фиксированной парой ION Network ↔ ION в BNB Chain; бывший swap deeplink открывает только её.
-- [x] Восстановлены Capacitor-оболочки; удалены Air и Gram Wallet widget extension. iOS Simulator `IONWallet` и Android debug собираются в ветке PR #30.
+- [x] Восстановлены Capacitor-оболочки; удалены Air и Gram Wallet widget extension. Изменения PR #30 включены в `master` (`63e34def5`); исторические iOS Simulator и Android debug проверки перечислены ниже.
 - [x] Удалена миграция legacy auth в Enclave; первое приложение использует Enclave. Механизм версионирования кэша сохранён.
 - [x] TonAPI, старые STON/pTON адреса и `tonsite://` убраны из рабочего кода; используется `ionsite://`. `TON_DNS_ZONES` содержит одну зону `.ion`. Назначение resolver всё ещё требует подтверждения владельца ION.
 - [x] В коммите `502dfff45` исправлены создание кошелька и ожидание BNB RPC при BIP39 discovery: после 10 секунд предусмотрен offline fallback. Это не подтверждает работу BNB indexer в production.
-- [ ] Довести и закоммитить текущие локальные изменения для ION-only кошелька, списка токенов и настройки мелких переводов; проверить создание, импорт и сохранённые настройки в web.
+- [x] В `7961ed176` включены ION-only кошелёк на 24 слова по умолчанию (`CREATE_MULTICHAIN_WALLET=1` включает мультичейн), фильтрация токенов по сетям аккаунта и `areTinyTransfersHidden: false` с миграцией кэша.
+- [x] В изменении конфигурации от 01.11.2026 линтеры исключают локальный `work/**`; из `.env.example` удалены Solana-переменные, неиспользуемый `STAKING_POOLS` и defaults старого TON Proxy. Существующий локальный `.env` автоматически не изменяется.
+- [ ] Проверить создание, импорт обоих форматов фразы и сохранённые настройки в браузере на актуальной release-сборке.
+- [ ] Определить объём поддержки BNB в мобильном релизе: `mobile:build:production` сейчас задаёт `NO_EVM=1`. Перед включением нужны проверенные RPC, индексатор и проверка импорта существующих мультичейн-кошельков.
 - [ ] Утвердить bridge-контракт и реализовать в Exchange перевод ION с безопасным подтверждением сети, адреса, комиссии и статуса.
 - [ ] Провести заключительный аудит доступных пользователю TON/MyTonWallet/GramWallet имён и оставшихся legacy-функций. Совместимые storage keys, dependency forks и внутренний `ton` менять только с отдельной миграцией.
 
@@ -41,25 +43,26 @@
 - [x] `/utils/get-config` сокращён до `isLimited`, `now`, `isCopyStorageEnabled`, `isUpdateRequired`; сезонные темы, negative-verdict cache, TonConnect analytics, `supportAccountsCount`, `swapVersion`, `knowledgeBaseVersion`, `isVestingEnabled` удалены.
 - [x] ION Wallet API выведен на `https://api.ionwallet.io` через существующий `ion-staking-backend`; DNS-запросы проксируются к `ion-dns-backend` по внутренней сети. 25.10 проверены DNS A-запись, TLS, `/test`, `/assets`, GET и CORS preflight `/dns/getDomains` для `https://ionwallet.local` с `X-App-Origin`.
 - [ ] Настроить надёжные BNB RPC **и индексатор истории токенов**. Текущий `evmapi.wallet.ice.io` не разрешался при проверке 23.10; Zerion в клиенте пока остаётся. Выбор замены и её backend-контракт не утверждены.
-- [ ] Решить судьбу графиков `/prices/chart/*`; сейчас они пустые. Подписки push сохраняются, но отправка ждёт Firebase и мобильных приложений.
-- [ ] Получить от ION `/pendingActions`, `/pendingTraces`, `emulateTrace` и streaming WebSocket либо оставить явные feature flags. Проверка 22.10: pending endpoints отвечали HTTP 500; `.env.example` рекомендует `NO_PENDING_ACTIVITIES=1` и `NO_WEBSOCKET=1`, но defaults webpack — `0`.
+- [ ] Решить судьбу графиков `/prices/chart/*`; по предыдущей проверке они пустые, UI показывает `No price data`. Подписки push сохраняются; клиентские Firebase-конфигурации готовы в `c9b4bc95f`, серверная отправка и доставка на устройства остаются отдельными задачами.
+- [x] В конфигурации от 01.11.2026 `NO_PENDING_ACTIVITIES`, `NO_WEBSOCKET` и `NO_TRACE_EMULATION` по умолчанию выключают недоступные ION-сервисы. Webpack defaults — `1`; отсутствующие и пустые значения также выключают сервисы, включая пустые repository variables из CI. Явное `0` включает соответствующую возможность для совместимого backend.
+- [ ] При появлении у ION `/pendingActions`, `/pendingTraces`, `emulateTrace` или streaming WebSocket проверить поддержку и только затем изменить соответствующий флаг. Историческая проверка 22.10 не заменяет проверку нового endpoint.
 - [ ] Подтвердить у владельца ION адрес BEP-20 токена/issuer и bridge, `.ion` DNS resolver, FIVA/Affluent code hashes, burn guarantee, testnet и все env overrides. Mainnet read-only наблюдение не заменяет подтверждения получателя транзакции.
 - [ ] На backend определить источник минимальных версий для App Store, Google Play и desktop, затем включить `isUpdateRequired`; клиентский экран блокировки без download URL уже реализован.
 
 ## 3. ION Gateway и ссылки
 
-- [x] `ion-gateway://` используется как схема кошелька, `ion://` — собственные ссылки; стандартный `tc://` остаётся входящим URI SDK. Пользовательский интерфейс переименован в ION Gateway.
+- [x] `ion-gateway://` используется как схема ION Gateway, `ion://` — собственные ссылки; пользовательский интерфейс переименован в ION Gateway. Текущие wallet deeplink constants не объявляют `tc://`; внутренние имена TON Connect SDK не означают поддержку этой входящей схемы.
 - [x] Мост v3 работает на `bridge.ionwallet.io`: HTTPS, Redis Cluster из трёх узлов и внешний POST → SSE round trip проверены. Все узлы находятся на одном VPS.
-- [x] `connect.ionwallet.io` отдаёт fallback для `/` и `/wc` по HTTPS; точный origin/path проверяется в коде PR #30, lookalike hosts отвергаются. `ionwallet.io` отдаёт временную страницу с действительным сертификатом.
-- [x] Подготовлены отдельный PR #29 для URL моста и черновой PR #4 в `ice-blockchain/wallets-list`.
-- [ ] Слить/согласовать PR #29 и #30, затем проверить подключение, `SignData` и отправку транзакции из `ion-staking-dapp` через extension и mobile QR/deep link. Dapp использует ION Gateway protocol v2 через `@ion-gateway/ui`/SDK и берёт bridge URL из wallet registry.
+- [x] По предыдущей внешней проверке `connect.ionwallet.io` отдаёт fallback для `/` и `/wc` по HTTPS. Проверки origin/path и lookalike hosts из PR #30 включены в `master` (`63e34def5`).
+- [x] URL моста `https://bridge.ionwallet.io/bridge/` включён в `master` (`da6c18522`, PR #29).
+- [ ] Проверить опубликованную запись wallet registry, подключение, `SignData` и отправку транзакции из `ion-staking-dapp` через extension и mobile QR/deep link. Dapp использует ION Gateway protocol v2 через `@ion-gateway/ui`/SDK и берёт bridge URL из wallet registry.
 - [ ] После регистрации мобильных приложений опубликовать `apple-app-site-association` и `assetlinks.json` на `connect.ionwallet.io` без редиректов; шаблоны лежат вне web root, сейчас оба URL возвращают 404. Нужны **новый** Apple Team ID и SHA-256 сертификата Play App Signing для `io.ionwallet`.
 - [ ] Зарегистрировать WalletConnect project ID и проверить metadata, redirect, `ion-wc://` и `/wc`; сейчас `WALLET_CONNECT_PROJECT_ID` по умолчанию пуст.
 - [ ] После утверждения схем и проверки совместимости пересмотреть alias `window.ionwallet.tonconnect` и прочие legacy protocol identifiers; не удалять их преждевременно.
 
 ## 4. Мобильный выпуск и внешние ресурсы
 
-- [x] В PR #30 Android application ID/Java packages и iOS bundle ID переведены на `io.ionwallet`; Capacitor WebView origin оставлен `https://ionwallet.local`. Старые Apple Team/App Store Connect IDs удалены из defaults; мобильный релиз CI запускается только вручную и проверяет Team ID, bundle ID и provisioning profile.
+- [x] В `63e34def5` (PR #30) Android application ID/Java packages и iOS bundle ID переведены на `io.ionwallet`; Capacitor WebView origin — `https://ionwallet.local`. Старые Apple Team/App Store Connect IDs удалены из defaults; в CI предусмотрены проверки signing IDs и provisioning profile. Условия запуска актуального release workflow описаны ниже.
 - [x] Firebase-файлы временно заменялись безопасными нерабочими заглушками; теперь зарегистрирован отдельный ION Firebase project и конфигурации заменены. Старые mobile associated domains убраны, EIP-6963 reverse DNS ID — `io.ionwallet`; ссылки на отсутствующие legal-страницы скрыты.
 - [x] Основные ION icon/logo/splash, web/PWA, Electron, Android/iOS и 13 анимаций с превью экспортированы; генерация воспроизводима через `npm run build:branding`.
 - [x] 29.10.2026 в Google Play Console аккаунта Roman T создано приложение ION Wallet с пакетом `io.ionwallet`; выбраны категория «Финансы», `support@ionwallet.io`, отсутствие рекламы и рекламного ID, функция «криптовалютный кошелёк», отсутствие государственных и медицинских функций.
@@ -71,16 +74,17 @@
 - [x] Для первого Android-релиза задана версия `1.0.0` в Gradle и Fastlane; CI больше не подставляет версию общего пакета `26.9.0`.
 - [x] 29.10.2026 собран и подписан AAB `io.ionwallet` версии `1.0.0` (versionCode 1). 30.10 закрытый тест Alpha с этой сборкой стал активен; она создаёт 12-словные мультичейн-кошельки по умолчанию.
 - [x] 30.10.2026 исправлено создание новых кошельков: по умолчанию 24 слова и только ION; `CREATE_MULTICHAIN_WALLET=1` включает 12-словный мультичейн. AAB `io.ionwallet` версии `1.0.0` с versionCode 2 подписан тем же upload key, загружен в Alpha как выпуск `ION Wallet 1.0.0 (build 2)` и находится на рассмотрении. До его одобрения тестировщикам доступна сборка 1. Upload key хранится вне репозитория в macOS Keychain и локальном keystore.
-- [x] Для ION настроена ручная Android-сборка в GitHub Actions: режим `build_only` собирает подписанный AAB без отправки в магазин; `play` нацелен на закрытый трек `alpha`, `firebase` — на Firebase Distribution. Версия берётся из `package.json` (`1.0.1`), ключ подписи и настройки приложения хранятся в GitHub Secrets/Variables. Автоматической публикации в Play при push нет.
+- [x] В `7961ed176`/`82e049e9a` настроены Android-сборка и публикация: push в `master` выбирает destination `play`; ручной запуск предлагает `build_only`, `play` и `firebase`. Play track задаёт `ANDROID_PLAY_TRACK`, fallback — `alpha`. Версия берётся из `package.json` (`1.0.1`); workflow использует GitHub Secrets/Variables для подписания и публикации. Наличие workflow не подтверждает успешную загрузку выпуска.
 - [x] Создан один сервисный аккаунт `ion-wallet-play-release@ionwallet-io.iam.gserviceaccount.com`; его JSON-ключ сохранён в GitHub Secret `ANDROID_API_KEY_BASE64`. В проекте `ionwallet-io` включён Google Play Android Developer API. В Play Console аккаунту выданы права выпускать тестовые и production-версии только приложения ION Wallet. Запрос на чтение выпусков трека `alpha` этим ключом вернул HTTP 200.
 - [x] Подпись AAB из GitHub Actions сверена с сертификатом загрузки предыдущего AAB в Play: SHA-256 совпадает.
-- [ ] Выполнить первый выпуск через GitHub Actions в закрытый трек после слияния нужных исправлений; сейчас `play` запускается только вручную. Для Firebase Distribution отдельно нужны `FIREBASE_SERVICE_ACCOUNT_BASE64` и `ANDROID_FIREBASE_APP_ID`, если этот канал будет использоваться.
-- [ ] До широкого тестирования объединить остальные исправления из рабочей папки, пересобрать и подписать следующий AAB с реальным Firebase config. Сверить Data safety с фактическим AAB и SDK: Firebase/Crashlytics, `X-App-ClientID`, пуши, backend logs и сроки хранения. Текущий Personal-аккаунт требует закрытый тест минимум с 12 участниками 14 дней подряд; после решения вопроса с типом аккаунта проверить, осталось ли это требование. Тестовый APK `io.ice.wallet.debug` в Play не загружать.
+- [ ] Подтвердить успешный Android Play release из актуального GitHub Actions: commit, versionCode, подпись, выбранный track и доступность тестировщикам. Ручной `play` и push в `master` предусмотрены в коде; результат публикации требует проверки в Actions и Play Console. Для Firebase Distribution отдельно нужны `FIREBASE_SERVICE_ACCOUNT_BASE64` и `ANDROID_FIREBASE_APP_ID`, если этот канал будет использоваться.
+- [ ] До широкого тестирования проверить итоговый подписанный AAB с Firebase-конфигурацией из `c9b4bc95f`. Сверить Data safety с фактическим AAB и SDK: Firebase/Crashlytics, `X-App-ClientID`, пуши, backend logs и сроки хранения. Указанное в предыдущей сверке требование к закрытому тесту Personal-аккаунта (12 участников, 14 дней) и его применимость после смены типа аккаунта нужно подтвердить отдельно. Тестовый APK `io.ice.wallet.debug` в Play не загружать.
 - [ ] Дождаться одобрения Apple Developer Program, зарегистрировать iOS-приложение `io.ionwallet`, получить новые signing IDs/ключи, настроить App Store listing и TestFlight; затем включить автоматический мобильный релиз CI. Старые аккаунты MyTonWallet не использовать.
 - [x] Создан Firebase project `ionwallet-io` (project number `69898768954`); зарегистрированы Android `io.ionwallet`, `.beta`, `.debug` и iOS `io.ionwallet`, `.preview`. Клиентские конфигурации заменены, Android Gradle генерирует правильный `gcm_defaultSenderId` для всех трёх вариантов.
 - [ ] После активации Apple Developer Program создать APNs auth key и загрузить его в Firebase Cloud Messaging для обоих iOS-приложений; проверить доставку на физическом устройстве.
 - [ ] Для будущей отправки уведомлений настроить backend с доступом к Firebase и проверить доставку Android/iOS. Отдельно решить, нужна ли Firebase App Distribution в CI; если нужна, задать `ANDROID_FIREBASE_APP_ID` и сервисную учётную запись с минимальными правами.
-- [x] Web-кошелёк версии `1.0.1` развёрнут в Dokploy на `https://web.ionwallet.io`; DNS добавлен в Cloudflare, HTTPS, иконка и маршруты отвечают. GitHub Actions собирает production web-артефакт. После слияния PR переключить Dokploy с рабочей ветки на `master` и проверить пользовательские сценарии в браузере.
+- [x] По предыдущей внешней проверке web-кошелёк версии `1.0.1` развёрнут в Dokploy на `https://web.ionwallet.io`. В `7961ed176` production web build включён в GitHub Actions.
+- [ ] Подтвердить, что Dokploy собирает нужный commit из `master`, сверить `build.txt` с release commit и проверить пользовательские сценарии в браузере.
 - [ ] Доработать лендинг `ionwallet.io`: опубликовать help/download и проверенные ссылки в README. Пока `APP_DOWNLOAD_URLS` пуст, install CTA скрыты.
 - [ ] Утвердить графику у владельца бренда; проверить все платформы, размеры, темы/палитры, QR, launcher mask, splash, уведомления и App Store assets. Обычные карточки аккаунтов не удалять.
 - [ ] Подтвердить desktop signing, notarization, `src/electron/config.yml` feed `/public/desktop` и staging `/desktop-beta`, имена `IONWallet-*`, каналы обновления и download URL. `extraMetadata.productName: IONWallet` связано с userData/keychain.
@@ -88,6 +92,7 @@
 
 ## 5. Проверки релиза
 
+- [x] 01.11.2026 для текущего изменения конфигурации: `npm run check` прошёл; Jest — 131 suite / 1057 тестов (`--runInBand --testTimeout=15000`, `TEMP`/`TMP` направлены в `work/review-temp` из-за ограничений Windows-песочницы). Production webpack собран с двумя предупреждениями о размере bundle; `deploy/copy_to_dist.sh` выполнен отдельно вне песочницы, блокирующей запуск Bash/MSYS. Это локальная проверка, без публикации и проверок на устройствах.
 - [x] Для merged master до `d8f41f205`: TypeScript/ESLint/Stylelint, 1004 Jest-теста, branding/i18n и production webpack проходили; `4c6a70954` дополнительно убрал остатки legacy swap и исправил CI.
 - [x] Для PR #30: `npm run check`, 84 целевых deeplink-теста, Android `:app:assembleIonwalletProdDebug` (`io.ionwallet.debug`), iOS `IONWallet` Simulator build (`io.ionwallet`) и GitHub Simple tests прошли. Это debug/simulator-проверки без production signing.
 - [x] 23.10 Android-эмулятор дошёл от onboarding до подтверждения PIN и экрана резервной копии; Android lint и один instrumentation-тест прошли. Это была историческая сборка с прежним ID `io.ice.wallet.debug`, не доказательство работы текущего `io.ionwallet` на устройстве.
@@ -169,7 +174,7 @@
 | ION Gateway registry | manifest / metadata кошелька и реестр ION Gateway | черновой PR #4 | Проверить и опубликовать wallet entry: название, `ion://`/`ion-gateway://`, сайт, иконки, ссылки на store и технический контакт. `tc://` относится к TON Connect и в ION Wallet не принимается; проверить подключение dApp после публикации. |
 | WalletConnect Explorer/registry | `WALLET_CONNECT_PROJECT_ID`, `src/api/dappProtocols/adapters/walletConnect/index.ts` | требует регистрации / настройки сборки | По умолчанию project ID пуст; адаптер проверяет его перед запуском. Получить production project ID, передать его в сборку и подтвердить metadata, package ID, redirect/deep links, иконки и privacy URL. Само наличие адаптера не подтверждает работающее подключение. |
 | App Store Connect | iOS target, signing, App Store listing | заявка на Apple Developer Program подана | После одобрения зарегистрировать `io.ionwallet` в новой Apple-команде, задать `APPLE_TEAM_ID`, App Store Connect key/issuer и профиль этого bundle ID; затем настроить privacy labels, возрастной рейтинг, support/privacy URL, скриншоты, локализации и TestFlight. Старые Team ID и API key IDs не используются как defaults. |
-| Google Play Console | Android flavor `ionwallet`, signing, listing | опубликованные сборки ещё без нового Firebase config | Следующий AAB должен включить клиентскую конфигурацию Firebase. До широкого тестирования и публичного выпуска сверить Data safety с итоговым AAB, решить вопрос Organization-аккаунта и возрастных групп. Задать signing/Firebase credentials для мобильного CI при необходимости; Play signing SHA-256 использовать в `assetlinks.json`. |
+| Google Play Console | Android flavor `ionwallet`, signing, listing | конфигурация Firebase и Play CI готовы в коде; опубликованный AAB требует проверки | Сверить commit, versionCode, подпись и Firebase-конфигурацию фактического AAB. До широкого тестирования и публичного выпуска сверить Data safety, решить вопрос Organization-аккаунта и возрастных групп. Play signing SHA-256 использовать в `assetlinks.json`. |
 | Desktop signing and update feed | `src/electron/config.yml`, `.github/workflows/package-and-publish.yml`, `public/icon-electron-*` | готово в коде частично / требует релизной проверки | Иконки заменены. Базовый feed — `/public/desktop`, artifact — `IONWallet-${arch}.${ext}`; staging workflow при пустом `PUBLISH_REPO` переключает feed на `/desktop-beta` и mac artifact на имя с версией. Подтвердить каналы, secrets, signing/notarization и реальное обновление. `extraMetadata.productName: IONWallet` сохранять: значение связано с userData/keychain. |
 | README и публичная документация | `README.md`, `docs/` | готово в коде / требует развития | README очищен от неподтверждённых заявлений старого продукта; перед публикацией добавить подтверждённые ссылки на сайт, stores, help, policy и инструкции поддержки. |
 

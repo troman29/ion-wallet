@@ -18,6 +18,7 @@ export default tseslint.config(
     '.github/',
     '.claude/',
     'headless/',
+    'work/',
     'babel.config.js',
     'jest.config.js',
     'postcss.config.js',
