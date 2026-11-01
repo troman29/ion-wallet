@@ -53,8 +53,8 @@ const PARTICLE_PARAMS: Partial<ParticleConfig> = {
   distanceLimit: 0.75,
 };
 
-const PARTICLE_COLORS_LIGHT = [44 / 255, 146 / 255, 240 / 255] as [number, number, number]; // #2C92F0
-const PARTICLE_COLORS_DARK = [70 / 255, 156 / 255, 236 / 255] as [number, number, number]; // #469CEC
+const PARTICLE_COLORS_LIGHT = [105 / 255, 65 / 255, 198 / 255] as [number, number, number]; // #6941C6
+const PARTICLE_COLORS_DARK = [182 / 255, 154 / 255, 246 / 255] as [number, number, number]; // #B69AF6
 
 const NEW_DOMAIN = new URL(PRODUCTION_URL).hostname;
 

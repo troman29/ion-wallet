@@ -17,6 +17,17 @@ It also exports matching Lottie/static illustrations, the inactive-tab artwork,
 and card backgrounds without the inherited MyTonWallet monogram. Existing card
 palette names and image dimensions are preserved.
 
+The default balance card and account thumbnail use an accent-based ION Violet
+gradient (`#8057D2` to `#6941C6`), including their SCSS fallback. Interface colors live in
+`src/styles/variables.scss`: the light theme uses `#6941C6`, and the dark theme
+uses `#B69AF6` with dark button labels. Theme-picker previews are SVGs in
+`src/assets/theme` so both appearances reflect the same palette.
+
+Action and navigation icons have their own colors inside TGS vector sources.
+`node dev/branding/actionIcons.mjs .` updates all 20 light/dark variants from
+the CSS palette and renders matching PNG previews with RLottie. This also runs
+as part of `build:branding`, covering loading and reduced-motion states.
+
 - Android adaptive foregrounds keep the mark inside the safe zone. Notification
   images are white on transparent; splash includes a dark disk for contrast.
 - iOS app icons are opaque 1024 × 1024. The Icon Composer bundle contains one

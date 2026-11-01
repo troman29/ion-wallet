@@ -16,6 +16,7 @@ export function useAccentColor(
   accentColorIndex: number | undefined,
 ) {
   const accentColor = accentColorIndex ? ACCENT_COLORS[appTheme][accentColorIndex] : undefined;
+  const buttonTextColor = accentColor ? (accentColor === '#FFFFFF' ? '#000000' : '#FFFFFF') : 'inherit';
 
   useLayoutEffect(() => {
     const element = elementRefOrBody === 'body' ? document.body : elementRefOrBody.current;
@@ -26,10 +27,10 @@ export function useAccentColor(
       '--color-accent-10o': accentColor ? `${accentColor}${HEX_10_PERCENT}` : 'inherit',
       '--color-accent-button-background': accentColor || 'inherit',
       '--color-accent-button-background-hover': accentColor ? `${accentColor}${HEX_80_PERCENT}` : 'inherit',
-      '--color-accent-button-text': accentColor === '#FFFFFF' ? '#000000' : 'inherit',
-      '--color-accent-button-text-hover': accentColor === '#FFFFFF' ? '#000000' : 'inherit',
+      '--color-accent-button-text': buttonTextColor,
+      '--color-accent-button-text-hover': buttonTextColor,
     });
 
     toggleExtraClass(document.documentElement, 'is-white-accent', accentColor === '#FFFFFF');
-  }, [elementRefOrBody, accentColor]);
+  }, [elementRefOrBody, accentColor, buttonTextColor]);
 }
