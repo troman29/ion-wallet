@@ -456,6 +456,8 @@ function PasswordForm({
   }
 
   function renderPasswordForm() {
+    const renderingError = error || localError;
+
     return (
       <>
         <Input
@@ -466,7 +468,7 @@ function PasswordForm({
           wrapperClassName={inputWrapperClassName}
           errorClassName={errorClassName}
           inputMode={isPasswordNumeric ? 'numeric' : undefined}
-          error={error ? lang(error) : localError}
+          error={renderingError ? lang(renderingError) : undefined}
           placeholder={lang(placeholder)}
           value={inputValue}
           onInput={handleInput}
