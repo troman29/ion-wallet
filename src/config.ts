@@ -224,6 +224,11 @@ export const LANG_LIST: LangItem[] = [{
   nativeName: 'ไทย',
   rtl: false,
 }, {
+  langCode: 'vi',
+  name: 'Vietnamese',
+  nativeName: 'Tiếng Việt',
+  rtl: false,
+}, {
   langCode: 'uk',
   name: 'Ukrainian',
   nativeName: 'Українська',

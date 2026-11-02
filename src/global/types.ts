@@ -83,7 +83,8 @@ export type DialogType = {
   };
 };
 
-export type LangCode = 'en' | 'es' | 'ru' | 'zh-Hant' | 'zh-Hans' | 'tr' | 'de' | 'th' | 'uk' | 'pl' | 'ar' | 'fa';
+export type LangCode =
+  'en' | 'es' | 'ru' | 'zh-Hant' | 'zh-Hans' | 'tr' | 'de' | 'th' | 'vi' | 'uk' | 'pl' | 'ar' | 'fa';
 export type LanguageSource = 'system' | 'user';
 
 export interface LangItem {
