@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enclave_use_biometrics">Dùng sinh trắc học</string>
+    <string name="enclave_enter_passcode_or_use_biometrics">Nhập mã khóa hoặc dùng vân tay</string>
+    <string name="enclave_use_pin">Dùng mã PIN</string>
+    <string name="enclave_cancel">Hủy</string>
+</resources>
