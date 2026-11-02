@@ -1,0 +1,1644 @@
+$auth_intro: Quản lý ION trên ION Network và BNB Chain.
+Create New Wallet: Tạo ví mới
+Import From %count% Secret Words: Nhập ví bằng %count% từ khôi phục
+More about %app_name%: Tìm hiểu thêm về %app_name%
+Creating Wallet...: Đang tạo ví...
+On the count of three...: Đếm đến ba...
+$back_up_auth: Sao lưu
+$back_up_security: Sao lưu
+Passwords must be equal.: Mật khẩu phải trùng khớp.
+To protect your wallet as much as possible, use a password with: Để bảo vệ ví tốt nhất, hãy sử dụng mật khẩu có
+$auth_password_rule_8chars: ít nhất 8 ký tự
+$auth_password_rule_one_small_char: một chữ thường
+$auth_password_rule_one_capital_char: một chữ hoa
+$auth_password_rule_one_digit: một chữ số
+$auth_password_rule_one_special_char: và một ký tự đặc biệt
+Create a password to protect it.: Tạo mật khẩu để bảo vệ ví.
+Enter your password: Nhập mật khẩu
+Enter your password...: Nhập mật khẩu...
+...and repeat it: ...và nhập lại
+Cancel: Hủy
+Insecure Password: Mật khẩu không an toàn
+Your have entered an insecure password, which can be easily guessed by scammers.: Bạn đã nhập mật khẩu không an toàn, kẻ lừa đảo có thể dễ dàng đoán được.
+Continue or change password to something more secure?: Tiếp tục hay đổi sang mật khẩu an toàn hơn?
+Change: Thay đổi
+"%count% Secret Words": "%count% từ khôi phục"
+Secret Words: Cụm từ khôi phục
+$auth_import_mnemonic_description: |
+  Bạn có thể khôi phục quyền truy cập ví bằng cách nhập **%counts% từ khôi phục** đã ghi lại khi tạo ví.
+Let’s make sure your secrets words are recorded correctly.: Hãy kiểm tra xem bạn đã ghi lại đúng các từ khôi phục chưa.
+$check_words_description: Bây giờ hãy kiểm tra xem bạn đã ghi lại đúng các từ khôi phục chưa.
+$mnemonic_list_description: Ghi lại các từ này theo **đúng thứ tự** và cất ở **nơi an toàn**.
+$private_key_description: Lưu khóa riêng tư này **chính xác** và cất ở **nơi an toàn**.
+$mnemonic_warning: |
+  Không gửi hay tiết lộ cho bất kỳ ai,
+  không nhập ở bất kỳ đâu.
+View Secret Words: Xem cụm từ khôi phục
+View %chain% Private Key: Xem khóa riêng tư %chain%
+Can be imported to non-multichain wallets for %chain%.: Có thể nhập vào ví đơn chuỗi dành cho %chain%.
+Can be imported to any multichain wallet supporting %chain%.: Có thể nhập vào bất kỳ ví đa chuỗi nào hỗ trợ %chain%.
+Let's Check: Kiểm tra
+Let's Check!: Kiểm tra ngay!
+Safety Rules: Nguyên tắc an toàn
+$safety_rules_private_key_one: |
+  Màn hình tiếp theo sẽ hiển thị **khóa riêng tư %chain%**. Hãy lưu chính xác và **cất ở nơi an toàn**.
+$safety_rules_private_key_two: Khóa này cho phép **mở ví** nếu bạn quên mật khẩu hoặc mất quyền truy cập thiết bị này.
+$safety_rules_private_key_three: Nếu người khác thấy khóa riêng tư này, tiền của bạn **có thể bị đánh cắp**. **Không gửi hay tiết lộ cho bất kỳ ai**, kể cả nhà phát triển hoặc bộ phận hỗ trợ kỹ thuật.
+$safety_rules_one: |
+  Màn hình tiếp theo sẽ hiển thị **cụm từ khôi phục**. Hãy ghi lại theo đúng thứ tự và **cất ở nơi an toàn**.
+$safety_rules_two: Các từ này cho phép **mở ví** nếu bạn quên mật khẩu hoặc mất quyền truy cập thiết bị này.
+$safety_rules_three: Nếu người khác thấy các từ này, tiền của bạn **có thể bị đánh cắp**. **Không gửi cho bất kỳ ai**, kể cả nhà phát triển hoặc bộ phận hỗ trợ kỹ thuật.
+Continue: Tiếp tục
+Close: Đóng
+Back: Quay lại
+Search...: Tìm kiếm...
+Main menu: Menu chính
+TON Proxy: TON Proxy
+Toggle TON Proxy: Bật/tắt TON Proxy
+Back Up Secret Words: Sao lưu cụm từ khôi phục
+Settings: Cài đặt
+About %app_name%: Giới thiệu về %app_name%
+Exit: Thoát
+Remove Wallet: Xóa ví
+Remove Wallets: Xóa các ví
+Something went wrong.: Đã xảy ra lỗi.
+Something went wrong: Đã xảy ra lỗi
+Logo: Logo
+$about_description1: Quản lý ION trên ION Network và BNB Chain.
+$about_description2: Khóa của bạn được lưu trên thiết bị. Hãy giữ bí mật cụm từ khôi phục.
+What is TON Proxy?: TON Proxy là gì?
+$about_extension_description1: TON Proxy mở ra **internet phi tập trung** bằng cách cho phép truy cập TON Sites ẩn danh.
+More info and demo.: Thông tin và bản demo.
+$about_proxy_magic_description: Để trải nghiệm **internet phi tập trung** và truy cập **TON Sites**, hãy cài đặt %extension_link%.
+$about_extension_link_text: "**Tiện ích mở rộng %app_name%**"
+Is it open source?: Ứng dụng có mã nguồn mở không?
+$about_wallet_github: Có. Bạn có thể khám phá %github_link% của chúng tôi.
+$about_github_link_text: "**Kho mã nguồn GitHub**"
+Is there a community?: Có cộng đồng không?
+$about_wallet_community: Có, chào mừng bạn đến với %community_link% của chúng tôi.
+Currency History: Lịch sử tiền tệ
+Price: Giá
+Enter Password: Nhập mật khẩu
+Send: Gửi
+Add Wallet: Thêm ví
+Done: Xong
+Delete: Xóa
+Delete Saved Address: Xóa địa chỉ đã lưu
+Are you sure you want to remove this address from your saved ones?: Bạn có chắc muốn xóa địa chỉ này khỏi danh sách đã lưu?
+Address removed from saved: Đã xóa địa chỉ khỏi danh sách đã lưu
+Warning!: Cảnh báo!
+$logout_without_backup_warning: Bạn chưa sao lưu ví này. Nếu xóa ví ngay bây giờ, bạn sẽ mất quyền truy cập token và NFT của mình.
+$logout_accounts_without_backup_warning: Bạn chưa sao lưu %links%. Nếu tiếp tục, bạn sẽ mất quyền truy cập token và NFT của mình.
+$logout_current_wallet_warning: Thao tác này sẽ xóa ví hiện tại khỏi ứng dụng.
+$logout_selected_wallet_warning: Thao tác này sẽ xóa ví đã chọn khỏi ứng dụng.
+$logout_selected_wallets_warning: Thao tác này sẽ xóa các ví đã chọn khỏi ứng dụng.
+$logout_all_wallets_warning: Thao tác này sẽ xóa tất cả ví khỏi ứng dụng.
+$secret_words_backup_reminder: Hãy đảm bảo bạn đã sao lưu **cụm từ khôi phục**.
+$all_secret_words_backup_reminder: Hãy đảm bảo bạn đã sao lưu **cụm từ khôi phục** của tất cả ví.
+Create Deposit Link: Tạo liên kết nạp tiền
+$receive_invoice_description: |
+  Bạn có thể chỉ định số tiền và mục đích
+  thanh toán để tiết kiệm thời gian cho người gửi.
+Amount: Số tiền
+Comment: Lời nhắn
+Comment or Memo: Lời nhắn hoặc Memo
+Share this URL to receive %token%: Chia sẻ URL này để nhận %token%
+Invoice Link Copied: Đã sao chép liên kết thanh toán
+Theme: Giao diện
+Language: Ngôn ngữ
+Enable Animations: Bật hiệu ứng chuyển động
+Enable Landscape Mode: Bật chế độ màn hình ngang
+Base Currency: Tiền tệ cơ sở
+Investor View: Chế độ nhà đầu tư
+Toggle Investor View: Bật/tắt chế độ nhà đầu tư
+Hide Tiny Transfers: Ẩn giao dịch giá trị nhỏ
+Toggle Hide Tiny Transfers: Bật/tắt ẩn giao dịch giá trị nhỏ
+Network: Mạng
+Developer Options: Tùy chọn nhà phát triển
+All Wallet Versions: Tất cả phiên bản ví
+Create TON-Only Wallet: Tạo ví chỉ hỗ trợ ION
+Confirmation: Xác nhận
+Signing Data: Đang ký dữ liệu
+Contract Initialization Data: Dữ liệu khởi tạo hợp đồng
+$unknown_token_address: Địa chỉ token không xác định.
+$dont_have_required_nft: Bạn không có NFT cần thiết để gửi.
+$state_init_invalid: Dữ liệu khởi tạo hợp đồng không hợp lệ.
+$signature_warning: Ký dữ liệu tùy chỉnh rất nguy hiểm. Chỉ thực hiện khi bạn tin tưởng nguồn cung cấp dữ liệu.
+Sign: Ký
+Done!: Xong!
+Signing Confirmed: Đã xác nhận ký
+Activity Details: Chi tiết hoạt động
+No activities found: Không tìm thấy hoạt động nào
+Comment Copied: Đã sao chép lời nhắn
+Copy Text: Sao chép văn bản
+Copy Description: Sao chép mô tả
+Description Copied: Đã sao chép mô tả
+Message Copied: Đã sao chép tin nhắn
+Sender: Người gửi
+Recipient: Người nhận
+"%chain% Address Copied": Đã sao chép địa chỉ %chain%
+Repeat: Lặp lại
+Switch Account: Chuyển tài khoản
+Copy wallet address: Sao chép địa chỉ ví
+View address on %explorer_name%: Xem địa chỉ trên %explorer_name%
+You have just created a new wallet: Bạn vừa tạo ví mới
+Assets: Tài sản
+Activity: Hoạt động
+$home_activity: Hoạt động
+NFT: NFT
+No NFTs yet: Chưa có NFT
+No hidden NFTs.: Không có NFT bị ẩn.
+$nft_explore_offer: |
+  Khám phá thị trường để tìm
+  các bộ sưu tập NFT hiện có.
+Received: Đã nhận
+Sent: Đã gửi
+$transaction_from: từ %address%
+$transaction_to: đến %address%
+$transaction_on: trên %address%
+Wallet is not backed up: Ví chưa được sao lưu
+Testnet Version: Phiên bản Testnet
+Error reading clipboard: Lỗi đọc bộ nhớ tạm
+$fee_value: Phí %fee%
+$fee_value_with_colon: "Phí: %fee%"
+Pay fee with %stars_symbol%: Thanh toán phí bằng %stars_symbol%
+Loading...: Đang tải...
+No price data: Không có dữ liệu giá
+Price Copied: Đã sao chép giá
+Recipient Address: Địa chỉ người nhận
+Wallet address or domain: Địa chỉ ví hoặc tên miền
+Incorrect address: Địa chỉ không chính xác
+Incorrect address.: Địa chỉ không chính xác.
+Paste: Dán
+Insufficient balance: Số dư không đủ
+Insufficient Balance: Số dư không đủ
+$seed_phrase_scam_warning: |-
+  Ví này không có đủ tiền để thanh toán phí rút token.
+
+  Đây có vẻ là một hình thức **LỪA ĐẢO** phổ biến, dụ bạn nạp tiền của mình để thanh toán phí.
+
+  **Không nạp** tiền của bạn, vì bạn có thể mất số tiền đó!
+$help_center_prepositional: Trung tâm trợ giúp
+Optional: Không bắt buộc
+$send_token_symbol: Gửi %symbol%
+Is it all ok?: Mọi thông tin đã đúng chưa?
+Receiving Address: Địa chỉ nhận
+Fee: Phí
+Edit: Chỉnh sửa
+Confirm: Xác nhận
+Data Signed: Đã ký dữ liệu
+Details: Chi tiết
+View details: Xem chi tiết
+Change password visibility: Ẩn/hiện mật khẩu
+Amount value: Giá trị số tiền
+Save Address: Lưu địa chỉ
+Name: Tên
+Save: Lưu
+Copy: Sao chép
+Remove from Saved: Xóa khỏi danh sách đã lưu
+View on Explorer: Xem trên trình khám phá
+No suggestions, you're on your own!: Không có gợi ý, bạn hãy tự chọn!
+Play Sounds: Phát âm thanh
+Focus on asset value rather than current balance: Tập trung vào giá trị tài sản thay vì số dư hiện tại
+$logout_confirm: Xóa **tất cả** ví
+$tiny_transfers_help: "Ẩn giao dịch nhận có giá trị dưới $%value%. Lưu ý: các khoản tiền nhỏ thường do kẻ gửi thư rác và kẻ lừa đảo gửi đến."
+Today: Hôm nay
+Total: Tổng
+Zoom Out: Toàn bộ thời gian
+Yesterday: Hôm qua
+Now: Bây giờ
+$receive_description: Quét mã QR này hoặc chia sẻ địa chỉ để nạp tiền vào ví.
+Wrong password, please try again.: Sai mật khẩu, vui lòng thử lại.
+Appearance: Hiển thị
+Light: Sáng
+Dark: Tối
+System: Hệ thống
+$stake_asset: Stake %symbol%
+Add Stake: Stake thêm
+Earn from your tokens while holding them: Kiếm lợi nhuận từ %symbol% trong khi nắm giữ
+Current APY: APY hiện tại
+Est. Yearly Earnings: Lợi nhuận năm ước tính
+Staking Details: Chi tiết staking
+Why this is safe: Vì sao điều này an toàn
+$safe_staking_description1: Staking **hoàn toàn phi tập trung** và được vận hành bởi các hợp đồng thông minh **ION Liquid Staking chính thức**.
+$safe_staking_description2: Tài sản đã stake sẽ được dùng để xác thực mạng %chain% theo cơ chế **bằng chứng cổ phần (Proof of Stake)**.
+$safe_staking_description3: Bạn có thể rút tài sản đã stake **bất kỳ lúc nào** và tiền sẽ được hoàn về tài khoản trong vòng **hai ngày**.
+$safe_staking_description_jetton1: Staking token được quản lý bằng hợp đồng thông minh. Hãy xem xét điều khoản và rủi ro của pool trước khi stake.
+$safe_staking_description_jetton2: Bạn có thể rút tài sản đã stake **bất kỳ lúc nào** và tiền sẽ được hoàn về tài khoản **ngay lập tức**.
+$min_value: Tối thiểu %value%
+Est. balance in a year: Số dư ước tính sau một năm
+Confirm Staking: Xác nhận staking
+View: Xem
+Stake More: Stake thêm
+Staking: Staking
+Currently Staked: Đang stake
+Total Staked: Tổng đã stake
+Total Stakers: Tổng số người stake
+Unstake: Rút stake
+$unstake_asset: Rút stake %symbol%
+Amount to unstake: Số tiền rút stake
+Confirm Unstaking: Xác nhận rút stake
+$unstaking_when_receive: Bạn sẽ nhận lại tiền đã rút stake sau %time%.
+$unstaking_when_receive_with_amount: Bạn sẽ nhận lại %amount% đã rút stake sau %time%.
+$unstake_insufficient_balance: Bạn cần có %balance% trong số dư chính để rút stake.
+at %annual_yield%: với lợi suất %annual_yield%
+Est. %annual_yield%: Ước tính %annual_yield%
+Staked: Đã stake
+$stake_action: Stake
+Unstaked: Đã rút stake
+Withdrawal from Staking: Rút tiền từ staking
+Withdrawing from Staking: Đang rút tiền từ staking
+$withdraw_from_staking_action: Rút tiền từ staking
+Not staked: Chưa stake
+Unstaking: Đang rút stake
+$unstake_action: Rút stake
+The network fee has slightly changed, try sending again.: Phí mạng đã thay đổi một chút, hãy thử gửi lại.
+Transfer was unsuccessful. Try again later.: Chuyển tiền không thành công. Vui lòng thử lại sau.
+Action Partially Completed: Thao tác hoàn tất một phần
+$action_partially_completed_description: Đã hoàn tất %completed% trong tổng số %total% thao tác. Các thao tác còn lại chưa hoàn tất. Hãy kiểm tra lịch sử hoạt động trước khi thử lại.
+Action Status Unknown: Chưa rõ trạng thái thao tác
+$action_status_unknown_description: Không thể xác minh trạng thái hoàn tất. Hãy kiểm tra lịch sử hoạt động và số dư trước khi thử lại; thử lại ngay có thể khiến thao tác được gửi hai lần.
+$action_will_continue_in_background: Thao tác sẽ tiếp tục chạy nền.
+Invalid amount: Số tiền không hợp lệ
+Invalid address: Địa chỉ không hợp lệ
+Domain is not connected to a wallet: Tên miền chưa liên kết với ví
+Unexpected error: Lỗi không mong muốn
+Unexpected Error: Lỗi không mong muốn
+Earn: Kiếm lợi nhuận
+Earning: Đang sinh lời
+Unexpected: Lỗi không mong muốn
+You can save this address for quick access while sending.: Bạn có thể lưu địa chỉ này để truy cập nhanh khi gửi tiền.
+Stake Again: Stake lại
+$staking_history_earned: Đã kiếm được
+Select wallet to use on this app: Chọn ví để sử dụng trên ứng dụng này
+Connect: Kết nối
+Already Connected: Đã kết nối
+Return to the dapp to proceed, or reconnect.: Quay lại dapp để tiếp tục hoặc kết nối lại.
+Dapp Disconnected: Dapp đã ngắt kết nối
+Please reconnect your wallet from the dapp.: Vui lòng kết nối lại ví trong dapp.
+Dapp Not Responding: Dapp không phản hồi
+You may need to reconnect your wallet from the dapp if this keeps happening.: Nếu tình trạng này tiếp diễn, bạn có thể cần kết nối lại ví trong dapp.
+Payload: Dữ liệu gửi kèm
+$many_transactions:
+  zeroValue: Không có giao dịch chuyển tiền
+  oneValue: "%count% giao dịch chuyển tiền"
+  otherValue: "%count% giao dịch chuyển tiền"
+Total Amount: Tổng số tiền
+$unstaking_short: Đang rút stake
+Handle ion:// links: Xử lý liên kết ion://
+Back up wallet to have full access to it: Sao lưu ví để có toàn quyền truy cập
+Consider More Secure Version: Cân nhắc phiên bản an toàn hơn
+Install our native app or browser extension.: Cài đặt ứng dụng gốc hoặc tiện ích mở rộng trình duyệt của chúng tôi.
+Scam: Lừa đảo
+Scam comment is hidden.: Lời nhắn lừa đảo đã bị ẩn.
+Display: Hiển thị
+Nested Transaction: Giao dịch lồng nhau
+Disconnect All Apps: Ngắt kết nối tất cả ứng dụng
+Disconnect: Ngắt kết nối
+Disconnect App: Ngắt kết nối ứng dụng
+Disconnect Apps: Ngắt kết nối các ứng dụng
+Are you sure you want to disconnect?: Bạn có chắc muốn ngắt kết nối %dappname%?
+Are you sure you want to disconnect all websites?: Bạn có chắc muốn ngắt kết nối tất cả trang web?
+Logged in with %app_name%: Đã đăng nhập bằng %app_name%
+No active connections: Không có kết nối đang hoạt động
+Other: Khác
+No data: Không có dữ liệu
+No chain balances: Không có số dư trên các chuỗi
+Native: Token gốc
+Stablecoins: Stablecoin
+Altcoins: Altcoin
+Asset Mix: Cơ cấu tài sản
+No asset balances: Không có số dư tài sản
+No staked assets: Không có tài sản đã stake
+Entire Period: Toàn bộ giai đoạn
+Asset %asset%: Tài sản %asset%
+Assets & Activity: Tài sản và hoạt động
+Token Settings: Cài đặt token
+Add Token: Thêm token
+Delete Token: Xóa token
+Are you sure you want to delete?: Bạn có chắc muốn xóa %token%?
+Hide Tokens With No Cost: Ẩn token không có giá trị
+Localized Token Names: Tên theo ngôn ngữ
+Sort By Cost: Sắp xếp theo giá trị
+Update %app_name%: Cập nhật %app_name%
+Try Again: Thử lại
+Driver: Trình điều khiển
+Maybe you need to check the password or change the driver.: Bạn có thể cần kiểm tra mật khẩu hoặc thay đổi trình điều khiển.
+Declined: Đã từ chối
+The time on your device is incorrect, sync it and try again.: Thời gian trên thiết bị không chính xác, hãy đồng bộ rồi thử lại.
+Name or Address...: Tên hoặc địa chỉ...
+Such error, many tabs: Lỗi do mở nhiều tab
+$many_tabs_error_description: |
+  %app_name% chỉ hỗ trợ một tab ứng dụng hoạt động.
+  Vui lòng tải lại trang để tiếp tục sử dụng tab này hoặc đóng tab.
+Reload App: Tải lại ứng dụng
+Token Not Found: Không tìm thấy token
+Try another keyword or address.: Thử từ khóa hoặc địa chỉ khác.
+Decrypt: Giải mã
+Encrypted Message: Tin nhắn được mã hóa
+Message is encrypted: Tin nhắn đã được mã hóa
+Agree: Đồng ý
+You sell: Bạn bán
+You buy: Bạn mua
+Blockchain Fee: Phí blockchain
+Included: Đã bao gồm
+Price Impact: Tác động giá
+Minimum Received: Số tiền nhận tối thiểu
+The exchange rate is below market value!: Tỷ giá thấp hơn giá thị trường %value%!
+Invalid Pair: Cặp giao dịch không hợp lệ
+We do not recommend to perform an exchange, try to specify a lower amount.: Chúng tôi không khuyến nghị thực hiện giao dịch hoán đổi này, hãy thử nhập số tiền nhỏ hơn.
+Not Enough %symbol%: Không đủ %symbol%
+Use Responsibly: Sử dụng có trách nhiệm
+$auth_responsibly_description1: |
+  %app_name% là ví **tự lưu ký**, nghĩa là **chỉ bạn** có toàn quyền kiểm soát và quan trọng nhất là **chịu hoàn toàn trách nhiệm** đối với tiền của mình.
+$auth_responsibly_description2: |
+  Khóa riêng tư được lưu trên thiết bị của bạn và có thể bị **tin tặc tấn công**. Nếu máy tính bị nhiễm **phần mềm độc hại**, tiền của bạn có nguy cơ bị đánh cắp.
+$auth_responsibly_description3: |
+  Đội ngũ %app_name% **không chịu trách nhiệm** về sự an toàn của tiền trong ví, tương tự như nhà sản xuất máy tính hay nhà cung cấp internet của bạn.
+$auth_responsibly_description4: |
+  **Không bao giờ** giữ toàn bộ tiền ở một nơi. Hãy **đa dạng hóa**, sử dụng nhiều phần mềm và thiết bị khác nhau. Luôn **tự nghiên cứu** và tìm hiểu thêm về bảo mật tiền mã hóa.
+Start Wallet: Bắt đầu dùng ví
+$auth_backup_warning_notice: |
+  Bây giờ bạn cần tự **sao lưu khóa bí mật** để phòng trường hợp quên mật khẩu hoặc mất quyền truy cập thiết bị này.
+Invalid address format. Only URL Safe Base64 format is allowed.: Định dạng địa chỉ không hợp lệ. Chỉ chấp nhận định dạng Base64 an toàn cho URL.
+Terms of Use: Điều khoản sử dụng
+Privacy Policy: Chính sách quyền riêng tư
+Insufficient liquidity: Thanh khoản không đủ
+This address is new and never received transfers before.: Địa chỉ này mới và chưa từng nhận giao dịch chuyển tiền.
+Create Backup: Tạo bản sao lưu
+Sending: Đang gửi
+$send_action: Gửi
+Failed: Thất bại
+Refunded: Đã hoàn tiền
+On Hold: Tạm giữ
+Expired: Đã hết hạn
+In Progress: Đang thực hiện
+Waiting for Payment: Đang chờ thanh toán
+Processing Payment: Đang xử lý thanh toán
+It may take a few seconds: Có thể mất vài giây
+Blockchain: Blockchain
+Your address on another blockchain: Địa chỉ của bạn trên blockchain khác
+Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: Vui lòng cung cấp địa chỉ ví trên blockchain %blockchain% để nhận token đã mua.
+The time for sending coins is over.: Đã hết thời gian gửi coin.
+You have not sent the coins to the specified address.: Bạn chưa gửi coin đến địa chỉ được chỉ định.
+Exchange failed and coins were refunded to your wallet.: Hoán đổi thất bại và coin đã được hoàn về ví của bạn.
+Address for %blockchain% transfer: Địa chỉ chuyển tiền %blockchain%
+Password must contain %length% digits.: Mật khẩu phải có %length% chữ số.
+Deposit Link: Liên kết nạp tiền
+Please note that it may take up to a few hours for tokens to appear in your wallet.: Lưu ý rằng có thể mất vài giờ để token xuất hiện trong ví.
+Minimum amount: Tối thiểu %value%
+Maximum amount: Tối đa %value%
+Display Tray Icon: Hiển thị biểu tượng khay hệ thống
+Auto-Updates: Tự động cập nhật
+Biometric Authentication: Xác thực sinh trắc học
+If you turn off biometric protection, you will need to create a password.: Nếu tắt bảo vệ bằng sinh trắc học, bạn sẽ cần tạo mật khẩu.
+Enter your current password: Nhập mật khẩu hiện tại
+Turn On Biometrics: Bật sinh trắc học
+Enabling biometric confirmation will reset the password.: Bật xác nhận bằng sinh trắc học sẽ đặt lại mật khẩu.
+Biometric Registration: Đăng ký sinh trắc học
+Step 1 of 2. Registration: Bước 1/2. Đăng ký
+Step 2 of 2. Verification: Bước 2/2. Xác minh
+Download Logs: Tải nhật ký
+Copy Logs: Sao chép nhật ký
+Logs Copied: Đã sao chép nhật ký
+Biometric setup failed.: Thiết lập sinh trắc học thất bại.
+Biometric confirmation failed.: Xác nhận sinh trắc học thất bại.
+Failed to disable biometrics.: Không thể tắt sinh trắc học.
+Biometric Confirmation: Xác nhận bằng sinh trắc học
+Create Password: Tạo mật khẩu
+Complete: Hoàn tất
+Verification: Xác minh
+Connect Biometrics: Kết nối sinh trắc học
+Use Password: Dùng mật khẩu
+Biometrics Disabled: Đã tắt sinh trắc học
+Biometrics Enabled: Đã bật sinh trắc học
+A request is already pending: Đã có yêu cầu đang chờ xử lý
+Please confirm action using biometrics: Vui lòng xác nhận thao tác bằng sinh trắc học
+Scan QR Code: Quét mã QR
+Open the QR scanner.: Mở trình quét mã QR.
+Open scanner in ${applicationName}: Mở trình quét trong ${applicationName}
+Scan a code with ${applicationName}: Quét mã bằng ${applicationName}
+Scan QR: Quét QR
+Scan QR with ${applicationName}: Quét QR bằng ${applicationName}
+Account: Tài khoản
+Accounts: Tài khoản
+Networks: Mạng
+Blockchains: Blockchain
+All Chains: Tất cả chuỗi
+You will still be able to receive and send tokens in hidden chains.: Bạn vẫn có thể nhận và gửi token trên các chuỗi bị ẩn.
+Sort by Value: Sắp xếp theo giá trị
+Automatically sort and hide chains based on your portfolio.: Tự động sắp xếp và ẩn các chuỗi dựa trên danh mục đầu tư.
+Hidden chains will still be available to receive and send tokens, but won’t appear in the main list.: Các chuỗi bị ẩn vẫn có thể nhận và gửi token nhưng sẽ không xuất hiện trong danh sách chính.
+Move Up: Di chuyển lên
+Move Down: Di chuyển xuống
+Tokens: Token
+Receive Funds: Nhận tiền
+Open the receive screen.: Mở màn hình nhận tiền.
+Receive with ${applicationName}: Nhận bằng ${applicationName}
+Add crypto with ${applicationName}: Nạp tiền mã hóa bằng ${applicationName}
+Open receive in ${applicationName}: Mở mục nhận tiền trong ${applicationName}
+Send Token: Gửi token
+Open Token: Mở token
+Open ${target} in ${applicationName}: Mở ${target} trong ${applicationName}
+Show ${target} in ${applicationName}: Hiển thị ${target} trong ${applicationName}
+Open the token screen.: Mở màn hình token.
+Open the send screen.: Mở màn hình gửi tiền.
+Send token with ${applicationName}: Gửi token bằng ${applicationName}
+Send crypto with ${applicationName}: Gửi tiền mã hóa bằng ${applicationName}
+Open send in ${applicationName}: Mở mục gửi tiền trong ${applicationName}
+Permission denied. Please grant camera permission to use the QR code scanner.: Quyền truy cập bị từ chối. Vui lòng cấp quyền camera để sử dụng trình quét mã QR.
+This QR Code is not supported: Mã QR này không được hỗ trợ
+An error on the server side. Please try again.: Đã xảy ra lỗi phía máy chủ. Vui lòng thử lại.
+Address Saved: Đã lưu địa chỉ
+US Dollar: Đô la Mỹ
+Euro: Euro
+Russian Ruble: Rúp Nga
+Chinese Yuan: Nhân dân tệ
+Bitcoin: Bitcoin
+$max_balance: "Tối đa: %balance%"
+$available_balance: "Khả dụng: %balance%"
+$send_recipient_invalid: Không hợp lệ
+$send_recipient_not_compatible: Không tương thích
+$unstake_information_instantly: Bạn sẽ nhận lại tiền ngay lập tức
+Select Token: Chọn token
+$token_picker_hidden: Đã ẩn
+MY: Của tôi
+Popular: Phổ biến
+Not Found: Không tìm thấy
+Wallet is ready!: Ví đã sẵn sàng!
+Wallet is imported!: Đã nhập ví!
+Create a code to protect it: Tạo mã để bảo vệ ví
+Enter your code again: Nhập lại mã
+Code set successfully: Đã thiết lập mã thành công
+Use Touch ID: Dùng Touch ID
+Use Face ID: Dùng Face ID
+Connect Touch ID: Kết nối Touch ID
+Connect Face ID: Kết nối Face ID
+Not Now: Để sau
+Touch ID: Touch ID
+Face ID: Face ID
+Turn Off Touch ID: Tắt Touch ID
+Turn Off Face ID: Tắt Face ID
+Turn Off Biometrics: Tắt sinh trắc học
+Enter code: Nhập mã
+Enter code or use Face ID: Nhập mã hoặc dùng Face ID
+Enter code or use Touch ID: Nhập mã hoặc dùng Touch ID
+Enter code or use biometrics: Nhập mã hoặc dùng sinh trắc học
+Wrong code, please try again: Sai mã, vui lòng thử lại
+Scan your fingerprint: Quét vân tay
+Incorrect code, please try again.: Mã không chính xác, vui lòng thử lại.
+Correct: Chính xác
+Confirm Action: Xác nhận thao tác
+$classic_confirm_actions: Xác nhận các thao tác
+Confirm Rewards Claim: Xác nhận nhận thưởng
+"%amount% to %address%": "%amount% đến %address%"
+"%amount_from% to %amount_to%": "%amount_from% sang %amount_to%"
+Failed to enable biometrics.: Không thể bật sinh trắc học.
+Please try to confirm your biometrics again: Vui lòng thử xác nhận lại sinh trắc học
+Unknown error: Lỗi không xác định
+Are you sure you want to disable Face ID?: Bạn có chắc muốn tắt Face ID?
+Are you sure you want to disable Touch ID?: Bạn có chắc muốn tắt Touch ID?
+Are you sure you want to disable biometrics?: Bạn có chắc muốn tắt sinh trắc học?
+"Yes": Có
+Biometric confirmation failed: Xác nhận sinh trắc học thất bại
+No Activity: Không có hoạt động
+Fund: Nạp tiền
+Buy with Card: Mua bằng thẻ
+Buy with Crypto: Mua bằng tiền mã hóa
+Cannot load widget: Không thể tải tiện ích
+Error: Lỗi
+Explore: Khám phá
+$lockdown_mode_enabled_title: Đã bật Chế độ phong tỏa
+$lockdown_mode_walletconnect_unavailable: WalletConnect không khả dụng trong Chế độ phong tỏa. Để sử dụng, hãy tắt Chế độ phong tỏa cho %app_name% trong Cài đặt > Quyền riêng tư & Bảo mật > Chế độ phong tỏa > Định cấu hình duyệt web.
+No partners yet: Chưa có đối tác
+Clear: Xóa
+Unavailable: Không khả dụng
+$unstake_up_to_information: Ngay lập tức – tối đa %value%
+$all_balance: "Tất cả: %balance%"
+$unstaking_not_enough_balance: Bạn cần có %value% trong số dư chính để rút stake.
+Wallet Versions: Phiên bản ví
+$read_more_about_wallet_version: Tìm hiểu thêm về các loại hợp đồng ví tại %link%.
+$current_wallet_version: Phiên bản ví hiện tại của bạn là %version%.
+You have tokens on other versions of your wallet. You can import them from here.: Bạn có token trên các phiên bản ví khác. Bạn có thể nhập các ví đó tại đây.
+$wallet_switch_version_1: Bạn cũng có thể %action%.
+$wallet_switch_version_2: chuyển sang phiên bản ví khác
+or import from: hoặc nhập từ
+Insufficient fee: Không đủ tiền trả phí
+$insufficient_fee: "Không đủ tiền trả phí: %fee%"
+$dapp_insufficient_network_fee_warning: Không đủ %token% để thanh toán phí mạng
+Required: Bắt buộc
+Comment is too long.: Lời nhắn quá dài.
+Memo: Memo
+Memo Copied: Đã sao chép Memo
+$hide_tokens_no_cost_help: "Ẩn token có giá trị dưới $%value%. Lưu ý: token không có giá trị thường do kẻ gửi thư rác và kẻ lừa đảo gửi đến. Bạn có thể ẩn từng token ở phía dưới màn hình này."
+No internet connection. Please check your connection and try again.: Không có kết nối internet. Vui lòng kiểm tra kết nối và thử lại.
+To use this feature, first enable Face ID in your phone settings.: Để sử dụng tính năng này, trước tiên hãy bật Face ID trong cài đặt điện thoại.
+To use this feature, first enable biometrics in your phone settings.: Để sử dụng tính năng này, trước tiên hãy bật sinh trắc học trong cài đặt điện thoại.
+No Price: Không có giá
+$dapp_transfer_tokens_burn: Đang đốt %amount%
+$dapp_dns_set_wallet_payload: Đang đổi ví liên kết của tên miền %domain% thành %address%
+$dapp_dns_delete_wallet_payload: Đang xóa ví liên kết của tên miền %domain%
+$dapp_dns_change_record_payload: Đang đổi bản ghi "%category%" của tên miền %domain% thành %value%
+$dapp_dns_delete_record_payload: Đang xóa bản ghi "%category%" của tên miền %domain%
+$dapp_liquid_staking_deposit_payload: Nạp vào staking thanh khoản
+$dapp_liquid_staking_vote_payload: Đang bỏ phiếu "%vote%" cho đề xuất %votingAddress%
+$dapp_single_nominator_change_validator_payload: Đang đổi địa chỉ trình xác thực của hợp đồng staking SingleNominator thành %address%
+$dapp_single_nominator_withdraw_payload: Rút %amount% từ hợp đồng staking SingleNominator
+$dapp_vesting_add_whitelist_payload: Đang thêm %address% vào danh sách cho phép của ví vesting
+Time synchronization issue. Please ensure your device's time settings are correct.: Lỗi đồng bộ thời gian. Vui lòng đảm bảo cài đặt thời gian trên thiết bị là chính xác.
+Data Copied: Đã sao chép dữ liệu
+URL Copied: Đã sao chép URL
+Private Key Copied: Đã sao chép khóa riêng tư
+Contract Initialization Data Copied: Đã sao chép dữ liệu khởi tạo hợp đồng
+Open NFT Collection: Mở bộ sưu tập NFT
+Previous: Trước
+Next: Tiếp theo
+Updating: Đang cập nhật
+Insufficient %token% for fee.%fee%: Không đủ %token% để trả phí.%fee%
+Send NFT: Gửi NFT
+Send Collectible: Gửi vật phẩm sưu tầm
+Send Collectibles: Gửi các vật phẩm sưu tầm
+$nfts_burned:
+  zeroValue: Đã đốt %count% NFT
+  oneValue: Đã đốt %count% NFT
+  otherValue: Đã đốt %count% NFT
+No NFT selected: Chưa chọn NFT
+Cannot be sent: Không thể gửi
+NFT is for sale: NFT đang được rao bán
+More actions: Thao tác khác
+Open on %explorer_name%: Mở trên %explorer_name%
+Buying with card is not supported in Testnet.: Testnet không hỗ trợ mua bằng thẻ.
+Staking is not supported in Testnet.: Testnet không hỗ trợ staking.
+Get Support: Nhận hỗ trợ
+$transfer_link_expired: Liên kết chuyển tiền đã hết hạn
+$transfer_text_and_bin_exclusive: Không thể dùng đồng thời tham số text và bin
+$unsupported_deeplink_parameter: Liên kết sâu này chứa tham số không được hỗ trợ.
+$unsupported_chain: Blockchain không được hỗ trợ.
+Successfully: Thành công
+Unstake More: Rút stake thêm
+Are you sure you want to burn this NFT? It will be lost forever.: |
+  Bạn có chắc muốn đốt NFT này?
+  NFT sẽ mất vĩnh viễn.
+$multi_burn_nft_warning: |
+  Bạn sắp đốt %amount% NFT. Quá trình có thể mất khoảng %duration%. Vui lòng không đóng ứng dụng hoặc chuyển ví cho đến khi hoàn tất.
+
+  Các NFT này sẽ mất vĩnh viễn.
+$duration_minutes:
+  zeroValue: "%count% phút"
+  oneValue: "%count% phút"
+  otherValue: "%count% phút"
+$multi_send_nft_warning: Quá trình có thể mất khoảng %duration% phút. Vui lòng không đóng ứng dụng hoặc chuyển tài khoản cho đến khi hoàn tất.
+Burn NFT: Đốt NFT
+Burn Collectibles: Đốt vật phẩm sưu tầm
+Burn: Đốt
+Private Key: Khóa riêng tư
+"%amount% NFTs":
+  zeroValue: Không có NFT
+  oneValue: "%amount% NFT"
+  otherValue: "%amount% NFT"
+1 NFT: 1 NFT
+1 NFT Selected: Đã chọn 1 NFT
+"%amount% NFTs Selected":
+  zeroValue: Chưa chọn NFT
+  oneValue: Đã chọn %amount% NFT
+  otherValue: Đã chọn %amount% NFT
+For sale. Cannot be sent and burned: Đang rao bán. Không thể gửi hoặc đốt
+Select: Chọn
+Send All: Gửi tất cả
+Burn All: Đốt tất cả
+Select All: Chọn tất cả
+Collection: Bộ sưu tập
+Unnamed Collection: Bộ sưu tập chưa có tên
+Transaction ID Copied: Đã sao chép mã giao dịch
+External Exchange ID Copied: Đã sao chép mã hoán đổi bên ngoài
+Email: Email
+Your %blockchain% Address: Địa chỉ %blockchain% của bạn
+My %blockchain% Address: Địa chỉ %blockchain% của tôi
+"%blockchain% Address": Địa chỉ %blockchain%
+$view_only_wallet_receive_warning: |
+  **Chế độ xem: đây KHÔNG phải ví của bạn**
+  Kiểm tra kỹ trước khi gửi tiền.
+Vesting: Vesting
+Vesting Balance: Số dư vesting
+Ready to Unfreeze: Sẵn sàng mở khóa
+You will receive your unfrozen coins in a few minutes.: Bạn sẽ nhận được coin đã mở khóa sau vài phút.
+Vesting Schedule: Lịch vesting
+Loyal User Airdrop: Airdrop cho người dùng trung thành
+Unfrozen: Đã mở khóa
+Missed: Đã bỏ lỡ
+Frozen: Đang khóa
+until %date%: đến %date%
+$until_date_capitalized: Đến %date%
+"%volume% in %amount% parts": "%volume% chia thành %amount% phần"
+Unfreeze: Mở khóa
+Claim: Nhận
+Confirm Unfreezing: Xác nhận mở khóa
+Insufficient Balance for Fee: Số dư không đủ để trả phí
+$fee_value_bold: "**Phí:** %fee%"
+"%app_name% Features": Tính năng của %app_name%
+Security: Bảo mật
+To avoid entering the passcode every time, you can use biometrics.: Bạn có thể dùng sinh trắc học để không phải nhập mã khóa mỗi lần.
+To avoid entering the password every time, you can use biometrics.: Bạn có thể dùng sinh trắc học để không phải nhập mật khẩu mỗi lần.
+Change Passcode: Đổi mã khóa
+Change Password: Đổi mật khẩu
+Confirm Password: Xác nhận mật khẩu
+The passcode will be changed for all your wallets.: Mã khóa sẽ được thay đổi cho tất cả ví của bạn.
+The password will be changed for all your wallets.: Mật khẩu sẽ được thay đổi cho tất cả ví của bạn.
+Password Changed!: Đã đổi mật khẩu!
+Passcode Changed!: Đã đổi mã khóa!
+New code set successfully: Đã thiết lập mã mới thành công
+Codes don’t match: Mã không trùng khớp
+Enter your new code: Nhập mã mới
+Re-enter your new code: Nhập lại mã mới
+Install on Desktop: Cài đặt trên máy tính
+Install on Mobile: Cài đặt trên điện thoại
+Install App: Cài đặt ứng dụng
+Hide: Ẩn
+Hidden NFTs: NFT bị ẩn
+Hidden By Me: Do tôi ẩn
+Probably Scam: Có thể là lừa đảo
+$settings_nft_probably_scam_description: Các NFT này đã bị tính năng chống lừa đảo tự động vô hiệu hóa. Bạn có thể đưa NFT cần thiết trở lại Trang chủ nếu cho rằng chúng bị đưa nhầm vào danh sách này.
+Unhide: Bỏ ẩn
+Hide All: Ẩn tất cả
+Hide NFT: Ẩn NFT
+Reload Page: Tải lại trang
+Open in Safari: Mở trong Safari
+Open in Browser: Mở trong trình duyệt
+CopyURL: Sao chép URL
+Share: Chia sẻ
+Unhide NFT: Bỏ ẩn NFT
+The NFT has been hidden: Đã ẩn NFT
+The NFT is no longer hidden: NFT không còn bị ẩn
+$unhide_nft_warning: Bạn có chắc muốn bỏ ẩn %name%? NFT này có dấu hiệu đáng ngờ và có thể không đúng với tên và mô tả.
+Hide NFTs: Ẩn NFT
+Are you sure you want to hide this NFT collection containing %number% NFTs?: Bạn có chắc muốn ẩn bộ sưu tập gồm %number% NFT này?
+Are you sure you want to hide these %number% NFTs?: Bạn có chắc muốn ẩn %number% NFT này?
+Show: Hiển thị
+Confirm Sending: Xác nhận gửi
+Confirm Burning: Xác nhận đốt
+Confirm Passcode: Xác nhận mã khóa
+Enter your code: Nhập mã của bạn
+Switch to W5: Chuyển sang W5
+Not Scam: Không phải lừa đảo
+Untitled: Chưa có tiêu đề
+Multichain: Đa chuỗi
+$not_enough_symbol_lowercase: Không đủ %symbol%
+Enter Secret Words: Nhập cụm từ khôi phục
+Turn this off so you can manually download updates and verify signatures.: Tắt tùy chọn này để tự tải bản cập nhật và xác minh chữ ký.
+InvalidMnemonic: Cụm từ khôi phục không hợp lệ
+NFT Menu: Menu NFT
+$app_lock_description: Khi bật khóa ứng dụng, biểu tượng khóa sẽ xuất hiện trên thẻ ở trang chính. Dùng biểu tượng này để khóa %app_name%.
+App Lock: Khóa ứng dụng
+Auto-Lock: Tự động khóa
+Disabled: Đã tắt
+30 seconds: 30 giây
+3 minutes: 3 phút
+10 minutes: 10 phút
+If away for 30 sec: Khi không hoạt động 30 giây
+If away for 3 min: Khi không hoạt động 3 phút
+If away for 10 min: Khi không hoạt động 10 phút
+Unlock: Mở khóa
+This address mimics another address that you previously interacted with.: Địa chỉ này giả mạo một địa chỉ khác mà bạn đã từng tương tác.
+Biometric authentication failed: Xác thực sinh trắc học thất bại
+Authentication is already configured: Xác thực đã được thiết lập
+Reset biometrics in security settings, or use a passcode.: Đặt lại sinh trắc học trong cài đặt bảo mật hoặc dùng mã khóa.
+Add Tokens: Thêm token
+No tokens yet: Chưa có token
+$no_tokens_description: Nhận token từ ví khác hoặc bật token bạn muốn theo dõi trong cài đặt.
+Exchange Rate: Tỷ giá
+Install Card: Cài đặt thẻ
+Reset Card: Đặt lại thẻ
+Apply Palette: Áp dụng bảng màu
+Reset Palette: Đặt lại bảng màu
+Notifications & Sounds: Thông báo và âm thanh
+Sounds: Âm thanh
+Push Notifications: Thông báo đẩy
+Select up to %count% wallets for notifications: Chọn tối đa %count% ví để nhận thông báo
+Accumulated Rewards: Phần thưởng tích lũy
+Blockchain Fee Details: Chi tiết phí blockchain
+Final Fee: Phí cuối cùng
+Excess: Phần dư
+$fee_details: |
+  %full_fee% sẽ được trừ ngay khỏi ví để thanh toán phí. Một phần sẽ được hoàn lại cho bạn **bằng **%excess_symbol% dưới dạng phần dư sau vài phút.
+
+  Đây là cách blockchain %chain_name% hoạt động.
+Got It: Đã hiểu
+Wallet: Ví
+Trending: Xu hướng
+No Data: Không có dữ liệu
+Toggle fullscreen: Bật/tắt toàn màn hình
+Transaction ID: Mã giao dịch
+Outgoing Transaction ID: Mã giao dịch gửi
+Incoming Transaction ID: Mã giao dịch nhận
+Help Center: Trung tâm trợ giúp
+"%app_name% Tips": Mẹo dùng %app_name%
+Open %nft_marketplace%: Mở %nft_marketplace%
+Link Copied: Đã sao chép liên kết
+Share Link: Chia sẻ liên kết
+$dapp_return_details: |
+  %fee_amount% sẽ được trừ ngay khỏi ví để thanh toán phí.
+
+  %received_amount% sẽ được hoàn lại cho bạn sau vài phút.
+$dapp_return_disclaimer: Số tiền hoàn lại hiển thị không được đảm bảo và có thể bị dapp độc hại thao túng. Hãy hủy thao tác nếu bạn không chắc chắn về độ tin cậy của dịch vụ này.
+Additional Amount Sent: Số tiền bổ sung đã gửi
+Show Sensitive Data: Hiển thị dữ liệu nhạy cảm
+Hide Sensitive Data: Ẩn dữ liệu nhạy cảm
+Copy Address: Sao chép địa chỉ
+Copy Transaction ID: Sao chép mã giao dịch
+Requesting Unstake: Đang yêu cầu rút stake
+Requested Unstake: Đã yêu cầu rút stake
+Unstake Requested: Đã gửi yêu cầu rút stake
+$request_unstake_action: Yêu cầu rút stake
+Calling Contract: Đang gọi hợp đồng
+Called Contract: Đã gọi hợp đồng
+$call_contract_action: Gọi hợp đồng
+Deploying Contract: Đang triển khai hợp đồng
+Deployed Contract: Đã triển khai hợp đồng
+$deploy_contract_action: Triển khai hợp đồng
+Minting: Đang đúc
+Minted: Đã đúc
+$mint_action: Đúc
+Burning: Đang đốt
+Burned: Đã đốt
+$burn_action: Đốt
+Updating Address: Đang cập nhật địa chỉ
+Updated Address: Đã cập nhật địa chỉ
+$update_address_action: Cập nhật địa chỉ
+Updating Site: Đang cập nhật trang web
+Updated Site: Đã cập nhật trang web
+$update_site_action: Cập nhật trang web
+Updating Subdomains: Đang cập nhật tên miền phụ
+Updated Subdomains: Đã cập nhật tên miền phụ
+$update_subdomains_action: Cập nhật tên miền phụ
+Updating Storage: Đang cập nhật lưu trữ
+Updated Storage: Đã cập nhật lưu trữ
+$update_storage_action: Cập nhật lưu trữ
+Deleting Domain Record: Đang xóa bản ghi tên miền
+Deleted Domain Record: Đã xóa bản ghi tên miền
+$delete_domain_record_action: Xóa bản ghi tên miền
+Renewing Domain: Đang gia hạn tên miền
+Renewed Domain: Đã gia hạn tên miền
+$renew_domain_action: Gia hạn tên miền
+Providing Liquidity: Đang cung cấp thanh khoản
+Provided Liquidity: Đã cung cấp thanh khoản
+$provide_liquidity_action: Cung cấp thanh khoản
+Withdrawing Liquidity: Đang rút thanh khoản
+Withdrawn Liquidity: Đã rút thanh khoản
+$withdraw_liquidity_action: Rút thanh khoản
+Bounced: Đã trả ngược
+Bouncing: Đang trả ngược
+$bounce_action: Trả ngược
+NFT Auction Bid: Giá đặt mua tại phiên đấu giá NFT
+Bidding at NFT Auction: Đang đặt giá tại phiên đấu giá NFT
+Buying NFT: Đang mua NFT
+Bought NFT: Đã mua NFT
+$buy_nft_action: Mua NFT
+Sold NFT: Đã bán NFT
+Selling NFT: Đang bán NFT
+$sell_nft_action: Bán NFT
+Receiving: Đang nhận
+$receive_action: Nhận
+Change Palette: Đổi bảng màu
+Palette: Bảng màu
+Unlock New Palettes: Mở khóa bảng màu mới
+Card has been upgraded!: Đã nâng cấp thẻ!
+$mint_card_result: Thẻ NFT sẽ được **đúc** và **tự động cài đặt** trong vòng một phút.
+Unique: Độc đáo
+Get a card with unique background and personalized palette for wallet interface.: Nhận thẻ có hình nền độc đáo và bảng màu cá nhân hóa cho giao diện ví.
+Transferable: Có thể chuyển
+Easily send your upgraded card to any of your friends.: Dễ dàng gửi thẻ đã nâng cấp cho bạn bè.
+Tradable: Có thể giao dịch
+Sell or auction your card on third-party NFT marketplaces.: Bán hoặc đấu giá thẻ trên các thị trường NFT bên thứ ba.
+Upgrade for %amount% %currency%: Nâng cấp với %amount% %currency%
+"%amount% left": Còn lại %amount%
+"%amount% sold": Đã bán %amount%
+This card has been sold out: Thẻ này đã bán hết
+Import Existing Wallet: Nhập ví hiện có
+View Any Address: Xem địa chỉ bất kỳ
+View Mode: Chế độ xem
+"%counts% Secret Words": "%counts% từ khôi phục"
+Address or Domain: Địa chỉ hoặc tên miền
+$import_view_account_note: Thêm địa chỉ **bất kỳ** để **theo dõi** hoạt động.
+$view_mode: Xem
+Import Wallet: Nhập ví
+Please top up your %token% balance.: Vui lòng nạp thêm %token%.
+Remember Passcode: Ghi nhớ mã khóa
+Remember Password: Ghi nhớ mật khẩu
+Not available with biometrics.: Không khả dụng khi dùng sinh trắc học.
+App will not ask for signature for %minutes% minutes after last entry.: Ứng dụng sẽ không yêu cầu ký trong %minutes% phút kể từ lần nhập gần nhất.
+Remember for %minutes% minutes: Ghi nhớ trong %minutes% phút
+Preview: Xem trước
+$preview_not_guaranteed: Kết quả xem trước **không được đảm bảo** và **có thể bị giả mạo** bởi dịch vụ.
+Unverified Source: Nguồn chưa được xác minh
+DappurlTrustStatusInvalidTitle: Tên miền không khớp
+$DappurlTrustStatusInvalidHelp: Nguồn yêu cầu không khớp với tên miền đã xác minh của ứng dụng này. Chỉ tiếp tục nếu bạn tin tưởng trang web này.
+DappurlTrustStatusDangerousTitle: Trang web có thể độc hại
+$DappurlTrustStatusDangerousHelp: Tên miền này đã bị đánh dấu nguy hiểm qua kiểm tra bảo mật. Kết nối có thể gây rủi ro cho tiền của bạn. Chỉ tiếp tục nếu bạn hoàn toàn chắc chắn.
+$reopen_in_iab: Vui lòng dùng %app_name% qua %mobileAppButton% hoặc %browserExtensionButton% để tránh cảnh báo này.
+$reopen_in_iab_explore: Vui lòng dùng mục %exploreTab% khi duyệt ứng dụng để tránh cảnh báo này.
+My Wallet Browser: Trình duyệt ION Wallet
+mobile app: ứng dụng di động
+browser extension: tiện ích mở rộng trình duyệt
+Exit all wallets: Thoát tất cả ví
+Can't confirm?: Không thể xác nhận?
+Unstake %amount%: Rút stake %amount%
+Request Unstaking: Yêu cầu rút stake
+Confirm Upgrading: Xác nhận nâng cấp
+How does it work?: Cách thức hoạt động?
+Renew All: Gia hạn tất cả
+Renew: Gia hạn
+Renew Domain: Gia hạn tên miền
+Renew Domains: Gia hạn các tên miền
+Some domains are about to expire: Một số tên miền sắp hết hạn
+$domain_expire: "**%domain%** hết hạn %days%"
+"%token% Staking": Staking %token%
+Add Tab: Thêm tab
+Customize Tabs: Tùy chỉnh tab
+Remove Tab: Xóa tab
+Reset: Đặt lại
+Tabs: Tab
+Tap or drag to add tabs.: Chạm hoặc kéo để thêm tab.
+$iab_tabs_count:
+  zeroValue: "%count% tab"
+  oneValue: "%count% tab"
+  otherValue: "%count% tab"
+$domains_amount %count%:
+  zeroValue: Không có tên miền
+  oneValue: "%count% tên miền"
+  otherValue: "%count% tên miền"
+Stake: Stake
+Attached to Contract: Đính kèm vào hợp đồng
+Estimated Unstake: Ước tính rút stake
+Burned Staking Tokens: Đã đốt token staking
+Manage Tokens: Quản lý token
+Claim Rewards: Nhận phần thưởng
+Configure DNS: Cấu hình DNS
+Link to Wallet: Liên kết với ví
+Change Wallet: Đổi ví
+Change Linked Wallet: Đổi ví liên kết
+Domain Renewed: Đã gia hạn tên miền
+Domains Renewed: Đã gia hạn các tên miền
+Linked Wallet: Ví liên kết
+Domain Linked: Đã liên kết tên miền
+Link: Liên kết
+Confirm Renewing: Xác nhận gia hạn
+Confirm Linking: Xác nhận liên kết
+$domains_expire:
+  zeroValue: Không có tên miền hết hạn %days%
+  oneValue: "**%domain% tên miền** hết hạn %days%"
+  otherValue: "**%domain% tên miền** hết hạn %days%"
+$in_days:
+  zeroValue: sau %count% ngày
+  oneValue: sau %count% ngày
+  otherValue: sau %count% ngày
+$domain_was_expired: "**%domain%** đã hết hạn"
+$domains_was_expired:
+  zeroValue: Không có tên miền nào đã hết hạn
+  oneValue: "**%domain% tên miền** đã hết hạn"
+  otherValue: "**%domain% tên miền** đã hết hạn"
+Reload: Tải lại
+Copy Link: Sao chép liên kết
+Check eligibility for max APY: Kiểm tra điều kiện nhận APY tối đa
+Check eligibility: Kiểm tra điều kiện
+$expired_many: Đã hết hạn
+$one_domain_expires %days%: Hết hạn %days%
+$multiple_domains_expire %days%: Hết hạn %days%
+Message: Tin nhắn
+Binary Data: Dữ liệu nhị phân
+The binary data content is unclear. Sign it only if you trust the service.: Nội dung dữ liệu nhị phân không rõ ràng. Chỉ ký nếu bạn tin tưởng dịch vụ.
+Cell Schema: Lược đồ cell
+Cell Data: Dữ liệu cell
+Sign Data: Ký dữ liệu
+EIP-712 typed data: Dữ liệu có kiểu EIP-712
+Domain: Tên miền
+Primary type: Kiểu chính
+Utilities: Tiện ích
+Games: Trò chơi
+Entertainment: Giải trí
+Toggle to landscape layout: Chuyển sang bố cục ngang
+Toggle to portrait layout: Chuyển sang bố cục dọc
+Attributes: Thuộc tính
+Show All: Hiển thị tất cả
+Description: Mô tả
+No additional data.: Không có dữ liệu bổ sung.
+"%chain% Domain Copied": Đã sao chép tên miền %chain%
+$in_currency: tính bằng %currency%
+Rename Wallet: Đổi tên ví
+You can rename this wallet for easier identification.: Bạn có thể đổi tên ví để dễ nhận biết hơn.
+Collectibles: Vật phẩm sưu tầm
+Canceled by the user: Người dùng đã hủy
+The proof for signing provided by the app is too large: Bằng chứng để ký do ứng dụng cung cấp quá lớn
+$domain_like_scam_warning: |-
+  Địa chỉ đã nhập có khả năng là **LỪA ĐẢO**. Đây **KHÔNG** phải địa chỉ của bất kỳ sàn giao dịch nào hay ví token của bạn.
+
+  Đây là một **tên miền** dài mà **kẻ lừa đảo** dùng để khiến mọi người tin rằng họ đang gửi token đến địa chỉ quen thuộc.
+
+  Hãy **hủy** giao dịch này và **không bao giờ** tin người lạ.
+Allow Suspicious Actions: Cho phép thao tác đáng ngờ
+$allow_suspicious_actions_description: Cho phép gửi đến địa chỉ đáng ngờ và tương tác với hợp đồng có thể không an toàn.
+Multisig Wallet Detected: Phát hiện ví đa chữ ký
+$multisig_warning_text: Ví này cần nhiều chữ ký để chuyển tiền. Bạn **không thể rút** bất kỳ khoản tiền nào tại đây bằng %app_name%. Hãy chắc chắn ví thuộc về bạn — nếu không, đây có thể là một phần của trò lừa đảo.
+$multisig_warning_link: Chạm để tìm hiểu thêm
+Multisig sending disabled: Đã tắt gửi từ ví đa chữ ký
+$accept_terms_with_link: Tôi đồng ý %link%
+use the wallet responsibly: sử dụng ví có trách nhiệm
+"%app_name% Resources": Tài nguyên %app_name%
+Resources: Tài nguyên
+Watch Video about Features: Xem video về các tính năng
+Enjoy Monthly Updates in Blog: Đọc cập nhật hằng tháng trên blog
+Learn New Things in Help Center: Tìm hiểu thêm tại Trung tâm trợ giúp
+Frequent Questions & Answers: Câu hỏi thường gặp
+Paste from Clipboard: Dán từ bộ nhớ tạm
+Use biometric authentication or create a password to protect it.: Dùng xác thực sinh trắc học hoặc tạo mật khẩu để bảo vệ ví.
+Go to Words: Xem cụm từ
+Copy to Clipboard: Sao chép vào bộ nhớ tạm
+$mnemonic_check_words_list: "Vui lòng chọn đúng các từ ở vị trí %word_numbers%:"
+$mnemonic_check_error: Các từ không khớp, vui lòng thử lại.
+Open Wallet: Mở ví
+All Set!: Đã sẵn sàng!
+$wallet_create_done: Xong! Bạn đã tạo ví.
+$wallet_import_done:
+  zeroValue: Xong! Bạn đã nhập ví.
+  oneValue: Xong! Bạn đã nhập ví.
+  otherValue: Xong! Bạn đã nhập %count% ví.
+$wallet_done_description: Giờ đây bạn có thể lưu trữ, nhận và gửi coin cùng các tài sản số khác một cách an toàn.
+Security Warning: Cảnh báo bảo mật
+Go back to Words: Quay lại cụm từ
+I’m sure. Continue: Tôi chắc chắn. Tiếp tục
+$copy_mnemonic_warning: Lưu các từ trong môi trường số, kể cả **bộ nhớ tạm**, là không an toàn. Hãy đảm bảo bạn đã lưu cụm từ khôi phục ở nơi an toàn.
+$screenshot_mnemonic_warning: Lưu các từ trong môi trường số, kể cả **ảnh chụp màn hình**, là không an toàn. Hãy đảm bảo bạn đã lưu cụm từ khôi phục ở nơi an toàn.
+Other apps will be able to read your secret words!: Các ứng dụng khác sẽ có thể đọc cụm từ khôi phục của bạn!
+I’m sure. Copy anyway: Tôi chắc chắn. Vẫn sao chép
+$auth_biometric_info: Bạn có thể thiết lập sinh trắc học để **thuận tiện hơn.**
+Open wallet without checking: Mở ví mà không kiểm tra
+Make sure you have your secret words securely saved.: Hãy đảm bảo bạn đã lưu cụm từ khôi phục ở nơi an toàn.
+Without it, you won't be able to access your wallet.: Nếu không có, bạn sẽ không thể truy cập ví.
+Search app or enter address: Tìm ứng dụng hoặc nhập địa chỉ
+Search or Ask: Tìm kiếm hoặc hỏi
+Connected Apps: Ứng dụng đã kết nối
+Connected Sites: Trang web đã kết nối
+Popular Apps: Ứng dụng phổ biến
+Popular Sites: Trang web phổ biến
+$wallets_amount:
+  zeroValue: Không có ví
+  oneValue: "%count% ví"
+  otherValue: "%count% ví"
+$total_balance: Tổng %balance%
+No wallets: Không có ví
+View as List: Xem dạng danh sách
+View as Cards: Xem dạng thẻ
+Reorder: Sắp xếp lại
+Reorder Tabs: Sắp xếp lại tab
+Rename: Đổi tên
+Customize: Tùy chỉnh
+Manage Wallets: Quản lý ví
+i18n_dragToSort: Kéo để sắp xếp
+My: Của tôi
+All: Tất cả
+$view_accounts: Xem
+Add your first one to begin.: Thêm ví đầu tiên để bắt đầu.
+You don’t have any wallets yet: Bạn chưa có ví nào
+Add View Wallet: Thêm ví theo dõi
+No view wallets yet: Chưa có ví theo dõi
+View wallets can receive assets, but you cannot use them to send or sign transactions.: Ví theo dõi có thể nhận tài sản, nhưng bạn không thể dùng chúng để gửi hoặc ký giao dịch.
+Add the first one to track balances and activity for any address.: Thêm ví đầu tiên để theo dõi số dư và hoạt động của địa chỉ bất kỳ.
+Customize Wallet: Tùy chỉnh ví
+"Select the card stored in this wallet:": "Chọn thẻ được lưu trong ví này:"
+This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Thẻ này sẽ được cài đặt cho ví và hiển thị trên màn hình chính cùng danh sách ví.
+Get First Card: Nhận thẻ đầu tiên
+Palette and Card: Bảng màu và thẻ
+Customize the wallet's home screen and color accents the way you like.: Tùy chỉnh màn hình chính và màu nhấn của ví theo sở thích.
+Address doesn't exist: Địa chỉ không tồn tại
+The address is not a token minter address: Địa chỉ này không phải địa chỉ hợp đồng phát hành token
+$joining_comma: ", "
+$joining_and: " và "
+$joining_or: " hoặc "
+View in App: Xem trong ứng dụng
+Save Account: Lưu tài khoản
+$invalid_address_format: Định dạng địa chỉ không hợp lệ
+$no_valid_view_addresses: Không có địa chỉ hợp lệ để xem
+Account Saved: Đã lưu tài khoản
+Share Wallet Link: Chia sẻ liên kết ví
+Address: Địa chỉ
+Remove: Xóa
+$missing_offramp_deposit_address: Thiếu địa chỉ nạp tiền để bán tiền mã hóa.
+Buy: Mua
+Sell: Bán
+Sell on Card: Bán nhận tiền về thẻ
+Sell %symbol%: Bán %symbol%
+$connect_dapp_description: Ứng dụng đã kết nối chỉ có thể xem địa chỉ ví và không thể di chuyển tài sản nếu chưa được bạn cho phép.
+$connect_dapp_title: Kết nối với %name%?
+$connect_dapp_no_compatible_wallets_found: Kết nối này yêu cầu ví đa chuỗi. Ví hiện tại chỉ hỗ trợ ION và bạn chưa có ví đa chuỗi nào khác. Dùng nút bên dưới để tạo ví đa chuỗi mới.
+Choose Wallet: Chọn ví
+Wallet to use on %host%: Ví dùng trên %host%
+Selected Wallet: Ví đã chọn
+Wallet to use for payment: Ví dùng để thanh toán
+$wallet_connect_pay_no_options: Không có phương thức thanh toán khả dụng cho ví này.
+$wallet_connect_pay_try_another_wallet: Thử chọn ví khác.
+Connect Wallet: Kết nối ví
+Create Multichain Wallet: Tạo ví đa chuỗi
+Select multichain wallet: Chọn ví đa chuỗi
+Connect Anyway: Vẫn kết nối
+Insufficient Fee: Không đủ tiền trả phí
+Waiting for a View deeplink to display a wallet address.: Đang chờ liên kết sâu View để hiển thị địa chỉ ví.
+Adding wallets is not available in explorer mode: Không thể thêm ví trong chế độ trình khám phá
+$explorer_mode_warning: "Chế độ trình khám phá: đang chờ liên kết sâu View để mở địa chỉ"
+This command is not supported in explorer mode: Lệnh này không được hỗ trợ trong chế độ trình khám phá
+$saved_addresses_header: Đã lưu
+confirm an action in My Wallet: xác nhận thao tác trong ION Wallet
+Migration was rolled back: Đã hoàn tác quá trình chuyển đổi
+Unable to migrate wallet data. Please contact support.: Không thể chuyển đổi dữ liệu ví. Vui lòng liên hệ bộ phận hỗ trợ.
+Failed to retrieve password from biometrics: Không thể lấy mật khẩu từ sinh trắc học
+Migration failed. Please try again.: Chuyển đổi thất bại. Vui lòng thử lại.
+Timed out waiting for account to be ready: Đã hết thời gian chờ tài khoản sẵn sàng
+$connected_apps:
+  otherValue: Đã kết nối %count%
+Night Mode, Palette, Card: Chế độ tối, bảng màu, thẻ
+Back Up, Passcode, Auto-Lock: Sao lưu, mã khóa, tự động khóa
+Back Up, Password, Auto-Lock: Sao lưu, mật khẩu, tự động khóa
+Base Currency, Token Order, Hidden NFTs: Tiền tệ cơ sở, thứ tự token, NFT bị ẩn
+Your assets on other contracts: Tài sản của bạn trên các hợp đồng khác
+Wallets, Sounds: Ví, âm thanh
+Help: Trợ giúp
+About: Giới thiệu
+Wallets: Ví
+Open: Mở
+Open in %app_name%: Mở trong %app_name%
+Blog: Blog
+Apps: Ứng dụng
+Permissions: Quyền
+Token approvals and wallet permissions: Quyền sử dụng token và quyền truy cập ví
+Approvals & Delegations: Phê duyệt và ủy quyền
+Plugins: Plugin
+No Permissions: Không có quyền nào
+Unlimited: Không giới hạn
+Approved to %name%: Đã phê duyệt cho %name%
+Wallet Delegation: Ủy quyền ví
+Wallet Delegation to %name%: Ủy quyền ví cho %name%
+Revoke Delegation: Thu hồi ủy quyền
+Are you sure you want to revoke delegation for %name%?: Bạn có chắc muốn thu hồi ủy quyền cho %name%?
+Revoke: Thu hồi
+Revoke Approval: Thu hồi phê duyệt
+Are you sure you want to revoke approval for %token%?: Bạn có chắc muốn thu hồi phê duyệt cho %token%?
+Confirm Revoking: Xác nhận thu hồi
+Unknown Plugin: Plugin không xác định
+$nft_not_found: Không tìm thấy NFT
+You will be able to save it again via Transfer Info with this address.: Bạn có thể lưu lại địa chỉ này qua mục Thông tin chuyển tiền.
+Transfer Info: Thông tin chuyển tiền
+Transfer not found: Không tìm thấy giao dịch chuyển tiền
+Failed to fetch transfer: Không thể tải giao dịch chuyển tiền
+Transfer in progress: Đang chuyển tiền
+Not all transfers were sent successfully: Một số giao dịch chuyển tiền chưa được gửi thành công
+Please confirm transfer using biometrics: Vui lòng xác nhận chuyển tiền bằng sinh trắc học
+$transfer_inactive_contract_error: |
+  Bạn đã nhập địa chỉ ở định dạng "EQ...", nhưng địa chỉ này chưa hoạt động nên giao dịch sẽ không hoàn tất.
+  Nếu bạn chắc chắn muốn gửi đến địa chỉ này, hãy nhập địa chỉ ở định dạng "UQ...".
+$transaction_not_found: Không tìm thấy giao dịch chuyển tiền.
+$could_not_determine_address: Không thể xác định địa chỉ ví từ giao dịch chuyển tiền
+WrongAddress: Ứng dụng đã yêu cầu thao tác từ ví khác.
+WrongNetwork: Ứng dụng đã yêu cầu thao tác từ mạng khác.
+Another transfer was sent from this wallet simultaneously. Please try again.: Một giao dịch khác đã được gửi đồng thời từ ví này. Vui lòng thử lại.
+Confirm action with your password: Xác nhận thao tác bằng mật khẩu
+$dapps-description: Bạn có thể đăng nhập vào các ứng dụng hỗ trợ %app_name%. Các ứng dụng có thể xem địa chỉ ví, số dư và yêu cầu thao tác.
+Please verify the action.: Vui lòng kiểm tra thao tác.
+$service_token_transfer_warning: Bạn sắp chuyển một token dịch vụ quan trọng, cần thiết để rút tiền đã nạp hoặc thực hiện các thao tác dịch vụ. Hãy đảm bảo đây là thao tác bạn thực sự muốn thực hiện.
+$hardware_payload_warning: "**Dịch vụ bên thứ ba đang yêu cầu quyền truy cập ví của bạn.** Điều này có thể dẫn đến mất tiền. Hãy hủy thao tác nếu bạn không chắc chắn về độ tin cậy của dịch vụ này."
+Pin: Ghim
+Unpin: Bỏ ghim
+My Assets: Tài sản của tôi
+Owner: Chủ sở hữu
+Show All Wallets: Hiển thị tất cả ví
+Ask a Question: Đặt câu hỏi
+Ask anything: Hỏi bất cứ điều gì
+Learn more: Tìm hiểu thêm
+$settings_token_change_threshold: Đổi ngưỡng biến động %
+$settings_token_change_threshold_description: Ẩn biến động phần trăm trong 24 giờ thấp hơn ngưỡng đã chọn.
+$settings_token_change_threshold_off: Tắt
+$settings_hide_action_buttons: Ẩn nút thao tác
+$settings_hide_action_buttons_description: Ẩn hàng nút thao tác trên màn hình Ví.
+Retry: Thử lại
+Clear Chat: Xóa cuộc trò chuyện
+Unsupported link: Liên kết không được hỗ trợ
+My Wallet Features: Tính năng ION Wallet
+Notifications: Thông báo
+Wrong passcode, please try again: Sai mã khóa, vui lòng thử lại
+Use biometric authentication or create a passcode to protect it.: Dùng xác thực sinh trắc học hoặc tạo mã khóa để bảo vệ ví.
+Use Passcode: Dùng mã khóa
+Create Passcode: Tạo mã khóa
+Create a passcode to protect it.: Tạo mã khóa để bảo vệ ví.
+Enter Passcode: Nhập mã khóa
+If you turn off biometric protection, you will need to create a passcode.: Nếu tắt bảo vệ bằng sinh trắc học, bạn sẽ cần tạo mã khóa.
+Enabling biometric confirmation will reset the passcode.: Bật xác nhận bằng sinh trắc học sẽ đặt lại mã khóa.
+Confirm action with your passcode: Xác nhận thao tác bằng mã khóa
+No Image: Không có hình ảnh
+Different blockchain. Cannot be selected: Khác blockchain. Không thể chọn
+Chains: Chuỗi
+enclave_use_biometrics: Dùng sinh trắc học
+Copy Storage Data: Sao chép dữ liệu lưu trữ
+Enclave session expired: Phiên Enclave đã hết hạn
+Failed to setup auth: Không thể thiết lập xác thực
+Failed to setup biometric auth: Không thể thiết lập xác thực sinh trắc học
+No enclave session token available: Không có token phiên Enclave
+Missing authorization: Thiếu thông tin xác thực
+$address_suggestion_no_chain: Không có %chain%
+Subwallets: Ví phụ
+Other addresses for this wallet: Các địa chỉ khác của ví này
+Current Wallet: Ví hiện tại
+Add Subwallet: Thêm ví phụ
+Create Subwallet: Tạo ví phụ
+Add All Found: Thêm tất cả ví tìm thấy
+You have tokens on other subwallets. You can switch to them here.: Bạn có token trên các ví phụ khác. Bạn có thể chuyển sang các ví đó tại đây.
+Subwallet Created: Đã tạo ví phụ
+Subwallet Added: Đã thêm ví phụ
+Subwallet Switched: Đã chuyển ví phụ
+Top 1: Top 1
+Top 3: Top 3
+Top 5: Top 5
+Top 10: Top 10
+Top 30: Top 30
+Manage Assets: Quản lý tài sản
+Pulse: Pulse
+Edit Message: Chỉnh sửa tin nhắn
+Toggle Hints: Bật/tắt gợi ý
+Scroll To Bottom: Cuộn xuống cuối
+$action_not_available_view_mode: Thao tác này không khả dụng với ví theo dõi
+Deposit: Nạp tiền
+Trade: Giao dịch
+Show All Assets: Hiển thị tất cả tài sản
+Show All Collectibles: Hiển thị tất cả vật phẩm sưu tầm
+Show All Actions: Hiển thị tất cả thao tác
+Show All %collection_name%: Hiển thị tất cả %collection_name%
+Scanning for subwallets...: Đang quét ví phụ...
+Your assets on other TON contracts: Tài sản của bạn trên các hợp đồng ION khác
+No existing subwallets found: Không tìm thấy ví phụ hiện có
+You can create a new subwallet if you need another address on the same secret words.: Bạn có thể tạo ví phụ mới nếu cần địa chỉ khác dùng cùng cụm từ khôi phục.
+You have tokens on other subwallets. Each subwallet has its own address.: Bạn có token trên các ví phụ khác. Mỗi ví phụ có địa chỉ riêng.
+Scanning...: Đang quét...
+No collectibles yet: Chưa có vật phẩm sưu tầm
+Hide Tab: Ẩn tab
+Show Collectibles: Hiển thị vật phẩm sưu tầm
+Show Assets: Hiển thị tài sản
+Top %amount%: Top %amount%
+No subwallets yet.: Chưa có ví phụ.
+$subwallets_found:
+  oneValue: "Đã tìm thấy: %count%"
+  otherValue: "Đã tìm thấy: %count%"
+$subwallet_scan_no_native_balances: Không có số dư token gốc
+$subwallet_scan_other_tokens_suffix:
+  oneValue: " + %count% token khác"
+  otherValue: " + %count% token khác"
+Send, receive, and trade tokens and collectibles.: Gửi, nhận và giao dịch token cùng vật phẩm sưu tầm.
+$overview_cell_size_small: Nhỏ
+$overview_cell_size_medium: Vừa
+$overview_cell_size_big: Lớn
+Set Name: Đặt tên
+Wallet Created: Đã tạo ví
+Wallet Imported: Đã nhập ví
+View Wallet Added: Đã thêm ví theo dõi
+Scroll Left: Cuộn sang trái
+Scroll Right: Cuộn sang phải
+Sent NFT: Đã gửi NFT
+Sending NFT: Đang gửi NFT
+$send_nft_action: Gửi NFT
+Received NFT: Đã nhận NFT
+Receiving NFT: Đang nhận NFT
+$receive_nft_action: Nhận NFT
+Minted NFT: Đã đúc NFT
+Minting NFT: Đang đúc NFT
+$mint_nft_action: Đúc NFT
+Burned NFT: Đã đốt NFT
+Burning NFT: Đang đốt NFT
+$burn_nft_action: Đốt NFT
+New Wallet: Ví mới
+From new secret words: Từ cụm từ khôi phục mới
+New Subwallet: Ví phụ mới
+From current secret words: Từ cụm từ khôi phục hiện tại
+$secret_words: Cụm từ khôi phục
+Restore wallet from 12 or 24 words: Khôi phục ví bằng 12 hoặc 24 từ
+Watch wallet in read-only mode: Theo dõi ví ở chế độ chỉ đọc
+More: Thêm
+at: lúc
+I agree to %term%: Tôi đồng ý với %term%
+See Words: Xem cụm từ
+Wrong Phrase: Cụm từ không đúng
+Permission Denied: Quyền truy cập bị từ chối
+Locked: Đã khóa
+Enter passcode or use fingerprint: Nhập mã khóa hoặc dùng vân tay
+Use PIN: Dùng mã PIN
+Try again in %duration%: Thử lại sau %duration%
+Try again in %duration% and %unit%: Thử lại sau %duration% và %unit%
+Screen Recording Detected: Phát hiện ghi màn hình
+$screen_recording_info: |
+  Bạn đang ghi màn hình.
+  Màn hình này có thể chứa thông tin nhạy cảm hoặc riêng tư.
+  Hãy chắc chắn bạn hiểu rõ những gì sẽ được chia sẻ.
+Screen Recording: Ghi màn hình
+Disable Screen Record Warning: Tắt cảnh báo ghi màn hình
+I Understand, Proceed: Tôi đã hiểu, tiếp tục
+Waiting for Network: Đang chờ kết nối mạng
+My Wallet: ION Wallet
+$no_activity_history: |
+  Ví này chưa có lịch sử hoạt động.
+Standalone: Độc lập
+"Enter wallet name:": "Nhập tên ví:"
+Add Crypto: Nạp tiền mã hóa
+Share QR Code: Chia sẻ mã QR
+$send_only_ton: Chỉ gửi ION hoặc tài sản trên nền tảng ION đến địa chỉ này. Gửi token khác sẽ dẫn đến mất tài sản.
+$send_only_chain: Chỉ gửi %chain% (%symbol%) hoặc tài sản trên nền tảng %chain% đến địa chỉ này. Gửi token khác sẽ dẫn đến mất tài sản.
+Buying with card is not supported for this account.: Tài khoản này không hỗ trợ mua bằng thẻ.
+Price per: Đơn giá
+from: từ
+to: đến
+Currency: Tiền tệ
+Select Token to Send: Chọn token để gửi
+Send to: Gửi đến
+Add a message, if needed: Thêm lời nhắn nếu cần
+Collapse: Thu gọn
+Expand: Mở rộng
+Standalone NFT: NFT độc lập
+$nft_select: Chọn
+$nft_batch_on_sale: Các vật phẩm đã chọn đang được rao bán.
+$nft_batch_different_chains: Các vật phẩm đã chọn thuộc các chuỗi khác nhau.
+$nft_expired: Đã hết hạn
+Linked Address: Địa chỉ liên kết
+Enter Address: Nhập địa chỉ
+D: "N"
+W: T
+M: Th
+3M: 3Th
+"Y": Năm
+$amount_K: "%amount%N"
+$amount_M: "%amount%Tr"
+Happening Now: Đang diễn ra
+No Dapps Found!: Không tìm thấy dapp!
+Edit Wallet Name: Chỉnh sửa tên ví
+Wallet Name: Tên ví
+App Icon: Biểu tượng ứng dụng
+Rounded Toolbars: Thanh công cụ bo góc
+Side Gutters: Lề hai bên
+Gradient Navigation Bar: Thanh điều hướng chuyển sắc
+Tokens on Home Screen: Token trên màn hình chính
+Current Wallet Version: Phiên bản ví hiện tại
+Tokens on Other Versions: Token trên phiên bản khác
+Show Secret Words: Hiển thị cụm từ khôi phục
+Passcode: Mã khóa
+Lock the app after: Khóa ứng dụng sau
+Never: Không bao giờ
+"%count% seconds": "%count% giây"
+"%count% minutes": "%count% phút"
+Unstake Request: Yêu cầu rút stake
+History: Lịch sử
+Earn up to %apy% per year from your tokens: Kiếm lợi nhuận lên đến %apy% mỗi năm từ token
+Insufficient %symbol% Balance: Số dư %symbol% không đủ
+Instant Withdrawal: Rút ngay
+Instantly: Ngay lập tức
+Up to %amount%: Tối đa %amount%
+$up_to_amount_lowercase: tối đa %amount%
+Current APR: APR hiện tại
+in: trong
+Network Error: Lỗi mạng
+Enter Amount: Nhập số tiền
+"%from% to %to%": "%from% sang %to%"
+Max %amount%: Tối đa %amount%
+Authorize %token% fee: Cho phép thanh toán phí bằng %token%
+Pending previous fee: Đang chờ khoản phí trước đó
+AML/KYC: AML/KYC
+Receive to: Nhận vào
+Enter %token% address: Nhập địa chỉ %token%
+"Send %token% this address:": "Gửi %token% đến địa chỉ này:"
+"%amount% will be returned": "%amount% sẽ được hoàn lại"
+Connecting your wallet: Đang kết nối ví
+Action is not possible on a view-only wallet.: Không thể thực hiện thao tác trên ví chỉ xem.
+No matching chains: Không có mạng tương thích
+Logged in with My Wallet: Đã đăng nhập bằng ION Wallet
+You have no apps connected to this wallet.: Bạn chưa kết nối ứng dụng nào với ví này.
+Asset: Tài sản
+Sent to: Đã gửi đến
+via %agg%: qua %agg%
+Switch to Legacy Version: Chuyển sang phiên bản cổ điển
+Received from: Đã nhận từ
+Your Secret Words: Cụm từ khôi phục của bạn
+day:
+  zeroValue: "%count% ngày"
+  oneValue: "%count% ngày"
+  otherValue: "%count% ngày"
+hour:
+  zeroValue: "%count% giờ"
+  oneValue: "%count% giờ"
+  otherValue: "%count% giờ"
+minute:
+  zeroValue: phút
+  oneValue: phút
+  otherValue: "%count% phút"
+second:
+  zeroValue: "%count% giây"
+  oneValue: "%count% giây"
+  otherValue: "%count% giây"
+transfer:
+  zeroValue: "%count% giao dịch chuyển tiền"
+  oneValue: "%count% giao dịch chuyển tiền"
+  otherValue: "%count% giao dịch chuyển tiền"
+Confirm Actions:
+  zeroValue: Xác nhận %count% thao tác
+  oneValue: Xác nhận thao tác
+  otherValue: Xác nhận các thao tác
+A ~ Z: A ~ Z
+Biometric authentication not available.: Xác thực sinh trắc học không khả dụng.
+Payment Address: Địa chỉ thanh toán
+Wallet to use on: Ví dùng trên
+Clipboard empty: Bộ nhớ tạm trống
+Confirm Connect: Xác nhận kết nối
+Connected apps can only see your wallet address and will not be able to move your assets without permission.: Ứng dụng đã kết nối chỉ có thể xem địa chỉ ví và không thể di chuyển tài sản nếu chưa được bạn cho phép.
+Connect to %name%?: Kết nối với %name%?
+Don’t show tokens on your account with value less than $0.01. You can also selectively enable and disable particular tokens using the list below.: Không hiển thị token trong tài khoản có giá trị dưới $0.01. Bạn cũng có thể bật hoặc tắt từng token trong danh sách bên dưới.
+Don’t show transactions of less than $0.01. Such small transactions are often used for spam and scam.: Không hiển thị giao dịch dưới $0.01. Các giao dịch nhỏ như vậy thường được dùng để gửi thư rác và lừa đảo.
+Enter your Wallet Passcode: Nhập mã khóa ví
+Import failed: Nhập ví thất bại
+Install Palette: Áp dụng bảng màu
+Moving to staking balance: Đang chuyển sang số dư staking
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet dùng xác thực sinh trắc học để mở khóa và phê duyệt giao dịch
+Network error: Lỗi mạng
+No Camera Access: Không có quyền truy cập camera
+Not all transactions were sent successfully.: Một số giao dịch chưa được gửi thành công.
+OK: OK
+Open in Explorer: Mở trong trình khám phá
+Open in...: Mở trong...
+Passcode changed: Đã đổi mã khóa
+Please make sure your internet connection is working and try again.: Vui lòng đảm bảo kết nối internet đang hoạt động và thử lại.
+Please set a passcode on your device, and then try to use biometric authentication.: Vui lòng đặt mã khóa cho thiết bị rồi thử dùng xác thực sinh trắc học.
+Please try again: Vui lòng thử lại
+Please wait...: Vui lòng chờ...
+Preview is currently unavailable.: Hiện không thể xem trước.
+Read-only account: Tài khoản chỉ đọc
+Request for unstaking: Yêu cầu rút stake
+Set a passcode: Đặt mã khóa
+Show All %name%: Hiển thị tất cả %name%
+TON Wallet Versions: Các phiên bản ION Wallet
+Tap to reveal: Chạm để hiển thị
+There is no activity history for this wallet yet.: Ví này chưa có lịch sử hoạt động.
+Discovering wallets: Đang tìm ví
+Address not resolved: Không thể phân giải địa chỉ
+Updating…: Đang cập nhật…
+This is how the TON Blockchain works.: Đây là cách blockchain ION hoạt động.
+Waiting for network…: Đang chờ kết nối mạng…
+Wallet is Locked: Ví đã khóa
+Warning: Cảnh báo
+Wear: Trang bị
+Passcodes don't match. Please try again.: Mã khóa không trùng khớp. Vui lòng thử lại.
+Secret phrase was copied to clipboard: Đã sao chép cụm từ khôi phục vào bộ nhớ tạm
+Copy Anyway: Vẫn sao chép
+12 Words: 12 từ
+24 Words: 24 từ
+Words don’t match, please try again.: Các từ không khớp, vui lòng thử lại.
+Load 5 More Wallets: Tải thêm 5 ví
+$n_wallets_selected:
+  zeroValue: Đã chọn %count%
+  oneValue: Đã chọn %count%
+  otherValue: Đã chọn %count%
+Are you sure you want to unpin %tab%?: Bạn có chắc muốn bỏ ghim %tab%?
+add: thêm
+send: gửi
+earn: kiếm lợi nhuận
+Actions: Thao tác
+$actions_description: Truy cập nhanh các thao tác thường dùng.
+Rate: Tỷ giá
+$rate_description: Xem tỷ giá hiện tại của token đã chọn.
+Rate with Chart: Tỷ giá kèm biểu đồ
+$rate_with_chart_description: Xem tỷ giá hiện tại và theo dõi biến động của token đã chọn.
+Style: Phong cách
+Neutral: Trung tính
+Vivid: Rực rỡ
+Chart Period: Khoảng thời gian biểu đồ
+$period_all: Toàn bộ thời gian
+$period_day: 1 ngày
+$period_week: 1 tuần
+$period_month: 1 tháng
+$period_3months: 3 tháng
+$period_year: 1 năm
+Token: Token
+All Tokens: Tất cả token
+Customize Widget: Tùy chỉnh tiện ích
+Chats: Cuộc trò chuyện
+Recent Searches: Tìm kiếm gần đây
+Clear All: Xóa tất cả
+Suggestions: Gợi ý
+Suggest: Gợi ý
+Popular and connected apps: Ứng dụng phổ biến và đã kết nối
+Site: Trang web
+Sites: Trang web
+App: Ứng dụng
+Collectible: Vật phẩm sưu tầm
+Action: Thao tác
+Tokens and Stocks: Token và cổ phiếu
+View Wallet: Ví theo dõi
+Connected Dapp: Dapp đã kết nối
+$ago: "%time% trước"
+$visited_ago: Đã truy cập %time% trước
+Notifications are disabled: Thông báo đã bị tắt
+Enable in Settings: Bật trong Cài đặt
+Open Link: Mở liên kết
+Open in App: Mở trong ứng dụng
+Search in Google: Tìm trên Google
+Stock: Cổ phiếu
+Recent Chat: Cuộc trò chuyện gần đây
+Recent Chats: Các cuộc trò chuyện gần đây
+Recent Search: Tìm kiếm gần đây
+Google: Google
+Open Website: Mở trang web
+Open Collectible: Mở vật phẩm sưu tầm
+Open Collection: Mở bộ sưu tập
+Open App: Mở ứng dụng
+Open Chat: Mở cuộc trò chuyện
+$universal_search_recent: Gần đây
+$universal_search_start_conversation: Bắt đầu trò chuyện
+$universal_search_dictate: Nhập bằng giọng nói
+$universal_search_clear_text: Xóa văn bản
+$universal_search_switch_section_contents: Chuyển nội dung mục
+$remove_wallets:
+  zeroValue: Xóa ví
+  oneValue: Xóa ví
+  otherValue: Xóa %count% ví
+Encryption is not possible. The recipient is not a wallet or has no outgoing transactions.: Không thể mã hóa. Người nhận không phải ví hoặc chưa có giao dịch gửi.
+just now: vừa xong
+"No": Không
+Search: Tìm kiếm
+State init supplied without message body: Có dữ liệu khởi tạo trạng thái nhưng thiếu nội dung tin nhắn
+The wallet is ready: Ví đã sẵn sàng
+Unexpected error. Please let the support know.: Lỗi không mong muốn. Vui lòng báo cho bộ phận hỗ trợ.
+Unlock it and open the TON App: Mở khóa thiết bị và mở ứng dụng TON
+Use 4-digit Passcode: Dùng mã khóa 4 chữ số
+Use 6-digit Passcode: Dùng mã khóa 6 chữ số
+$authorize_token_fee_capitalized: Cho phép thanh toán phí bằng %token%
+Awaiting Previous Fee: Đang chờ khoản phí trước đó
+Lock: Khóa
+Receive: Nhận
+Scan: Quét
+$web_permission_prompt: Cho phép %origin% sử dụng %permissions% của bạn?
+$web_permission_allow: Cho phép
+$web_permission_deny: Không cho phép
+$web_permission_camera: camera
+$web_permission_microphone: micrô
+$web_permission_location: vị trí
+$web_permission_device_features: các tính năng thiết bị
+$web_permission_this_site: trang web này
+$enclave_use_biometrics: Dùng sinh trắc học
+$enclave_enter_passcode_or_use_biometrics: Nhập mã khóa hoặc dùng vân tay
+$enclave_use_pin: Dùng mã PIN
+$enclave_cancel: Hủy
+push_title_wallet: "%wallet_title%"
+push_activity_token_sent: Đã gửi %amount% %symbol%
+push_activity_token_received: Đã nhận %amount% %symbol%
+push_activity_contract_called: Đã gọi hợp đồng thông minh
+push_activity_contract_deployed: Đã triển khai hợp đồng thông minh
+push_activity_token_minted: Đã đúc %amount% %symbol%
+push_activity_token_burned: Đã đốt %amount% %symbol%
+push_activity_nft_sent: Đã gửi NFT
+push_activity_nft_sent_named: "Đã gửi NFT: %name%"
+push_activity_nft_received: Đã nhận NFT
+push_activity_nft_received_named: "Đã nhận NFT: %name%"
+push_activity_nft_minted: Đã đúc NFT
+push_activity_nft_minted_named: "Đã đúc NFT: %name%"
+push_activity_liquidity_deposited: Đã cung cấp thanh khoản
+push_activity_liquidity_withdrawn: Đã rút thanh khoản
+push_activity_stake_deposit: Đã stake %amount% %symbol%
+push_activity_stake_withdrawal: Đã rút stake %amount% %symbol%
+push_activity_stake_withdrawal_request: Đã yêu cầu rút tiền từ staking
+push_activity_auction_bid: Đã đặt giá đấu giá %amount% %symbol%
+push_activity_dns_changed: Đã cập nhật bản ghi DNS
+push_activity_dns_deleted: Đã xóa bản ghi DNS
+push_activity_dns_renewed: Đã gia hạn DNS
+push_activity_subscription_started: Đã bắt đầu đăng ký
+push_activity_subscription_payment_received: Đã nhận thanh toán đăng ký %amount% %symbol%
+push_activity_subscription_canceled: Đã hủy đăng ký
+push_activity_staking_profit: Lợi nhuận staking %amount% ION
+push_activity_staking_loyalty_profit: Lợi nhuận khách hàng trung thành từ staking %amount% ION
+push_domain_title_renew: Gia hạn tên miền
+push_domain_expired_yesterday: Tên miền %domain% của bạn đã hết hạn hôm qua. Vui lòng gia hạn sớm nhất có thể để tránh mất quyền truy cập
+push_domain_expired_days_ago: Tên miền %domain% của bạn đã hết hạn %days% ngày trước. Vui lòng gia hạn sớm nhất có thể để tránh mất quyền truy cập
+push_domain_expired_days_ago_number:
+  zeroValue: Tên miền %domain% của bạn đã hết hạn %days% ngày trước. Vui lòng gia hạn sớm nhất có thể để tránh mất quyền truy cập
+  oneValue: Tên miền %domain% của bạn đã hết hạn %days% ngày trước. Vui lòng gia hạn sớm nhất có thể để tránh mất quyền truy cập
+  otherValue: Tên miền %domain% của bạn đã hết hạn %days% ngày trước. Vui lòng gia hạn sớm nhất có thể để tránh mất quyền truy cập
+push_domain_expires_today: Tên miền %domain% của bạn sẽ hết hạn hôm nay. Vui lòng gia hạn để tránh mất quyền truy cập
+push_domain_expires_tomorrow: Tên miền %domain% của bạn sẽ hết hạn ngày mai. Vui lòng gia hạn để tránh mất quyền truy cập
+push_domain_expires_in_days: Tên miền %domain% của bạn sẽ hết hạn sau %days% ngày. Vui lòng gia hạn để tránh mất quyền truy cập
+push_domain_expires_in_days_number:
+  zeroValue: Tên miền %domain% của bạn sẽ hết hạn sau %days% ngày. Vui lòng gia hạn để tránh mất quyền truy cập
+  oneValue: Tên miền %domain% của bạn sẽ hết hạn sau %days% ngày. Vui lòng gia hạn để tránh mất quyền truy cập
+  otherValue: Tên miền %domain% của bạn sẽ hết hạn sau %days% ngày. Vui lòng gia hạn để tránh mất quyền truy cập
+$more_nfts:
+  zeroValue: Không có NFT
+  oneValue: +1 NFT
+  otherValue: +%count% NFT
+$subwallets_hint: Dùng ví phụ để có thêm địa chỉ mà không cần tạo cụm từ khôi phục mới.
+$subwallets_created_wallets: Nếu bạn đã tạo ví phụ trước đây, chúng sẽ xuất hiện trong danh sách bên dưới.
+$subwallets_none: Chưa có ví phụ.
+Tracked asset value over time: Giá trị tài sản được theo dõi theo thời gian
+Current allocation across tracked assets: Phân bổ hiện tại giữa các tài sản được theo dõi
+Limited history: Lịch sử hạn chế
+Cumulative profit and loss over time: Lãi lỗ tích lũy theo thời gian
+Day-by-day profit and loss: Lãi lỗ từng ngày
+This action is not supported in explorer mode.: Thao tác này không được hỗ trợ trong chế độ trình khám phá.
+$relative_today: hôm nay
+$relative_tomorrow: ngày mai
+P&L Change: Biến động lãi lỗ
+Choose Token: Chọn token
+You don't have any eligible tokens for this payment: Bạn không có token nào đủ điều kiện cho khoản thanh toán này
+Copy Wallet Link: Sao chép liên kết ví
+Are you sure you want to cancel the payment?: Bạn có chắc muốn hủy thanh toán?
+Cancel Payment: Hủy thanh toán
+Paid: Đã thanh toán
+Payment: Thanh toán
+$chart_months_short: Th1,Th2,Th3,Th4,Th5,Th6,Th7,Th8,Th9,Th10,Th11,Th12
+$chart_week_days: Chủ nhật,Thứ hai,Thứ ba,Thứ tư,Thứ năm,Thứ sáu,Thứ bảy
+$chart_week_days_short: CN,T2,T3,T4,T5,T6,T7
+Unsupported Chain: Chuỗi không được hỗ trợ
+Please upgrade to multichain to use this app.: Vui lòng nâng cấp lên ví đa chuỗi để sử dụng ứng dụng này.
+Rounded Corners: Góc bo tròn
+Enable Blur: Bật hiệu ứng làm mờ
+App Font: Phông chữ ứng dụng
+Rounded Balance Font: Phông chữ số dư bo tròn
+Selling to card is not supported in Testnet.: Testnet không hỗ trợ bán nhận tiền về thẻ.
+Selling to card is not supported for this account.: Tài khoản này không hỗ trợ bán nhận tiền về thẻ.
+Deprecated Website: Trang web ngừng hỗ trợ
+This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: "Phiên bản này đã ngừng được hỗ trợ. Hãy nhập lại ví trên\_%new_domain% hoặc\_%download_app%."
+download the app: tải ứng dụng
+Open %new_domain%: Mở %new_domain%
+Why is %tokenName% %direction% %timeframe%?: Vì sao %tokenName% %direction% %timeframe%?
+up: tăng
+down: giảm
+today: hôm nay
+this week: tuần này
+this month: tháng này
+Info: Thông tin
+Market: Thị trường
+Market Cap: Vốn hóa thị trường
+Created: Ngày tạo
+Expanded: Đã mở rộng
+Collapsed: Đã thu gọn
+Circulating / Total Supply: Cung lưu hành / Tổng cung
+Circulating Supply: Cung lưu hành
+Total Supply: Tổng cung
+Volume · 24h: Khối lượng · 24 giờ
+Token Info Mock: Mẫu thông tin token
+Design: Thiết kế
+Localized Description: Mô tả theo ngôn ngữ
+Long / Sparse: Dài / Thưa
+Loading: Đang tải
+Missing Description: Thiếu mô tả
+Missing Token Info: Thiếu thông tin token
+Website: Trang web
+Documentation: Tài liệu
+Source Code: Mã nguồn
+Translated from English: Dịch từ tiếng Anh
+Show Original: Hiển thị bản gốc
+Show Translation: Hiển thị bản dịch
+Original Text: Văn bản gốc
+$token_info_market_cap_hint: Tổng giá trị thị trường của lượng token đang lưu hành.
+$token_info_supply_hint: Số lượng token đang lưu hành so với tổng cung.
+$token_info_volume_hint: Tổng giá trị giao dịch trong 24 giờ qua.
+$token_info_expand_hint: Mở rộng thông tin token.
+$token_info_collapse_hint: Thu gọn thông tin token.
+$token_info_open_in_browser_hint: Mở trong trình duyệt.
+$token_info_fallback_description: Không có thông tin công khai
+$token_info_no_description: Không có mô tả
+Hide Unverified NFTs: Ẩn NFT chưa được xác minh
+Unverified: Chưa xác minh
+Switched to %account%: Đã chuyển sang %account%
+See All: Xem tất cả
+Add an **extra layer of security** for your wallet in TON network.: Thêm **một lớp bảo mật** cho ví của bạn trên mạng ION.
+Another transaction was sent from this wallet simultaneously. Please try again.: Một giao dịch khác đã được gửi đồng thời từ ví này. Vui lòng thử lại.
+Buying with card is not supported for this chain.: Chuỗi này không hỗ trợ mua bằng thẻ.
+Couldn't open support chat. Please try again.: Không thể mở cuộc trò chuyện hỗ trợ. Vui lòng thử lại.
+Couldn't prepare logs for export. Please try again.: Không thể chuẩn bị nhật ký để xuất. Vui lòng thử lại.
+Disconnect Dapps: Ngắt kết nối dapp
+EIP-712 domain: Miền EIP-712
+Earn is not supported on this account.: Tài khoản này không hỗ trợ tính năng kiếm lợi nhuận.
+Export Logs: Xuất nhật ký
+Failed to load chat: Không thể tải cuộc trò chuyện
+Gram: ION
+More Details: Chi tiết thêm
+Open addresses: Mở các địa chỉ
+SDK is not ready. Please try again.: SDK chưa sẵn sàng. Vui lòng thử lại.
+Selected NFTs must use the same network: Các NFT đã chọn phải thuộc cùng một mạng
+Selling is not supported for this token.: Token này không hỗ trợ bán.
+Shows more information: Hiển thị thêm thông tin
+This action cannot be undone.: Không thể hoàn tác thao tác này.
+This action is no longer available.: Thao tác này không còn khả dụng.
+Transaction is not ready: Giao dịch chưa sẵn sàng
+Unsupported Wallet Version: Phiên bản ví không được hỗ trợ
+Unsupported version: Phiên bản không được hỗ trợ
+Waiting For Payment: Đang chờ thanh toán
+Today's Movers: Biến động hôm nay
+Popular Tokens: Token phổ biến
+Tokenized Stocks: Cổ phiếu được token hóa
+Tokenized Gold: Vàng được token hóa
+Index Funds: Quỹ chỉ số
+Exchange will be available after the ION bridge is configured.: Hoán đổi sẽ khả dụng sau khi cầu nối ION được cấu hình.
+Exchange: Hoán đổi
+Allow App Lock: Cho phép khóa ứng dụng
+Receive a supported token to continue.: Nhận token được hỗ trợ để tiếp tục.
+$unverified_source_warning: Nguồn này chưa được xác minh. Hãy kiểm tra địa chỉ trang web trước khi kết nối ví.
+$update_required: Cần cập nhật để tiếp tục sử dụng ứng dụng.
+$update_channel_unavailable: Cần cập nhật nhưng kênh tải xuống hiện không khả dụng. Vui lòng thử lại sau.
+This version is deprecated. Re-import your wallets on %new_domain%.: Phiên bản này đã ngừng được hỗ trợ. Hãy nhập lại ví trên %new_domain%.
