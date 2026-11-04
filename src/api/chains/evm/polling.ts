@@ -17,11 +17,9 @@ import { compact } from '../../../util/iteratees';
 import { logDebugError } from '../../../util/logs';
 import { pause } from '../../../util/schedulers';
 import { getChainBySlug } from '../../../util/tokens';
-import { NftStream } from './util/nftStream';
 import { getAlchemySocket } from './util/socket';
 import { fetchStoredWallet } from '../../common/accounts';
 import {
-  activeNftTiming,
   activeWalletTiming,
   inactiveWalletTiming,
 } from '../../common/polling/utils';
@@ -32,8 +30,10 @@ import { FIRST_TRANSACTIONS_LIMIT, MINUTE, SEC } from '../../constants';
 import { getTokenActivitySlice } from './activities';
 import { fetchAccountAssets, fetchCrosschainAccountAssets, getIsWalletActive } from './wallet';
 
+// Every poll reaches our backend, so it is less frequent than the shared timing
 const activeEvmWalletTiming = {
   ...activeWalletTiming,
+  pollingPeriod: { focused: 10 * SEC, notFocused: 30 * SEC },
   forcedPollingPeriod: { focused: 3 * MINUTE, notFocused: 10 * MINUTE },
 };
 
@@ -62,10 +62,6 @@ export function setupActivePolling<C extends EVMChain>(
     () => markWalletActiveForBalancePolling(),
   );
 
-  const nftPolling = getChainConfig(chain).isNftSupported
-    ? setupNftPolling(chain, accountId, address, scheduleCrossApiActivityCatchUp, onUpdate)
-    : undefined;
-
   const balancePolling = setupBalancePolling(
     chain,
     accountId,
@@ -79,7 +75,6 @@ export function setupActivePolling<C extends EVMChain>(
   markWalletActiveForBalancePolling = balancePolling.markWalletActiveAndForcePoll;
 
   return () => {
-    nftPolling?.stop();
     balancePolling.stop();
   };
 }
@@ -187,57 +182,6 @@ function setupActivityPolling(
   return {
     scheduleCrossApiActivityCatchUp,
     cancelCrossApiActivityCatchUp,
-  };
-}
-
-function setupNftPolling(
-  chain: EVMChain,
-  accountId: string,
-  address: string,
-  scheduleCrossApiActivityCatchUp: (source: 'socket' | 'poll') => void,
-  onUpdate: OnApiUpdate,
-) {
-  const { network } = parseAccountId(accountId);
-
-  const nftStream = new NftStream(chain, network, address, accountId, activeNftTiming);
-
-  nftStream.onUpdate((params) => {
-    if (params.direction === 'set') {
-      onUpdate({
-        type: 'updateNfts',
-        accountId,
-        nfts: params.nfts,
-        chain,
-        isFullLoading: params.isFullLoading,
-        streamedAddresses: params.streamedAddresses,
-      });
-      if (!params.hasNewNfts) return;
-    }
-    if (params.direction === 'send') {
-      onUpdate({
-        type: 'nftSent',
-        accountId,
-        chain,
-        nftAddress: params.nftAddress,
-        newOwnerAddress: params.newOwner,
-      });
-      scheduleCrossApiActivityCatchUp('socket');
-    }
-    if (params.direction === 'receive') {
-      onUpdate({
-        type: 'nftReceived',
-        accountId,
-        nft: params.nft,
-        nftAddress: params.nft.address,
-      });
-      scheduleCrossApiActivityCatchUp('socket');
-    }
-  });
-
-  return {
-    stop() {
-      nftStream.destroy();
-    },
   };
 }
 

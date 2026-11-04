@@ -1,12 +1,13 @@
-import type { ZerionPositionsResponse } from './types';
+import type { BnbBalancesResponse } from './types';
 
+import { ION_BNB_MAINNET } from '../../../config';
+import { getChainConfig } from '../../../util/chain';
 import { fetchWithRetry } from '../../../util/fetch';
 import { updateTokens } from '../../common/tokens';
 import { fetchAccountAssets, fetchCrosschainAccountAssets } from './wallet';
 
 jest.mock('../../../util/fetch', () => ({
   fetchWithRetry: jest.fn(),
-  buildRequestUrl: jest.fn((url: string) => new URL(url)),
 }));
 
 jest.mock('../../common/tokens', () => ({
@@ -16,8 +17,8 @@ jest.mock('../../common/tokens', () => ({
 
 const mockedFetch = jest.mocked(fetchWithRetry);
 
-/** The positions fetcher reads the body and the gateway's observation header off one response. */
-function positionsResponse(body: ZerionPositionsResponse, snapshotAt?: string, date?: string) {
+/** The balances fetcher reads the body and the backend's observation header off one response. */
+function positionsResponse(body: BnbBalancesResponse, snapshotAt?: string, date?: string) {
   const headers: Record<string, string | undefined> = { 'X-Snapshot-At': snapshotAt, Date: date };
 
   return {
@@ -31,9 +32,11 @@ const NETWORK = 'mainnet';
 const ADDRESS_A = '0x5819e5Ff34198F315322e1863Be6C3dC927cC5C3';
 const ADDRESS_B = '0x1111111111111111111111111111111111111111';
 
-const EMPTY_RESPONSE: ZerionPositionsResponse = {
-  links: { self: 'https://example.com' },
-  data: [],
+const EMPTY_RESPONSE: BnbBalancesResponse = {
+  address: ADDRESS_A,
+  native: '0',
+  tokens: {},
+  asOf: 0,
 };
 
 /** Creates a manually controllable promise so a fetch can be held in-flight while a second call arrives. */
@@ -241,5 +244,27 @@ describe('fetchAccountAssets provenance', () => {
     const result = await fetchAccountAssets('bnb', NETWORK, ADDRESS_B, jest.fn());
 
     expect(result.asOf).toBe(Date.now() - 30_000);
+  });
+});
+
+describe('fetchAccountAssets balances', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedUpdateTokens.mockResolvedValue(undefined);
+  });
+
+  it('maps BNB and ION balances from the backend onto their slugs', async () => {
+    mockedFetch.mockResolvedValue(positionsResponse({
+      ...EMPTY_RESPONSE,
+      native: '1000',
+      tokens: { [ION_BNB_MAINNET.tokenAddress.toLowerCase()]: '25' },
+    }));
+
+    const { balances } = await fetchAccountAssets('bnb', NETWORK, ADDRESS_A, jest.fn());
+
+    expect(balances).toEqual({
+      [getChainConfig('bnb').nativeToken.slug]: 1000n,
+      [ION_BNB_MAINNET.slug]: 25n,
+    });
   });
 });

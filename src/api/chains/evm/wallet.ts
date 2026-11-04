@@ -1,29 +1,19 @@
 import { Contract, isError } from 'ethers';
 
-import type { QueryParams } from '../../../util/fetch';
 import type {
   ApiAddressInfo, ApiNetwork, ApiTokenWithMaybePrice, EVMChain, StampedBalances,
 } from '../../types';
-import type {
-  AlchemyGetAssetTransfersResponse,
-  AlchemyGetTokenAssetResponse,
-  ZerionPosition,
-  ZerionPositionsResponse,
-} from './types';
+import type { BnbBalancesResponse } from './types';
 import { ApiCommonError } from '../../types';
 
 import { throwIfAborted } from '../../../util/abortSignal';
-import { getChainConfig, getChainsByStandard, getIsTokenKept } from '../../../util/chain';
-import { buildRequestUrl, fetchJson, fetchWithRetry } from '../../../util/fetch';
-import { compact } from '../../../util/iteratees';
-import withCacheAsync from '../../../util/withCacheAsync';
+import { getChainConfig, getIsTokenKept } from '../../../util/chain';
+import { fetchWithRetry } from '../../../util/fetch';
 import { getEvmProvider } from './util/client';
-import { inactiveWallets } from './util/inactiveWallets';
-import { getZerionFungibleImplementation, isZerionNativeFungible } from './util/tokens';
 import { getKnownAddressInfo } from '../../common/addresses';
-import { buildTokenSlug, updateTokens } from '../../common/tokens';
+import { updateTokens } from '../../common/tokens';
 import { isValidAddress } from './address';
-import { EVM_RPC_URLS, getApiChainByZerionChain, getEvmApiUrl, getZerionChainByApiChain } from './constants';
+import { getBnbApiUrl } from './constants';
 
 export async function getWalletBalance(chain: EVMChain, network: ApiNetwork, address: string) {
   return getEvmProvider(network, chain).getBalance(address);
@@ -31,63 +21,6 @@ export async function getWalletBalance(chain: EVMChain, network: ApiNetwork, add
 
 export async function getWalletTransactionCount(chain: EVMChain, network: ApiNetwork, address: string) {
   return getEvmProvider(network, chain).getTransactionCount(address);
-}
-
-export async function fetchAssetsByAddresses(
-  network: ApiNetwork,
-  chain: EVMChain,
-  addresses: string[],
-  signal?: AbortSignal,
-) {
-  const assets = await Promise.all(addresses.map(async (e) => {
-    const payload = {
-      method: 'POST',
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'alchemy_getTokenMetadata',
-        params: [
-          e,
-        ],
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const response = await fetchJson<AlchemyGetTokenAssetResponse>(
-      `${EVM_RPC_URLS[network](chain)}/v2`,
-      undefined,
-      { ...payload, ...(signal && { signal }) },
-    );
-
-    return {
-      address: e,
-      ...response.result,
-    };
-  }));
-
-  const tokenEntities: ApiTokenWithMaybePrice[] = [];
-
-  assets
-    .filter((e) => e?.name)
-    .forEach((e) => {
-      const slug = buildTokenSlug(chain, e.address);
-
-      tokenEntities.push({
-        priceUsd: undefined,
-        percentChange24h: undefined,
-        name: e.name,
-        symbol: e.symbol,
-        slug,
-        decimals: e.decimals,
-        chain,
-        image: e.logo,
-        tokenAddress: e.address,
-      });
-    });
-
-  return tokenEntities;
 }
 
 export function fetchCrosschainAccountAssets(
@@ -167,30 +100,25 @@ export function fetchAccountAssets(
   return promise;
 }
 
-/**
- * Fetches a positions page and reads the gateway's observation instant off it. That instant, not
- * the moment the response arrived, says how fresh the payload is: a page served from the gateway
- * cache can reach us after a socket delta that is genuinely newer. An older gateway sends no such
- * header, and the caller then falls back to arrival ordering.
- */
-async function fetchPositionsPage(url: string, params: QueryParams, signal?: AbortSignal) {
-  const response = await fetchWithRetry(buildRequestUrl(url, params), signal ? { signal } : undefined);
+async function fetchBalancesSnapshot(network: ApiNetwork, address: string, signal?: AbortSignal) {
+  const url = `${getBnbApiUrl(network)}/balances/${address}`;
+  const response = await fetchWithRetry(url, signal ? { signal } : undefined);
 
   return {
-    data: (await response.json()) as ZerionPositionsResponse,
+    data: (await response.json()) as BnbBalancesResponse,
     snapshotAt: readSnapshotAt(response),
   };
 }
 
 /**
- * Reads the observation instant and states it on this device's clock. The gateway stamps the
+ * Reads the observation instant and states it on this device's clock. The backend stamps the
  * instant by its own clock while socket deltas are stamped by ours, so a device whose clock is
  * off would rank every snapshot wrong in one direction or the other. The response's own Date is
- * the same event seen by the gateway clock, so the gap between it and arrival is the offset
+ * the same event seen by the backend clock, so the gap between it and arrival is the offset
  * between the two, and adding it puts both stamps on one clock. Without a readable Date there is
  * nothing to correct by, and an instant that still sits further ahead than MAX_SNAPSHOT_CLOCK_SKEW
  * is reported as none at all: it would outrank every delta for as long as the account lives, and
- * arrival ordering, which is what the app did before any of this, is the safer answer.
+ * arrival ordering is the safer answer.
  */
 function readSnapshotAt(response: Response) {
   const raw = response.headers.get('X-Snapshot-At');
@@ -213,107 +141,25 @@ async function fetchAccountAssetsUncoalesced(
   sendUpdateTokens: NoneToVoidFunction,
   options: { isCrossChain?: boolean; signal?: AbortSignal },
 ): Promise<StampedBalances> {
-  const { isCrossChain = false, signal } = options;
-  const zerionChain = getZerionChainByApiChain(chain);
-
-  const params = {
-    'filter[positions]': 'only_simple',
-    'filter[trash]': 'no_filter',
-    currency: 'usd',
-    'filter[chain_ids]': isCrossChain
-      ? getChainsByStandard(chain).map((c) => getZerionChainByApiChain(c as EVMChain)).join(',')
-      : zerionChain,
-  };
-
-  const { data: response, snapshotAt: asOf } = await fetchPositionsPage(
-    `${getEvmApiUrl(network)}/v1/wallets/${address}/positions/`,
-    params,
-    signal,
-  );
+  const { signal } = options;
+  const { data, snapshotAt: asOf } = await fetchBalancesSnapshot(network, address, signal);
   throwIfAborted(signal);
 
-  const tokenEntities: ApiTokenWithMaybePrice[] = [];
-  const slugPairs: Record<string, bigint> = {};
+  const { nativeToken, tokenInfo } = getChainConfig(chain);
+  const balances: Record<string, bigint> = { [nativeToken.slug]: BigInt(data.native) };
+  const tokens: ApiTokenWithMaybePrice[] = [{ priceUsd: undefined, percentChange24h: undefined, ...nativeToken }];
 
-  response.data
-    .filter((e) =>
-      e.attributes.fungible_info.name
-      && e.attributes.fungible_info.symbol
-      && !isNativeZerionAsset(
-        getApiChainByZerionChain(e.relationships.chain.data.id),
-        e.relationships.chain.data.id,
-        e),
-    )
-    .forEach((e) => {
-      const assetChain = getApiChainByZerionChain(e.relationships.chain.data.id);
-
-      const assetImplementation = getZerionFungibleImplementation(
-        e.attributes.fungible_info,
-        e.relationships.chain.data.id,
-      );
-
-      if (!assetImplementation?.address) {
-        return;
-      }
-
-      const slug = buildTokenSlug(assetChain, assetImplementation.address);
-
-      if (!getIsTokenKept(assetChain, slug)) {
-        return;
-      }
-
-      slugPairs[slug] = BigInt(e.attributes.quantity.int ?? 0);
-
-      tokenEntities.push({
-        priceUsd: typeof e.attributes.price === 'number' ? e.attributes.price : undefined,
-        percentChange24h: undefined,
-        name: e.attributes.fungible_info.name,
-        symbol: e.attributes.fungible_info.symbol,
-        slug,
-        decimals: assetImplementation.decimals,
-        chain: assetChain,
-        image: e.attributes.fungible_info.icon?.url,
-        tokenAddress: assetImplementation.address,
-      });
-    });
-
-  const chainsForNative = (isCrossChain ? getChainsByStandard(chain) : [chain]) as EVMChain[];
-
-  for (const balanceChain of chainsForNative) {
-    const { nativeToken: nativeTokenMetadata } = getChainConfig(balanceChain);
-
-    const zerionBalanceChain = getZerionChainByApiChain(balanceChain);
-
-    const nativeAsset = response.data.find((e) =>
-      isNativeZerionAsset(balanceChain, zerionBalanceChain, e),
-    );
-
-    const nativeSlug = getChainConfig(balanceChain).nativeToken.slug;
-
-    slugPairs[nativeSlug] = BigInt(nativeAsset?.attributes.quantity.int ?? 0);
-
-    tokenEntities.push({
-      priceUsd: typeof nativeAsset?.attributes.price === 'number'
-        ? nativeAsset.attributes.price
-        : undefined,
-      percentChange24h: undefined,
-      ...nativeTokenMetadata,
-    });
+  for (const token of tokenInfo) {
+    if (!token.tokenAddress || !getIsTokenKept(chain, token.slug)) {
+      continue;
+    }
+    balances[token.slug] = BigInt(data.tokens[token.tokenAddress.toLowerCase()] ?? 0);
+    tokens.push({ priceUsd: undefined, percentChange24h: undefined, ...token });
   }
 
-  await updateTokens(tokenEntities, sendUpdateTokens, true);
+  await updateTokens(tokens, sendUpdateTokens, true);
 
-  return { balances: slugPairs, asOf };
-}
-
-function isNativeZerionAsset(chain: EVMChain, zerionChain: string, position: ZerionPosition) {
-  return position.relationships.chain.data.id === zerionChain
-    && isZerionNativeFungible(
-      chain,
-      zerionChain,
-      position.attributes.fungible_info,
-      position.relationships.fungible.data.id,
-    );
+  return { balances, asOf };
 }
 
 export async function getErc20Balance(
@@ -360,80 +206,7 @@ export const getAddressInfo = (
   };
 };
 
-// The two verdicts are remembered in different places because they expire differently.
-// "Active" is monotonic - an address that has held a balance or received a transfer can never
-// stop having done so - so `withCacheAsync`, which keeps only truthy results, holds it for the
-// whole process. "Inactive" is revocable by the next block, so it lives in `inactiveWallets`
-// under a TTL.
-//
-// The balance read runs before that TTL is consulted. It is a single cheap RPC, and letting it
-// answer first means an address that receives native funds is recognised on the next check
-// rather than whenever the TTL happens to lapse - which matters because `BalanceStream` runs
-// this precheck once per stream and holds the answer for the stream's lifetime. The registry
-// then covers only the transfer probe, the expensive half, for an address whose balance is
-// still zero.
-export const getIsWalletActive = withCacheAsync(
-  async (network: ApiNetwork, chain: EVMChain, address: string) => {
-    const [balance, transactionCount] = await Promise.all([
-      getWalletBalance(chain, network, address),
-      getWalletTransactionCount(chain, network, address),
-    ]);
-
-    // An EOA's native balance only ever decreases through a transaction it signed itself, so a
-    // zero balance beside a zero nonce proves nothing native ever arrived. That closes the case a
-    // balance read alone misses - an address that received funds and spent them all reads as empty
-    // yet carries a non-zero nonce - which matters because the inbound-transfer probe below cannot
-    // see it either: `internal` is not among the categories asked for outside Ethereum. A contract
-    // address reports a nonce of at least 1 under EIP-161 and so errs towards active, the safe
-    // direction. The nonce also arrives before the probe, so an address it settles never pays for
-    // one.
-    if (balance > 0n || transactionCount > 0) {
-      return true;
-    }
-
-    if (inactiveWallets.has(network, chain, address)) {
-      return false;
-    }
-
-    const payload = {
-      method: 'POST',
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            toAddress: address,
-            excludeZeroValue: false,
-            withMetadata: false,
-            category: compact([
-              'erc721',
-              'erc1155',
-              'external',
-              'erc20',
-              'specialnft',
-            ]),
-            maxCount: '0x1',
-          },
-        ],
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const response = await fetchJson<AlchemyGetAssetTransfersResponse>(
-      `${EVM_RPC_URLS[network](chain)}/v2`,
-      undefined,
-      payload,
-    );
-
-    const isActive = !!response.result.transfers.length;
-
-    if (!isActive) {
-      inactiveWallets.mark(network, chain, address);
-    }
-
-    return isActive;
-  },
-);
+/** History and balances come from our backend at no per-request cost, so every wallet is polled */
+export function getIsWalletActive(_network: ApiNetwork, _chain: EVMChain, _address: string) {
+  return Promise.resolve(true);
+}

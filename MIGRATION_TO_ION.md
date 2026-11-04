@@ -43,7 +43,7 @@
 - [x] Нужные wallet endpoint-ы реализованы в `troman29/ion-staking-backend` (`origin/master` включает PR #12); список и назначение — в разделе «Контракт backend API» ниже. Старые `/account-config`, `/market/assets`, `/portfolio/net-worth-by-asset`, POST `/assets`, `/swap/*`, attribution/report endpoints удалены из клиента.
 - [x] `/utils/get-config` сокращён до `isLimited`, `now`, `isCopyStorageEnabled`, `isUpdateRequired`; сезонные темы, negative-verdict cache, TonConnect analytics, `supportAccountsCount`, `swapVersion`, `knowledgeBaseVersion`, `isVestingEnabled` удалены.
 - [x] ION Wallet API выведен на `https://api.ionwallet.io` через существующий `ion-staking-backend`; DNS-запросы проксируются к `ion-dns-backend` по внутренней сети. 25.10 проверены DNS A-запись, TLS, `/test`, `/assets`, GET и CORS preflight `/dns/getDomains` для `https://ionwallet.local` с `X-App-Origin`.
-- [ ] Настроить надёжные BNB RPC **и индексатор истории токенов**. Текущий `evmapi.wallet.ice.io` не разрешался при проверке 23.10; Zerion в клиенте пока остаётся. Выбор замены и её backend-контракт не утверждены.
+- [x] BNB RPC и индексатор истории — свой в ION backend (windbit/ion-backend#15, Dwellir Developer). Клиент переведён на `/bnb/*`; бэкфилл BNB-истории импортированных кошельков требует платный ключ Etherscan V2 (`ETHERSCAN_API_KEY`).
 - [x] В web-исправлении от 01.11.2026 ошибка первоначального запроса графика завершает загрузку состоянием `No price data`; при сбое обновления сохраняется последний успешный график. Последующий успешный запрос заменяет пустое состояние.
 - [ ] Реализовать или согласованно отключить API графиков `/prices/chart/*`: 01.11.2026 прямой GET `/prices/chart/ton:ION?base=USD&period=1D` вернул `Cannot GET /prices/chart/ton:ION`. Подписки push сохраняются; клиентские Firebase-конфигурации готовы в `c9b4bc95f`, серверная отправка и доставка на устройства остаются отдельными задачами.
 - [x] В конфигурации от 01.11.2026 `NO_PENDING_ACTIVITIES`, `NO_WEBSOCKET` и `NO_TRACE_EMULATION` по умолчанию выключают недоступные ION-сервисы. Webpack defaults — `1`; отсутствующие и пустые значения также выключают сервисы, включая пустые repository variables из CI. Явное `0` включает соответствующую возможность для совместимого backend.
@@ -122,7 +122,7 @@
 
 ## Контракт backend API
 
-Общие заголовки запросов (`src/api/common/backend.ts`): `X-App-ClientID`, `X-App-Version`, `X-App-Env`, `X-App-Name`; в Capacitor, расширении и Electron добавляется `X-App-Origin`, в авторизованных POST — `X-Auth-Token`. `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` по умолчанию указывают на `https://api.ionwallet.io` (существующий ION backend). `TONCENTER_*_URL` указывает на ION indexer/RPC; `EVM_*_RPC_URL` — на BNB.
+Общие заголовки запросов (`src/api/common/backend.ts`): `X-App-ClientID`, `X-App-Version`, `X-App-Env`, `X-App-Name`; в Capacitor, расширении и Electron добавляется `X-App-Origin`, в авторизованных POST — `X-Auth-Token`. `BRILLIANT_API_BASE_URL` и `PROXY_API_BASE_URL` по умолчанию указывают на `https://api.ionwallet.io` (существующий ION backend). `TONCENTER_*_URL` указывает на ION indexer/RPC; BNB идёт через тот же backend (`/bnb/*`).
 
 ### ION Wallet backend (`BRILLIANT_API_BASE_URL`)
 
@@ -163,16 +163,16 @@
 | `/jetton/wallets` | Балансы jetton'ов. |
 | `/nft/items`, `/nft/transfers` | NFT и их история. |
 
-### BNB Chain (`EVM_*_RPC_URL`)
+### BNB Chain (`BRILLIANT_API_BASE_URL/bnb`, тот же ION backend)
 
-| Endpoint | Сейчас | Зачем |
-| --- | --- | --- |
-| `/{chain}/v2` (JSON-RPC) | RPC-нода | Отправка транзакций, газ, nonce. |
-| `/v1/wallets/{address}/positions/` | Zerion | Балансы. Клиенту нужен только ION в BNB. |
-| `/v1/wallets/{address}/transactions/` | Zerion | История. |
-| `/nft/v3/getNFTsForOwner`, `/nft/v3/getNFTMetadata` | Alchemy-совместимый | NFT; можно убрать, если NFT на BNB не нужны. |
+Свой индексатор в ION backend (windbit/ion-backend#15): сканер `finalized`-блоков на Dwellir для адресов кошельков, все Transfer/Approval ION с блока деплоя 71166802, точечные трейсы транзакций наших адресов. Zerion, Alchemy и `evmapi.*` клиентом больше не используются; NFT на BNB выключены.
 
-Замена Zerion не утверждена. Нужен индексатор с историей токенов; прокси в ION backend позволит сменить провайдера без изменения клиентского контракта.
+| Endpoint | Зачем |
+| --- | --- |
+| `POST /bnb/rpc` | JSON-RPC узла по белому списку: газ, nonce, `eth_call`, отправка. |
+| `GET /bnb/balances/{address}` | BNB и ION, кэш в Redis; заголовок `X-Snapshot-At`. Первый запрос регистрирует адрес для сканера. |
+| `GET /bnb/history/{address}?before&after&limit&token&hash` | История BNB (с регистрации адреса; раньше — через бэкфилл Etherscan) и всех переводов ION. |
+| `GET /bnb/approvals/{address}` | Выданные approvals ION. |
 
 ### Будущее
 
