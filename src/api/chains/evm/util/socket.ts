@@ -15,7 +15,7 @@ import { logDebugError } from '../../../../util/logs';
 import safeExec from '../../../../util/safeExec';
 import withCache from '../../../../util/withCache';
 import { AbstractWebsocketClient } from '../../../common/websocket/abstractWsClient';
-import { EVM_RPC_URLS } from '../constants';
+import { getBnbApiUrl } from '../constants';
 import { getErc20Balance, getWalletBalance } from '../wallet';
 
 type Subscription = {
@@ -403,7 +403,7 @@ function buildSubscribeMessage(sub: Subscription): AlchemySocketClientMessage {
 }
 
 function getSocketUrl(network: ApiNetwork, chain: EVMChain) {
-  const url = new URL(`${EVM_RPC_URLS[network](chain)}/v2`);
+  const url = new URL(`${getBnbApiUrl(network)}/rpc`);
   url.protocol = 'wss:';
 
   return url;

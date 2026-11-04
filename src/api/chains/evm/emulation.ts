@@ -1,17 +1,15 @@
-import { Transaction } from 'ethers';
+import { Interface, Transaction } from 'ethers';
 
 import type { ApiDappTransfer, ApiEmulationResult, ApiNetwork, EVMChain } from '../../types';
-import type { AlchemyAssetChange, AlchemyAssetChangesResponse, EvmTokenOperation } from './types';
+import type { EvmTokenOperation } from './types';
 import { EVM_CHAIN_IDS } from '../../dappProtocols/adapters/walletConnect/types';
 
 import { getChainConfig } from '../../../util/chain';
-import { fetchJson } from '../../../util/fetch';
 import { logDebugError } from '../../../util/logs';
 import { getEvmProvider } from './util/client';
 import { updateActivityMetadata } from '../../common/helpers';
 import { buildTokenSlug } from '../../methods';
 import { normalizeAddress } from './address';
-import { EVM_RPC_URLS } from './constants';
 
 function normalizeHexTx(rawTx: string): string {
   const trimmed = rawTx.trim();
@@ -175,7 +173,7 @@ export async function parseTransactionForPreview(
   }
 
   try {
-    const emulated = await emulateTransaction(chain, network, address, tx);
+    const emulated = emulateTransaction(address, tx);
 
     const tokenOperation = parseTokenOperation(network, chain, emulated, address);
 
@@ -217,47 +215,43 @@ export async function parseTransactionForPreview(
   return { transfers, emulation };
 }
 
-async function emulateTransaction(
-  chain: EVMChain,
-  network: ApiNetwork,
-  address: string,
-  tx: Transaction,
-) {
-  const payload = {
-    method: 'POST',
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'alchemy_simulateAssetChanges',
-      params: [
-        {
-          from: address,
-          to: tx.to,
-          data: tx.data,
-          gas: '0x' + tx.gasLimit.toString(16),
-          gasPrice: '0x' + (tx.gasPrice?.toString(16) ?? '0'),
-          value: '0x' + (tx.value?.toString(16) ?? '0'),
-        },
-      ],
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+type AssetChange = {
+  assetType: 'NATIVE' | 'ERC20';
+  contractAddress: string | undefined;
+  from: string;
+  to: string;
+  rawAmount: string;
+};
 
-  const response = await fetchJson<AlchemyAssetChangesResponse>(
-    `${EVM_RPC_URLS[network](chain)}/v2`,
-    undefined,
-    payload,
-  );
+type AssetChanges = {
+  changes: AssetChange[];
+  gasUsed: string;
+};
 
-  return response.result;
+const erc20TransferInterface = new Interface(['function transfer(address to, uint256 amount) returns (bool)']);
+
+/** No node simulates calls for us, so only BNB value and plain token transfers are recognized */
+function emulateTransaction(address: string, tx: Transaction): AssetChanges {
+  const changes: AssetChange[] = [];
+  if (tx.value > 0n && tx.to) {
+    changes.push({
+      assetType: 'NATIVE', contractAddress: undefined, from: address, to: tx.to, rawAmount: tx.value.toString(),
+    });
+  }
+
+  const call = tx.to ? erc20TransferInterface.parseTransaction({ data: tx.data }) : undefined;
+  if (call && tx.to) {
+    const [to, amount] = call.args as unknown as [string, bigint];
+    changes.push({ assetType: 'ERC20', contractAddress: tx.to, from: address, to, rawAmount: amount.toString() });
+  }
+
+  return { changes, gasUsed: '0' };
 }
 
 export function parseTokenOperation(
   network: ApiNetwork,
   chain: EVMChain,
-  tx: AlchemyAssetChange,
+  tx: AssetChanges,
   userAddress: string,
 ): EvmTokenOperation | undefined {
   const changes = new Map<string, bigint>();
