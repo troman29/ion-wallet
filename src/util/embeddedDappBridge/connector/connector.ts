@@ -145,7 +145,7 @@ export function initConnector(
     }
 
     (window as any)[bridgeKey] = {
-      tonconnect: {
+      ionconnect: {
         ...tonConnectProperties,
         ...methods,
         listen: addUpdateHandler,
