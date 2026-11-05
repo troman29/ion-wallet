@@ -151,6 +151,9 @@ export const WALLET_CONNECT_PAY_FRAME_ORIGINS = [
 export const WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID || '';
 export const WALLET_CONNECT_PAY_APP_ID = process.env.WALLET_CONNECT_PAY_APP_ID || '';
 
+// The backend indexes BNB mainnet only; testnet goes straight to a public node, without history
+export const BNB_TESTNET_RPC_URL = 'https://bsc-testnet-rpc.publicnode.com';
+
 export const FRACTION_DIGITS = 9;
 export const SHORT_FRACTION_DIGITS = 2;
 

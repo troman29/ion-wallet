@@ -3,12 +3,11 @@ import type { BnbHistoryItem, BnbHistoryResponse } from './types';
 
 import { parseAccountId } from '../../../util/account';
 import { getChainConfig } from '../../../util/chain';
-import { fetchJson } from '../../../util/fetch';
 import { fetchStoredWallet } from '../../common/accounts';
+import { callBackendGet } from '../../common/backend';
 import { updateActivityMetadata } from '../../common/helpers';
 import { buildTokenSlug, getTokenBySlug } from '../../common/tokens';
 import { normalizeAddress } from './address';
-import { getBnbApiUrl } from './constants';
 
 export async function fetchActivitySlice(
   chain: EVMChain,
@@ -60,8 +59,11 @@ function fetchBnbHistory(
   address: string,
   params: { before?: number; after?: number; limit?: number; token?: string; hash?: string },
   signal?: AbortSignal,
-) {
-  return fetchJson<BnbHistoryResponse>(`${getBnbApiUrl(network)}/history/${address}`, params, { signal });
+): Promise<BnbHistoryResponse> {
+  if (network !== 'mainnet') {
+    return Promise.resolve({ items: [], hasMore: false, isBackfilling: false });
+  }
+  return callBackendGet<BnbHistoryResponse>(`/bnb/history/${address}`, params, undefined, signal);
 }
 
 function getHistoryToken(chain: EVMChain, slug?: string) {

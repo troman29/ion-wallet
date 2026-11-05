@@ -6,14 +6,15 @@ import type {
 import type { BnbBalancesResponse } from './types';
 import { ApiCommonError } from '../../types';
 
+import { BRILLIANT_API_BASE_URL } from '../../../config';
 import { throwIfAborted } from '../../../util/abortSignal';
 import { getChainConfig, getIsTokenKept } from '../../../util/chain';
 import { fetchWithRetry } from '../../../util/fetch';
 import { getEvmProvider } from './util/client';
 import { getKnownAddressInfo } from '../../common/addresses';
+import { getBackendHeaders } from '../../common/backend';
 import { updateTokens } from '../../common/tokens';
 import { isValidAddress } from './address';
-import { getBnbApiUrl } from './constants';
 
 export async function getWalletBalance(chain: EVMChain, network: ApiNetwork, address: string) {
   return getEvmProvider(network, chain).getBalance(address);
@@ -101,8 +102,13 @@ export function fetchAccountAssets(
 }
 
 async function fetchBalancesSnapshot(network: ApiNetwork, address: string, signal?: AbortSignal) {
-  const url = `${getBnbApiUrl(network)}/balances/${address}`;
-  const response = await fetchWithRetry(url, signal ? { signal } : undefined);
+  if (network !== 'mainnet') {
+    const native = await getWalletBalance('bnb', network, address);
+    return { data: { address, native: native.toString(), tokens: {}, asOf: Date.now() }, snapshotAt: undefined };
+  }
+
+  const url = `${BRILLIANT_API_BASE_URL}/bnb/balances/${address}`;
+  const response = await fetchWithRetry(url, { headers: getBackendHeaders(), ...(signal && { signal }) });
 
   return {
     data: (await response.json()) as BnbBalancesResponse,
