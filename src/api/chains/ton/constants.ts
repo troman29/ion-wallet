@@ -6,7 +6,7 @@ import {
 } from '../../../config';
 import { JettonStakingGas } from './contracts/JettonStaking/imports/constants';
 
-export { TON_BIP39_PATH } from './derivationConstants';
+export { ION_BIP39_PATH, TON_BIP39_PATH } from './derivationConstants';
 
 export const NETWORK_CONFIG = {
   mainnet: {
