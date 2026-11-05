@@ -22,6 +22,7 @@ addActionHandler('initApi', async (global, actions) => {
   });
 
   await callApi('waitDataPreload');
+  await callApi('reconcileIonDerivationMigrations');
   // Properly handle temporary account cleanup
   if (global.currentTemporaryViewAccountId) {
     await removeTemporaryAccount(global.currentTemporaryViewAccountId);
@@ -52,6 +53,17 @@ addActionHandler('initApi', async (global, actions) => {
       setGlobal({
         ...getGlobal(),
         multichainUpgradeCount: candidateIds.length,
+      });
+    }
+  });
+
+  void callApi('getLegacyIonDerivationCandidateIds').then((candidateIds) => {
+    if (candidateIds?.length) {
+      const current = getGlobal();
+      setGlobal({
+        ...current,
+        ionDerivationMigrationCount: candidateIds.length,
+        isManualLockActive: current.settings.isAppLockEnabled ? current.isManualLockActive : true,
       });
     }
   });
