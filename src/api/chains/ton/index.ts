@@ -14,7 +14,7 @@ import {
   getWalletFromPrivateKey,
   validateMnemonic,
 } from './auth';
-import { TON_BIP39_PATH } from './constants';
+import { ION_BIP39_PATH } from './constants';
 import { signConnectionProof, signDappData, signDappTransfers } from './dapp';
 import {
   checkDnsChangeWalletDraft,
@@ -53,7 +53,7 @@ const tonSdk: ChainSdk<'ton'> = {
   fetchActivityDetails,
   decryptComment,
   normalizeAddress,
-  getDefaultDerivation: () => ({ path: TON_BIP39_PATH, index: 0 }),
+  getDefaultDerivation: () => ({ path: ION_BIP39_PATH, index: 0 }),
   getWalletFromBip39Mnemonic,
   getWalletFromPrivateKey,
   getWalletFromAddress,

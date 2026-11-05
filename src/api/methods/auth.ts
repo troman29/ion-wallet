@@ -79,7 +79,7 @@ function getWalletForReplacement<
  * no extra Enclave export. Returns `undefined` when the token does not match the wallet's
  * stored public key (e.g. the mnemonic holds a private key of another chain).
  */
-async function buildTonBackendAuthToken(mnemonic: string[], account: ApiAccountWithMnemonic) {
+export async function buildTonBackendAuthToken(mnemonic: string[], account: ApiAccountWithMnemonic) {
   const tonWallet = account.byChain.ton;
   if (!tonWallet?.publicKey || tonWallet.authToken) return undefined;
 
@@ -291,7 +291,7 @@ async function findBip39WalletGroups(network: ApiNetwork, mnemonic: string[]) {
 
       if (!chain0Wallet?.derivation?.path) {
         const [placeholderWallet] = await chains[chain].getWalletFromBip39Mnemonic(
-          network, mnemonic,
+          network, mnemonic, chains[chain].getDefaultDerivation(), true,
         );
         if (placeholderWallet) {
           groupWallets.push({ ...placeholderWallet, chain });
