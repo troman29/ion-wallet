@@ -8,7 +8,7 @@ import { callApi } from '../../../api';
 import { SEC } from '../../../api/constants';
 import { getIsTinyOrScamTransaction } from '../../helpers';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
-import { addPastActivities, updateActivity } from '../../reducers';
+import { addPastActivities, updateAccountState, updateActivity } from '../../reducers';
 import {
   selectAccount,
   selectAccountState,
@@ -141,3 +141,14 @@ function waitInitialActivityLoading(accountId: string) {
 
   return initialActivityWaitingByAccountId[accountId];
 }
+
+/** Drops the loaded history and restarts polling without timestamps, so it loads from scratch */
+addActionHandler('reloadActivities', async (global) => {
+  const accountId = selectCurrentAccountId(global);
+  if (!accountId) {
+    return;
+  }
+
+  setGlobal(updateAccountState(global, accountId, { activities: undefined }));
+  await callApi('activateAccount', accountId, {});
+});

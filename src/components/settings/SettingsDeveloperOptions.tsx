@@ -77,6 +77,7 @@ function SettingsDeveloperOptions({
     openAddAccountModal,
     copyStorageData,
     showToast,
+    reloadActivities,
   } = getActions();
 
   const lang = useLang();
@@ -174,6 +175,12 @@ function SettingsDeveloperOptions({
           </div>
         </>
       )}
+
+      <div className={buildClassName(styles.settingsBlock)}>
+        <div className={buildClassName(styles.item, styles.item_small)} onClick={() => reloadActivities()}>
+          <span className={styles.itemTitle}>{lang('Reload Transactions')}</span>
+        </div>
+      </div>
 
       <div className={buildClassName(styles.settingsBlock)}>
         <div className={buildClassName(styles.item, styles.item_small)} onClick={handleDownloadLogs}>
