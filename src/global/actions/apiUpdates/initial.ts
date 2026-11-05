@@ -268,6 +268,7 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       const {
         isLimited: isLimitedRegion,
         isCopyStorageEnabled,
+        isLegacyIonRecoveryEnabled,
         isAppUpdateRequired,
       } = update;
 
@@ -282,6 +283,7 @@ addActionHandler('apiUpdate', (global, actions, update) => {
       });
       global = {
         ...global,
+        isLegacyIonRecoveryEnabled: isLegacyIonRecoveryEnabled === true,
         isAppUpdateRequired,
       };
       setGlobal(global);

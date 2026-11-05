@@ -115,6 +115,11 @@ Hide Tiny Transfers: Ẩn giao dịch giá trị nhỏ
 Toggle Hide Tiny Transfers: Bật/tắt ẩn giao dịch giá trị nhỏ
 Network: Mạng
 Developer Options: Tùy chọn nhà phát triển
+Recover funds from %address%: Khôi phục tiền từ %address%
+Recover LION and ION: Khôi phục LION và ION
+Legacy funds recovered: Đã khôi phục tiền từ địa chỉ cũ
+Transfer pending. Try again after confirmation.: Giao dịch đang chờ. Hãy thử lại sau khi được xác nhận.
+Unable to recover legacy funds: Không thể khôi phục tiền từ địa chỉ cũ
 All Wallet Versions: Tất cả phiên bản ví
 Create TON-Only Wallet: Tạo ví chỉ hỗ trợ ION
 Confirmation: Xác nhận
