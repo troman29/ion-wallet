@@ -38,15 +38,15 @@ export async function getTokenActivitySlice(
   limit?: number,
   _isCrossChain?: boolean,
   signal?: AbortSignal,
-): Promise<{ activities: ApiActivity[]; hasMore: boolean }> {
-  const { items, hasMore } = await fetchBnbHistory(network, address, {
+): Promise<{ activities: ApiActivity[]; hasMore: boolean; isBackfilling: boolean }> {
+  const { items, hasMore, isBackfilling } = await fetchBnbHistory(network, address, {
     before: toTimestamp,
     after: fromTimestamp,
     limit,
     token: getHistoryToken(chain, slug),
   }, signal);
 
-  return { activities: items.map((item) => transformBnbItem(chain, item, address)), hasMore };
+  return { activities: items.map((item) => transformBnbItem(chain, item, address)), hasMore, isBackfilling };
 }
 
 export async function fetchActivitiesByHash(chain: EVMChain, network: ApiNetwork, address: string, hash: string) {

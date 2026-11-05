@@ -173,9 +173,9 @@ export async function parseTransactionForPreview(
   }
 
   try {
-    const emulated = emulateTransaction(address, tx);
+    const emulated = isDangerousMeta ? undefined : emulateTransaction(chain, address, tx);
 
-    const tokenOperation = parseTokenOperation(network, chain, emulated, address);
+    const tokenOperation = emulated && parseTokenOperation(network, chain, emulated, address);
 
     if (tokenOperation?.assets) {
       transfers.push(getFakeTransfer(chain, rawTx, false));
@@ -198,10 +198,10 @@ export async function parseTransactionForPreview(
           slug: transfer.slug,
           isIncoming: false,
           normalizedAddress: transfer.toAddress,
-          fee: transfer.fee,
+          fee: feeForActivity,
           status: 'completed',
         })],
-        realFee: transfer.fee,
+        realFee: feeForActivity,
       };
     }
   } catch (error) {
@@ -230,22 +230,27 @@ type AssetChanges = {
 
 const erc20TransferInterface = new Interface(['function transfer(address to, uint256 amount) returns (bool)']);
 
-/** No node simulates calls for us, so only BNB value and plain token transfers are recognized */
-function emulateTransaction(address: string, tx: Transaction): AssetChanges {
-  const changes: AssetChange[] = [];
-  if (tx.value > 0n && tx.to) {
-    changes.push({
-      assetType: 'NATIVE', contractAddress: undefined, from: address, to: tx.to, rawAmount: tx.value.toString(),
-    });
+/**
+ * No node simulates calls for us, so only a plain transfer of a token from the chain config is recognized;
+ * any other contract call stays unrecognized and the caller marks it dangerous
+ */
+function emulateTransaction(chain: EVMChain, address: string, tx: Transaction): AssetChanges | undefined {
+  const isKnownToken = getChainConfig(chain).tokenInfo
+    .some(({ tokenAddress }) => tokenAddress && tx.to && tokenAddress.toLowerCase() === tx.to.toLowerCase());
+  if (!isKnownToken || tx.value > 0n) {
+    return undefined;
   }
 
-  const call = tx.to ? erc20TransferInterface.parseTransaction({ data: tx.data }) : undefined;
-  if (call && tx.to) {
-    const [to, amount] = call.args as unknown as [string, bigint];
-    changes.push({ assetType: 'ERC20', contractAddress: tx.to, from: address, to, rawAmount: amount.toString() });
+  const call = erc20TransferInterface.parseTransaction({ data: tx.data });
+  if (!call) {
+    return undefined;
   }
 
-  return { changes, gasUsed: '0' };
+  const [to, amount] = call.args as unknown as [string, bigint];
+  return {
+    changes: [{ assetType: 'ERC20', contractAddress: tx.to!, from: address, to, rawAmount: amount.toString() }],
+    gasUsed: '0',
+  };
 }
 
 export function parseTokenOperation(
