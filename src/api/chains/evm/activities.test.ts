@@ -71,4 +71,12 @@ describe('transformBnbItem', () => {
 
     expect(patch.replacedIds).toEqual({ [local.id]: confirmed.id });
   });
+
+  it('hides a fee-only call to a contract unrelated to BNB and ION', () => {
+    const unrelated = transformBnbItem('bnb', item({ amount: '0', to: OTHER }), WALLET);
+    const ionApproval = transformBnbItem('bnb', item({ amount: '0', to: ION_BNB_MAINNET.tokenAddress }), WALLET);
+
+    expect(unrelated.shouldHide).toBe(true);
+    expect(ionApproval.shouldHide).toBeUndefined();
+  });
 });
