@@ -245,7 +245,8 @@ export async function submitGasfullTransfer(
 
     const response = await signer.sendTransaction(transaction);
 
-    return { txId: response.hash };
+    // History items carry the hash too, so the confirmed activity replaces the local one
+    return { txId: response.hash, localActivityParams: { externalMsgHashNorm: response.hash } };
   } catch (err) {
     logDebugError(`evm:${chain}:submitGasfullTransfer`, err);
 

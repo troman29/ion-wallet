@@ -1140,6 +1140,7 @@ Different blockchain. Cannot be selected: Khác blockchain. Không thể chọn
 Chains: Chuỗi
 enclave_use_biometrics: Dùng sinh trắc học
 Copy Storage Data: Sao chép dữ liệu lưu trữ
+Reload Transactions: Tải lại giao dịch
 Enclave session expired: Phiên Enclave đã hết hạn
 Failed to setup auth: Không thể thiết lập xác thực
 Failed to setup biometric auth: Không thể thiết lập xác thực sinh trắc học

@@ -1151,6 +1151,7 @@ Different blockchain. Cannot be selected: Другой блокчейн. Нев�
 Chains: Сети
 enclave_use_biometrics: Использовать биометрию
 Copy Storage Data: Скопировать данные хранилища
+Reload Transactions: Перезагрузить транзакции
 Enclave session expired: Сессия истекла
 Failed to setup auth: Не удалось настроить аутентификацию
 Failed to setup biometric auth: Не удалось настроить биометрическую аутентификацию

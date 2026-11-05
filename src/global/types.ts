@@ -1128,6 +1128,7 @@ export interface ActionPayloads {
   changePasscode: { passcode: string; onSuccess: NoneToVoidFunction };
   changeBaseCurrency: { currency: ApiBaseCurrency };
   copyStorageData: undefined;
+  reloadActivities: undefined;
   setAppLockValue: { value?: AutolockValueType; isEnabled: boolean };
   setIsManualLockActive: { isActive?: boolean; shouldHideBiometrics?: boolean };
   setIsAutoConfirmEnabled: { isEnabled: boolean };

@@ -1140,6 +1140,7 @@ Different blockchain. Cannot be selected: Different blockchain. Cannot be select
 Chains: Chains
 enclave_use_biometrics: Use Biometrics
 Copy Storage Data: Copy Storage Data
+Reload Transactions: Reload Transactions
 Enclave session expired: Enclave session expired
 Failed to setup auth: Failed to setup auth
 Failed to setup biometric auth: Failed to setup biometric auth
