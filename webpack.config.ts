@@ -19,6 +19,7 @@ import {
   APP_ENV,
   APP_NAME,
   BASE_URL,
+  BNB_TESTNET_RPC_URL,
   BRILLIANT_API_BASE_URL,
   EXTENSION_DESCRIPTION,
   EXTENSION_NAME,
@@ -81,6 +82,7 @@ const cspConnectSrcHosts = Array.from(new Set([
   TONCENTER_TESTNET_URL.replace(/^http(s?):/, 'ws$1:'),
   WALLET_CONNECT_BRIDGE_PATTERNS,
   ...WALLET_CONNECT_PAY_CONNECT_ORIGINS,
+  BNB_TESTNET_RPC_URL,
   ensureTrailingSlash(IPFS_GATEWAY_BASE_URL),
   ensureTrailingSlash(SSE_BRIDGE_URL),
 ])).join(' ');

@@ -8,18 +8,17 @@ import { ApiCommonError, ApiTransactionError } from '../../types';
 import { parseAccountId } from '../../../util/account';
 import { getChainConfig } from '../../../util/chain';
 import { toDecimal } from '../../../util/decimals';
-import { fetchJson } from '../../../util/fetch';
 import { logDebugError } from '../../../util/logs';
 import { getEvmProvider } from './util/client';
 import { fetchStoredChainAccount } from '../../common/accounts';
 import { getKnownAddressInfo } from '../../common/addresses';
+import { callBackendGet } from '../../common/backend';
 import { buildTokenSlug } from '../../common/tokens';
 import { normalizeAddress } from './address';
 import { fetchPrivateKeyString, getSignerFromPrivateKey } from './auth';
 import {
   EVM_DALEGATOR_ADDRESSES,
   EVM_MAX_NUMBER,
-  getBnbApiUrl,
   ZERO_ADDRESS,
 } from './constants';
 import { estimateEvmFee } from './transfer';
@@ -76,7 +75,10 @@ async function getEvmDelegationAddress(
 
 /** Spenders the owner approved, from the backend's index of ION Approval events */
 async function fetchApprovalCandidates(network: ApiNetwork, address: string) {
-  const { approvals } = await fetchJson<{ approvals: BnbApproval[] }>(`${getBnbApiUrl(network)}/approvals/${address}`);
+  if (network !== 'mainnet') {
+    return [];
+  }
+  const { approvals } = await callBackendGet<{ approvals: BnbApproval[] }>(`/bnb/approvals/${address}`);
 
   return approvals.map(({ token, spender }) => ({
     tokenAddress: normalizeAddress(token),

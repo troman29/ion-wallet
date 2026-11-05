@@ -1,6 +1,6 @@
 import type { ApiNetwork } from '../../types';
 
-import { BRILLIANT_API_BASE_URL } from '../../../config';
+import { BNB_TESTNET_RPC_URL, BRILLIANT_API_BASE_URL } from '../../../config';
 
 /** Safety multiplier applied to the estimated gas fee when sending the max native balance */
 export const EVM_MAX_TRANSFER_FEE_MULTIPLIER = 1.5;
@@ -15,9 +15,8 @@ export const EVM_DERIVATION_PATHS = {
 
 export const EVM_MAX_NUMBER = 2n ** 256n - 1n;
 
-/** The backend indexes BNB Chain mainnet only */
-export function getBnbApiUrl(network: ApiNetwork) {
-  return network === 'mainnet' ? `${BRILLIANT_API_BASE_URL}/bnb` : `${BRILLIANT_API_BASE_URL}/bnb-testnet`;
+export function getEvmRpcUrl(network: ApiNetwork) {
+  return network === 'mainnet' ? `${BRILLIANT_API_BASE_URL}/bnb/rpc` : BNB_TESTNET_RPC_URL;
 }
 
 export const EVM_CHAIN_IDS: Record<ApiNetwork, number> = { mainnet: 56, testnet: 97 };

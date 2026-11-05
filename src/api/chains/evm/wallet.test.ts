@@ -10,6 +10,10 @@ jest.mock('../../../util/fetch', () => ({
   fetchWithRetry: jest.fn(),
 }));
 
+jest.mock('../../common/backend', () => ({
+  getBackendHeaders: () => ({ 'X-App-Env': 'test' }),
+}));
+
 jest.mock('../../common/tokens', () => ({
   updateTokens: jest.fn(),
   buildTokenSlug: jest.fn((chain: string, address: string) => `${chain}-${address}`),
@@ -123,7 +127,7 @@ describe('fetchAccountAssets in-flight coalescing', () => {
     await Promise.all([uiPromise, agentPromise]);
 
     expect(mockedFetch).toHaveBeenCalledTimes(2);
-    expect(mockedFetch.mock.calls[0][1]).toBeUndefined();
+    expect(mockedFetch.mock.calls[0][1]).not.toHaveProperty('signal');
     expect(mockedFetch.mock.calls[1][1]).toHaveProperty('signal', controller.signal);
   });
 
