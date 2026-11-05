@@ -2,7 +2,7 @@
 
 ION Wallet is a self-custodial wallet being migrated from the MyTonWallet codebase for the ION ecosystem. The target product supports the ION network and ION on BNB Chain (with native BNB for gas) across web, browser extension, Electron, Android, and iOS through Capacitor.
 
-This repository is in active migration. Public endpoints, wallet registries, mobile-store listings, policies, help pages, and brand assets are not yet release-ready. Their status and required work live in [Migration to ION](MIGRATION_TO_ION.md).
+This repository is in active migration. Public endpoints, wallet registries, mobile-store listings, policies, help pages, and brand assets are not yet release-ready. Their status and required work are tracked in Linear.
 
 ## Product scope
 
@@ -48,11 +48,11 @@ npm test -- --runInBand
 npm run build
 ```
 
-Platform configuration lives in `src/electron/config.yml`, `capacitor.config.ts`, and `mobile/`. Platform validation and signing remain release tasks in [Migration to ION](MIGRATION_TO_ION.md).
+Platform configuration lives in `src/electron/config.yml`, `capacitor.config.ts`, and `mobile/`. Platform validation and signing remain release tasks (tracked in Linear).
 
 ## Release work
 
-Do not publish an artifact solely from the repository configuration. Before a public release, complete the endpoint, registry, store, policy, signing, and visual-asset work in [Migration to ION](MIGRATION_TO_ION.md).
+Do not publish an artifact solely from the repository configuration. Before a public release, complete the endpoint, registry, store, policy, signing, and visual-asset work tracked in Linear.
 
 ## Contributing
 
