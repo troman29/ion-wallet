@@ -205,8 +205,3 @@ export const getAddressInfo = (
     addressName: getKnownAddressInfo(addressOrDomain)?.name,
   };
 };
-
-/** History and balances come from our backend at no per-request cost, so every wallet is polled */
-export function getIsWalletActive(_network: ApiNetwork, _chain: EVMChain, _address: string) {
-  return Promise.resolve(true);
-}

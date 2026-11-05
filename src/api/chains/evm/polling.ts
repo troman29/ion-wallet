@@ -4,7 +4,6 @@ import type {
   ApiActivityTimestamps,
   ApiBalanceBySlug,
   ApiChain,
-  ApiNetwork,
   EVMChain,
   OnApiUpdate,
   OnUpdatingStatusChange,
@@ -28,7 +27,7 @@ import { txCallbacks } from '../../common/txCallbacks';
 import { BalanceStream } from '../../common/websocket/balanceStream';
 import { FIRST_TRANSACTIONS_LIMIT, MINUTE, SEC } from '../../constants';
 import { getTokenActivitySlice } from './activities';
-import { fetchAccountAssets, fetchCrosschainAccountAssets, getIsWalletActive } from './wallet';
+import { fetchAccountAssets, fetchCrosschainAccountAssets } from './wallet';
 
 // Every poll reaches our backend, so it is less frequent than the shared timing
 const activeEvmWalletTiming = {
@@ -80,6 +79,7 @@ export function setupActivePolling<C extends EVMChain>(
 }
 
 const BALANCE_ACTIVITY_CATCH_UP_ATTEMPTS = 60;
+const BACKFILL_RELOAD_DELAY = 15 * SEC;
 
 function setupActivityPolling(
   chain: EVMChain,
@@ -98,7 +98,7 @@ function setupActivityPolling(
   let lastEmptyTimestamp: number | undefined;
   let balanceCatchUpGeneration = 0;
 
-  async function rawUpdate(isForced?: boolean): Promise<boolean> {
+  async function rawUpdate(): Promise<boolean> {
     if (newestConfirmedActivityTimestamp !== undefined && newestConfirmedActivityTimestamp === lastEmptyTimestamp) {
       return false;
     }
@@ -107,8 +107,14 @@ function setupActivityPolling(
 
     try {
       if (newestConfirmedActivityTimestamp === undefined) {
-        const result = await loadInitialActivities(chain, accountId, onUpdate, isForced);
+        const { timestamps: result, isBackfilling } = await loadInitialActivities(chain, accountId, onUpdate);
         const timestamps = compact(Object.values(result));
+
+        if (isBackfilling) {
+          // Older history is still arriving, so the initial load repeats instead of polling for newer rows only
+          scheduleInitialReload();
+          return timestamps.length > 0;
+        }
 
         newestConfirmedActivityTimestamp = timestamps.length ? Math.max(...timestamps) : undefined;
         if (timestamps.length) {
@@ -148,9 +154,7 @@ function setupActivityPolling(
           return;
         }
         lastEmptyTimestamp = undefined;
-        // A socket event is proof that something landed on chain, so it overrides the
-        // "this address has nothing here" verdict the poll path is allowed to trust.
-        const found = await rawUpdate(source === 'socket');
+        const found = await rawUpdate();
 
         if (source === 'poll') {
           return;
@@ -175,6 +179,15 @@ function setupActivityPolling(
     balanceCatchUpGeneration += 1;
   }
 
+  function scheduleInitialReload() {
+    const generation = balanceCatchUpGeneration;
+    setTimeout(() => {
+      if (generation === balanceCatchUpGeneration) {
+        scheduleCrossApiActivityCatchUp('poll');
+      }
+    }, BACKFILL_RELOAD_DELAY);
+  }
+
   if (newestConfirmedActivityTimestamp === undefined) {
     scheduleCrossApiActivityCatchUp('poll');
   }
@@ -196,10 +209,6 @@ function setupBalancePolling(
   onUpdatingStatusChange?: (isUpdating: boolean) => void,
 ) {
   const { network } = parseAccountId(accountId);
-  const checkIsWalletActive = async () => {
-    return getIsWalletActive(network, chain, address);
-  };
-
   const balanceStream = new BalanceStream({
     chain,
     wsClient: getAlchemySocket(network, chain),
@@ -211,7 +220,6 @@ function setupBalancePolling(
     fetchCrosschainBalancesCb: fetchCrosschainAccountAssets,
     importUnknownTokens: undefined,
     loadingConcurrencyLimiter: undefined,
-    ensureIsPollingNeeded: checkIsWalletActive,
   });
 
   balanceStream.onUpdate((balances, updateSource) => {
@@ -285,51 +293,16 @@ export function setupInactivePolling<C extends EVMChain>(
 // reads from the RPC provider, which is separate from the history provider, and an outage there
 // says nothing about whether history exists - blanking the feed on it would trade a saved request
 // for a wallet that looks empty while its history is perfectly reachable.
-async function canSkipInitialActivities(network: ApiNetwork, chain: EVMChain, address: string) {
-  try {
-    return !(await getIsWalletActive(network, chain, address));
-  } catch (err) {
-    logDebugError('canSkipInitialActivities', err);
-    return false;
-  }
-}
-
 async function loadInitialActivities(
   chain: EVMChain,
   accountId: string,
   onUpdate: OnApiUpdate,
-  isForced?: boolean,
-): Promise<ApiActivityTimestamps> {
+): Promise<{ timestamps: ApiActivityTimestamps; isBackfilling: boolean }> {
   try {
     const { network } = parseAccountId(accountId);
     const { address } = await fetchStoredWallet(accountId, chain);
 
-    // An address with no balance and no inbound transfer on this chain has no history to
-    // return, so the load is skipped rather than paid for. This matters most on an account
-    // that holds every EVM chain but uses none of them: an empty chain records no newest
-    // timestamp, so it takes this full-load path on every launch rather than an incremental
-    // poll. The probe answers from the RPC provider, not the history provider, and already
-    // gates balance polling for the same address. A socket event is evidence that something
-    // landed on chain, so it forces the load past this check.
-    if (!isForced && await canSkipInitialActivities(network, chain, address)) {
-      // The feed waits on `areInitialActivitiesLoaded[chain]`, so staying silent hangs it.
-      // `mainHistoryHasMore: false` is what separates this from the failure path below, which
-      // emits the same shape without it: an omitted flag reads as "this attempt told us
-      // nothing", leaves the chain's end state undefined and sends the UI to
-      // `fetchPastActivities` - straight back to the history call this skip exists to avoid.
-      onUpdate({
-        type: 'initialActivities',
-        chain,
-        accountId,
-        mainActivities: [],
-        mainHistoryHasMore: false,
-        bySlug: {},
-      });
-
-      return {};
-    }
-
-    const { activities: rawActivities, hasMore: mainHistoryHasMore } = await getTokenActivitySlice(
+    const { activities: rawActivities, hasMore: mainHistoryHasMore, isBackfilling } = await getTokenActivitySlice(
       chain,
       network,
       address,
@@ -379,7 +352,7 @@ async function loadInitialActivities(
       bySlug,
     });
 
-    return result;
+    return { timestamps: result, isBackfilling };
   } catch (err) {
     // Ensure `areInitialActivitiesLoaded[chain] = true` even on failure so
     // `waitInitialActivityLoading` unblocks and other chains stay visible.
