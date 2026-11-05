@@ -348,7 +348,8 @@ async function loadInitialActivities(
       chain,
       accountId,
       mainActivities: activities,
-      mainHistoryHasMore,
+      // Keeps the feed loading while the backend still loads older history
+      mainHistoryHasMore: mainHistoryHasMore || isBackfilling,
       bySlug,
     });
 
