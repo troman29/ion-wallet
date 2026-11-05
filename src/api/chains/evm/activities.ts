@@ -81,6 +81,9 @@ export function transformBnbItem(chain: EVMChain, item: BnbHistoryItem, address:
   const isIncoming = toAddress === ownAddress && fromAddress !== ownAddress;
   const amount = BigInt(item.amount);
   const isContractCall = item.kind === 'native' && amount === 0n;
+  // The backend folds calls that moved BNB or ION into those transfers, so a call left alone only paid its fee
+  // for other tokens; ION approvals and failed calls stay visible
+  const isUnrelatedCall = isContractCall && !item.isFailed && !isIonToken(chain, item.to);
 
   return updateActivityMetadata({
     id: item.id,
@@ -99,9 +102,15 @@ export function transformBnbItem(chain: EVMChain, item: BnbHistoryItem, address:
     status: item.isFailed ? 'failed' : 'completed',
     externalMsgHashNorm: item.hash,
     ...(isContractCall && { type: 'callContract' as const }),
+    ...(isUnrelatedCall && { shouldHide: true }),
   });
 }
 
 export function fetchActivityDetails() {
   return undefined;
+}
+
+function isIonToken(chain: EVMChain, address: string) {
+  return getChainConfig(chain).tokenInfo
+    .some(({ tokenAddress }) => tokenAddress?.toLowerCase() === address.toLowerCase());
 }
