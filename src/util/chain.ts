@@ -237,7 +237,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       nft: '{base}item/{chain}/{address}',
     }],
     doesSupportPushNotifications: false,
-    isNftSupported: true,
+    isNftSupported: false,
   },
 };
 

@@ -15,13 +15,6 @@ import {
 import { EVM_DERIVATION_PATHS } from './constants';
 import { signDappData, signDappTransfers } from './dapp';
 import { parseTransactionForPreview } from './emulation';
-import {
-  checkNftOwnership,
-  checkNftTransferDraft,
-  getAccountNfts,
-  streamAllAccountNfts,
-  submitNftTransfers,
-} from './nfts';
 import { setupActivePolling, setupInactivePolling } from './polling';
 import { fetchTransactionById } from './transactionInfo';
 import { checkTransactionDraft, sendSignedTransaction, submitGasfullTransfer } from './transfer';
@@ -88,11 +81,11 @@ class EVMChainSdk<T extends EVMChain> implements ChainSdk<T> {
     sendSignedTransaction: this.#bindChain(sendSignedTransaction),
   };
 
-  getAccountNfts = this.#bindChain(getAccountNfts);
-  streamAllAccountNfts = this.#bindChain(streamAllAccountNfts);
-  checkNftTransferDraft = this.#bindChain(checkNftTransferDraft);
-  submitNftTransfers = this.#bindChain(submitNftTransfers);
-  checkNftOwnership = this.#bindChain(checkNftOwnership);
+  getAccountNfts = () => Promise.resolve([]);
+  streamAllAccountNfts = () => Promise.resolve();
+  checkNftTransferDraft = notSupported;
+  submitNftTransfers = notSupported;
+  checkNftOwnership = () => Promise.resolve(false);
 
   fetchWalletPermissions = this.#bindChain(fetchEvmWalletPermissions);
 
