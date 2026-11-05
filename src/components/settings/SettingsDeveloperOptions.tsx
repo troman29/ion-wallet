@@ -29,6 +29,7 @@ import useLastCallback from '../../hooks/useLastCallback';
 import Button from '../ui/Button';
 import Dropdown from '../ui/Dropdown';
 import Modal from '../ui/Modal';
+import SettingsLegacyRecovery from './SettingsLegacyRecovery';
 
 import styles from './Settings.module.scss';
 
@@ -158,6 +159,7 @@ function SettingsDeveloperOptions({
             )}
           </div>
         </div>
+        <SettingsLegacyRecovery />
       </div>
 
       {isCopyStorageEnabled && (

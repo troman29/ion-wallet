@@ -92,6 +92,7 @@ export type ApiVestingInfo = {
 export type ApiBackendConfig = {
   isLimited: boolean;
   isCopyStorageEnabled?: boolean;
+  isLegacyIonRecoveryEnabled?: boolean;
   now: number;
   isUpdateRequired: boolean;
 };
