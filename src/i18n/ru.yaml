@@ -122,6 +122,8 @@ Developer Options: Инструменты разработчика
 Recover funds from %address%: Вывести средства с %address%
 Recover LION and ION: Вывести LION и ION
 Legacy funds recovered: Средства со старого адреса выведены
+"Recovering legacy funds...": Выводим средства со старого адреса…
+No funds on the legacy address: На старом адресе нет средств
 Transfer pending. Try again after confirmation.: Перевод ещё подтверждается. Повторите позже.
 Unable to recover legacy funds: Не удалось вывести средства со старого адреса
 All Wallet Versions: Все версии кошелька

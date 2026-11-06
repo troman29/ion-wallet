@@ -74,9 +74,11 @@ async function runLegacyRecovery(accountId: string, enclaveToken: string) {
   }
 
   const { network } = parseAccountId(accountId);
+  let hasFunds = false;
   for (const asset of ['lion', 'ion'] as const) {
     migration = (await getMigrations())[accountId];
     if (migration[asset]) {
+      hasFunds = true;
       if (!await waitForTransfer(accountId, migration, asset)) return { status: 'pending' as const };
       continue;
     }
@@ -88,6 +90,7 @@ async function runLegacyRecovery(accountId: string, enclaveToken: string) {
     ]);
     const amount = oldBalances[asset];
     if (!amount) continue;
+    hasFunds = true;
     const result = await submitGasfullTransfer({
       accountId,
       enclaveToken,
@@ -109,5 +112,5 @@ async function runLegacyRecovery(accountId: string, enclaveToken: string) {
     await saveMigration(accountId, migration);
     if (!await waitForTransfer(accountId, migration, asset)) return { status: 'pending' as const };
   }
-  return { status: 'done' as const };
+  return { status: hasFunds ? 'done' as const : 'empty' as const };
 }
