@@ -118,6 +118,8 @@ Developer Options: Developer Options
 Recover funds from %address%: Recover funds from %address%
 Recover LION and ION: Recover LION and ION
 Legacy funds recovered: Legacy funds recovered
+"Recovering legacy funds...": Recovering legacy funds…
+No funds on the legacy address: No funds on the legacy address
 Transfer pending. Try again after confirmation.: Transfer pending. Try again after confirmation.
 Unable to recover legacy funds: Unable to recover legacy funds
 All Wallet Versions: All Wallet Versions

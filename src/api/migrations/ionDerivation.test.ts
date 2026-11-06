@@ -151,6 +151,15 @@ it('moves LION first, then the remaining native ION, only after a button action'
   expect(submitGasfullTransfer).toHaveBeenCalledTimes(2);
 });
 
+it('reports an empty legacy address without sending anything', async () => {
+  await migrateLegacyIonDerivations('unlocked-token');
+  oldIon = 0n;
+  oldLion = 0n;
+
+  expect(await recoverLegacyIonFunds(accountId, 'unlocked-token')).toEqual({ status: 'empty' });
+  expect(submitGasfullTransfer).not.toHaveBeenCalled();
+});
+
 it('waits for LION confirmation and never broadcasts the same transfer twice', async () => {
   await migrateLegacyIonDerivations('unlocked-token');
   jest.mocked(submitGasfullTransfer).mockResolvedValue({ txId: 'lion-pending' } as any);
