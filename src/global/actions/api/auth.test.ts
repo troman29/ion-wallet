@@ -75,7 +75,7 @@ describe('add-account routing', () => {
 
   it('moves to protection setup as soon as the mnemonic is ready, without a countdown', async () => {
     jest.useFakeTimers();
-    const isMultichain = process.env.CREATE_MULTICHAIN_WALLET === '1';
+    const isMultichain = process.env.CREATE_MULTICHAIN_WALLET !== '0';
     const mnemonic = Array(isMultichain ? 12 : 24).fill('test');
     (callApi as jest.Mock).mockResolvedValueOnce(mnemonic);
 
