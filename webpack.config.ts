@@ -426,7 +426,7 @@ export default function createConfig(
         WALLET_CONNECT_PAY_APP_ID: '',
         NO_TON: '0',
         NO_EVM: '0',
-        CREATE_MULTICHAIN_WALLET: '0',
+        CREATE_MULTICHAIN_WALLET: '1',
         ENABLE_EXCHANGE: '0',
         NO_PENDING_ACTIVITIES: '1',
         NO_WEBSOCKET: '1',
