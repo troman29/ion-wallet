@@ -563,8 +563,8 @@ Next: Next
 Updating: Updating
 Insufficient %token% for fee.%fee%: Insufficient %token% for fee.%fee%
 Send NFT: Send NFT
-Send Collectible: Send Collectible
-Send Collectibles: Send Collectibles
+Send Collectible: Send NFT
+Send Collectibles: Send NFTs
 $nfts_burned:
   zeroValue: "Burned %count% NFTs"
   oneValue: "Burned %count% NFT"
@@ -596,7 +596,7 @@ $duration_minutes:
   otherValue: "%count% minutes"
 $multi_send_nft_warning: The process may take ~%duration% minute(s). Please do not close the app and do not switch accounts until it is finished.
 Burn NFT: Burn NFT
-Burn Collectibles: Burn Collectibles
+Burn Collectibles: Burn NFTs
 Burn: Burn
 Private Key: Private Key
 "%amount% NFTs":
@@ -932,7 +932,7 @@ No additional data.: No additional data.
 $in_currency: in %currency%
 Rename Wallet: Rename Wallet
 You can rename this wallet for easier identification.: You can rename this wallet for easier identification.
-Collectibles: Collectibles
+Collectibles: NFT
 Canceled by the user: Canceled by the user
 The proof for signing provided by the app is too large: The proof for signing provided by the app is too large
 $domain_like_scam_warning: |-
@@ -1173,7 +1173,7 @@ $action_not_available_view_mode: This action is not available for View Wallets
 Deposit: Deposit
 Trade: Trade
 Show All Assets: Show All Assets
-Show All Collectibles: Show All Collectibles
+Show All Collectibles: Show All NFTs
 Show All Actions: Show All Actions
 Show All %collection_name%: Show All %collection_name%
 Scanning for subwallets...: Scanning for subwallets...
@@ -1182,9 +1182,9 @@ No existing subwallets found: No existing subwallets found
 You can create a new subwallet if you need another address on the same secret words.: You can create a new subwallet if you need another address on the same secret words.
 You have tokens on other subwallets. Each subwallet has its own address.: You have tokens on other subwallets. Each subwallet has its own address.
 Scanning...: Scanning...
-No collectibles yet: No collectibles yet
+No collectibles yet: No NFTs yet
 Hide Tab: Hide Tab
-Show Collectibles: Show Collectibles
+Show Collectibles: Show NFTs
 Show Assets: Show Assets
 Top %amount%: Top %amount%
 No subwallets yet.: No subwallets yet.
@@ -1195,7 +1195,7 @@ $subwallet_scan_no_native_balances: No native balances
 $subwallet_scan_other_tokens_suffix:
   oneValue: " + %count% other token"
   otherValue: " + %count% other tokens"
-Send, receive, and trade tokens and collectibles.: Send, receive, and trade tokens and collectibles.
+Send, receive, and trade tokens and collectibles.: Send, receive, and trade tokens and NFTs.
 $overview_cell_size_small: Small
 $overview_cell_size_medium: Medium
 $overview_cell_size_big: Big
@@ -1265,8 +1265,8 @@ Collapse: Collapse
 Expand: Expand
 Standalone NFT: Standalone NFT
 $nft_select: "Select"
-$nft_batch_on_sale: Selected collectibles are on sale.
-$nft_batch_different_chains: Selected collectibles are in different chains.
+$nft_batch_on_sale: Selected NFTs are on sale.
+$nft_batch_different_chains: Selected NFTs are in different chains.
 $nft_expired: "Expired"
 Linked Address: Linked Address
 Enter Address: Enter Address
@@ -1435,7 +1435,7 @@ Popular and connected apps: Popular and connected apps
 Site: Site
 Sites: Sites
 App: App
-Collectible: Collectible
+Collectible: NFT
 Action: Action
 Tokens and Stocks: Tokens and Stocks
 View Wallet: View Wallet
@@ -1453,7 +1453,7 @@ Recent Chats: Recent Chats
 Recent Search: Recent Search
 Google: Google
 Open Website: Open Website
-Open Collectible: Open Collectible
+Open Collectible: Open NFT
 Open Collection: Open Collection
 Open App: Open App
 Open Chat: Open Chat
