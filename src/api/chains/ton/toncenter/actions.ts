@@ -43,7 +43,7 @@ import {
 import { buildTxId, parseTxId } from '../../../../util/activities';
 import { sortActivities } from '../../../../util/activities/order';
 import { toMilliseconds, toSeconds } from '../../../../util/datetime';
-import { getDnsDomainZone } from '../../../../util/dns';
+import { getDnsDomainZone, getDnsZoneByCollection } from '../../../../util/dns';
 import { fixIpfsUrl, getProxiedLottieUrl } from '../../../../util/fetch';
 import { omitUndefined } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
@@ -744,6 +744,26 @@ function parseCommonFields(
   } satisfies Partial<ApiTransactionActivity>;
 }
 
+// The ION indexer does not fetch off-chain NFT metadata, so a DNS item is named by the URI its collection builds
+function getDnsItemMetadataByContentUri(
+  network: ApiNetwork,
+  rawCollectionAddress?: string,
+  contentUri?: string,
+): NftItemMetadata | undefined {
+  const base = contentUri?.match(/\/item-([^/]+)\.json$/)?.[1];
+  if (!rawCollectionAddress || !base) {
+    return undefined;
+  }
+
+  const zone = getDnsZoneByCollection(toBase64Address(rawCollectionAddress, true, network));
+  if (!zone) {
+    return undefined;
+  }
+
+  const domain = `${base}.${zone.suffixes[0]}`;
+  return getDnsDomainZone(domain)?.zone === zone ? { type: 'nft_items', name: domain } : undefined;
+}
+
 export function parseToncenterNft(
   network: ApiNetwork,
   metadataMap: MetadataMap,
@@ -764,12 +784,17 @@ export function parseToncenterNft(
      * name alone proves nothing.
      */
     isDns?: boolean;
+    /** The `content.uri` of the `/nft/items` entry */
+    contentUri?: string;
   },
 ): { nft?: ApiNft } {
-  const { rawCollectionAddress, index, ownerAddress, isOnSale, isDns: isDnsByContext } = options ?? {};
+  const {
+    rawCollectionAddress, index, ownerAddress, isOnSale, isDns: isDnsByContext, contentUri,
+  } = options ?? {};
 
   try {
-    const nftMetadata = extractMetadata<NftItemMetadata>(rawNftAddress, metadataMap, 'nft_items');
+    const nftMetadata = extractMetadata<NftItemMetadata>(rawNftAddress, metadataMap, 'nft_items')
+      ?? getDnsItemMetadataByContentUri(network, rawCollectionAddress, contentUri);
 
     if (!nftMetadata) {
       return {};
