@@ -62,6 +62,7 @@ import {
   OpCode,
   TeleitemOpCode,
 } from '../constants';
+import { fillAddressBookNames } from './dnsNames';
 import { extractMetadata } from './metadata';
 import { callToncenterV3 } from './other';
 
@@ -141,6 +142,7 @@ export async function fetchActions(options: FetchActionsOptions): Promise<ApiAct
     address_book: addressBook = {},
     metadata = {},
   } = await callToncenterV3<ActionsResponse>(network, '/actions', data, signal);
+  await fillAddressBookNames(network, addressBook);
 
   const activities = parseActionsToActivities(actions, {
     network,
@@ -162,6 +164,7 @@ export async function fetchPendingActions(network: ApiNetwork, address: string):
   } = await callToncenterV3<ActionsResponse>(network, '/pendingActions', {
     account: address,
   });
+  await fillAddressBookNames(network, addressBook);
 
   return parseActionsToActivities(actions, {
     network,
