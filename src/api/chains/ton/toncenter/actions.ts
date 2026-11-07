@@ -833,8 +833,8 @@ export function parseToncenterNft(
         name: domain,
         address: nftAddress,
 
-        thumbnail: generatedImage ?? extra?._image_medium,
-        image: generatedImage ?? extra?._image_big ?? extra?._image_medium,
+        thumbnail: `${generatedImage}&s=256`,
+        image: generatedImage,
         description,
         ownerAddress,
         isOnSale: isOnSale ?? false,

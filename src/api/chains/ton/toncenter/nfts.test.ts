@@ -177,6 +177,7 @@ describe('parseNftItem without indexed metadata', () => {
       collectionAddress: 'EQD-T0TFfemKkgq2GCuKfsuCJhs56wVDfqXSCi65TrzZFb5E',
       collectionName: 'ION DNS Domains',
       image: 'https://dns.ice.io/meta/img?d=dashboard',
+      thumbnail: 'https://dns.ice.io/meta/img?d=dashboard&s=256',
     });
   });
 
