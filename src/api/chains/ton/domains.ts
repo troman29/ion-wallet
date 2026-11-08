@@ -150,8 +150,8 @@ async function verifyTonDnsLinkedAddress(network: ApiNetwork, nftAddress: string
       return undefined;
     }
 
-    const normalizedLinkedAddress = toBase64Address(linkedAddress, true, network);
-    const normalizedResolvedLinkedAddress = toBase64Address(resolvedLinkedAddress, true, network);
+    const normalizedLinkedAddress = toBase64Address(linkedAddress, false, network);
+    const normalizedResolvedLinkedAddress = toBase64Address(resolvedLinkedAddress, false, network);
 
     if (normalizedLinkedAddress !== normalizedResolvedLinkedAddress) {
       logDebugError('verifyTonDnsLinkedAddress:mismatch', {

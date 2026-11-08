@@ -53,6 +53,8 @@ const ACCOUNT_ID = 'mainnet-0';
 const WALLET_ADDRESS = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz';
 const NFT_ADDRESS = 'EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi';
 const LINKED_ADDRESS = 'EQBWG4EBbPDv4Xj7xlPwzxd7hSyHMzwwLB5O6rY-0BBeaixS';
+// A linked address is a wallet, so it is shown non-bounceable like any wallet address
+const LINKED_WALLET_ADDRESS = 'UQBWG4EBbPDv4Xj7xlPwzxd7hSyHMzwwLB5O6rY-0BBeanGX';
 const OTHER_ADDRESS = 'EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ';
 
 const mockedCallBackendGet = jest.mocked(callBackendGet);
@@ -82,7 +84,7 @@ describe('fetchDomains', () => {
     expect(mockedGetDnsItemDomain).toHaveBeenCalledWith('mainnet', NFT_ADDRESS);
     expect(mockedResolveAddressByDomain).toHaveBeenCalledWith('mainnet', 'alice.ton');
     expect(result.linkedAddressByAddress).toEqual({
-      [NFT_ADDRESS]: LINKED_ADDRESS,
+      [NFT_ADDRESS]: LINKED_WALLET_ADDRESS,
     });
     expect(result.nfts).toEqual({
       [NFT_ADDRESS]: expect.objectContaining({ address: NFT_ADDRESS }),
@@ -111,7 +113,7 @@ describe('fetchDomains', () => {
     const result = await fetchDomains(ACCOUNT_ID);
 
     expect(result.linkedAddressByAddress).toEqual({
-      [NFT_ADDRESS]: LINKED_ADDRESS,
+      [NFT_ADDRESS]: LINKED_WALLET_ADDRESS,
     });
   });
 
