@@ -14,7 +14,7 @@ import { fetchStoredChainAccount, fetchStoredWallet } from '../../common/account
 import { callBackendGet } from '../../common/backend';
 import { fetchNftByAddress } from './toncenter/nfts';
 import { resolveAddressByDomain } from './address';
-import { TON_GAS } from './constants';
+import { DnsCategory, TON_GAS } from './constants';
 import { checkMultiTransactionDraft, submitMultiTransfer } from './transfer';
 
 const LINKED_ADDRESS_VERIFICATION_CONCURRENCY = 3;
@@ -63,7 +63,8 @@ export async function* submitDnsRenewal(
   }
 }
 
-export async function checkDnsChangeWalletDraft(accountId: string, nftAddress: string, address: string) {
+/** `address` is the wallet to link, or `undefined` to unlink the domain */
+export async function checkDnsChangeWalletDraft(accountId: string, nftAddress: string, address: string | undefined) {
   const result = await checkMultiTransactionDraft(accountId, [makeChangeMessage(nftAddress, address)]);
 
   if ('error' in result) {
@@ -77,7 +78,7 @@ export async function submitDnsChangeWallet(
   accountId: string,
   enclaveToken: string | undefined,
   nftAddress: string,
-  address: string,
+  address: string | undefined,
 ) {
   const account = await fetchStoredChainAccount(accountId, 'ton');
 
@@ -96,10 +97,12 @@ function makeRenewMessage(nftAddress: string) {
   };
 }
 
-function makeChangeMessage(nftAddress: string, linkedAddress: string) {
+function makeChangeMessage(nftAddress: string, linkedAddress: string | undefined) {
   return {
     toAddress: nftAddress,
-    payload: DnsItem.buildChangeDnsWalletMessage(linkedAddress),
+    payload: linkedAddress
+      ? DnsItem.buildChangeDnsWalletMessage(linkedAddress)
+      : DnsItem.buildDeleteDnsRecordMessage(undefined, DnsCategory.Wallet),
     amount: TON_GAS.changeDns,
   };
 }
