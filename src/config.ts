@@ -83,7 +83,7 @@ export const NATIVE_BIOMETRICS_SERVER = 'https://wallet.ice.io';
 
 export const MNEMONIC_COUNT = 24;
 export const MNEMONIC_COUNTS = [12, 24];
-export const CREATE_MULTICHAIN_WALLET = process.env.CREATE_MULTICHAIN_WALLET === '1';
+export const CREATE_MULTICHAIN_WALLET = process.env.CREATE_MULTICHAIN_WALLET !== '0';
 export const ENABLE_EXCHANGE = process.env.ENABLE_EXCHANGE === '1';
 
 export const PRIVATE_KEY_HEX_LENGTH = 64;

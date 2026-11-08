@@ -801,7 +801,10 @@ export type GlobalState = {
   currentQrScan?: {
     currentTransfer?: GlobalState['currentTransfer'];
     currentDomainLinking?: GlobalState['currentDomainLinking'];
+    isViewAccount?: true;
   };
+  // The address scanned for the view-only wallet import, until its screen takes it
+  viewAccountQrAddress?: string;
 
   latestAppVersion?: string;
   stateVersion: number;
@@ -1059,7 +1062,8 @@ export interface ActionPayloads {
   setIsPinAccepted: undefined;
   clearIsPinAccepted: undefined;
 
-  requestOpenQrScanner: undefined;
+  requestOpenQrScanner: { isViewAccount?: true } | undefined;
+  clearViewAccountQrAddress: undefined;
   closeQrScanner: undefined;
   handleQrCode: { data: string };
 

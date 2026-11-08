@@ -1,4 +1,6 @@
+import type { Cell } from '@ton/core';
 import { Address } from '@ton/core';
+import { createHash } from 'crypto';
 
 import type { ApiDomainData, ApiNft } from '../../types';
 
@@ -8,7 +10,8 @@ import { fetchStoredWallet } from '../../common/accounts';
 import { callBackendGet } from '../../common/backend';
 import { fetchNftByAddress } from './toncenter/nfts';
 import { resolveAddressByDomain } from './address';
-import { fetchDomains } from './domains';
+import { checkDnsChangeWalletDraft, fetchDomains } from './domains';
+import { checkMultiTransactionDraft } from './transfer';
 
 jest.mock('../../../util/account', () => ({
   parseAccountId: jest.fn(() => ({ network: 'mainnet' })),
@@ -53,6 +56,8 @@ const ACCOUNT_ID = 'mainnet-0';
 const WALLET_ADDRESS = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz';
 const NFT_ADDRESS = 'EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi';
 const LINKED_ADDRESS = 'EQBWG4EBbPDv4Xj7xlPwzxd7hSyHMzwwLB5O6rY-0BBeaixS';
+// A linked address is a wallet, so it is shown non-bounceable like any wallet address
+const LINKED_WALLET_ADDRESS = 'UQBWG4EBbPDv4Xj7xlPwzxd7hSyHMzwwLB5O6rY-0BBeanGX';
 const OTHER_ADDRESS = 'EQAic3zPce496ukFDhbco28FVsKKl2WUX_iJwaL87CBxSiLQ';
 
 const mockedCallBackendGet = jest.mocked(callBackendGet);
@@ -82,7 +87,7 @@ describe('fetchDomains', () => {
     expect(mockedGetDnsItemDomain).toHaveBeenCalledWith('mainnet', NFT_ADDRESS);
     expect(mockedResolveAddressByDomain).toHaveBeenCalledWith('mainnet', 'alice.ton');
     expect(result.linkedAddressByAddress).toEqual({
-      [NFT_ADDRESS]: LINKED_ADDRESS,
+      [NFT_ADDRESS]: LINKED_WALLET_ADDRESS,
     });
     expect(result.nfts).toEqual({
       [NFT_ADDRESS]: expect.objectContaining({ address: NFT_ADDRESS }),
@@ -111,7 +116,7 @@ describe('fetchDomains', () => {
     const result = await fetchDomains(ACCOUNT_ID);
 
     expect(result.linkedAddressByAddress).toEqual({
-      [NFT_ADDRESS]: LINKED_ADDRESS,
+      [NFT_ADDRESS]: LINKED_WALLET_ADDRESS,
     });
   });
 
@@ -180,3 +185,34 @@ function makeNft(): ApiNft {
     interface: 'default',
   };
 }
+
+describe('checkDnsChangeWalletDraft', () => {
+  const WALLET_CATEGORY = BigInt(`0x${createHash('sha256').update('wallet').digest('hex')}`);
+  const CHANGE_RECORD_OP = 0x4eb1f0f9;
+
+  async function getPayload(address: string | undefined) {
+    jest.mocked(checkMultiTransactionDraft).mockResolvedValueOnce({ emulation: { networkFee: 1n } } as never);
+    await checkDnsChangeWalletDraft(ACCOUNT_ID, NFT_ADDRESS, address);
+    const [, [message]] = jest.mocked(checkMultiTransactionDraft).mock.calls.at(-1)!;
+    return (message.payload as Cell).beginParse();
+  }
+
+  it('links a wallet by setting its record', async () => {
+    const payload = await getPayload(LINKED_ADDRESS);
+
+    expect(payload.loadUint(32)).toBe(CHANGE_RECORD_OP);
+    payload.loadUint(64);
+    expect(payload.loadUintBig(256)).toBe(WALLET_CATEGORY);
+    expect(payload.remainingRefs).toBe(1);
+  });
+
+  // The contract deletes a record when the change carries no value
+  it('unlinks by deleting the wallet record', async () => {
+    const payload = await getPayload(undefined);
+
+    expect(payload.loadUint(32)).toBe(CHANGE_RECORD_OP);
+    payload.loadUint(64);
+    expect(payload.loadUintBig(256)).toBe(WALLET_CATEGORY);
+    expect(payload.remainingRefs).toBe(0);
+  });
+});

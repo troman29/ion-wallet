@@ -109,10 +109,13 @@ addActionHandler('submitDomainLinking', withEnclaveSessionRelease(async (global,
   const nftAddress = global.currentDomainLinking.address!;
   const realFee = global.currentDomainLinking.realFee!;
   const nft = nftsByAddress?.[nftAddress];
-  const currentAddress = global.currentDomainLinking.walletAddress!;
-  const checkAddressResult = await callApi('getAddressInfo', 'ton', network, currentAddress);
+  const currentAddress = global.currentDomainLinking.walletAddress;
+  // An empty address unlinks the domain
+  const checkAddressResult = currentAddress
+    ? await callApi('getAddressInfo', 'ton', network, currentAddress)
+    : undefined;
 
-  if (isErrorTransferResult(checkAddressResult)) {
+  if (currentAddress && isErrorTransferResult(checkAddressResult)) {
     actions.showError({ error: checkAddressResult?.error });
     return;
   }
@@ -128,7 +131,7 @@ addActionHandler('submitDomainLinking', withEnclaveSessionRelease(async (global,
     accountId,
     enclaveToken,
     nft,
-    checkAddressResult.resolvedAddress,
+    checkAddressResult && !isErrorTransferResult(checkAddressResult) ? checkAddressResult.resolvedAddress : undefined,
     realFee,
   );
 

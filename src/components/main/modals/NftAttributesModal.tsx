@@ -10,10 +10,12 @@ import {
   type Theme,
 } from '../../../global/types';
 
-import { selectCurrentAccountId, selectCurrentAccountState, selectNetworkAccounts } from '../../../global/selectors';
+import {
+  selectCurrentAccountId, selectCurrentAccountState, selectNetworkAccounts, selectTonDnsLinkedAddress,
+} from '../../../global/selectors';
 import buildClassName from '../../../util/buildClassName';
 import { getChainTitle } from '../../../util/chain';
-import { getCountDaysToDate } from '../../../util/dateFormat';
+import { formatFullDay, getCountDaysToDate } from '../../../util/dateFormat';
 import { getDnsExpirationDate } from '../../../util/dns';
 import { stopEvent } from '../../../util/domEvents';
 import { getLocalAddressName } from '../../../util/getLocalAddressName';
@@ -41,6 +43,7 @@ interface StateProps {
   nft?: ApiNft;
   theme: Theme;
   dnsExpiration?: Record<string, number>;
+  dnsLinkedAddress?: string;
   shouldShowOwnerInNftAttributes?: true;
   accounts?: Record<string, Account>;
   currentAccountId: string;
@@ -54,6 +57,7 @@ function NftAttributesModal({
   nft,
   theme,
   dnsExpiration,
+  dnsLinkedAddress,
   accounts,
   currentAccountId,
   savedAddresses,
@@ -83,7 +87,8 @@ function NftAttributesModal({
   const tonDnsExpiration = getDnsExpirationDate(renderedNft, dnsExpiration);
   const dnsExpireInDays = tonDnsExpiration ? getCountDaysToDate(tonDnsExpiration) : undefined;
   const list = attributes?.slice(0, isFolded ? FOLD_LIMIT : undefined) || [];
-  const isNoData = !renderedWithNftOwner && !renderedNft?.description && list.length === 0;
+  const isNoData = !renderedWithNftOwner && !tonDnsExpiration && !dnsLinkedAddress
+    && !renderedNft?.description && list.length === 0;
 
   useEffect(() => {
     setHasImage(Boolean(thumbnail));
@@ -271,6 +276,27 @@ function NftAttributesModal({
 
         {isNoData && lang('No additional data.')}
 
+        {Boolean(tonDnsExpiration) && (
+          <>
+            <h3 className={styles.label}>{lang('Expires')}</h3>
+            <div className={styles.description}>
+              {formatFullDay(lang.code!, tonDnsExpiration)}
+            </div>
+          </>
+        )}
+
+        {dnsLinkedAddress && (
+          <>
+            <h3 className={styles.label}>{lang('Linked Wallet')}</h3>
+            <InteractiveTextField
+              chain={chain}
+              address={dnsLinkedAddress}
+              copyNotification={lang('%chain% Address Copied', { chain: chain ? getChainTitle(chain) : '' }) as string}
+              className={styles.copyButtonWrapper}
+            />
+          </>
+        )}
+
         {renderedNft.description && (
           <>
             <h3 className={styles.label}>{lang('Description')}</h3>
@@ -315,6 +341,7 @@ export default memo(withGlobal((global): StateProps => {
     nft: currentNftForAttributes,
     theme: global.settings.theme,
     dnsExpiration,
+    dnsLinkedAddress: selectTonDnsLinkedAddress(global, currentNftForAttributes),
     accounts,
     savedAddresses,
     shouldShowOwnerInNftAttributes,

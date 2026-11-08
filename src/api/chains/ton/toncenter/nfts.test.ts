@@ -150,3 +150,46 @@ describe('fetchNftTransfers', () => {
     expect(getRequest().params!.start_utime).toBeUndefined();
   });
 });
+
+describe('parseNftItem without indexed metadata', () => {
+  const RAW_DNS_COLLECTION_ADDRESS = '0:FE4F44C57DE98A920AB6182B8A7ECB82261B39EB05437EA5D20A2EB94EBCD915';
+  const NOT_INDEXED = { is_indexed: false, token_info: [{ type: 'nft_items' }] };
+
+  function mockItem(collectionAddress: string, uri: string) {
+    mockedCall.mockResolvedValueOnce({
+      nft_items: [{
+        address: RAW_NFT_ADDRESS,
+        collection_address: collectionAddress,
+        owner_address: RAW_WALLET_ADDRESS,
+        index: '1',
+        on_sale: false,
+        content: { uri },
+      }],
+      metadata: { [RAW_NFT_ADDRESS]: NOT_INDEXED },
+    });
+  }
+
+  it('names a DNS item by the URI built by its collection', async () => {
+    mockItem(RAW_DNS_COLLECTION_ADDRESS, 'https://dns.ice.io/meta/item-dashboard.json');
+
+    expect(await fetchNftByAddress('mainnet', NFT_ADDRESS)).toMatchObject({
+      name: 'dashboard.ion',
+      collectionAddress: 'EQD-T0TFfemKkgq2GCuKfsuCJhs56wVDfqXSCi65TrzZFb5E',
+      collectionName: 'ION DNS Domains',
+      image: 'https://dns.ice.io/meta/img?d=dashboard',
+      thumbnail: 'https://dns.ice.io/meta/img?d=dashboard&s=256',
+    });
+  });
+
+  it('ignores the same URI from another collection', async () => {
+    mockItem(RAW_COLLECTION_ADDRESS, 'https://dns.ice.io/meta/item-dashboard.json');
+
+    expect(await fetchNftByAddress('mainnet', NFT_ADDRESS)).toBeUndefined();
+  });
+
+  it('ignores a name the zone does not allow', async () => {
+    mockItem(RAW_DNS_COLLECTION_ADDRESS, 'https://dns.ice.io/meta/item-abc.json');
+
+    expect(await fetchNftByAddress('mainnet', NFT_ADDRESS)).toBeUndefined();
+  });
+});

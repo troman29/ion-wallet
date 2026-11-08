@@ -31,6 +31,7 @@ import { AbstractWebsocketClient } from '../../../common/websocket/abstractWsCli
 import { SEC } from '../../../constants';
 import { NETWORK_CONFIG } from '../constants';
 import { parseActionsToActivities } from './actions';
+import { applyCachedNames, fillAddressBookNames } from './dnsNames';
 
 // Toncenter closes the socket after 30 seconds of inactivity, so a ping has to reach it inside every
 // such window. PING_INTERVAL + PONG_TIMEOUT is the longest a dead link is held before we reconnect,
@@ -401,6 +402,9 @@ function getSocketUrl(network: ApiNetwork) {
 
 function parseSocketActions(network: ApiNetwork, message: ActionsSocketMessage, addressWhitelist: Set<string>) {
   const actionsByAddress = groupActionsByAddress(message.actions, message.address_book);
+  applyCachedNames(message.address_book);
+  // Warms the cache for the next finality updates of the same trace
+  void fillAddressBookNames(network, message.address_book);
   const activitiesByAddress: Record<string, ApiActivity[]> = {};
 
   for (const [address, actions] of Object.entries(actionsByAddress)) {

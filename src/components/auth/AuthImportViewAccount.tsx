@@ -1,7 +1,7 @@
 import React, {
-  memo, useRef, useState,
+  memo, useEffect, useRef, useState,
 } from '../../lib/teact/teact';
-import { getActions } from '../../global';
+import { getActions, withGlobal } from '../../global';
 
 import type { ApiImportAddressByChain } from '../../api/types';
 
@@ -17,6 +17,7 @@ import { ANIMATED_STICKERS_PATHS } from '../ui/helpers/animatedAssets';
 import useFocusAfterAnimation from '../../hooks/useFocusAfterAnimation';
 import useHistoryBack from '../../hooks/useHistoryBack';
 import useLang from '../../hooks/useLang';
+import useLastCallback from '../../hooks/useLastCallback';
 
 import AddressInput from '../ui/AddressInput';
 import AnimatedIconWithPreview from '../ui/AnimatedIconWithPreview';
@@ -34,10 +35,14 @@ type OwnProps = {
   onClose?: NoneToVoidFunction;
 };
 
+type StateProps = {
+  scannedAddress?: string;
+};
+
 function AuthImportViewAccount({
-  isActive, isLoading, isInModal, onCancel, onClose,
-}: OwnProps) {
-  const { importViewAccount } = getActions();
+  isActive, isLoading, isInModal, scannedAddress, onCancel, onClose,
+}: OwnProps & StateProps) {
+  const { importViewAccount, requestOpenQrScanner, clearViewAccountQrAddress } = getActions();
 
   const lang = useLang();
 
@@ -50,6 +55,19 @@ function AuthImportViewAccount({
   useHistoryBack({
     isActive,
     onBack: onCancel,
+  });
+
+  useEffect(() => {
+    if (!scannedAddress) {
+      return;
+    }
+
+    setValue(scannedAddress);
+    clearViewAccountQrAddress();
+  }, [scannedAddress]);
+
+  const handleQrScan = useLastCallback(() => {
+    requestOpenQrScanner({ isViewAccount: true });
   });
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -112,7 +130,7 @@ function AuthImportViewAccount({
           shouldValidateAllChains
           onInput={setValue}
           onError={setIsInvalidAddress}
-          onClose={onClose ?? onCancel}
+          onQrScan={handleQrScan}
         />
 
         <p className={styles.info}>
@@ -135,4 +153,6 @@ function AuthImportViewAccount({
   );
 }
 
-export default memo(AuthImportViewAccount);
+export default memo(withGlobal<OwnProps>((global): StateProps => ({
+  scannedAddress: global.viewAccountQrAddress,
+}))(AuthImportViewAccount));

@@ -179,7 +179,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       baseUrl: { mainnet: 'https://explorer.ice.io/' },
       address: '{base}address/{address}',
       token: '{base}jetton/{address}',
-      transaction: '{base}transaction/{hash}',
+      transaction: '{base}tx/{hash}',
       nft: '{base}nft/{address}',
       nftCollection: '{base}collection/{address}',
       doConvertHashFromBase64: true,

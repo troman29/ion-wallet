@@ -9,19 +9,20 @@ import { INJECTED_ICON } from '../../injectedConnector/injectedIcon';
 import { tonConnectGetDeviceInfo } from '../../tonConnectEnvironment';
 import { initConnectorString } from './connector';
 
+// The strings are JSON-encoded: the icon is a multi-line SVG, and a raw newline breaks the injected script
 export function buildInAppBrowserBridgeConnectorCode() {
   return `
 (${initConnectorString})(
-  '${TONCONNECT_WALLET_JSBRIDGE_KEY}',
-  '${EMBEDDED_DAPP_BRIDGE_CHANNEL}',
+  ${JSON.stringify(TONCONNECT_WALLET_JSBRIDGE_KEY)},
+  ${JSON.stringify(EMBEDDED_DAPP_BRIDGE_CHANNEL)},
   'cordova_iab' in window ? window.cordova_iab : window.webkit.messageHandlers.cordova_iab,
   {
     deviceInfo: ${JSON.stringify(tonConnectGetDeviceInfo())},
     protocolVersion: ${TONCONNECT_PROTOCOL_VERSION},
     isWalletBrowser: true,
   },
-  '${APP_NAME}',
-  '${INJECTED_ICON}',
+  ${JSON.stringify(APP_NAME)},
+  ${JSON.stringify(INJECTED_ICON)},
   ${registerEvmInjectedWallet.toString()}
 );
 `;

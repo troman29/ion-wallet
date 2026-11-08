@@ -44,7 +44,7 @@ function ReceiveModal({
     renderingKey, nextKey, updateNextKey, openSelector, closeSelector,
   } = useAccountSwitcherScreen(isOpen, currentAccountId);
 
-  const modalTitle = lang('Fund');
+  const modalTitle = lang('Receive');
 
   const handleSelectAccount = useLastCallback((accountId: string) => {
     switchAccount({ accountId });

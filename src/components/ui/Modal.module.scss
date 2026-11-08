@@ -140,6 +140,25 @@
     padding-bottom: var(--safe-area-bottom);
   }
 
+  @media (min-width: 28.01rem) {
+    // On a tablet the dialog is narrower than the screen, so it floats between the system bars instead of covering them
+    :global(html.is-android-app) &:not(.forceBottomSheet) {
+      .container {
+        align-items: center;
+      }
+
+      .dialog {
+        overflow: hidden;
+
+        height: calc(100% - var(--safe-area-top) - var(--safe-area-bottom) - 2rem);
+        max-height: none;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-radius: var(--border-radius-default);
+      }
+    }
+  }
+
 }
 
 .container {

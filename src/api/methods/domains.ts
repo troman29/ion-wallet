@@ -68,7 +68,7 @@ export async function submitDnsRenewal(
   return results;
 }
 
-export async function checkDnsChangeWalletDraft(accountId: string, nft: ApiNft, address: string) {
+export async function checkDnsChangeWalletDraft(accountId: string, nft: ApiNft, address: string | undefined) {
   const chain = await getDnsChain(accountId);
   return chains[chain].dns!.checkDnsChangeWalletDraft(accountId, nft.address, address);
 }
@@ -77,7 +77,7 @@ export async function submitDnsChangeWallet(
   accountId: string,
   enclaveToken: string | undefined,
   nft: ApiNft,
-  address: string,
+  address: string | undefined,
   realFee = 0n,
 ) {
   const chain = await getDnsChain(accountId);
@@ -98,7 +98,7 @@ export async function submitDnsChangeWallet(
     slug: getNativeToken(chain).slug,
     externalMsgHashNorm: result.msgHashNormalized,
     nft,
-    type: 'dnsChangeAddress',
+    type: address ? 'dnsChangeAddress' : 'dnsDelete',
   }]);
 
   return { activityId: activity.id };
