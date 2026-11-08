@@ -6,8 +6,15 @@ export type LangFn = langProvider.LangFn;
 
 const useLang = (): LangFn => {
   const forceUpdate = useForceUpdate();
+  const renderedTranslation = langProvider.getTranslation;
 
   useEffectOnce(() => {
+    // The language pack can load between the first render and this subscription, and then nothing
+    // would render the component again
+    if (langProvider.getTranslation !== renderedTranslation) {
+      forceUpdate();
+    }
+
     return langProvider.addCallback(forceUpdate);
   });
 
