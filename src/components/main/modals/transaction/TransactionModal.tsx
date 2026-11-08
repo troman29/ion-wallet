@@ -271,7 +271,7 @@ function TransactionModal({
                 transaction={renderedTransaction}
                 appTheme={appTheme}
                 isModalOpen={isModalOpen}
-                onShareClick={chain && transactionHash ? handleShareClick : undefined}
+                onShareClick={chain && transactionHash && isActivityWithHash ? handleShareClick : undefined}
                 onClose={handleClose}
               />
             )}

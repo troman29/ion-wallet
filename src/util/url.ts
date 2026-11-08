@@ -283,7 +283,13 @@ export function getBlogUrl(lang: LangCode): string | undefined {
   return MY_WALLET_BLOG[lang] || MY_WALLET_BLOG.en;
 }
 
+/** The shared link of a transaction: its explorer page, or the wallet page on a network without an explorer */
 export function getViewTransactionUrl(chain: ApiChain, txId: string, isTestnet?: boolean): string {
+  const explorerUrl = getExplorerTransactionUrl(chain, txId, isTestnet);
+  if (explorerUrl) {
+    return explorerUrl;
+  }
+
   const url = `${SELF_UNIVERSAL_HOST_URL}/tx/${chain}/${encodeURIComponent(txId)}`;
 
   return isTestnet ? `${url}?testnet=true` : url;
