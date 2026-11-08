@@ -157,9 +157,10 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     cached.settings.areTinyTransfersHidden = false;
   }
 
-  if (cached.stateVersion <= 2) {
-    // The NFT and domain activities were cached without their NFT, since the ION indexer lacks NFT metadata.
-    // Loading the history again shows them with it.
+  if (cached.stateVersion <= 3) {
+    // Version 2 cached the NFT and domain activities without their NFT, since the ION indexer lacks NFT metadata.
+    // Version 3 kept the initial activities of a chain out of the main feed when the other chains resumed from
+    // the cache. Loading the history again fixes both.
     for (const accountState of Object.values(cached.byAccountId ?? {})) {
       accountState.activities = undefined;
     }
