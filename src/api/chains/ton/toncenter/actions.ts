@@ -43,7 +43,7 @@ import {
 import { buildTxId, parseTxId } from '../../../../util/activities';
 import { sortActivities } from '../../../../util/activities/order';
 import { toMilliseconds, toSeconds } from '../../../../util/datetime';
-import { getDnsDomainZone, getDnsZoneByCollection } from '../../../../util/dns';
+import { getDnsDomainZone } from '../../../../util/dns';
 import { fixIpfsUrl, getProxiedLottieUrl } from '../../../../util/fetch';
 import { omitUndefined } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
@@ -63,6 +63,7 @@ import {
   TeleitemOpCode,
 } from '../constants';
 import { fillAddressBookNames } from './dnsNames';
+import { fillDnsNftMetadata, getDnsItemMetadataByContentUri } from './dnsNftMetadata';
 import { extractMetadata } from './metadata';
 import { callToncenterV3 } from './other';
 
@@ -142,7 +143,7 @@ export async function fetchActions(options: FetchActionsOptions): Promise<ApiAct
     address_book: addressBook = {},
     metadata = {},
   } = await callToncenterV3<ActionsResponse>(network, '/actions', data, signal);
-  await fillAddressBookNames(network, addressBook);
+  await Promise.all([fillAddressBookNames(network, addressBook), fillDnsNftMetadata(network, actions, metadata)]);
 
   const activities = parseActionsToActivities(actions, {
     network,
@@ -164,7 +165,7 @@ export async function fetchPendingActions(network: ApiNetwork, address: string):
   } = await callToncenterV3<ActionsResponse>(network, '/pendingActions', {
     account: address,
   });
-  await fillAddressBookNames(network, addressBook);
+  await Promise.all([fillAddressBookNames(network, addressBook), fillDnsNftMetadata(network, actions, metadata)]);
 
   return parseActionsToActivities(actions, {
     network,
@@ -745,26 +746,6 @@ function parseCommonFields(
     // Pending actions from Toncenter are not trusted
     status: resolveActivityStatus(isPending, action.success, finality),
   } satisfies Partial<ApiTransactionActivity>;
-}
-
-// The ION indexer does not fetch off-chain NFT metadata, so a DNS item is named by the URI its collection builds
-function getDnsItemMetadataByContentUri(
-  network: ApiNetwork,
-  rawCollectionAddress?: string,
-  contentUri?: string,
-): NftItemMetadata | undefined {
-  const base = contentUri?.match(/\/item-([^/]+)\.json$/)?.[1];
-  if (!rawCollectionAddress || !base) {
-    return undefined;
-  }
-
-  const zone = getDnsZoneByCollection(toBase64Address(rawCollectionAddress, true, network));
-  if (!zone) {
-    return undefined;
-  }
-
-  const domain = `${base}.${zone.suffixes[0]}`;
-  return getDnsDomainZone(domain)?.zone === zone ? { type: 'nft_items', name: domain } : undefined;
 }
 
 export function parseToncenterNft(
