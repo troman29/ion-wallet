@@ -374,7 +374,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         return;
       }
 
-      dappUniqueId = getDappConnectionUniqueId(result.session.dapp);
+      dappUniqueId = getDappConnectionUniqueId(result.session.dapp, this.protocolType);
       dappAccountId = result.session.accountId;
       dappUrl = result.session.dapp.url;
 
@@ -524,7 +524,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         return;
       }
 
-      dappUniqueId = getDappConnectionUniqueId(result.session.dapp);
+      dappUniqueId = getDappConnectionUniqueId(result.session.dapp, this.protocolType);
       dappAccountId = result.session.accountId;
       dappUrl = result.session.dapp.url;
 
@@ -887,7 +887,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
     dappUrl: string,
     request: ApiDappRequest,
   ): Promise<{ accountId: string; uniqueId: string; dapp: StoredDappConnection } | undefined> {
-    const uniqueId = getDappConnectionUniqueId({ ...request, url: dappUrl });
+    const uniqueId = getDappConnectionUniqueId({ ...request, url: dappUrl }, this.protocolType);
 
     try {
       const accountId = await getCurrentAccountOrFail();
@@ -993,7 +993,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
     requestId: number,
     dappUrl: string,
   ): Promise<DappConnectionResult<typeof this.protocolType>> {
-    const uniqueId = getDappConnectionUniqueId({ ...request, url: dappUrl });
+    const uniqueId = getDappConnectionUniqueId({ ...request, url: dappUrl }, this.protocolType);
     const connectKey = this.buildInjectedConnectKey(dappUrl, uniqueId);
     const inFlight = this.inFlightConnects.get(connectKey);
 
@@ -1239,7 +1239,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
       // WalletConnect sessions are automatically restored by the SDK, but injected are not
 
       const { url, accountId } = await ensureRequestParams(request);
-      const uniqueId = getDappConnectionUniqueId(request);
+      const uniqueId = getDappConnectionUniqueId(request, this.protocolType);
       key = `${accountId} ${url} ${uniqueId}`;
 
       const inFlight = this.inFlightReconnects.get(key);
@@ -1308,7 +1308,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
   ): Promise<DappMethodResult<typeof this.protocolType>> {
     let dapp: StoredDappConnection | undefined = undefined;
 
-    const uniqueId = getDappConnectionUniqueId(request);
+    const uniqueId = getDappConnectionUniqueId(request, this.protocolType);
 
     logDebug('walletConnect:disconnect:enter', {
       host: safeHost(request.url),
@@ -1387,7 +1387,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         accountAddress = (await fetchStoredChainAccount(accountId, message.chain)).byChain[message.chain].address;
       } else {
         accountAddress = message.payload.address!;
-        const uniqueId = getDappConnectionUniqueId(request);
+        const uniqueId = getDappConnectionUniqueId(request, this.protocolType);
         const dappUrl = resolveWalletConnectMethodDappUrl(request.url);
 
         accountId = request.accountId
@@ -1553,6 +1553,16 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
     } catch (err) {
       logDebugError('walletConnect:sendTransaction', err);
 
+      // The transfer may have failed after the user confirmed it, and the modal waits for its outcome
+      this.onUpdate({ type: 'dappCloseLoading', connectionType: 'sendTransaction' });
+
+      if (!message.payload.topic && !(err instanceof ApiUserRejectsError)) {
+        this.onUpdate({
+          type: 'showError',
+          error: err instanceof ApiBaseError && err.displayError ? err.displayError : ApiCommonError.Unexpected,
+        });
+      }
+
       if (message.payload.topic) {
         this.markSessionRequestFailed(message.payload.topic, message.id, err);
         const response = {
@@ -1595,7 +1605,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         dapp = byTopic.dapp;
         accountId = byTopic.accountId;
       } else {
-        const uniqueId = getDappConnectionUniqueId(request);
+        const uniqueId = getDappConnectionUniqueId(request, this.protocolType);
         const dappUrl = resolveWalletConnectMethodDappUrl(request.url);
 
         // For inApp browser flow, accountId comes from the request (the wallet active in the browser session).
