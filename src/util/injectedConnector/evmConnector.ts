@@ -28,10 +28,11 @@ export interface EIP6963ProviderDetail {
   provider: EIP1193Provider;
 }
 
-const EIP6963_ANNOUNCE_PROVIDER = 'eip6963:announceProvider';
-const EIP6963_REQUEST_PROVIDER = 'eip6963:requestProvider';
-
+// Self-contained: the in-app browser injects its source text into the dapp page, where nothing of this module exists
 export function registerEvmInjectedWallet(detail: EIP6963ProviderDetail) {
+  const EIP6963_ANNOUNCE_PROVIDER = 'eip6963:announceProvider';
+  const EIP6963_REQUEST_PROVIDER = 'eip6963:requestProvider';
+
   const frozenDetail = Object.freeze({
     info: Object.freeze({ ...detail.info }),
     provider: detail.provider,
