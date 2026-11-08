@@ -72,7 +72,9 @@ interface OwnProps {
   onInput: (value: string, isValueReplaced?: boolean) => void;
   onPaste?: (value: string) => void;
   onError?: (hasError: boolean) => void;
-  onClose: NoneToVoidFunction;
+  // Replaces the default scan, which closes the owner and restores it with the scanned address
+  onQrScan?: NoneToVoidFunction;
+  onClose?: NoneToVoidFunction;
 }
 
 interface StateProps {
@@ -113,6 +115,7 @@ function AddressInput({
   onInput,
   onPaste,
   onError,
+  onQrScan,
   onClose,
 }: OwnProps & StateProps) {
   const {
@@ -257,8 +260,13 @@ function AddressInput({
   });
 
   const handleQrScanClick = useLastCallback(() => {
+    if (onQrScan) {
+      onQrScan();
+      return;
+    }
+
     requestOpenQrScanner();
-    onClose();
+    onClose?.();
   });
 
   const handleAddressValidate = useLastCallback((address?: string) => {
