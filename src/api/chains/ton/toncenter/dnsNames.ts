@@ -1,12 +1,14 @@
 import type { ApiNetwork } from '../../../types';
 import type { AddressBook } from './types';
 
-import { HOUR } from '../../../../util/dateFormat';
+import { HOUR, MINUTE } from '../../../../util/dateFormat';
 import { split } from '../../../../util/iteratees';
 import { logDebugError } from '../../../../util/logs';
 import { callBackendPost } from '../../../common/backend';
 
-const CACHE_TTL = HOUR;
+const NAME_CACHE_TTL = HOUR;
+// A domain linked to an address shows up after this time; the backend keeps a missing name as long
+const NO_NAME_CACHE_TTL = 10 * MINUTE;
 const MAX_ADDRESSES_PER_REQUEST = 100;
 const REQUEST_TIMEOUT = 3000;
 // The indexer gives wallets (and uninitialized accounts) in the non-bounceable form, contracts in the bounceable one
@@ -70,9 +72,10 @@ async function fetchNames(addresses: [raw: string, userFriendly: string][]) {
       { addresses: addresses.map(([, userFriendly]) => userFriendly) },
       { timeout: REQUEST_TIMEOUT },
     );
-    const expiresAt = Date.now() + CACHE_TTL;
+    const now = Date.now();
     for (const [raw, userFriendly] of addresses) {
-      cache.set(raw, { name: names[userFriendly], expiresAt });
+      const name = names[userFriendly];
+      cache.set(raw, { name, expiresAt: now + (name ? NAME_CACHE_TTL : NO_NAME_CACHE_TTL) });
     }
   } catch (err) {
     // Names are cosmetic: the history must load even when the backend is down
