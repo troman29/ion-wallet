@@ -40,10 +40,10 @@ describe('activity history migration', () => {
     localStorage.removeItem(GLOBAL_STATE_CACHE_KEY);
   });
 
-  // The cached domain and NFT activities miss their NFT, so they have to be loaded again
-  it('drops the cached activities of version 2 and keeps the rest of the account', () => {
+  // Version 2 activities miss their NFT, version 3 ones may be missing from the main feed
+  it.each([2, 3])('drops the cached activities of version %i and keeps the rest of the account', (stateVersion) => {
     localStorage.setItem(GLOBAL_STATE_CACHE_KEY, JSON.stringify({
-      stateVersion: 2,
+      stateVersion,
       settings: INITIAL_STATE.settings,
       byAccountId: {
         '0-mainnet': {
