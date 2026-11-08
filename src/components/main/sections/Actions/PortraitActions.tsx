@@ -32,7 +32,7 @@ function PortraitActions({
 
   const lang = useLang();
 
-  const addBuyButtonName = lang('Fund');
+  const addBuyButtonName = lang('Receive');
 
   const handleStartExchange = useLastCallback(() => {
     void vibrate();
