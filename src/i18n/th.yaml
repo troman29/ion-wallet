@@ -867,7 +867,10 @@ Change Linked Wallet: เปลี่ยนกระเป๋าเงินท�
 Domain Renewed: ต่ออายุโดเมนเรียบร้อยแล้ว
 Domains Renewed: ต่ออายุโดเมนเรียบร้อยแล้ว
 Linked Wallet: กระเป๋าเงินที่เชื่อมโยง
+Expires: หมดอายุ
 Domain Linked: เชื่อมโยงโดเมนเรียบร้อยแล้ว
+Domain Unlinked: ยกเลิกการเชื่อมโยงโดเมนแล้ว
+Unlink: ยกเลิกการเชื่อมโยง
 Link: เชื่อมโยง
 Confirm Renewing: ยืนยันการต่ออายุ
 Confirm Linking: ยืนยันการเชื่อมโยง

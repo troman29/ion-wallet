@@ -480,9 +480,11 @@ addActionHandler('requestConfetti', (global) => {
   };
 });
 
-addActionHandler('requestOpenQrScanner', async (global, actions) => {
+addActionHandler('requestOpenQrScanner', async (global, actions, payload) => {
   let currentQrScan: GlobalState['currentQrScan'];
-  if (global.currentTransfer.state === TransferState.Initial) {
+  if (payload?.isViewAccount) {
+    currentQrScan = { isViewAccount: true };
+  } else if (global.currentTransfer.state === TransferState.Initial) {
     currentQrScan = { currentTransfer: global.currentTransfer };
   } else if (global.currentDomainLinking.state === DomainLinkingState.Initial) {
     currentQrScan = { currentDomainLinking: global.currentDomainLinking };
@@ -507,6 +509,10 @@ addActionHandler('requestOpenQrScanner', async (global, actions) => {
   setGlobal(global);
 });
 
+addActionHandler('clearViewAccountQrAddress', (global) => {
+  return { ...global, viewAccountQrAddress: undefined };
+});
+
 addActionHandler('closeQrScanner', (global) => {
   return {
     ...global,
@@ -516,7 +522,14 @@ addActionHandler('closeQrScanner', (global) => {
 });
 
 addActionHandler('handleQrCode', async (global, actions, { data }) => {
-  const { currentTransfer } = global.currentQrScan || {};
+  const { currentTransfer, isViewAccount } = global.currentQrScan || {};
+
+  if (isViewAccount) {
+    const transferParams = parseDeeplinkTransferParams(data, global);
+    const toAddress = transferParams && !('error' in transferParams) ? transferParams.toAddress : undefined;
+    setGlobal({ ...global, viewAccountQrAddress: toAddress || data.trim() });
+    return;
+  }
 
   if (currentTransfer) {
     const transferParams = parseDeeplinkTransferParams(data, global);

@@ -2,6 +2,8 @@ import type { ApiActivity, ApiFetchTransactionByIdOptions } from '../../types';
 
 import { logDebugError } from '../../../util/logs';
 import { parseActionsToActivities } from './toncenter/actions';
+import { fillAddressBookNames } from './toncenter/dnsNames';
+import { fillDnsNftMetadata } from './toncenter/dnsNftMetadata';
 import { TRACE_ACTIVITY_RULES } from './toncenter/technicalChildRules';
 import { getHiddenActivityIdsByOutput } from './toncenter/traceActivityProjection';
 import { fetchTraceByIdOrHash, fetchTraceByTxHash } from './toncenter/traces';
@@ -27,6 +29,11 @@ export async function fetchTransactionById(
     if (!trace || !trace.actions?.length) {
       return [];
     }
+
+    await Promise.all([
+      fillAddressBookNames(network, addressBook),
+      fillDnsNftMetadata(network, trace.actions, metadata),
+    ]);
 
     let activities = parseActionsToActivities(trace.actions, {
       network,

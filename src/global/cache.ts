@@ -157,6 +157,14 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     cached.settings.areTinyTransfersHidden = false;
   }
 
+  if (cached.stateVersion <= 2) {
+    // The NFT and domain activities were cached without their NFT, since the ION indexer lacks NFT metadata.
+    // Loading the history again shows them with it.
+    for (const accountState of Object.values(cached.byAccountId ?? {})) {
+      accountState.activities = undefined;
+    }
+  }
+
   // ION Wallet starts with a clean storage namespace. Future persisted-state migrations belong here;
   // each must advance `stateVersion` to `STATE_VERSION` after transforming the cached data.
   cached.stateVersion = STATE_VERSION;

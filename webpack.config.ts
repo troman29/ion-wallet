@@ -426,7 +426,7 @@ export default function createConfig(
         WALLET_CONNECT_PAY_APP_ID: '',
         NO_TON: '0',
         NO_EVM: '0',
-        CREATE_MULTICHAIN_WALLET: '0',
+        CREATE_MULTICHAIN_WALLET: '1',
         ENABLE_EXCHANGE: '0',
         NO_PENDING_ACTIVITIES: '1',
         NO_WEBSOCKET: '1',
@@ -452,7 +452,14 @@ export default function createConfig(
                 extension_pages: CSP,
               };
               manifest.action = { default_title: APP_NAME };
-              manifest.icons = { 192: 'icon-192x192.png', 384: 'icon-384x384.png', 512: 'icon-512x512.png' };
+              manifest.icons = {
+                16: 'icon-16x16.png',
+                32: 'icon-32x32.png',
+                128: 'icon-128x128.png',
+                192: 'icon-192x192.png',
+                384: 'icon-384x384.png',
+                512: 'icon-512x512.png',
+              };
 
               if (IS_FIREFOX_EXTENSION) {
                 manifest.background = {

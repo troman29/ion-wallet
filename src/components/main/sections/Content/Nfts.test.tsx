@@ -74,7 +74,7 @@ function getIsSpinnerShown() {
 }
 
 function getIsEmptyStateShown() {
-  return Boolean(root.textContent?.includes('No collectibles yet'));
+  return Boolean(root.textContent?.includes('No NFTs yet'));
 }
 
 function emitTerminalNftUpdate() {
