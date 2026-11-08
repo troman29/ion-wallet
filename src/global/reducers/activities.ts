@@ -11,6 +11,7 @@ import {
 import { mergeSortedActivityIds } from '../../util/activities/order';
 import { getOrderedAccountChains } from '../../util/chain';
 import { extractKey, mapValues, unique } from '../../util/iteratees';
+import { getChainBySlug } from '../../util/tokens';
 import { replaceActivityId } from '../helpers/misc';
 import { selectAccountOrAuthAccount, selectAccountState } from '../selectors';
 import { updateAccountState } from './misc';
@@ -22,7 +23,8 @@ const MAX_ACTIVITY_ID_REPLACEMENTS = 500;
  * The given activity lists must be sorted and contain no pending or local activities.
  *
  * Each chain reports its initial slice independently. The merged main feed (`idsMain`) is only
- * built once all chains have reported, so partial multi-chain history isn't shown out of order.
+ * built once all chains have reported (or resumed from the cache), so partial multi-chain history isn't
+ * shown out of order.
  * Until then, only local/pending ids remain visible. Per-chain ids are kept in `mainActivityIdsByChain`
  * (along with each chain's `hasMore` flag) to enable boundary recomputation on subsequent pagination.
  */
@@ -78,7 +80,9 @@ export function addInitialActivities(
     [chain]: mainHistoryHasMore,
   };
 
-  const areAllLoaded = areAllInitialActivitiesLoaded(global, accountId, areInitialActivitiesLoaded);
+  const areAllLoaded = areAllInitialActivitiesLoaded(
+    global, accountId, areInitialActivitiesLoaded, activities?.newestActivitiesBySlug,
+  );
   if (areAllLoaded) {
     const initialIdsMain = buildMainActivityIds(byId, mainActivityIdsByChain, mainHistoryHasMoreByChain);
     const initialIds = new Set(Object.values(mainActivityIdsByChain).flat());
@@ -537,14 +541,17 @@ function areAllInitialActivitiesLoaded(
   global: GlobalState,
   accountId: string,
   newAreInitialActivitiesLoaded: Partial<Record<ApiChain, boolean>>,
+  newestActivitiesBySlug: Record<string, ApiActivity> | undefined,
 ) {
   // The initial activities may be loaded and added before the authentication completes.
   // `getOrderedAccountChains` filters stored keys to those still in CHAIN_CONFIG, so a key
   // for a removed chain (whose `loaded` flag is never delivered) doesn't pin this at `false`.
   const byChain = selectAccountOrAuthAccount(global, accountId)?.byChain ?? {};
   const chains = getOrderedAccountChains(byChain);
+  // A chain with a known newest activity resumes polling from it and never reports initial activities
+  const resumedChains = new Set(Object.keys(newestActivitiesBySlug ?? {}).map(getChainBySlug));
 
-  return chains.every((chain) => newAreInitialActivitiesLoaded[chain]);
+  return chains.every((chain) => newAreInitialActivitiesLoaded[chain] || resumedChains.has(chain));
 }
 
 function areAllMainHistoriesEndReached(
