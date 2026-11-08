@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Resources looked up by name, which resource shrinking in release builds cannot see:
+  Cordova reads its plugin list from xml/config (without it the in-app browser never opens),
+  and the in-app browser plugin finds its toolbar icons with getIdentifier.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+  tools:keep="@xml/config,@drawable/ic_action_close,@drawable/ic_action_more,@drawable/ic_action_previous_item" />
