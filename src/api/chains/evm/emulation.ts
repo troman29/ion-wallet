@@ -1,17 +1,15 @@
-import { Transaction } from 'ethers';
+import { Interface, Transaction } from 'ethers';
 
 import type { ApiDappTransfer, ApiEmulationResult, ApiNetwork, EVMChain } from '../../types';
-import type { AlchemyAssetChange, AlchemyAssetChangesResponse, EvmTokenOperation } from './types';
+import type { EvmTokenOperation } from './types';
 import { EVM_CHAIN_IDS } from '../../dappProtocols/adapters/walletConnect/types';
 
 import { getChainConfig } from '../../../util/chain';
-import { fetchJson } from '../../../util/fetch';
 import { logDebugError } from '../../../util/logs';
 import { getEvmProvider } from './util/client';
 import { updateActivityMetadata } from '../../common/helpers';
 import { buildTokenSlug } from '../../methods';
 import { normalizeAddress } from './address';
-import { EVM_RPC_URLS } from './constants';
 
 function normalizeHexTx(rawTx: string): string {
   const trimmed = rawTx.trim();
@@ -175,9 +173,9 @@ export async function parseTransactionForPreview(
   }
 
   try {
-    const emulated = await emulateTransaction(chain, network, address, tx);
+    const emulated = isDangerousMeta ? undefined : emulateTransaction(chain, address, tx);
 
-    const tokenOperation = parseTokenOperation(network, chain, emulated, address);
+    const tokenOperation = emulated && parseTokenOperation(network, chain, emulated, address);
 
     if (tokenOperation?.assets) {
       transfers.push(getFakeTransfer(chain, rawTx, false));
@@ -200,10 +198,10 @@ export async function parseTransactionForPreview(
           slug: transfer.slug,
           isIncoming: false,
           normalizedAddress: transfer.toAddress,
-          fee: transfer.fee,
+          fee: feeForActivity,
           status: 'completed',
         })],
-        realFee: transfer.fee,
+        realFee: feeForActivity,
       };
     }
   } catch (error) {
@@ -217,47 +215,48 @@ export async function parseTransactionForPreview(
   return { transfers, emulation };
 }
 
-async function emulateTransaction(
-  chain: EVMChain,
-  network: ApiNetwork,
-  address: string,
-  tx: Transaction,
-) {
-  const payload = {
-    method: 'POST',
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'alchemy_simulateAssetChanges',
-      params: [
-        {
-          from: address,
-          to: tx.to,
-          data: tx.data,
-          gas: '0x' + tx.gasLimit.toString(16),
-          gasPrice: '0x' + (tx.gasPrice?.toString(16) ?? '0'),
-          value: '0x' + (tx.value?.toString(16) ?? '0'),
-        },
-      ],
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+type AssetChange = {
+  assetType: 'NATIVE' | 'ERC20';
+  contractAddress: string | undefined;
+  from: string;
+  to: string;
+  rawAmount: string;
+};
+
+type AssetChanges = {
+  changes: AssetChange[];
+  gasUsed: string;
+};
+
+const erc20TransferInterface = new Interface(['function transfer(address to, uint256 amount) returns (bool)']);
+
+/**
+ * No node simulates calls for us, so only a plain transfer of a token from the chain config is recognized;
+ * any other contract call stays unrecognized and the caller marks it dangerous
+ */
+function emulateTransaction(chain: EVMChain, address: string, tx: Transaction): AssetChanges | undefined {
+  const isKnownToken = getChainConfig(chain).tokenInfo
+    .some(({ tokenAddress }) => tokenAddress && tx.to && tokenAddress.toLowerCase() === tx.to.toLowerCase());
+  if (!isKnownToken || tx.value > 0n) {
+    return undefined;
+  }
+
+  const call = erc20TransferInterface.parseTransaction({ data: tx.data });
+  if (!call) {
+    return undefined;
+  }
+
+  const [to, amount] = call.args as unknown as [string, bigint];
+  return {
+    changes: [{ assetType: 'ERC20', contractAddress: tx.to!, from: address, to, rawAmount: amount.toString() }],
+    gasUsed: '0',
   };
-
-  const response = await fetchJson<AlchemyAssetChangesResponse>(
-    `${EVM_RPC_URLS[network](chain)}/v2`,
-    undefined,
-    payload,
-  );
-
-  return response.result;
 }
 
 export function parseTokenOperation(
   network: ApiNetwork,
   chain: EVMChain,
-  tx: AlchemyAssetChange,
+  tx: AssetChanges,
   userAddress: string,
 ): EvmTokenOperation | undefined {
   const changes = new Map<string, bigint>();

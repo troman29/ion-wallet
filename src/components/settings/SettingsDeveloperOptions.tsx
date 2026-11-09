@@ -29,6 +29,7 @@ import useLastCallback from '../../hooks/useLastCallback';
 import Button from '../ui/Button';
 import Dropdown from '../ui/Dropdown';
 import Modal from '../ui/Modal';
+import SettingsLegacyRecovery from './SettingsLegacyRecovery';
 
 import styles from './Settings.module.scss';
 
@@ -77,6 +78,7 @@ function SettingsDeveloperOptions({
     openAddAccountModal,
     copyStorageData,
     showToast,
+    reloadActivities,
   } = getActions();
 
   const lang = useLang();
@@ -158,6 +160,7 @@ function SettingsDeveloperOptions({
             )}
           </div>
         </div>
+        <SettingsLegacyRecovery />
       </div>
 
       {isCopyStorageEnabled && (
@@ -174,6 +177,12 @@ function SettingsDeveloperOptions({
           </div>
         </>
       )}
+
+      <div className={buildClassName(styles.settingsBlock)}>
+        <div className={buildClassName(styles.item, styles.item_small)} onClick={() => reloadActivities()}>
+          <span className={styles.itemTitle}>{lang('Reload Transactions')}</span>
+        </div>
+      </div>
 
       <div className={buildClassName(styles.settingsBlock)}>
         <div className={buildClassName(styles.item, styles.item_small)} onClick={handleDownloadLogs}>

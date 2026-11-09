@@ -1,183 +1,39 @@
-import type { BaseApiTransaction, EVMChain, EvmNftInterface } from '../../types';
+import type { BaseApiTransaction, EVMChain } from '../../types';
 
-export type ZerionFungibleInfo = {
+export type BnbBalancesResponse = {
+  address: string;
+  native: string;
+  tokens: Record<string, string>;
+  asOf: number;
+};
+
+export type BnbHistoryItem = {
   id: string;
-  name: string;
-  symbol: string;
-  icon: { url: string } | null;
-  flags: { verified: boolean };
-  implementations: {
-    chain_id: string;
-    address: string | null;
-    decimals: number;
-  }[];
+  hash: string;
+  kind: 'native' | 'internal' | 'token';
+  token?: string;
+  from: string;
+  to: string;
+  amount: string;
+  fee?: string;
+  isFailed: boolean;
+  timestamp: number;
+  blockNumber: number;
 };
 
-type ZerionNftInfo = {
-  content?: {
-    detail: {
-      url: string;
-    };
-    preview: {
-      url: string;
-    };
-  };
-  contract_address: string;
-  flags: {
-    is_spam: boolean;
-  };
-  interface: EvmNftInterface;
-  name: string;
-  token_id: string;
+export type BnbHistoryResponse = {
+  items: BnbHistoryItem[];
+  hasMore: boolean;
+  isBackfilling: boolean;
 };
 
-type ZerionTokenAmount = {
-  quantity: {
-    int: string;
-    decimals: number;
-    float: number;
-    numeric: string;
-  };
-  price: number | null;
-  value: number | null;
-};
-
-type ZerionAssetTransferInfo = {
-  direction: 'in' | 'out' | 'self';
-  sender: string;
-  recipient: string;
-  act_id: string;
-};
-
-export type ZerionTokenTransfer = ZerionTokenAmount & ZerionAssetTransferInfo & {
-  fungible_info: ZerionFungibleInfo;
-};
-
-export type ZerionNftTransfer = ZerionTokenAmount & ZerionAssetTransferInfo & {
-  nft_info: ZerionNftInfo;
-};
-
-export type ZerionTransaction = {
-  type: 'transactions';
-  id: string;
-  attributes: {
-    address: string;
-    operation_type: 'trade' | 'receive' | 'send' | 'execute' | 'approve' | 'delegate' | 'revoke_delegation';
-    hash: string;
-    mined_at_block: number;
-    mined_at: string;
-    sent_from: string;
-    sent_to: string;
-    status: 'confirmed' | 'failed' | 'pending';
-    nonce: number;
-    fee: ZerionTokenAmount;
-    transfers: (ZerionTokenTransfer | ZerionNftTransfer)[];
-    approvals: (Omit<ZerionTokenAmount, 'price' | 'value'> & {
-      fungible_info?: ZerionFungibleInfo;
-      sender: string;
-      act_id: string;
-    })[];
-    delegations?: {
-      address: string;
-      act_id: string;
-      chain_id?: string;
-    }[];
-    application_metadata?: {
-      name?: string;
-      icon?: { url: string };
-      contract_address: string;
-      method?: { id: string; name: string };
-    };
-    flags: { is_trash: boolean };
-    acts: {
-      id: string;
-      type: 'trade' | 'receive' | 'send' | 'execute' | 'approve' | 'delegate' | 'revoke_delegation';
-      application_metadata?: ZerionTransaction['attributes']['application_metadata'];
-    }[];
-    paymaster?: string;
-  };
-  relationships: {
-    chain: {
-      links: {
-        related: string;
-      };
-      data: {
-        type: 'chains';
-        id: string;
-      };
-    };
-    dapp?: {
-      data: {
-        type: 'dapps';
-        id: string;
-      };
-    };
-  };
-};
-
-export type ZerionTransactionsResponse = {
-  links: {
-    self: string;
-    next?: string;
-  };
-  data: ZerionTransaction[];
-};
-
-export type ZerionPosition = {
-  type: 'positions';
-  id: string;
-  attributes: {
-    parent: string | null;
-    protocol: string | null;
-    name: string;
-    position_type: 'wallet' | 'deposit' | 'loan' | 'reward' | 'staked';
-    quantity: {
-      int: string;
-      decimals: number;
-      float: number;
-      numeric: string;
-    };
-    value: number | null;
-    price: number | null;
-    changes: {
-      absolute_1d: number | null;
-      percent_1d: number | null;
-    } | null;
-    fungible_info: Omit<ZerionFungibleInfo, 'id'>;
-    flags: {
-      displayable: boolean;
-      is_trash: boolean;
-    };
-    updated_at: string;
-    updated_at_block: number;
-  };
-  relationships: {
-    chain: {
-      links: {
-        related: string;
-      };
-      data: {
-        type: 'chains';
-        id: string;
-      };
-    };
-    fungible: {
-      links: {
-        related: string;
-      };
-      data: {
-        type: 'fungibles';
-        id: string;
-      };
-    };
-  };
-};
-
-export type ZerionPositionsResponse = {
-  links: {
-    self: string;
-  };
-  data: ZerionPosition[];
+export type BnbApproval = {
+  token: string;
+  spender: string;
+  amount: string;
+  blockNumber: number;
+  timestamp: number;
+  hash: string;
 };
 
 export type EvmWatchedWallet = {
@@ -287,132 +143,6 @@ export type AlchemySocketServerMessage =
   | EthSubscribeResultMessage
   | EthUnsubscribeResultMessage
   | EthSubscriptionMessage;
-
-export type AlchemyGetTokenAssetsResponse = {
-  jsonrpc: '2.0';
-  id: number;
-  result: {
-    address: string;
-    tokenBalances: {
-      contractAddress: string;
-      tokenBalance: string;
-    }[];
-  };
-};
-
-export type AlchemyGetTokenAssetResponse = {
-  jsonrpc: '2.0';
-  id: number;
-  result: {
-    name: string;
-    symbol: string;
-    decimals: number;
-    logo: string;
-  };
-};
-
-export type AlchemyGetAssetTransfersResponse = {
-  jsonrpc: '2.0';
-  id: number;
-  result: {
-    transfers: {
-      blockNum: string;
-      uniqueId: string;
-      hash: string | null;
-      from: string;
-      to: string;
-      value: number | null;
-      erc721TokenId: string | null;
-      erc1155Metadata: {
-        tokenId: string;
-        value: string;
-      }[] | null;
-      tokenId: string | null;
-      asset: string | null;
-      category: 'external'
-        | 'internal'
-        | 'erc20'
-        | 'erc721'
-        | 'erc1155'
-        | 'specialnft';
-      rawContract: {
-        value: string | null;
-        address: string | null;
-        decimal: string | null;
-      } | null;
-      metadata?: {
-        blockTimestamp?: string;
-      };
-    }[];
-    pageKey: string;
-  };
-};
-
-export type AlchemyNftImage = {
-  cachedUrl?: string;
-  thumbnailUrl?: string;
-  contentType?: string;
-  originalUrl?: string;
-};
-
-export type AlchemyNftContract = {
-  address: string;
-  name?: string;
-  symbol?: string;
-  totalSupply?: string;
-  tokenType: EvmNftInterface;
-};
-
-export type AlchemyOwnedNft = {
-  contract: AlchemyNftContract;
-  tokenId: string;
-  tokenType: EvmNftInterface;
-  name?: string;
-  description?: string;
-  image: AlchemyNftImage;
-  raw: {
-    tokenUri?: string;
-    metadata?: {
-      attributes?: {
-        value: string;
-        trait_type: string;
-      }[];
-    };
-    error?: string | null;
-  };
-  balance: string;
-};
-
-export type AlchemyNftsForOwnerResponse = {
-  ownedNfts: AlchemyOwnedNft[];
-  totalCount: number;
-  pageKey?: string | null;
-};
-
-export type AlchemyAssetChange = {
-  changes: {
-    amount: string;
-    assetType: 'NATIVE' | 'ERC20' | 'ERC721' | 'ERC1155';
-    changeType: 'TRANSFER';
-    contractAddress: string | null;
-    decimals: number;
-    from: string;
-    logo: string;
-    name: string;
-    rawAmount: string;
-    symbol: string;
-    to: string;
-    tokenId: string | null;
-  }[];
-  error: string | null;
-  gasUsed: string;
-};
-
-export type AlchemyAssetChangesResponse = {
-  jsonrpc: '2.0';
-  id: number;
-  result: AlchemyAssetChange;
-};
 
 export type EvmTokenOperation = {
   assets: string[];

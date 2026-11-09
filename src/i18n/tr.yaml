@@ -868,7 +868,10 @@ Change Linked Wallet: Bağlı cüzdanı değiştir
 Domain Renewed: Alan adı yenilendi
 Domains Renewed: Alan adları yenilendi
 Linked Wallet: Bağlı cüzdan
+Expires: Bitiş tarihi
 Domain Linked: Alan adı bağlandı
+Domain Unlinked: Alan adı bağlantısı kaldırıldı
+Unlink: Bağlantıyı kaldır
 Link: Bağla
 Confirm Renewing: Yenilemeyi Onayla
 Confirm Linking: Bağlamayı Onayla

@@ -1,29 +1,20 @@
 import type { ApiActivity, ApiFetchTransactionByIdOptions, EVMChain } from '../../types';
 
 import { logDebugError } from '../../../util/logs';
-import { collectTokensFromTransactions, fetchEvmTx, transformEvmTxToUnified } from './activities';
+import { getEvmProvider } from './util/client';
+import { fetchActivitiesByHash } from './activities';
 
 export async function fetchTransactionById(
   chain: EVMChain,
   { network, walletAddress, ...options }: ApiFetchTransactionByIdOptions,
 ): Promise<ApiActivity[]> {
-  const isTxId = 'txId' in options;
+  if (!('txId' in options)) {
+    return [];
+  }
 
   try {
-    if (!isTxId) {
-      return [];
-    }
-    const tx = await fetchEvmTx(chain, network, options.txId);
-
-    if (!tx) {
-      return [];
-    }
-
-    const address = walletAddress || tx.attributes.sent_from;
-
-    await collectTokensFromTransactions(network, chain, address, [tx]);
-
-    return [transformEvmTxToUnified(chain, tx, address)];
+    const address = walletAddress || (await getEvmProvider(network, chain).getTransaction(options.txId))?.from;
+    return address ? await fetchActivitiesByHash(chain, network, address, options.txId) : [];
   } catch (err) {
     logDebugError('fetchTransactionById', chain, err);
     return [];

@@ -85,7 +85,7 @@ export const NATIVE_BIOMETRICS_SERVER = 'https://wallet.ice.io';
 
 export const MNEMONIC_COUNT = 24;
 export const MNEMONIC_COUNTS = [12, 24];
-export const CREATE_MULTICHAIN_WALLET = process.env.CREATE_MULTICHAIN_WALLET === '1';
+export const CREATE_MULTICHAIN_WALLET = process.env.CREATE_MULTICHAIN_WALLET !== '0';
 export const ENABLE_EXCHANGE = process.env.ENABLE_EXCHANGE === '1';
 
 export const PRIVATE_KEY_HEX_LENGTH = 64;
@@ -153,8 +153,8 @@ export const WALLET_CONNECT_PAY_FRAME_ORIGINS = [
 export const WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID || '';
 export const WALLET_CONNECT_PAY_APP_ID = process.env.WALLET_CONNECT_PAY_APP_ID || '';
 
-export const EVM_MAINNET_RPC_URL = process.env.EVM_MAINNET_RPC_URL || 'https://evmapi.wallet.ice.io';
-export const EVM_TESTNET_RPC_URL = process.env.EVM_TESTNET_RPC_URL || 'https://evmapi-testnet.wallet.ice.io';
+// The backend indexes BNB mainnet only; testnet goes straight to a public node, without history
+export const BNB_TESTNET_RPC_URL = 'https://bsc-testnet-rpc.publicnode.com';
 
 export const FRACTION_DIGITS = 9;
 export const SHORT_FRACTION_DIGITS = 2;

@@ -2,7 +2,7 @@
 
 ION Wallet is a self-custodial wallet being migrated from the MyTonWallet codebase for the ION ecosystem. The target product supports the ION network and ION on BNB Chain (with native BNB for gas) across web, browser extension, Electron, Android, and iOS through Capacitor.
 
-This repository is in active migration. Public endpoints, wallet registries, mobile-store listings, policies, help pages, and brand assets are not yet release-ready. Their status and required work live in [Migration to ION](MIGRATION_TO_ION.md).
+This repository is in active migration. Public endpoints, wallet registries, mobile-store listings, policies, help pages, and brand assets are not yet release-ready. Their status and required work are tracked in Linear.
 
 ## Product scope
 
@@ -32,7 +32,7 @@ npm ci
 npm run dev
 ```
 
-New wallets use a 24-word ION-only recovery phrase by default. Set `CREATE_MULTICHAIN_WALLET=1` at build time to create 12-word multichain wallets. Existing wallets can be imported with either format.
+New wallets use a 12-word multichain recovery phrase (ION and BNB Chain) by default. Set `CREATE_MULTICHAIN_WALLET=0` at build time to create 24-word ION-only wallets. Existing wallets can be imported with either format.
 
 Exchange is hidden by default while its ION bridge flow is unfinished. Set `ENABLE_EXCHANGE=1` at build time to show it.
 
@@ -41,7 +41,7 @@ Price charts support ION, ION BEP-20, BNB, and LION for periods up to one year; 
 show the existing service-token warning via `STAKED_TOKEN_SLUGS`; unstaking remains available through the staking screen.
 
 Token slugs use `ioncoin` for native ION and `ion-<full address>` for all ION Network jettons, including LION.
-The internal chain ID remains `ton`; BNB Chain slugs stay unchanged. Cache schema 3 migrates token references,
+The internal chain ID remains `ton`; BNB Chain slugs stay unchanged. Cache schema 5 migrates token references,
 balances, staking, and visibility settings, and clears cached transaction history so it is fetched again.
 The legacy native slug `toncoin` migrates directly to `ioncoin`.
 IndexedDB schema 8 canonicalizes token addresses and merges duplicate metadata records atomically.
@@ -63,11 +63,11 @@ npm test -- --runInBand
 npm run build
 ```
 
-Platform configuration lives in `src/electron/config.yml`, `capacitor.config.ts`, and `mobile/`. Platform validation and signing remain release tasks in [Migration to ION](MIGRATION_TO_ION.md).
+Platform configuration lives in `src/electron/config.yml`, `capacitor.config.ts`, and `mobile/`. Platform validation and signing remain release tasks (tracked in Linear).
 
 ## Release work
 
-Do not publish an artifact solely from the repository configuration. Before a public release, complete the endpoint, registry, store, policy, signing, and visual-asset work in [Migration to ION](MIGRATION_TO_ION.md).
+Do not publish an artifact solely from the repository configuration. Before a public release, complete the endpoint, registry, store, policy, signing, and visual-asset work tracked in Linear.
 
 ## Contributing
 

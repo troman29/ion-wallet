@@ -2,7 +2,7 @@ import { getChainConfig } from './chain';
 import {
   convertExplorerUrl, getExplorerAddressUrl, getExplorerName, getExplorerNftCollectionUrl, getExplorerNftUrl,
   getExplorerTokenUrl, getExplorerTransactionUrl, getMarketplaceNftCollectionUrl, getMarketplaceNftUrl,
-  getViewAccountUrl, isInIframeWhitelist, isValidUrl, normalizeUrl,
+  getViewAccountUrl, getViewTransactionUrl, isInIframeWhitelist, isValidUrl, normalizeUrl,
 } from './url';
 
 // Test constants
@@ -95,9 +95,14 @@ describe('ION external links', () => {
     expect(getExplorerNftUrl('ton', TEST_NFT_ADDRESS)).toBe(base + 'nft/' + TEST_NFT_ADDRESS);
     expect(getExplorerNftCollectionUrl('ton', TEST_NFT_COLLECTION_ADDRESS))
       .toBe(base + 'collection/' + TEST_NFT_COLLECTION_ADDRESS);
-    expect(getExplorerTransactionUrl('ton', TEST_TON_HASH)).toBe(base + 'transaction/' + TEST_TON_HASH);
+    expect(getExplorerTransactionUrl('ton', TEST_TON_HASH)).toBe(base + 'tx/' + TEST_TON_HASH);
     expect(getExplorerTransactionUrl('ton', Buffer.from(TEST_TON_HASH, 'hex').toString('base64')))
-      .toBe(base + 'transaction/' + TEST_TON_HASH);
+      .toBe(base + 'tx/' + TEST_TON_HASH);
+  });
+  it('shares a transaction as its explorer page, and as the wallet page where the network has no explorer', () => {
+    expect(getViewTransactionUrl('ton', TEST_TON_HASH)).toBe(base + 'tx/' + TEST_TON_HASH);
+    expect(getViewTransactionUrl('ton', TEST_TON_HASH, true))
+      .toBe(`https://web.ionwallet.io/tx/ton/${TEST_TON_HASH}?testnet=true`);
   });
   it('does not send testnet objects to mainnet or offer an ION marketplace', () => {
     expect(getExplorerAddressUrl('ton', TEST_TON_ADDRESS, true)).toBeUndefined();

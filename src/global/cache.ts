@@ -158,7 +158,8 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     cached.settings.areTinyTransfersHidden = false;
   }
 
-  if ((cached.stateVersion ?? 0) < 3) {
+  if ((cached.stateVersion ?? 0) < 5) {
+    // Also refetch histories affected by the NFT metadata and initial-feed fixes from cache versions 2 and 3.
     migrateTokenSlugs(cached);
   }
 
@@ -216,8 +217,19 @@ function updateCache(force?: boolean) {
     return;
   }
 
-  const global = getGlobalWithoutTemporaryAccount();
+  writeCache(getGlobalWithoutTemporaryAccount());
+}
 
+export function saveGlobalCacheNow(global: GlobalState) {
+  if (GLOBAL_STATE_CACHE_DISABLED) return;
+  writeCache(global);
+  const saved = localStorage.getItem(GLOBAL_STATE_CACHE_KEY);
+  if (!saved || JSON.parse(saved).accounts?.byId === undefined) {
+    throw new Error('Failed to verify wallet cache');
+  }
+}
+
+function writeCache(global: GlobalState) {
   const accountsById = global.accounts?.byId || {};
   const accountIds = Object.keys(accountsById);
   const reducedGlobal: GlobalState = {

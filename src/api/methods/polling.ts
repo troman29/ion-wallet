@@ -141,6 +141,7 @@ export async function tryUpdateConfig() {
     const {
       isLimited,
       isCopyStorageEnabled = false,
+      isLegacyIonRecoveryEnabled = false,
       now: serverUtc,
       isUpdateRequired: isAppUpdateRequired,
     } = config;
@@ -149,6 +150,7 @@ export async function tryUpdateConfig() {
       type: 'updateConfig',
       isLimited,
       isCopyStorageEnabled,
+      isLegacyIonRecoveryEnabled,
       isAppUpdateRequired,
     };
 

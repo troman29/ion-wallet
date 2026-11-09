@@ -1,48 +1,30 @@
 import type { ApiActivity, ApiFetchActivitySliceOptions, ApiNetwork, EVMChain } from '../../types';
-import type { ZerionNftTransfer, ZerionTokenTransfer, ZerionTransaction, ZerionTransactionsResponse } from './types';
+import type { BnbHistoryItem, BnbHistoryResponse } from './types';
 
 import { parseAccountId } from '../../../util/account';
-import { getChainConfig, getIsEvmChain, getIsSupportedChain } from '../../../util/chain';
-import { fetchJson } from '../../../util/fetch';
-import { compact } from '../../../util/iteratees';
-import { logDebugError } from '../../../util/logs';
-import { getEvmProvider } from './util/client';
-import { updateTokensMetadataByAddress } from './util/metadata';
-import { getZerionFungibleImplementation, getZerionFungibleTokenSlug } from './util/tokens';
+import { getChainConfig } from '../../../util/chain';
 import { fetchStoredWallet } from '../../common/accounts';
+import { callBackendGet } from '../../common/backend';
 import { updateActivityMetadata } from '../../common/helpers';
-import { getTokenBySlug } from '../../common/tokens';
-import { SEC } from '../../constants';
+import { buildTokenSlug, getTokenBySlug } from '../../common/tokens';
 import { normalizeAddress } from './address';
-import { getApiChainByZerionChain, getEvmApiUrl, getZerionChainByApiChain } from './constants';
 
 export async function fetchActivitySlice(
   chain: EVMChain,
-  {
-    accountId,
-    tokenSlug,
-    toTimestamp,
-    fromTimestamp,
-    limit,
-    signal,
-  }: ApiFetchActivitySliceOptions,
+  { accountId, tokenSlug, toTimestamp, fromTimestamp, limit, signal }: ApiFetchActivitySliceOptions,
 ): Promise<ApiActivity[]> {
   const { network } = parseAccountId(accountId);
   const { address } = await fetchStoredWallet(accountId, chain);
 
   const { activities } = await getTokenActivitySlice(
-    chain,
-    network,
-    address,
-    tokenSlug,
-    toTimestamp,
-    fromTimestamp,
-    limit,
-    undefined,
-    signal,
+    chain, network, address, tokenSlug, toTimestamp, fromTimestamp, limit, undefined, signal,
   );
 
   return activities;
+}
+
+export function fetchCrossChainActivitySlice(options: ApiFetchActivitySliceOptions): Promise<ApiActivity[]> {
+  return fetchActivitySlice('bnb', options);
 }
 
 export async function getTokenActivitySlice(
@@ -53,309 +35,82 @@ export async function getTokenActivitySlice(
   toTimestamp?: number,
   fromTimestamp?: number,
   limit?: number,
-  isCrossChain?: boolean,
+  _isCrossChain?: boolean,
   signal?: AbortSignal,
-): Promise<{ activities: ApiActivity[]; hasMore: boolean }> {
-  const checksumAddress = normalizeAddress(address);
-
-  const txs = await fetchEvmTxs({
-    chain,
-    network,
-    address: checksumAddress,
-    slug,
-    toTimestamp,
-    fromTimestamp,
+): Promise<{ activities: ApiActivity[]; hasMore: boolean; isBackfilling: boolean }> {
+  const { items, hasMore, isBackfilling } = await fetchBnbHistory(network, address, {
+    before: toTimestamp,
+    after: fromTimestamp,
     limit,
-    isCrossChain,
-    signal,
-  });
+    token: getHistoryToken(chain, slug),
+  }, signal);
 
-  // hasMore is computed from the raw API response length, not the post-transform `activities`.
-  // `transformEvmTxToUnified` returns undefined for unsupported tx shapes, and `compact` drops
-  // those - so a length check on the returned activities would underreport remaining pages.
-  const hasMore = limit !== undefined && txs.length >= limit;
-
-  if (isCrossChain) {
-    await collectCrossChainTokensFromTransactions(network, address, txs, signal);
-
-    const activities = compact(txs.map((tx) => {
-      const txChain = getZerionTransactionChain(tx);
-
-      return txChain ? transformEvmTxToUnified(txChain, tx, address) : undefined;
-    }));
-
-    return { activities, hasMore };
-  }
-
-  await collectTokensFromTransactions(network, chain, address, txs, signal);
-
-  const activities = compact(txs.map((tx) => transformEvmTxToUnified(chain, tx, address)));
-
-  return { activities, hasMore };
+  return { activities: items.map((item) => transformBnbItem(chain, item, address)), hasMore, isBackfilling };
 }
 
-export async function fetchEvmTxs(options: {
-  chain: EVMChain;
-  network: ApiNetwork;
-  address: string;
-  slug?: string;
-  toTimestamp?: number;
-  fromTimestamp?: number;
-  limit?: number;
-  isCrossChain?: boolean;
-  hash?: string;
-  signal?: AbortSignal;
-}) {
-  const {
-    chain, network, address, slug, toTimestamp, fromTimestamp, limit, isCrossChain, hash, signal,
-  } = options;
+export async function fetchActivitiesByHash(chain: EVMChain, network: ApiNetwork, address: string, hash: string) {
+  const { items } = await fetchBnbHistory(network, address, { hash });
 
-  const tokenAddress = slug
-    ? (slug === getChainConfig(chain).nativeToken.slug || slug === 'eth')
-      ? undefined
-      : getTokenBySlug(slug)?.tokenAddress
-    : undefined;
-  const zerionChain = getZerionChainByApiChain(chain);
-
-  const params = {
-    'filter[min_mined_at]': fromTimestamp ? fromTimestamp + SEC : undefined,
-    'filter[max_mined_at]': toTimestamp ? toTimestamp - SEC : undefined,
-    'page[size]': limit,
-    'filter[chain_ids]': isCrossChain ? undefined : zerionChain,
-    'filter[fungible_implementations]': tokenAddress ? `${zerionChain}:${tokenAddress.toLowerCase()}` : undefined,
-    'filter[search_query]': hash,
-  };
-
-  const data = await fetchJson<ZerionTransactionsResponse>(
-    `${getEvmApiUrl(network)}/v1/wallets/${address}/transactions/`,
-    params,
-    { signal },
-  );
-
-  return data.data;
+  return items.map((item) => transformBnbItem(chain, item, address));
 }
 
-export async function fetchEvmTx(
-  chain: EVMChain,
+function fetchBnbHistory(
   network: ApiNetwork,
-  hash: string,
-): Promise<ZerionTransaction | undefined> {
-  // We nned to get unparsed tx from node first
-  const transfer = await getEvmProvider(network, chain).getTransaction(hash);
-
-  if (!transfer) {
-    return undefined;
-  }
-
-  // Then get it parsed by participant address & hash from Zerion
-  const tx = await fetchEvmTxs({ chain, network, hash, address: transfer.from });
-
-  if (!tx.length) {
-    return undefined;
-  }
-
-  return tx[0];
-}
-
-export async function collectTokensFromTransactions(
-  network: ApiNetwork,
-  chain: EVMChain,
   address: string,
-  rawTxs: ZerionTransaction[],
+  params: { before?: number; after?: number; limit?: number; token?: string; hash?: string },
   signal?: AbortSignal,
-) {
-  const addresses = new Set<string>();
-  const zerionChain = getZerionChainByApiChain(chain);
-
-  for (const tx of rawTxs) {
-    if (tx.attributes.transfers.length) {
-      for (const transfer of tx.attributes.transfers) {
-        if ('fungible_info' in transfer) {
-          const implementation = getZerionFungibleImplementation(transfer.fungible_info, zerionChain);
-
-          if (implementation?.address) {
-            addresses.add(implementation.address);
-          }
-        }
-      }
-    }
+): Promise<BnbHistoryResponse> {
+  if (network !== 'mainnet') {
+    return Promise.resolve({ items: [], hasMore: false, isBackfilling: false });
   }
-
-  await updateTokensMetadataByAddress(network, chain, [...addresses], signal);
+  return callBackendGet<BnbHistoryResponse>(`/bnb/history/${address}`, params, undefined, signal);
 }
 
-async function collectCrossChainTokensFromTransactions(
-  network: ApiNetwork,
-  address: string,
-  rawTxs: ZerionTransaction[],
-  signal?: AbortSignal,
-) {
-  const txsByChain = new Map<EVMChain, ZerionTransaction[]>();
-
-  for (const tx of rawTxs) {
-    const chain = getZerionTransactionChain(tx);
-
-    if (!chain) {
-      continue;
-    }
-
-    const chainTxs = txsByChain.get(chain) ?? [];
-    chainTxs.push(tx);
-    txsByChain.set(chain, chainTxs);
-  }
-
-  await Promise.all(
-    [...txsByChain.entries()].map(([chain, txs]) => (
-      collectTokensFromTransactions(network, chain, address, txs, signal)
-    )),
-  );
-}
-
-function getZerionTransactionChain(tx: ZerionTransaction) {
-  const chain = getApiChainByZerionChain(tx.relationships.chain.data.id);
-
-  if (!getIsSupportedChain(chain) || !getIsEvmChain(chain)) {
-    logDebugError('getZerionTransactionChain', 'Unsupported chain', { chain });
-
-    return undefined;
-  }
-
-  return chain;
-}
-
-export async function fetchCrossChainActivitySlice(options: ApiFetchActivitySliceOptions): Promise<ApiActivity[]> {
-  const {
-    accountId, tokenSlug, toTimestamp, fromTimestamp, limit, signal,
-  } = options;
-
-  const { network } = parseAccountId(accountId);
-  const { address } = await fetchStoredWallet(accountId, 'bnb');
-
-  const { activities } = await getTokenActivitySlice(
-    'bnb', network, address, tokenSlug, toTimestamp, fromTimestamp, limit, true, signal,
-  );
-
-  return activities;
-}
-
-function transformUnknownTx(
-  chain: EVMChain,
-  tx: ZerionTransaction,
-  address: string,
-): ApiActivity {
-  return updateActivityMetadata({
-    id: tx.attributes.hash,
-    kind: 'transaction',
-    timestamp: new Date(tx.attributes.mined_at).getTime(),
-    comment: undefined,
-    fromAddress: normalizeAddress(tx.attributes.sent_from),
-    toAddress: normalizeAddress(tx.attributes.sent_to),
-    amount: 0n,
-    slug: getChainConfig(chain).nativeToken.slug,
-    isIncoming: tx.attributes.sent_from !== address,
-    normalizedAddress: normalizeAddress(address),
-    fee: BigInt(tx.attributes.fee.quantity.int),
-    type: 'callContract',
-    shouldHide: false,
-    status: 'completed',
-    externalMsgHashNorm: tx.attributes.hash,
-    isScam: tx.attributes.flags.is_trash,
-  });
-}
-
-function transformEvmTransfer(
-  chain: EVMChain,
-  tx: ZerionTransaction,
-  transfer: ZerionTokenTransfer,
-  address: string,
-): ApiActivity {
-  const slug = getZerionFungibleTokenSlug(chain, getZerionChainByApiChain(chain), transfer.fungible_info);
+function getHistoryToken(chain: EVMChain, slug?: string) {
   if (!slug) {
-    return transformUnknownTx(chain, tx, address);
+    return undefined;
   }
 
-  const isIncoming = transfer.direction === 'in';
+  return slug === getChainConfig(chain).nativeToken.slug ? 'native' : getTokenBySlug(slug)?.tokenAddress;
+}
+
+export function transformBnbItem(chain: EVMChain, item: BnbHistoryItem, address: string): ApiActivity {
+  const ownAddress = normalizeAddress(address);
+  const fromAddress = normalizeAddress(item.from);
+  const toAddress = normalizeAddress(item.to);
+  const isIncoming = toAddress === ownAddress && fromAddress !== ownAddress;
+  const amount = BigInt(item.amount);
+  const isContractCall = item.kind === 'native' && amount === 0n;
+  // The backend folds calls that moved BNB or ION into those transfers, so a call left alone only paid its fee
+  // for other tokens; ION approvals and failed calls stay visible
+  const isUnrelatedCall = isContractCall && !item.isFailed && !isIonToken(chain, item.to);
 
   return updateActivityMetadata({
-    id: tx.attributes.hash,
+    id: item.id,
     kind: 'transaction',
-    timestamp: new Date(tx.attributes.mined_at).getTime(),
+    timestamp: item.timestamp,
     comment: undefined,
-    fromAddress: normalizeAddress(transfer.sender),
-    toAddress: normalizeAddress(transfer.recipient),
-    amount: isIncoming ? BigInt(transfer.quantity.int) : -BigInt(transfer.quantity.int),
-    slug,
+    fromAddress,
+    toAddress,
+    amount: isIncoming ? amount : -amount,
+    slug: item.kind === 'token' && item.token
+      ? buildTokenSlug(chain, item.token)
+      : getChainConfig(chain).nativeToken.slug,
     isIncoming,
-    normalizedAddress: normalizeAddress(address),
-    fee: BigInt(tx.attributes.fee.quantity.int),
-    status: 'completed',
-    isScam: tx.attributes.flags.is_trash,
+    normalizedAddress: ownAddress,
+    fee: BigInt(item.fee ?? 0),
+    status: item.isFailed ? 'failed' : 'completed',
+    externalMsgHashNorm: item.hash,
+    ...(isContractCall && { type: 'callContract' as const }),
+    ...(isUnrelatedCall && { shouldHide: true }),
   });
-}
-
-function transformEvmNftTransfer(
-  chain: EVMChain,
-  transfer: ZerionNftTransfer,
-  tx: ZerionTransaction,
-  address: string,
-): ApiActivity {
-  return updateActivityMetadata({
-    id: tx.attributes.hash,
-    kind: 'transaction',
-    timestamp: new Date(tx.attributes.mined_at).getTime(),
-    comment: undefined,
-    fromAddress: normalizeAddress(transfer.sender),
-    toAddress: normalizeAddress(transfer.recipient),
-    amount: 0n,
-    slug: getChainConfig(chain).nativeToken.slug,
-    isIncoming: transfer.direction === 'in',
-    normalizedAddress: normalizeAddress(address),
-    fee: BigInt(tx.attributes.fee.quantity.int),
-    status: 'completed',
-    nft: {
-      chain,
-      index: 0,
-      address: normalizeAddress(transfer.nft_info.contract_address),
-      image: transfer.nft_info.content?.preview?.url || '',
-      thumbnail: transfer.nft_info.content?.preview?.url || '',
-      name: transfer.nft_info.name,
-      description: '',
-      isOnSale: false,
-      metadata: {
-        attributes: [],
-      },
-      interface: 'default',
-    },
-    isScam: tx.attributes.flags.is_trash,
-  });
-}
-
-export function transformEvmTxToUnified(
-  chain: EVMChain,
-  tx: ZerionTransaction,
-  address: string,
-): ApiActivity {
-  address = normalizeAddress(address);
-
-  const transfer = tx.attributes.transfers.find((e) =>
-    e.direction === 'in'
-      ? normalizeAddress(e.recipient) === address
-      : normalizeAddress(e.sender) === address,
-  );
-
-  if (!transfer) {
-    return transformUnknownTx(chain, tx, address);
-  }
-
-  const isNftTransfer = 'nft_info' in transfer;
-
-  if (isNftTransfer) {
-    return transformEvmNftTransfer(chain, transfer, tx, address);
-  }
-
-  return transformEvmTransfer(chain, tx, transfer, address);
 }
 
 export function fetchActivityDetails() {
   return undefined;
+}
+
+function isIonToken(chain: EVMChain, address: string) {
+  return getChainConfig(chain).tokenInfo
+    .some(({ tokenAddress }) => tokenAddress?.toLowerCase() === address.toLowerCase());
 }

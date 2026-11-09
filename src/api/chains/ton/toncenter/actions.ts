@@ -62,6 +62,8 @@ import {
   OpCode,
   TeleitemOpCode,
 } from '../constants';
+import { fillAddressBookNames } from './dnsNames';
+import { fillDnsNftMetadata, getDnsItemMetadataByContentUri } from './dnsNftMetadata';
 import { extractMetadata } from './metadata';
 import { callToncenterV3 } from './other';
 
@@ -141,6 +143,7 @@ export async function fetchActions(options: FetchActionsOptions): Promise<ApiAct
     address_book: addressBook = {},
     metadata = {},
   } = await callToncenterV3<ActionsResponse>(network, '/actions', data, signal);
+  await Promise.all([fillAddressBookNames(network, addressBook), fillDnsNftMetadata(network, actions, metadata)]);
 
   const activities = parseActionsToActivities(actions, {
     network,
@@ -162,6 +165,7 @@ export async function fetchPendingActions(network: ApiNetwork, address: string):
   } = await callToncenterV3<ActionsResponse>(network, '/pendingActions', {
     account: address,
   });
+  await Promise.all([fillAddressBookNames(network, addressBook), fillDnsNftMetadata(network, actions, metadata)]);
 
   return parseActionsToActivities(actions, {
     network,
@@ -764,12 +768,17 @@ export function parseToncenterNft(
      * name alone proves nothing.
      */
     isDns?: boolean;
+    /** The `content.uri` of the `/nft/items` entry */
+    contentUri?: string;
   },
 ): { nft?: ApiNft } {
-  const { rawCollectionAddress, index, ownerAddress, isOnSale, isDns: isDnsByContext } = options ?? {};
+  const {
+    rawCollectionAddress, index, ownerAddress, isOnSale, isDns: isDnsByContext, contentUri,
+  } = options ?? {};
 
   try {
-    const nftMetadata = extractMetadata<NftItemMetadata>(rawNftAddress, metadataMap, 'nft_items');
+    const nftMetadata = extractMetadata<NftItemMetadata>(rawNftAddress, metadataMap, 'nft_items')
+      ?? getDnsItemMetadataByContentUri(network, rawCollectionAddress, contentUri);
 
     if (!nftMetadata) {
       return {};
@@ -808,8 +817,8 @@ export function parseToncenterNft(
         name: domain,
         address: nftAddress,
 
-        thumbnail: generatedImage ?? extra?._image_medium,
-        image: generatedImage ?? extra?._image_big ?? extra?._image_medium,
+        thumbnail: `${generatedImage}&s=256`,
+        image: generatedImage,
         description,
         ownerAddress,
         isOnSale: isOnSale ?? false,

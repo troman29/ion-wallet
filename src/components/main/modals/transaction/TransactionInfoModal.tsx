@@ -20,7 +20,7 @@ import {
   selectIsCurrentAccountViewMode,
   selectNetworkAccounts,
 } from '../../../../global/selectors';
-import { parseTxId } from '../../../../util/activities';
+import { getIsTxIdLocal, parseTxId } from '../../../../util/activities';
 import { getDoesUsePinPad } from '../../../../util/biometrics';
 import buildClassName from '../../../../util/buildClassName';
 import resolveSlideTransitionName from '../../../../util/resolveSlideTransitionName';
@@ -385,6 +385,11 @@ export default memo(withGlobal((global): StateProps => {
 })(TransactionInfoModal));
 
 function getActivityShareInfo(activity: ApiActivity): { chain: ApiChain; hash: string } | undefined {
+  // A local activity is keyed by its message hash until confirmed, and the explorer knows only transaction hashes
+  if (getIsTxIdLocal(activity.id)) {
+    return undefined;
+  }
+
   const chain = getChainBySlug(activity.slug);
   const hash = parseTxId(activity.id).hash;
   return chain && hash ? { chain, hash } : undefined;

@@ -1,11 +1,14 @@
+import type { StoredDappsState } from '../dappProtocols/storage';
 import type {
   ApiActivity,
   ApiLocalTransactionParams,
   ApiTransactionActivity,
   OnApiUpdate,
 } from '../types';
+import { DappProtocolType } from '../dappProtocols/types';
 
 import { buildLocalTxId } from '../../util/activities';
+import { EVM_JS_BRIDGE_ID } from '../../util/getDappConnectionUniqueId';
 import { logDebugError } from '../../util/logs';
 import { storage } from '../storages';
 import {
@@ -15,7 +18,7 @@ import {
   getScamMarkers,
 } from './addresses';
 
-const ACTUAL_STATE_VERSION = 23;
+const ACTUAL_STATE_VERSION = 24;
 
 export function buildLocalTransaction(
   params: ApiLocalTransactionParams,
@@ -94,9 +97,8 @@ export async function tryMigrateStorage(onUpdate: OnApiUpdate) {
 }
 
 /**
- * The hook every future storage migration hangs off: it compares the stored `stateVersion` with the one
- * this build expects and stamps it when they differ. There is nothing to migrate yet — this app has no
- * released version whose storage would need converting — so the body is only that bookkeeping.
+ * Compares the stored `stateVersion` with the one this build expects, runs the steps in between and
+ * stamps the new version. Every step must be safe to run again, since a crash before the stamp repeats it.
  */
 export async function migrateStorage() {
   const version = Number(await storage.getItem('stateVersion', true));
@@ -105,5 +107,31 @@ export async function migrateStorage() {
     return;
   }
 
+  if (version < 24) {
+    await moveInjectedEvmConnections();
+  }
+
   await storage.setItem('stateVersion', ACTUAL_STATE_VERSION);
+}
+
+/** The injected EVM connections used to share the TonConnect key in the in-app browser and now have their own */
+async function moveInjectedEvmConnections() {
+  const dapps = await storage.getItem('dapps') as StoredDappsState | undefined;
+  if (!dapps) return;
+
+  let isChanged = false;
+  for (const byUrl of Object.values(dapps)) {
+    for (const byId of Object.values(byUrl)) {
+      const connection = byId.jsbridge;
+      if (connection?.protocolType !== DappProtocolType.WalletConnect) continue;
+
+      byId[EVM_JS_BRIDGE_ID] ??= connection;
+      delete byId.jsbridge;
+      isChanged = true;
+    }
+  }
+
+  if (isChanged) {
+    await storage.setItem('dapps', dapps);
+  }
 }

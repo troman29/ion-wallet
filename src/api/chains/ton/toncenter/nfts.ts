@@ -83,6 +83,7 @@ export function parseNftItem(
       // `real_owner` sees through a sale contract, so it is the owner the user thinks of
       ownerAddress: rawOwnerAddress ? toBase64Address(rawOwnerAddress, false, network) : undefined,
       isOnSale: item.on_sale,
+      contentUri: item.content?.uri,
     },
   );
 

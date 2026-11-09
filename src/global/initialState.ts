@@ -28,7 +28,7 @@ import { mapValues } from '../util/iteratees';
 import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
 // Increment when adding a persisted-state cache migration.
-export const STATE_VERSION = 3;
+export const STATE_VERSION = 5;
 
 export const INITIAL_STATE: GlobalState = {
   appState: AppState.Auth,
