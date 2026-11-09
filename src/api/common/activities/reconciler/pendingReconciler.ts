@@ -29,6 +29,7 @@ export function reconcileNewActivitiesUpdate(
         previous.externalMsgHashNorm
         && previous.externalMsgHashNorm === next.externalMsgHashNorm
         && !getIsTxIdLocal(next.id)
+        && isSameTransferSide(previous, next)
         && (previous.type !== 'unstakeRequest' || next.type === 'unstakeRequest'),
       );
     });
@@ -62,4 +63,14 @@ export function reconcileNewActivitiesUpdate(
       replacedIds,
     },
   };
+}
+
+/**
+ * A dapp may answer in the same trace (the ION bridge sends an incoming "OK" back), so every action of the trace
+ * shares the external hash. Only the action moving the same token in the same direction can be the local transfer.
+ */
+function isSameTransferSide(previous: ApiActivity, next: ApiActivity) {
+  if (previous.kind !== 'transaction' || next.kind !== 'transaction') return true;
+
+  return previous.isIncoming === next.isIncoming && previous.slug === next.slug;
 }

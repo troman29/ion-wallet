@@ -1,3 +1,5 @@
+import { Address } from '@ton/core';
+
 import { GLOBAL_STATE_CACHE_KEY, IONCOIN, LIQUID_JETTON, STAKED_ION_SLUG } from '../config';
 import { loadCache } from './cache';
 import { INITIAL_STATE, STATE_VERSION } from './initialState';
@@ -42,7 +44,7 @@ describe('ION token slug migration', () => {
 
   afterEach(() => localStorage.removeItem(GLOBAL_STATE_CACHE_KEY));
 
-  it.each([1, 2])('migrates version %s across accounts and clears transaction history', (stateVersion) => {
+  it.each([1, 2, 3, 4])('migrates version %s across accounts and clears transaction history', (stateVersion) => {
     const nativeSlug = 'toncoin';
     const tokenLists = [
       'pinnedSlugs', 'alwaysShownSlugs', 'alwaysHiddenSlugs', 'deletedSlugs', 'importedSlugs',
@@ -152,4 +154,27 @@ describe('ION token slug migration', () => {
     expect(global.settings.byAccountId.first.pinnedSlugs).toEqual([STAKED_ION_SLUG]);
   });
 });
-import { Address } from '@ton/core';
+describe('activity history migration', () => {
+  afterEach(() => {
+    localStorage.removeItem(GLOBAL_STATE_CACHE_KEY);
+  });
+
+  // Version 2 activities miss their NFT, version 3 ones may be missing from the main feed
+  it.each([2, 3])('drops the cached activities of version %i and keeps the rest of the account', (stateVersion) => {
+    localStorage.setItem(GLOBAL_STATE_CACHE_KEY, JSON.stringify({
+      stateVersion,
+      settings: INITIAL_STATE.settings,
+      byAccountId: {
+        '0-mainnet': {
+          activities: { byId: { tx: { id: 'tx' } }, idsMain: ['tx'] },
+          nfts: { byAddress: { nft: { address: 'nft' } } },
+        },
+      },
+    }));
+
+    const global = loadCache(INITIAL_STATE);
+
+    expect(global.byAccountId['0-mainnet']?.activities).toBeUndefined();
+    expect(global.byAccountId['0-mainnet']?.nfts?.byAddress).toHaveProperty('nft');
+  });
+});

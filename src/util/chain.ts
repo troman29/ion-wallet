@@ -7,7 +7,7 @@ import {
   IONCOIN,
 } from '../config';
 import { EVM_DERIVATION_PATHS } from '../api/chains/evm/constants';
-import { TON_BIP39_PATH } from '../api/chains/ton/derivationConstants';
+import { ION_BIP39_PATH } from '../api/chains/ton/derivationConstants';
 import formatTonTransferUrl from './ton/formatTransferUrl';
 import { buildCollectionByKey } from './iteratees';
 import withCache from './withCache';
@@ -157,7 +157,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     isEncryptedCommentSupported: true,
     canTransferFullNativeBalance: true,
     isSubwalletsSupported: true,
-    defaultDerivationPath: TON_BIP39_PATH,
+    defaultDerivationPath: ION_BIP39_PATH,
     isNftSupported: true,
     addressRegex: /^([-\w_]{48}|0:[\da-h]{64})$/i,
     addressPrefixRegex: /^([-\w_]{1,48}|0:[\da-h]{0,64})$/i,
@@ -179,7 +179,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       baseUrl: { mainnet: 'https://explorer.ice.io/' },
       address: '{base}address/{address}',
       token: '{base}jetton/{address}',
-      transaction: '{base}transaction/{hash}',
+      transaction: '{base}tx/{hash}',
       nft: '{base}nft/{address}',
       nftCollection: '{base}collection/{address}',
       doConvertHashFromBase64: true,
@@ -237,7 +237,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
       nft: '{base}item/{chain}/{address}',
     }],
     doesSupportPushNotifications: false,
-    isNftSupported: true,
+    isNftSupported: false,
   },
 };
 

@@ -28,8 +28,6 @@ declare global {
   interface Window {
     ionwallet: {
       ionconnect: TonConnect;
-      // Kept temporarily for dApps that still discover the legacy TON Connect bridge.
-      tonconnect: TonConnect;
     };
   }
 }
@@ -254,7 +252,6 @@ export function initTonConnect(apiConnector: Connector) {
 
   window[TONCONNECT_WALLET_JSBRIDGE_KEY] = {
     ionconnect: tonConnect,
-    tonconnect: tonConnect,
   };
 
   return tonConnect;

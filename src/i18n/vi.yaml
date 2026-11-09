@@ -115,6 +115,13 @@ Hide Tiny Transfers: Ẩn giao dịch giá trị nhỏ
 Toggle Hide Tiny Transfers: Bật/tắt ẩn giao dịch giá trị nhỏ
 Network: Mạng
 Developer Options: Tùy chọn nhà phát triển
+Recover funds from %address%: Khôi phục tiền từ %address%
+Recover LION and ION: Khôi phục LION và ION
+Legacy funds recovered: Đã khôi phục tiền từ địa chỉ cũ
+"Recovering legacy funds...": Đang khôi phục tiền từ địa chỉ cũ…
+No funds on the legacy address: Không có tiền ở địa chỉ cũ
+Transfer pending. Try again after confirmation.: Giao dịch đang chờ. Hãy thử lại sau khi được xác nhận.
+Unable to recover legacy funds: Không thể khôi phục tiền từ địa chỉ cũ
 All Wallet Versions: Tất cả phiên bản ví
 Create TON-Only Wallet: Tạo ví chỉ hỗ trợ ION
 Confirmation: Xác nhận
@@ -879,7 +886,10 @@ Change Linked Wallet: Đổi ví liên kết
 Domain Renewed: Đã gia hạn tên miền
 Domains Renewed: Đã gia hạn các tên miền
 Linked Wallet: Ví liên kết
+Expires: Hết hạn
 Domain Linked: Đã liên kết tên miền
+Domain Unlinked: Đã hủy liên kết tên miền
+Unlink: Hủy liên kết
 Link: Liên kết
 Confirm Renewing: Xác nhận gia hạn
 Confirm Linking: Xác nhận liên kết
@@ -1135,6 +1145,7 @@ Different blockchain. Cannot be selected: Khác blockchain. Không thể chọn
 Chains: Chuỗi
 enclave_use_biometrics: Dùng sinh trắc học
 Copy Storage Data: Sao chép dữ liệu lưu trữ
+Reload Transactions: Tải lại giao dịch
 Enclave session expired: Phiên Enclave đã hết hạn
 Failed to setup auth: Không thể thiết lập xác thực
 Failed to setup biometric auth: Không thể thiết lập xác thực sinh trắc học

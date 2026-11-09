@@ -19,9 +19,8 @@ import {
   APP_ENV,
   APP_NAME,
   BASE_URL,
+  BNB_TESTNET_RPC_URL,
   BRILLIANT_API_BASE_URL,
-  EVM_MAINNET_RPC_URL,
-  EVM_TESTNET_RPC_URL,
   EXTENSION_DESCRIPTION,
   EXTENSION_NAME,
   GLOBAL_STATE_CACHE_KEY,
@@ -83,10 +82,7 @@ const cspConnectSrcHosts = Array.from(new Set([
   TONCENTER_TESTNET_URL.replace(/^http(s?):/, 'ws$1:'),
   WALLET_CONNECT_BRIDGE_PATTERNS,
   ...WALLET_CONNECT_PAY_CONNECT_ORIGINS,
-  EVM_MAINNET_RPC_URL,
-  EVM_TESTNET_RPC_URL,
-  EVM_MAINNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
-  EVM_TESTNET_RPC_URL.replace(/^http(s?):/, 'ws$1:'),
+  BNB_TESTNET_RPC_URL,
   ensureTrailingSlash(IPFS_GATEWAY_BASE_URL),
   ensureTrailingSlash(SSE_BRIDGE_URL),
 ])).join(' ');
@@ -411,8 +407,6 @@ export default function createConfig(
         TONCENTER_TESTNET_URL: '',
         TONCENTER_TESTNET_KEY: '',
         BRILLIANT_API_BASE_URL: '',
-        EVM_MAINNET_RPC_URL: '',
-        EVM_TESTNET_RPC_URL: '',
         PROXY_HOSTS: '',
         LIQUID_POOL: '',
         LIQUID_JETTON: '',
@@ -432,7 +426,7 @@ export default function createConfig(
         WALLET_CONNECT_PAY_APP_ID: '',
         NO_TON: '0',
         NO_EVM: '0',
-        CREATE_MULTICHAIN_WALLET: '0',
+        CREATE_MULTICHAIN_WALLET: '1',
         ENABLE_EXCHANGE: '0',
         NO_PENDING_ACTIVITIES: '1',
         NO_WEBSOCKET: '1',
@@ -458,7 +452,14 @@ export default function createConfig(
                 extension_pages: CSP,
               };
               manifest.action = { default_title: APP_NAME };
-              manifest.icons = { 192: 'icon-192x192.png', 384: 'icon-384x384.png', 512: 'icon-512x512.png' };
+              manifest.icons = {
+                16: 'icon-16x16.png',
+                32: 'icon-32x32.png',
+                128: 'icon-128x128.png',
+                192: 'icon-192x192.png',
+                384: 'icon-384x384.png',
+                512: 'icon-512x512.png',
+              };
 
               if (IS_FIREFOX_EXTENSION) {
                 manifest.background = {

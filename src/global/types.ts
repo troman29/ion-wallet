@@ -326,6 +326,7 @@ export type AccountType = 'mnemonic' | 'view';
 
 export interface AccountChain {
   address: string;
+  legacyIonAddress?: string;
   domain?: string;
   isMultisig?: true;
   derivation?: ApiDerivation;
@@ -530,6 +531,7 @@ export type GlobalState = {
    * it has not run yet.
    */
   multichainUpgradeCount?: number;
+  ionDerivationMigrationCount?: number;
 
   biometrics: {
     state: BiometricsState;
@@ -799,7 +801,10 @@ export type GlobalState = {
   currentQrScan?: {
     currentTransfer?: GlobalState['currentTransfer'];
     currentDomainLinking?: GlobalState['currentDomainLinking'];
+    isViewAccount?: true;
   };
+  // The address scanned for the view-only wallet import, until its screen takes it
+  viewAccountQrAddress?: string;
 
   latestAppVersion?: string;
   stateVersion: number;
@@ -836,6 +841,7 @@ export type GlobalState = {
   };
 
   isAppLockActive?: boolean;
+  isLegacyIonRecoveryEnabled?: boolean;
   isManualLockActive?: boolean;
   appLockHideBiometrics?: boolean;
   isFullscreen?: boolean;
@@ -889,6 +895,7 @@ export interface ActionPayloads {
   addAllFoundSubwallets: { foundSubwallets: ApiGroupedWalletVariant[] };
   createSubWallet: { enclaveToken: string };
   upgradeMultichainAccounts: { enclaveToken: string };
+  migrateLegacyIonDerivations: { enclaveToken: string };
   importViewAccount: { addressByChain: ApiImportAddressByChain };
   openTemporaryViewAccount: { addressByChain: Partial<Record<ApiChain, string>> };
   saveTemporaryAccount: undefined;
@@ -1055,7 +1062,8 @@ export interface ActionPayloads {
   setIsPinAccepted: undefined;
   clearIsPinAccepted: undefined;
 
-  requestOpenQrScanner: undefined;
+  requestOpenQrScanner: { isViewAccount?: true } | undefined;
+  clearViewAccountQrAddress: undefined;
   closeQrScanner: undefined;
   handleQrCode: { data: string };
 
@@ -1124,6 +1132,7 @@ export interface ActionPayloads {
   changePasscode: { passcode: string; onSuccess: NoneToVoidFunction };
   changeBaseCurrency: { currency: ApiBaseCurrency };
   copyStorageData: undefined;
+  reloadActivities: undefined;
   setAppLockValue: { value?: AutolockValueType; isEnabled: boolean };
   setIsManualLockActive: { isActive?: boolean; shouldHideBiometrics?: boolean };
   setIsAutoConfirmEnabled: { isEnabled: boolean };

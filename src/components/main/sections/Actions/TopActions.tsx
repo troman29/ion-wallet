@@ -102,7 +102,7 @@ function TopActions({
 
   const depositButton = (
     <ActionButton
-      label={lang('Fund')}
+      label={lang('Receive')}
       tgsUrl={stickerPaths.iconAdd}
       previewUrl={stickerPaths.preview.iconAdd}
       accentColor={accentColor}

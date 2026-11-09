@@ -44,6 +44,15 @@ describe('activity reconciliation', () => {
     expect(result.patch.replacedIds).toEqual({});
   });
 
+  it('replaces a local transfer when the dapp answers in the same trace', () => {
+    const local = { ...activity(`${HASH}:0:local`, 'pendingTrusted'), type: undefined };
+    const sent = { ...activity('trace:sent', 'completed'), type: undefined };
+    const answer = { ...activity('trace:answer', 'completed'), type: undefined, isIncoming: true };
+    const result = reconcileNewActivitiesUpdate([local], [answer, sent]);
+
+    expect(result.patch.replacedIds).toEqual({ [local.id]: sent.id });
+  });
+
   it('does not replace a withdrawal with a partial refund update', () => {
     const local = activity(`${HASH}:0:local`, 'pendingTrusted');
     const result = reconcileNewActivitiesUpdate([local], [

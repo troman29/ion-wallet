@@ -1,6 +1,6 @@
-import type { ApiNetwork, EVMChain } from '../../types';
+import type { ApiNetwork } from '../../types';
 
-import { EVM_MAINNET_RPC_URL, EVM_TESTNET_RPC_URL } from '../../../config';
+import { BNB_TESTNET_RPC_URL, BRILLIANT_API_BASE_URL } from '../../../config';
 
 /** Safety multiplier applied to the estimated gas fee when sending the max native balance */
 export const EVM_MAX_TRANSFER_FEE_MULTIPLIER = 1.5;
@@ -13,24 +13,13 @@ export const EVM_DERIVATION_PATHS = {
   alt: `m/44'/60'/0'`,
 } as const;
 
-export function getApiChainByZerionChain(chain: string): EVMChain {
-  return chain === 'binance-smart-chain' ? 'bnb' : chain as EVMChain;
-}
-
-export function getZerionChainByApiChain(chain: EVMChain): string {
-  return chain === 'bnb' ? 'binance-smart-chain' : chain;
-}
-
 export const EVM_MAX_NUMBER = 2n ** 256n - 1n;
 
-export const EVM_RPC_URLS: Record<ApiNetwork, (chain: EVMChain) => string> = {
-  mainnet: (chain: EVMChain) => `${EVM_MAINNET_RPC_URL}/${chain}`,
-  testnet: (chain: EVMChain) => `${EVM_TESTNET_RPC_URL}/${chain}`,
-};
+export function getEvmRpcUrl(network: ApiNetwork) {
+  return network === 'mainnet' ? `${BRILLIANT_API_BASE_URL}/bnb/rpc` : BNB_TESTNET_RPC_URL;
+}
 
-export const getEvmApiUrl = (network: ApiNetwork) => {
-  return network === 'mainnet' ? EVM_MAINNET_RPC_URL : EVM_TESTNET_RPC_URL;
-};
+export const EVM_CHAIN_IDS: Record<ApiNetwork, number> = { mainnet: 56, testnet: 97 };
 
 export const EVM_DALEGATOR_ADDRESSES: Record<string, string> = {
   '0x000000009B1D0aF20D8C6d0A44e162d11F9b8f00': 'Uniswap',

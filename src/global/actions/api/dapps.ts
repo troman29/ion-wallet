@@ -1,4 +1,5 @@
 import type { GlobalState } from '../../types';
+import { ApiCommonError } from '../../../api/types';
 import { DappConnectState, SignDataState, TransferState } from '../../types';
 
 import { ANIMATION_END_DELAY } from '../../../config';
@@ -10,7 +11,7 @@ import { USER_AGENT_LANG_CODE } from '../../../util/windowEnvironment';
 import { callApi } from '../../../api';
 import { requestAbortDappConnectWalletCreation } from '../../helpers/abortDappConnectWalletCreation';
 import { withEnclaveSessionRelease } from '../../helpers/enclave';
-import { handleDappSignatureResult, prepareDappOperation } from '../../helpers/transfer';
+import { handleDappSignatureResult, prepareDappOperation, reportErrorTransferResult } from '../../helpers/transfer';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
 import {
   clearConnectedDapps,
@@ -122,6 +123,7 @@ addActionHandler('submitDappTransfer', withEnclaveSessionRelease(async (global, 
   const { transactions, validUntil, operationChain, dapp, isLegacyOutput } = global.currentDappTransfer;
   const currentChain = dapp?.chains?.find((e) => e.chain === operationChain);
   if (!currentChain) {
+    reportErrorTransferResult({ error: ApiCommonError.Unexpected }, updateCurrentDappTransfer);
     return;
   }
   const accountId = selectCurrentAccountId(global)!;
@@ -157,6 +159,7 @@ addActionHandler('submitDappSignData', withEnclaveSessionRelease(async (global, 
   const { dapp, payloadToSign, operationChain } = global.currentDappSignData;
   const currentChain = dapp?.chains?.find((e) => e.chain === operationChain);
   if (!currentChain) {
+    reportErrorTransferResult({ error: ApiCommonError.Unexpected }, updateCurrentDappSignData);
     return;
   }
   const accountId = selectCurrentAccountId(global)!;
@@ -377,6 +380,9 @@ addActionHandler('apiUpdateDappCloseLoading', (global, actions, { connectionType
     global = clearDappConnectRequest(global);
   } else if (connectionType === 'sendTransaction' && global.currentDappTransfer.state === TransferState.Initial) {
     global = clearCurrentDappTransfer(global);
+  } else if (connectionType === 'sendTransaction' && global.currentDappTransfer.isLoading) {
+    // Confirmed, but not sent: the error is shown separately, and the form is given back to retry or cancel
+    global = updateCurrentDappTransfer(global, { isLoading: undefined });
   } else if (connectionType === 'signData' && global.currentDappSignData.state === SignDataState.Initial) {
     global = clearCurrentDappSignData(global);
   }

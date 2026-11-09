@@ -91,7 +91,8 @@ function LinkingDomainModal({
     setDomainLinkingWalletAddress({ address: newToAddress });
   });
 
-  const canSubmit = isAddressValid && walletAddress !== currentLinkedWalletAddress
+  const isUnlinking = !walletAddress && Boolean(currentLinkedWalletAddress);
+  const canSubmit = (isUnlinking || (isAddressValid && walletAddress !== currentLinkedWalletAddress))
     && !isInsufficientBalance && !isLoading;
 
   useSyncEffectWithPrevDeps(([prevIsOpen]) => {
@@ -155,7 +156,7 @@ function LinkingDomainModal({
             >
               {isInsufficientBalance
                 ? lang('Insufficient Balance')
-                : lang('Link')}
+                : lang(isUnlinking ? 'Unlink' : 'Link')}
             </Button>
           </div>
         </div>
@@ -190,7 +191,7 @@ function LinkingDomainModal({
   function renderComplete(isActive: boolean) {
     return (
       <>
-        <ModalHeader title={lang('Domain Linked')} onClose={cancelDomainLinking} />
+        <ModalHeader title={lang(isUnlinking ? 'Domain Unlinked' : 'Domain Linked')} onClose={cancelDomainLinking} />
 
         <div className={modalStyles.transitionContent}>
           <AnimatedIconWithPreview
