@@ -8,7 +8,7 @@ import { DappProtocolType } from '../../api/dappProtocols/types';
 import { ContentTab, SettingsState } from '../../global/types';
 
 import {
-  TONCOIN,
+  IONCOIN,
 } from '../../config';
 import {
   selectAccountTokenBySlug,
@@ -33,6 +33,7 @@ import { logDebug, logDebugError } from '../logs';
 import { isSubproject, openUrl } from '../openUrl';
 import { waitRender } from '../renderPromise';
 import { waitFor } from '../schedulers';
+import { normalizeTokenSlug } from '../tokenSlug';
 import { isTelegramUrl } from '../url';
 import {
   CHECKIN_URL,
@@ -303,7 +304,8 @@ function parseSendDeeplink(
   const amount = searchParams.get('amount') ?? undefined;
   const comment = searchParams.get('text') ?? undefined;
   const binPayload = searchParams.get('bin') ?? undefined;
-  const tokenSlugParam = searchParams.get('token') ?? undefined;
+  const rawTokenSlug = searchParams.get('token');
+  const tokenSlugParam = rawTokenSlug ? normalizeTokenSlug(rawTokenSlug) : undefined;
   const stateInit = searchParams.get('init') ?? searchParams.get('stateInit') ?? undefined;
   const exp = searchParams.get('exp') ?? undefined;
 
@@ -372,7 +374,7 @@ export function parseTonDeeplink(url: string, global: GlobalState) {
 
   const transferParams: NonNullable<ActionPayloads['startTransfer']> & { error?: string } = {
     toAddress: verifiedAddress,
-    tokenSlug: TONCOIN.slug,
+    tokenSlug: IONCOIN.slug,
     amount,
     comment,
     binPayload,
@@ -609,7 +611,8 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
         }
 
         const productId = searchParams.get('product') ?? undefined;
-        const tokenSlug = searchParams.get('asset') ?? undefined;
+        const rawTokenSlug = searchParams.get('asset');
+        const tokenSlug = rawTokenSlug ? normalizeTokenSlug(rawTokenSlug) : undefined;
         const amountValue = searchParams.get('amount') ?? undefined;
         if (!productId && !tokenSlug && !amountValue) {
           actions.startStaking();
@@ -733,7 +736,7 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
 
         if (pathParts.length === 2) {
           // Format: ion://token/{slug}
-          tokenSlug = pathParts[1];
+          tokenSlug = normalizeTokenSlug(pathParts[1]);
         } else if (pathParts.length === 3) {
           // Format: ion://token/{chain}/{tokenAddress}
           const chain = pathParts[1];

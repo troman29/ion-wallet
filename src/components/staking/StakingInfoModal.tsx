@@ -3,7 +3,7 @@ import { getActions, withGlobal } from '../../global';
 
 import type { Account, GlobalState } from '../../global/types';
 
-import { TONCOIN } from '../../config';
+import { IONCOIN } from '../../config';
 import {
   selectAccountStakingState,
   selectCurrentAccount,
@@ -49,7 +49,7 @@ function StakingInfoModal({
 
   const [isSelectorOpen, openSelector, closeSelector] = useFlag();
 
-  const withBackground = tokenSlug !== TONCOIN.slug;
+  const withBackground = tokenSlug !== IONCOIN.slug;
 
   useEffect(() => {
     if (!isOpen) {

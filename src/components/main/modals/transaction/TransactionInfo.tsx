@@ -15,7 +15,7 @@ import type { Account, SavedAddress, Theme } from '../../../../global/types';
 
 import {
   ANIMATED_STICKER_TINY_ICON_PX,
-  TONCOIN,
+  IONCOIN,
 } from '../../../../config';
 import {
   getIsActivityPendingForUser,
@@ -195,7 +195,7 @@ function TransactionInfo({
   const shouldLoadDetails = transaction?.shouldLoadDetails;
 
   const stakingState = stakingStates?.find((staking): staking is ApiToncoinStakingState => {
-    return staking.tokenSlug === TONCOIN.slug && staking.balance > 0n;
+    return staking.tokenSlug === IONCOIN.slug && staking.balance > 0n;
   });
   const stakingStatus = stakingState && getStakingStateStatus(stakingState);
   const shouldRenderTransactionId = shouldRenderTransactionIdProp ?? (isActivityWithHash && Boolean(transactionUrl));

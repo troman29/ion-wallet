@@ -2,7 +2,7 @@ import type { ApiNetwork } from '../../types';
 import type { AddressBook, AnyAction, MetadataMap, TraceDetail, Transaction } from './toncenter/types';
 import type { ApiTransactionExtended, ParsedAction, ParsedTrace, TraceOutput } from './types';
 
-import { TONCOIN } from '../../../config';
+import { IONCOIN } from '../../../config';
 import { bigintAbs } from '../../../util/bigint';
 import { groupBy, intersection } from '../../../util/iteratees';
 import { parseBidaskPayload } from './util/metadata';
@@ -105,9 +105,9 @@ function fixLiquidityActions(parsedActions: ParsedAction[], traceOutputs: TraceO
         continue;
       }
 
-      const isMainTonTransaction = mainActivity.kind === 'transaction' && mainActivity.slug === TONCOIN.slug;
+      const isMainTonTransaction = mainActivity.kind === 'transaction' && mainActivity.slug === IONCOIN.slug;
       const isAdditionalTonTransaction = additionalActivity.kind === 'transaction'
-        && additionalActivity.slug === TONCOIN.slug;
+        && additionalActivity.slug === IONCOIN.slug;
 
       parsedAction.toncoinChange = isMainTonTransaction
         ? (mainActivity.kind === 'transaction' ? mainActivity.amount : 0n)
@@ -271,10 +271,10 @@ export function findToncoinChangeInTransactions(
       continue;
     }
 
-    const isToncoinIn = transaction.slug === TONCOIN.slug
+    const isToncoinIn = transaction.slug === IONCOIN.slug
       && transaction.toAddress === walletAddress
       && transaction.isIncoming;
-    const isToncoinOut = transaction.slug === TONCOIN.slug
+    const isToncoinOut = transaction.slug === IONCOIN.slug
       && transaction.fromAddress === walletAddress
       && !transaction.isIncoming;
 

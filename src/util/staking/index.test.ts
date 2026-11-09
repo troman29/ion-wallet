@@ -1,13 +1,13 @@
 import type { ApiStakingState } from '../../api/types';
 
-import { LIQUID_POOL, TONCOIN } from '../../config';
+import { IONCOIN, LIQUID_POOL } from '../../config';
 import { TON_USDT_MAINNET } from '../../../tests/mocks/tokens';
 import { getFullStakingBalance, getIsNewStakeAllowed } from '.';
 
 describe('getIsNewStakeAllowed', () => {
   it('allows new stakes for other tokens', () => {
-    expect(getIsNewStakeAllowed(TONCOIN.slug)).toBe(true);
-    expect(getIsNewStakeAllowed('ton-some-other-jetton')).toBe(true);
+    expect(getIsNewStakeAllowed(IONCOIN.slug)).toBe(true);
+    expect(getIsNewStakeAllowed('ion-some-other-jetton')).toBe(true);
   });
 
   it('allows when the slug is unknown', () => {
@@ -20,7 +20,7 @@ describe('getFullStakingBalance', () => {
     return {
       type: 'liquid',
       id: 'liquid',
-      tokenSlug: TONCOIN.slug,
+      tokenSlug: IONCOIN.slug,
       pool: LIQUID_POOL,
       balance,
       tokenBalance: 4_549_625_219_272n,

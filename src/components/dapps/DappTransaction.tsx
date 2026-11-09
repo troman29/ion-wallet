@@ -2,7 +2,7 @@ import React, { memo, useMemo } from '../../lib/teact/teact';
 
 import type { ApiDappTransfer, ApiToken } from '../../api/types';
 
-import { STAKED_TON_SLUG, TONCOIN } from '../../config';
+import { IONCOIN, STAKED_ION_SLUG } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import { getChainTitle } from '../../util/chain';
 import isEmptyObject from '../../util/isEmptyObject';
@@ -69,14 +69,14 @@ function DappTransactionContent({
     }
 
     if (tonAmount !== 0n || (!isNftTransferPayload(payload) && isEmptyObject(amountBySlug))) {
-      amountBySlug[TONCOIN.slug] = tonAmount;
+      amountBySlug[IONCOIN.slug] = tonAmount;
     }
 
     return amountBySlug;
   }, [transaction]);
 
   const feeBySlug = useMemo(
-    () => ({ [TONCOIN.slug]: transaction.networkFee }),
+    () => ({ [IONCOIN.slug]: transaction.networkFee }),
     [transaction.networkFee],
   );
 
@@ -85,11 +85,11 @@ function DappTransactionContent({
       {isNftTransferPayload(transaction.payload) && <NftInfo nft={transaction.payload.nft} />}
       <p className={styles.label}>{lang('Receiving Address')}</p>
       <InteractiveTextField
-        chain={TONCOIN.chain}
+        chain={IONCOIN.chain}
         address={transaction.displayedToAddress}
         isScam={transaction.isScam}
         className={buildClassName(styles.dataField, styles.receivingAddress)}
-        copyNotification={lang('%chain% Address Copied', { chain: getChainTitle(TONCOIN.chain) }) as string}
+        copyNotification={lang('%chain% Address Copied', { chain: getChainTitle(IONCOIN.chain) }) as string}
       />
       {!isEmptyObject(amountBySlug) && (
         <DappAmountField
@@ -101,13 +101,13 @@ function DappTransactionContent({
       {transaction.stakingPreview?.amount !== undefined && (
         <DappAmountField
           label={transaction.stakingPreview.operation === 'stake' ? lang('Stake') : lang('Estimated Unstake')}
-          amountsBySlug={{ [TONCOIN.slug]: transaction.stakingPreview.amount }}
+          amountsBySlug={{ [IONCOIN.slug]: transaction.stakingPreview.amount }}
         />
       )}
       {transaction.stakingPreview?.jettonAmount !== undefined && (
         <DappAmountField
           label={lang('Burned Staking Tokens')}
-          amountsBySlug={{ [STAKED_TON_SLUG]: transaction.stakingPreview.jettonAmount }}
+          amountsBySlug={{ [STAKED_ION_SLUG]: transaction.stakingPreview.jettonAmount }}
         />
       )}
       <DappAmountField label={lang('Fee')} amountsBySlug={feeBySlug} />

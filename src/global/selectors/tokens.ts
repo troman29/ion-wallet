@@ -8,9 +8,9 @@ import type {
 import type { Account, AccountSettings, AccountState, GlobalState, UserToken } from '../types';
 
 import {
+  IONCOIN,
   PRICELESS_TOKEN_HASHES,
   TINY_TRANSFER_MAX_COST,
-  TONCOIN,
 } from '../../config';
 import { parseAccountId } from '../../util/account';
 import { calculateTokenPrice } from '../../util/calculatePrice';
@@ -134,7 +134,7 @@ export function selectCurrentAccountTokenBalance(global: GlobalState, slug: stri
 }
 
 export function selectCurrentToncoinBalance(global: GlobalState) {
-  return selectCurrentAccountTokenBalance(global, TONCOIN.slug);
+  return selectCurrentAccountTokenBalance(global, IONCOIN.slug);
 }
 
 export function selectAccountTokens(global: GlobalState, accountId: string) {

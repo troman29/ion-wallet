@@ -5,7 +5,7 @@ import type { ApiNft } from '../../api/types';
 import type { GlobalState, SavedAddress } from '../../global/types';
 import { DomainLinkingState } from '../../global/types';
 
-import { TONCOIN } from '../../config';
+import { IONCOIN } from '../../config';
 import {
   selectCurrentAccount,
   selectCurrentAccountState,
@@ -143,7 +143,7 @@ function LinkingDomainModal({
             />
           </div>
 
-          <FeeLine terms={feeTerms} token={TONCOIN} precision="exact" />
+          <FeeLine terms={feeTerms} token={IONCOIN} precision="exact" />
           <div className={buildClassName(modalStyles.buttons, styles.footer)}>
             <Button
               isPrimary
