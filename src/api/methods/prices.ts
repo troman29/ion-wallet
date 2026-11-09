@@ -18,7 +18,7 @@ export async function fetchPriceHistory(
 
   const assetId = `${token.chain}:${token.tokenAddress ?? token.symbol}`;
 
-  return callBackendGet<ApiHistoryList>(`/prices/chart/${assetId}`, {
+  return callBackendGet<ApiHistoryList>(`/prices/chart/${encodeURIComponent(assetId)}`, {
     base: baseCurrency,
     period,
   });

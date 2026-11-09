@@ -1,5 +1,6 @@
 import type { ApiCheckTransactionDraftOptions, ApiCheckTransactionDraftResult } from '../types';
 
+import { LIQUID_JETTON } from '../../config';
 import chains from '../chains';
 import { checkTransactionDraft } from './transfer';
 
@@ -24,6 +25,12 @@ describe('checkTransactionDraft cancellation isolation', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockedCheckTransactionDraft.mockResolvedValue({});
+  });
+
+  it('checks LION transfers through the normal chain API', async () => {
+    const lionOptions = { ...options, tokenAddress: LIQUID_JETTON };
+    await expect(checkTransactionDraft('ton', lionOptions)).resolves.toEqual({});
+    expect(mockedCheckTransactionDraft).toHaveBeenCalledWith(lionOptions);
   });
 
   it('bypasses the shared draft cache and passes the signal to the chain', async () => {

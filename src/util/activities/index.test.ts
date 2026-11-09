@@ -76,7 +76,7 @@ describe('getIsHiddenNftActivity', () => {
     expect(getIsHiddenNftActivity(activity, [], [], true)).toBe(false);
   });
 
-  // For `nftTrade` the `isIncoming` flag shows the TONCOIN direction, so a sale looks like an incoming transfer
+  // For `nftTrade` the `isIncoming` flag shows the ION direction, so a sale looks like an incoming transfer
   it('keeps an unverified NFT sold on a marketplace', () => {
     const activity = makeMockTransactionActivity({
       isIncoming: true,

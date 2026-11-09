@@ -18,7 +18,7 @@ import type { Account, SavedAddress, Theme } from '../../../../global/types';
 import {
   ANIMATION_END_DELAY,
   ANIMATION_LEVEL_MIN,
-  TONCOIN,
+  IONCOIN,
   VALIDATION_PERIOD_MS,
 } from '../../../../config';
 import {
@@ -154,7 +154,7 @@ function TransactionModal({
   });
 
   const stakingState = stakingStates?.find((staking): staking is ApiToncoinStakingState => {
-    return staking.tokenSlug === TONCOIN.slug && staking.balance > 0n;
+    return staking.tokenSlug === IONCOIN.slug && staking.balance > 0n;
   });
   const stakingStatus = stakingState && getStakingStateStatus(stakingState);
   const startOfStakingCycle = stakingState?.start;
@@ -227,7 +227,7 @@ function TransactionModal({
   const handleSendClick = useLastCallback(() => {
     closeActivityInfo({ id: id! });
     startTransfer({
-      tokenSlug: slug || TONCOIN.slug,
+      tokenSlug: slug || IONCOIN.slug,
       toAddress: address,
       amount: bigintAbs(amount!),
       comment: !isIncoming ? comment : undefined,

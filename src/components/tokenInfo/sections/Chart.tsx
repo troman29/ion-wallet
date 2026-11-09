@@ -11,7 +11,7 @@ import { formatChartDate, formatShortDay, formatTime, SECOND } from '../../../ut
 import { formatCurrency, formatPercent, getShortCurrencySymbol } from '../../../util/formatNumber';
 import { vibrate } from '../../../util/haptics';
 import { SWIPE_DISABLED_CLASS_NAME } from '../../../util/swipeController';
-import { TIME_RANGES } from '../../../util/timeRange';
+import { normalizePriceHistoryPeriod, TIME_RANGES } from '../../../util/timeRange';
 import { IS_IOS } from '../../../util/windowEnvironment';
 
 import useInterval from '../../../hooks/useInterval';
@@ -42,8 +42,6 @@ interface StateProps {
   baseCurrency: ApiBaseCurrency;
   historyPeriods?: PriceHistoryPeriods;
 }
-
-const DEFAULT_PERIOD: ApiPriceHistoryPeriod = '1D';
 
 // An open chart keeps polling the price, at the same cadence as the native apps
 const REFRESH_INTERVAL = 15 * SECOND;
@@ -80,14 +78,14 @@ function Chart({
     loadPriceHistory({ slug, period, currency: chartCurrency });
   });
 
-  useEffect(refreshHistory, [slug, period, chartCurrency, refreshHistory]);
+  useEffect(refreshHistory, [slug, period, baseCurrency, chartCurrency, refreshHistory]);
 
   useInterval(refreshHistory, REFRESH_INTERVAL, true);
 
   // The selection points into the shown series, so switching the token or the period drops it.
   useEffect(() => {
     setSelectedIndex(NO_SELECTION);
-  }, [slug, period]);
+  }, [slug, period, chartCurrency]);
 
   useSyncEffect(([prevSelectedIndex]) => {
     if (IS_IOS && prevSelectedIndex !== undefined) void vibrate();
@@ -103,8 +101,9 @@ function Chart({
   const initialPrice = initialPoint?.[1];
   const changePercent = initialPrice && shownPoint ? (shownPoint[1] / initialPrice - 1) * 100 : undefined;
 
-  // A price quoted in another currency would make the balance above jump between currencies
-  const shownPrice = chartCurrency !== baseCurrency ? undefined : shownPoint?.[1];
+  // Only an explicitly selected point overrides the current balance from the token price feed.
+  // A price quoted in another currency would make the balance above jump between currencies.
+  const shownPrice = chartCurrency !== baseCurrency ? undefined : selectedPoint?.[1];
 
   useEffect(() => {
     onPricePointChange(shownPrice !== undefined && initialPrice
@@ -218,7 +217,7 @@ export default memo(
     const accountState = selectCurrentAccountState(global);
 
     return {
-      period: accountState?.currentTokenPeriod ?? DEFAULT_PERIOD,
+      period: normalizePriceHistoryPeriod(accountState?.currentTokenPeriod),
       baseCurrency: global.settings.baseCurrency,
       historyPeriods: global.tokenPriceHistory.bySlug[token.slug],
     };

@@ -15,7 +15,7 @@ import { parseAccountId } from '../../util/account';
 import { logDebugError } from '../../util/logs';
 import { OrGate } from '../../util/orGate';
 import { forbidConcurrency } from '../../util/schedulers';
-import { getNativeToken } from '../../util/tokens';
+import { getChainBySlug } from '../../util/tokens';
 import chains from '../chains';
 import {
   doesAccountHaveChain,
@@ -360,9 +360,8 @@ function createInactiveAccountsPollingManager() {
 }
 
 function pickChainTimestamps(bySlug: ApiActivityTimestamps, chain: ApiChain) {
-  const { slug: nativeSlug } = getNativeToken(chain);
   return Object.entries(bySlug).reduce((newBySlug, [slug, timestamp]) => {
-    if (slug === nativeSlug || slug.startsWith(`${chain}-`)) {
+    if (getChainBySlug(slug) === chain) {
       newBySlug[slug] = timestamp;
     }
     return newBySlug;

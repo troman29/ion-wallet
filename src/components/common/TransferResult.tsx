@@ -1,6 +1,6 @@
 import React, { memo } from '../../lib/teact/teact';
 
-import { TONCOIN } from '../../config';
+import { IONCOIN } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import { toDecimal } from '../../util/decimals';
 import { formatCurrencyExtended } from '../../util/formatNumber';
@@ -30,8 +30,8 @@ function TransferResult({
   isSensitiveDataHidden,
   playAnimation,
   amount = 0n,
-  tokenSymbol = TONCOIN.symbol,
-  decimals = TONCOIN.decimals,
+  tokenSymbol = IONCOIN.symbol,
+  decimals = IONCOIN.decimals,
   noSign,
   color,
   firstButtonText,

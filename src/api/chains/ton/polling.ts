@@ -11,7 +11,7 @@ import type {
   OnUpdatingStatusChange,
 } from '../../types';
 
-import { NO_EXTRA_FEATURES, POPULAR_WALLET_VERSIONS, TONCOIN } from '../../../config';
+import { IONCOIN, NO_EXTRA_FEATURES, POPULAR_WALLET_VERSIONS } from '../../../config';
 import { parseAccountId } from '../../../util/account';
 import { getActivityTokenSlugs } from '../../../util/activities';
 import { areDeepEqual } from '../../../util/areDeepEqual';
@@ -411,7 +411,7 @@ async function loadInitialConfirmedActivities(accountId: string, onUpdate: OnApi
     const bySlug = {
       // Loading the TON history is a side effect of loading the main history.
       // Because there is no way to load TON activities without loading activities of other tokens.
-      [TONCOIN.slug]: mainActivities.filter((activity) => getActivityTokenSlugs(activity).includes(TONCOIN.slug)),
+      [IONCOIN.slug]: mainActivities.filter((activity) => getActivityTokenSlugs(activity).includes(IONCOIN.slug)),
     };
 
     const newestActivityTimestamp = mainActivities[0]?.timestamp;

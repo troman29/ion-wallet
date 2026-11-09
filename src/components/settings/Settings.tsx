@@ -12,11 +12,11 @@ import {
   APP_DOWNLOAD_URLS, APP_ENV_MARKER, APP_INSTALL_URL,
   APP_NAME,
   APP_VERSION,
+  IONCOIN,
   IS_CAPACITOR,
   IS_EXTENSION,
   LANG_LIST,
   PROXY_HOSTS,
-  TONCOIN,
 } from '../../config';
 import {
   selectAccount,
@@ -180,7 +180,7 @@ function Settings({
 
   const shortBaseSymbol = getShortCurrencySymbol(baseCurrency);
 
-  const tonToken = useMemo(() => tokens?.find(({ slug }) => slug === TONCOIN.slug), [tokens]);
+  const tonToken = useMemo(() => tokens?.find(({ slug }) => slug === IONCOIN.slug), [tokens]);
 
   const wallets = useMemo(() => {
     return versions

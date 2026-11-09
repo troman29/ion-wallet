@@ -17,7 +17,7 @@ interface OwnProps {
 }
 
 function Summary({ token, className }: OwnProps) {
-  // The balance follows the point under the cursor, so the chart reports the point up to here
+  // Without a selected chart point, Balance uses the current token price feed.
   const [pricePoint, setPricePoint] = useState<TokenPricePoint>();
 
   return (
