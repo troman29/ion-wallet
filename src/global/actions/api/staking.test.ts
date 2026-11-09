@@ -4,7 +4,7 @@ import type { ApiStakingState } from '../../../api/types';
 import type { GlobalState } from '../../types';
 import { StakingState } from '../../types';
 
-import { TONCOIN } from '../../../config';
+import { IONCOIN } from '../../../config';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
 
 jest.mock('../../index', () => ({
@@ -14,7 +14,7 @@ jest.mock('../../index', () => ({
 }));
 
 // The shipped list is empty, so the blocking mechanism needs a slug of its own to be exercised
-const BLOCKED_SLUG = 'ton-blocked-jetton';
+const BLOCKED_SLUG = 'ion-blocked-jetton';
 
 jest.mock('../../../util/staking', () => ({
   ...jest.requireActual('../../../util/staking'),
@@ -32,10 +32,10 @@ const MY_STATE = {
   id: 'my-1', type: 'jetton', tokenSlug: BLOCKED_SLUG, balance: 1n,
 } as unknown as ApiStakingState;
 const TON_STATE = {
-  id: 'ton-1', type: 'liquid', tokenSlug: TONCOIN.slug, balance: 0n,
+  id: 'ton-1', type: 'liquid', tokenSlug: IONCOIN.slug, balance: 0n,
 } as unknown as ApiStakingState;
 const TON_ALT_STATE = {
-  id: 'ton-2', type: 'nominators', tokenSlug: TONCOIN.slug, balance: 0n,
+  id: 'ton-2', type: 'nominators', tokenSlug: IONCOIN.slug, balance: 0n,
 } as unknown as ApiStakingState;
 
 function makeGlobal(stakingId?: string): GlobalState {
@@ -88,14 +88,14 @@ describe('startStaking action', () => {
   });
 
   it('opens the stake form for an allowed token', () => {
-    const result = run(makeGlobal('ton-1'), { tokenSlug: TONCOIN.slug });
+    const result = run(makeGlobal('ton-1'), { tokenSlug: IONCOIN.slug });
     expect(result.currentStaking.state).toBe(StakingState.StakeInitial);
   });
 
   it('selects the exact product and preserves an exact amount prefill', () => {
     const result = run(makeGlobal('ton-1'), {
       stakingId: 'ton-2',
-      tokenSlug: TONCOIN.slug,
+      tokenSlug: IONCOIN.slug,
       initialAmount: 10_000_000_000n,
     });
 
@@ -109,7 +109,7 @@ describe('startStaking action', () => {
   it('preserves an all-balance prefill for the exact product', () => {
     const result = run(makeGlobal('ton-1'), {
       stakingId: 'ton-1',
-      tokenSlug: TONCOIN.slug,
+      tokenSlug: IONCOIN.slug,
       initialAmount: 'all',
     });
 

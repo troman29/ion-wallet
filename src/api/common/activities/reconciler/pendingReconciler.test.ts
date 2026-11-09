@@ -15,7 +15,7 @@ function activity(id: string, status: ApiTransactionActivity['status'], hash = H
     fromAddress: 'wallet',
     toAddress: 'pool',
     normalizedAddress: 'pool',
-    slug: 'toncoin',
+    slug: 'ioncoin',
     isIncoming: false,
     status,
     timestamp: 1000,

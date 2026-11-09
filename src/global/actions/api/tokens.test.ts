@@ -16,7 +16,7 @@ jest.mock('../../index', () => ({
 }));
 
 const HISTORY: ApiHistoryList = [[1000, 1.25], [2000, 1.5]];
-const SLUG = 'toncoin';
+const SLUG = 'ioncoin';
 const PAYLOAD = { slug: SLUG, period: '1D', currency: 'USD' };
 
 type LoadPriceHistory = (global: GlobalState, actions: AnyLiteral, payload: typeof PAYLOAD) => Promise<void>;

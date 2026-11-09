@@ -29,6 +29,6 @@ describe('getIsTokenKept', () => {
 
   it('keeps any token of a chain that names none', () => {
     expect(getIsTokenKept('ton', TON_USDT_MAINNET.slug)).toBe(true);
-    expect(getIsTokenKept('ton', 'ton-eqsomethingelse')).toBe(true);
+    expect(getIsTokenKept('ton', 'ion-eqsomethingelse')).toBe(true);
   });
 });

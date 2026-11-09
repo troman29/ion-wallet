@@ -29,7 +29,7 @@ function parsedBurn(amount: bigint): ApiTokensBurnPayload {
     queryId: 10001n,
     amount,
     address: owner.toString(),
-    slug: 'ton-liquid',
+    slug: 'ion-liquid',
     isLiquidUnstakeRequest: true,
   };
 }

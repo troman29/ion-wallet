@@ -1,6 +1,10 @@
 import type { ApiTokenWithPrice } from '../../api/types';
 import type { GlobalState, PriceHistoryPeriods } from '../types';
 
+export function clearTokenPriceHistory(global: GlobalState): GlobalState {
+  return { ...global, tokenPriceHistory: { bySlug: {} } };
+}
+
 export function updateTokenPriceHistory(global: GlobalState, slug: string, partial: PriceHistoryPeriods): GlobalState {
   const { bySlug } = global.tokenPriceHistory;
 

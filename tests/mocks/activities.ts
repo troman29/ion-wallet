@@ -1,12 +1,12 @@
 import type { ApiTransactionActivity } from '../../src/api/types';
 
-import { BNB, TONCOIN } from '../../src/config';
+import { BNB, IONCOIN } from '../../src/config';
 import { buildTxId } from '../../src/util/activities';
 import { random, randomBase64, sample } from '../../src/util/random';
 import { BSC_USDT_MAINNET, TON_USDT_MAINNET } from './tokens';
 
 const slugs = [
-  TONCOIN.slug,
+  IONCOIN.slug,
   BNB.slug,
   TON_USDT_MAINNET.slug,
   BSC_USDT_MAINNET.slug,

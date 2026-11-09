@@ -5,7 +5,7 @@ import type { ApiJettonStakingState } from '../../api/types';
 import type { UserToken } from '../../global/types';
 import { StakingState } from '../../global/types';
 
-import { SHORT_FRACTION_DIGITS, TONCOIN } from '../../config';
+import { IONCOIN, SHORT_FRACTION_DIGITS } from '../../config';
 import renderText from '../../global/helpers/renderText';
 import {
   selectAccount,
@@ -93,7 +93,7 @@ function StakingClaimModal({
   const lang = useLang();
 
   const token = useMemo(() => tokens?.find(({ slug }) => slug === tokenSlug), [tokens, tokenSlug]);
-  const nativeToken = useMemo(() => tokens?.find(({ slug }) => slug === TONCOIN.slug), [tokens]);
+  const nativeToken = useMemo(() => tokens?.find(({ slug }) => slug === IONCOIN.slug), [tokens]);
   const nativeBalance = nativeToken?.amount ?? 0n;
 
   const { gas: networkFee, real: realNetworkFee } = getTonStakingFees(stakingState?.type).claim!;

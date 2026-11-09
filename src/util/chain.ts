@@ -4,7 +4,7 @@ import {
   BNB,
   DEBUG,
   ION_BNB_MAINNET,
-  TONCOIN,
+  IONCOIN,
 } from '../config';
 import { EVM_DERIVATION_PATHS } from '../api/chains/evm/constants';
 import { TON_BIP39_PATH } from '../api/chains/ton/derivationConstants';
@@ -161,7 +161,7 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     isNftSupported: true,
     addressRegex: /^([-\w_]{48}|0:[\da-h]{64})$/i,
     addressPrefixRegex: /^([-\w_]{1,48}|0:[\da-h]{0,64})$/i,
-    nativeToken: TONCOIN,
+    nativeToken: IONCOIN,
     displayColor: '#6941C6',
     doesBackendSocketSupport: true,
     canImportTokens: true,
@@ -169,10 +169,10 @@ const CHAIN_CONFIG: Record<ApiChain, ChainConfig> = {
     doesSupportPushNotifications: true,
     feeCheckAddress: 'UQBE5NzPPnfb6KAy7Rba2yQiuUnihrfcFw96T-p5JtZjAl_c',
     defaultEnabledSlugs: {
-      mainnet: [TONCOIN.slug],
-      testnet: [TONCOIN.slug],
+      mainnet: [IONCOIN.slug],
+      testnet: [IONCOIN.slug],
     },
-    tokenInfo: [TONCOIN],
+    tokenInfo: [IONCOIN],
     explorers: [{
       id: 'ion',
       name: 'ION Explorer',

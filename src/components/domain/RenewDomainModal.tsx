@@ -5,7 +5,7 @@ import type { ApiNft } from '../../api/types';
 import type { GlobalState } from '../../global/types';
 import { DomainRenewalState } from '../../global/types';
 
-import { TONCOIN } from '../../config';
+import { IONCOIN } from '../../config';
 import { selectCurrentAccountState, selectCurrentToncoinBalance } from '../../global/selectors';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
@@ -125,7 +125,7 @@ function RenewDomainModal({
           {domainNfts.length > 1 && <NftChips nfts={domainNfts} className={styles.multiNftChips} />}
         </div>
 
-        <FeeLine terms={feeTerms} token={TONCOIN} precision="exact" />
+        <FeeLine terms={feeTerms} token={IONCOIN} precision="exact" />
         <div className={buildClassName(modalStyles.buttons, styles.footer)}>
           <Button
             isPrimary

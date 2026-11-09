@@ -9,7 +9,7 @@ import type {
 import type { EmulationResponse } from './toncenter/emulation';
 import type { TonWallet } from './util/tonCore';
 
-import { BURN_ADDRESS, TONCOIN } from '../../../config';
+import { BURN_ADDRESS, IONCOIN } from '../../../config';
 import { toBase64Address } from './util/tonCore';
 import { FAKE_TX_ID } from '../../constants';
 import { fetchEmulateTrace } from './toncenter/emulation';
@@ -99,7 +99,7 @@ function addOrUpdateExcessActivity(walletAddress: string, activities: ApiActivit
       timestamp: ts,
       kind: 'transaction',
       amount: excess,
-      slug: TONCOIN.slug,
+      slug: IONCOIN.slug,
       normalizedAddress: BURN_ADDRESS,
       fromAddress: BURN_ADDRESS,
       toAddress: walletAddress,

@@ -1,6 +1,6 @@
 import type { ParsedTrace } from './types';
 
-import { TONCOIN } from '../../../config';
+import { IONCOIN } from '../../../config';
 import { buildTxId } from '../../../util/activities';
 import { logDebugError } from '../../../util/logs';
 import { pause } from '../../../util/schedulers';
@@ -40,7 +40,7 @@ describe('fetchActivityDetails', () => {
       isIncoming: false,
       normalizedAddress: 'recipient-address',
       amount: -1n,
-      slug: TONCOIN.slug,
+      slug: IONCOIN.slug,
       shouldLoadDetails: true,
       status: 'completed',
     });

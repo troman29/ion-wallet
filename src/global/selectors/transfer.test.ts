@@ -1,6 +1,6 @@
 import type { GlobalState } from '../types';
 
-import { BNB, TONCOIN } from '../../config';
+import { BNB, IONCOIN } from '../../config';
 import { BSC_USDT_MAINNET, TON_USDT_MAINNET } from '../../../tests/mocks/tokens';
 import { INITIAL_STATE } from '../initialState';
 import { selectTokenMatchingCurrentTransferAddressSlow } from './transfer';
@@ -10,7 +10,7 @@ const TON_ADDRESS = 'EQAIsixsrb93f9kDyplo_bK5OdgW5r0WCcIJZdGOUG1B282S';
 const BNB_ADDRESS = '0x9429C8Af1089efD542b313156Af2DFA35c7e0a81';
 
 const TOKEN_INFO: Record<string, object> = {
-  [TONCOIN.slug]: { ...TONCOIN, priceUsd: 5, percentChange24h: 0 },
+  [IONCOIN.slug]: { ...IONCOIN, priceUsd: 5, percentChange24h: 0 },
   [TON_USDT_MAINNET.slug]: { ...TON_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
   [BNB.slug]: { ...BNB, priceUsd: 600, percentChange24h: 0 },
   [BSC_USDT_MAINNET.slug]: { ...BSC_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
@@ -69,26 +69,26 @@ function buildGlobal(
 describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
   describe('no-op conditions', () => {
     it('returns the current token when toAddress is empty', () => {
-      const global = buildGlobal(TONCOIN.slug, undefined, {
-        [TONCOIN.slug]: 1_000_000_000n,
+      const global = buildGlobal(IONCOIN.slug, undefined, {
+        [IONCOIN.slug]: 1_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(IONCOIN.slug);
     });
 
     it('returns the current token when the address belongs to the current chain (TON → TON)', () => {
-      const global = buildGlobal(TONCOIN.slug, TON_ADDRESS, {
-        [TONCOIN.slug]: 1_000_000_000n,
+      const global = buildGlobal(IONCOIN.slug, TON_ADDRESS, {
+        [IONCOIN.slug]: 1_000_000_000n,
         [BNB.slug]: 1_000_000_000_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(IONCOIN.slug);
     });
 
     it('returns the current token when the address belongs to the current chain (BNB → BNB)', () => {
       const global = buildGlobal(BNB.slug, BNB_ADDRESS, {
         [BNB.slug]: 1_000_000_000_000_000_000n,
-        [TONCOIN.slug]: 1_000_000_000n,
+        [IONCOIN.slug]: 1_000_000_000n,
       });
 
       expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(BNB.slug);
@@ -97,8 +97,8 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
 
   describe('chain switching', () => {
     it('selects BNB when pasting a BNB address while Toncoin is current', () => {
-      const global = buildGlobal(TONCOIN.slug, BNB_ADDRESS, {
-        [TONCOIN.slug]: 1_000_000_000n,
+      const global = buildGlobal(IONCOIN.slug, BNB_ADDRESS, {
+        [IONCOIN.slug]: 1_000_000_000n,
         [BNB.slug]: 1_000_000_000_000_000_000n,
       });
 
@@ -108,10 +108,10 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
     it('selects Toncoin when pasting a TON address while BNB is current', () => {
       const global = buildGlobal(BNB.slug, TON_ADDRESS, {
         [BNB.slug]: 1_000_000_000_000_000_000n,
-        [TONCOIN.slug]: 1_000_000_000n,
+        [IONCOIN.slug]: 1_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(IONCOIN.slug);
     });
   });
 
@@ -119,16 +119,16 @@ describe('selectTokenMatchingCurrentTransferAddressSlow', () => {
     it('prefers Toncoin (native) over TON USDT when BNB is current', () => {
       const global = buildGlobal(BNB.slug, TON_ADDRESS, {
         [BNB.slug]: 1_000_000_000_000_000_000n,
-        [TONCOIN.slug]: 100_000_000n,
+        [IONCOIN.slug]: 100_000_000n,
         [TON_USDT_MAINNET.slug]: 1_000_000_000n,
       });
 
-      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(TONCOIN.slug);
+      expect(selectTokenMatchingCurrentTransferAddressSlow(global)).toBe(IONCOIN.slug);
     });
 
     it('prefers BNB (native) over BSC USDT when Toncoin is current', () => {
-      const global = buildGlobal(TONCOIN.slug, BNB_ADDRESS, {
-        [TONCOIN.slug]: 1_000_000_000n,
+      const global = buildGlobal(IONCOIN.slug, BNB_ADDRESS, {
+        [IONCOIN.slug]: 1_000_000_000n,
         [BNB.slug]: 1_000_000_000_000_000_000n,
         [BSC_USDT_MAINNET.slug]: 1_000_000_000_000_000_000_000n,
       });

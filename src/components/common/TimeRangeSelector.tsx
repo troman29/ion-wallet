@@ -35,7 +35,6 @@ const TAB_COUNT = TIME_RANGES.length;
 
 // The range value matches the backend (`1D/7D/…`); these are the short display labels
 const RANGE_LABEL_KEYS: Record<ApiPriceHistoryPeriod, string> = {
-  ALL: 'All',
   '1Y': 'Y',
   '3M': '3M',
   '1M': 'M',

@@ -13,7 +13,7 @@ function makeTransaction(overrides: Partial<ApiTransactionActivity> = {}): ApiTr
     fromAddress: 'from-address',
     toAddress: 'to-address',
     fee: 1n,
-    slug: 'toncoin',
+    slug: 'ioncoin',
     isIncoming: false,
     normalizedAddress: 'normalized-address',
     status: 'completed',

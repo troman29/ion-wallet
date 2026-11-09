@@ -1,6 +1,7 @@
 import type { ApiJettonStakingState } from '../../../api/types';
 import { StakingState } from '../../types';
 
+import { IONCOIN, STAKED_ION_SLUG } from '../../../config';
 import { getDoesUsePinPad } from '../../../util/biometrics';
 import { getTonStakingFees } from '../../../util/fee/getTonOperationFees';
 import { pause } from '../../../util/schedulers';
@@ -409,7 +410,8 @@ addActionHandler('openStakingInfoOrStart', (global, actions) => {
   let stakingState = selectAccountStakingState(global, currentAccountId);
 
   // Prefer the currently viewed token over the last one selected in the modal, when it supports staking
-  const currentTokenSlug = selectAccountState(global, currentAccountId)?.currentTokenSlug;
+  const selectedTokenSlug = selectAccountState(global, currentAccountId)?.currentTokenSlug;
+  const currentTokenSlug = selectedTokenSlug === STAKED_ION_SLUG ? IONCOIN.slug : selectedTokenSlug;
   if (currentTokenSlug && stakingState.tokenSlug !== currentTokenSlug) {
     const activeTokenStakingState = selectAccountStakingStatesBySlug(global, currentAccountId)[currentTokenSlug];
     if (activeTokenStakingState) {

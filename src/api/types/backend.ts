@@ -70,7 +70,7 @@ export type ApiSiteCategory = {
 };
 
 // Prices
-export type ApiPriceHistoryPeriod = '1D' | '7D' | '1M' | '3M' | '1Y' | 'ALL';
+export type ApiPriceHistoryPeriod = '1D' | '7D' | '1M' | '3M' | '1Y';
 
 // Vesting
 export type ApiVestingPartStatus = 'frozen' | 'ready' | 'unfrozen' | 'missed';

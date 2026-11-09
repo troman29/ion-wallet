@@ -17,9 +17,9 @@ import type { TonTransferParams } from './types';
 import { ApiLiquidUnstakeMode, ApiTransactionDraftError } from '../../types';
 
 import {
+  IONCOIN,
   LIQUID_JETTON,
   LIQUID_POOL,
-  TONCOIN,
   UNSTAKE_TON_GRACE_PERIOD,
   VALIDATION_PERIOD_MS,
 } from '../../../config';
@@ -211,7 +211,7 @@ export async function submitUnstake(
 
   let result: ApiSubmitGasfullTransferResult | { error: string };
   let toAddress: string;
-  const tokenSlug: string = TONCOIN.slug;
+  const tokenSlug: string = IONCOIN.slug;
 
   switch (state.type) {
     case 'liquid': {
@@ -343,7 +343,7 @@ function buildLiquidState({
   return {
     type: 'liquid',
     id: 'liquid',
-    tokenSlug: TONCOIN.slug,
+    tokenSlug: IONCOIN.slug,
     pool: LIQUID_POOL,
     balance,
     annualYield: commonData.liquid.apy,
@@ -479,7 +479,7 @@ export async function submitTokenStakingClaim(
       ...result.localActivityParams,
       toAddress,
       amount,
-      slug: TONCOIN.slug,
+      slug: IONCOIN.slug,
     },
   };
 }

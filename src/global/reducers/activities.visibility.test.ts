@@ -27,7 +27,7 @@ function activity(id: string, shouldHide = false): ApiTransactionActivity {
   return {
     id,
     kind: 'transaction',
-    slug: 'toncoin',
+    slug: 'ioncoin',
     timestamp: 1000,
     status: 'failed',
     shouldHide,
@@ -45,6 +45,6 @@ it('keeps hidden output actions for details and pagination without listing them'
     .toEqual([refund.id, failedRequest.id]);
   expect(global.byAccountId[ACCOUNT_ID].activities?.byId[refund.id]).toEqual(refund);
 
-  global = addPastActivities(global, ACCOUNT_ID, 'toncoin', [refund, failedRequest]);
-  expect(global.byAccountId[ACCOUNT_ID].activities?.idsBySlug?.toncoin).toEqual([failedRequest.id]);
+  global = addPastActivities(global, ACCOUNT_ID, 'ioncoin', [refund, failedRequest]);
+  expect(global.byAccountId[ACCOUNT_ID].activities?.idsBySlug?.ioncoin).toEqual([failedRequest.id]);
 });

@@ -37,8 +37,8 @@ import type {
 import {
   BURN_ADDRESS,
   DNS_IMAGE_GEN_URL,
+  IONCOIN,
   LIQUID_POOL,
-  TONCOIN,
 } from '../../../../config';
 import { buildTxId, parseTxId } from '../../../../util/activities';
 import { sortActivities } from '../../../../util/activities/order';
@@ -295,7 +295,7 @@ function parseTonTransfer(action: TonTransferAction, options: ParseOptions): Par
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, source, destination, value),
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     comment,
     encryptedComment,
   };
@@ -328,7 +328,7 @@ function parseCallContract(action: CallContractAction, options: ParseOptions): P
 
   const activity: ApiTransactionActivity = {
     ...common,
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type,
     shouldHide,
 
@@ -351,7 +351,7 @@ function parseContractDeploy(action: ContractDeployAction, options: ParseOptions
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, source, destination),
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type: 'contractDeploy',
     shouldLoadDetails: false,
     fee: 0n,
@@ -493,7 +493,7 @@ function parseNftTransfer(action: NftTransferAction, options: ParseOptions): Par
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, oldOwner ?? rawNftAddress, newOwner),
     shouldHide,
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     nft,
     comment: (forwardPayload && safeReadComment(forwardPayload)) || undefined,
     extra: omitUndefined({
@@ -541,7 +541,7 @@ function parseNftMint(action: NftMintAction, options: ParseOptions): ParsedActio
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, owner, rawNftAddress),
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     nft,
     type: 'mint',
   };
@@ -562,7 +562,7 @@ function parseStakeDeposit(action: StakeDepositAction, options: ParseOptions): P
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, holder, pool, amount),
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type: 'stake',
   };
 
@@ -590,7 +590,7 @@ function parseStakeWithdrawal(action: StakeWithdrawalAction, options: ParseOptio
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, fixedOptions, pool, holder, amount),
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type: 'unstake',
     shouldLoadDetails: details.provider === 'ionstakers' && !details.payout_nft,
   };
@@ -607,7 +607,7 @@ function parseStakeWithdrawalRequest(action: StakeWithdrawalRequestAction, optio
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, holder, pool, 0), // TODO (actions) Replace to real fee
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type: 'unstakeRequest',
   };
 
@@ -651,7 +651,7 @@ function parseDns(action: DnsAction, options: ParseOptions): ParsedAction {
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, source, asset, 0), // TODO (actions) Replace to real fee
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type,
     nft,
   };
@@ -683,7 +683,7 @@ function parseAuctionBid(action: AuctionBidAction, options: ParseOptions): Parse
 
   const activity: ApiTransactionActivity = {
     ...parseCommonFields(action, options, bidder, auction, details.amount),
-    slug: TONCOIN.slug,
+    slug: IONCOIN.slug,
     type: 'auctionBid',
     nft,
   };
