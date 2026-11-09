@@ -114,7 +114,7 @@ describe('ION external links', () => {
       expect(getMarketplaceNftUrl('ton', TEST_NFT_ADDRESS, testnet)).toBeUndefined();
       expect(getMarketplaceNftCollectionUrl('ton', TEST_NFT_COLLECTION_ADDRESS, testnet)).toBeUndefined();
     }
-    expect(getExplorerTokenUrl('ton', 'toncoin')).toBeUndefined();
+    expect(getExplorerTokenUrl('ton', 'ioncoin')).toBeUndefined();
     expect(getExplorerTokenUrl('ton', 'unconfirmed-ion-page')).toBeUndefined();
   });
   it('forwards the selected explorer ID to the base URL and template', () => {

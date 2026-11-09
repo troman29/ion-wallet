@@ -10,8 +10,8 @@ import { StakingState } from '../../global/types';
 import {
   ANIMATED_STICKER_TINY_ICON_PX,
   DEFAULT_PRICE_CURRENCY,
+  IONCOIN,
   IS_CAPACITOR,
-  TONCOIN,
   VALIDATION_PERIOD_MS,
 } from '../../config';
 import {
@@ -113,7 +113,7 @@ function UnstakeModal({
 
   const { gas: networkFee, real: realFee } = getTonStakingFees(stakingState?.type).unstake;
 
-  const nativeToken = useMemo(() => tokens?.find(({ slug }) => slug === TONCOIN.slug), [tokens]);
+  const nativeToken = useMemo(() => tokens?.find(({ slug }) => slug === IONCOIN.slug), [tokens]);
   const isNativeEnough = nativeToken && nativeToken.amount >= networkFee;
   const instantAvailable = stakingState?.type === 'liquid' ? stakingState.instantAvailable : undefined;
 

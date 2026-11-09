@@ -9,7 +9,7 @@ import { StakingState } from '../../global/types';
 
 import {
   DEFAULT_PRICE_CURRENCY,
-  TONCOIN,
+  IONCOIN,
 } from '../../config';
 import renderText from '../../global/helpers/renderText';
 import {
@@ -124,7 +124,7 @@ function StakingInitial({
     }
     return userToken;
   }, [tokenSlug, tokens, tokenBySlug]);
-  const { amount: balance = 0n, symbol, decimals = TONCOIN.decimals } = token ?? {};
+  const { amount: balance = 0n, symbol, decimals = IONCOIN.decimals } = token ?? {};
 
   let { annualYield = 0 } = stakingState ?? {};
   let annualYieldText = `${annualYield}%`;

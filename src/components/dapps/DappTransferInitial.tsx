@@ -14,7 +14,7 @@ import type {
 } from '../../api/types';
 import type { Account, SavedAddress, Theme } from '../../global/types';
 
-import { DEFAULT_CHAIN, STAKED_TON_SLUG, TONCOIN, UNKNOWN_TOKEN } from '../../config';
+import { DEFAULT_CHAIN, IONCOIN, STAKED_ION_SLUG, UNKNOWN_TOKEN } from '../../config';
 import renderText from '../../global/helpers/renderText';
 import {
   selectAccountStakingStatesBySlug,
@@ -207,17 +207,17 @@ function DappTransferInitial({
     if (transaction.stakingPreview) {
       const { operation, amount, jettonAmount } = transaction.stakingPreview;
       const label = operation === 'stake' ? lang('Stake') : lang('Unstake');
-      const stakedToken = tokensBySlug[STAKED_TON_SLUG];
+      const stakedToken = tokensBySlug[STAKED_ION_SLUG];
       const quantity = amount !== undefined
-        ? `${operation === 'unstake' ? '≈ ' : ''}${formatCurrency(toDecimal(amount), TONCOIN.symbol, 4, true)}`
+        ? `${operation === 'unstake' ? '≈ ' : ''}${formatCurrency(toDecimal(amount), IONCOIN.symbol, 4, true)}`
         : jettonAmount !== undefined
           ? formatCurrency(
-            toDecimal(jettonAmount, stakedToken?.decimals ?? TONCOIN.decimals),
+            toDecimal(jettonAmount, stakedToken?.decimals ?? IONCOIN.decimals),
             stakedToken?.symbol ?? 'LION',
           )
           : undefined;
       amountText.push(`${label} ${quantity ?? ''}`);
-      const attachedAmount = formatCurrency(toDecimal(transaction.amount), TONCOIN.symbol);
+      const attachedAmount = formatCurrency(toDecimal(transaction.amount), IONCOIN.symbol);
       amountText.push(`${lang('Attached to Contract')}: ${attachedAmount}`);
     } else if (isNftTransferPayload(payload)) {
       amountText.push('1 NFT');
@@ -228,7 +228,7 @@ function DappTransferInitial({
     }
 
     if (!transaction.stakingPreview) {
-      amountText.push(formatCurrency(toDecimal(transaction.amount + transaction.networkFee), TONCOIN.symbol));
+      amountText.push(formatCurrency(toDecimal(transaction.amount + transaction.networkFee), IONCOIN.symbol));
     }
 
     return (
@@ -495,8 +495,8 @@ function sortTransactions(
 }
 
 function getTransactionCostForSorting(transaction: ApiDappTransfer, tokensBySlug: Record<string, ApiTokenWithPrice>) {
-  const tonAmount = toBig(transaction.amount + transaction.networkFee, TONCOIN.decimals).toNumber();
-  let cost = tokensBySlug[TONCOIN.slug].priceUsd * tonAmount;
+  const tonAmount = toBig(transaction.amount + transaction.networkFee, IONCOIN.decimals).toNumber();
+  let cost = tokensBySlug[IONCOIN.slug].priceUsd * tonAmount;
 
   if (isTokenTransferPayload(transaction.payload)) {
     const { amount, slug } = transaction.payload;

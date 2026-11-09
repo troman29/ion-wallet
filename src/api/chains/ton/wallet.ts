@@ -14,7 +14,7 @@ import {
   type ApiWalletWithVersionInfo,
 } from '../../types';
 
-import { DEFAULT_WALLET_VERSION, TONCOIN } from '../../../config';
+import { DEFAULT_WALLET_VERSION, IONCOIN } from '../../../config';
 import { raceWithAbortSignal } from '../../../util/abortSignal';
 import { extractKey, findLast } from '../../../util/iteratees';
 import withCacheAsync from '../../../util/withCacheAsync';
@@ -119,7 +119,7 @@ export async function fetchBalances(
   ]);
 
   return {
-    [TONCOIN.slug]: tonBalance,
+    [IONCOIN.slug]: tonBalance,
     ...tokenBalances,
   };
 }

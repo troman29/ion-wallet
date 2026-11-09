@@ -1,6 +1,6 @@
 import type { GlobalState } from '../types';
 
-import { BNB, TONCOIN } from '../../config';
+import { BNB, IONCOIN } from '../../config';
 import { BSC_USDT_MAINNET, TON_USDT_MAINNET } from '../../../tests/mocks/tokens';
 import { INITIAL_STATE } from '../initialState';
 import { selectAccountTokens, selectTokenInfoUserTokens } from './tokens';
@@ -27,7 +27,7 @@ function buildGlobal(): GlobalState {
       [ACCOUNT_ID]: {
         balances: {
           bySlug: {
-            [TONCOIN.slug]: 1_000_000_000n,
+            [IONCOIN.slug]: 1_000_000_000n,
             [BNB.slug]: 2_000_000_000_000_000_000n,
           },
         },
@@ -35,7 +35,7 @@ function buildGlobal(): GlobalState {
     },
     tokenInfo: {
       bySlug: {
-        [TONCOIN.slug]: { ...TONCOIN, priceUsd: 5, percentChange24h: 0 },
+        [IONCOIN.slug]: { ...IONCOIN, priceUsd: 5, percentChange24h: 0 },
         [BNB.slug]: { ...BNB, priceUsd: 3000, percentChange24h: 100 },
         [BSC_USDT_MAINNET.slug]: { ...BSC_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
         [TON_USDT_MAINNET.slug]: { ...TON_USDT_MAINNET, priceUsd: 1, percentChange24h: 0 },
@@ -52,7 +52,7 @@ describe('selectTokenInfoUserTokens', () => {
     const tokensBySlug = Object.fromEntries(tokens.map((token) => [token.slug, token]));
 
     expect(Object.keys(tokensBySlug)).toEqual(expect.arrayContaining([
-      TONCOIN.slug,
+      IONCOIN.slug,
       BNB.slug,
       BSC_USDT_MAINNET.slug,
       TON_USDT_MAINNET.slug,
@@ -81,7 +81,7 @@ describe('selectAccountTokens', () => {
 
     const tokens = selectAccountTokens(global, ACCOUNT_ID)!;
 
-    expect(tokens.map(({ slug }) => slug)).toContain(TONCOIN.slug);
+    expect(tokens.map(({ slug }) => slug)).toContain(IONCOIN.slug);
     expect(tokens.every(({ chain }) => chain === 'ton')).toBe(true);
     expect(tokens.some(({ slug }) => slug === BNB.slug)).toBe(false);
   });

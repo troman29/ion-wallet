@@ -1,4 +1,4 @@
-import { TONCOIN } from '../../config';
+import { IONCOIN } from '../../config';
 import withCache from '../../util/withCache';
 
 export const getNumberRegex = withCache((decimals: number): RegExp => {
@@ -7,7 +7,7 @@ export const getNumberRegex = withCache((decimals: number): RegExp => {
     : new RegExp(`^(\\d+)([.,])?(\\d{1,${decimals}})?`);
 });
 
-export function getNumberParts(value: string, decimals: number = TONCOIN.decimals) {
+export function getNumberParts(value: string, decimals: number = IONCOIN.decimals) {
   const regex = getNumberRegex(decimals);
   return value.match(regex) || undefined;
 }

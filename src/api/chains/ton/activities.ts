@@ -6,7 +6,7 @@ import type {
 } from '../../types';
 import type { ParsedAction, ParsedTrace, TraceOutput } from './types';
 
-import { TONCOIN } from '../../../config';
+import { IONCOIN } from '../../../config';
 import { pauseWithAbortSignal, raceWithAbortSignal } from '../../../util/abortSignal';
 import { parseAccountId } from '../../../util/account';
 import { getActivityTokenSlugs, getIsActivityPending } from '../../../util/activities';
@@ -64,7 +64,7 @@ export async function fetchActivitySlice({
   } else {
     let tokenWalletAddress = address;
 
-    if (tokenSlug !== TONCOIN.slug) {
+    if (tokenSlug !== IONCOIN.slug) {
       await raceWithAbortSignal(tokensPreload.promise, signal);
       const token = getTokenBySlug(tokenSlug);
       if (!token?.tokenAddress) {

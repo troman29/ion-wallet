@@ -1,6 +1,6 @@
 import { SignDataState, TransferState } from '../../types';
 
-import { TONCOIN } from '../../../config';
+import { IONCOIN } from '../../../config';
 import { processDeeplink } from '../../../util/deeplink';
 import { addActionHandler, setGlobal } from '../../index';
 import {
@@ -65,7 +65,7 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         amount,
         comment,
         promiseId,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         rawPayload,
         stateInit,
       });
@@ -169,7 +169,7 @@ addActionHandler('apiUpdate', (global, actions, update) => {
         toAddress,
         amount: amount ?? 0n,
         comment,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         binPayload,
       });
 
