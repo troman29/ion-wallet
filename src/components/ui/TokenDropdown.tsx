@@ -2,15 +2,17 @@ import React, { memo, useMemo } from '../../lib/teact/teact';
 
 import type { ApiTokenWithPrice } from '../../api/types';
 
-import getChainNetworkIcon from '../../util/getChainNetworkIcon';
+import { IONCOIN } from '../../config';
+import getTokenChainIcon from '../../util/getTokenChainIcon';
 import getTokenImage from '../../util/getTokenImage';
-import { getIsNativeToken, getIsRwaStockToken } from '../../util/tokens';
+import { getIsRwaStockToken } from '../../util/tokens';
 
 import useLang from '../../hooks/useLang';
 import useLastCallback from '../../hooks/useLastCallback';
 
 import Dropdown, { type DropdownItem } from './Dropdown';
 
+import chainIconStyles from '../common/TokenChainIcon.module.scss';
 import styles from './TokenDropdown.module.scss';
 
 export type TokenWithId = Pick<ApiTokenWithPrice, 'slug' | 'symbol' | 'image' | 'chain' | 'keywords'> & {
@@ -111,7 +113,8 @@ export function tokenToDropdownItem(token: TokenWithId, isMultichainAccount?: bo
     value: getTokenId(token),
     icon: getTokenImage(token),
     iconClassName: getIsRwaStockToken(token) ? styles.rwaStockIcon : undefined,
-    overlayIcon: isMultichainAccount && !getIsNativeToken(token.slug) ? getChainNetworkIcon(token.chain) : undefined,
+    overlayIcon: isMultichainAccount ? getTokenChainIcon(token) : undefined,
+    overlayIconClassName: token.slug === IONCOIN.slug ? chainIconStyles.ion : undefined,
     name: token.symbol,
   };
 }

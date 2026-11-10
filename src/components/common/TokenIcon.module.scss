@@ -83,26 +83,26 @@
 .blockchainIcon {
   position: absolute;
   top: 1.4375rem;
-  inset-inline-start: 1.4375rem;
+  inset-inline-start: var(--token-chain-icon-inset-start, 1.4375rem);
 
-  width: 1rem;
+  width: var(--token-chain-icon-width, 1rem);
   height: 1rem;
-  border-radius: 50%;
+  border-radius: var(--token-chain-icon-border-radius, 50%);
 
   box-shadow: 0 0 0 0.1rem var(--color-background-first);
 
   @include mixins.is-mobile() {
     top: 1.625rem;
-    inset-inline-start: 1.625rem;
-    width: 1.125rem;
+    inset-inline-start: var(--token-chain-icon-inset-start, 1.625rem);
+    width: var(--token-chain-icon-width, 1.125rem);
     height: 1.125rem;
   }
 
   &.large {
     @include mixins.is-not-mobile() {
       top: 1.5rem;
-      inset-inline-start: 1.5rem;
-      width: 1.125rem;
+      inset-inline-start: var(--token-chain-icon-inset-start, 1.5rem);
+      width: var(--token-chain-icon-width, 1.125rem);
       height: 1.125rem;
     }
   }
@@ -110,9 +110,9 @@
   &.small,
   &.x-small, {
     top: 0.625rem !important;
-    inset-inline-start: 0.625rem !important;
+    inset-inline-start: var(--token-chain-icon-inset-start, 0.625rem) !important;
 
-    width: 0.6875rem !important;
+    width: var(--token-chain-icon-width, 0.6875rem) !important;
     height: 0.6875rem !important;
 
     box-shadow: 0 0 0 0.0625rem var(--color-background-first);
@@ -120,15 +120,15 @@
 
   &.xx-large {
     top: 2.375rem;
-    inset-inline-start: 2.375rem;
-    width: 1.25rem;
+    inset-inline-start: var(--token-chain-icon-inset-start, 2.375rem);
+    width: var(--token-chain-icon-width, 1.25rem);
     height: 1.25rem;
   }
 
   &.middle {
     top: 0.9375rem !important;
-    inset-inline-start: 0.9375rem !important;
-    width: 0.625rem !important;
+    inset-inline-start: var(--token-chain-icon-inset-start, 0.9375rem) !important;
+    width: var(--token-chain-icon-width, 0.625rem) !important;
     height: 0.625rem !important;
   }
 }
