@@ -264,6 +264,10 @@ function writeCache(global: GlobalState) {
     bySlug: pickTruthy(global.tokenInfo.bySlug, usedTokenSlugs),
   };
 
+  reducedGlobal.tokenDetails = {
+    bySlug: pickTruthy(global.tokenDetails.bySlug, usedTokenSlugs),
+  };
+
   const json = JSON.stringify(reducedGlobal);
   localStorage.setItem(GLOBAL_STATE_CACHE_KEY, json);
 }
