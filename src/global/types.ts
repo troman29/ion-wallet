@@ -31,6 +31,7 @@ import type {
   ApiSite,
   ApiSiteCategory,
   ApiStakingState,
+  ApiTokenDetails,
   ApiTokenType,
   ApiTokenWithPrice,
   ApiUpdate,
@@ -86,6 +87,13 @@ export type DialogType = {
 export type LangCode =
   'en' | 'es' | 'ru' | 'zh-Hant' | 'zh-Hans' | 'tr' | 'de' | 'th' | 'vi' | 'uk' | 'pl' | 'ar' | 'fa';
 export type LanguageSource = 'system' | 'user';
+
+export interface TokenDetailsState {
+  data?: ApiTokenDetails;
+  langCode?: LangCode;
+  fetchedAt?: number;
+  hasError?: boolean;
+}
 
 export interface LangItem {
   langCode: LangCode;
@@ -723,6 +731,10 @@ export type GlobalState = {
     bySlug: Record<string, ApiTokenWithPrice>;
   };
 
+  tokenDetails: {
+    bySlug: Record<string, TokenDetailsState>;
+  };
+
   currencyRates: ApiCurrencyRates;
 
   tokenPriceHistory: {
@@ -1232,6 +1244,7 @@ export interface ActionPayloads {
   closeInvoiceModal: undefined;
 
   loadPriceHistory: { slug: string; period: ApiPriceHistoryPeriod; currency?: ApiBaseCurrency };
+  loadTokenDetails: { slugs: string[] };
 
   showIncorrectTimeError: undefined;
 

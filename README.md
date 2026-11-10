@@ -40,6 +40,18 @@ Price charts support ION, ION BEP-20, BNB, and LION for periods up to one year; 
 `GET /prices/chart/{assetId}`. LION's chart uses its historical pool redemption rate. Ordinary LION transfers
 show the existing service-token warning via `STAKED_TOKEN_SLUGS`; unstaking remains available through the staking screen.
 
+The token screen displays an information card beside the chart, or below it on narrow screens.
+It loads `POST /assets?langCode=<language>` with `{ "assets": ["ton:ION"] }` and keeps token details
+separate from the balance/price catalogue. The backend refreshes history and market snapshots in background
+monitors; requests from the wallet only read its cache. Market cap and volume are quoted in USD by the backend and
+converted to the selected currency in the client. Descriptions cover all 13 supported languages.
+Opening the card refreshes its details; subsequent refreshes run once a minute while it is active.
+Cached descriptions and metrics remain visible after failed refreshes in the same language.
+Market metrics refresh on the server every 15 minutes. Cold history caches return a temporary error until
+the background monitor fills them; chart polling retries automatically. Buy/sell volume bars require
+a real breakdown and remain hidden when only total trading volume is available.
+Unsupported tokens show an empty state, and failed initial requests offer a retry.
+
 Token slugs use `ioncoin` for native ION and `ion-<full address>` for all ION Network jettons, including LION.
 The internal chain ID remains `ton`; BNB Chain slugs stay unchanged. Cache schema 5 migrates token references,
 balances, staking, and visibility settings, and clears cached transaction history so it is fetched again.

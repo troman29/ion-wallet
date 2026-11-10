@@ -1,5 +1,34 @@
 import type { StakingPoolConfig } from '../chains/ton/contracts/JettonStaking/StakingPool';
 
+export interface ApiTokenDetails {
+  description?: string;
+  links?: { kind: ApiTokenLinkKind; url: string }[];
+  marketCap?: number;
+  circulatingSupply?: number;
+  totalSupply?: number;
+  /** Unix seconds */
+  createdAt?: number;
+  volume24h?: { total: number; buy?: number; sell?: number; change?: number };
+}
+
+export type ApiTokenLink = NonNullable<ApiTokenDetails['links']>[number];
+
+export type ApiTokenLinkKind = 'website' | 'x' | 'telegram' | 'facebook' | 'instagram'
+  | 'linkedin' | 'tiktok' | 'youtube' | 'reddit';
+
+export interface ApiBackendTokenDetails {
+  slug: string;
+  tokenInfo?: {
+    description?: string;
+    localizedDescription?: string;
+    links?: { url: string; type?: ApiTokenLinkKind }[];
+    marketCap?: number;
+    supply?: { circulating?: number; total?: number };
+    createdAt?: string;
+    volume24h?: { total?: number; buy?: number; sell?: number; percentChange?: number };
+  };
+}
+
 export type ApiStakingJettonPool = {
   pool: string;
   poolConfig: StakingPoolConfig;
