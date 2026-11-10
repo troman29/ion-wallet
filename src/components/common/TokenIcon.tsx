@@ -3,7 +3,6 @@ import React, { memo, type TeactNode } from '../../lib/teact/teact';
 import type { ApiToken } from '../../api/types';
 import type { UserToken } from '../../global/types';
 
-import { IONCOIN } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import getTokenChainIcon from '../../util/getTokenChainIcon';
 import getTokenImage from '../../util/getTokenImage';
@@ -11,7 +10,6 @@ import { getIsNativeStakedToken, getIsRwaStockToken } from '../../util/tokens';
 
 import useFlag from '../../hooks/useFlag';
 
-import chainIconStyles from './TokenChainIcon.module.scss';
 import styles from './TokenIcon.module.scss';
 
 interface OwnProps {
@@ -60,9 +58,7 @@ function TokenIcon({
         <img
           src={chainIcon}
           alt=""
-          className={buildClassName(
-            styles.blockchainIcon, size && styles[size], slug === IONCOIN.slug && chainIconStyles.ion,
-          )}
+          className={buildClassName(styles.blockchainIcon, size && styles[size])}
           draggable={false}
         />
       )}
