@@ -1,0 +1,1714 @@
+$auth_intro: Spravujte ION v sítích ION Network a BNB Chain.
+Create New Wallet: Vytvořit novou peněženku
+Import From %count% Secret Words: Importovat pomocí %count% tajných slov
+More about %app_name%: Více o %app_name%
+Creating Wallet...: Vytváření peněženky...
+On the count of three...: Raz, dva, tři...
+$back_up_auth: Zálohovat
+$back_up_security: Zálohovat
+Passwords must be equal.: Hesla se musí shodovat.
+To protect your wallet as much as possible, use a password with: Pro co nejlepší ochranu peněženky použijte heslo, které obsahuje
+$auth_password_rule_8chars: alespoň 8 znaků
+$auth_password_rule_one_small_char: jedno malé písmeno
+$auth_password_rule_one_capital_char: jedno velké písmeno
+$auth_password_rule_one_digit: jednu číslici
+$auth_password_rule_one_special_char: a jeden speciální znak
+Create a password to protect it.: Vytvořte heslo pro její ochranu.
+Enter your password: Zadejte své heslo
+Enter your password...: Zadejte své heslo...
+...and repeat it: ...a zopakujte ho
+Cancel: Zrušit
+Insecure Password: Slabé heslo
+Your have entered an insecure password, which can be easily guessed by scammers.: Zadali jste slabé heslo, které mohou podvodníci snadno uhodnout.
+Continue or change password to something more secure?: Chcete pokračovat, nebo změnit heslo na bezpečnější?
+Change: Změnit
+"%count% Secret Words": "%count% tajných slov"
+Secret Words: Tajná slova
+$auth_import_mnemonic_description: |
+  Přístup ke své peněžence můžete obnovit zadáním **%counts% tajných slov**, která jste si zapsali při jejím vytváření.
+Let’s make sure your secrets words are recorded correctly.: Ověřme, že máte tajná slova správně zapsaná.
+$check_words_description: Nyní ověříme, že jste si tajná slova zapsali správně.
+$mnemonic_list_description: Zapište si tato slova ve **správném pořadí** a uložte je na **bezpečné místo**.
+$private_key_description: Uložte tento soukromý klíč **správně** a uchovávejte ho na **bezpečném místě**.
+$mnemonic_warning: |
+  Nikomu ho neposílejte ani neukazujte,
+  nikam ho nezadávejte.
+View Secret Words: Zobrazit tajná slova
+View %chain% Private Key: Zobrazit soukromý klíč %chain%
+Can be imported to non-multichain wallets for %chain%.: Lze importovat do peněženek pro %chain%, které nepodporují více sítí.
+Can be imported to any multichain wallet supporting %chain%.: Lze importovat do libovolné peněženky podporující více sítí včetně %chain%.
+Let's Check: Ověřit
+Let's Check!: Ověřit!
+Safety Rules: Bezpečnostní pravidla
+$safety_rules_private_key_one: |
+  Na další obrazovce uvidíte **soukromý klíč %chain%**. Správně ho uložte a **uchovávejte na bezpečném místě**.
+$safety_rules_private_key_two: Umožňuje **otevřít peněženku**, pokud ztratíte heslo nebo přístup k tomuto zařízení.
+$safety_rules_private_key_three: Pokud tento soukromý klíč uvidí někdo jiný, vaše prostředky **mohou být odcizeny**. **Nikomu ho neposílejte ani neukazujte**, ani vývojářům či technické podpoře.
+$safety_rules_one: |
+  Na další obrazovce uvidíte **tajná slova**. Zapište si je ve správném pořadí a **uložte je na bezpečné místo**.
+$safety_rules_two: Umožňují **otevřít peněženku**, pokud ztratíte heslo nebo přístup k tomuto zařízení.
+$safety_rules_three: Pokud tato slova uvidí někdo jiný, vaše prostředky **mohou být odcizeny**. **Nikomu je neposílejte**, ani vývojářům či technické podpoře.
+Continue: Pokračovat
+Close: Zavřít
+Back: Zpět
+Search...: Hledat...
+Main menu: Hlavní nabídka
+TON Proxy: TON Proxy
+Toggle TON Proxy: Přepnout TON Proxy
+Back Up Secret Words: Zálohovat tajná slova
+Settings: Nastavení
+About %app_name%: O %app_name%
+Exit: Ukončit
+Remove Wallet: Odebrat peněženku
+Remove Wallets: Odebrat peněženky
+Something went wrong.: Něco se pokazilo.
+Something went wrong: Něco se pokazilo
+Logo: Logo
+$about_description1: Spravujte ION v sítích ION Network a BNB Chain.
+$about_description2: Vaše klíče zůstávají na vašem zařízení. Obnovovací frázi uchovávejte v tajnosti.
+What is TON Proxy?: Co je TON Proxy?
+$about_extension_description1: TON Proxy otevírá cestu k **decentralizovanému internetu** tím, že umožňuje anonymní přístup k webům TON Sites.
+More info and demo.: Více informací a ukázka.
+$about_proxy_magic_description: Chcete-li využívat **decentralizovaný internet** a přistupovat k **TON Sites**, nainstalujte si %extension_link%.
+$about_extension_link_text: "**rozšíření %app_name%**"
+Is it open source?: Je zdrojový kód otevřený?
+$about_wallet_github: Ano. Prohlédněte si náš %github_link%.
+$about_github_link_text: "**repozitář na GitHubu**"
+Is there a community?: Existuje komunita?
+$about_wallet_community: Samozřejmě, přidejte se k naší %community_link%.
+Currency History: Historie měny
+Price: Cena
+Enter Password: Zadejte heslo
+Send: Odeslat
+Add Wallet: Přidat peněženku
+Done: Hotovo
+Delete: Smazat
+Delete Saved Address: Smazat uloženou adresu
+Are you sure you want to remove this address from your saved ones?: Opravdu chcete tuto adresu odebrat z uložených?
+Address removed from saved: Adresa byla odebrána z uložených
+Warning!: Varování!
+$logout_without_backup_warning: Tuto peněženku jste nezálohovali. Pokud ji nyní odeberete, ztratíte přístup ke svým tokenům a NFT.
+$logout_accounts_without_backup_warning: Nezálohovali jste %links%. Pokud budete pokračovat, ztratíte přístup ke svým tokenům a NFT.
+$logout_current_wallet_warning: Tím odeberete aktuální peněženku z aplikace.
+$logout_selected_wallet_warning: Tím odeberete vybranou peněženku z aplikace.
+$logout_selected_wallets_warning: Tím odeberete vybrané peněženky z aplikace.
+$logout_all_wallets_warning: Tím odeberete všechny peněženky z aplikace.
+$secret_words_backup_reminder: Ujistěte se, že máte zálohovaná **tajná slova**.
+$all_secret_words_backup_reminder: Ujistěte se, že máte zálohovaná všechna **tajná slova**.
+Create Deposit Link: Vytvořit odkaz pro vklad
+$receive_invoice_description: |
+  Můžete zadat částku a účel
+  platby a ušetřit tak odesílateli čas.
+Amount: Částka
+Comment: Komentář
+Comment or Memo: Komentář nebo memo
+Share this URL to receive %token%: Sdílejte tuto URL pro příjem %token%
+Invoice Link Copied: Odkaz na platbu byl zkopírován
+Theme: Motiv
+Language: Jazyk
+Enable Animations: Povolit animace
+Enable Landscape Mode: Povolit režim na šířku
+Base Currency: Základní měna
+Investor View: Zobrazení pro investory
+Toggle Investor View: Přepnout zobrazení pro investory
+Hide Tiny Transfers: Skrýt drobné převody
+Toggle Hide Tiny Transfers: Přepnout skrývání drobných převodů
+Network: Síť
+Developer Options: Vývojářské možnosti
+Recover funds from %address%: Obnovit prostředky z %address%
+Recover LION and ION: Obnovit LION a ION
+Legacy funds recovered: Prostředky ze staré adresy byly obnoveny
+Recovering legacy funds...: Obnovování prostředků ze staré adresy…
+No funds on the legacy address: Na staré adrese nejsou žádné prostředky
+Transfer pending. Try again after confirmation.: Převod čeká na vyřízení. Zkuste to znovu po potvrzení.
+Unable to recover legacy funds: Prostředky ze staré adresy se nepodařilo obnovit
+All Wallet Versions: Všechny verze peněženky
+Create TON-Only Wallet: Vytvořit peněženku pouze pro ION
+Confirmation: Potvrzení
+Signing Data: Podepisování dat
+Contract Initialization Data: Inicializační data kontraktu
+$unknown_token_address: Neznámá adresa tokenu.
+$dont_have_required_nft: Nemáte požadované NFT k odeslání.
+$state_init_invalid: Neplatná inicializační data kontraktu.
+$signature_warning: Podepisování vlastních dat je velmi nebezpečné. Používejte ho pouze tehdy, pokud důvěřujete jejich zdroji.
+Sign: Podepsat
+Done!: Hotovo!
+Signing Confirmed: Podpis potvrzen
+Activity Details: Podrobnosti aktivity
+No activities found: Žádná aktivita nenalezena
+Comment Copied: Komentář byl zkopírován
+Copy Text: Kopírovat text
+Copy Description: Kopírovat popis
+Description Copied: Popis byl zkopírován
+Message Copied: Zpráva byla zkopírována
+Sender: Odesílatel
+Recipient: Příjemce
+"%chain% Address Copied": Adresa %chain% byla zkopírována
+Repeat: Opakovat
+Switch Account: Přepnout účet
+Copy wallet address: Kopírovat adresu peněženky
+View address on %explorer_name%: Zobrazit adresu na %explorer_name%
+You have just created a new wallet: Právě jste vytvořili novou peněženku
+Assets: Aktiva
+Activity: Aktivita
+$home_activity: Aktivita
+NFT: NFT
+No NFTs yet: Zatím žádná NFT
+No hidden NFTs.: Žádná skrytá NFT.
+$nft_explore_offer: |
+  Prozkoumejte tržiště a objevte
+  existující kolekce NFT.
+Received: Přijato
+Sent: Odesláno
+$transaction_from: od %address%
+$transaction_to: na %address%
+$transaction_on: na %address%
+Wallet is not backed up: Peněženka není zálohovaná
+Testnet Version: Testovací verze
+Error reading clipboard: Chyba při čtení schránky
+$fee_value: Poplatek %fee%
+$fee_value_with_colon: "Poplatek: %fee%"
+Pay fee with %stars_symbol%: Zaplatit poplatek pomocí %stars_symbol%
+Loading...: Načítání...
+No price data: Žádné údaje o ceně
+Price Copied: Cena byla zkopírována
+Recipient Address: Adresa příjemce
+Wallet address or domain: Adresa peněženky nebo doména
+Incorrect address: Nesprávná adresa
+Incorrect address.: Nesprávná adresa.
+Paste: Vložit
+Insufficient balance: Nedostatečný zůstatek
+Insufficient Balance: Nedostatečný zůstatek
+$seed_phrase_scam_warning: |-
+  Tato peněženka nemá dostatek prostředků na poplatky za výběr tokenů.
+
+  Zřejmě se jedná o běžný **PODVOD**, při kterém vás někdo vybízí k vložení vlastních prostředků na úhradu poplatků.
+
+  **Nevkládejte** vlastní prostředky, mohli byste o ně přijít!
+$help_center_prepositional: Centrum nápovědy
+Optional: Volitelné
+$send_token_symbol: Odeslat %symbol%
+Is it all ok?: Je vše v pořádku?
+Receiving Address: Adresa pro příjem
+Fee: Poplatek
+Edit: Upravit
+Confirm: Potvrdit
+Data Signed: Data podepsána
+Details: Podrobnosti
+View details: Zobrazit podrobnosti
+Change password visibility: Změnit viditelnost hesla
+Amount value: Hodnota částky
+Save Address: Uložit adresu
+Name: Název
+Save: Uložit
+Copy: Kopírovat
+Remove from Saved: Odebrat z uložených
+View on Explorer: Zobrazit v průzkumníku
+No suggestions, you're on your own!: Žádné návrhy, je to na vás!
+Play Sounds: Přehrávat zvuky
+Focus on asset value rather than current balance: Zaměřit se na hodnotu aktiv místo aktuálního zůstatku
+$logout_confirm: Odebrat **všechny** peněženky
+$tiny_transfers_help: "Skrýt příchozí převody s hodnotou nižší než $%value%. Pamatujte: malé částky často posílají šiřitelé spamu a podvodníci."
+Today: Dnes
+Total: Celkem
+Zoom Out: Celé období
+Yesterday: Včera
+Now: Nyní
+$receive_description: Naskenujte tento QR kód nebo sdílejte adresu pro doplnění zůstatku peněženky.
+Wrong password, please try again.: Nesprávné heslo, zkuste to znovu.
+Appearance: Vzhled
+Light: Světlý
+Dark: Tmavý
+System: Systémový
+$stake_asset: Stakovat %symbol%
+Add Stake: Přidat vklad
+Earn from your tokens while holding them: Získávejte odměny za držení %symbol%
+Current APY: Aktuální APY
+Est. Yearly Earnings: Odhad ročního výnosu
+Staking Details: Podrobnosti stakingu
+Why this is safe: Proč je to bezpečné
+$safe_staking_description1: Staking je **plně decentralizovaný** a zajišťují ho chytré kontrakty **oficiálního ION Liquid Staking**.
+$safe_staking_description2: Vložené prostředky budou použity k validaci sítě %chain% v rámci jejího mechanismu **proof-of-stake**.
+$safe_staking_description3: Svůj vklad můžete vybrat **kdykoli** a na účet vám bude vrácen do **dvou dnů**.
+$safe_staking_description_jetton1: Staking tokenů je spravován chytrými kontrakty. Před vložením si prostudujte podmínky poolu a rizika.
+$safe_staking_description_jetton2: Svůj vklad můžete vybrat **kdykoli** a na účet vám bude vrácen **okamžitě**.
+$min_value: Min. %value%
+Est. balance in a year: Odhad zůstatku za rok
+Confirm Staking: Potvrdit staking
+View: Zobrazit
+Stake More: Stakovat více
+Staking: Staking
+Currently Staked: Aktuálně stakováno
+Total Staked: Celkem stakováno
+Total Stakers: Počet účastníků stakingu
+Unstake: Vybrat ze stakingu
+$unstake_asset: Vybrat %symbol% ze stakingu
+Amount to unstake: Částka k výběru ze stakingu
+Confirm Unstaking: Potvrdit výběr ze stakingu
+$unstaking_when_receive: Váš vklad ze stakingu obdržíte za %time%.
+$unstaking_when_receive_with_amount: Částku %amount% ze stakingu obdržíte za %time%.
+$unstake_insufficient_balance: Pro výběr ze stakingu musíte mít na hlavním zůstatku %balance%.
+at %annual_yield%: při %annual_yield%
+Est. %annual_yield%: Odhad %annual_yield%
+Staked: Stakováno
+$stake_action: Stakovat
+Unstaked: Vybráno ze stakingu
+Withdrawal from Staking: Výběr ze stakingu
+Withdrawing from Staking: Vybírání ze stakingu
+$withdraw_from_staking_action: Vybrat ze stakingu
+Not staked: Nestakováno
+Unstaking: Vybírání ze stakingu
+$unstake_action: Vybrat ze stakingu
+The network fee has slightly changed, try sending again.: Síťový poplatek se mírně změnil, zkuste odeslání znovu.
+Transfer was unsuccessful. Try again later.: Převod se nezdařil. Zkuste to později.
+Action Partially Completed: Akce částečně dokončena
+$action_partially_completed_description: Dokončeno %completed% z %total% operací. Zbývající operace nebyly dokončeny. Před dalším pokusem zkontrolujte aktivitu.
+Action Status Unknown: Stav akce není znám
+$action_status_unknown_description: Stav dokončení se nepodařilo ověřit. Před dalším pokusem zkontrolujte aktivitu a zůstatek; opakování nyní může akci odeslat dvakrát.
+$action_will_continue_in_background: Akce bude pokračovat na pozadí.
+Invalid amount: Neplatná částka
+Invalid address: Neplatná adresa
+Domain is not connected to a wallet: Doména není propojena s peněženkou
+Unexpected error: Neočekávaná chyba
+Unexpected Error: Neočekávaná chyba
+Earn: Vydělávat
+Earning: Vydělávání
+Unexpected: Neočekávaná chyba
+You can save this address for quick access while sending.: Tuto adresu si můžete uložit pro rychlý přístup při odesílání.
+Stake Again: Znovu stakovat
+$staking_history_earned: Získáno
+Select wallet to use on this app: Vyberte peněženku pro použití v této aplikaci
+Connect: Připojit
+Already Connected: Již připojeno
+Return to the dapp to proceed, or reconnect.: Pro pokračování se vraťte do dapp nebo se znovu připojte.
+Dapp Disconnected: Dapp odpojena
+Please reconnect your wallet from the dapp.: Znovu připojte peněženku v dapp.
+Dapp Not Responding: Dapp neodpovídá
+You may need to reconnect your wallet from the dapp if this keeps happening.: Pokud se to opakuje, možná bude nutné peněženku v dapp znovu připojit.
+Payload: Přenášená data
+$many_transactions:
+  zeroValue: Žádné převody
+  oneValue: "%count% převod"
+  otherValue: "%count% převodů"
+  fewValue: "%count% převody"
+  manyValue: "%count% převodu"
+Total Amount: Celková částka
+$unstaking_short: Vybírání ze stakingu
+Handle ion:// links: Otevírat odkazy ion://
+Back up wallet to have full access to it: Zálohujte peněženku pro plný přístup
+Consider More Secure Version: Zvažte bezpečnější verzi
+Install our native app or browser extension.: Nainstalujte si naši nativní aplikaci nebo rozšíření prohlížeče.
+Scam: Podvod
+Scam comment is hidden.: Podvodný komentář je skrytý.
+Display: Zobrazit
+Nested Transaction: Vnořená transakce
+Disconnect All Apps: Odpojit všechny aplikace
+Disconnect: Odpojit
+Disconnect App: Odpojit aplikaci
+Disconnect Apps: Odpojit aplikace
+Are you sure you want to disconnect?: Opravdu chcete odpojit %dappname%?
+Are you sure you want to disconnect all websites?: Opravdu chcete odpojit všechny weby?
+Logged in with %app_name%: Přihlášeno pomocí %app_name%
+No active connections: Žádná aktivní připojení
+Other: Ostatní
+No data: Žádná data
+No chain balances: Žádné zůstatky v sítích
+Native: Nativní
+Stablecoins: Stablecoiny
+Altcoins: Altcoiny
+Asset Mix: Složení aktiv
+No asset balances: Žádné zůstatky aktiv
+No staked assets: Žádná stakovaná aktiva
+Entire Period: Celé období
+Asset %asset%: Aktivum %asset%
+Assets & Activity: Aktiva a aktivita
+Token Settings: Nastavení tokenů
+Add Token: Přidat token
+Delete Token: Smazat token
+Are you sure you want to delete?: Opravdu chcete smazat %token%?
+Hide Tokens With No Cost: Skrýt tokeny bez hodnoty
+Localized Token Names: Lokalizované názvy
+Sort By Cost: Řadit podle hodnoty
+Update %app_name%: Aktualizovat %app_name%
+Try Again: Zkusit znovu
+Driver: Ovladač
+Maybe you need to check the password or change the driver.: Možná je třeba zkontrolovat heslo nebo změnit ovladač.
+Declined: Zamítnuto
+The time on your device is incorrect, sync it and try again.: Čas na vašem zařízení je nesprávný. Synchronizujte ho a zkuste to znovu.
+Name or Address...: Název nebo adresa...
+Such error, many tabs: Příliš mnoho karet
+$many_tabs_error_description: |
+  %app_name% podporuje pouze jednu aktivní kartu s aplikací.
+  Chcete-li tuto kartu dál používat, načtěte stránku znovu, nebo ji zavřete.
+Reload App: Znovu načíst aplikaci
+Token Not Found: Token nenalezen
+Try another keyword or address.: Zkuste jiné klíčové slovo nebo adresu.
+Decrypt: Dešifrovat
+Encrypted Message: Šifrovaná zpráva
+Message is encrypted: Zpráva je šifrovaná
+Agree: Souhlasím
+You sell: Prodáváte
+You buy: Kupujete
+Blockchain Fee: Blockchainový poplatek
+Included: Zahrnuto
+Price Impact: Dopad na cenu
+Minimum Received: Minimálně obdržíte
+The exchange rate is below market value!: Směnný kurz je o %value% nižší než tržní hodnota!
+Invalid Pair: Neplatný pár
+We do not recommend to perform an exchange, try to specify a lower amount.: Směnu nedoporučujeme provádět, zkuste zadat nižší částku.
+Not Enough %symbol%: Nedostatek %symbol%
+Use Responsibly: Používejte zodpovědně
+$auth_responsibly_description1: |
+  %app_name% je peněženka s **vlastní správou klíčů**, což znamená, že **pouze vy** máte plnou kontrolu a především **plnou odpovědnost** za své prostředky.
+$auth_responsibly_description2: |
+  Vaše soukromé klíče jsou uloženy na vašem zařízení a mohou být cílem **hackerských útoků**. Pokud je váš počítač napaden **škodlivým softwarem**, vaše prostředky mohou být odcizeny.
+$auth_responsibly_description3: |
+  Tým %app_name% **nenese odpovědnost** za bezpečnost vašich prostředků, stejně jako ji nenese výrobce vašeho počítače nebo poskytovatel internetu.
+$auth_responsibly_description4: |
+  **Nikdy** neuchovávejte všechny prostředky na jednom místě. **Diverzifikujte** a používejte různé softwarové i hardwarové nástroje. Vždy **provádějte vlastní průzkum** a vzdělávejte se v zabezpečení kryptoměn.
+Start Wallet: Spustit peněženku
+$auth_backup_warning_notice: |
+  Nyní je třeba ručně **zálohovat tajné klíče** pro případ, že zapomenete heslo nebo ztratíte přístup k tomuto zařízení.
+Invalid address format. Only URL Safe Base64 format is allowed.: Neplatný formát adresy. Povolen je pouze formát URL Safe Base64.
+Terms of Use: Podmínky použití
+Privacy Policy: Zásady ochrany osobních údajů
+Insufficient liquidity: Nedostatečná likvidita
+This address is new and never received transfers before.: Tato adresa je nová a dosud nepřijala žádné převody.
+Create Backup: Vytvořit zálohu
+Sending: Odesílání
+$send_action: Odeslat
+Failed: Nezdařilo se
+Refunded: Vráceno
+On Hold: Pozastaveno
+Expired: Platnost vypršela
+In Progress: Probíhá
+Waiting for Payment: Čekání na platbu
+Processing Payment: Zpracování platby
+It may take a few seconds: Může to trvat několik sekund
+Blockchain: Blockchain
+Your address on another blockchain: Vaše adresa na jiném blockchainu
+Please provide an address of your wallet in %blockchain% blockchain to receive bought tokens.: Pro příjem zakoupených tokenů zadejte adresu své peněženky na blockchainu %blockchain%.
+The time for sending coins is over.: Lhůta pro odeslání mincí vypršela.
+You have not sent the coins to the specified address.: Na uvedenou adresu jste mince neodeslali.
+Exchange failed and coins were refunded to your wallet.: Směna se nezdařila a mince byly vráceny do vaší peněženky.
+Address for %blockchain% transfer: Adresa pro převod v síti %blockchain%
+Password must contain %length% digits.: Heslo musí obsahovat %length% číslic.
+Deposit Link: Odkaz pro vklad
+Please note that it may take up to a few hours for tokens to appear in your wallet.: Než se tokeny objeví ve vaší peněžence, může to trvat až několik hodin.
+Minimum amount: Minimum %value%
+Maximum amount: Maximum %value%
+Display Tray Icon: Zobrazit ikonu v oznamovací oblasti
+Auto-Updates: Automatické aktualizace
+Biometric Authentication: Biometrické ověřování
+If you turn off biometric protection, you will need to create a password.: Pokud vypnete biometrickou ochranu, budete muset vytvořit heslo.
+Enter your current password: Zadejte své aktuální heslo
+Turn On Biometrics: Zapnout biometrii
+Enabling biometric confirmation will reset the password.: Zapnutí biometrického potvrzování obnoví heslo.
+Biometric Registration: Registrace biometrie
+Step 1 of 2. Registration: Krok 1 ze 2. Registrace
+Step 2 of 2. Verification: Krok 2 ze 2. Ověření
+Download Logs: Stáhnout protokoly
+Copy Logs: Kopírovat protokoly
+Logs Copied: Protokoly byly zkopírovány
+Biometric setup failed.: Nastavení biometrie se nezdařilo.
+Biometric confirmation failed.: Biometrické potvrzení se nezdařilo.
+Failed to disable biometrics.: Biometrii se nepodařilo vypnout.
+Biometric Confirmation: Biometrické potvrzení
+Create Password: Vytvořit heslo
+Complete: Dokončit
+Verification: Ověření
+Connect Biometrics: Připojit biometrii
+Use Password: Použít heslo
+Biometrics Disabled: Biometrie vypnuta
+Biometrics Enabled: Biometrie zapnuta
+A request is already pending: Požadavek již čeká na vyřízení
+Please confirm action using biometrics: Potvrďte akci pomocí biometrie
+Scan QR Code: Naskenovat QR kód
+Open the QR scanner.: Otevřít skener QR kódů.
+Open scanner in ${applicationName}: Otevřít skener v ${applicationName}
+Scan a code with ${applicationName}: Naskenovat kód pomocí ${applicationName}
+Scan QR: Naskenovat QR
+Scan QR with ${applicationName}: Naskenovat QR pomocí ${applicationName}
+Account: Účet
+Accounts: Účty
+Networks: Sítě
+Blockchains: Blockchainy
+All Chains: Všechny sítě
+You will still be able to receive and send tokens in hidden chains.: Ve skrytých sítích budete moci nadále přijímat a odesílat tokeny.
+Sort by Value: Řadit podle hodnoty
+Automatically sort and hide chains based on your portfolio.: Automaticky řadit a skrývat sítě podle vašeho portfolia.
+Hidden chains will still be available to receive and send tokens, but won’t appear in the main list.: Skryté sítě budou nadále dostupné pro příjem a odesílání tokenů, ale nezobrazí se v hlavním seznamu.
+Move Up: Posunout nahoru
+Move Down: Posunout dolů
+Tokens: Tokeny
+Receive Funds: Přijmout prostředky
+Open the receive screen.: Otevřít obrazovku příjmu.
+Receive with ${applicationName}: Přijmout pomocí ${applicationName}
+Add crypto with ${applicationName}: Přidat kryptoměnu pomocí ${applicationName}
+Open receive in ${applicationName}: Otevřít příjem v ${applicationName}
+Send Token: Odeslat token
+Open Token: Otevřít token
+Open ${target} in ${applicationName}: Otevřít ${target} v ${applicationName}
+Show ${target} in ${applicationName}: Zobrazit ${target} v ${applicationName}
+Open the token screen.: Otevřít obrazovku tokenu.
+Open the send screen.: Otevřít obrazovku odesílání.
+Send token with ${applicationName}: Odeslat token pomocí ${applicationName}
+Send crypto with ${applicationName}: Odeslat kryptoměnu pomocí ${applicationName}
+Open send in ${applicationName}: Otevřít odesílání v ${applicationName}
+Permission denied. Please grant camera permission to use the QR code scanner.: Přístup zamítnut. Pro použití skeneru QR kódů povolte přístup k fotoaparátu.
+This QR Code is not supported: Tento QR kód není podporován
+An error on the server side. Please try again.: Chyba na straně serveru. Zkuste to znovu.
+Address Saved: Adresa byla uložena
+US Dollar: Americký dolar
+Euro: Euro
+Russian Ruble: Ruský rubl
+Chinese Yuan: Čínský jüan
+Bitcoin: Bitcoin
+$max_balance: "Max.: %balance%"
+$available_balance: "Dostupné: %balance%"
+$send_recipient_invalid: Neplatné
+$send_recipient_not_compatible: Nekompatibilní
+$unstake_information_instantly: Vklad obdržíte okamžitě
+Select Token: Vybrat token
+$token_picker_hidden: Skryté
+MY: Moje
+Popular: Oblíbené
+Not Found: Nenalezeno
+Wallet is ready!: Peněženka je připravena!
+Wallet is imported!: Peněženka byla importována!
+Create a code to protect it: Vytvořte kód pro její ochranu
+Enter your code again: Zadejte kód znovu
+Code set successfully: Kód byl úspěšně nastaven
+Use Touch ID: Použít Touch ID
+Use Face ID: Použít Face ID
+Connect Touch ID: Připojit Touch ID
+Connect Face ID: Připojit Face ID
+Not Now: Teď ne
+Touch ID: Touch ID
+Face ID: Face ID
+Turn Off Touch ID: Vypnout Touch ID
+Turn Off Face ID: Vypnout Face ID
+Turn Off Biometrics: Vypnout biometrii
+Enter code: Zadejte kód
+Enter code or use Face ID: Zadejte kód nebo použijte Face ID
+Enter code or use Touch ID: Zadejte kód nebo použijte Touch ID
+Enter code or use biometrics: Zadejte kód nebo použijte biometrii
+Wrong code, please try again: Nesprávný kód, zkuste to znovu
+Scan your fingerprint: Naskenujte otisk prstu
+Incorrect code, please try again.: Nesprávný kód, zkuste to znovu.
+Correct: Správně
+Confirm Action: Potvrdit akci
+$classic_confirm_actions: Potvrdit akce
+Confirm Rewards Claim: Potvrdit vyzvednutí odměn
+"%amount% to %address%": "%amount% na %address%"
+"%amount_from% to %amount_to%": "%amount_from% na %amount_to%"
+Failed to enable biometrics.: Biometrii se nepodařilo zapnout.
+Please try to confirm your biometrics again: Zkuste znovu potvrdit svou biometrii
+Unknown error: Neznámá chyba
+Are you sure you want to disable Face ID?: Opravdu chcete vypnout Face ID?
+Are you sure you want to disable Touch ID?: Opravdu chcete vypnout Touch ID?
+Are you sure you want to disable biometrics?: Opravdu chcete vypnout biometrii?
+"Yes": Ano
+Biometric confirmation failed: Biometrické potvrzení se nezdařilo
+No Activity: Žádná aktivita
+Fund: Doplnit
+Buy with Card: Koupit kartou
+Buy with Crypto: Koupit za kryptoměnu
+Cannot load widget: Widget nelze načíst
+Error: Chyba
+Explore: Prozkoumat
+$lockdown_mode_enabled_title: Režim blokování zapnut
+$lockdown_mode_walletconnect_unavailable: WalletConnect není v režimu blokování dostupný. Chcete-li ho používat, vypněte režim blokování pro %app_name% v Nastavení > Soukromí a zabezpečení > Režim blokování > Konfigurovat prohlížení webu.
+No partners yet: Zatím žádní partneři
+Clear: Vymazat
+Unavailable: Nedostupné
+$unstake_up_to_information: Okamžitě – až %value%
+$all_balance: "Vše: %balance%"
+$unstaking_not_enough_balance: Pro výběr ze stakingu musíte mít na hlavním zůstatku %value%.
+Wallet Versions: Verze peněženky
+$read_more_about_wallet_version: Více o typech kontraktů peněženek najdete na %link%.
+$current_wallet_version: Vaše aktuální verze peněženky je %version%.
+You have tokens on other versions of your wallet. You can import them from here.: Máte tokeny v jiných verzích své peněženky. Zde je můžete importovat.
+$wallet_switch_version_1: Můžete také %action%.
+$wallet_switch_version_2: přepnout na jinou verzi peněženky
+or import from: nebo importovat z
+Insufficient fee: Nedostatek prostředků na poplatek
+$insufficient_fee: "Nedostatek prostředků na poplatek: %fee%"
+$dapp_insufficient_network_fee_warning: Nedostatek %token% na úhradu síťového poplatku
+Required: Požadováno
+Comment is too long.: Komentář je příliš dlouhý.
+Memo: Memo
+Memo Copied: Memo bylo zkopírováno
+$hide_tokens_no_cost_help: "Skrýt tokeny s hodnotou nižší než $%value%. Pamatujte: bezcenné tokeny často posílají šiřitelé spamu a podvodníci. Níže na této obrazovce můžete skrýt jednotlivé tokeny."
+No internet connection. Please check your connection and try again.: Bez připojení k internetu. Zkontrolujte připojení a zkuste to znovu.
+To use this feature, first enable Face ID in your phone settings.: Pro použití této funkce nejprve povolte Face ID v nastavení telefonu.
+To use this feature, first enable biometrics in your phone settings.: Pro použití této funkce nejprve povolte biometrii v nastavení telefonu.
+No Price: Bez ceny
+$dapp_transfer_tokens_burn: Spalování %amount%
+$dapp_dns_set_wallet_payload: Změna propojené peněženky domény %domain% na %address%
+$dapp_dns_delete_wallet_payload: Odstranění propojené peněženky domény %domain%
+$dapp_dns_change_record_payload: Změna záznamu „%category%“ domény %domain% na %value%
+$dapp_dns_delete_record_payload: Odstranění záznamu „%category%“ domény %domain%
+$dapp_liquid_staking_deposit_payload: Vklad do likvidního stakingu
+$dapp_liquid_staking_vote_payload: Hlasování „%vote%“ o návrhu %votingAddress%
+$dapp_single_nominator_change_validator_payload: Změna adresy validátora stakingového kontraktu SingleNominator na %address%
+$dapp_single_nominator_withdraw_payload: Výběr %amount% ze stakingového kontraktu SingleNominator
+$dapp_vesting_add_whitelist_payload: Přidání %address% na seznam povolených adres vestingové peněženky
+Time synchronization issue. Please ensure your device's time settings are correct.: Problém se synchronizací času. Ověřte správné nastavení času na zařízení.
+Data Copied: Data byla zkopírována
+URL Copied: URL byla zkopírována
+Private Key Copied: Soukromý klíč byl zkopírován
+Contract Initialization Data Copied: Inicializační data kontraktu byla zkopírována
+Open NFT Collection: Otevřít kolekci NFT
+Previous: Předchozí
+Next: Další
+Updating: Aktualizace
+Insufficient %token% for fee.%fee%: Nedostatek %token% na poplatek.%fee%
+Send NFT: Odeslat NFT
+Send Collectible: Odeslat NFT
+Send Collectibles: Odeslat NFT
+$nfts_burned:
+  zeroValue: Spáleno %count% NFT
+  oneValue: Spáleno %count% NFT
+  otherValue: Spáleno %count% NFT
+  fewValue: Spáleno %count% NFT
+  manyValue: Spáleno %count% NFT
+No NFT selected: Není vybráno žádné NFT
+Cannot be sent: Nelze odeslat
+NFT is for sale: NFT je na prodej
+More actions: Další akce
+Open on %explorer_name%: Otevřít na %explorer_name%
+Buying with card is not supported in Testnet.: Nákup kartou není v testovací síti podporován.
+Staking is not supported in Testnet.: Staking není v testovací síti podporován.
+Get Support: Získat podporu
+$transfer_link_expired: Platnost odkazu na převod vypršela
+$transfer_text_and_bin_exclusive: Parametry text a bin nelze použít současně
+$unsupported_deeplink_parameter: Tento přímý odkaz obsahuje nepodporované parametry.
+$unsupported_chain: Nepodporovaný blockchain.
+Successfully: Úspěšně
+Unstake More: Vybrat více ze stakingu
+Are you sure you want to burn this NFT? It will be lost forever.: |
+  Opravdu chcete toto NFT spálit?
+  Bude navždy ztraceno.
+$multi_burn_nft_warning: |
+  Chystáte se spálit %amount% NFT. Proces může trvat přibližně %duration%. Dokud neskončí, nezavírejte aplikaci ani nepřepínejte peněženky.
+
+  Tato NFT budou navždy ztracena.
+$duration_minutes:
+  zeroValue: "%count% minut"
+  oneValue: "%count% minuta"
+  otherValue: "%count% minut"
+  fewValue: "%count% minuty"
+  manyValue: "%count% minuty"
+$multi_send_nft_warning: Proces může trvat přibližně %duration% min. Dokud neskončí, nezavírejte aplikaci ani nepřepínejte účty.
+Burn NFT: Spálit NFT
+Burn Collectibles: Spálit NFT
+Burn: Spálit
+Private Key: Soukromý klíč
+"%amount% NFTs":
+  zeroValue: Žádná NFT
+  oneValue: "%amount% NFT"
+  otherValue: "%amount% NFT"
+  fewValue: "%amount% NFT"
+  manyValue: "%amount% NFT"
+1 NFT: 1 NFT
+1 NFT Selected: Vybráno 1 NFT
+"%amount% NFTs Selected":
+  zeroValue: Nejsou vybrána žádná NFT
+  oneValue: Vybráno %amount% NFT
+  otherValue: Vybráno %amount% NFT
+  fewValue: Vybráno %amount% NFT
+  manyValue: Vybráno %amount% NFT
+For sale. Cannot be sent and burned: Na prodej. Nelze odeslat ani spálit
+Select: Vybrat
+Send All: Odeslat vše
+Burn All: Spálit vše
+Select All: Vybrat vše
+Collection: Kolekce
+Unnamed Collection: Nepojmenovaná kolekce
+Transaction ID Copied: ID transakce bylo zkopírováno
+External Exchange ID Copied: ID externí směny bylo zkopírováno
+Email: E-mail
+Your %blockchain% Address: Vaše adresa v síti %blockchain%
+My %blockchain% Address: Moje adresa v síti %blockchain%
+"%blockchain% Address": Adresa v síti %blockchain%
+$view_only_wallet_receive_warning: |
+  **Režim prohlížení: toto NENÍ vaše peněženka**
+  Před odesláním prostředků vše pečlivě ověřte.
+Vesting: Vesting
+Vesting Balance: Zůstatek vestingu
+Ready to Unfreeze: Připraveno k odemčení
+You will receive your unfrozen coins in a few minutes.: Odemčené mince obdržíte během několika minut.
+Vesting Schedule: Harmonogram vestingu
+Loyal User Airdrop: Airdrop pro věrné uživatele
+Unfrozen: Odemčeno
+Missed: Zmeškáno
+Frozen: Uzamčeno
+until %date%: do %date%
+$until_date_capitalized: Do %date%
+"%volume% in %amount% parts": "%volume% v %amount% částech"
+Unfreeze: Odemknout
+Claim: Vyzvednout
+Confirm Unfreezing: Potvrdit odemčení
+Insufficient Balance for Fee: Nedostatečný zůstatek na poplatek
+$fee_value_bold: "**Poplatek:** %fee%"
+"%app_name% Features": Funkce %app_name%
+Security: Zabezpečení
+To avoid entering the passcode every time, you can use biometrics.: Abyste nemuseli pokaždé zadávat přístupový kód, můžete použít biometrii.
+To avoid entering the password every time, you can use biometrics.: Abyste nemuseli pokaždé zadávat heslo, můžete použít biometrii.
+Change Passcode: Změnit přístupový kód
+Change Password: Změnit heslo
+Confirm Password: Potvrdit heslo
+The passcode will be changed for all your wallets.: Přístupový kód se změní pro všechny vaše peněženky.
+The password will be changed for all your wallets.: Heslo se změní pro všechny vaše peněženky.
+Password Changed!: Heslo bylo změněno!
+Passcode Changed!: Přístupový kód byl změněn!
+New code set successfully: Nový kód byl úspěšně nastaven
+Codes don’t match: Kódy se neshodují
+Enter your new code: Zadejte nový kód
+Re-enter your new code: Zadejte nový kód znovu
+Install on Desktop: Nainstalovat na počítač
+Install on Mobile: Nainstalovat na mobil
+Install App: Nainstalovat aplikaci
+Hide: Skrýt
+Hidden NFTs: Skrytá NFT
+Hidden By Me: Skryté mnou
+Probably Scam: Pravděpodobný podvod
+$settings_nft_probably_scam_description: Tato NFT byla automaticky skryta ochranou proti podvodům. Pokud se domníváte, že se do seznamu dostala omylem, můžete je vrátit na hlavní obrazovku.
+Unhide: Znovu zobrazit
+Hide All: Skrýt vše
+Hide NFT: Skrýt NFT
+Reload Page: Znovu načíst stránku
+Open in Safari: Otevřít v Safari
+Open in Browser: Otevřít v prohlížeči
+CopyURL: Kopírovat URL
+Share: Sdílet
+Unhide NFT: Znovu zobrazit NFT
+The NFT has been hidden: NFT bylo skryto
+The NFT is no longer hidden: NFT již není skryté
+$unhide_nft_warning: Opravdu chcete znovu zobrazit %name%? Toto NFT vypadá podezřele a nemusí odpovídat svému názvu a popisu.
+Hide NFTs: Skrýt NFT
+Are you sure you want to hide this NFT collection containing %number% NFTs?: Opravdu chcete skrýt tuto kolekci NFT obsahující %number% NFT?
+Are you sure you want to hide these %number% NFTs?: Opravdu chcete skrýt těchto %number% NFT?
+Show: Zobrazit
+Confirm Sending: Potvrdit odeslání
+Confirm Burning: Potvrdit spálení
+Confirm Passcode: Potvrdit přístupový kód
+Enter your code: Zadejte svůj kód
+Switch to W5: Přepnout na W5
+Not Scam: Není podvod
+Untitled: Bez názvu
+Multichain: Více sítí
+$not_enough_symbol_lowercase: Nedostatek %symbol%
+Enter Secret Words: Zadejte tajná slova
+Turn this off so you can manually download updates and verify signatures.: Vypněte tuto možnost, abyste mohli aktualizace stahovat ručně a ověřovat podpisy.
+InvalidMnemonic: Vaše mnemotechnická slova jsou neplatná
+NFT Menu: Nabídka NFT
+$app_lock_description: Když je zámek aplikace zapnutý, na kartě na hlavní stránce se objeví ikona zámku. Pomocí ní uzamknete %app_name%.
+App Lock: Zámek aplikace
+Auto-Lock: Automatické uzamčení
+Disabled: Vypnuto
+30 seconds: 30 sekund
+3 minutes: 3 minuty
+10 minutes: 10 minut
+If away for 30 sec: Při neaktivitě 30 s
+If away for 3 min: Při neaktivitě 3 min
+If away for 10 min: Při neaktivitě 10 min
+Unlock: Odemknout
+This address mimics another address that you previously interacted with.: Tato adresa napodobuje jinou adresu, se kterou jste již dříve komunikovali.
+Biometric authentication failed: Biometrické ověření se nezdařilo
+Authentication is already configured: Ověřování je již nastaveno
+Reset biometrics in security settings, or use a passcode.: Obnovte biometrii v nastavení zabezpečení nebo použijte přístupový kód.
+Add Tokens: Přidat tokeny
+No tokens yet: Zatím žádné tokeny
+$no_tokens_description: Přijměte tokeny z jiné peněženky nebo v nastavení povolte sledování preferovaných tokenů.
+Exchange Rate: Směnný kurz
+Install Card: Nastavit kartu
+Reset Card: Obnovit kartu
+Apply Palette: Nastavit paletu
+Reset Palette: Obnovit paletu
+Notifications & Sounds: Oznámení a zvuky
+Sounds: Zvuky
+Push Notifications: Push oznámení
+Select up to %count% wallets for notifications: Vyberte až %count% peněženek pro oznámení
+Accumulated Rewards: Nashromážděné odměny
+Blockchain Fee Details: Podrobnosti blockchainového poplatku
+Final Fee: Konečný poplatek
+Excess: Přeplatek
+$fee_details: |
+  %full_fee% bude ihned odečteno z vaší peněženky na úhradu poplatku. Část této částky vám bude během několika minut vrácena jako přeplatek **v **%excess_symbol%.
+
+  Takto funguje blockchain %chain_name%.
+Got It: Rozumím
+Wallet: Peněženka
+Trending: Trendy
+No Data: Žádná data
+Toggle fullscreen: Přepnout celou obrazovku
+Transaction ID: ID transakce
+Outgoing Transaction ID: ID odchozí transakce
+Incoming Transaction ID: ID příchozí transakce
+Help Center: Centrum nápovědy
+"%app_name% Tips": Tipy pro %app_name%
+Open %nft_marketplace%: Otevřít %nft_marketplace%
+Link Copied: Odkaz byl zkopírován
+Share Link: Sdílet odkaz
+$dapp_return_details: |
+  Z vaší peněženky bude ihned odečteno %fee_amount% na úhradu poplatku.
+
+  Během několika minut vám bude vráceno %received_amount%.
+$dapp_return_disclaimer: Zobrazená vrácená částka není zaručena a škodlivé dapp ji mohou zmanipulovat. Pokud si nejste jisti důvěryhodností služby, operaci zrušte.
+Additional Amount Sent: Odeslaná dodatečná částka
+Show Sensitive Data: Zobrazit citlivé údaje
+Hide Sensitive Data: Skrýt citlivé údaje
+Copy Address: Kopírovat adresu
+Copy Transaction ID: Kopírovat ID transakce
+Requesting Unstake: Odesílání žádosti o výběr ze stakingu
+Requested Unstake: Požádáno o výběr ze stakingu
+Unstake Requested: Žádost o výběr ze stakingu odeslána
+$request_unstake_action: Požádat o výběr ze stakingu
+Calling Contract: Volání kontraktu
+Called Contract: Kontrakt zavolán
+$call_contract_action: Zavolat kontrakt
+Deploying Contract: Nasazování kontraktu
+Deployed Contract: Kontrakt nasazen
+$deploy_contract_action: Nasadit kontrakt
+Minting: Ražba
+Minted: Vyraženo
+$mint_action: Vyrazit
+Burning: Spalování
+Burned: Spáleno
+$burn_action: Spálit
+Updating Address: Aktualizace adresy
+Updated Address: Adresa aktualizována
+$update_address_action: Aktualizovat adresu
+Updating Site: Aktualizace webu
+Updated Site: Web aktualizován
+$update_site_action: Aktualizovat web
+Updating Subdomains: Aktualizace subdomén
+Updated Subdomains: Subdomény aktualizovány
+$update_subdomains_action: Aktualizovat subdomény
+Updating Storage: Aktualizace úložiště
+Updated Storage: Úložiště aktualizováno
+$update_storage_action: Aktualizovat úložiště
+Deleting Domain Record: Mazání záznamu domény
+Deleted Domain Record: Záznam domény smazán
+$delete_domain_record_action: Smazat záznam domény
+Renewing Domain: Prodloužení domény
+Renewed Domain: Doména prodloužena
+$renew_domain_action: Prodloužit doménu
+Providing Liquidity: Poskytování likvidity
+Provided Liquidity: Likvidita poskytnuta
+$provide_liquidity_action: Poskytnout likviditu
+Withdrawing Liquidity: Výběr likvidity
+Withdrawn Liquidity: Likvidita vybrána
+$withdraw_liquidity_action: Vybrat likviditu
+Bounced: Vráceno
+Bouncing: Vracení
+$bounce_action: Vrátit
+NFT Auction Bid: Příhoz v aukci NFT
+Bidding at NFT Auction: Přihazování v aukci NFT
+Buying NFT: Nákup NFT
+Bought NFT: NFT zakoupeno
+$buy_nft_action: Koupit NFT
+Sold NFT: NFT prodáno
+Selling NFT: Prodej NFT
+$sell_nft_action: Prodat NFT
+Receiving: Přijímání
+$receive_action: Přijmout
+Change Palette: Změnit paletu
+Palette: Paleta
+Unlock New Palettes: Odemknout nové palety
+Card has been upgraded!: Karta byla vylepšena!
+$mint_card_result: NFT karta bude během minuty **vyražena** a **automaticky nastavena**.
+Unique: Jedinečná
+Get a card with unique background and personalized palette for wallet interface.: Získejte kartu s jedinečným pozadím a vlastní paletou pro rozhraní peněženky.
+Transferable: Přenositelná
+Easily send your upgraded card to any of your friends.: Snadno pošlete svou vylepšenou kartu komukoli z přátel.
+Tradable: Obchodovatelná
+Sell or auction your card on third-party NFT marketplaces.: Prodejte svou kartu nebo ji nabídněte v aukci na externích tržištích NFT.
+Upgrade for %amount% %currency%: Vylepšit za %amount% %currency%
+"%amount% left": Zbývá %amount%
+"%amount% sold": Prodáno %amount%
+This card has been sold out: Tato karta je vyprodaná
+Import Existing Wallet: Importovat existující peněženku
+View Any Address: Prohlížet libovolnou adresu
+View Mode: Režim prohlížení
+"%counts% Secret Words": "%counts% tajných slov"
+Address or Domain: Adresa nebo doména
+$import_view_account_note: Přidejte **libovolnou** adresu a **sledujte** její aktivitu.
+$view_mode: Prohlížet
+Import Wallet: Importovat peněženku
+Please top up your %token% balance.: Doplňte zůstatek %token%.
+Remember Passcode: Zapamatovat přístupový kód
+Remember Password: Zapamatovat heslo
+Not available with biometrics.: Není dostupné s biometrií.
+App will not ask for signature for %minutes% minutes after last entry.: Aplikace nebude vyžadovat podpis po dobu %minutes% minut od posledního zadání.
+Remember for %minutes% minutes: Zapamatovat na %minutes% minut
+Preview: Náhled
+$preview_not_guaranteed: Výsledek náhledu **není zaručen** a služba ho **může zfalšovat**.
+Unverified Source: Neověřený zdroj
+DappurlTrustStatusInvalidTitle: Neshoda domény
+$DappurlTrustStatusInvalidHelp: Zdroj neodpovídá ověřené doméně této aplikace. Pokračujte pouze tehdy, pokud tomuto webu důvěřujete.
+DappurlTrustStatusDangerousTitle: Potenciálně škodlivý web
+$DappurlTrustStatusDangerousHelp: Bezpečnostní kontroly označily tuto doménu za nebezpečnou. Připojením můžete ohrozit své prostředky. Pokračujte pouze tehdy, pokud jste si naprosto jisti.
+$reopen_in_iab: Pro %app_name% použijte %mobileAppButton% nebo %browserExtensionButton%, abyste se tomuto upozornění vyhnuli.
+$reopen_in_iab_explore: Při prohlížení aplikací používejte sekci %exploreTab%, abyste se tomuto upozornění vyhnuli.
+My Wallet Browser: Prohlížeč ION Wallet
+mobile app: mobilní aplikaci
+browser extension: rozšíření prohlížeče
+Exit all wallets: Opustit všechny peněženky
+Can't confirm?: Nelze potvrdit?
+Unstake %amount%: Vybrat %amount% ze stakingu
+Request Unstaking: Požádat o výběr ze stakingu
+Confirm Upgrading: Potvrdit vylepšení
+How does it work?: Jak to funguje?
+Renew All: Prodloužit vše
+Renew: Prodloužit
+Renew Domain: Prodloužit doménu
+Renew Domains: Prodloužit domény
+Some domains are about to expire: Platnost některých domén brzy vyprší
+$domain_expire: Platnost **%domain%** vyprší %days%
+"%token% Staking": Staking %token%
+Add Tab: Přidat kartu
+Customize Tabs: Přizpůsobit karty
+Remove Tab: Odebrat kartu
+Reset: Obnovit
+Tabs: Karty
+Tap or drag to add tabs.: Klepnutím nebo přetažením přidejte karty.
+$iab_tabs_count:
+  zeroValue: "%count% karet"
+  oneValue: "%count% karta"
+  otherValue: "%count% karet"
+  fewValue: "%count% karty"
+  manyValue: "%count% karty"
+$domains_amount %count%:
+  zeroValue: Žádné domény
+  oneValue: "%count% doména"
+  otherValue: "%count% domén"
+  fewValue: "%count% domény"
+  manyValue: "%count% domény"
+Stake: Stakovat
+Attached to Contract: Připojeno ke kontraktu
+Estimated Unstake: Odhadovaný výběr ze stakingu
+Burned Staking Tokens: Spálené stakingové tokeny
+Manage Tokens: Spravovat tokeny
+Claim Rewards: Vyzvednout odměny
+Configure DNS: Nastavit DNS
+Link to Wallet: Propojit s peněženkou
+Change Wallet: Změnit peněženku
+Change Linked Wallet: Změnit propojenou peněženku
+Domain Renewed: Doména prodloužena
+Domains Renewed: Domény prodlouženy
+Linked Wallet: Propojená peněženka
+Expires: Platnost vyprší
+Domain Linked: Doména propojena
+Domain Unlinked: Doména odpojena
+Unlink: Zrušit propojení
+Link: Propojit
+Confirm Renewing: Potvrdit prodloužení
+Confirm Linking: Potvrdit propojení
+$domains_expire:
+  zeroValue: Žádným doménám nevyprší platnost %days%
+  oneValue: Platnost **domény %domain%** vyprší %days%
+  otherValue: Platnost **domén %domain%** vyprší %days%
+  fewValue: Platnost **domén %domain%** vyprší %days%
+  manyValue: Platnost **domén %domain%** vyprší %days%
+$in_days:
+  zeroValue: za %count% dní
+  oneValue: za %count% den
+  otherValue: za %count% dní
+  fewValue: za %count% dny
+  manyValue: za %count% dne
+$domain_was_expired: Platnost **%domain%** vypršela
+$domains_was_expired:
+  zeroValue: Žádné doméně nevypršela platnost
+  oneValue: Platnost **domény %domain%** vypršela
+  otherValue: Platnost **domén %domain%** vypršela
+  fewValue: Platnost **domén %domain%** vypršela
+  manyValue: Platnost **domén %domain%** vypršela
+Reload: Znovu načíst
+Copy Link: Kopírovat odkaz
+Check eligibility for max APY: Ověřit nárok na maximální APY
+Check eligibility: Ověřit nárok
+$expired_many: Platnost vypršela
+$one_domain_expires %days%: Platnost vyprší %days%
+$multiple_domains_expire %days%: Platnost vyprší %days%
+Message: Zpráva
+Binary Data: Binární data
+The binary data content is unclear. Sign it only if you trust the service.: Obsah binárních dat není srozumitelný. Podepište je pouze tehdy, pokud službě důvěřujete.
+Cell Schema: Schéma buňky
+Cell Data: Data buňky
+Sign Data: Podepsat data
+EIP-712 typed data: Typovaná data EIP-712
+Domain: Doména
+Primary type: Primární typ
+Utilities: Nástroje
+Games: Hry
+Entertainment: Zábava
+Toggle to landscape layout: Přepnout na rozložení na šířku
+Toggle to portrait layout: Přepnout na rozložení na výšku
+Attributes: Atributy
+Show All: Zobrazit vše
+Description: Popis
+No additional data.: Žádná další data.
+"%chain% Domain Copied": Doména %chain% byla zkopírována
+$in_currency: v %currency%
+Rename Wallet: Přejmenovat peněženku
+You can rename this wallet for easier identification.: Pro snazší rozpoznání můžete tuto peněženku přejmenovat.
+Collectibles: NFT
+Canceled by the user: Zrušeno uživatelem
+The proof for signing provided by the app is too large: Důkaz k podpisu poskytnutý aplikací je příliš velký
+$domain_like_scam_warning: |-
+  Zadaná adresa je pravděpodobně **PODVOD**. Toto **NENÍ** adresa žádné burzy ani vaší tokenové peněženky.
+
+  Jde o dlouhou **doménu**, kterou **podvodníci** používají, aby lidi přesvědčili, že posílají tokeny na známou adresu.
+
+  **Zrušte** tento převod a **nikdy** nedůvěřujte cizím lidem.
+Allow Suspicious Actions: Povolit podezřelé akce
+$allow_suspicious_actions_description: Povolit odesílání na podezřelé adresy a interakce s potenciálně nebezpečnými kontrakty.
+Multisig Wallet Detected: Zjištěna peněženka s více podpisy
+$multisig_warning_text: Tato peněženka vyžaduje k převodům více podpisů. Pomocí %app_name% z ní **nemůžete vybrat** žádné prostředky. Ujistěte se, že patří vám, jinak může být součástí podvodu.
+$multisig_warning_link: Klepnutím se dozvíte více
+Multisig sending disabled: Odesílání z peněženky s více podpisy je vypnuto
+$accept_terms_with_link: Souhlasím s %link%
+use the wallet responsibly: používat peněženku zodpovědně
+"%app_name% Resources": Zdroje %app_name%
+Resources: Zdroje
+Watch Video about Features: Zhlédnout video o funkcích
+Enjoy Monthly Updates in Blog: Číst měsíční novinky na blogu
+Learn New Things in Help Center: Naučit se něco nového v centru nápovědy
+Frequent Questions & Answers: Časté otázky a odpovědi
+Paste from Clipboard: Vložit ze schránky
+Use biometric authentication or create a password to protect it.: Pro ochranu použijte biometrické ověřování nebo vytvořte heslo.
+Go to Words: Přejít ke slovům
+Copy to Clipboard: Kopírovat do schránky
+$mnemonic_check_words_list: "Vyberte správná slova %word_numbers%:"
+$mnemonic_check_error: Slova se neshodují, zkuste to znovu.
+Open Wallet: Otevřít peněženku
+All Set!: Vše je připraveno!
+$wallet_create_done: Hotovo! Vytvořili jste peněženku.
+$wallet_import_done:
+  zeroValue: Hotovo! Importovali jste peněženku.
+  oneValue: Hotovo! Importovali jste peněženku.
+  otherValue: Hotovo! Importovali jste %count% peněženek.
+  fewValue: Hotovo! Importovali jste %count% peněženky.
+  manyValue: Hotovo! Importovali jste %count% peněženky.
+$wallet_done_description: Nyní můžete bezpečně uchovávat, přijímat a odesílat mince a další digitální aktiva.
+Security Warning: Bezpečnostní upozornění
+Go back to Words: Zpět ke slovům
+I’m sure. Continue: Rozumím. Pokračovat
+$copy_mnemonic_warning: Ukládání slov v digitální podobě, včetně **schránky**, není bezpečné. Ujistěte se, že máte tajná slova bezpečně uložená.
+$screenshot_mnemonic_warning: Ukládání slov v digitální podobě, včetně **snímku obrazovky**, není bezpečné. Ujistěte se, že máte tajná slova bezpečně uložená.
+Other apps will be able to read your secret words!: Ostatní aplikace budou moci přečíst vaše tajná slova!
+I’m sure. Copy anyway: Rozumím. Přesto kopírovat
+$auth_biometric_info: Pro **větší pohodlí** můžete připojit své biometrické údaje.
+Open wallet without checking: Otevřít peněženku bez ověření
+Make sure you have your secret words securely saved.: Ujistěte se, že máte tajná slova bezpečně uložená.
+Without it, you won't be able to access your wallet.: Bez nich nebudete mít k peněžence přístup.
+Search app or enter address: Hledat aplikaci nebo zadat adresu
+Search or Ask: Hledat nebo se zeptat
+Connected Apps: Připojené aplikace
+Connected Sites: Připojené weby
+Popular Apps: Oblíbené aplikace
+Popular Sites: Oblíbené weby
+$wallets_amount:
+  zeroValue: Žádné peněženky
+  oneValue: "%count% peněženka"
+  otherValue: "%count% peněženek"
+  fewValue: "%count% peněženky"
+  manyValue: "%count% peněženky"
+$total_balance: Celkem %balance%
+No wallets: Žádné peněženky
+View as List: Zobrazit jako seznam
+View as Cards: Zobrazit jako karty
+Reorder: Změnit pořadí
+Reorder Tabs: Změnit pořadí karet
+Rename: Přejmenovat
+Customize: Přizpůsobit
+Manage Wallets: Spravovat peněženky
+i18n_dragToSort: Přetažením seřadit
+My: Moje
+All: Vše
+$view_accounts: Prohlížení
+Add your first one to begin.: Začněte přidáním první.
+You don’t have any wallets yet: Zatím nemáte žádné peněženky
+Add View Wallet: Přidat peněženku k prohlížení
+No view wallets yet: Zatím žádné peněženky k prohlížení
+View wallets can receive assets, but you cannot use them to send or sign transactions.: Peněženky k prohlížení mohou přijímat aktiva, ale nelze z nich odesílat ani podepisovat transakce.
+Add the first one to track balances and activity for any address.: Přidejte první a sledujte zůstatky a aktivitu libovolné adresy.
+Customize Wallet: Přizpůsobit peněženku
+"Select the card stored in this wallet:": "Vyberte kartu uloženou v této peněžence:"
+This card will be installed for this wallet and will be displayed on the home screen and in the wallets list.: Tato karta bude nastavena pro tuto peněženku a zobrazí se na hlavní obrazovce i v seznamu peněženek.
+Get First Card: Získat první kartu
+Palette and Card: Paleta a karta
+Customize the wallet's home screen and color accents the way you like.: Přizpůsobte si hlavní obrazovku peněženky a barevné akcenty podle sebe.
+Address doesn't exist: Adresa neexistuje
+The address is not a token minter address: Adresa není adresou kontraktu pro ražbu tokenu
+$joining_comma: ", "
+$joining_and: " a "
+$joining_or: " nebo "
+View in App: Zobrazit v aplikaci
+Save Account: Uložit účet
+$invalid_address_format: Neplatný formát adresy
+$no_valid_view_addresses: Žádné platné adresy k prohlížení
+Account Saved: Účet uložen
+Share Wallet Link: Sdílet odkaz na peněženku
+Address: Adresa
+Remove: Odebrat
+$missing_offramp_deposit_address: Chybí vkladová adresa pro převod na fiat měnu.
+Buy: Koupit
+Sell: Prodat
+Sell on Card: Prodat na kartu
+Sell %symbol%: Prodat %symbol%
+$connect_dapp_description: Připojené aplikace vidí pouze adresu vaší peněženky a bez svolení nemohou přesouvat vaše aktiva.
+$connect_dapp_title: Připojit k %name%?
+$connect_dapp_no_compatible_wallets_found: Toto připojení vyžaduje peněženku pro více sítí. Vaše aktuální peněženka podporuje pouze ION a nemáte žádnou jinou peněženku pro více sítí. Tlačítkem níže vytvoříte novou peněženku pro více sítí.
+Choose Wallet: Vybrat peněženku
+Wallet to use on %host%: Peněženka pro použití na %host%
+Selected Wallet: Vybraná peněženka
+Wallet to use for payment: Peněženka pro platbu
+$wallet_connect_pay_no_options: Pro tuto peněženku nejsou dostupné žádné možnosti platby.
+$wallet_connect_pay_try_another_wallet: Zkuste vybrat jinou peněženku.
+Connect Wallet: Připojit peněženku
+Create Multichain Wallet: Vytvořit peněženku pro více sítí
+Select multichain wallet: Vybrat peněženku pro více sítí
+Connect Anyway: Přesto připojit
+Insufficient Fee: Nedostatek prostředků na poplatek
+Waiting for a View deeplink to display a wallet address.: Čekání na přímý odkaz View pro zobrazení adresy peněženky.
+Adding wallets is not available in explorer mode: Přidávání peněženek není v režimu průzkumníku dostupné
+$explorer_mode_warning: "Režim průzkumníku: čekání na přímý odkaz View pro otevření adresy"
+This command is not supported in explorer mode: Tento příkaz není v režimu průzkumníku podporován
+$saved_addresses_header: Uložené
+confirm an action in My Wallet: potvrďte akci v ION Wallet
+Migration was rolled back: Migrace byla vrácena zpět
+Unable to migrate wallet data. Please contact support.: Data peněženky se nepodařilo migrovat. Kontaktujte podporu.
+Failed to retrieve password from biometrics: Heslo se nepodařilo získat pomocí biometrie
+Migration failed. Please try again.: Migrace se nezdařila. Zkuste to znovu.
+Timed out waiting for account to be ready: Vypršel čas čekání na připravenost účtu
+$connected_apps:
+  otherValue: "Připojeno: %count%"
+  fewValue: "Připojeno: %count%"
+  manyValue: "Připojeno: %count%"
+Night Mode, Palette, Card: Noční režim, paleta, karta
+Back Up, Passcode, Auto-Lock: Záloha, přístupový kód, automatické uzamčení
+Back Up, Password, Auto-Lock: Záloha, heslo, automatické uzamčení
+Base Currency, Token Order, Hidden NFTs: Základní měna, pořadí tokenů, skrytá NFT
+Your assets on other contracts: Vaše aktiva v jiných kontraktech
+Wallets, Sounds: Peněženky, zvuky
+Help: Nápověda
+About: O aplikaci
+Wallets: Peněženky
+Open: Otevřít
+Open in %app_name%: Otevřít v %app_name%
+Blog: Blog
+Apps: Aplikace
+Permissions: Oprávnění
+Token approvals and wallet permissions: Schválení tokenů a oprávnění peněženky
+Approvals & Delegations: Schválení a delegace
+Plugins: Pluginy
+No Permissions: Žádná oprávnění
+Unlimited: Neomezeně
+Approved to %name%: Schváleno pro %name%
+Wallet Delegation: Delegace peněženky
+Wallet Delegation to %name%: Delegace peněženky pro %name%
+Revoke Delegation: Odvolat delegaci
+Are you sure you want to revoke delegation for %name%?: Opravdu chcete odvolat delegaci pro %name%?
+Revoke: Odvolat
+Revoke Approval: Odvolat schválení
+Are you sure you want to revoke approval for %token%?: Opravdu chcete odvolat schválení pro %token%?
+Confirm Revoking: Potvrdit odvolání
+Unknown Plugin: Neznámý plugin
+$nft_not_found: NFT nenalezeno
+You will be able to save it again via Transfer Info with this address.: Znovu ho budete moci uložit v informacích o převodu s touto adresou.
+Transfer Info: Informace o převodu
+Transfer not found: Převod nenalezen
+Failed to fetch transfer: Převod se nepodařilo načíst
+Transfer in progress: Převod probíhá
+Not all transfers were sent successfully: Ne všechny převody byly úspěšně odeslány
+Please confirm transfer using biometrics: Potvrďte převod pomocí biometrie
+$transfer_inactive_contract_error: |
+  Zadali jste adresu ve formátu „EQ...“, ale adresa není aktivní, takže převod nebude dokončen.
+  Pokud na tuto adresu opravdu chcete prostředky odeslat, zadejte ji ve formátu „UQ...“.
+$transaction_not_found: Převod nenalezen.
+$could_not_determine_address: Z převodu se nepodařilo určit adresu peněženky
+WrongAddress: Aplikace požádala o akci z jiné peněženky.
+WrongNetwork: Aplikace požádala o akci z jiné sítě.
+Another transfer was sent from this wallet simultaneously. Please try again.: Z této peněženky byl současně odeslán jiný převod. Zkuste to znovu.
+Confirm action with your password: Potvrďte akci svým heslem
+$dapps-description: Můžete se přihlašovat do aplikací, které podporují %app_name%. Mohou zobrazit adresu a zůstatek peněženky a žádat o akce.
+Please verify the action.: Ověřte akci.
+$service_token_transfer_warning: Chystáte se převést důležitý servisní token potřebný k výběru vkladu nebo dokončení operací služby. Ujistěte se, že tuto akci opravdu chcete provést.
+$hardware_payload_warning: "**Služba třetí strany žádá o přístup k vaší peněžence.** To může vést ke ztrátě prostředků. Pokud si nejste jisti důvěryhodností služby, akci zrušte."
+Pin: Připnout
+Unpin: Odepnout
+My Assets: Moje aktiva
+Owner: Vlastník
+Show All Wallets: Zobrazit všechny peněženky
+Ask a Question: Položit otázku
+Ask anything: Zeptejte se na cokoli
+Learn more: Více informací
+$settings_token_change_threshold: Práh změny v %
+$settings_token_change_threshold_description: Skrývá procentní změny za 24 hodin nižší než zvolený práh.
+$settings_token_change_threshold_off: Vypnuto
+$settings_hide_action_buttons: Skrýt tlačítka akcí
+$settings_hide_action_buttons_description: Skryje řádek tlačítek akcí na obrazovce peněženky.
+Retry: Zkusit znovu
+Clear Chat: Vymazat chat
+Unsupported link: Nepodporovaný odkaz
+My Wallet Features: Funkce ION Wallet
+Notifications: Oznámení
+Wrong passcode, please try again: Nesprávný přístupový kód, zkuste to znovu
+Use biometric authentication or create a passcode to protect it.: Pro ochranu použijte biometrické ověřování nebo vytvořte přístupový kód.
+Use Passcode: Použít přístupový kód
+Create Passcode: Vytvořit přístupový kód
+Create a passcode to protect it.: Vytvořte přístupový kód pro její ochranu.
+Enter Passcode: Zadejte přístupový kód
+If you turn off biometric protection, you will need to create a passcode.: Pokud vypnete biometrickou ochranu, budete muset vytvořit přístupový kód.
+Enabling biometric confirmation will reset the passcode.: Zapnutí biometrického potvrzování obnoví přístupový kód.
+Confirm action with your passcode: Potvrďte akci svým přístupovým kódem
+No Image: Bez obrázku
+Different blockchain. Cannot be selected: Jiný blockchain. Nelze vybrat
+Chains: Sítě
+enclave_use_biometrics: Použít biometrii
+Copy Storage Data: Kopírovat data úložiště
+Reload Transactions: Znovu načíst transakce
+Enclave session expired: Platnost relace enklávy vypršela
+Failed to setup auth: Ověřování se nepodařilo nastavit
+Failed to setup biometric auth: Biometrické ověřování se nepodařilo nastavit
+No enclave session token available: Token relace enklávy není dostupný
+Missing authorization: Chybí autorizace
+$address_suggestion_no_chain: Bez %chain%
+Subwallets: Podpeněženky
+Other addresses for this wallet: Další adresy této peněženky
+Current Wallet: Aktuální peněženka
+Add Subwallet: Přidat podpeněženku
+Create Subwallet: Vytvořit podpeněženku
+Add All Found: Přidat všechny nalezené
+You have tokens on other subwallets. You can switch to them here.: Máte tokeny v jiných podpeněženkách. Zde na ně můžete přepnout.
+Subwallet Created: Podpeněženka vytvořena
+Subwallet Added: Podpeněženka přidána
+Subwallet Switched: Podpeněženka přepnuta
+Top 1: Nejlepší 1
+Top 3: Nejlepší 3
+Top 5: Nejlepších 5
+Top 10: Nejlepších 10
+Top 30: Nejlepších 30
+Manage Assets: Spravovat aktiva
+Pulse: Puls
+Edit Message: Upravit zprávu
+Toggle Hints: Přepnout nápovědy
+Scroll To Bottom: Posunout dolů
+$action_not_available_view_mode: Tato akce není pro peněženky k prohlížení dostupná
+Deposit: Vložit
+Trade: Obchodovat
+Show All Assets: Zobrazit všechna aktiva
+Show All Collectibles: Zobrazit všechna NFT
+Show All Actions: Zobrazit všechny akce
+Show All %collection_name%: Zobrazit vše z %collection_name%
+Scanning for subwallets...: Hledání podpeněženek...
+Your assets on other TON contracts: Vaše aktiva v jiných kontraktech ION
+No existing subwallets found: Žádné existující podpeněženky nenalezeny
+You can create a new subwallet if you need another address on the same secret words.: Pokud potřebujete další adresu se stejnými tajnými slovy, můžete vytvořit novou podpeněženku.
+You have tokens on other subwallets. Each subwallet has its own address.: Máte tokeny v jiných podpeněženkách. Každá podpeněženka má vlastní adresu.
+Scanning...: Hledání...
+No collectibles yet: Zatím žádná NFT
+Hide Tab: Skrýt kartu
+Show Collectibles: Zobrazit NFT
+Show Assets: Zobrazit aktiva
+Top %amount%: Nejlepších %amount%
+No subwallets yet.: Zatím žádné podpeněženky.
+$subwallets_found:
+  oneValue: "Nalezeno: %count%"
+  otherValue: "Nalezeno: %count%"
+  fewValue: "Nalezeno: %count%"
+  manyValue: "Nalezeno: %count%"
+$subwallet_scan_no_native_balances: Žádné nativní zůstatky
+$subwallet_scan_other_tokens_suffix:
+  oneValue: " + %count% další token"
+  otherValue: " + %count% dalších tokenů"
+  fewValue: " + %count% další tokeny"
+  manyValue: " + %count% dalšího tokenu"
+Send, receive, and trade tokens and collectibles.: Odesílejte, přijímejte a obchodujte s tokeny a NFT.
+$overview_cell_size_small: Malá
+$overview_cell_size_medium: Střední
+$overview_cell_size_big: Velká
+Set Name: Nastavit název
+Wallet Created: Peněženka vytvořena
+Wallet Imported: Peněženka importována
+View Wallet Added: Peněženka k prohlížení přidána
+Scroll Left: Posunout doleva
+Scroll Right: Posunout doprava
+Sent NFT: NFT odesláno
+Sending NFT: Odesílání NFT
+$send_nft_action: Odeslat NFT
+Received NFT: NFT přijato
+Receiving NFT: Přijímání NFT
+$receive_nft_action: Přijmout NFT
+Minted NFT: NFT vyraženo
+Minting NFT: Ražba NFT
+$mint_nft_action: Vyrazit NFT
+Burned NFT: NFT spáleno
+Burning NFT: Spalování NFT
+$burn_nft_action: Spálit NFT
+New Wallet: Nová peněženka
+From new secret words: Z nových tajných slov
+New Subwallet: Nová podpeněženka
+From current secret words: Z aktuálních tajných slov
+$secret_words: Tajná slova
+Restore wallet from 12 or 24 words: Obnovit peněženku z 12 nebo 24 slov
+Watch wallet in read-only mode: Sledovat peněženku v režimu pouze pro čtení
+More: Více
+at: v
+I agree to %term%: Souhlasím s %term%
+See Words: Zobrazit slova
+Wrong Phrase: Nesprávná fráze
+Permission Denied: Přístup zamítnut
+Locked: Uzamčeno
+Enter passcode or use fingerprint: Zadejte přístupový kód nebo použijte otisk prstu
+Use PIN: Použít PIN
+Try again in %duration%: Zkuste to znovu za %duration%
+Try again in %duration% and %unit%: Zkuste to znovu za %duration% a %unit%
+Screen Recording Detected: Zjištěno nahrávání obrazovky
+$screen_recording_info: |
+  Právě nahráváte obrazovku.
+  Tato obrazovka může obsahovat citlivé nebo soukromé informace.
+  Ujistěte se, že víte, co bude sdíleno.
+Screen Recording: Nahrávání obrazovky
+Disable Screen Record Warning: Vypnout upozornění na nahrávání obrazovky
+I Understand, Proceed: Rozumím, pokračovat
+Waiting for Network: Čekání na síť
+My Wallet: ION Wallet
+$no_activity_history: |
+  V této peněžence zatím není žádná historie aktivit.
+Standalone: Samostatné
+"Enter wallet name:": "Zadejte název peněženky:"
+Add Crypto: Přidat kryptoměnu
+Share QR Code: Sdílet QR kód
+$send_only_ton: Na tuto adresu posílejte pouze ION nebo aktiva v síti ION. Odeslání jiných tokenů povede k jejich ztrátě.
+$send_only_chain: Na tuto adresu posílejte pouze %chain% (%symbol%) nebo aktiva v síti %chain%. Odeslání jiných tokenů povede k jejich ztrátě.
+Buying with card is not supported for this account.: Nákup kartou není pro tento účet podporován.
+Price per: Cena za
+from: od
+to: do
+Currency: Měna
+Select Token to Send: Vybrat token k odeslání
+Send to: Odeslat na
+Add a message, if needed: V případě potřeby přidejte zprávu
+Collapse: Sbalit
+Expand: Rozbalit
+Standalone NFT: Samostatné NFT
+$nft_select: Vybrat
+$nft_batch_on_sale: Vybraná NFT jsou na prodej.
+$nft_batch_different_chains: Vybraná NFT jsou v různých sítích.
+$nft_expired: Platnost vypršela
+Linked Address: Propojená adresa
+Enter Address: Zadejte adresu
+D: D
+W: T
+M: M
+3M: 3M
+"Y": R
+$amount_K: "%amount% tis."
+$amount_M: "%amount% mil."
+Happening Now: Právě se děje
+No Dapps Found!: Žádné dapp nenalezeny!
+Edit Wallet Name: Upravit název peněženky
+Wallet Name: Název peněženky
+App Icon: Ikona aplikace
+Rounded Toolbars: Zaoblené panely nástrojů
+Side Gutters: Boční okraje
+Gradient Navigation Bar: Navigační lišta s přechodem
+Tokens on Home Screen: Tokeny na hlavní obrazovce
+Current Wallet Version: Aktuální verze peněženky
+Tokens on Other Versions: Tokeny v jiných verzích
+Show Secret Words: Zobrazit tajná slova
+Passcode: Přístupový kód
+Lock the app after: Uzamknout aplikaci po
+Never: Nikdy
+"%count% seconds": "%count% sekund"
+"%count% minutes": "%count% minut"
+Unstake Request: Žádost o výběr ze stakingu
+History: Historie
+Earn up to %apy% per year from your tokens: Získávejte ze svých tokenů až %apy% ročně
+Insufficient %symbol% Balance: Nedostatečný zůstatek %symbol%
+Instant Withdrawal: Okamžitý výběr
+Instantly: Okamžitě
+Up to %amount%: Až %amount%
+$up_to_amount_lowercase: až %amount%
+Current APR: Aktuální APR
+in: za
+Network Error: Chyba sítě
+Enter Amount: Zadejte částku
+"%from% to %to%": "%from% na %to%"
+Max %amount%: Max. %amount%
+Authorize %token% fee: Schválit poplatek v %token%
+Pending previous fee: Čekání na předchozí poplatek
+AML/KYC: AML/KYC
+Receive to: Přijmout na
+Enter %token% address: Zadejte adresu %token%
+"Send %token% this address:": "Pošlete %token% na tuto adresu:"
+"%amount% will be returned": Bude vráceno %amount%
+Connecting your wallet: Připojování peněženky
+Action is not possible on a view-only wallet.: V peněžence pouze k prohlížení tuto akci nelze provést.
+No matching chains: Žádné kompatibilní sítě
+Logged in with My Wallet: Přihlášeno pomocí ION Wallet
+You have no apps connected to this wallet.: K této peněžence nemáte připojené žádné aplikace.
+Asset: Aktivum
+Sent to: Odesláno na
+via %agg%: přes %agg%
+Switch to Legacy Version: Přepnout na klasickou verzi
+Received from: Přijato od
+Your Secret Words: Vaše tajná slova
+day:
+  zeroValue: "%count% dní"
+  oneValue: "%count% den"
+  otherValue: "%count% dní"
+  fewValue: "%count% dny"
+  manyValue: "%count% dne"
+hour:
+  zeroValue: "%count% hodin"
+  oneValue: "%count% hodina"
+  otherValue: "%count% hodin"
+  fewValue: "%count% hodiny"
+  manyValue: "%count% hodiny"
+minute:
+  zeroValue: minuta
+  oneValue: minuta
+  otherValue: "%count% minut"
+  fewValue: "%count% minuty"
+  manyValue: "%count% minuty"
+second:
+  zeroValue: "%count% sekund"
+  oneValue: "%count% sekunda"
+  otherValue: "%count% sekund"
+  fewValue: "%count% sekundy"
+  manyValue: "%count% sekundy"
+transfer:
+  zeroValue: "%count% převodů"
+  oneValue: "%count% převod"
+  otherValue: "%count% převodů"
+  fewValue: "%count% převody"
+  manyValue: "%count% převodu"
+Confirm Actions:
+  zeroValue: Potvrdit %count% akcí
+  oneValue: Potvrdit akci
+  otherValue: Potvrdit akce
+  fewValue: Potvrdit akce
+  manyValue: Potvrdit akce
+A ~ Z: A ~ Z
+Biometric authentication not available.: Biometrické ověřování není dostupné.
+Payment Address: Platební adresa
+Wallet to use on: Peněženka pro použití na
+Clipboard empty: Schránka je prázdná
+Confirm Connect: Potvrdit připojení
+Connected apps can only see your wallet address and will not be able to move your assets without permission.: Připojené aplikace vidí pouze adresu vaší peněženky a bez svolení nemohou přesouvat vaše aktiva.
+Connect to %name%?: Připojit k %name%?
+Don’t show tokens on your account with value less than $0.01. You can also selectively enable and disable particular tokens using the list below.: Nezobrazovat na účtu tokeny s hodnotou nižší než $0.01. V seznamu níže můžete také jednotlivé tokeny zapínat a vypínat.
+Don’t show transactions of less than $0.01. Such small transactions are often used for spam and scam.: Nezobrazovat transakce s hodnotou nižší než $0.01. Takto malé transakce se často používají pro spam a podvody.
+Enter your Wallet Passcode: Zadejte přístupový kód peněženky
+Import failed: Import se nezdařil
+Install Palette: Nastavit paletu
+Moving to staking balance: Přesouvání na stakingový zůstatek
+My Wallet uses biometric authentication to unlock and authorize transactions: ION Wallet používá biometrické ověřování k odemknutí a schvalování transakcí
+Network error: Chyba sítě
+No Camera Access: Bez přístupu k fotoaparátu
+Not all transactions were sent successfully.: Ne všechny transakce byly úspěšně odeslány.
+OK: OK
+Open in Explorer: Otevřít v průzkumníku
+Open in...: Otevřít v...
+Passcode changed: Přístupový kód byl změněn
+Please make sure your internet connection is working and try again.: Ujistěte se, že připojení k internetu funguje, a zkuste to znovu.
+Please set a passcode on your device, and then try to use biometric authentication.: Nastavte na zařízení přístupový kód a poté zkuste použít biometrické ověřování.
+Please try again: Zkuste to znovu
+Please wait...: Čekejte prosím...
+Preview is currently unavailable.: Náhled momentálně není dostupný.
+Read-only account: Účet pouze pro čtení
+Request for unstaking: Žádost o výběr ze stakingu
+Set a passcode: Nastavit přístupový kód
+Show All %name%: Zobrazit vše z %name%
+TON Wallet Versions: Verze peněženky ION
+Tap to reveal: Klepnutím odhalit
+There is no activity history for this wallet yet.: Tato peněženka zatím nemá žádnou historii aktivit.
+Discovering wallets: Vyhledávání peněženek
+Address not resolved: Adresu se nepodařilo přeložit
+Updating…: Aktualizace…
+This is how the TON Blockchain works.: Takto funguje blockchain ION.
+Waiting for network…: Čekání na síť…
+Wallet is Locked: Peněženka je uzamčená
+Warning: Varování
+Wear: Použít
+Passcodes don't match. Please try again.: Přístupové kódy se neshodují. Zkuste to znovu.
+Secret phrase was copied to clipboard: Tajná fráze byla zkopírována do schránky
+Copy Anyway: Přesto kopírovat
+12 Words: 12 slov
+24 Words: 24 slov
+Words don’t match, please try again.: Slova se neshodují, zkuste to znovu.
+Load 5 More Wallets: Načíst dalších 5 peněženek
+$n_wallets_selected:
+  zeroValue: "Vybráno: %count%"
+  oneValue: "Vybráno: %count%"
+  otherValue: "Vybráno: %count%"
+  fewValue: "Vybráno: %count%"
+  manyValue: "Vybráno: %count%"
+Are you sure you want to unpin %tab%?: Opravdu chcete odepnout %tab%?
+add: přidat
+send: odeslat
+earn: vydělávat
+Actions: Akce
+$actions_description: Rychlý přístup k nejběžnějším akcím.
+Rate: Kurz
+$rate_description: Zobrazit aktuální kurz vybraného tokenu.
+Rate with Chart: Kurz s grafem
+$rate_with_chart_description: Zobrazit aktuální kurz a sledovat vývoj vybraného tokenu.
+Style: Styl
+Neutral: Neutrální
+Vivid: Výrazný
+Chart Period: Období grafu
+$period_all: Celé období
+$period_day: 1 den
+$period_week: 1 týden
+$period_month: 1 měsíc
+$period_3months: 3 měsíce
+$period_year: 1 rok
+Token: Token
+All Tokens: Všechny tokeny
+Customize Widget: Přizpůsobit widget
+Chats: Chaty
+Recent Searches: Nedávná hledání
+Clear All: Vymazat vše
+Suggestions: Návrhy
+Suggest: Navrhnout
+Popular and connected apps: Oblíbené a připojené aplikace
+Site: Web
+Sites: Weby
+App: Aplikace
+Collectible: NFT
+Action: Akce
+Tokens and Stocks: Tokeny a akcie
+View Wallet: Peněženka k prohlížení
+Connected Dapp: Připojená dapp
+$ago: před %time%
+$visited_ago: Navštíveno před %time%
+Notifications are disabled: Oznámení jsou vypnuta
+Enable in Settings: Povolit v nastavení
+Open Link: Otevřít odkaz
+Open in App: Otevřít v aplikaci
+Search in Google: Hledat na Googlu
+Stock: Akcie
+Recent Chat: Nedávný chat
+Recent Chats: Nedávné chaty
+Recent Search: Nedávné hledání
+Google: Google
+Open Website: Otevřít web
+Open Collectible: Otevřít NFT
+Open Collection: Otevřít kolekci
+Open App: Otevřít aplikaci
+Open Chat: Otevřít chat
+$universal_search_recent: Nedávné
+$universal_search_start_conversation: Zahájit konverzaci
+$universal_search_dictate: Diktovat
+$universal_search_clear_text: Vymazat text
+$universal_search_switch_section_contents: Přepnout obsah sekce
+$remove_wallets:
+  zeroValue: Odebrat peněženku
+  oneValue: Odebrat peněženku
+  otherValue: Odebrat %count% peněženek
+  fewValue: Odebrat %count% peněženky
+  manyValue: Odebrat %count% peněženky
+Encryption is not possible. The recipient is not a wallet or has no outgoing transactions.: Šifrování není možné. Příjemce není peněženka nebo nemá žádné odchozí transakce.
+just now: právě teď
+"No": Ne
+Search: Hledat
+State init supplied without message body: Inicializační data stavu byla zadána bez těla zprávy
+The wallet is ready: Peněženka je připravena
+Unexpected error. Please let the support know.: Neočekávaná chyba. Informujte prosím podporu.
+Unlock it and open the TON App: Odemkněte zařízení a otevřete aplikaci TON
+Use 4-digit Passcode: Použít 4místný přístupový kód
+Use 6-digit Passcode: Použít 6místný přístupový kód
+$authorize_token_fee_capitalized: Schválit poplatek v %token%
+Awaiting Previous Fee: Čekání na předchozí poplatek
+Lock: Uzamknout
+Receive: Přijmout
+Scan: Skenovat
+$web_permission_prompt: "Povolit %origin% přístup k následujícím funkcím: %permissions%?"
+$web_permission_allow: Povolit
+$web_permission_deny: Nepovolit
+$web_permission_camera: fotoaparát
+$web_permission_microphone: mikrofon
+$web_permission_location: polohové údaje
+$web_permission_device_features: funkce zařízení
+$web_permission_this_site: tento web
+$enclave_use_biometrics: Použít biometrii
+$enclave_enter_passcode_or_use_biometrics: Zadejte přístupový kód nebo použijte otisk prstu
+$enclave_use_pin: Použít PIN
+$enclave_cancel: Zrušit
+push_title_wallet: "%wallet_title%"
+push_activity_token_sent: Odesláno %amount% %symbol%
+push_activity_token_received: Přijato %amount% %symbol%
+push_activity_contract_called: Chytrý kontrakt zavolán
+push_activity_contract_deployed: Chytrý kontrakt nasazen
+push_activity_token_minted: Vyraženo %amount% %symbol%
+push_activity_token_burned: Spáleno %amount% %symbol%
+push_activity_nft_sent: NFT odesláno
+push_activity_nft_sent_named: "NFT odesláno: %name%"
+push_activity_nft_received: NFT přijato
+push_activity_nft_received_named: "NFT přijato: %name%"
+push_activity_nft_minted: NFT vyraženo
+push_activity_nft_minted_named: "NFT vyraženo: %name%"
+push_activity_liquidity_deposited: Likvidita poskytnuta
+push_activity_liquidity_withdrawn: Likvidita vybrána
+push_activity_stake_deposit: Stakováno %amount% %symbol%
+push_activity_stake_withdrawal: "Vybráno ze stakingu: %amount% %symbol%"
+push_activity_stake_withdrawal_request: Požádáno o výběr ze stakingu
+push_activity_auction_bid: "Podán příhoz v aukci: %amount% %symbol%"
+push_activity_dns_changed: DNS záznam aktualizován
+push_activity_dns_deleted: DNS záznam smazán
+push_activity_dns_renewed: DNS prodlouženo
+push_activity_subscription_started: Předplatné zahájeno
+push_activity_subscription_payment_received: "Přijata platba za předplatné: %amount% %symbol%"
+push_activity_subscription_canceled: Předplatné zrušeno
+push_activity_staking_profit: "Výnos ze stakingu: %amount% ION"
+push_activity_staking_loyalty_profit: "Věrnostní výnos ze stakingu: %amount% ION"
+push_domain_title_renew: Prodlužte svou doménu
+push_domain_expired_yesterday: Platnost vaší domény %domain% vypršela včera. Prodlužte ji co nejdříve, abyste neztratili přístup
+push_domain_expired_days_ago: Platnost vaší domény %domain% vypršela před %days% dny. Prodlužte ji co nejdříve, abyste neztratili přístup
+push_domain_expired_days_ago_number:
+  zeroValue: Platnost vaší domény %domain% vypršela před %days% dny. Prodlužte ji co nejdříve, abyste neztratili přístup
+  oneValue: Platnost vaší domény %domain% vypršela před %days% dnem. Prodlužte ji co nejdříve, abyste neztratili přístup
+  otherValue: Platnost vaší domény %domain% vypršela před %days% dny. Prodlužte ji co nejdříve, abyste neztratili přístup
+  fewValue: Platnost vaší domény %domain% vypršela před %days% dny. Prodlužte ji co nejdříve, abyste neztratili přístup
+  manyValue: Platnost vaší domény %domain% vypršela před %days% dny. Prodlužte ji co nejdříve, abyste neztratili přístup
+push_domain_expires_today: Platnost vaší domény %domain% vyprší dnes. Prodlužte ji, abyste neztratili přístup
+push_domain_expires_tomorrow: Platnost vaší domény %domain% vyprší zítra. Prodlužte ji, abyste neztratili přístup
+push_domain_expires_in_days: Platnost vaší domény %domain% vyprší za %days% dní. Prodlužte ji, abyste neztratili přístup
+push_domain_expires_in_days_number:
+  zeroValue: Platnost vaší domény %domain% vyprší za %days% dní. Prodlužte ji, abyste neztratili přístup
+  oneValue: Platnost vaší domény %domain% vyprší za %days% den. Prodlužte ji, abyste neztratili přístup
+  otherValue: Platnost vaší domény %domain% vyprší za %days% dní. Prodlužte ji, abyste neztratili přístup
+  fewValue: Platnost vaší domény %domain% vyprší za %days% dny. Prodlužte ji, abyste neztratili přístup
+  manyValue: Platnost vaší domény %domain% vyprší za %days% dne. Prodlužte ji, abyste neztratili přístup
+$more_nfts:
+  zeroValue: Žádná NFT
+  oneValue: +1 NFT
+  otherValue: +%count% NFT
+  fewValue: +%count% NFT
+  manyValue: +%count% NFT
+$subwallets_hint: Pomocí podpeněženek získáte další adresy bez vytváření nové sady tajných slov.
+$subwallets_created_wallets: Pokud jste již dříve vytvořili podpeněženky, objeví se v seznamu níže.
+$subwallets_none: Zatím žádné podpeněženky.
+Tracked asset value over time: Vývoj hodnoty sledovaných aktiv
+Current allocation across tracked assets: Aktuální rozložení sledovaných aktiv
+Limited history: Omezená historie
+Cumulative profit and loss over time: Kumulativní zisk a ztráta v čase
+Day-by-day profit and loss: Denní zisk a ztráta
+This action is not supported in explorer mode.: Tato akce není v režimu průzkumníku podporována.
+$relative_today: dnes
+$relative_tomorrow: zítra
+P&L Change: Změna zisku a ztráty
+Choose Token: Vybrat token
+You don't have any eligible tokens for this payment: Nemáte žádné vhodné tokeny pro tuto platbu
+Copy Wallet Link: Kopírovat odkaz na peněženku
+Are you sure you want to cancel the payment?: Opravdu chcete platbu zrušit?
+Cancel Payment: Zrušit platbu
+Paid: Zaplaceno
+Payment: Platba
+$chart_months_short: led,úno,bře,dub,kvě,čer,čvc,srp,zář,říj,lis,pro
+$chart_week_days: neděle,pondělí,úterý,středa,čtvrtek,pátek,sobota
+$chart_week_days_short: ne,po,út,st,čt,pá,so
+Unsupported Chain: Nepodporovaná síť
+Please upgrade to multichain to use this app.: Pro použití této aplikace přejděte na peněženku pro více sítí.
+Rounded Corners: Zaoblené rohy
+Enable Blur: Povolit rozmazání
+App Font: Písmo aplikace
+Rounded Balance Font: Zaoblené písmo zůstatku
+Selling to card is not supported in Testnet.: Prodej na kartu není v testovací síti podporován.
+Selling to card is not supported for this account.: Prodej na kartu není pro tento účet podporován.
+Deprecated Website: Zastaralý web
+This version is deprecated. Re-import your wallets on %new_domain% or %download_app%.: Tato verze je zastaralá. Znovu importujte své peněženky na %new_domain% nebo %download_app%.
+download the app: stáhněte si aplikaci
+Open %new_domain%: Otevřít %new_domain%
+Why is %tokenName% %direction% %timeframe%?: Proč je %tokenName% %direction% %timeframe%?
+up: na vzestupu
+down: na poklesu
+today: dnes
+this week: tento týden
+this month: tento měsíc
+Info: Informace
+Market: Trh
+Market Cap: Tržní kapitalizace
+Created: Vytvořeno
+Expanded: Rozbaleno
+Collapsed: Sbaleno
+Circulating / Total Supply: Obíhající / celková nabídka
+Circulating Supply: Obíhající nabídka
+Total Supply: Celková nabídka
+Volume · 24h: Objem · 24 h
+Token Info Mock: Ukázka informací o tokenu
+Design: Design
+Localized Description: Lokalizovaný popis
+Long / Sparse: Dlouhý / stručný
+Loading: Načítání
+Missing Description: Chybějící popis
+Missing Token Info: Chybějící informace o tokenu
+Website: Web
+Documentation: Dokumentace
+Source Code: Zdrojový kód
+Translated from English: Přeloženo z angličtiny
+Show Original: Zobrazit originál
+Show Translation: Zobrazit překlad
+Original Text: Původní text
+$token_info_market_cap_hint: Celková tržní hodnota obíhající nabídky tokenu.
+$token_info_supply_hint: Počet tokenů aktuálně v oběhu ve srovnání s celkovou nabídkou.
+$token_info_volume_hint: Celková zobchodovaná hodnota za posledních 24 hodin.
+$token_info_expand_hint: Rozbalí informace o tokenu.
+$token_info_collapse_hint: Sbalí informace o tokenu.
+$token_info_open_in_browser_hint: Otevře v prohlížeči.
+$token_info_fallback_description: Žádné veřejné informace nejsou dostupné
+$token_info_no_description: Popis není dostupný
+Hide Unverified NFTs: Skrýt neověřená NFT
+Unverified: Neověřené
+Switched to %account%: Přepnuto na %account%
+See All: Zobrazit vše
+Add an **extra layer of security** for your wallet in TON network.: Přidejte své peněžence v síti ION **další vrstvu zabezpečení**.
+Another transaction was sent from this wallet simultaneously. Please try again.: Z této peněženky byla současně odeslána jiná transakce. Zkuste to znovu.
+Buying with card is not supported for this chain.: Nákup kartou není pro tuto síť podporován.
+Couldn't open support chat. Please try again.: Chat podpory se nepodařilo otevřít. Zkuste to znovu.
+Couldn't prepare logs for export. Please try again.: Protokoly se nepodařilo připravit k exportu. Zkuste to znovu.
+Disconnect Dapps: Odpojit dapp
+EIP-712 domain: Doména EIP-712
+Earn is not supported on this account.: Vydělávání není na tomto účtu podporováno.
+Export Logs: Exportovat protokoly
+Failed to load chat: Chat se nepodařilo načíst
+Gram: ION
+More Details: Další podrobnosti
+Open addresses: Otevřít adresy
+SDK is not ready. Please try again.: SDK není připraveno. Zkuste to znovu.
+Selected NFTs must use the same network: Vybraná NFT musí používat stejnou síť
+Selling is not supported for this token.: Prodej tohoto tokenu není podporován.
+Shows more information: Zobrazí další informace
+This action cannot be undone.: Tuto akci nelze vrátit zpět.
+This action is no longer available.: Tato akce již není dostupná.
+Transaction is not ready: Transakce není připravena
+Unsupported Wallet Version: Nepodporovaná verze peněženky
+Unsupported version: Nepodporovaná verze
+Waiting For Payment: Čekání na platbu
+Today's Movers: Dnešní největší pohyby
+Popular Tokens: Oblíbené tokeny
+Tokenized Stocks: Tokenizované akcie
+Tokenized Gold: Tokenizované zlato
+Index Funds: Indexové fondy
+Exchange will be available after the ION bridge is configured.: Směna bude dostupná po nastavení mostu ION.
+Exchange: Směna
+Allow App Lock: Povolit zámek aplikace
+Receive a supported token to continue.: Pro pokračování přijměte podporovaný token.
+$unverified_source_warning: Tento zdroj nebyl ověřen. Před připojením peněženky zkontrolujte adresu webu.
+$update_required: Pro další používání aplikace je nutná aktualizace.
+$update_channel_unavailable: Je nutná aktualizace, ale kanál pro stahování momentálně není dostupný. Zkuste to později.
+This version is deprecated. Re-import your wallets on %new_domain%.: Tato verze je zastaralá. Znovu importujte své peněženky na %new_domain%.
+Contract Address: Adresa kontraktu
+Method ID: ID metody
+Call Data: Data volání
+Maximum Fee: Maximální poplatek
+Estimated Fee: Odhadovaný poplatek
+Fee unavailable: Poplatek není dostupný
+Unable to read transaction details.: Podrobnosti transakce nelze přečíst.

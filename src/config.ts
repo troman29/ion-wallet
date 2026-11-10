@@ -241,6 +241,11 @@ export const LANG_LIST: LangItem[] = [{
   nativeName: 'Polski',
   rtl: false,
 }, {
+  langCode: 'cs',
+  name: 'Czech',
+  nativeName: 'Čeština',
+  rtl: false,
+}, {
   langCode: 'ar',
   name: 'Arabic',
   nativeName: 'العربية',
