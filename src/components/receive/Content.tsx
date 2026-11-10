@@ -139,6 +139,7 @@ function getChainTabs(chains: ApiChain[]): TabWithProperties[] {
   return chains.map((chain) => ({
     id: tabIdByChain[chain],
     title: getChainTitle(chain),
+    icon: `icon-chain-${chain}`,
     className: buildClassName(styles.tab, styles[chain]),
   }));
 }

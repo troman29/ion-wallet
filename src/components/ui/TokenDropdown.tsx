@@ -3,6 +3,7 @@ import React, { memo, useMemo } from '../../lib/teact/teact';
 import type { ApiTokenWithPrice } from '../../api/types';
 
 import getChainNetworkIcon from '../../util/getChainNetworkIcon';
+import getTokenImage from '../../util/getTokenImage';
 import { getIsNativeToken, getIsRwaStockToken } from '../../util/tokens';
 
 import useLang from '../../hooks/useLang';
@@ -108,7 +109,7 @@ export function getTokenId(token: TokenWithId) {
 export function tokenToDropdownItem(token: TokenWithId, isMultichainAccount?: boolean): DropdownItem {
   return {
     value: getTokenId(token),
-    icon: token.image,
+    icon: getTokenImage(token),
     iconClassName: getIsRwaStockToken(token) ? styles.rwaStockIcon : undefined,
     overlayIcon: isMultichainAccount && !getIsNativeToken(token.slug) ? getChainNetworkIcon(token.chain) : undefined,
     name: token.symbol,
