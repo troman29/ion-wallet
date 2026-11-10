@@ -3,18 +3,14 @@ import React, { memo, type TeactNode } from '../../lib/teact/teact';
 import type { ApiToken } from '../../api/types';
 import type { UserToken } from '../../global/types';
 
-import { BNB, ION_BNB_MAINNET, IONCOIN, STAKED_ION_SLUG } from '../../config';
 import buildClassName from '../../util/buildClassName';
 import getChainNetworkIcon from '../../util/getChainNetworkIcon';
+import getTokenImage from '../../util/getTokenImage';
 import { getIsNativeStakedToken, getIsNativeToken, getIsRwaStockToken } from '../../util/tokens';
 
 import useFlag from '../../hooks/useFlag';
 
 import styles from './TokenIcon.module.scss';
-
-import bnbIcon from '../../assets/blockchain/chain_bnb.svg';
-import ionIcon from '../../assets/blockchain/chain_ton.svg';
-import lionIcon from '../../assets/tokens/lion.svg';
 
 interface OwnProps {
   token: UserToken | ApiToken;
@@ -29,9 +25,7 @@ function TokenIcon({
   token, size, withChainIcon, className, iconClassName, children,
 }: OwnProps) {
   const { symbol, chain, slug } = token;
-  const image = slug === STAKED_ION_SLUG ? lionIcon : slug === IONCOIN.slug || slug === ION_BNB_MAINNET.slug
-    ? ionIcon
-    : slug === BNB.slug ? bnbIcon : token.image;
+  const image = getTokenImage(token);
   const [isLoadingError, markLoadingError] = useFlag();
   const isNativeToken = getIsNativeToken(slug);
   const isNativeTokenStaking = getIsNativeStakedToken(slug);
