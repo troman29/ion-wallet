@@ -48,7 +48,7 @@ function Balance({ token, pricePoint, baseCurrency, isSensitiveDataHidden }: Own
 
   return (
     <div className={styles.root}>
-      <TokenIcon token={token} size="xx-large" className={styles.icon} />
+      <TokenIcon token={token} withChainIcon size="xx-large" className={styles.icon} />
 
       <SensitiveData
         isActive={isSensitiveDataHidden}

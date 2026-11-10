@@ -1,7 +1,9 @@
 import './misc';
 
-import type { GlobalState } from '../../types';
+import type { ApiChain } from '../../../api/types';
+import type { AccountState, GlobalState } from '../../types';
 
+import { BNB, ION_BNB_MAINNET, TONCOIN } from '../../../config';
 import { addActionHandler, setGlobal } from '../../index';
 
 jest.mock('../../index', () => ({
@@ -70,5 +72,73 @@ describe('QR scan for the view-only wallet import', () => {
     );
 
     expect(lastGlobal().viewAccountQrAddress).toBe(ADDRESS);
+  });
+});
+
+describe('receive network selection', () => {
+  beforeEach(() => (setGlobal as jest.Mock).mockClear());
+
+  function makeReceiveGlobal(accountState: Partial<AccountState> = {}) {
+    return makeGlobal({
+      currentAccountId: '0-mainnet',
+      accounts: {
+        byId: { '0-mainnet': { type: 'mnemonic', byChain: { ton: { address: ADDRESS }, bnb: { address: '0x123' } } } },
+      },
+      byAccountId: { '0-mainnet': accountState },
+      tokenInfo: {
+        bySlug: {
+          [TONCOIN.slug]: { ...TONCOIN, priceUsd: 1, percentChange24h: 0 },
+          [BNB.slug]: { ...BNB, priceUsd: 1, percentChange24h: 0 },
+          [ION_BNB_MAINNET.slug]: { ...ION_BNB_MAINNET, priceUsd: 1, percentChange24h: 0 },
+        },
+      },
+    });
+  }
+
+  function openReceive(global: GlobalState, chain?: ApiChain) {
+    getHandler('openReceiveModal')(global, {}, chain ? { chain } : undefined);
+    return (setGlobal as jest.Mock).mock.calls.at(-1)![0] as GlobalState;
+  }
+
+  it.each([
+    [ION_BNB_MAINNET.slug, 'bnb'],
+    [BNB.slug, 'bnb'],
+    [TONCOIN.slug, 'ton'],
+  ] as const)('opens the network of the selected %s token', (currentTokenSlug, chain) => {
+    const global = openReceive(makeReceiveGlobal({ currentTokenSlug }));
+
+    expect(global.isReceiveModalOpen).toBe(true);
+    expect(global.byAccountId['0-mainnet'].receiveModalChain).toBe(chain);
+  });
+
+  it('prefers an explicit network over the selected token', () => {
+    const global = openReceive(makeReceiveGlobal({ currentTokenSlug: ION_BNB_MAINNET.slug }), 'ton');
+
+    expect(global.byAccountId['0-mainnet'].receiveModalChain).toBe('ton');
+  });
+
+  it.each([undefined, 'unknown-token'])('uses the default when the selected token is %s', (currentTokenSlug) => {
+    const global = openReceive(makeReceiveGlobal({ currentTokenSlug, receiveModalChain: 'bnb' }));
+
+    expect(global.byAccountId['0-mainnet'].receiveModalChain).toBeUndefined();
+  });
+
+  it('allows switching tabs and restores the token network on reopening', () => {
+    let global = openReceive(makeReceiveGlobal({ currentTokenSlug: ION_BNB_MAINNET.slug }));
+    global = getHandler('setReceiveActiveTab')(global, {}, { chain: 'ton' }) as GlobalState;
+    expect(global.byAccountId['0-mainnet'].receiveModalChain).toBe('ton');
+
+    global = getHandler('closeReceiveModal')(global, {}) as GlobalState;
+    expect(global.isReceiveModalOpen).toBeUndefined();
+
+    global = openReceive(global);
+    expect(global.byAccountId['0-mainnet'].receiveModalChain).toBe('bnb');
+  });
+
+  it('updates the network when another token is selected before reopening', () => {
+    const global = openReceive(makeReceiveGlobal({ currentTokenSlug: ION_BNB_MAINNET.slug }));
+    global.byAccountId['0-mainnet'].currentTokenSlug = TONCOIN.slug;
+
+    expect(openReceive(global).byAccountId['0-mainnet'].receiveModalChain).toBe('ton');
   });
 });
