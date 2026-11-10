@@ -1643,3 +1643,10 @@ $update_required: Uygulamayı kullanmaya devam etmek için güncelleme gereklidi
 $update_channel_unavailable: Güncelleme gereklidir, ancak indirme kanalı şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: Bu sürüm eskidi. Cüzdanlarınızı %new_domain% üzerinde yeniden içe aktarın.
+Contract Address: Sözleşme Adresi
+Method ID: Metot Kimliği
+Call Data: Çağrı Verisi
+Maximum Fee: Maksimum Ücret
+Estimated Fee: Tahmini Ücret
+Fee unavailable: Ücret bilgisi mevcut değil
+Unable to read transaction details.: İşlem ayrıntıları okunamadı.

@@ -1641,3 +1641,10 @@ $update_required: برای ادامه استفاده از برنامه، به‌
 $update_channel_unavailable: به‌روزرسانی لازم است، اما کانال دانلود فعلاً در دسترس نیست. بعداً دوباره تلاش کنید.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: این نسخه قدیمی است. کیف پول‌های خود را در %new_domain% دوباره وارد کنید.
+Contract Address: آدرس قرارداد
+Method ID: شناسه تابع
+Call Data: داده‌های فراخوانی
+Maximum Fee: حداکثر کارمزد
+Estimated Fee: کارمزد تخمینی
+Fee unavailable: کارمزد در دسترس نیست
+Unable to read transaction details.: خواندن جزئیات تراکنش ممکن نشد.

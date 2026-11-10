@@ -130,6 +130,7 @@ export type ApiUpdateDappSendTransactions = {
   // Dapp may have many chains, so need to specify current operation chain
   operationChain: ApiChain;
   transactions: ApiDappTransfer[];
+  isSignOnly?: boolean;
   emulation?: Pick<ApiEmulationResult, 'activities' | 'realFee'>;
   /** Unix seconds */
   validUntil?: number;

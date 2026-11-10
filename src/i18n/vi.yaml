@@ -1653,3 +1653,10 @@ $unverified_source_warning: Nguồn này chưa được xác minh. Hãy kiểm t
 $update_required: Cần cập nhật để tiếp tục sử dụng ứng dụng.
 $update_channel_unavailable: Cần cập nhật nhưng kênh tải xuống hiện không khả dụng. Vui lòng thử lại sau.
 This version is deprecated. Re-import your wallets on %new_domain%.: Phiên bản này đã ngừng được hỗ trợ. Hãy nhập lại ví trên %new_domain%.
+Contract Address: Địa chỉ hợp đồng
+Method ID: Mã định danh phương thức
+Call Data: Dữ liệu gọi hàm
+Maximum Fee: Phí tối đa
+Estimated Fee: Phí ước tính
+Fee unavailable: Không có thông tin phí
+Unable to read transaction details.: Không thể đọc chi tiết giao dịch.

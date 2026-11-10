@@ -1639,3 +1639,10 @@ $update_required: 需要更新应用才能继续使用。
 $update_channel_unavailable: 需要更新，但下载渠道暂不可用。请稍后重试。
 
 This version is deprecated. Re-import your wallets on %new_domain%.: 此版本已过时。请在 %new_domain% 重新导入钱包。
+Contract Address: 合约地址
+Method ID: 方法标识符
+Call Data: 调用数据
+Maximum Fee: 最高手续费
+Estimated Fee: 预估手续费
+Fee unavailable: 手续费暂不可用
+Unable to read transaction details.: 无法读取交易详情。

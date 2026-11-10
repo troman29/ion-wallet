@@ -1665,3 +1665,10 @@ $update_required: An update is required to continue using the app.
 $update_channel_unavailable: An update is required, but the download channel is currently unavailable. Please try again later.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: This version is deprecated. Re-import your wallets on %new_domain%.
+Contract Address: Contract Address
+Method ID: Method ID
+Call Data: Call Data
+Maximum Fee: Maximum Fee
+Estimated Fee: Estimated Fee
+Fee unavailable: Fee unavailable
+Unable to read transaction details.: Unable to read transaction details.

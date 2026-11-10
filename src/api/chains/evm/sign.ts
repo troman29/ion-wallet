@@ -2,9 +2,10 @@ import { getBytes, Transaction } from 'ethers';
 
 import type { DappProtocolType, UnifiedSignDataPayload } from '../../dappProtocols';
 import type { ApiAnyDisplayError, ApiSignedTransfer, EVMChain } from '../../types';
-import { ApiCommonError } from '../../types';
+import { ApiCommonError, ApiTransactionError } from '../../types';
 
 import { parseAccountId } from '../../../util/account';
+import { getIsEvmTransactionChainValid } from './util/transaction';
 import { fetchPrivateKeyString, getSignerFromPrivateKey } from './auth';
 
 export async function signPayload(
@@ -56,12 +57,15 @@ export async function signTransfer(
 
   const { network } = parseAccountId(accountId);
 
+  const txRequest = Transaction.from(transaction);
+  if (!getIsEvmTransactionChainValid(txRequest.chainId, chain, network)) {
+    return { error: ApiTransactionError.WrongNetwork };
+  }
+
   const privateKey = await fetchPrivateKeyString(chain, accountId, enclaveToken);
   if (!privateKey) return { error: ApiCommonError.InvalidPassword };
 
   const signer = getSignerFromPrivateKey(network, privateKey);
-
-  const txRequest = Transaction.from(transaction);
 
   const signedTx = await signer.signTransaction(txRequest);
   const signature = Transaction.from(signedTx).signature!.serialized;
