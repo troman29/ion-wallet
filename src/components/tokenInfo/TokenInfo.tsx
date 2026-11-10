@@ -57,7 +57,7 @@ function TokenInfo({ isActive, token }: OwnProps & StateProps) {
       <Header token={renderedToken} isScrolled={isScrolled} onBackClick={closeTokenActivity} />
 
       <div className={buildClassName(styles.body, 'custom-scroll', SCROLL_CONTAINER_CLASS)} onScroll={handleScroll}>
-        <Summary token={renderedToken} className={styles.summary} />
+        <Summary token={renderedToken} isActive={isActive} className={styles.summary} />
 
         <div className={styles.activity}>
           <Activities isActive={isActive} scrollContainerSelector={SCROLL_CONTAINER_SELECTOR} />

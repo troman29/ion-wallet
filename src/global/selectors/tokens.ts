@@ -168,6 +168,11 @@ export function selectToken(global: GlobalState, slug: string) {
   return global.tokenInfo.bySlug[slug];
 }
 
+export function selectTokenDetails(global: GlobalState, slug: string) {
+  const details = global.tokenDetails.bySlug[slug];
+  return details?.langCode === global.settings.langCode ? details : undefined;
+}
+
 export const selectUserTokenMemoized = memoize((global: GlobalState, slug: string): UserToken | undefined => {
   const apiToken = selectToken(global, slug);
   if (!apiToken) return undefined;

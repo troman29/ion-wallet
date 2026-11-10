@@ -1,8 +1,31 @@
+import '../util/bigintPatch';
+
 import { Address } from '@ton/core';
 
 import { GLOBAL_STATE_CACHE_KEY, IONCOIN, LIQUID_JETTON, STAKED_ION_SLUG } from '../config';
-import { loadCache } from './cache';
+import { loadCache, saveGlobalCacheNow } from './cache';
 import { INITIAL_STATE, STATE_VERSION } from './initialState';
+
+describe('token details cache', () => {
+  afterEach(() => localStorage.removeItem(GLOBAL_STATE_CACHE_KEY));
+
+  it('adds an empty details cache when opening an existing installation', () => {
+    localStorage.setItem(GLOBAL_STATE_CACHE_KEY, JSON.stringify({
+      stateVersion: STATE_VERSION, settings: INITIAL_STATE.settings, byAccountId: {},
+    }));
+    expect(loadCache(INITIAL_STATE).tokenDetails).toEqual({ bySlug: {} });
+  });
+
+  it('persists selected token details, including language, and trims unused tokens', () => {
+    const ionDetails = { data: { description: 'ION description' }, langCode: 'en' as const, fetchedAt: 123 };
+    saveGlobalCacheNow({
+      ...INITIAL_STATE,
+      accounts: { byId: {} },
+      tokenDetails: { bySlug: { ioncoin: ionDetails, unused: ionDetails } },
+    });
+    expect(loadCache(INITIAL_STATE).tokenDetails.bySlug).toEqual({ ioncoin: ionDetails });
+  });
+});
 
 describe('tiny transfer visibility', () => {
   afterEach(() => {
