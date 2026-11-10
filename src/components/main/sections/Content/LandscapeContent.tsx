@@ -254,7 +254,7 @@ function LandscapeContent({
           <div className={buildClassName(styles.slides, currentToken && styles.slidesOnTokenScreen)}>
             {currentToken ? (
               <>
-                <TokenSummary token={currentToken} />
+                <TokenSummary token={currentToken} isActive={isSlideActive && !isCoveredByLandscapeOverlay} />
                 <div className={styles.tokenActivity}>{slide}</div>
               </>
             ) : slide}
