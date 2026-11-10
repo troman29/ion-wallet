@@ -602,6 +602,7 @@ export type GlobalState = {
     promiseId?: string;
     isLoading?: boolean;
     transactions?: ApiDappTransfer[];
+    isSignOnly?: boolean;
     /** What else should happen after submitting the transactions (in addition to the transactions) */
     emulation?: Pick<ApiEmulationResult, 'activities' | 'realFee'>;
     /** Unix seconds */

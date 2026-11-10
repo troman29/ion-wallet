@@ -1694,3 +1694,10 @@ $update_required: Для продолжения работы необходим�
 $update_channel_unavailable: Необходимо обновить приложение, но канал загрузки пока недоступен. Попробуйте позже.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: Эта версия устарела. Импортируйте свои кошельки на %new_domain%.
+Contract Address: Адрес контракта
+Method ID: Идентификатор метода
+Call Data: Данные вызова
+Maximum Fee: Максимальная комиссия
+Estimated Fee: Ожидаемая комиссия
+Fee unavailable: Комиссия недоступна
+Unable to read transaction details.: Не удалось прочитать детали транзакции.

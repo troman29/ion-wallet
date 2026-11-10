@@ -1681,3 +1681,10 @@ $update_required: Для продовження роботи потрібно о
 $update_channel_unavailable: Потрібне оновлення, але канал завантаження поки недоступний. Спробуйте пізніше.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: Ця версія застаріла. Імпортуйте свої гаманці на %new_domain%.
+Contract Address: Адреса контракту
+Method ID: Ідентифікатор методу
+Call Data: Дані виклику
+Maximum Fee: Максимальна комісія
+Estimated Fee: Орієнтовна комісія
+Fee unavailable: Комісія недоступна
+Unable to read transaction details.: Не вдалося прочитати деталі транзакції.

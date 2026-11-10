@@ -1490,6 +1490,7 @@ class WalletConnectAdapter implements DappProtocolAdapter<DappProtocolType.Walle
         validUntil: Math.floor(Date.now() / 1000 + 60 * 5),
         shouldHideTransfers: true,
         isLegacyOutput: !message.payload.isFullTxRequested,
+        isSignOnly: message.payload.isSignOnly,
       });
 
       const signedTransactions: Parameters<

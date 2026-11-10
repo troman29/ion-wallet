@@ -1643,3 +1643,10 @@ $update_required: يلزم تحديث التطبيق للمتابعة.
 $update_channel_unavailable: يلزم تحديث التطبيق، لكن قناة التنزيل غير متاحة حاليًا. حاول لاحقًا.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: هذا الإصدار قديم. أعد استيراد محافظك على %new_domain%.
+Contract Address: عنوان العقد
+Method ID: معرّف الدالة
+Call Data: بيانات الاستدعاء
+Maximum Fee: الحد الأقصى للرسوم
+Estimated Fee: الرسوم المقدّرة
+Fee unavailable: الرسوم غير متاحة
+Unable to read transaction details.: تعذّرت قراءة تفاصيل المعاملة.

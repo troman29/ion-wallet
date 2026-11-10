@@ -2,12 +2,14 @@ import { Interface, Transaction } from 'ethers';
 
 import type { ApiDappTransfer, ApiEmulationResult, ApiNetwork, EVMChain } from '../../types';
 import type { EvmTokenOperation } from './types';
-import { EVM_CHAIN_IDS } from '../../dappProtocols/adapters/walletConnect/types';
+import { ApiTransactionError } from '../../types';
 
 import { getChainConfig } from '../../../util/chain';
 import { logDebugError } from '../../../util/logs';
 import { getEvmProvider } from './util/client';
+import { getIsEvmTransactionChainValid } from './util/transaction';
 import { updateActivityMetadata } from '../../common/helpers';
+import { ApiBaseError } from '../../errors';
 import { buildTokenSlug } from '../../methods';
 import { normalizeAddress } from './address';
 
@@ -26,6 +28,31 @@ function getFakeTransfer(chain: EVMChain, rawTx: string, isDangerous: boolean): 
     normalizedAddress: '',
     displayedToAddress: '',
     networkFee: 0n,
+  };
+}
+
+function getTransferForPreview(
+  chain: EVMChain,
+  rawTx: string,
+  tx: Transaction,
+  networkFee: bigint,
+  isDangerous: boolean,
+): ApiDappTransfer {
+  const toAddress = tx.to ?? '';
+  const feePerGas = tx.maxFeePerGas ?? tx.gasPrice ?? undefined;
+  const hasFee = tx.gasLimit > 0n && feePerGas !== undefined;
+
+  return {
+    ...getFakeTransfer(chain, rawTx, isDangerous),
+    toAddress,
+    displayedToAddress: toAddress,
+    normalizedAddress: toAddress ? normalizeAddress(toAddress) : '',
+    amount: tx.value,
+    networkFee,
+    evmPreview: {
+      data: tx.data,
+      maximumFee: hasFee ? maxFeeFromSerializedTx(tx) : undefined,
+    },
   };
 }
 
@@ -75,18 +102,6 @@ async function estimateNetworkFee(
   }
 }
 
-function isWrongChain(tx: Transaction, chain: EVMChain, network: ApiNetwork): boolean {
-  const chainId = tx.chainId ? `eip155:${tx.chainId.toString()}` : undefined;
-
-  if (!chainId) {
-    return false;
-  }
-
-  const expected = EVM_CHAIN_IDS[chainId];
-
-  return chain !== expected.chain || network !== expected.network;
-}
-
 function isWrongSigner(tx: Transaction, accountAddress: string): boolean {
   const from = tx.from ?? undefined;
   if (from === undefined) {
@@ -128,10 +143,13 @@ export async function parseTransactionForPreview(
     };
   }
 
+  if (!getIsEvmTransactionChainValid(tx.chainId, chain, network)) {
+    throw new ApiBaseError('Transaction chain does not match the selected network', ApiTransactionError.WrongNetwork);
+  }
+
   const nativeSlug = getChainConfig(chain).nativeToken.slug;
   const wrongSigner = isWrongSigner(tx, address);
-  const wrongChain = isWrongChain(tx, chain, network);
-  const isDangerousMeta = wrongSigner || wrongChain || !tx.to;
+  const isDangerousMeta = wrongSigner || !tx.to;
 
   let emulation: ApiEmulationResult | undefined = undefined;
   const transfers: ApiDappTransfer[] = [];
@@ -144,7 +162,7 @@ export async function parseTransactionForPreview(
     const toAddr = normalizeAddress(tx.to!);
     const amount = tx.value ?? 0n;
 
-    transfers.push(getFakeTransfer(chain, rawTx, false));
+    transfers.push(getTransferForPreview(chain, rawTx, tx, networkFee, false));
 
     emulation = {
       networkFee,
@@ -178,7 +196,7 @@ export async function parseTransactionForPreview(
     const tokenOperation = emulated && parseTokenOperation(network, chain, emulated, address);
 
     if (tokenOperation?.assets) {
-      transfers.push(getFakeTransfer(chain, rawTx, false));
+      transfers.push(getTransferForPreview(chain, rawTx, tx, networkFee, false));
       const { transfer } = tokenOperation;
 
       emulation = {
@@ -209,7 +227,7 @@ export async function parseTransactionForPreview(
   }
 
   if (!transfers.length) {
-    transfers.push(getFakeTransfer(chain, rawTx, true));
+    transfers.push(getTransferForPreview(chain, rawTx, tx, networkFee, true));
   }
 
   return { transfers, emulation };

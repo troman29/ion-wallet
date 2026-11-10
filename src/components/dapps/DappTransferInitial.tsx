@@ -26,7 +26,7 @@ import {
   selectNetworkAccounts,
 } from '../../global/selectors';
 import buildClassName from '../../util/buildClassName';
-import { getChainConfig } from '../../util/chain';
+import { getChainConfig, getIsEvmChain } from '../../util/chain';
 import { toBig, toDecimal } from '../../util/decimals';
 import { formatCurrency } from '../../util/formatNumber';
 import isEmptyObject from '../../util/isEmptyObject';
@@ -44,6 +44,7 @@ import Button from '../ui/Button';
 import ModalHeader from '../ui/ModalHeader';
 import Transition from '../ui/Transition';
 import DappAmountField from './DappAmountField';
+import DappEvmTransaction from './DappEvmTransaction';
 import DappInfoWithAccount from './DappInfoWithAccount';
 import DappSkeletonWithContent, { type DappSkeletonRow } from './DappSkeletonWithContent';
 
@@ -65,6 +66,7 @@ interface StateProps {
   nftCount: number;
   dapp?: StoredDappConnection;
   isLoading?: boolean;
+  isSignOnly?: boolean;
   tokensBySlug: Record<string, ApiTokenWithPrice>;
   theme: Theme;
   baseCurrency: ApiBaseCurrency;
@@ -105,6 +107,7 @@ function DappTransferInitial({
   nftCount,
   dapp,
   isLoading,
+  isSignOnly,
   tokensBySlug,
   theme,
   baseCurrency,
@@ -136,6 +139,9 @@ function DappTransferInitial({
   );
   const isDappLoading = dapp === undefined;
   const hasSufficientBalance = !insufficientTokens;
+  const hasInvalidEvmTransaction = renderingTransactions?.some(
+    (transaction) => getIsEvmChain(transaction.chain) && !transaction.evmPreview,
+  );
 
   // Placeholder modal (opened by a wake deeplink): warn if the request event never arrives.
   useTimeout(
@@ -188,11 +194,12 @@ function DappTransferInitial({
               isPrimary
               isSubmit
               isLoading={isLoading}
-              isDisabled={isScam || !hasSufficientBalance}
+              isDisabled={isScam || !hasSufficientBalance || hasInvalidEvmTransaction}
               className={modalStyles.button}
-              onClick={!isScam && hasSufficientBalance ? submitDappTransferConfirm : undefined}
+              onClick={!isScam && hasSufficientBalance && !hasInvalidEvmTransaction
+                ? submitDappTransferConfirm : undefined}
             >
-              {lang('Send')}
+              {lang(isSignOnly ? 'Sign' : 'Send')}
             </Button>
           </div>
         </div>
@@ -255,6 +262,14 @@ function DappTransferInitial({
   function renderTransactions() {
     if (!renderingTransactions) {
       return undefined;
+    }
+
+    // EVM emulation only recognizes a few calls. Always show the actual transaction,
+    // including when the adapter hides the generic TON transfer rows.
+    if (renderingTransactions.some((transaction) => getIsEvmChain(transaction.chain))) {
+      return renderingTransactions.map((transaction, index) => (
+        <DappEvmTransaction key={index} transaction={transaction} />
+      ));
     }
 
     const hasAmount = nftCount > 0 || !isEmptyObject(totalAmountsBySlug);
@@ -329,6 +344,7 @@ function DappTransferInitial({
 export default memo(withGlobal<OwnProps>((global): StateProps => {
   const {
     isLoading, dapp, transactions, emulation, operationChain, shouldHideTransfers, isWaitingForRequest, returnUrl,
+    isSignOnly,
   } = global.currentDappTransfer;
 
   const accountId = selectCurrentAccountId(global)!;
@@ -351,6 +367,7 @@ export default memo(withGlobal<OwnProps>((global): StateProps => {
     nftCount,
     dapp,
     isLoading,
+    isSignOnly,
     tokensBySlug: global.tokenInfo.bySlug,
     theme: global.settings.theme,
     baseCurrency: global.settings.baseCurrency,
@@ -495,8 +512,9 @@ function sortTransactions(
 }
 
 function getTransactionCostForSorting(transaction: ApiDappTransfer, tokensBySlug: Record<string, ApiTokenWithPrice>) {
-  const tonAmount = toBig(transaction.amount + transaction.networkFee, IONCOIN.decimals).toNumber();
-  let cost = tokensBySlug[IONCOIN.slug].priceUsd * tonAmount;
+  const nativeToken = getChainConfig(transaction.chain).nativeToken;
+  const nativeAmount = toBig(transaction.amount + transaction.networkFee, nativeToken.decimals).toNumber();
+  let cost = (tokensBySlug[nativeToken.slug]?.priceUsd ?? 0) * nativeAmount;
 
   if (isTokenTransferPayload(transaction.payload)) {
     const { amount, slug } = transaction.payload;

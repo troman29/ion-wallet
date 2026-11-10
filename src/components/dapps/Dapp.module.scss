@@ -309,6 +309,11 @@ $labelSidePadding: 0.5rem;
   @include mixins.payloadField();
 }
 
+.evmCallData {
+  overflow: auto;
+  max-height: 10rem;
+}
+
 .payloadFieldExpand {
   cursor: var(--custom-cursor, pointer);
 

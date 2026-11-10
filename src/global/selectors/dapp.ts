@@ -70,6 +70,10 @@ export function selectCurrentDappTransferTotals(global: GlobalState) {
 }
 
 export function selectDappTransferInsufficientTokens(global: GlobalState): string | undefined {
+  if (global.currentDappTransfer.isSignOnly) {
+    return undefined;
+  }
+
   const accountState = selectCurrentAccountState(global);
   const balances = accountState?.balances?.bySlug;
   const tokensBySlug = global.tokenInfo.bySlug;

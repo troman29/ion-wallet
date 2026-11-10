@@ -1637,3 +1637,10 @@ $update_required: จำเป็นต้องอัปเดตแอปเ�
 $update_channel_unavailable: จำเป็นต้องอัปเดต แต่ช่องทางดาวน์โหลดยังไม่พร้อมใช้งาน โปรดลองอีกครั้งภายหลัง
 
 This version is deprecated. Re-import your wallets on %new_domain%.: เวอร์ชันนี้ล้าสมัยแล้ว นำเข้ากระเป๋าเงินอีกครั้งที่ %new_domain%
+Contract Address: ที่อยู่สัญญา
+Method ID: รหัสเมธอด
+Call Data: ข้อมูลการเรียก
+Maximum Fee: ค่าธรรมเนียมสูงสุด
+Estimated Fee: ค่าธรรมเนียมโดยประมาณ
+Fee unavailable: ไม่สามารถแสดงค่าธรรมเนียมได้
+Unable to read transaction details.: ไม่สามารถอ่านรายละเอียดธุรกรรมได้

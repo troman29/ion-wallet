@@ -1631,3 +1631,10 @@ $update_required: 需要更新應用程式才能繼續使用。
 $update_channel_unavailable: 需要更新，但下載管道暫不可用。請稍後再試。
 
 This version is deprecated. Re-import your wallets on %new_domain%.: 此版本已過時。請在 %new_domain% 重新匯入錢包。
+Contract Address: 合約地址
+Method ID: 方法識別碼
+Call Data: 呼叫資料
+Maximum Fee: 最高手續費
+Estimated Fee: 預估手續費
+Fee unavailable: 手續費暫不可用
+Unable to read transaction details.: 無法讀取交易詳情。

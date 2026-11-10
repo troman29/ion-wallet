@@ -257,6 +257,7 @@ addActionHandler('apiUpdateDappSendTransaction', async (global, actions, payload
     operationChain,
     shouldHideTransfers,
     isLegacyOutput,
+    isSignOnly,
   } = payload;
 
   await apiUpdateDappOperation(
@@ -275,6 +276,7 @@ addActionHandler('apiUpdateDappSendTransaction', async (global, actions, payload
       validUntil,
       shouldHideTransfers,
       isLegacyOutput,
+      isSignOnly,
     }),
   );
 });

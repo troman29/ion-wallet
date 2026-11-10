@@ -251,6 +251,12 @@ export interface ApiTransferToSign {
 }
 
 export interface ApiDappTransfer extends ApiTransferToSign {
+  /** Fields read from the serialized EVM transaction that will be signed, independently of emulation. */
+  evmPreview?: {
+    data: string;
+    /** Gas limit times the transaction's fee cap; absent when the serialized fee is incomplete. */
+    maximumFee?: bigint;
+  };
   stakingPreview?: {
     operation: 'stake' | 'unstake';
     amount?: bigint;

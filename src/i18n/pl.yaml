@@ -1682,3 +1682,10 @@ $update_required: Aby kontynuować, zaktualizuj aplikację.
 $update_channel_unavailable: Aktualizacja jest wymagana, ale kanał pobierania jest obecnie niedostępny. Spróbuj później.
 
 This version is deprecated. Re-import your wallets on %new_domain%.: Ta wersja jest przestarzała. Zaimportuj ponownie portfele na %new_domain%.
+Contract Address: Adres kontraktu
+Method ID: Identyfikator metody
+Call Data: Dane wywołania
+Maximum Fee: Maksymalna opłata
+Estimated Fee: Szacowana opłata
+Fee unavailable: Opłata niedostępna
+Unable to read transaction details.: Nie udało się odczytać szczegółów transakcji.
