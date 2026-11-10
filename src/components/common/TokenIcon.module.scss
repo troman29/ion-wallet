@@ -118,6 +118,13 @@
     box-shadow: 0 0 0 0.0625rem var(--color-background-first);
   }
 
+  &.xx-large {
+    top: 2.375rem;
+    inset-inline-start: 2.375rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
   &.middle {
     top: 0.9375rem !important;
     inset-inline-start: 0.9375rem !important;

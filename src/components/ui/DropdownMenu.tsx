@@ -123,7 +123,7 @@ function DropdownMenu<T extends string>({
       {items.map((item, index) => {
         const fullButtonClassName = buildClassName(
           styles.item,
-          (item.icon || item.fontIcon) && styles.item_with_icon,
+          (item.icon || item.overlayIcon || item.fontIcon) && styles.item_with_icon,
           item.withDelimiter && index > 0 && styles.delimiter,
           item.withDelimiterAfter && styles.delimiterAfter,
           selectedValue === item.value && styles.item_selected,

@@ -59,6 +59,7 @@ import {
   selectCurrentAccountState,
   selectCurrentNetwork,
   selectHasPassword,
+  selectToken,
 } from '../../selectors';
 import { switchAccount } from '../api/auth';
 
@@ -617,7 +618,9 @@ addActionHandler('setReceiveActiveTab', (global, actions, { chain }): GlobalStat
 });
 
 addActionHandler('openReceiveModal', (global, actions, params) => {
-  global = updateCurrentAccountState(global, { receiveModalChain: params?.chain });
+  const { currentTokenSlug } = selectCurrentAccountState(global) ?? {};
+  const selectedTokenChain = currentTokenSlug ? selectToken(global, currentTokenSlug)?.chain : undefined;
+  global = updateCurrentAccountState(global, { receiveModalChain: params?.chain ?? selectedTokenChain });
   global = { ...global, isReceiveModalOpen: true };
   setGlobal(global);
 });

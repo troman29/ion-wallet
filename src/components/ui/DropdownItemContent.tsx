@@ -49,14 +49,15 @@ function DropdownItemContent<T extends string>({
   );
 
   function renderIcon() {
-    if (typeof item.icon !== 'string') {
-      return item.icon;
+    const icon = item.icon || item.overlayIcon;
+    if (typeof icon !== 'string') {
+      return icon;
     }
 
     return (
       <span className={buildClassName('icon', styles.itemIcon, iconClassName)}>
-        <img src={item.icon} alt="" className={buildClassName(styles.itemMainIcon, item.iconClassName)} />
-        {item.overlayIcon && (
+        <img src={icon} alt="" className={buildClassName(styles.itemMainIcon, item.iconClassName)} />
+        {Boolean(item.icon) && item.overlayIcon && (
           <img
             src={item.overlayIcon}
             alt=""
@@ -75,7 +76,7 @@ function DropdownItemContent<T extends string>({
       onClick={onClick && ((e) => onClick(e, item.value))}
     >
       {prefix}
-      {Boolean(item.icon) && renderIcon()}
+      {Boolean(item.icon || item.overlayIcon) && renderIcon()}
       {item.fontIcon && (
         <i
           className={buildClassName(
