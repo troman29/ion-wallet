@@ -2,7 +2,6 @@ import React, { memo, useMemo } from '../../lib/teact/teact';
 
 import type { ApiTokenWithPrice } from '../../api/types';
 
-import { IONCOIN } from '../../config';
 import getTokenChainIcon from '../../util/getTokenChainIcon';
 import getTokenImage from '../../util/getTokenImage';
 import { getIsRwaStockToken } from '../../util/tokens';
@@ -12,7 +11,6 @@ import useLastCallback from '../../hooks/useLastCallback';
 
 import Dropdown, { type DropdownItem } from './Dropdown';
 
-import chainIconStyles from '../common/TokenChainIcon.module.scss';
 import styles from './TokenDropdown.module.scss';
 
 export type TokenWithId = Pick<ApiTokenWithPrice, 'slug' | 'symbol' | 'image' | 'chain' | 'keywords'> & {
@@ -114,7 +112,6 @@ export function tokenToDropdownItem(token: TokenWithId, isMultichainAccount?: bo
     icon: getTokenImage(token),
     iconClassName: getIsRwaStockToken(token) ? styles.rwaStockIcon : undefined,
     overlayIcon: isMultichainAccount ? getTokenChainIcon(token) : undefined,
-    overlayIconClassName: token.slug === IONCOIN.slug ? chainIconStyles.ion : undefined,
     name: token.symbol,
   };
 }
