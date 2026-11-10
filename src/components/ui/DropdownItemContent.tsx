@@ -61,7 +61,7 @@ function DropdownItemContent<T extends string>({
           <img
             src={item.overlayIcon}
             alt=""
-            className={buildClassName('icon', styles.itemOverlayIcon, iconOverlayClassName)}
+            className={buildClassName('icon', styles.itemOverlayIcon, iconOverlayClassName, item.overlayIconClassName)}
           />
         )}
       </span>

@@ -191,11 +191,11 @@
 .itemOverlayIcon {
   position: absolute;
   top: 0.9375rem;
-  inset-inline-start: 0.875rem;
+  inset-inline-start: var(--token-chain-icon-inset-start, 0.875rem);
 
-  width: 0.75rem !important;
+  width: var(--token-chain-icon-width, 0.75rem) !important;
   height: 0.75rem !important;
-  border-radius: 50%;
+  border-radius: var(--token-chain-icon-border-radius, 50%);
 
   box-shadow: 0 0 0 0.1rem var(--color-background-first);
 }

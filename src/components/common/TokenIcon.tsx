@@ -3,13 +3,15 @@ import React, { memo, type TeactNode } from '../../lib/teact/teact';
 import type { ApiToken } from '../../api/types';
 import type { UserToken } from '../../global/types';
 
+import { IONCOIN } from '../../config';
 import buildClassName from '../../util/buildClassName';
-import getChainNetworkIcon from '../../util/getChainNetworkIcon';
+import getTokenChainIcon from '../../util/getTokenChainIcon';
 import getTokenImage from '../../util/getTokenImage';
-import { getIsNativeStakedToken, getIsNativeToken, getIsRwaStockToken } from '../../util/tokens';
+import { getIsNativeStakedToken, getIsRwaStockToken } from '../../util/tokens';
 
 import useFlag from '../../hooks/useFlag';
 
+import chainIconStyles from './TokenChainIcon.module.scss';
 import styles from './TokenIcon.module.scss';
 
 interface OwnProps {
@@ -27,8 +29,7 @@ function TokenIcon({
   const { symbol, chain, slug } = token;
   const image = getTokenImage(token);
   const [isLoadingError, markLoadingError] = useFlag();
-  const isNativeToken = getIsNativeToken(slug);
-  const isNativeTokenStaking = getIsNativeStakedToken(slug);
+  const chainIcon = withChainIcon && !getIsNativeStakedToken(slug) ? getTokenChainIcon(token) : undefined;
   const shouldRenderImage = Boolean(image) && !isLoadingError;
   const shapeClassName = getIsRwaStockToken(token) ? styles.square : styles.circle;
   const iconFullClassName = buildClassName(styles.icon, size && styles[size], shapeClassName, iconClassName);
@@ -55,11 +56,13 @@ function TokenIcon({
           />
         ) : renderDefaultIcon()
       }
-      {withChainIcon && !isNativeToken && !isNativeTokenStaking && chain && (
+      {chainIcon && chain && (
         <img
-          src={getChainNetworkIcon(chain)}
+          src={chainIcon}
           alt=""
-          className={buildClassName(styles.blockchainIcon, size && styles[size])}
+          className={buildClassName(
+            styles.blockchainIcon, size && styles[size], slug === IONCOIN.slug && chainIconStyles.ion,
+          )}
           draggable={false}
         />
       )}

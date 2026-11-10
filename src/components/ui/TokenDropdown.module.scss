@@ -55,8 +55,8 @@
 
 .chainIcon {
   top: 0.625rem !important;
-  inset-inline-start: 0.625rem !important;
-  width: 0.6875rem !important;
+  inset-inline-start: var(--token-chain-icon-inset-start, 0.625rem) !important;
+  width: var(--token-chain-icon-width, 0.6875rem) !important;
   height: 0.6875rem !important;
 }
 
