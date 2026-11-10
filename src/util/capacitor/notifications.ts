@@ -6,7 +6,7 @@ import { getActions, getGlobal, setGlobal } from '../../global';
 import type { ApiChain, ApiStakingType } from '../../api/types';
 import type { GlobalState } from '../../global/types';
 
-import { TONCOIN } from '../../config';
+import { IONCOIN } from '../../config';
 import { selectAccountIdByAddress } from '../../global/selectors';
 import { selectNotificationAddressesSlow } from '../../global/selectors/notifications';
 import { callApi } from '../../api';
@@ -110,7 +110,7 @@ function handlePushNotificationActionPerformed(notification: ActionPerformed) {
   const { action, address } = notificationData;
   const chain = 'chain' in notificationData && notificationData.chain
     ? notificationData.chain
-    : TONCOIN.chain;
+    : IONCOIN.chain;
   const accountId = address === undefined ? undefined : selectAccountIdByAddress(global, chain, address);
   const network = 'mainnet';
 

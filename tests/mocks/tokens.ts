@@ -2,7 +2,7 @@ export const TON_USDT_MAINNET = {
   name: 'Tether USD',
   symbol: 'USD₮',
   chain: 'ton',
-  slug: 'ton-EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
+  slug: 'ion-EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
   decimals: 6,
   tokenAddress: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
   priceUsd: 1,

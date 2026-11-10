@@ -1,10 +1,14 @@
 const mockTonCheckStakeDraft = jest.fn();
+const mockTonCheckUnstakeDraft = jest.fn();
 const mockSolanaCheckStakeDraft = jest.fn();
 
 jest.mock('../chains', () => ({
   __esModule: true,
   default: {
-    ton: { staking: { checkStakeDraft: (...args: unknown[]) => mockTonCheckStakeDraft(...args) } },
+    ton: { staking: {
+      checkStakeDraft: (...args: unknown[]) => mockTonCheckStakeDraft(...args),
+      checkUnstakeDraft: (...args: unknown[]) => mockTonCheckUnstakeDraft(...args),
+    } },
     solana: { staking: { checkStakeDraft: (...args: unknown[]) => mockSolanaCheckStakeDraft(...args) } },
     tron: {},
   },
@@ -12,7 +16,7 @@ jest.mock('../chains', () => ({
 
 import type { ApiStakingState } from '../types';
 
-import { checkStakeDraft } from './staking';
+import { checkStakeDraft, checkUnstakeDraft } from './staking';
 
 const ACCOUNT_ID = '0-mainnet';
 
@@ -23,6 +27,7 @@ function buildState(tokenSlug: string) {
 describe('staking chain routing', () => {
   afterEach(() => {
     mockTonCheckStakeDraft.mockReset();
+    mockTonCheckUnstakeDraft.mockReset();
     mockSolanaCheckStakeDraft.mockReset();
   });
 
@@ -38,10 +43,17 @@ describe('staking chain routing', () => {
   it('routes a native token slug to its chain', async () => {
     mockTonCheckStakeDraft.mockResolvedValue({ realFee: 1n });
 
-    await checkStakeDraft(ACCOUNT_ID, 1n, buildState('toncoin'));
+    await checkStakeDraft(ACCOUNT_ID, 1n, buildState('ioncoin'));
 
     expect(mockTonCheckStakeDraft).toHaveBeenCalledTimes(1);
     expect(mockSolanaCheckStakeDraft).not.toHaveBeenCalled();
+  });
+
+  it('keeps LION redemption available through the dedicated unstake path', async () => {
+    const state = buildState('ioncoin');
+    mockTonCheckUnstakeDraft.mockResolvedValue({ realFee: 1n });
+    await expect(checkUnstakeDraft(ACCOUNT_ID, 1n, state)).resolves.toEqual({ realFee: 1n });
+    expect(mockTonCheckUnstakeDraft).toHaveBeenCalledWith(ACCOUNT_ID, 1n, state);
   });
 
   it('rejects when the state names a chain without staking', async () => {

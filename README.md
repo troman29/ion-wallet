@@ -36,6 +36,21 @@ New wallets use a 12-word multichain recovery phrase (ION and BNB Chain) by defa
 
 Exchange is hidden by default while its ION bridge flow is unfinished. Set `ENABLE_EXCHANGE=1` at build time to show it.
 
+Price charts support ION, ION BEP-20, BNB, and LION for periods up to one year; the backend must provide
+`GET /prices/chart/{assetId}`. LION's chart uses its historical pool redemption rate. Ordinary LION transfers
+show the existing service-token warning via `STAKED_TOKEN_SLUGS`; unstaking remains available through the staking screen.
+
+Token slugs use `ioncoin` for native ION and `ion-<full address>` for all ION Network jettons, including LION.
+The internal chain ID remains `ton`; BNB Chain slugs stay unchanged. Cache schema 5 migrates token references,
+balances, staking, and visibility settings, and clears cached transaction history so it is fetched again.
+The legacy native slug `toncoin` migrates directly to `ioncoin`.
+IndexedDB schema 8 canonicalizes token addresses and merges duplicate metadata records atomically.
+Canonical records take priority while missing metadata is preserved.
+LION configuration accepts raw, bounceable, non-bounceable and test-only addresses; token identities always
+use URL-safe bounceable addresses without the test-only flag. The client sends `X-App-Version: 1.0.2` and also accepts
+legacy `/assets` slugs. The updated backend returns ION slugs to wallets from `1.0.2` and legacy slugs to older
+wallets or requests without a valid version, with `Vary: X-App-Version` to separate cached responses.
+
 Pending activities, WebSockets, and trace emulation are disabled by default because the ION backend does not support them.
 Unset or empty `NO_PENDING_ACTIVITIES`, `NO_WEBSOCKET`, and `NO_TRACE_EMULATION` values keep them disabled;
 set a flag to `0` only when the configured backend supports that capability.

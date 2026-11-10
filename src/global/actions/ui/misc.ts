@@ -53,6 +53,7 @@ import {
   updateDappConnectRequest,
   updateSettings,
 } from '../../reducers';
+import { clearTokenPriceHistory } from '../../reducers/tokens';
 import {
   selectCurrentAccount,
   selectCurrentAccountId,
@@ -571,6 +572,7 @@ addActionHandler('changeBaseCurrency', (global, actions, { currency }) => {
   global = updateSettings(global, {
     baseCurrency: currency,
   });
+  global = clearTokenPriceHistory(global);
   setGlobal(global);
 });
 

@@ -10,6 +10,8 @@ import type {
 import type { TOKEN_CARD_COLORS } from './components/main/helpers/cardColors';
 import type { AutolockValueType, LangCode, LangItem } from './global/types';
 
+import { normalizeTonTokenAddress } from './util/tonAddress';
+
 export const APP_ENV = process.env.APP_ENV || 'production';
 
 export const APP_NAME = process.env.APP_NAME || 'ION Wallet';
@@ -285,7 +287,9 @@ export const DEFAULT_FEE = 15_000_000n; // 0.015 TON
 export const UNSTAKE_TON_GRACE_PERIOD = 20 * 60 * 1000; // 20 m.
 
 export const LIQUID_POOL = process.env.LIQUID_POOL || 'EQAYI9vwZ3K5y9n_9-E8F_e3JzMzNNyEib0ddBlfAWOOsh_c';
-export const LIQUID_JETTON = process.env.LIQUID_JETTON || 'EQACbwI38RnvclU5Wv6H9zDr8Ao_tq9NWilXxBmoE8yroZlF';
+export const LIQUID_JETTON = normalizeTonTokenAddress(
+  process.env.LIQUID_JETTON || 'EQACbwI38RnvclU5Wv6H9zDr8Ao_tq9NWilXxBmoE8yroZlF',
+);
 export const STAKING_MIN_AMOUNT = ONE_TON;
 export const MIN_ACTIVE_STAKING_REWARDS = 100_000_000n; // 0.1 MY
 // Staked tokens now showing with all other tokens, so we need to add a prefix to avoid collisions
@@ -298,10 +302,10 @@ export const EMBEDDED_DAPP_BRIDGE_CHANNEL = 'embedded-dapp-bridge';
 export const TON_DNS_RENEWAL_WARNING_DAYS = 14;
 export const TON_DNS_RENEWAL_NFT_WARNING_DAYS = 30;
 
-export const TONCOIN = {
+export const IONCOIN = {
   name: 'ION',
   symbol: 'ION',
-  slug: 'toncoin',
+  slug: 'ioncoin',
   decimals: 9,
   chain: 'ton',
   cmcSlug: 'toncoin',
@@ -315,7 +319,7 @@ export const BNB = {
   chain: 'bnb',
 } as const;
 
-export const STAKED_TON_SLUG = `ton-${LIQUID_JETTON}`;
+export const STAKED_ION_SLUG = `ion-${LIQUID_JETTON}`;
 
 // Tokens that do not accept new stakes; existing positions stay fully withdrawable
 export const NEW_STAKE_DISABLED_TOKEN_SLUGS: ReadonlySet<string> = new Set();
@@ -338,7 +342,7 @@ export const TOKEN_CUSTOM_STYLES: Partial<Record<string, {
   fontIcon?: string;
   cardColor?: keyof typeof TOKEN_CARD_COLORS;
 }>> = {
-  [TONCOIN.slug]: {
+  [IONCOIN.slug]: {
     fontIcon: 'icon-chain-ton',
     cardColor: 'blue',
   },
@@ -346,7 +350,7 @@ export const TOKEN_CUSTOM_STYLES: Partial<Record<string, {
     fontIcon: 'icon-chain-bnb',
     cardColor: 'green',
   },
-  [STAKED_TON_SLUG]: {
+  [STAKED_ION_SLUG]: {
     cardColor: 'green',
   },
 };
@@ -357,11 +361,11 @@ export const ALL_STAKING_POOLS = [
 
 // Native tokens in the UI display order (see CHAIN_DISPLAY_ORDER). Drives the empty-wallet token order.
 export const PRIORITY_TOKENS = [
-  TONCOIN,
+  IONCOIN,
   BNB,
 ] as ApiToken[];
 
-export const DEFAULT_TRANSFER_TOKEN_SLUG = TONCOIN.slug;
+export const DEFAULT_TRANSFER_TOKEN_SLUG = IONCOIN.slug;
 
 export const ACTIVE_TAB_STORAGE_KEY = 'ion-active-tab';
 // Kept while older tabs can still be open on the same origin.
@@ -485,13 +489,13 @@ export const PRICELESS_TOKEN_HASHES = new Set([
 ]);
 
 export const STAKED_TOKEN_SLUGS = new Set([
-  STAKED_TON_SLUG,
+  STAKED_ION_SLUG,
 ]);
 
 export const DEFAULT_STAKING_STATE: ApiLiquidStakingState = {
   type: 'liquid',
   id: 'liquid',
-  tokenSlug: TONCOIN.slug,
+  tokenSlug: IONCOIN.slug,
   annualYield: 14.09,
   yieldType: 'APY',
   balance: 0n,

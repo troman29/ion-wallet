@@ -1,10 +1,10 @@
 import type { ApiStakingState, ApiTokenWithPrice } from '../../../api/types';
 
-import { TONCOIN } from '../../../config';
+import { IONCOIN } from '../../../config';
 import { getStakingTokens } from './useTokenDropdown';
 
 // The shipped blocked-token list is empty, so the mechanism needs a slug of its own to be exercised
-const BLOCKED_SLUG = 'ton-blocked-jetton';
+const BLOCKED_SLUG = 'ion-blocked-jetton';
 
 jest.mock('../../../util/staking', () => ({
   ...jest.requireActual('../../../util/staking'),
@@ -13,14 +13,14 @@ jest.mock('../../../util/staking', () => ({
 
 const tokenBySlug = {
   [BLOCKED_SLUG]: { slug: BLOCKED_SLUG } as ApiTokenWithPrice,
-  [TONCOIN.slug]: { slug: TONCOIN.slug } as ApiTokenWithPrice,
+  [IONCOIN.slug]: { slug: IONCOIN.slug } as ApiTokenWithPrice,
 };
 
 const activeMyState = {
   id: 'my-1', type: 'jetton', tokenSlug: BLOCKED_SLUG, balance: 1n,
 } as unknown as ApiStakingState;
 const tonState = {
-  id: 'ton-1', type: 'liquid', tokenSlug: TONCOIN.slug, balance: 0n,
+  id: 'ton-1', type: 'liquid', tokenSlug: IONCOIN.slug, balance: 0n,
 } as unknown as ApiStakingState;
 
 function getTokenIds(...args: Parameters<typeof getStakingTokens>) {

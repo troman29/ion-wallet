@@ -2,7 +2,7 @@ import type { ApiNetwork, ApiTransaction } from '../../../types';
 import type { ApiTransactionExtended } from '../types';
 import type { AddressBook, Transaction, TransactionMessage } from './types';
 
-import { TONCOIN } from '../../../../config';
+import { IONCOIN } from '../../../../config';
 import { toSeconds } from '../../../../util/datetime';
 import { omitUndefined } from '../../../../util/iteratees';
 import { toBase64Address } from '../util/tonCore';
@@ -113,7 +113,7 @@ export function parseRawTransaction(
       fromAddress,
       toAddress,
       amount: isIncoming ? BigInt(value!) : -BigInt(value!),
-      slug: TONCOIN.slug,
+      slug: IONCOIN.slug,
       fee,
       externalMsgHashNorm: isIncoming ? undefined : inMsgHashNorm,
       normalizedAddress,

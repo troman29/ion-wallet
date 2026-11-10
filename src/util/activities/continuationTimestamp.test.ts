@@ -15,7 +15,7 @@ function makeActivity(
     fromAddress: 'from',
     toAddress: 'to',
     normalizedAddress: 'to',
-    slug: 'toncoin',
+    slug: 'ioncoin',
     isIncoming: true,
     status,
     timestamp,

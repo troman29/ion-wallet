@@ -1,7 +1,7 @@
 import type { Migration } from '../migrations/ionDerivation';
 import type { ApiBip39Account } from '../types';
 
-import { LIQUID_JETTON, TONCOIN } from '../../config';
+import { IONCOIN, LIQUID_JETTON } from '../../config';
 import { parseAccountId } from '../../util/account';
 import { pause } from '../../util/schedulers';
 import { getKeyPairFromStoredMnemonic } from '../chains/ton/auth';
@@ -18,7 +18,7 @@ async function getBalances(accountId: string, address: string) {
   const { network } = parseAccountId(accountId);
   const balances = await fetchBalances(network, address, () => {});
   return {
-    ion: balances[TONCOIN.slug] ?? 0n,
+    ion: balances[IONCOIN.slug] ?? 0n,
     lion: balances[buildTokenSlug('ton', LIQUID_JETTON)] ?? 0n,
   };
 }

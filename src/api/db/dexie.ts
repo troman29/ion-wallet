@@ -4,6 +4,7 @@ import Dexie from 'dexie';
 import type { ApiTokenWithPrice } from '../types';
 import type { ApiDbNft } from './types';
 
+import { mergeCachedTokenIdentities } from './migrations';
 import { DbRepository } from './repository';
 
 const DB_NAME = 'tables';
@@ -44,6 +45,13 @@ export class ApiDb extends Dexie {
       return tx.table<ApiTokenWithPrice>('tokens').toCollection().modify((token) => {
         if (token.chain === 'ton' && !token.isFromBackend) delete token.image;
       });
+    });
+    this.version(8).upgrade(async (tx) => {
+      const table = tx.table<ApiTokenWithPrice>('tokens');
+      const tokens = mergeCachedTokenIdentities(await table.toArray());
+      // Both operations belong to the upgrade transaction: a failed write restores the original table.
+      await table.clear();
+      await table.bulkPut(tokens);
     });
   }
 }

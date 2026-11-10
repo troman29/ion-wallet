@@ -3,7 +3,7 @@ import './misc';
 import type { ApiChain } from '../../../api/types';
 import type { AccountState, GlobalState } from '../../types';
 
-import { BNB, ION_BNB_MAINNET, TONCOIN } from '../../../config';
+import { BNB, ION_BNB_MAINNET, IONCOIN } from '../../../config';
 import { addActionHandler, setGlobal } from '../../index';
 
 jest.mock('../../index', () => ({
@@ -87,7 +87,7 @@ describe('receive network selection', () => {
       byAccountId: { '0-mainnet': accountState },
       tokenInfo: {
         bySlug: {
-          [TONCOIN.slug]: { ...TONCOIN, priceUsd: 1, percentChange24h: 0 },
+          [IONCOIN.slug]: { ...IONCOIN, priceUsd: 1, percentChange24h: 0 },
           [BNB.slug]: { ...BNB, priceUsd: 1, percentChange24h: 0 },
           [ION_BNB_MAINNET.slug]: { ...ION_BNB_MAINNET, priceUsd: 1, percentChange24h: 0 },
         },
@@ -103,7 +103,7 @@ describe('receive network selection', () => {
   it.each([
     [ION_BNB_MAINNET.slug, 'bnb'],
     [BNB.slug, 'bnb'],
-    [TONCOIN.slug, 'ton'],
+    [IONCOIN.slug, 'ton'],
   ] as const)('opens the network of the selected %s token', (currentTokenSlug, chain) => {
     const global = openReceive(makeReceiveGlobal({ currentTokenSlug }));
 
@@ -137,7 +137,7 @@ describe('receive network selection', () => {
 
   it('updates the network when another token is selected before reopening', () => {
     const global = openReceive(makeReceiveGlobal({ currentTokenSlug: ION_BNB_MAINNET.slug }));
-    global.byAccountId['0-mainnet'].currentTokenSlug = TONCOIN.slug;
+    global.byAccountId['0-mainnet'].currentTokenSlug = IONCOIN.slug;
 
     expect(openReceive(global).byAccountId['0-mainnet'].receiveModalChain).toBe('ton');
   });

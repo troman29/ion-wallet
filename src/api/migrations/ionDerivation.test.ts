@@ -1,4 +1,4 @@
-import { LIQUID_JETTON } from '../../config';
+import { IONCOIN, LIQUID_JETTON, STAKED_ION_SLUG } from '../../config';
 import { pause } from '../../util/schedulers';
 import { callWindow } from '../../util/windowProvider/connector';
 import { getKeyPairFromStoredMnemonic, getWalletFromBip39Mnemonic } from '../chains/ton/auth';
@@ -45,7 +45,7 @@ const newWallet = {
   ...oldWallet, address: 'new-address', publicKey: 'b'.repeat(64),
   derivation: { path: 'm/44\'/696365\'/{index}\'', index: 0 },
 };
-const lionSlug = `ton-${LIQUID_JETTON}`;
+const lionSlug = STAKED_ION_SLUG;
 let oldIon: bigint;
 let newIon: bigint;
 let oldLion: bigint;
@@ -87,7 +87,7 @@ beforeEach(() => {
     isInitialized: true,
   }));
   jest.mocked(fetchBalances).mockImplementation((_network, address) => Promise.resolve({
-    toncoin: address === oldWallet.address ? oldIon : newIon,
+    [IONCOIN.slug]: address === oldWallet.address ? oldIon : newIon,
     [lionSlug]: address === oldWallet.address ? oldLion : newLion,
   }));
   jest.mocked(callWindow).mockImplementation((...args: any[]) => Promise.resolve((

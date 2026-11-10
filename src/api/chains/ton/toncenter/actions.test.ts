@@ -1,6 +1,6 @@
 import type { AnyAction } from './types';
 
-import { TONCOIN } from '../../../../config';
+import { IONCOIN } from '../../../../config';
 import { toBase64Address } from '../util/tonCore';
 import { parseActions, parseActionsToActivities } from './actions';
 
@@ -109,7 +109,7 @@ describe('parseActionsToActivities', () => {
 
     expect(activity).toMatchObject({
       kind: 'transaction',
-      slug: TONCOIN.slug,
+      slug: IONCOIN.slug,
       isIncoming: true,
       fromAddress: SENDER,
       amount: 50_000_000_000_000_000n,

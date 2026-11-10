@@ -1,0 +1,2 @@
+Added price charts for ION, ION BEP-20, BNB, and LION with up to one year of history.
+Migrated ION token identifiers and refreshed cached transaction history.

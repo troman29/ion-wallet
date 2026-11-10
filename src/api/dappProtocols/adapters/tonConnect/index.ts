@@ -68,7 +68,7 @@ import {
 import { DappProtocolType } from '../../types';
 import { CHAIN } from './types';
 
-import { IS_CAPACITOR, IS_EXTENSION, SSE_BRIDGE_URL, TONCOIN } from '../../../../config';
+import { IONCOIN, IS_CAPACITOR, IS_EXTENSION, SSE_BRIDGE_URL } from '../../../../config';
 import { parseAccountId } from '../../../../util/account';
 import { bigintDivideToNumber, bigintMultiplyToNumber } from '../../../../util/bigint';
 import {
@@ -576,7 +576,7 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
             toAddress: normalizedAddress,
             comment,
             fee: networkFee,
-            slug: TONCOIN.slug,
+            slug: IONCOIN.slug,
             externalMsgHashNorm,
           };
         }));

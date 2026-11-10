@@ -3,7 +3,7 @@ import { getActions, getGlobal } from '../../global';
 import type { GlobalState } from '../../global/types';
 import { ContentTab } from '../../global/types';
 
-import { BNB, TONCOIN } from '../../config';
+import { BNB, IONCOIN } from '../../config';
 import { INITIAL_STATE } from '../../global/initialState';
 import { BSC_USDT_MAINNET, TON_USDT_MAINNET } from '../../../tests/mocks/tokens';
 import { callApi } from '../../api';
@@ -68,8 +68,8 @@ const createMockGlobalState = (): GlobalState => {
     },
     tokenInfo: {
       bySlug: {
-        [TONCOIN.slug]: {
-          ...TONCOIN,
+        [IONCOIN.slug]: {
+          ...IONCOIN,
           priceUsd: 1,
           percentChange24h: 1,
         },
@@ -94,7 +94,7 @@ const createMockGlobalState = (): GlobalState => {
       'test-account-id': {
         balances: {
           bySlug: {
-            [TONCOIN.slug]: 1000000000n, // 1 TON
+            [IONCOIN.slug]: 1000000000n, // 1 TON
             [TON_USDT_MAINNET.slug]: 1000000n, // 1 USDT
             [BNB.slug]: 1000000000000000000n, // 1 BNB
             [BSC_USDT_MAINNET.slug]: 1000000000000000000n, // 1 USDT BEP-20
@@ -122,7 +122,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         binPayload: TEST_BIN_PAYLOAD,
       },
@@ -132,7 +132,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&exp=${EXPIRED_TIMESTAMP}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         error: '$transfer_link_expired',
       },
@@ -142,7 +142,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_DNS_NAME}?amount=1`,
       expected: {
         toAddress: TEST_DNS_NAME,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
       },
     },
@@ -171,7 +171,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&exp=${VALID_TIMESTAMP}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
       },
     },
@@ -180,7 +180,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         stateInit: TEST_STATE_INIT,
       },
@@ -200,7 +200,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         comment: TEST_COMMENT,
       },
@@ -210,7 +210,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         stateInit: TEST_STATE_INIT,
         binPayload: TEST_BIN_PAYLOAD,
@@ -221,7 +221,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&init=${TEST_STATE_INIT}&text=${TEST_COMMENT}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         stateInit: TEST_STATE_INIT,
         comment: TEST_COMMENT,
@@ -232,7 +232,7 @@ describe('parseTonDeeplink', () => {
       url: `ion://transfer/${TEST_TON_ADDRESS}?amount=1&text=${TEST_COMMENT}&bin=${TEST_BIN_PAYLOAD}`,
       expected: {
         toAddress: TEST_TON_ADDRESS,
-        tokenSlug: TONCOIN.slug,
+        tokenSlug: IONCOIN.slug,
         amount: TEST_AMOUNT,
         comment: TEST_COMMENT,
         binPayload: TEST_BIN_PAYLOAD,
@@ -267,6 +267,7 @@ describe('processSelfDeeplink', () => {
       showError: jest.fn(),
       startStaking: jest.fn(),
       startTransfer: jest.fn(),
+      showTokenActivity: jest.fn(),
       closeSettings: jest.fn(),
       openExplore: jest.fn(),
       setActiveContentTab: jest.fn(),
@@ -281,6 +282,16 @@ describe('processSelfDeeplink', () => {
     // Setup getActions and getGlobal mocks
     (getActions as jest.Mock).mockReturnValue(mockActions);
     (getGlobal as jest.Mock).mockReturnValue(mockGlobal);
+  });
+
+  it.each([
+    ['ioncoin', 'ioncoin'],
+    ['toncoin', 'ioncoin'],
+    [TON_USDT_MAINNET.slug, TON_USDT_MAINNET.slug],
+    [TON_USDT_MAINNET.slug.replace(/^ion-/, 'ton-'), TON_USDT_MAINNET.slug],
+  ])('opens token link %s using canonical slug %s', async (slug, canonicalSlug) => {
+    expect(await processSelfDeeplink(`ion://token/${slug}`)).toBe(true);
+    expect(mockActions.showTokenActivity).toHaveBeenCalledWith({ slug: canonicalSlug });
   });
 
   describe('Exchange commands', () => {
@@ -298,30 +309,30 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.startStaking).toHaveBeenCalled();
     });
 
-    it('should preserve the exact staking product, asset, and decimal amount', async () => {
-      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=toncoin&amount=10');
+    it.each(['ioncoin', 'toncoin'])('should preserve staking product and amount for asset %s', async (asset) => {
+      const result = await processSelfDeeplink(`ion://stake?product=liquid&asset=${asset}&amount=10`);
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalledWith({
         stakingId: 'liquid',
-        tokenSlug: 'toncoin',
+        tokenSlug: 'ioncoin',
         initialAmount: 10_000_000_000n,
       });
     });
 
     it('should preserve an all-balance staking instruction', async () => {
-      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=toncoin&amount=all');
+      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=ioncoin&amount=all');
 
       expect(result).toBe(true);
       expect(mockActions.startStaking).toHaveBeenCalledWith({
         stakingId: 'liquid',
-        tokenSlug: 'toncoin',
+        tokenSlug: 'ioncoin',
         initialAmount: 'all',
       });
     });
 
     it('should reject a partial or invalid exact staking target', async () => {
-      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=toncoin&amount=0');
+      const result = await processSelfDeeplink('ion://stake?product=liquid&asset=ioncoin&amount=0');
 
       expect(result).toBe(true);
       expect(mockActions.showError).toHaveBeenCalledWith({ error: '$unsupported_deeplink_parameter' });
@@ -485,7 +496,7 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.startTransfer).toHaveBeenCalledWith(
         expect.objectContaining({
           toAddress: TEST_TON_ADDRESS,
-          tokenSlug: TONCOIN.slug,
+          tokenSlug: IONCOIN.slug,
           amount: 1n,
         }),
       );
@@ -499,7 +510,7 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.startTransfer).toHaveBeenCalledWith(
         expect.objectContaining({
           toAddress: TEST_TON_ADDRESS,
-          tokenSlug: TONCOIN.slug,
+          tokenSlug: IONCOIN.slug,
           amount: 5n,
           comment: 'Hello',
         }),
@@ -524,7 +535,7 @@ describe('processSelfDeeplink', () => {
       expect(mockActions.startTransfer).toHaveBeenCalledWith(
         expect.objectContaining({
           toAddress: TEST_TON_ADDRESS,
-          tokenSlug: TONCOIN.slug,
+          tokenSlug: IONCOIN.slug,
           amount: 1n,
           comment: TEST_COMMENT,
         }),
@@ -772,8 +783,8 @@ describe('getDeeplinkFromLocation', () => {
     {
       name: 'handle swap command with query params',
       pathname: '/swap',
-      search: '?in=toncoin&out=ton-usdt&amount=100',
-      expected: 'ion://swap?in=toncoin&out=ton-usdt&amount=100',
+      search: '?in=ioncoin&out=ion-usdt&amount=100',
+      expected: 'ion://swap?in=ioncoin&out=ion-usdt&amount=100',
     },
     {
       name: 'handle transfer command with address',

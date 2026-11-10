@@ -8,6 +8,8 @@ import {
 import { getTokenInfo } from '../../util/chain';
 import Deferred from '../../util/Deferred';
 import { omitUndefined } from '../../util/iteratees';
+import { normalizeTokenIdentity, normalizeTokenSlug } from '../../util/tokenSlug';
+import { normalizeTonTokenAddress } from '../../util/tonAddress';
 import { tokenRepository } from '../db';
 import { callBackendGet } from './backend';
 
@@ -57,7 +59,9 @@ export async function updateTokens(
 ) {
   const tokensForDb: ApiTokenWithPrice[] = [];
 
-  for (const token of tokens) {
+  for (const originalToken of tokens) {
+    // Accept catalogues and caches written before the ION slug migration.
+    const token = normalizeTokenIdentity(originalToken);
     const { slug } = token;
     const cachedToken = tokensCache.bySlug[slug] as ApiTokenWithPrice | undefined;
     const mergedToken = mergeTokenWithCache(token, cachedToken);
@@ -107,7 +111,7 @@ export function getTokensCache() {
 
 /** Note that this function may return `undefined` if the token is not found (e.g. pTON) */
 export function getTokenBySlug(slug: string): ApiTokenWithPrice | undefined {
-  return tokensCache.bySlug[slug];
+  return tokensCache.bySlug[normalizeTokenSlug(slug)];
 }
 
 export function getTokenByAddress(tokenAddress: string, chain?: ApiChain) {
@@ -122,7 +126,11 @@ export function getTokenByAddress(tokenAddress: string, chain?: ApiChain) {
 }
 
 function normalizeTokenAddress(tokenAddress: string) {
-  return tokenAddress.trim().toLowerCase();
+  try {
+    return normalizeTonTokenAddress(tokenAddress);
+  } catch {
+    return tokenAddress.trim().toLowerCase();
+  }
 }
 
 export function sendUpdateTokens(onUpdate: OnApiUpdate) {
@@ -166,5 +174,5 @@ export function buildTokenSlug(chain: ApiChain, address: string) {
   } catch {
     // Invalid address: keep it as is
   }
-  return `${chain}-${normalizedAddress}`;
+  return `${chain === 'ton' ? 'ion' : chain}-${normalizedAddress}`;
 }
