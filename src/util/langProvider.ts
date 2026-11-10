@@ -39,6 +39,7 @@ const PLURAL_VALUE_OPTIONS = ['zeroValue', 'oneValue', 'twoValue', 'fewValue', '
 const PLURAL_OPTIONS = ['value', ...PLURAL_VALUE_OPTIONS] as const;
 // Some rules edited from https://github.com/eemeli/make-plural/blob/master/packages/plurals/cardinals.js
 // ar - zeroValue, oneValue, twoValue, fewValue, manyValue, otherValue
+// cs - zeroValue, oneValue, fewValue, manyValue, otherValue
 // de - zeroValue, oneValue, otherValue
 // en - zeroValue, oneValue, otherValue
 // es - zeroValue, oneValue, otherValue
@@ -54,6 +55,7 @@ const PLURAL_OPTIONS = ['value', ...PLURAL_VALUE_OPTIONS] as const;
 const PLURAL_RULES = {
   /* eslint-disable @stylistic/max-len */
   ar: (n: number) => (n === 0 ? 1 : (n === 1 ? 2 : (n === 2 ? 3 : (n % 100 >= 3 && n % 100 <= 10 ? 4 : (n % 100 >= 11 && n % 100 <= 99 ? 5 : 6))))),
+  cs: (n: number) => (n === 0 ? 1 : (!Number.isInteger(n) ? 5 : (n === 1 ? 2 : (n >= 2 && n <= 4 ? 4 : 6)))),
   de: (n: number) => (n === 0 ? 1 : (n !== 1 ? 6 : 2)),
   en: (n: number) => (n === 0 ? 1 : (n !== 1 ? 6 : 2)),
   es: (n: number) => (n === 0 ? 1 : (n !== 1 ? 6 : 2)),

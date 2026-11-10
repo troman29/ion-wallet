@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enclave_use_biometrics">Použít biometrii</string>
+    <string name="enclave_enter_passcode_or_use_biometrics">Zadejte přístupový kód nebo použijte otisk prstu</string>
+    <string name="enclave_use_pin">Použít PIN</string>
+    <string name="enclave_cancel">Zrušit</string>
+</resources>

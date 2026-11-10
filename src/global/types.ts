@@ -85,7 +85,7 @@ export type DialogType = {
 };
 
 export type LangCode =
-  'en' | 'es' | 'ru' | 'zh-Hant' | 'zh-Hans' | 'tr' | 'de' | 'th' | 'vi' | 'uk' | 'pl' | 'ar' | 'fa';
+  'en' | 'es' | 'ru' | 'zh-Hant' | 'zh-Hans' | 'tr' | 'de' | 'th' | 'vi' | 'uk' | 'pl' | 'cs' | 'ar' | 'fa';
 export type LanguageSource = 'system' | 'user';
 
 export interface TokenDetailsState {
