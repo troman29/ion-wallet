@@ -5,7 +5,7 @@ import { getToncoinAmountForTransfer } from './getTonOperationFees';
 const token: ApiToken = {
   name: 'Test',
   symbol: 'TEST',
-  slug: 'ton-test',
+  slug: 'ion-test',
   decimals: 9,
   chain: 'ton',
 };

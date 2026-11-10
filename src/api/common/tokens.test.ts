@@ -1,8 +1,14 @@
+import { Address } from '@ton/core';
+
 import type { ApiTokenWithPrice } from '../types';
 
+import { IONCOIN, LIQUID_JETTON, STAKED_ION_SLUG } from '../../config';
+import { getIsServiceToken } from '../../util/tokens';
+import { tokenRepository } from '../db';
 import {
   buildTokenSlug,
   getTokenByAddress,
+  getTokenBySlug,
   getTokensCache,
   pauseTokenUpdates,
   resumeTokenUpdates,
@@ -70,9 +76,60 @@ describe('token lookup', () => {
 describe('token updates', () => {
   beforeEach(pauseTokenUpdates);
 
+  it.each([
+    Address.parse(LIQUID_JETTON).toRawString(),
+    Address.parse(LIQUID_JETTON).toString({ bounceable: false }),
+    Address.parse(LIQUID_JETTON).toString({ testOnly: true }),
+    Address.parse(LIQUID_JETTON).toString({ urlSafe: false }),
+  ])('matches incoming LION alias %s to balances, staking and the service-token warning', async (alias) => {
+    const cache = getTokensCache();
+    const previous = cache.bySlug[STAKED_ION_SLUG];
+    try {
+      const token = makeToken(`ton-${alias}`, 'ton', alias, { priceUsd: 2.5, isFromBackend: true });
+      await updateTokens([token]);
+      const slug = buildTokenSlug('ton', alias);
+      const canonicalToken = getTokenBySlug(slug)!;
+      expect(slug).toBe(STAKED_ION_SLUG);
+      expect(canonicalToken).toMatchObject({ slug, tokenAddress: LIQUID_JETTON, priceUsd: 2.5 });
+      expect(getTokenByAddress(alias)).toBe(canonicalToken);
+      expect(getTokenByAddress(alias, 'ton')).toBe(canonicalToken);
+      expect(getIsServiceToken(canonicalToken)).toBe(true);
+      expect(tokenRepository.bulkPut).toHaveBeenLastCalledWith([canonicalToken]);
+      expect(cache.bySlug[token.slug]).toBeUndefined();
+    } finally {
+      if (previous) cache.bySlug[STAKED_ION_SLUG] = previous;
+      else delete cache.bySlug[STAKED_ION_SLUG];
+    }
+  });
+
+  it.each(['toncoin', 'ioncoin'])(
+    'accepts native backend slug %s under the canonical key and persists canonical jettons', async (nativeSlug) => {
+      const cache = getTokensCache();
+      const previousLion = cache.bySlug[STAKED_ION_SLUG];
+      const previousIon = cache.bySlug[IONCOIN.slug];
+      const native = { ...IONCOIN, slug: nativeSlug, priceUsd: 5, percentChange24h: 1, isFromBackend: true };
+      const lion = makeToken(`ton-${LIQUID_JETTON}`, 'ton', LIQUID_JETTON, { name: 'LION', isFromBackend: true });
+      try {
+        await updateTokens([native, lion]);
+        expect(getTokenBySlug('ioncoin')).toMatchObject({ slug: 'ioncoin', priceUsd: 5 });
+        expect(getTokenBySlug(STAKED_ION_SLUG)?.slug).toBe(STAKED_ION_SLUG);
+        expect(cache.bySlug.toncoin).toBeUndefined();
+        expect(cache.bySlug[lion.slug]).toBeUndefined();
+        expect(buildTokenSlug('ton', LIQUID_JETTON)).toBe(STAKED_ION_SLUG);
+        expect(tokenRepository.bulkPut).toHaveBeenLastCalledWith([
+          expect.objectContaining({ slug: STAKED_ION_SLUG, tokenAddress: LIQUID_JETTON }),
+        ]);
+      } finally {
+        cache.bySlug[IONCOIN.slug] = previousIon;
+        if (previousLion) cache.bySlug[STAKED_ION_SLUG] = previousLion;
+        else delete cache.bySlug[STAKED_ION_SLUG];
+      }
+    },
+  );
+
   it('only sends repeated updates when explicitly requested', async () => {
     const cache = getTokensCache();
-    const slug = 'ton-event-storm-regression';
+    const slug = 'ion-event-storm-regression';
     const token = makeToken(slug, 'ton', 'EQEventStormRegression');
     const previousToken = cache.bySlug[slug];
     const sendUpdate = jest.fn();
@@ -149,11 +206,11 @@ describe('buildTokenSlug', () => {
   it('maps every spelling of an address to one slug', () => {
     expect(buildTokenSlug('bnb', EVM_ADDRESS.toLowerCase())).toBe(`bnb-${EVM_ADDRESS}`);
     expect(buildTokenSlug('ton', '0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe'))
-      .toBe(`ton-${TON_ADDRESS}`);
-    expect(buildTokenSlug('ton', 'UQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_p0p')).toBe(`ton-${TON_ADDRESS}`);
+      .toBe(`ion-${TON_ADDRESS}`);
+    expect(buildTokenSlug('ton', 'UQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_p0p')).toBe(`ion-${TON_ADDRESS}`);
   });
 
   it('keeps an invalid address whole', () => {
-    expect(buildTokenSlug('ton', 'not-an-address')).toBe('ton-not-an-address');
+    expect(buildTokenSlug('ton', 'not-an-address')).toBe('ion-not-an-address');
   });
 });

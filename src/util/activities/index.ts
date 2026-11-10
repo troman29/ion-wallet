@@ -194,7 +194,7 @@ export function getIsHiddenNftActivity(
 
   if (whitelistedNftAddresses?.includes(nft.address)) return false;
 
-  // The user buys and sells on a marketplace themselves, and `isIncoming` shows the TONCOIN direction there
+  // The user buys and sells on a marketplace themselves, and `isIncoming` shows the ION direction there
   const isReceivedFromOthers = isIncoming && type !== 'nftTrade';
 
   return Boolean(nft.isHidden) || Boolean(areUnverifiedNftsHidden && nft.isUnverified && isReceivedFromOthers);

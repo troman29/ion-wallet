@@ -3,7 +3,7 @@ import '../../util/bigintPatch';
 import type { ApiTransactionActivity } from '../../api/types';
 import type { GlobalState } from '../types';
 
-import { GLOBAL_STATE_CACHE_KEY } from '../../config';
+import { GLOBAL_STATE_CACHE_KEY, IONCOIN } from '../../config';
 import { loadCache, saveGlobalCacheNow } from '../cache';
 import { INITIAL_STATE } from '../initialState';
 import { addInitialActivities, addNewActivities } from './activities';
@@ -24,7 +24,7 @@ function buildGlobal(): GlobalState {
       },
     },
     byAccountId: {
-      [ACCOUNT_ID]: { balances: { bySlug: { toncoin: 1n, bnb: 1n } } },
+      [ACCOUNT_ID]: { balances: { bySlug: { [IONCOIN.slug]: 1n, bnb: 1n } } },
     },
   } as unknown as GlobalState;
 }
@@ -59,7 +59,7 @@ afterEach(() => {
 
 // The TON polling resumes from the cached newest activity and never reports its initial activities in that session
 it('shows the initial activities of a chain loaded after the other chains resumed from the cache', () => {
-  const tonActivity = transfer('ton-tx', 'toncoin', 1000);
+  const tonActivity = transfer('ton-tx', IONCOIN.slug, 1000);
   const deposit1 = transfer('bnb-deposit-1', 'bnb', 2000);
   const deposit2 = transfer('bnb-deposit-2', 'bnb', 3000);
 

@@ -12,8 +12,8 @@ import {
   DEBUG,
   GLOBAL_STATE_CACHE_DISABLED,
   GLOBAL_STATE_CACHE_KEY,
+  IONCOIN,
   IS_CAPACITOR,
-  TONCOIN,
 } from '../config';
 import { getActivityTokenSlugs, getIsActivityPending, getIsTxIdLocal } from '../util/activities';
 import { bigintReviver } from '../util/bigint';
@@ -30,6 +30,7 @@ import { getIsActiveStakingState } from '../util/staking';
 import { IS_ANDROID_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 import { addActionHandler, getGlobal } from './index';
 import { INITIAL_STATE, STATE_VERSION } from './initialState';
+import { migrateTokenSlugs } from './migrations';
 import { selectAccountState, selectAccountTokens } from './selectors';
 
 const UPDATE_THROTTLE = IS_CAPACITOR ? 500 : 5000;
@@ -157,17 +158,11 @@ function migrateCache(cached: GlobalState, initialState: GlobalState) {
     cached.settings.areTinyTransfersHidden = false;
   }
 
-  if (cached.stateVersion <= 3) {
-    // Version 2 cached the NFT and domain activities without their NFT, since the ION indexer lacks NFT metadata.
-    // Version 3 kept the initial activities of a chain out of the main feed when the other chains resumed from
-    // the cache. Loading the history again fixes both.
-    for (const accountState of Object.values(cached.byAccountId ?? {})) {
-      accountState.activities = undefined;
-    }
+  if ((cached.stateVersion ?? 0) < 5) {
+    // Also refetch histories affected by the NFT metadata and initial-feed fixes from cache versions 2 and 3.
+    migrateTokenSlugs(cached);
   }
 
-  // ION Wallet starts with a clean storage namespace. Future persisted-state migrations belong here;
-  // each must advance `stateVersion` to `STATE_VERSION` after transforming the cached data.
   cached.stateVersion = STATE_VERSION;
 }
 
@@ -206,8 +201,8 @@ function getAccountTokenSlugs(global: GlobalState, accountId: string) {
   const tokenSlugs = extractKey(selectAccountTokens(global, accountId) ?? [], 'slug')
     .slice(0, ACTIVITY_TOKENS_LIMIT);
 
-  if (!tokenSlugs.includes(TONCOIN.slug)) {
-    tokenSlugs.push(TONCOIN.slug);
+  if (!tokenSlugs.includes(IONCOIN.slug)) {
+    tokenSlugs.push(IONCOIN.slug);
   }
 
   if (currentTokenSlug && !tokenSlugs.includes(currentTokenSlug)) {

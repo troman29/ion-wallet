@@ -27,8 +27,8 @@ import { getTokenInfo } from '../util/chain';
 import { mapValues } from '../util/iteratees';
 import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
-// First persisted-state schema for ION Wallet. Increment when adding a cache migration.
-export const STATE_VERSION = 4;
+// Increment when adding a persisted-state cache migration.
+export const STATE_VERSION = 5;
 
 export const INITIAL_STATE: GlobalState = {
   appState: AppState.Auth,

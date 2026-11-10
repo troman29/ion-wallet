@@ -17,7 +17,7 @@ import styles from './Balance.module.scss';
 
 interface OwnProps {
   token: UserToken;
-  /** Follows the chart: the price under the cursor, or the last one of the shown period */
+  /** Overrides the current token price while a historical chart point is selected */
   pricePoint?: TokenPricePoint;
 }
 

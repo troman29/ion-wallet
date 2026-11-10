@@ -4,7 +4,7 @@ import { getActions, withGlobal } from '../../../../global';
 import type { Theme } from '../../../../global/types';
 import type { StakingStateStatus } from '../../../../util/staking';
 
-import { ANIMATED_STICKER_ICON_PX, ENABLE_EXCHANGE } from '../../../../config';
+import { ANIMATED_STICKER_ICON_PX, ENABLE_EXCHANGE, IONCOIN, STAKED_ION_SLUG } from '../../../../config';
 import {
   selectAccountStakingState,
   selectAccountStakingStatesBySlug,
@@ -159,7 +159,8 @@ export default memo(
       const stakingState = accountId ? selectAccountStakingState(global, accountId) : undefined;
       const currentTokenSlug = selectCurrentAccountState(global)?.currentTokenSlug;
       const stakingStatesBySlug = accountId ? selectAccountStakingStatesBySlug(global, accountId) : undefined;
-      const currentStakingState = currentTokenSlug !== undefined ? stakingStatesBySlug?.[currentTokenSlug] : undefined;
+      const stakingTokenSlug = currentTokenSlug === STAKED_ION_SLUG ? IONCOIN.slug : currentTokenSlug;
+      const currentStakingState = stakingTokenSlug !== undefined ? stakingStatesBySlug?.[stakingTokenSlug] : undefined;
       const isEarnHidden = selectIsStakingDisabled(global)
         || (currentTokenSlug !== undefined && !currentStakingState)
         || Boolean(

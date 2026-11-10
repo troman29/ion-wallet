@@ -6,12 +6,13 @@ import type { LangFn } from './langProvider';
 import {
   PRICELESS_TOKEN_HASHES,
   PRIORITY_TOKENS,
+  STAKED_ION_SLUG,
   STAKED_TOKEN_SLUGS,
-  STAKED_TON_SLUG,
   STAKING_SLUG_PREFIX,
 } from '../config';
 import { findChainConfig, getChainConfig, getSupportedChains } from './chain';
 import { pick } from './iteratees';
+import { normalizeTokenSlug } from './tokenSlug';
 
 const RWA_STOCK_KEYWORD = 'rwa';
 const XSTOCKS_NAME_REGEX = /\s+xStock$/;
@@ -27,7 +28,7 @@ export function getIsNativeToken(slug?: string) {
 
 export function getIsNativeStakedToken(slug?: string) {
   if (!slug) return false;
-  if (slug === STAKED_TON_SLUG) return true;
+  if (slug === STAKED_ION_SLUG) return true;
   if (slug.startsWith(STAKING_SLUG_PREFIX)) {
     return getIsNativeToken(slug.slice(STAKING_SLUG_PREFIX.length));
   }
@@ -74,8 +75,9 @@ export function getTokenName(
 }
 
 export function getChainBySlug(slug: string) {
-  const items = slug.split('-');
-  return items.length > 1 ? items[0] as ApiChain : chainByNativeSlug[slug];
+  const normalizedSlug = normalizeTokenSlug(slug);
+  const items = normalizedSlug.split('-');
+  return items.length > 1 ? (items[0] === 'ion' ? 'ton' : items[0] as ApiChain) : chainByNativeSlug[normalizedSlug];
 }
 
 export function getIsServiceToken(token?: ApiToken) {
