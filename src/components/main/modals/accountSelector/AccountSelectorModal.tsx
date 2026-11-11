@@ -539,7 +539,12 @@ function AccountSelectorModal({
 
       case AccountSelectorState.AddAccountViewMode:
         return (
-          <div className={modalStyles.transitionContentWrapper}>
+          <div className={buildClassName(
+            modalStyles.transitionContentWrapper,
+            styles.compensateSafeArea,
+            styles.compensateSafeAreaViewAccount,
+          )}
+          >
             <AuthImportViewAccount
               isActive={isActive}
               isLoading={isLoading}

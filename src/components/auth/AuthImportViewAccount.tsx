@@ -108,7 +108,7 @@ function AuthImportViewAccount({
       />
       <form
         action="#"
-        className={buildClassName(modalStyles.transitionContent, 'custom-scroll')}
+        className={buildClassName(modalStyles.transitionContent, isInModal && styles.viewModeForm, 'custom-scroll')}
         onSubmit={handleSubmit}
       >
         <AnimatedIconWithPreview
