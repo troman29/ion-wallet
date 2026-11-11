@@ -98,7 +98,13 @@ function InAppBrowser({ title, subtitle, url, theme, animationLevel, selectedExp
     }
   });
 
+  // Android injects the preload code in `onPageStarted`, which sometimes races the new document; the connector is idempotent
+  const handleLoadStop = useLastCallback(() => {
+    void inAppBrowser?.executeScript({ code: bridgeInjectionCode });
+  });
+
   const handleBrowserClose = useLastCallback(() => {
+    inAppBrowser.removeEventListener('loadstop', handleLoadStop);
     inAppBrowser.removeEventListener('loaderror', handleError);
     inAppBrowser.removeEventListener('menuitemselected', handleMenuItemSelected);
     inAppBrowser.removeEventListener('exit', handleBrowserClose);
@@ -181,6 +187,7 @@ function InAppBrowser({ title, subtitle, url, theme, animationLevel, selectedExp
 
     setupDappBridge(inAppBrowser);
 
+    inAppBrowser.addEventListener('loadstop', handleLoadStop);
     inAppBrowser.addEventListener('loaderror', handleError);
     inAppBrowser.addEventListener('menuitemselected', handleMenuItemSelected);
     inAppBrowser.addEventListener('exit', handleBrowserClose);
