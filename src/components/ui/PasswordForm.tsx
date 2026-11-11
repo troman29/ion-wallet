@@ -11,10 +11,10 @@ import { selectIsBiometricAuthEnabled } from '../../global/selectors';
 import { selectAuthUsageCountRequest, selectEnclaveToken } from '../../global/selectors/enclave';
 import { getDoesUsePinPad, getIsFaceIdAvailable, getIsTouchIdAvailable } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
+import { getAppBackgroundGeneration, getIsAppInBackground } from '../../util/capacitor/appLifecycle';
 import captureKeyboardListeners from '../../util/captureKeyboardListeners';
 import { stopEvent } from '../../util/domEvents';
 import { toNativeDigits } from '../../util/nativeDigits';
-import { pause } from '../../util/schedulers';
 import { createSignal } from '../../util/signals';
 import { enclave } from '../../enclave';
 import { ANIMATED_STICKERS_PATHS } from './helpers/animatedAssets';
@@ -162,6 +162,8 @@ function PasswordForm({
   const [isLogOutModalOpened, openLogOutModal, closeLogOutModal] = useFlag(false);
   const shouldSuggestLogout = useMatchCount(!!error || !!localError, WRONG_ATTEMPTS_BEFORE_LOG_OUT_SUGGESTION);
   const isAuthorizingRef = useRef(false);
+  const hasAuthorizedRef = useRef(false);
+  const [biometricRetryCount, setBiometricRetryCount] = useState(0);
 
   const extraUsages = (authUsageCountRequest ?? 0) + (extraAuthUsages ?? 0);
   const usageCount = extraUsages ? 1 + extraUsages : undefined;
@@ -179,16 +181,36 @@ function PasswordForm({
     if (isActive) {
       setLocalError('');
       setInputValue('');
-      isAuthorizingRef.current = false;
+      // A completed form can be reused, but reactivation must not release an in-flight request.
+      if (hasAuthorizedRef.current) {
+        hasAuthorizedRef.current = false;
+        isAuthorizingRef.current = false;
+      }
     }
   }, [isActive]);
 
+  const shouldDiscardAuthorization = useLastCallback((backgroundGeneration: number) => {
+    if (operationType !== 'unlock' || (!getIsAppInBackground()
+      && backgroundGeneration === getAppBackgroundGeneration())) return false;
+
+    isAuthorizingRef.current = false;
+    // The activation timer may already have run while this old native request was still pending.
+    // Re-arm it only after that request finishes; a current cancellation must not retry itself.
+    if (isActive && isBiometricAuthEnabled && !withAutoConfirm && !getIsAppInBackground()) {
+      setBiometricRetryCount((count) => count + 1);
+    }
+    return true;
+  });
+
   const handleSubmit = useLastCallback(async (pin?: string) => {
+    if (operationType === 'unlock' && getIsAppInBackground()) return;
     // Prevent double authorization (e.g., race between PIN input and biometrics)
     if (isAuthorizingRef.current || isLoading) return;
     isAuthorizingRef.current = true;
+    const backgroundGeneration = getAppBackgroundGeneration();
 
     if (withAutoConfirm) {
+      hasAuthorizedRef.current = true;
       handleAuthorized(selectEnclaveToken(getGlobal())!);
       return;
     }
@@ -197,6 +219,8 @@ function PasswordForm({
 
     // Normal authorization
     const enclaveSession = await enclave.authorize('passcode', isLongSession, password, usageCount);
+
+    if (shouldDiscardAuthorization(backgroundGeneration)) return;
 
     if (!enclaveSession) {
       isAuthorizingRef.current = false;
@@ -207,18 +231,22 @@ function PasswordForm({
     }
 
     setEnclaveSession(enclaveSession);
+    hasAuthorizedRef.current = true;
     handleAuthorized(enclaveSession.token);
   });
 
   const handleBiometrics = useLastCallback(async () => {
+    if (operationType === 'unlock' && getIsAppInBackground()) return;
     // Prevent double authorization (e.g., race between PIN input and biometrics)
     if (isAuthorizingRef.current || isLoading) return;
     isAuthorizingRef.current = true;
+    const backgroundGeneration = getAppBackgroundGeneration();
 
     try {
       setLocalError('');
 
       const enclaveSession = await enclave.authorize('biometric', false, undefined, usageCount);
+      if (shouldDiscardAuthorization(backgroundGeneration)) return;
       if (!enclaveSession) {
         isAuthorizingRef.current = false;
         const errorMessage = 'Biometric confirmation failed';
@@ -228,8 +256,10 @@ function PasswordForm({
       }
 
       setEnclaveSession(enclaveSession);
+      hasAuthorizedRef.current = true;
       handleAuthorized(enclaveSession.token);
     } catch (err: any) {
+      if (shouldDiscardAuthorization(backgroundGeneration)) return;
       isAuthorizingRef.current = false;
       const errorMessage = err.message || lang('Something went wrong.');
       setLocalError(errorMessage);
@@ -242,9 +272,12 @@ function PasswordForm({
       return;
     }
 
-    void pause(APPEAR_ANIMATION_DURATION_MS).then(handleBiometrics);
+    const timeout = setTimeout(() => {
+      if (!getIsAppInBackground()) void handleBiometrics();
+    }, APPEAR_ANIMATION_DURATION_MS);
+    return () => clearTimeout(timeout);
   }, [
-    forceBiometricsInMain, handleBiometrics, isActive, isBiometricAuthEnabled, withAutoConfirm,
+    biometricRetryCount, forceBiometricsInMain, handleBiometrics, isActive, isBiometricAuthEnabled, withAutoConfirm,
   ]);
 
   useEffectOnce(() => {

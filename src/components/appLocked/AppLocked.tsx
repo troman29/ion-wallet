@@ -3,10 +3,12 @@ import { getActions, getGlobal, withGlobal } from '../../global';
 
 import type { AutolockValueType } from '../../global/types';
 
-import { AUTOLOCK_OPTIONS_LIST, DEBUG } from '../../config';
+import { DEBUG, IS_CAPACITOR } from '../../config';
 import { selectHasPassword, selectIsBiometricAuthEnabled } from '../../global/selectors';
+import { isAutolockDue } from '../../util/appLock';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
+import { getIsAppInBackground } from '../../util/capacitor/appLifecycle';
 import { stopEvent } from '../../util/domEvents';
 import { vibrate } from '../../util/haptics';
 import { IS_ELECTRON } from '../../util/windowEnvironment';
@@ -32,7 +34,6 @@ import styles from './AppLocked.module.scss';
 const WINDOW_EVENTS_LATENCY = 5000;
 const INTERVAL_CHECK_PERIOD = 5000;
 const ACTIVATION_EVENT_NAMES = [
-  'focus', // For Web
   'mousemove', // For Web
   'touch', // For Capacitor
   'wheel',
@@ -167,6 +168,7 @@ function AppLocked({
   const [isLocked, lock, unlock, lockReason] = useAppLockState(autolockValue, !!isManualLockActive, canRender);
   const [shouldRenderUi, showUi, hideUi] = useFlag(isLocked);
   const lastActivityTime = useRef(Date.now());
+  const [isNativeBackground, setIsNativeBackground] = useState(getIsAppInBackground());
 
   const {
     ref,
@@ -178,26 +180,27 @@ function AppLocked({
   } = useContentSlide(isBiometricOnly, isLocked, lockReason);
 
   const handleActivity = useLastCallback(() => {
+    if (IS_CAPACITOR && getIsAppInBackground()) return;
+    if (isAppLockEnabled && !isLocked && isAutolockDue(autolockValue, lastActivityTime.current)) {
+      handleLock();
+    }
     lastActivityTime.current = Date.now();
   });
 
   const handleActivityThrottled = useThrottledCallback(handleActivity, [handleActivity], WINDOW_EVENTS_LATENCY);
 
   const afterUnlockCallback = useLastCallback(() => {
+    if (IS_CAPACITOR && getIsAppInBackground() && autolockValue === 'background') return;
     hideUi();
     setSlideForBiometricAuth(getDefaultSlideForBiometricAuth());
     getInAppBrowser()?.show();
     clearIsPinAccepted();
-    handleActivity();
+    lastActivityTime.current = Date.now();
     setIsManualLockActive({ isActive: undefined, shouldHideBiometrics: undefined });
     unfixSlide();
     setIsAppLockActive({ isActive: false });
     void vibrate();
   });
-
-  const autolockPeriod = useMemo(
-    () => AUTOLOCK_OPTIONS_LIST.find((option) => option.value === autolockValue)!.period, [autolockValue],
-  );
 
   const { ref: transitionRef } = useShowTransition({
     isOpen: isLocked,
@@ -235,6 +238,30 @@ function AppLocked({
     setSlideForBiometricAuth(SLIDES.passwordForm);
   });
 
+  const handleForeground = useLastCallback(() => {
+    handleActivity();
+    handleChangeSlideForBiometricAuth();
+  });
+
+  const handleNativeStateChange = useLastCallback(() => {
+    const isBackground = getIsAppInBackground();
+    setIsNativeBackground(isBackground);
+    if (isBackground) {
+      if (isAppLockEnabled && autolockValue === 'background') {
+        clearIsPinAccepted();
+        handleLock();
+      }
+    } else {
+      handleForeground();
+    }
+  });
+
+  useEffectOnce(() => {
+    if (!IS_CAPACITOR) return undefined;
+    handleNativeStateChange();
+    return getIsAppInBackground.subscribe(handleNativeStateChange);
+  });
+
   useEffectOnce(() => {
     for (const eventName of ACTIVATION_EVENT_NAMES) {
       window.addEventListener(eventName, handleActivityThrottled, ACTIVATION_EVENT_OPTIONS);
@@ -261,14 +288,14 @@ function AppLocked({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (isAppLockEnabled && !isLocked && Date.now() - lastActivityTime.current > autolockPeriod) {
+      if (isAppLockEnabled && !isLocked && isAutolockDue(autolockValue, lastActivityTime.current)) {
         handleLock();
       }
     }, INTERVAL_CHECK_PERIOD);
     return () => clearInterval(interval);
-  }, [isLocked, autolockPeriod, handleLock, isAppLockEnabled]);
+  }, [isLocked, autolockValue, handleLock, isAppLockEnabled]);
 
-  useBackgroundMode(undefined, handleChangeSlideForBiometricAuth);
+  useBackgroundMode(undefined, handleForeground, IS_CAPACITOR);
 
   function renderTransitionContent(isActive: boolean) {
     return (
@@ -291,7 +318,7 @@ function AppLocked({
             : (
               <PasswordFormSlide
                 ref={ref}
-                isActive={isActive}
+                isActive={isActive && !isNativeBackground}
                 innerContentTopPosition={innerContentTopPosition}
                 shouldHideBiometrics={!!shouldHideBiometrics}
                 onSubmit={unlock}

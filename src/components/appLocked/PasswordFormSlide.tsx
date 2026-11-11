@@ -4,6 +4,7 @@ import { getActions } from '../../global';
 import { APP_NAME } from '../../config';
 import { getDoesUsePinPad } from '../../util/biometrics';
 import buildClassName from '../../util/buildClassName';
+import { getAppBackgroundGeneration, getIsAppInBackground } from '../../util/capacitor/appLifecycle';
 import { vibrateOnSuccess } from '../../util/haptics';
 
 import useLang from '../../hooks/useLang';
@@ -35,10 +36,14 @@ function PasswordFormSlide({
   const { setIsPinAccepted } = getActions();
 
   const handleAuthorize = useLastCallback(async () => {
+    const backgroundGeneration = getAppBackgroundGeneration();
+    if (getIsAppInBackground()) return;
     if (getDoesUsePinPad()) {
       setIsPinAccepted();
       await vibrateOnSuccess(true);
     }
+    // Backgrounding during the success animation starts a new lock, even if we have already returned.
+    if (getIsAppInBackground() || backgroundGeneration !== getAppBackgroundGeneration()) return;
     onSubmit();
   });
 
