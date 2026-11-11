@@ -1013,7 +1013,7 @@ Sell on Card: 出售到卡
 Sell %symbol%: 出售 %symbol%
 $connect_dapp_description: 已連接的應用程式只能查看你的錢包地址，未經你的許可無法轉移你的資產。
 $connect_dapp_title: 連接到 %name%？
-$connect_dapp_no_compatible_wallets_found: 此連線需要多鏈錢包。您目前的錢包僅支援 ION，且沒有其他多鏈錢包。請使用下方按鈕建立新的多鏈錢包。
+$connect_dapp_no_compatible_wallets_found: "此應用程式需要支援 BNB Chain（BSC）的錢包。請建立多鏈錢包以連線。"
 Choose Wallet: 選擇錢包
 Wallet to use on %host%: 用於 %host% 的錢包
 Selected Wallet: 已選錢包
@@ -1640,3 +1640,5 @@ Fee unavailable: 手續費暫不可用
 Unable to read transaction details.: 無法讀取交易詳情。
 
 On return: 返回時
+$ion_only_wallet_explanation: "舊版 24 詞 ION 復原短語只能復原僅支援 ION 的錢包，不支援 BNB Chain（BSC）。新的 12 詞多鏈錢包支援這兩個網路，並擁有獨立的復原短語和地址。原有錢包和資金保持不變，資金不會自動轉移。"
+$connect_dapp_multichain_selected: "已為此 BNB Chain（BSC）應用程式選擇相容的多鏈錢包。僅支援 ION 的錢包及其中的資金保持不變。"

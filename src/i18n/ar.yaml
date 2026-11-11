@@ -1526,7 +1526,7 @@ Rounded Balance Font: خط الرصيد المستدير
 Selling to card is not supported in Testnet.: البيع على البطاقة غير مدعوم في Testnet.
 Selling to card is not supported for this account.: البيع على البطاقة غير مدعوم لهذا الحساب.
 Copy Wallet Link: نسخ رابط المحفظة
-$connect_dapp_no_compatible_wallets_found: يتطلب هذا الاتصال محفظة متعددة السلاسل. محفظتك الحالية تدعم ION فقط، وليس لديك محافظ أخرى متعددة السلاسل. استخدم الزر أدناه لإنشاء محفظة جديدة متعددة السلاسل.
+$connect_dapp_no_compatible_wallets_found: "يتطلب هذا التطبيق محفظة تدعم BNB Chain (BSC). أنشئ محفظة متعددة السلاسل للاتصال."
 Create Multichain Wallet: إنشاء محفظة متعددة السلاسل
 push_domain_expired_days_ago_number:
   zeroValue: انتهت صلاحية نطاقك %domain% منذ %days% يوم. يرجى تجديده في أقرب وقت ممكن لتجنب فقدان الوصول
@@ -1652,3 +1652,5 @@ Fee unavailable: الرسوم غير متاحة
 Unable to read transaction details.: تعذّرت قراءة تفاصيل المعاملة.
 
 On return: عند العودة
+$ion_only_wallet_explanation: "تستعيد عبارات ION القديمة المكونة من 24 كلمة محافظ تدعم ION فقط، دون BNB Chain (BSC). تدعم المحفظة الجديدة متعددة السلاسل ذات 12 كلمة كلتا الشبكتين، ولها عبارة استرداد وعناوين منفصلة. تبقى محفظتك الحالية وأموالك كما هي؛ ولا تُنقل الأموال تلقائيًا."
+$connect_dapp_multichain_selected: "تم اختيار محفظة متوافقة متعددة السلاسل لهذا التطبيق على BNB Chain (BSC). تبقى محفظتك التي تدعم ION فقط وأموالها كما هي."

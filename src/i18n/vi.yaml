@@ -1038,7 +1038,7 @@ Sell on Card: Bán nhận tiền về thẻ
 Sell %symbol%: Bán %symbol%
 $connect_dapp_description: Ứng dụng đã kết nối chỉ có thể xem địa chỉ ví và không thể di chuyển tài sản nếu chưa được bạn cho phép.
 $connect_dapp_title: Kết nối với %name%?
-$connect_dapp_no_compatible_wallets_found: Kết nối này yêu cầu ví đa chuỗi. Ví hiện tại chỉ hỗ trợ ION và bạn chưa có ví đa chuỗi nào khác. Dùng nút bên dưới để tạo ví đa chuỗi mới.
+$connect_dapp_no_compatible_wallets_found: "Ứng dụng này yêu cầu ví hỗ trợ BNB Chain (BSC). Hãy tạo ví đa chuỗi để kết nối."
 Choose Wallet: Chọn ví
 Wallet to use on %host%: Ví dùng trên %host%
 Selected Wallet: Ví đã chọn
@@ -1662,3 +1662,5 @@ Fee unavailable: Không có thông tin phí
 Unable to read transaction details.: Không thể đọc chi tiết giao dịch.
 
 On return: Khi quay lại
+$ion_only_wallet_explanation: "Cụm từ khôi phục ION cũ gồm 24 từ khôi phục ví chỉ hỗ trợ ION, không có BNB Chain (BSC). Ví đa chuỗi mới gồm 12 từ hỗ trợ cả hai mạng, với cụm từ khôi phục và địa chỉ riêng. Ví hiện tại và tiền của bạn vẫn được giữ nguyên; tiền không được tự động chuyển."
+$connect_dapp_multichain_selected: "Đã chọn một ví đa chuỗi tương thích cho ứng dụng BNB Chain (BSC) này. Ví chỉ hỗ trợ ION và tiền trong ví vẫn được giữ nguyên."

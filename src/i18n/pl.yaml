@@ -1041,7 +1041,7 @@ Sell on Card: Sprzedaj na kartę
 Sell %symbol%: Sprzedaj %symbol%
 $connect_dapp_description: Połączone aplikacje mogą jedynie zobaczyć adres Twojego portfela i nie mogą przenosić Twoich aktywów bez Twojej zgody.
 $connect_dapp_title: Połączyć z %name%?
-$connect_dapp_no_compatible_wallets_found: To połączenie wymaga portfela multichain. Twój obecny portfel obsługuje wyłącznie ION, a nie masz innych portfeli multichain. Użyj przycisku poniżej, aby utworzyć nowy portfel multichain.
+$connect_dapp_no_compatible_wallets_found: "Ta aplikacja wymaga portfela obsługującego BNB Chain (BSC). Utwórz portfel multichain, aby się połączyć."
 Choose Wallet: Wybierz portfel
 Wallet to use on %host%: Portfel dla %host%
 Selected Wallet: Wybrany portfel
@@ -1691,3 +1691,5 @@ Fee unavailable: Opłata niedostępna
 Unable to read transaction details.: Nie udało się odczytać szczegółów transakcji.
 
 On return: Po powrocie
+$ion_only_wallet_explanation: "Starsze frazy ION złożone z 24 słów przywracają portfele tylko dla ION, bez BNB Chain (BSC). Nowy portfel multichain z frazą 12-słowną obsługuje obie sieci i ma osobną frazę odzyskiwania oraz adresy. Twój dotychczasowy portfel i środki pozostają bez zmian; środki nie są przenoszone automatycznie."
+$connect_dapp_multichain_selected: "Dla tej aplikacji BNB Chain (BSC) wybrano zgodny portfel multichain. Twój portfel tylko dla ION i jego środki pozostają bez zmian."
