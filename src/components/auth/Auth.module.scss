@@ -462,6 +462,13 @@ $footerPaddingBottomMin: 1rem;
   margin-bottom: 1.5rem;
 }
 
+.mnemonicNotice {
+  flex-shrink: 0;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  line-height: 1.25rem;
+}
+
 .modeSwitch {
   --tab-gap-size: 0;
 

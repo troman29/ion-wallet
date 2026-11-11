@@ -261,6 +261,12 @@ const AuthImportMnemonic = ({ isActive, isLoading, error }: OwnProps & StateProp
           </div>
         )}
 
+        {selectedMnemonicCount === 24 && !isMnemonicPrivateKey(compact(Object.values(mnemonic))) && (
+          <div className={buildClassName(styles.infoBlock, styles.mnemonicNotice)}>
+            {lang('$ion_only_wallet_explanation')}
+          </div>
+        )}
+
         <div
           className={buildClassName(
             styles.importingContent,

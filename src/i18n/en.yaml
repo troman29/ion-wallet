@@ -1038,7 +1038,7 @@ Sell on Card: Sell on Card
 Sell %symbol%: Sell %symbol%
 $connect_dapp_description: Connected apps can only see your wallet address and will not be able to move your assets without permission.
 $connect_dapp_title: Connect to %name%?
-$connect_dapp_no_compatible_wallets_found: This connection requires a multichain wallet. Your current wallet is ION-only, and you have no other multichain wallets. Use the button below to create a new multichain wallet.
+$connect_dapp_no_compatible_wallets_found: "This app requires a wallet that supports BNB Chain (BSC). Create a multichain wallet to connect."
 Choose Wallet: Choose Wallet
 Wallet to use on %host%: Wallet to use on %host%
 Selected Wallet: Selected Wallet
@@ -1674,3 +1674,5 @@ Fee unavailable: Fee unavailable
 Unable to read transaction details.: Unable to read transaction details.
 
 On return: On return
+$ion_only_wallet_explanation: "Legacy 24-word ION phrases restore ION-only wallets, without BNB Chain (BSC). A new 12-word multichain wallet supports both networks, with a separate recovery phrase and addresses. Your existing wallet and funds stay unchanged; funds are not transferred automatically."
+$connect_dapp_multichain_selected: "A compatible multichain wallet has been selected for this BNB Chain (BSC) app. Your ION-only wallet and its funds stay unchanged."

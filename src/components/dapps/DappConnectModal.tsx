@@ -210,6 +210,10 @@ function DappConnectModal({
       && requiredProof,
     );
     const isSelectedAccountCompatible = getIsAccountCompatible(accounts?.[selectedAccount]?.byChain ?? {});
+    const isIonOnlyAccount = Boolean(accounts?.[selectedAccount]?.byChain.ton)
+      && !accounts?.[selectedAccount]?.byChain.bnb;
+    const shouldExplainIonOnlyWallet = isNoCompatibleWallet
+      || (isIonOnlyAccount && dapp?.chains?.some(({ chain }) => chain === 'bnb'));
 
     return (
       <div className={buildClassName(modalStyles.transitionContent, styles.skeletonBackground)}>
@@ -234,6 +238,11 @@ function DappConnectModal({
               />
             )}
           </span>
+          {multichainResolution === 'switched-account' && (
+            <p className={styles.dappLargePreviewDescription}>
+              {lang('$connect_dapp_multichain_selected')}
+            </p>
+          )}
           <p className={styles.dappLargePreviewDescription}>
             {lang(multichainResolution === 'needs-new-wallet'
               ? '$connect_dapp_no_compatible_wallets_found'
@@ -243,7 +252,9 @@ function DappConnectModal({
         {(!isSelectedAccountCompatible || isNoCompatibleWallet) && (
           <div className={buildClassName(styles.multichainWarning, styles.warning)}>
             <div className={styles.warningTitle}>{lang('Unsupported Chain')}</div>
-            {lang('Please upgrade to multichain to use this app.')}
+            {lang(shouldExplainIonOnlyWallet
+              ? '$ion_only_wallet_explanation'
+              : 'Please upgrade to multichain to use this app.')}
           </div>
         )}
 

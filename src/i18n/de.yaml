@@ -1023,7 +1023,7 @@ Sell on Card: Auf Karte verkaufen
 Sell %symbol%: "%symbol% verkaufen"
 $connect_dapp_description: Verbundene Apps können nur Ihre Wallet-Adresse sehen und können Ihre Assets ohne Ihre Zustimmung nicht bewegen.
 $connect_dapp_title: Mit %name% verbinden?
-$connect_dapp_no_compatible_wallets_found: Für diese Verbindung benötigen Sie eine Multichain-Wallet. Ihre aktuelle Wallet ist nur für ION, und Sie haben keine weitere Multichain-Wallet. Tippen Sie unten auf die Schaltfläche, um eine neue Multichain-Wallet anzulegen.
+$connect_dapp_no_compatible_wallets_found: "Diese App benötigt eine Wallet mit Unterstützung für BNB Chain (BSC). Erstellen Sie eine Multichain-Wallet, um sich zu verbinden."
 Choose Wallet: Wallet auswählen
 Wallet to use on %host%: Wallet für %host%
 Selected Wallet: Ausgewählte Wallet
@@ -1660,3 +1660,5 @@ Fee unavailable: Gebühr nicht verfügbar
 Unable to read transaction details.: Die Transaktionsdetails konnten nicht gelesen werden.
 
 On return: Bei Rückkehr
+$ion_only_wallet_explanation: "Alte ION-Wiederherstellungsphrasen mit 24 Wörtern stellen reine ION-Wallets ohne BNB Chain (BSC) wieder her. Eine neue Multichain-Wallet mit 12 Wörtern unterstützt beide Netzwerke und hat eine eigene Wiederherstellungsphrase und eigene Adressen. Ihre bisherige Wallet und ihr Guthaben bleiben erhalten; Guthaben wird nicht automatisch übertragen."
+$connect_dapp_multichain_selected: "Für diese BNB Chain (BSC)-App wurde eine kompatible Multichain-Wallet ausgewählt. Ihre reine ION-Wallet und ihr Guthaben bleiben erhalten."

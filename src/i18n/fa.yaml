@@ -1530,7 +1530,7 @@ Rounded Balance Font: فونت موجودی گرد
 Selling to card is not supported in Testnet.: فروش به کارت در تست‌نت پشتیبانی نمی‌شود.
 Selling to card is not supported for this account.: فروش به کارت برای این حساب پشتیبانی نمی‌شود.
 Copy Wallet Link: کپی لینک کیف پول
-$connect_dapp_no_compatible_wallets_found: این اتصال به کیف پول چندزنجیره‌ای نیاز دارد. کیف پول فعلی شما فقط از ION پشتیبانی می‌کند و کیف پول چندزنجیره‌ای دیگری ندارید. برای ساخت کیف پول چندزنجیره‌ای جدید از دکمه زیر استفاده کنید.
+$connect_dapp_no_compatible_wallets_found: "این برنامه به کیف پولی با پشتیبانی از BNB Chain (BSC) نیاز دارد. برای اتصال، یک کیف پول چندزنجیره‌ای ایجاد کنید."
 Create Multichain Wallet: ساخت کیف پول چندزنجیره‌ای
 push_domain_expired_days_ago_number:
   zeroValue: دامنه شما %domain% %days% روز پیش منقضی شد. لطفاً برای از دست ندادن دسترسی، هرچه زودتر آن را تمدید کنید
@@ -1650,3 +1650,5 @@ Fee unavailable: کارمزد در دسترس نیست
 Unable to read transaction details.: خواندن جزئیات تراکنش ممکن نشد.
 
 On return: هنگام بازگشت
+$ion_only_wallet_explanation: "عبارت‌های بازیابی قدیمی ION با ۲۴ کلمه، کیف پول‌هایی را بازیابی می‌کنند که فقط از ION پشتیبانی می‌کنند و از BNB Chain (BSC) پشتیبانی ندارند. کیف پول چندزنجیره‌ای جدید با ۱۲ کلمه از هر دو شبکه پشتیبانی می‌کند و عبارت بازیابی و آدرس‌های جداگانه دارد. کیف پول فعلی و دارایی شما حفظ می‌شوند؛ دارایی به‌صورت خودکار منتقل نمی‌شود."
+$connect_dapp_multichain_selected: "یک کیف پول چندزنجیره‌ای سازگار برای این برنامه BNB Chain (BSC) انتخاب شده است. کیف پول مخصوص ION و دارایی آن بدون تغییر باقی می‌مانند."

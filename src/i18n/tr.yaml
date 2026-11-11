@@ -1018,7 +1018,7 @@ Sell on Card: Karta sat
 Sell %symbol%: "%symbol% sat"
 $connect_dapp_description: Bağlı uygulamalar yalnızca cüzdan adresinizi görebilir ve izniniz olmadan varlıklarınızı taşıyamaz.
 $connect_dapp_title: '%name% ile bağlanılsın mı?'
-$connect_dapp_no_compatible_wallets_found: Bu bağlantı için çok zincirli (multichain) bir cüzdan gerekir. Mevcut cüzdanız yalnızca ION destekler ve başka çok zincirli cüzdanınız yok. Yeni bir multichain cüzdan oluşturmak için aşağıdaki düğmeye basın.
+$connect_dapp_no_compatible_wallets_found: "Bu uygulama BNB Chain (BSC) destekleyen bir cüzdan gerektirir. Bağlanmak için çok zincirli bir cüzdan oluşturun."
 Choose Wallet: Cüzdan seç
 Wallet to use on %host%: '%host% için cüzdan'
 Selected Wallet: Seçili cüzdan
@@ -1652,3 +1652,5 @@ Fee unavailable: Ücret bilgisi mevcut değil
 Unable to read transaction details.: İşlem ayrıntıları okunamadı.
 
 On return: Geri dönünce
+$ion_only_wallet_explanation: "Eski 24 kelimelik ION kurtarma ifadeleri, BNB Chain (BSC) desteği olmayan, yalnızca ION cüzdanlarını geri yükler. Yeni 12 kelimelik çok zincirli cüzdan her iki ağı da destekler ve ayrı bir kurtarma ifadesi ile adreslere sahiptir. Mevcut cüzdanınız ve varlıklarınız korunur; varlıklar otomatik olarak aktarılmaz."
+$connect_dapp_multichain_selected: "Bu BNB Chain (BSC) uygulaması için uyumlu bir çok zincirli cüzdan seçildi. Yalnızca ION destekleyen cüzdanınız ve varlıkları korunur."

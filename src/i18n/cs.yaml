@@ -1062,7 +1062,7 @@ Sell on Card: Prodat na kartu
 Sell %symbol%: Prodat %symbol%
 $connect_dapp_description: Připojené aplikace vidí pouze adresu vaší peněženky a bez svolení nemohou přesouvat vaše aktiva.
 $connect_dapp_title: Připojit k %name%?
-$connect_dapp_no_compatible_wallets_found: Toto připojení vyžaduje peněženku pro více sítí. Vaše aktuální peněženka podporuje pouze ION a nemáte žádnou jinou peněženku pro více sítí. Tlačítkem níže vytvoříte novou peněženku pro více sítí.
+$connect_dapp_no_compatible_wallets_found: "Tato aplikace vyžaduje peněženku s podporou BNB Chain (BSC). Pro připojení vytvořte peněženku pro více sítí."
 Choose Wallet: Vybrat peněženku
 Wallet to use on %host%: Peněženka pro použití na %host%
 Selected Wallet: Vybraná peněženka
@@ -1714,3 +1714,5 @@ Fee unavailable: Poplatek není dostupný
 Unable to read transaction details.: Podrobnosti transakce nelze přečíst.
 
 On return: Při návratu
+$ion_only_wallet_explanation: "Starší 24slovné fráze ION obnovují peněženky pouze pro ION, bez BNB Chain (BSC). Nová peněženka pro více sítí s 12slovnou frází podporuje obě sítě a má vlastní obnovovací frázi i adresy. Vaše původní peněženka a prostředky zůstávají beze změny; prostředky se nepřevádějí automaticky."
+$connect_dapp_multichain_selected: "Pro tuto aplikaci BNB Chain (BSC) byla vybrána kompatibilní peněženka pro více sítí. Vaše peněženka pouze pro ION a její prostředky zůstávají beze změny."
