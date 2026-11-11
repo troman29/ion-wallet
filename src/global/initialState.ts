@@ -21,6 +21,7 @@ import {
   DEFAULT_PRICE_CURRENCY,
   DEFAULT_STAKING_STATE,
   DEFAULT_TRANSFER_TOKEN_SLUG,
+  IS_CAPACITOR,
   THEME_DEFAULT,
 } from '../config';
 import { getTokenInfo } from '../util/chain';
@@ -28,7 +29,7 @@ import { mapValues } from '../util/iteratees';
 import { IS_IOS_APP, USER_AGENT_LANG_CODE } from '../util/windowEnvironment';
 
 // Increment when adding a persisted-state cache migration.
-export const STATE_VERSION = 5;
+export const STATE_VERSION = 6;
 
 export const INITIAL_STATE: GlobalState = {
   appState: AppState.Auth,
@@ -97,6 +98,7 @@ export const INITIAL_STATE: GlobalState = {
     byAccountId: {},
     areTokensWithNoCostHidden: true,
     autolockValue: DEFAULT_AUTOLOCK_OPTION,
+    isAppLockEnabled: IS_CAPACITOR || undefined,
     baseCurrency: DEFAULT_PRICE_CURRENCY,
   },
 

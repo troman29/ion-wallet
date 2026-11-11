@@ -6,6 +6,37 @@ import { GLOBAL_STATE_CACHE_KEY, IONCOIN, LIQUID_JETTON, STAKED_ION_SLUG } from 
 import { loadCache, saveGlobalCacheNow } from './cache';
 import { INITIAL_STATE, STATE_VERSION } from './initialState';
 
+describe('mobile app lock defaults and migration', () => {
+  const mobileInitialState = {
+    ...INITIAL_STATE,
+    settings: { ...INITIAL_STATE.settings, isAppLockEnabled: true, autolockValue: 'background' as const },
+  };
+
+  afterEach(() => localStorage.removeItem(GLOBAL_STATE_CACHE_KEY));
+
+  it('uses background locking on a fresh installation', () => {
+    expect(loadCache(mobileInitialState).settings).toMatchObject({
+      isAppLockEnabled: true, autolockValue: 'background',
+    });
+  });
+
+  it.each([undefined, false, true])('preserves legacy app locking (%s) before merging defaults', (isAppLockEnabled) => {
+    localStorage.setItem(GLOBAL_STATE_CACHE_KEY, JSON.stringify({
+      stateVersion: 5, settings: { isAppLockEnabled }, byAccountId: {},
+    }));
+    expect(loadCache(mobileInitialState).settings).toMatchObject({
+      isAppLockEnabled: isAppLockEnabled ?? false, autolockValue: '3',
+    });
+  });
+
+  it.each(['never', '1', '2', '3', 'background'])('preserves a saved interval (%s)', (autolockValue) => {
+    localStorage.setItem(GLOBAL_STATE_CACHE_KEY, JSON.stringify({
+      stateVersion: STATE_VERSION, settings: { isAppLockEnabled: false, autolockValue }, byAccountId: {},
+    }));
+    expect(loadCache(mobileInitialState).settings).toMatchObject({ isAppLockEnabled: false, autolockValue });
+  });
+});
+
 describe('token details cache', () => {
   afterEach(() => localStorage.removeItem(GLOBAL_STATE_CACHE_KEY));
 

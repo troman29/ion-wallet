@@ -183,7 +183,7 @@ export const PROXY_HOSTS = process.env.PROXY_HOSTS;
 export const TINY_TRANSFER_MAX_COST = 0.01;
 
 export const IMAGE_CACHE_NAME = 'ion-image';
-export const LANG_CACHE_NAME = 'ion-lang-1';
+export const LANG_CACHE_NAME = 'ion-lang-2';
 
 export const LANG_LIST: LangItem[] = [{
   langCode: 'en',
@@ -459,6 +459,12 @@ export const AUTOLOCK_OPTIONS_LIST = [
     period: 0,
   },
   {
+    value: 'background',
+    name: 'When returning to the app',
+    selectedName: 'When returning to the app',
+    period: Infinity,
+  },
+  {
     value: '1',
     name: '30 seconds',
     selectedName: 'If away for 30 sec',
@@ -535,7 +541,7 @@ export const RENEWABLE_TON_DNS_COLLECTIONS = new Set<string>(
   TON_DNS_ZONES.filter((zone) => zone.isRenewable).map((zone) => zone.resolver),
 );
 
-export const DEFAULT_AUTOLOCK_OPTION: AutolockValueType = '3';
+export const DEFAULT_AUTOLOCK_OPTION: AutolockValueType = IS_CAPACITOR ? 'background' : '3';
 export const WRONG_ATTEMPTS_BEFORE_LOG_OUT_SUGGESTION = 2;
 
 export const UNKNOWN_TOKEN = {

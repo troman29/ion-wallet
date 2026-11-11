@@ -144,6 +144,14 @@ function normalizeCapacitorLanguageSettings(global: GlobalState): GlobalState {
 }
 
 function migrateCache(cached: GlobalState, initialState: GlobalState) {
+  // Absence used to mean disabled. Do this before merging the new mobile defaults.
+  if ((cached.stateVersion ?? 0) < 6) {
+    cached.settings = {
+      ...cached.settings,
+      isAppLockEnabled: cached.settings?.isAppLockEnabled ?? false,
+      autolockValue: cached.settings?.autolockValue ?? '3',
+    };
+  }
   // Keep defaults added in the current application version while preserving settings saved by this installation.
   cached.settings = {
     ...initialState.settings,

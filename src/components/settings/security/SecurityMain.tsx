@@ -7,6 +7,7 @@ import {
   AUTO_CONFIRM_DURATION_MINUTES,
   AUTOLOCK_OPTIONS_LIST,
   DEFAULT_AUTOLOCK_OPTION,
+  IS_CAPACITOR,
 } from '../../../config';
 import {
   getDoesUsePinPad,
@@ -88,6 +89,7 @@ function SecurityMain({
   const biometricIcon = isFaceId ? faceIdImg : biometricsImg;
 
   const isAutoConfirmAvailable = !isBiometricAuthEnabled;
+  const autolockOptions = AUTOLOCK_OPTIONS_LIST.filter((option) => IS_CAPACITOR || option.value !== 'background');
 
   const biometricDescription = lang(getDoesUsePinPad()
     ? 'To avoid entering the passcode every time, you can use biometrics.'
@@ -182,7 +184,7 @@ function SecurityMain({
             <Collapsible isShown={!!isAppLockEnabled}>
               <Dropdown
                 label={lang('Auto-Lock')}
-                items={AUTOLOCK_OPTIONS_LIST as unknown as DropdownItem<AutolockValueType>[]}
+                items={autolockOptions as unknown as DropdownItem<AutolockValueType>[]}
                 selectedValue={autolockValue}
                 theme="light"
                 shouldTranslateOptions

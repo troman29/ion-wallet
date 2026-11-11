@@ -13,6 +13,7 @@ import { processDeeplink } from '../deeplink';
 import { logDebug } from '../logs';
 import { IS_IOS } from '../windowEnvironment';
 import * as storageMethods from '../windowProvider/methods';
+import { initAppLifecycle } from './appLifecycle';
 import { BiometryType, NativeBiometric } from './nativeBiometric';
 import { initNotificationsWithGlobal } from './notifications';
 import { getCapacitorPlatform, setCapacitorPlatform } from './platform';
@@ -55,6 +56,7 @@ function updateSafeAreaValues(safeAreaInsets: SafeAreaInsets) {
 
 export async function initCapacitor() {
   setCapacitorPlatform(Capacitor.getPlatform() as CapacitorPlatform);
+  await initAppLifecycle(getCapacitorPlatform() === 'ios');
 
   void SafeArea.getStatusBarHeight().then(({ statusBarHeight: height }) => {
     statusBarHeight = height;

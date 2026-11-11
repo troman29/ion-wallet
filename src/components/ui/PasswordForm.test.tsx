@@ -27,12 +27,92 @@ jest.mock('../../global', () => ({
 }));
 
 let root: HTMLDivElement;
+let mockBackgroundGeneration = 0;
+let mockIsBackground = false;
+jest.mock('../../util/capacitor/appLifecycle', () => ({
+  getAppBackgroundGeneration: () => mockBackgroundGeneration,
+  getIsAppInBackground: () => mockIsBackground,
+}));
 
 beforeEach(() => {
+  mockBackgroundGeneration = 0;
+  mockIsBackground = false;
   root = document.createElement('div');
   document.body.append(root);
   setGlobal(cloneDeep(INITIAL_STATE));
   (enclave.authorize as jest.Mock).mockReset();
+});
+
+it('rejects biometric authorization that spans a background transition', async () => {
+  const onAuthorize = jest.fn();
+  let resolveAuth!: (value: { token: string }) => void;
+  (enclave.authorize as jest.Mock).mockImplementation(() => new Promise((resolve) => {
+    resolveAuth = resolve;
+  }));
+  setGlobal({ ...cloneDeep(INITIAL_STATE), authTypes: ['biometric'] });
+  TeactDOM.render(
+    <PasswordForm isActive operationType="unlock" noAnimatedIcon noAutoConfirm onAuthorize={onAuthorize} />,
+    root,
+  );
+  await waitForCondition(() => (enclave.authorize as jest.Mock).mock.calls.length === 1);
+  mockBackgroundGeneration++;
+  resolveAuth({ token: 'biometric:stale' });
+  await new Promise((resolve) => {
+    setTimeout(resolve, 50);
+  });
+  expect(onAuthorize).not.toHaveBeenCalled();
+});
+
+it('does not launch a delayed biometric prompt after the app enters background', async () => {
+  setGlobal({ ...cloneDeep(INITIAL_STATE), authTypes: ['biometric'] });
+  TeactDOM.render(
+    <PasswordForm isActive operationType="unlock" noAnimatedIcon noAutoConfirm onAuthorize={jest.fn()} />,
+    root,
+  );
+  mockIsBackground = true;
+  await new Promise((resolve) => {
+    setTimeout(resolve, 400);
+  });
+  expect(enclave.authorize).not.toHaveBeenCalled();
+});
+
+it.each(['success', 'failure', 'error'])('retries an outdated biometric %s after returning', async (result) => {
+  const onAuthorize = jest.fn();
+  let finishOldRequest!: (value?: { token: string }) => void;
+  let rejectOldRequest!: (error: Error) => void;
+  (enclave.authorize as jest.Mock)
+    .mockImplementationOnce(() => new Promise((resolve, reject) => {
+      finishOldRequest = resolve;
+      rejectOldRequest = reject;
+    }))
+    .mockResolvedValueOnce({ token: 'biometric:current' });
+  setGlobal({ ...cloneDeep(INITIAL_STATE), authTypes: ['biometric'] });
+  const render = (isActive: boolean) => TeactDOM.render(
+    <PasswordForm isActive={isActive} operationType="unlock" noAnimatedIcon noAutoConfirm onAuthorize={onAuthorize} />,
+    root,
+  );
+  render(true);
+  await waitForCondition(() => (enclave.authorize as jest.Mock).mock.calls.length === 1);
+  mockIsBackground = true;
+  mockBackgroundGeneration++;
+  render(false);
+  await new Promise((resolve) => {
+    setTimeout(resolve, 50);
+  });
+  mockIsBackground = false;
+  render(true);
+  await new Promise((resolve) => {
+    setTimeout(resolve, 400);
+  });
+  expect(enclave.authorize).toHaveBeenCalledTimes(1);
+  if (result === 'error') {
+    rejectOldRequest(new Error('Cancelled in background'));
+  } else {
+    finishOldRequest(result === 'success' ? { token: 'biometric:stale' } : undefined);
+  }
+  await waitForCondition(() => onAuthorize.mock.calls.length === 1);
+  expect(enclave.authorize).toHaveBeenCalledTimes(2);
+  expect(onAuthorize).toHaveBeenCalledWith('biometric:current');
 });
 
 afterEach(() => {
