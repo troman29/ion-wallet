@@ -300,6 +300,8 @@
 }
 
 .stakingInfoModalContent {
+  // Anchor the account switcher below the dialog's safe-area padding.
+  position: relative;
   min-height: 0;
 
   @media (max-height: 639.8px) {
