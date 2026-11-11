@@ -183,7 +183,7 @@ export const PROXY_HOSTS = process.env.PROXY_HOSTS;
 export const TINY_TRANSFER_MAX_COST = 0.01;
 
 export const IMAGE_CACHE_NAME = 'ion-image';
-export const LANG_CACHE_NAME = 'ion-lang-2';
+export const LANG_CACHE_NAME = 'ion-lang-3';
 
 export const LANG_LIST: LangItem[] = [{
   langCode: 'en',
@@ -460,8 +460,8 @@ export const AUTOLOCK_OPTIONS_LIST = [
   },
   {
     value: 'background',
-    name: 'When returning to the app',
-    selectedName: 'When returning to the app',
+    name: 'On return',
+    selectedName: 'On return',
     period: Infinity,
   },
   {
