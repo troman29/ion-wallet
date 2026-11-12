@@ -1,8 +1,8 @@
-import type { ApiActivity } from '../../../types';
+import type { ApiTransactionActivity } from '../../../types';
 
 import { getIsTxIdLocal } from '../../../../util/activities';
 
-const STATUS_RANK: Record<ApiActivity['status'], number> = {
+const STATUS_RANK: Record<ApiTransactionActivity['status'], number> = {
   pending: 1,
   pendingTrusted: 2,
   confirmed: 3,
@@ -11,15 +11,15 @@ const STATUS_RANK: Record<ApiActivity['status'], number> = {
 };
 
 export function reconcileNewActivitiesUpdate(
-  previousActivities: readonly ApiActivity[],
-  confirmedActivities: readonly ApiActivity[],
-  pendingActivities?: readonly ApiActivity[],
+  previousActivities: readonly ApiTransactionActivity[],
+  confirmedActivities: readonly ApiTransactionActivity[],
+  pendingActivities?: readonly ApiTransactionActivity[],
 ) {
   const incoming = Array.from(new Map(
     [...(pendingActivities ?? []), ...confirmedActivities].map((activity) => [activity.id, activity]),
   ).values());
   const replacedIds: Record<string, string> = {};
-  const previousByNextId = new Map<string, ApiActivity>();
+  const previousByNextId = new Map<string, ApiTransactionActivity>();
   const usedNextIds = new Set<string>();
 
   for (const previous of previousActivities) {
@@ -43,7 +43,7 @@ export function reconcileNewActivitiesUpdate(
     usedNextIds.add(match.id);
   }
 
-  const preserveStatus = (activity: ApiActivity) => {
+  const preserveStatus = (activity: ApiTransactionActivity) => {
     const previous = previousByNextId.get(activity.id);
     return previous && STATUS_RANK[previous.status] > STATUS_RANK[activity.status]
       ? { ...activity, status: previous.status }
@@ -69,7 +69,7 @@ export function reconcileNewActivitiesUpdate(
  * A dapp may answer in the same trace (the ION bridge sends an incoming "OK" back), so every action of the trace
  * shares the external hash. Only the action moving the same token in the same direction can be the local transfer.
  */
-function isSameTransferSide(previous: ApiActivity, next: ApiActivity) {
+function isSameTransferSide(previous: ApiTransactionActivity, next: ApiTransactionActivity) {
   if (previous.kind !== 'transaction' || next.kind !== 'transaction') return true;
 
   return previous.isIncoming === next.isIncoming && previous.slug === next.slug;

@@ -15,7 +15,8 @@ function compareActivities(a: ApiActivity, b: ApiActivity, isAsc = false) {
   // The activity sorting is tuned to match the Toncenter API sorting as close as possible.
   // Putting the pending activities first, because when they get confirmed, their timestamp gets bigger than any current
   // confirmed activity timestamp. This reduces the movement in the activity list.
-  let value = (getIsActivityPending(a) ? 1 : 0) - (getIsActivityPending(b) ? 1 : 0);
+  let value = (a.kind === 'transaction' && getIsActivityPending(a) ? 1 : 0)
+    - (b.kind === 'transaction' && getIsActivityPending(b) ? 1 : 0);
   if (value === 0) {
     value = a.timestamp - b.timestamp;
     if (value === 0) {

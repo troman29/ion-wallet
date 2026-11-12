@@ -86,6 +86,13 @@ export function buildTxId(hash: string, subId?: number | string, type?: UnusualT
 /** Returns the token slugs that the activity is a part of the history of */
 export function getActivityTokenSlugs(activity: ApiActivity): string[] {
   switch (activity.kind) {
+    case 'swap': {
+      const operation = activity.operation;
+      const hasBnbFee = operation.fees.some((fee) => fee.chain === 'bnb'
+        && [operation.fromAddress.toLowerCase(), operation.toAddress.toLowerCase()].includes(fee.payer.toLowerCase()));
+
+      return [activity.fromSlug, activity.toSlug, ...(hasBnbFee ? ['bnb'] : [])];
+    }
     case 'transaction': {
       if (activity.nft) return []; // We don't want NFT activities to get into any token activity list
       return [activity.slug];
@@ -95,6 +102,8 @@ export function getActivityTokenSlugs(activity: ApiActivity): string[] {
 
 export function getActivityChains(activity: ApiActivity): ApiChain[] {
   switch (activity.kind) {
+    case 'swap':
+      return activity.operation.source === 'ton' ? ['ton', 'bnb'] : ['bnb', 'ton'];
     case 'transaction': {
       return [getChainBySlug(activity.slug)];
     }
@@ -103,6 +112,7 @@ export function getActivityChains(activity: ApiActivity): ApiChain[] {
 
 export function getIsActivitySuitableForFetchingTimestamp(activity: ApiActivity | undefined) {
   return !!activity
+    && activity.kind === 'transaction'
     && !getIsTxIdLocal(activity.id)
     && !getIsActivityPending(activity);
 }
@@ -128,7 +138,7 @@ export function getActivityContinuationTimestamp<T>(
   // caller holding ids would otherwise rebuild the whole history on every read.
   for (let i = items.length - 1; i >= 0; i--) {
     const activity = getActivity(items[i]);
-    if (!activity) continue;
+    if (!activity || activity.kind === 'swap') continue;
 
     if (getIsActivitySuitableForFetchingTimestamp(activity)) {
       return activity.timestamp;
@@ -250,5 +260,7 @@ export function getIsActivityPending(activity: ApiActivity) {
 }
 
 export function getIsActivityPendingForUser(activity: ApiActivity) {
+  if (activity.kind === 'swap') return activity.status !== 'completed' && activity.status !== 'failed';
+
   return PENDING_STATUSES.has(activity.status);
 }

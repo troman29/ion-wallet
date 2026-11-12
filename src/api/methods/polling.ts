@@ -23,6 +23,7 @@ import {
   fetchStoredAccount,
   fetchStoredAccounts,
 } from '../common/accounts';
+import { setupBridgeActivityPolling } from '../common/activities/bridge/polling';
 import { tryUpdateKnownAddresses } from '../common/addresses';
 import { callBackendGet } from '../common/backend';
 import { setBackendConfigCache } from '../common/cache';
@@ -179,6 +180,7 @@ export async function setActivePollingAccount(
   if (accountId) {
     const account = await fetchStoredAccount(accountId);
     const stopPollingFns = [
+      setupBridgeActivityPolling(accountId, onUpdate),
       ...(Object.keys(chains) as (keyof typeof chains)[]).map((chain) => {
         if (doesAccountHaveChain(account, chain)) {
           return chains[chain].setupActivePolling(

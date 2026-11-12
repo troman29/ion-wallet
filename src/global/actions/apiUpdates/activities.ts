@@ -1,12 +1,15 @@
 import type { ApiActivity, ApiChain } from '../../../api/types';
 import type { GlobalState } from '../../types';
 
+import { IONCOIN } from '../../../config';
+import { parseAccountId } from '../../../util/account';
 import { getIsHiddenNftActivity } from '../../../util/activities';
 import { playIncomingTransactionSound } from '../../../util/notificationSound';
 import { getIsTransactionWithPoisoning, updatePoisoningCacheFromActivities } from '../../../util/poisoningHash';
 import { waitFor } from '../../../util/schedulers';
 import { getChainBySlug } from '../../../util/tokens';
 import { callApi } from '../../../api';
+import { BRIDGE_CONFIG } from '../../../api/bridge/config';
 import { SEC } from '../../../api/constants';
 import { getIsTinyOrScamTransaction } from '../../helpers';
 import { runActivityUpdateInOrder } from '../../helpers/activityUpdateQueue';
@@ -22,11 +25,11 @@ import {
   replaceCurrentDomainRenewalId,
   replaceCurrentTransferId,
   replacePendingActivities,
+  updateAccountState,
 } from '../../reducers';
 import {
   selectAccountState,
   selectAccountTokens,
-  selectLocalActivitiesSlow,
   selectPendingActivitiesSlow,
   selectRecentNonLocalActivitiesSlow,
 } from '../../selectors';
@@ -44,7 +47,7 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
       updatePoisoningCacheFromActivities(mainActivities);
 
       await runActivityUpdateInOrder(accountId, async () => {
-        const previous = selectLocalActivitiesSlow(getGlobal(), accountId);
+        const previous = Object.values(selectAccountState(getGlobal(), accountId)?.activities?.byId ?? {});
         const reconciliation = await callApi(
           'reconcileActivityUpdate', accountId, previous, [mainActivities, ...Object.values(bySlug)].flat(),
         );
@@ -53,9 +56,11 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
         );
         if (reconciliation) {
           nextGlobal = applyActivitiesPatch(nextGlobal, accountId, {
-            upsert: [], removeIds: reconciliation.patch.removeIds,
+            ...reconciliation.patch,
+            upsert: reconciliation.patch.upsert.filter(({ kind }) => kind === 'swap'),
           });
           nextGlobal = replaceActivityReferences(nextGlobal, accountId, reconciliation.patch.replacedIds);
+          if (reconciliation.bridgeHasMore) nextGlobal = reopenBridgeHistory(nextGlobal, accountId);
         }
         setGlobal(nextGlobal);
       });
@@ -68,16 +73,26 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
       const { accountId, activities } = update;
       await runActivityUpdateInOrder(accountId, async () => {
         const confirmed = selectRecentNonLocalActivitiesSlow(getGlobal(), accountId, activities.length + 20);
-        const reconciliation = await callApi('reconcileActivityUpdate', accountId, activities, confirmed);
+        const cached = Object.values(selectAccountState(getGlobal(), accountId)?.activities?.byId ?? {});
+        const reconciliation = await callApi(
+          'reconcileActivityUpdate', accountId, [...cached, ...activities], confirmed,
+        );
         let nextGlobal = addNewActivities(getGlobal(), accountId, activities);
         if (reconciliation) {
           const { removeIds, replacedIds } = reconciliation.patch;
-          const matchedIds = new Set(Object.values(replacedIds));
+          const localIds = new Set(activities.map(({ id }) => id));
+          const matchedIds = new Set(Object.entries(replacedIds)
+            .filter(([previousId]) => localIds.has(previousId)).map(([, nextId]) => nextId));
           nextGlobal = applyActivitiesPatch(nextGlobal, accountId, {
-            upsert: reconciliation.confirmedActivities.filter(({ id }) => matchedIds.has(id)),
+            upsert: [
+              ...reconciliation.confirmedActivities.filter((activity) =>
+                activity.kind === 'swap' || matchedIds.has(activity.id)),
+            ],
+            evidenceActivities: reconciliation.evidenceActivities,
             removeIds,
           });
           nextGlobal = replaceActivityReferences(nextGlobal, accountId, replacedIds);
+          if (reconciliation.bridgeHasMore) nextGlobal = reopenBridgeHistory(nextGlobal, accountId);
         }
         setGlobal(nextGlobal);
       });
@@ -88,7 +103,7 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
       const { accountId, activities: confirmedActivities, pendingActivities, chain } = update;
       await runActivityUpdateInOrder(accountId, async () => {
         const previous = [
-          ...selectLocalActivitiesSlow(getGlobal(), accountId),
+          ...Object.values(selectAccountState(getGlobal(), accountId)?.activities?.byId ?? {}),
           ...(chain ? selectPendingActivitiesSlow(getGlobal(), accountId, chain) : []),
         ];
         const reconciliation = await callApi(
@@ -106,13 +121,14 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
         if (reconciliation) {
           nextGlobal = applyActivitiesPatch(nextGlobal, accountId, reconciliation.patch);
           nextGlobal = replaceActivityReferences(nextGlobal, accountId, reconciliation.patch.replacedIds);
+          if (reconciliation.bridgeHasMore) nextGlobal = reopenBridgeHistory(nextGlobal, accountId);
         }
         notifyAboutNewActivities(
           nextGlobal, accountId, confirmedActivities.filter(({ shouldHide }) => shouldHide !== true),
         );
         updatePoisoningCacheFromActivities(confirmedActivities);
         for (const activity of confirmedActivities) {
-          if (!activity.nft) continue;
+          if (activity.kind !== 'transaction' || !activity.nft) continue;
           nextGlobal = activity.isIncoming
             ? applyIncomingNftFromActivity(nextGlobal, accountId, activity.nft)
             : applyOutgoingNftFromActivity(nextGlobal, accountId, activity.nft);
@@ -124,9 +140,33 @@ addActionHandler('apiUpdate', async (global, actions, update) => {
   }
 });
 
+function reopenBridgeHistory(global: GlobalState, accountId: string) {
+  const activities = selectAccountState(global, accountId)?.activities;
+  if (!activities) return global;
+
+  return updateAccountState(global, accountId, {
+    activities: {
+      ...activities,
+      isMainHistoryEndReached: false,
+      isHistoryEndReachedBySlug: {
+        ...activities.isHistoryEndReachedBySlug,
+        [IONCOIN.slug]: false,
+        [`bnb-${BRIDGE_CONFIG[parseAccountId(accountId).network].token}`]: false,
+        bnb: false,
+      },
+    },
+  });
+}
+
 function replaceActivityReferences(global: GlobalState, accountId: string, replacements: Record<string, string>) {
   if (!Object.keys(replacements).length) return global;
   global = replaceCurrentActivityId(global, accountId, replacements);
+  const accountState = selectAccountState(global, accountId);
+  const currentId = accountState?.currentActivityId;
+  const operationId = currentId && accountState.activities?.byId[currentId]?.extra?.bridgeProjection?.operationId;
+  if (currentId && operationId) {
+    global = replaceCurrentActivityId(global, accountId, { [currentId]: operationId });
+  }
   global = replaceCurrentTransferId(global, replacements);
   global = replaceCurrentDomainRenewalId(global, replacements);
   return replaceCurrentDomainLinkingId(global, replacements);

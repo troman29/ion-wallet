@@ -3,6 +3,7 @@ import TeactDOM from '../../lib/teact/teact-dom';
 import { setGlobal } from '../../global';
 
 import { INITIAL_STATE } from '../../global/initialState';
+import * as biometrics from '../../util/biometrics';
 import { cloneDeep } from '../../util/iteratees';
 import { waitForCondition } from '../../../tests/util/async';
 import { enclave } from '../../enclave';
@@ -118,6 +119,44 @@ it.each(['success', 'failure', 'error'])('retries an outdated biometric %s after
 afterEach(() => {
   TeactDOM.render(undefined, root);
   root.remove();
+  jest.restoreAllMocks();
+});
+
+it.each([false, true])('shows loading after biometric authorization with PIN pad %s', async (shouldUsePinPad) => {
+  jest.spyOn(biometrics, 'getDoesUsePinPad').mockReturnValue(shouldUsePinPad);
+  setGlobal({ ...cloneDeep(INITIAL_STATE), authTypes: ['biometric'] });
+  (enclave.authorize as jest.Mock).mockResolvedValue({ token: 'biometric:confirmed' });
+
+  let isLoading = false;
+  const onAuthorize = jest.fn(() => {
+    isLoading = true;
+    render();
+  });
+
+  function render() {
+    TeactDOM.render(
+      <PasswordForm
+        isActive
+        isLoading={isLoading}
+        operationType="transfer"
+        noAnimatedIcon
+        noAutoConfirm
+        onAuthorize={onAuthorize}
+      />,
+      root,
+    );
+  }
+
+  render();
+  await waitForCondition(() => Boolean(root.querySelector('[role="status"]')));
+
+  expect(onAuthorize).toHaveBeenCalledWith('biometric:confirmed');
+  expect(root.querySelector('[aria-label="Loading..."]')).not.toBeNull();
+  if (shouldUsePinPad) expect(root.querySelector('[aria-busy="true"]')).not.toBeNull();
+
+  isLoading = false;
+  render();
+  await waitForCondition(() => !root.querySelector('[role="status"]'));
 });
 
 it('translates a rejected password and lets the user retry successfully', async () => {

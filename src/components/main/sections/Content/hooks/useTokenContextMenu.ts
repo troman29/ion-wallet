@@ -7,7 +7,8 @@ import type { DropdownItem } from '../../../../ui/Dropdown';
 import { SettingsState } from '../../../../../global/types';
 
 import {
-  ENABLE_EXCHANGE,
+  ION_BNB_MAINNET,
+  IONCOIN,
   STAKING_SLUG_PREFIX,
 } from '../../../../../config';
 import { vibrate } from '../../../../../util/haptics';
@@ -27,6 +28,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
   token: UserToken;
   isStakingAvailable?: boolean;
   isViewMode?: boolean;
+  isBridgeAvailable?: boolean;
   stakingState?: ApiStakingState;
   isPinned?: boolean;
 }) {
@@ -48,6 +50,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
     withContextMenu,
     isStakingAvailable,
     isViewMode,
+    isBridgeAvailable,
     stakingState,
     isPinned,
   } = options;
@@ -113,9 +116,9 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
         fontIcon: 'menu-send',
         value: 'send',
       } satisfies DropdownItem<MenuHandler>,
-      ENABLE_EXCHANGE && {
-        name: 'Exchange',
-        fontIcon: 'menu-send',
+      isBridgeAvailable && (token.slug === IONCOIN.slug || token.slug === ION_BNB_MAINNET.slug) && {
+        name: 'Bridge',
+        fontIcon: 'menu-swap',
         value: 'exchange',
       } satisfies DropdownItem<MenuHandler>,
       isStakingAvailable && {
@@ -127,7 +130,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
     return compact(result.concat(mandatoryItems));
   }, [
     canBeClaimed, hasUnclaimedRewards, isStakingAvailable, isStakeMoreAllowed, isViewMode,
-    stakingId, isServiceToken, isPinned,
+    stakingId, isServiceToken, isPinned, token.slug, isBridgeAvailable,
   ]);
 
   const handleMenuItemSelect = useLastCallback((value: MenuHandler) => {
@@ -145,7 +148,7 @@ function useTokenContextMenu(ref: ElementRef<HTMLButtonElement>, options: {
         break;
 
       case 'exchange':
-        startExchange();
+        startExchange({ source: token.chain === 'bnb' ? 'bnb' : 'ton' });
         break;
 
       case 'stake':

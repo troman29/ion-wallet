@@ -41,6 +41,7 @@ import ModalHeader from '../../../ui/ModalHeader';
 import Spinner from '../../../ui/Spinner';
 import Transition from '../../../ui/Transition';
 import Activity from '../../sections/Content/Activity';
+import SwapInfo from './SwapInfo';
 import TransactionInfo from './TransactionInfo';
 
 import modalStyles from '../../../ui/Modal.module.scss';
@@ -263,6 +264,9 @@ function TransactionInfoModal({
     if (!selectedActivity) return undefined;
 
     const backButton = activities && activities.length > 1 ? handleBackClick : undefined;
+    if (selectedActivity.kind === 'swap') {
+      return <SwapInfo activity={selectedActivity} isViewMode={isViewMode} onClose={handleClose} onBack={backButton} />;
+    }
 
     if (selectedTransactionActivity) {
       return (
@@ -385,6 +389,10 @@ export default memo(withGlobal((global): StateProps => {
 })(TransactionInfoModal));
 
 function getActivityShareInfo(activity: ApiActivity): { chain: ApiChain; hash: string } | undefined {
+  if (activity.kind === 'swap') {
+    return activity.operation.sourceTransaction ?? activity.operation.destinationTransaction;
+  }
+
   // A local activity is keyed by its message hash until confirmed, and the explorer knows only transaction hashes
   if (getIsTxIdLocal(activity.id)) {
     return undefined;

@@ -35,6 +35,7 @@ import Button from './Button';
 import Checkbox from './Checkbox';
 import Input from './Input';
 import PinPad from './PinPad';
+import Spinner from './Spinner';
 
 import modalStyles from './Modal.module.scss';
 import styles from './PasswordForm.module.scss';
@@ -446,6 +447,7 @@ function PasswordForm({
         {withAutoConfirm ? renderFooterButtons() : (
           <PinPad
             isActive={isActive}
+            isLoading={isLoading}
             title={lang(hasError
               ? (localError || error!)
               : (pinPadTitle || (isSmallHeight && title ? title : actionName)),
@@ -477,6 +479,14 @@ function PasswordForm({
   }
 
   function renderBiometricPrompt() {
+    if (isLoading) {
+      return (
+        <div className={styles.loading} role="status">
+          <Spinner />
+        </div>
+      );
+    }
+
     const renderingError = localError || error;
     if (renderingError) {
       return (

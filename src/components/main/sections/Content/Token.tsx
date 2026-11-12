@@ -58,6 +58,7 @@ interface OwnProps {
   areTokenNamesLocalized?: boolean;
   isStakingAvailable?: boolean;
   isViewMode?: boolean;
+  isBridgeAvailable: boolean;
   isPinned?: boolean;
   withPinTransition?: boolean;
   onClick: (slug: string) => void;
@@ -89,6 +90,7 @@ function Token({
   areTokenNamesLocalized,
   isStakingAvailable,
   isViewMode,
+  isBridgeAvailable,
   isPinned,
   withPinTransition,
   yieldType,
@@ -174,6 +176,7 @@ function Token({
     withContextMenu,
     isStakingAvailable,
     isViewMode,
+    isBridgeAvailable,
     stakingState,
     isPinned,
   });

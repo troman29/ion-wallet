@@ -119,6 +119,7 @@ export type ApiVestingInfo = {
 };
 
 export type ApiBackendConfig = {
+  isBridgeHistoryEnabled?: boolean;
   isLimited: boolean;
   isCopyStorageEnabled?: boolean;
   isLegacyIonRecoveryEnabled?: boolean;

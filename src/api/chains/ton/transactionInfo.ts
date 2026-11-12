@@ -65,7 +65,7 @@ export async function fetchTransactionById(
       Also, we omit the `ourFee` field to avoid duplication (`ourFee` will be presented as its own activity).
     */
     return activities.map((activity) => {
-      if (!activity.shouldLoadDetails) {
+      if (activity.kind !== 'transaction' || !activity.shouldLoadDetails) {
         return activity;
       }
 

@@ -9,6 +9,7 @@ import type {
   ApiCurrencyRates,
   ApiNft,
   ApiStakingState,
+  ApiSwapActivity,
   ApiTokenWithPrice,
   ApiToncoinStakingState,
   ApiTransactionActivity,
@@ -54,12 +55,14 @@ import PasswordSlide from '../../../common/PasswordSlide';
 import TransactionHeader from '../../../common/TransactionHeader';
 import Modal, { CLOSE_DURATION, CLOSE_DURATION_PORTRAIT } from '../../../ui/Modal';
 import Transition from '../../../ui/Transition';
+import SwapInfo from './SwapInfo';
 import TransactionInfo from './TransactionInfo';
 
 import modalStyles from '../../../ui/Modal.module.scss';
 import styles from './TransactionModal.module.scss';
 
 type StateProps = {
+  swap?: ApiSwapActivity;
   transaction?: ApiTransactionActivity;
   tokensBySlug?: Record<string, ApiTokenWithPrice>;
   savedAddresses?: SavedAddress[];
@@ -84,6 +87,7 @@ const enum SLIDES {
 }
 
 function TransactionModal({
+  swap,
   transaction,
   tokensBySlug,
   savedAddresses,
@@ -135,7 +139,7 @@ function TransactionModal({
 
   const token = slug ? tokensBySlug?.[slug] : undefined;
   const address = isIncoming ? renderedTransaction?.fromAddress : renderedTransaction?.toAddress;
-  const isModalOpen = Boolean(transaction) && !isMediaViewerOpen;
+  const isModalOpen = Boolean(transaction || swap) && !isMediaViewerOpen;
   const canDecryptComment = !isViewMode;
 
   const [
@@ -216,7 +220,8 @@ function TransactionModal({
 
   useEffect(() => {
     if (id && shouldLoadDetails) fetchActivityDetails({ id });
-  }, [id, shouldLoadDetails]);
+    if (swap?.id) fetchActivityDetails({ id: swap.id });
+  }, [id, shouldLoadDetails, swap?.id]);
 
   const closePasswordSlide = useLastCallback(() => {
     closePasswordSlideBase();
@@ -245,7 +250,7 @@ function TransactionModal({
   });
 
   const handleClose = useLastCallback(() => {
-    closeActivityInfo({ id: id! });
+    closeActivityInfo({ id: (swap?.id ?? id)! });
     if (getDoesUsePinPad()) {
       clearIsPinAccepted();
     }
@@ -336,15 +341,17 @@ function TransactionModal({
       onClose={handleClose}
       onCloseAnimationEnd={closePasswordSlide}
     >
-      <Transition
-        name={resolveSlideTransitionName()}
-        className={buildClassName(modalStyles.transition, 'custom-scroll')}
-        slideClassName={modalStyles.transitionSlide}
-        activeKey={currentSlide}
-        nextKey={nextKey}
-      >
-        {renderContent}
-      </Transition>
+      {swap ? <SwapInfo activity={swap} isViewMode={isViewMode} onClose={handleClose} /> : (
+        <Transition
+          name={resolveSlideTransitionName()}
+          className={buildClassName(modalStyles.transition, 'custom-scroll')}
+          slideClassName={modalStyles.transitionSlide}
+          activeKey={currentSlide}
+          nextKey={nextKey}
+        >
+          {renderContent}
+        </Transition>
+      )}
     </Modal>
   );
 }
@@ -365,6 +372,7 @@ export default memo(
 
     return {
       transaction: activity?.kind === 'transaction' ? activity : undefined,
+      swap: activity?.kind === 'swap' ? activity : undefined,
       tokensBySlug: global.tokenInfo?.bySlug,
       savedAddresses,
       isTestnet,

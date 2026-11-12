@@ -1,0 +1,57 @@
+.textBlock {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 1.25rem;
+  padding: 0.75rem;
+  border-radius: var(--border-radius-default);
+
+  background: var(--color-gray-button-background-light);
+
+  &_gap {
+    gap: 0.5rem;
+  }
+
+  &_success {
+    margin-top: 1.25rem;
+    color: var(--color-transaction-amount-green-text);
+    background: var(--color-transaction-amount-green-bg);
+  }
+}
+
+.textIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-self: flex-start;
+
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.text {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-gray-1);
+
+  &_failed {
+    color: var(--color-red);
+  }
+
+  &_connected {
+    color: var(--color-accent);
+  }
+
+  &_success {
+    color: var(--color-transaction-amount-green-text);
+  }
+}
+
+.counter {
+  margin-inline-start: auto;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}

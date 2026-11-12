@@ -1,6 +1,6 @@
 import type { Account, GlobalState } from '../types';
 
-import { selectHasAuth, selectHasPassword } from './accounts';
+import { selectHasAuth, selectHasPassword, selectIsBridgeAvailable } from './accounts';
 
 const MNEMONIC_ACCOUNT = { title: 'Wallet', type: 'mnemonic', byChain: {} } as unknown as Account;
 const VIEW_ACCOUNT = { title: 'Wallet', type: 'view', byChain: {} } as unknown as Account;
@@ -33,5 +33,31 @@ describe('auth-state selectors', () => {
     const global = buildGlobal({ '0-mainnet': VIEW_ACCOUNT });
 
     expect(selectHasPassword(global)).toBe(false);
+  });
+});
+
+describe('bridge availability', () => {
+  const ionWallet = { address: 'ion-address' };
+  const bnbWallet = { address: 'bnb-address' };
+
+  it.each([
+    ['ION-only', 'mnemonic', { ton: ionWallet }, false],
+    ['BNB-only', 'mnemonic', { bnb: bnbWallet }, false],
+    ['multichain', 'mnemonic', { ton: ionWallet, bnb: bnbWallet }, true],
+    ['view-only multichain', 'view', { ton: ionWallet, bnb: bnbWallet }, false],
+  ])('shows the bridge appropriately for a %s account', (_label, type, byChain, isExpectedAvailable) => {
+    const account = { title: 'Wallet', type, byChain } as Account;
+
+    expect(selectIsBridgeAvailable(buildGlobal({ '0-mainnet': account }))).toBe(isExpectedAvailable);
+  });
+
+  it('updates when switching from a multichain account to an ION-only account', () => {
+    const global = buildGlobal({
+      '0-mainnet': { ...MNEMONIC_ACCOUNT, byChain: { ton: ionWallet, bnb: bnbWallet } } as Account,
+      '1-mainnet': { ...MNEMONIC_ACCOUNT, byChain: { ton: ionWallet } } as Account,
+    });
+
+    expect(selectIsBridgeAvailable(global)).toBe(true);
+    expect(selectIsBridgeAvailable({ ...global, currentAccountId: '1-mainnet' })).toBe(false);
   });
 });

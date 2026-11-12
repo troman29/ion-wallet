@@ -357,6 +357,7 @@ export interface AccountState {
     bySlug: ApiBalanceBySlug;
   };
   activities?: {
+    historyContinuationBySlug?: Record<string, number>;
     byId: Record<string, ApiActivity>;
     /**
      * The array values are sorted by the activity type (newest to oldest).
@@ -787,6 +788,8 @@ export type GlobalState = {
   currentTemporaryViewAccountId?: string;
   isAccountSelectorOpen?: boolean;
   isExchangeModalOpen?: boolean;
+  exchangeSource?: 'ton' | 'bnb';
+  exchangeOperationId?: string;
   walletRenameAccountId?: string;
   accountSelectorActiveTab?: number;
   accountSelectorViewMode?: 'cards' | 'list';
@@ -1207,7 +1210,7 @@ export interface ActionPayloads {
   };
 
   // Exchange
-  startExchange: undefined;
+  startExchange: { source?: 'ton' | 'bnb'; bridgeOperationId?: string } | undefined;
   closeExchange: undefined;
 
   // WalletConnect Pay

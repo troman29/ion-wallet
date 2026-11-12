@@ -1,9 +1,9 @@
 import React, { memo } from '../../../../lib/teact/teact';
-import { getActions } from '../../../../global';
+import { getActions, withGlobal } from '../../../../global';
 
 import type { StakingStateStatus } from '../../../../util/staking';
 
-import { ENABLE_EXCHANGE } from '../../../../config';
+import { selectIsBridgeAvailable } from '../../../../global/selectors';
 import buildClassName from '../../../../util/buildClassName';
 import { vibrate } from '../../../../util/haptics';
 import { STAKING_TAB_TEXT_VARIANTS } from './helpers/stakingLabels';
@@ -21,11 +21,16 @@ interface OwnProps {
   onEarnClick: NoneToVoidFunction;
 }
 
+interface StateProps {
+  isBridgeAvailable: boolean;
+}
+
 function PortraitActions({
   stakingStatus,
   isStakingDisabled,
   onEarnClick,
-}: OwnProps) {
+  isBridgeAvailable,
+}: OwnProps & StateProps) {
   const {
     startTransfer, startExchange, openReceiveModal,
   } = getActions();
@@ -77,14 +82,14 @@ function PortraitActions({
           <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
           {lang('Send')}
         </Button>
-        {ENABLE_EXCHANGE && (
+        {isBridgeAvailable && (
           <Button
             isSimple
             className={styles.button}
             onClick={handleStartExchange}
           >
-            <i className={buildClassName(styles.buttonIcon, 'icon-action-send')} aria-hidden />
-            {lang('Exchange')}
+            <i className={buildClassName(styles.buttonIcon, 'icon-action-swap')} aria-hidden />
+            {lang('Bridge')}
           </Button>
         )}
         {!isStakingDisabled && (
@@ -102,4 +107,6 @@ function PortraitActions({
   );
 }
 
-export default memo(PortraitActions);
+export default memo(withGlobal<OwnProps>((global): StateProps => ({
+  isBridgeAvailable: selectIsBridgeAvailable(global),
+}))(PortraitActions));

@@ -1,4 +1,6 @@
-import type { ApiActivity, ApiFetchActivitySliceOptions, ApiNetwork, EVMChain } from '../../types';
+import type {
+  ApiActivity, ApiFetchActivitySliceOptions, ApiNetwork, ApiTransactionActivity, EVMChain,
+} from '../../types';
 import type { BnbHistoryItem, BnbHistoryResponse } from './types';
 
 import { parseAccountId } from '../../../util/account';
@@ -74,7 +76,7 @@ function getHistoryToken(chain: EVMChain, slug?: string) {
   return slug === getChainConfig(chain).nativeToken.slug ? 'native' : getTokenBySlug(slug)?.tokenAddress;
 }
 
-export function transformBnbItem(chain: EVMChain, item: BnbHistoryItem, address: string): ApiActivity {
+export function transformBnbItem(chain: EVMChain, item: BnbHistoryItem, address: string): ApiTransactionActivity {
   const ownAddress = normalizeAddress(address);
   const fromAddress = normalizeAddress(item.from);
   const toAddress = normalizeAddress(item.to);
@@ -101,6 +103,7 @@ export function transformBnbItem(chain: EVMChain, item: BnbHistoryItem, address:
     fee: BigInt(item.fee ?? 0),
     status: item.isFailed ? 'failed' : 'completed',
     externalMsgHashNorm: item.hash,
+    extra: { chainLogIndex: /:l(\d+)$/.test(item.id) ? Number(item.id.match(/:l(\d+)$/)![1]) : undefined },
     ...(isContractCall && { type: 'callContract' as const }),
     ...(isUnrelatedCall && { shouldHide: true }),
   });

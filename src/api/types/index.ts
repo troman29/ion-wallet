@@ -7,6 +7,7 @@ export * from './backend';
 export * from './backendSocket';
 export * from './storage';
 export * from './activities';
+export * from './bridgeActivity';
 export * from './notifications';
 export * from './emulation';
 export * from './transfer';

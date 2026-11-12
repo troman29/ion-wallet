@@ -1,6 +1,7 @@
 import type { ApiChain, ApiNetwork } from '../../api/types';
 import type { Account, AccountSettings, AccountState, GlobalState, UserToken } from '../types';
 
+import { ENABLE_EXCHANGE } from '../../config';
 import { parseAccountId } from '../../util/account';
 import { isKeyCountGreater } from '../../util/isEmptyObject';
 import isViewAccount, { getIsViewAccountDisabled } from '../../util/isViewAccount';
@@ -135,6 +136,12 @@ export function selectAccountNftByAddress(global: GlobalState, accountId: string
 export function selectIsMultichainAccount(global: GlobalState, accountId: string) {
   const byChain = selectAccount(global, accountId)?.byChain;
   return Boolean(byChain) && isKeyCountGreater(byChain, 1);
+}
+
+export function selectIsBridgeAvailable(global: GlobalState) {
+  const account = selectCurrentAccount(global);
+
+  return ENABLE_EXCHANGE && account?.type === 'mnemonic' && Boolean(account.byChain.ton && account.byChain.bnb);
 }
 
 export function selectIsMultisigAccount(global: GlobalState, accountId: string) {

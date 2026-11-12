@@ -1,3 +1,4 @@
+import type { ApiBridgeOperation } from './bridgeActivity';
 import type { ApiNetwork, ApiNftMarketplace, ApiTransaction } from './misc';
 
 export type ApiActivityReconciliationReason =
@@ -29,6 +30,9 @@ type BaseActivity = {
     queryId?: string;
     /** SDK-owned source/projection metadata for activity reconciliation. Optional for backwards compatibility. */
     reconciliation?: ApiActivityReconciliationMetadata;
+    chainTransactionHashes?: string[];
+    chainLogIndex?: number;
+    bridgeProjection?: { operationId: string; wasHidden?: boolean };
     // TODO Move other extra fields here (externalMsgHash, ...)
   };
 };
@@ -37,7 +41,17 @@ export type ApiTransactionActivity = BaseActivity & ApiTransaction & {
   kind: 'transaction';
 };
 
-export type ApiActivity = ApiTransactionActivity;
+export type ApiSwapActivity = BaseActivity & {
+  kind: 'swap';
+  provider: 'ion-bridge';
+  timestamp: number;
+  status: ApiBridgeOperation['status'];
+  fromSlug: string;
+  toSlug: string;
+  operation: ApiBridgeOperation;
+};
+
+export type ApiActivity = ApiTransactionActivity | ApiSwapActivity;
 
 export type ApiFetchActivitySliceOptions = {
   accountId: string;

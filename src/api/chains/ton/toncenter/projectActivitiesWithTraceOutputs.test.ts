@@ -1,4 +1,4 @@
-import type { ApiActivity } from '../../../types';
+import type { ApiActivity, ApiTransactionActivity } from '../../../types';
 import type { ParsedTrace } from '../types';
 
 import { fetchAndParseTrace } from '../traces';
@@ -8,8 +8,10 @@ jest.mock('../traces', () => ({ fetchAndParseTrace: jest.fn() }));
 
 const HASH = 'external-message-hash';
 
-function activity(id: string, type?: ApiActivity['type'], status: ApiActivity['status'] = 'completed'): ApiActivity {
-  return { id, type, status, externalMsgHashNorm: HASH } as ApiActivity;
+function activity(
+  id: string, type?: ApiTransactionActivity['type'], status: ApiActivity['status'] = 'completed',
+): ApiActivity {
+  return { id, kind: 'transaction', type, status, externalMsgHashNorm: HASH } as ApiActivity;
 }
 
 describe('projectActivitiesWithTraceOutputs', () => {

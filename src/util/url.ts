@@ -131,8 +131,10 @@ export function getExplorerTransactionUrl(
   if (!base) return undefined;
   const { parsedBaseUrl, parsedUrlParam } = base;
 
-  const hash = explorer.doConvertHashFromBase64 && !/^[a-f\d]{64}$/i.test(transactionHash)
-    ? base64ToHex(transactionHash) : transactionHash;
+  const normalizedHash = explorer.doConvertHashFromBase64 && /^0x[a-f\d]{64}$/i.test(transactionHash)
+    ? transactionHash.slice(2) : transactionHash;
+  const hash = explorer.doConvertHashFromBase64 && !/^[a-f\d]{64}$/i.test(normalizedHash)
+    ? base64ToHex(normalizedHash) : normalizedHash;
 
   return explorer.transaction
     .replace('{base}', parsedBaseUrl)

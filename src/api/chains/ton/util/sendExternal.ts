@@ -4,11 +4,18 @@ import { beginCell, external, storeMessage } from '@ton/core';
 import type { TonClient } from './TonClient';
 import type { TonWallet } from './tonCore';
 
+interface PreparedExternalMessage {
+  boc: string;
+  msgHash: string;
+  msgHashNormalized: string;
+}
+
 export async function sendExternal(
   client: TonClient,
   wallet: TonWallet,
   message: Cell,
   isWalletInitialized?: boolean,
+  beforeSend?: (message: PreparedExternalMessage) => Promise<void>,
 ) {
   const {
     address,
@@ -43,6 +50,7 @@ export async function sendExternal(
   const msgHashNormalized = getExternalMsgHashNormalized(ext);
   const boc = cell.toBoc().toString('base64');
 
+  await beforeSend?.({ boc, msgHash, msgHashNormalized });
   await client.sendFile(boc);
 
   return {

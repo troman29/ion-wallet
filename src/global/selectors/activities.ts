@@ -20,6 +20,9 @@ export function selectLastActivityTimestamp(
   const activities = selectAccountState(global, accountId)?.activities;
   if (!activities) return undefined;
 
+  const continuationTimestamp = activities.historyContinuationBySlug?.[tokenSlug ?? '__main__'];
+  if (continuationTimestamp !== undefined) return continuationTimestamp;
+
   const { byId, idsMain, idsBySlug } = activities;
   const ids = (tokenSlug ? idsBySlug?.[tokenSlug] : idsMain) || [];
 
