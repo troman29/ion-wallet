@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="prism-title prism-description">
+<title id="prism-title">ION Wallet — PRISM</title>
+<desc id="prism-description">Eight identical crystal rays, spaced at 45 degrees, with ice and amethyst facets.</desc>
+<defs></defs>
+<g transform="translate(256 256) scale(1)">
+<g transform="rotate(0)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(45)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(90)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(135)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(180)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(225)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(270)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+<g transform="rotate(315)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="#FFFFFF"/>
+</g>
+</g>
+</svg>

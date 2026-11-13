@@ -3,6 +3,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 import { generateActionIcons } from './actionIcons.mjs';
 import { generateIllustrations } from './illustrations.mjs';
+import { PRISM_BACKGROUND, prismSvg } from './prism.mjs';
 
 const root = process.argv[2];
 if (!root) throw new Error('Pass the repository directory');
@@ -13,17 +14,17 @@ const write = async (p, data) => {
 };
 const source = await read('src/assets/blockchain/chain_ton.svg');
 const mark = source.match(/ d="([^"]+)"/)[1];
-const walletSource = await read('dev/branding/ion-wallet-arcs.svg');
-const walletArtwork = walletSource.replace(/<svg\b[^>]*>/, '<svg x="9" y="9" width="110" height="110" viewBox="180 150 900 900">');
-const background = '#11073C';
+const background = PRISM_BACKGROUND;
 const symbol = (color = '#fff') => `<path fill="${color}" transform="translate(22.9 23.8) scale(2.01)" d="${mark}"/>`;
-const svg = (kind = 'circle', scale = 1) => `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 128 128">${kind === 'circle' ? `<circle cx="64" cy="64" r="64" fill="${background}"/>` : kind === 'square' ? `<path fill="${background}" d="M0 0h128v128H0z"/>` : kind === 'rounded' ? `<rect width="128" height="128" rx="27" fill="${background}"/>` : ''}<g transform="translate(${64 * (1 - scale)} ${64 * (1 - scale)}) scale(${scale})">${walletArtwork}</g></svg>`;
+const svg = (kind = 'circle', scale = 1, size = 512) => prismSvg({ kind, scale, size });
 const raster = async (p, w, h = w, kind = 'circle', scale = 1) => {
-  const img = sharp(Buffer.from(svg(kind, scale))).resize(w, h);
+  const img = sharp(Buffer.from(svg(kind, scale, Math.min(w, h)))).resize(w, h);
   if (kind === 'square') img.removeAlpha();
   await write(p, await (p.endsWith('.webp') ? img.webp({ lossless: true }) : p.endsWith('.tiff') ? img.tiff() : img.png()).toBuffer());
 };
 await write('dev/branding/ion-mark.svg', svg('none'));
+await write('dev/branding/ion-mark-mono.svg', prismSvg({ kind: 'none', monochrome: true }));
+for (const file of ['dev/branding/ion-prism.svg', 'public/icon.svg']) await write(file, svg('rounded'));
 for (const file of ['src/assets/logo.svg', 'src/assets/logoLight.svg', 'src/assets/logoMinimalistic.svg', 'public/logo.svg']) await write(file, svg());
 const iconChunks = svg().match(/[\s\S]{1,90}/g) ?? [];
 const quoteChunk = (chunk) => `'${chunk.replaceAll('\\', '\\\\').replaceAll("'", "\\'").replaceAll('\n', '\\n').replaceAll('\r', '\\r')}'`;
@@ -37,7 +38,7 @@ await raster('public/mstile-150x150.png', 150, 150, 'square');
 await raster('public/icon-electron-macos.png', 512, 512, 'rounded');
 await raster('public/assets/ui/qr-logo.png', 192);
 // PNG-backed ICO frames work with Chromium, Windows and electron-builder.
-const icoFrames = await Promise.all([16, 24, 32, 48, 64, 128, 256].map(async (n) => ({ n, data: await sharp(Buffer.from(svg('rounded'))).resize(n).png().toBuffer() })));
+const icoFrames = await Promise.all([16, 24, 32, 48, 64, 128, 256].map(async (n) => ({ n, data: await sharp(Buffer.from(svg('rounded', 1, n))).resize(n).png().toBuffer() })));
 const icoHeader = Buffer.alloc(6 + icoFrames.length * 16);
 icoHeader.writeUInt16LE(1, 2); icoHeader.writeUInt16LE(icoFrames.length, 4);
 let offset = icoHeader.length;
@@ -50,7 +51,7 @@ icoFrames.forEach(({ n, data }, i) => {
 for (const file of ['public/favicon.ico', 'public/icon-electron-windows.ico']) await write(file, Buffer.concat([icoHeader, ...icoFrames.map((f) => f.data)]));
 const icnsChunks = [];
 for (const [type, n] of [['icp4', 16], ['icp5', 32], ['icp6', 64], ['ic07', 128], ['ic08', 256], ['ic09', 512], ['ic10', 1024]]) {
-  const data = await sharp(Buffer.from(svg('rounded'))).resize(n).png().toBuffer();
+  const data = await sharp(Buffer.from(svg('rounded', 1, n))).resize(n).png().toBuffer();
   const header = Buffer.alloc(8); header.write(type); header.writeUInt32BE(data.length + 8, 4);
   icnsChunks.push(header, data);
 }
@@ -62,8 +63,8 @@ for (const [density, launcher, adaptive, notification] of [['mdpi',48,108,24],['
   await raster(`${android}/mipmap-${density}/ic_launcher_round.webp`, launcher);
   // Keep the mark inside Android's 66/108 adaptive-icon safe zone.
   await raster(`${android}/mipmap-${density}/ic_launcher_foreground.webp`, adaptive, adaptive, 'none', 0.72);
-  await write(`${android}/mipmap-${density}/ic_launcher_background.webp`, await sharp({ create: { width: adaptive, height: adaptive, channels: 4, background } }).webp({ lossless: true }).toBuffer());
-  const notificationImage = await sharp(Buffer.from(svg('none'))).resize(notification).ensureAlpha().toBuffer();
+  await write(`${android}/mipmap-${density}/ic_launcher_background.webp`, await sharp(Buffer.from(prismSvg({ kind: 'square', symbol: false }))).resize(adaptive).webp({ lossless: true }).toBuffer());
+  const notificationImage = await sharp(Buffer.from(prismSvg({ kind: 'none', monochrome: true }))).resize(notification).ensureAlpha().toBuffer();
   const notificationAlpha = await sharp(notificationImage).extractChannel('alpha').toBuffer();
   await write(`${android}/drawable-${density}/ic_default_notification.png`, await sharp({ create: { width: notification, height: notification, channels: 3, background: '#ffffff' } }).joinChannel(notificationAlpha).png().toBuffer());
 }
@@ -73,13 +74,19 @@ const ios = 'mobile/ios/App/App/Resources/IONWallet';
 await raster(`${ios}/Assets.xcassets/AppIcon.appiconset/AppIcon.png`, 1024, 1024, 'square');
 await raster(`${ios}/Assets.xcassets/IntroLogo.imageset/IntroLogo@3x.png`, 372);
 await write(`${ios}/AppIcon.icon/Assets/ION.svg`, svg('none').replace('width="512" height="512"', 'width="1024" height="1024"'));
-await write(`${ios}/AppIcon.icon/icon.json`, JSON.stringify({ fill: { solid: 'srgb:0.06667,0.02745,0.23529,1.00000' }, groups: [{ layers: [{ 'image-name': 'ION.svg', name: 'ION', hidden: false, position: { scale: 1, 'translation-in-points': [0, 0] } }], shadow: { kind: 'neutral', opacity: 0.2 }, translucency: { enabled: false, value: 0 } }], 'supported-platforms': { circles: ['watchOS'], squares: 'shared' } }, null, 2) + '\n');
+const nativeBackground = `srgb:${background.slice(1).match(/../g).map((channel) => (parseInt(channel, 16) / 255).toFixed(5)).join(',')},1.00000`;
+await write(`${ios}/AppIcon.icon/icon.json`, JSON.stringify({ fill: { solid: nativeBackground }, groups: [{ layers: [{ 'image-name': 'ION.svg', name: 'ION', hidden: false, position: { scale: 1, 'translation-in-points': [0, 0] } }], shadow: { kind: 'neutral', opacity: 0.12 }, translucency: { enabled: false, value: 0 } }], 'supported-platforms': { circles: ['watchOS'], squares: 'shared' } }, null, 2) + '\n');
 // Existing settings badges are 28px; preserve their layout dimensions.
-await write('src/assets/settings/settings_ton-wallets.svg', svg('rounded').replace('width="512" height="512"', 'width="28" height="28"'));
-const iconContent = svg().replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
-const inactive = `<svg xmlns="http://www.w3.org/2000/svg" width="680" height="518" viewBox="0 0 680 518"><rect x="14" y="46" width="652" height="458" rx="36" fill="#f7f5ff" stroke="#d8d3e8" stroke-width="8"/><path d="M36 48V32Q36 12 58 12H249Q271 12 271 32V48" fill="#d8d3e8"/><text x="82" y="37" font-family="Arial,sans-serif" font-size="22" fill="#11073c">ION Wallet</text><g transform="translate(48 18) scale(.18)">${iconContent}</g><rect x="42" y="86" width="596" height="384" rx="24" fill="#fff"/><g transform="translate(242 160) scale(1.53)">${iconContent}</g><path d="M310 400h60" stroke="#d8d3e8" stroke-width="8" stroke-linecap="round"/></svg>`;
+await write('src/assets/settings/settings_ton-wallets.svg', svg('rounded', 1, 28).replace('width="512" height="512"', 'width="28" height="28"'));
+const iconContent = svg().trim().replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
+const tabIconContent = svg('circle', 1, 24).trim().replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '').replaceAll('prism-', 'prism-tab-');
+const inactive = `<svg xmlns="http://www.w3.org/2000/svg" width="680" height="518" viewBox="0 0 680 518"><rect x="14" y="46" width="652" height="458" rx="36" fill="#f7f5ff" stroke="#d8d3e8" stroke-width="8"/><path d="M36 48V32Q36 12 58 12H249Q271 12 271 32V48" fill="#d8d3e8"/><text x="82" y="37" font-family="Arial,sans-serif" font-size="22" fill="#11073c">ION Wallet</text><g transform="translate(48 18) scale(.045)">${tabIconContent}</g><rect x="42" y="86" width="596" height="384" rx="24" fill="#fff"/><g transform="translate(242 160) scale(.3825)">${iconContent}</g><path d="M310 400h60" stroke="#d8d3e8" stroke-width="8" stroke-linecap="round"/></svg>`;
 await write('src/assets/app-inactive.png', await sharp(Buffer.from(inactive)).png().toBuffer());
 await write('src/assets/app-inactive.webp', await sharp(Buffer.from(inactive)).webp({lossless:true}).toBuffer());
+if (process.argv.includes('--icons-only')) {
+  console.log('Generated PRISM wallet icons for web, extension, QR, desktop, Android and iOS.');
+  process.exit(0);
+}
 const palette = { orange:['#efb267','#b45b22'], green:['#57bf9c','#146953'], purple:['#9a82ed','#4f318b'], pink:['#df8bbe','#8c3679'], ping:['#df8bbe','#8c3679'], red:['#f08089','#a8314a'], sea:['#6ac5df','#226b9c'], tegro:['#9a82ed','#4f318b'] };
 const cardFiles = (await fs.readdir(path.join(root,'src/assets/cards'))).filter((f)=>/^card(?:_|@|\.)/.test(f)&&/\.(jpg|avif)$/.test(f)).map((f)=>`src/assets/cards/${f}`);
 cardFiles.push(...(await fs.readdir(path.join(root,'src/assets'))).filter((f)=>/^account_button_bg.*\.(jpg|avif)$/.test(f)).map((f)=>`src/assets/${f}`));
