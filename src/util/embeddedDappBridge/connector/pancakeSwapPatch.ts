@@ -1,19 +1,28 @@
-export const PANCAKESWAP_HOST = 'pancakeswap.finance';
+// pancakeswap.finance redirects to pancake.xyz; both stay in case the redirect goes away
+export const PANCAKESWAP_HOSTS = ['pancake.xyz', 'pancakeswap.finance'];
 
 /**
  * Narrows PancakeSwap in the in-app browser to swapping BNB and ION (BEP-20) with this wallet: other tokens,
  * the navigation, the search and the ads are hidden.
  *
+ * PancakeSwap's mobile wallet list ignores EIP-6963 and lists only the wallets it knows. It connects the injected
+ * provider by itself only inside a wallet browser it recognizes by a flag, so the patch marks ours with `isBinance`.
+ *
  * Self-contained: the in-app browser injects its source text into every page, so it checks the host itself.
  * It relies on PancakeSwap's markup (`pcs-swap-picker-*` classes) and URL parameters; if they change, the token
  * picker shows all tokens again, but the URL check still puts BNB and ION back.
  */
-export function patchPancakeSwap(host: string, ionTokenAddress: string) {
-  if (window.location.hostname !== host) return undefined;
+export function patchPancakeSwap(hosts: string[], ionTokenAddress: string) {
+  if (!hosts.includes(window.location.hostname)) return undefined;
+
+  // PancakeSwap reads the flag while it loads, so it has to be set before DOMContentLoaded
+  const { ethereum } = window as unknown as { ethereum?: { isBinance?: boolean } };
+  if (ethereum) {
+    ethereum.isBinance = true;
+  }
 
   const ALLOWED_CURRENCIES = ['bnb', ionTokenAddress.toLowerCase()];
   const ALLOWED_TOKENS: Record<string, string> = { BNB: 'BNB CHAIN NATIVE TOKEN', ION: 'ICE OPEN NETWORK' };
-  const PROMPT_FLAG = 'ionwallet:pancakeswap-connect-asked';
   const REDIRECT_KEY = 'ionwallet:pancakeswap-redirected-at';
   const REDIRECT_INTERVAL = 10000;
 
@@ -47,24 +56,6 @@ export function patchPancakeSwap(host: string, ionTokenAddress: string) {
     });
   }
 
-  async function connectWallet() {
-    const { ethereum } = window as unknown as { ethereum?: { request(args: { method: string }): Promise<string[]> } };
-    if (!ethereum) return;
-
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
-    if (accounts.length) return;
-
-    // Asked once per session, so a declined request does not come back on every page
-    if (sessionStorage.getItem(PROMPT_FLAG)) return;
-    sessionStorage.setItem(PROMPT_FLAG, '1');
-
-    const approved = await ethereum.request({ method: 'eth_requestAccounts' });
-    if (approved.length) {
-      // PancakeSwap's wallet library picks up an authorized injected wallet only while the page loads
-      window.location.reload();
-    }
-  }
-
   const style = document.createElement('style');
   // Everything that leads to other tokens or other parts of PancakeSwap
   style.textContent = [
@@ -91,7 +82,6 @@ export function patchPancakeSwap(host: string, ionTokenAddress: string) {
     keepAllowedCurrencies();
     hideOtherTokens();
     observer.observe(document.body, { childList: true, subtree: true });
-    connectWallet().catch(() => undefined);
   }
 
   if (document.readyState === 'loading') {
