@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="prism-title prism-description">
+<title id="prism-title">ION Wallet — PRISM</title>
+<desc id="prism-description">Eight identical crystal rays, spaced at 45 degrees, with ice and amethyst facets.</desc>
+<defs><linearGradient id="prism-shell" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#29213D"/><stop offset="0.46" stop-color="#100C1F"/><stop offset="1" stop-color="#080811"/></linearGradient>
+<radialGradient id="prism-ambient" cx="0.45" cy="0.35" r="0.65"><stop stop-color="#5C30A8" stop-opacity="0.28"/><stop offset="1" stop-color="#251343" stop-opacity="0"/></radialGradient>
+<linearGradient id="prism-edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#BCAAD9" stop-opacity="0.42"/><stop offset="0.42" stop-color="#4D4164" stop-opacity="0.16"/><stop offset="0.78" stop-color="#291F42" stop-opacity="0.3"/><stop offset="1" stop-color="#826BBA" stop-opacity="0.3"/></linearGradient>
+<clipPath id="prism-clip"><rect width="512" height="512" rx="112"/></clipPath>
+<radialGradient id="prism-floor"><stop stop-color="#9060F5" stop-opacity="0.24"/><stop offset="1" stop-color="#9060F5" stop-opacity="0"/></radialGradient>
+<filter id="prism-shadow" x="-0.5" y="-0.5" width="2" height="2" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="7"/></filter>
+<radialGradient id="prism-core"><stop stop-color="#D9BDFF" stop-opacity="0.3"/><stop offset="0.3" stop-color="#B78BFF" stop-opacity="0.12"/><stop offset="1" stop-color="#9460FA" stop-opacity="0"/></radialGradient>
+<linearGradient id="prism-bevel-0" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#FFFFFF"/><stop offset="0.48" stop-color="#DCE4FF"/><stop offset="0.7" stop-color="#8180C8"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-0" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#DCE4FF"/><stop offset="0.85" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-0" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.33" stop-color="#DCE4FF"/><stop offset="0.55" stop-color="#8180C8"/><stop offset="1" stop-color="#DCE4FF"/></linearGradient>
+<linearGradient id="prism-c-0" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.5" stop-color="#DCE4FF"/><stop offset="1" stop-color="#8180C8"/></linearGradient>
+<linearGradient id="prism-d-0" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#8180C8"/><stop offset="1" stop-color="#DCE4FF"/></linearGradient>
+<linearGradient id="prism-bevel-1" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#EDF4FF"/><stop offset="0.48" stop-color="#C3CCFA"/><stop offset="0.7" stop-color="#6963B5"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-1" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#C3CCFA"/><stop offset="0.85" stop-color="#EDF4FF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-1" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#EDF4FF"/><stop offset="0.33" stop-color="#C3CCFA"/><stop offset="0.55" stop-color="#6963B5"/><stop offset="1" stop-color="#C3CCFA"/></linearGradient>
+<linearGradient id="prism-c-1" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#EDF4FF"/><stop offset="0.5" stop-color="#C3CCFA"/><stop offset="1" stop-color="#6963B5"/></linearGradient>
+<linearGradient id="prism-d-1" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#6963B5"/><stop offset="1" stop-color="#C3CCFA"/></linearGradient>
+<linearGradient id="prism-bevel-2" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#E3D9FF"/><stop offset="0.48" stop-color="#AA98ED"/><stop offset="0.7" stop-color="#55458C"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-2" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#AA98ED"/><stop offset="0.85" stop-color="#E3D9FF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-2" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#E3D9FF"/><stop offset="0.33" stop-color="#AA98ED"/><stop offset="0.55" stop-color="#55458C"/><stop offset="1" stop-color="#AA98ED"/></linearGradient>
+<linearGradient id="prism-c-2" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#E3D9FF"/><stop offset="0.5" stop-color="#AA98ED"/><stop offset="1" stop-color="#55458C"/></linearGradient>
+<linearGradient id="prism-d-2" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#55458C"/><stop offset="1" stop-color="#AA98ED"/></linearGradient>
+<linearGradient id="prism-bevel-3" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#EDDEFF"/><stop offset="0.48" stop-color="#B79AEE"/><stop offset="0.7" stop-color="#654C98"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-3" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#B79AEE"/><stop offset="0.85" stop-color="#EDDEFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-3" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#EDDEFF"/><stop offset="0.33" stop-color="#B79AEE"/><stop offset="0.55" stop-color="#654C98"/><stop offset="1" stop-color="#B79AEE"/></linearGradient>
+<linearGradient id="prism-c-3" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#EDDEFF"/><stop offset="0.5" stop-color="#B79AEE"/><stop offset="1" stop-color="#654C98"/></linearGradient>
+<linearGradient id="prism-d-3" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#654C98"/><stop offset="1" stop-color="#B79AEE"/></linearGradient>
+<linearGradient id="prism-bevel-4" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#F4E3FF"/><stop offset="0.48" stop-color="#C5A6F4"/><stop offset="0.7" stop-color="#7859AD"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-4" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#C5A6F4"/><stop offset="0.85" stop-color="#F4E3FF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-4" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#F4E3FF"/><stop offset="0.33" stop-color="#C5A6F4"/><stop offset="0.55" stop-color="#7859AD"/><stop offset="1" stop-color="#C5A6F4"/></linearGradient>
+<linearGradient id="prism-c-4" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#F4E3FF"/><stop offset="0.5" stop-color="#C5A6F4"/><stop offset="1" stop-color="#7859AD"/></linearGradient>
+<linearGradient id="prism-d-4" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#7859AD"/><stop offset="1" stop-color="#C5A6F4"/></linearGradient>
+<linearGradient id="prism-bevel-5" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#E4CEFF"/><stop offset="0.48" stop-color="#A480DE"/><stop offset="0.7" stop-color="#5B438C"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-5" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#A480DE"/><stop offset="0.85" stop-color="#E4CEFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-5" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#E4CEFF"/><stop offset="0.33" stop-color="#A480DE"/><stop offset="0.55" stop-color="#5B438C"/><stop offset="1" stop-color="#A480DE"/></linearGradient>
+<linearGradient id="prism-c-5" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#E4CEFF"/><stop offset="0.5" stop-color="#A480DE"/><stop offset="1" stop-color="#5B438C"/></linearGradient>
+<linearGradient id="prism-d-5" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#5B438C"/><stop offset="1" stop-color="#A480DE"/></linearGradient>
+<linearGradient id="prism-bevel-6" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#DCD9FF"/><stop offset="0.48" stop-color="#9295DB"/><stop offset="0.7" stop-color="#4B4C88"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-6" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#9295DB"/><stop offset="0.85" stop-color="#DCD9FF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-6" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#DCD9FF"/><stop offset="0.33" stop-color="#9295DB"/><stop offset="0.55" stop-color="#4B4C88"/><stop offset="1" stop-color="#9295DB"/></linearGradient>
+<linearGradient id="prism-c-6" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#DCD9FF"/><stop offset="0.5" stop-color="#9295DB"/><stop offset="1" stop-color="#4B4C88"/></linearGradient>
+<linearGradient id="prism-d-6" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#4B4C88"/><stop offset="1" stop-color="#9295DB"/></linearGradient>
+<linearGradient id="prism-bevel-7" gradientUnits="userSpaceOnUse" x1="-32" y1="-138" x2="34" y2="-52"><stop offset="0" stop-color="#E9EDFF"/><stop offset="0.23" stop-color="#F0FAFF"/><stop offset="0.48" stop-color="#C5D7F5"/><stop offset="0.7" stop-color="#727CC1"/><stop offset="1" stop-color="#B09AE1"/></linearGradient>
+<linearGradient id="prism-a-7" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="24" y2="-88"><stop offset="0" stop-color="#C5D7F5"/><stop offset="0.85" stop-color="#F0FAFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<linearGradient id="prism-b-7" gradientUnits="userSpaceOnUse" x1="0" y1="-164" x2="0" y2="-41"><stop offset="0" stop-color="#F0FAFF"/><stop offset="0.33" stop-color="#C5D7F5"/><stop offset="0.55" stop-color="#727CC1"/><stop offset="1" stop-color="#C5D7F5"/></linearGradient>
+<linearGradient id="prism-c-7" gradientUnits="userSpaceOnUse" x1="-24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#F0FAFF"/><stop offset="0.5" stop-color="#C5D7F5"/><stop offset="1" stop-color="#727CC1"/></linearGradient>
+<linearGradient id="prism-d-7" gradientUnits="userSpaceOnUse" x1="24" y1="-88" x2="0" y2="-41"><stop offset="0" stop-color="#727CC1"/><stop offset="1" stop-color="#C5D7F5"/></linearGradient></defs>
+<g clip-path="url(#prism-clip)"><g fill="url(#prism-shell)"><rect width="512" height="512" rx="112"/></g><g fill="url(#prism-ambient)"><rect width="512" height="512" rx="112"/></g>
+<ellipse cx="256" cy="419" rx="175" ry="58" fill="url(#prism-floor)"/>
+<g fill="none" stroke="url(#prism-edge)" stroke-width="2"><rect width="512" height="512" rx="112"/></g>
+</g>
+<g transform="translate(256 256) scale(1)">
+<circle r="112" fill="url(#prism-core)"/>
+<g fill="#000000" opacity="0.6" filter="url(#prism-shadow)" transform="translate(0 12)"><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(0)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(45)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(90)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(135)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(180)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(225)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(270)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(315)"/></g>
+<g fill="#29213F" transform="translate(0 5)"><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(0)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(45)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(90)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(135)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(180)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(225)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(270)"/><path d="M0-178 32-88 0-29-32-88Z" transform="rotate(315)"/></g>
+<g transform="rotate(0)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-0)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-0)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-0)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-0)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-0)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(45)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-1)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-1)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-1)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-1)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-1)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(90)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-2)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-2)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-2)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-2)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-2)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(135)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-3)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-3)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-3)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-3)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-3)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(180)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-4)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-4)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-4)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-4)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-4)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(225)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-5)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-5)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-5)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-5)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-5)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(270)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-6)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-6)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-6)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-6)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-6)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+<g transform="rotate(315)">
+<path d="M0-178 32-88 0-29-32-88Z" fill="url(#prism-bevel-7)"/>
+<path d="M0-164-24-88 0-92Z" fill="url(#prism-a-7)"/><path d="M0-164 0-92 24-88Z" fill="url(#prism-b-7)"/>
+<path d="M-24-88 0-41 0-92Z" fill="url(#prism-c-7)"/><path d="M0-92 0-41 24-88Z" fill="url(#prism-d-7)"/>
+<path d="M0-164V-41" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.36"/>
+<path d="M0-178-32-88 0-29" fill="none" stroke="#F1EFFF" stroke-width="0.9" stroke-opacity="0.4"/>
+</g>
+</g>
+</svg>

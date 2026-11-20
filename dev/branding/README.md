@@ -1,7 +1,20 @@
 # ION Wallet visual assets
 
-The wallet app icon uses `dev/branding/ion-wallet-arcs.svg` on `#11073C`.
-This source is separate from the ION coin and chain icons.
+The wallet app icon is **PRISM**: eight identical beveled crystal rays, spaced at
+45 degrees around a centered aperture, with ice and amethyst reflections.
+`dev/branding/prism.mjs` contains the shared geometry and export variants.
+This artwork is separate from the ION coin and chain icons.
+
+- `dev/branding/ion-prism.svg` / `public/icon.svg`: complete rounded app icon.
+- `dev/branding/ion-mark.svg`: crystal mark on a transparent background.
+- `dev/branding/ion-mark-mono.svg`: white silhouette for monochrome surfaces.
+- `public/logo.svg`: circular in-app/QR version.
+
+All SVGs contain vector paths and gradients, with no embedded bitmap or font.
+The complete icon also uses a soft SVG shadow. Transparent native foregrounds
+omit the glow and blur filters. The native background base is `#100C1F`.
+At 16–32 px, two broader facets per ray replace subpixel bevel details while
+preserving the same silhouette. The 28 px settings badge uses this variant too.
 
 ## Rebuild
 
@@ -10,6 +23,9 @@ npm ci
 npm run build:branding
 npm run check:branding
 ```
+
+To rebuild only the app icons and inactive-tab artwork, without regenerating
+cards or animations, run `npm run build:branding -- --icons-only`.
 
 `sharp` is a pinned development dependency. The generator exports SVG, PNG, WebP,
 ICO and ICNS for the web app, extension, QR codes, Electron and Capacitor shells.
