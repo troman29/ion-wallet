@@ -1,7 +1,7 @@
 import { CONTENT_SCRIPT_PORT, PAGE_CONNECTOR_CHANNEL } from './config';
 import { isPortDisconnectedError } from '../../../util/isPortDisconnectedError';
 
-const PAGE_ORIGIN = window.location.href;
+const PAGE_ORIGIN = window.location.origin;
 
 let port: chrome.runtime.Port;
 

@@ -382,6 +382,7 @@ async function tryAutoImportTestMnemonic(actions: any) {
 
   const mnemonic = TEST_MNEMONIC.split(/\s+/).map((word) => word.trim().toLowerCase()).filter(Boolean);
   if (!mnemonic.length) return;
+  if (!TEST_PASSWORD) return;
 
   const enclaveSession = await enclave.setupAuth('passcode', TEST_PASSWORD);
   if (!enclaveSession) return;

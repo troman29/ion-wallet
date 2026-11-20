@@ -6,7 +6,7 @@ import type WebAuthnAuth from './auth/WebAuthnAuth';
 
 export type StorageKey = (
   `encryptedMasterKey:auth-${AuthType}` | `encryptedSecret#${string}`
-  | 'PasscodeAuth:salt' | 'PasscodeAuth:verifierSalt' | 'PasscodeAuth:verifier'
+  | 'PasscodeAuth:salt' | 'PasscodeAuth:verifierSalt' | 'PasscodeAuth:verifier' | 'PasscodeAuth:iterations'
   | 'ElectronAuth:encryptedKeyMaterial' | 'WebAuthnAuth:credentialParams'
   );
 export type StorageValue = string;

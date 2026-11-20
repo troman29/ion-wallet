@@ -1,5 +1,8 @@
 import type { SimpleStorage, StorageKey, StorageValue } from '../types';
 
+import { hexFromArrayBuffer } from '../../util/casting';
+import { deriveBitsFromPasscode, PBKDF2_ITERATIONS } from './deriveKey';
+
 import PasscodeAuth from './PasscodeAuth';
 
 function createMemoryStorage(): SimpleStorage {
@@ -138,5 +141,27 @@ describe('PasscodeAuth', () => {
 
       expect(auth.getKey(token)).toBeDefined();
     });
+  });
+
+  it('stores the 600k+ iteration count for a new passcode', async () => {
+    const storage = createMemoryStorage();
+    await setupPasscode(storage, '123456');
+
+    expect(PBKDF2_ITERATIONS).toBeGreaterThanOrEqual(600_000);
+    expect(await storage.getItem('PasscodeAuth:iterations' as StorageKey)).toBe(String(PBKDF2_ITERATIONS));
+  });
+
+  it('still authorizes a legacy passcode stored without an iteration count', async () => {
+    const storage = createMemoryStorage();
+    const salt = 'AAAAAAAAAAAAAAAAAAAAAA==';
+    const verifierSalt = 'BBBBBBBBBBBBBBBBBBBBBA==';
+    const verifier = hexFromArrayBuffer(await deriveBitsFromPasscode('1234', verifierSalt));
+    await storage.setItem('PasscodeAuth:salt' as StorageKey, salt);
+    await storage.setItem('PasscodeAuth:verifierSalt' as StorageKey, verifierSalt);
+    await storage.setItem('PasscodeAuth:verifier' as StorageKey, verifier);
+
+    const auth = new PasscodeAuth(storage);
+    await expect(auth.authorize(false, '1234')).resolves.toMatchObject({ token: expect.stringMatching(/^passcode:/) });
+    await expect(new PasscodeAuth(storage).authorize(false, '1235')).rejects.toThrow('Invalid passcode');
   });
 });

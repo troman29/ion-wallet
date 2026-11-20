@@ -27,7 +27,7 @@ export const DEBUG_MORE = false;
 export const DEBUG_API = false;
 export const DEBUG_VIEW_ACCOUNTS = false;
 export const TEST_MNEMONIC = process.env.TEST_MNEMONIC?.trim();
-export const TEST_PASSWORD = process.env.TEST_PASSWORD || 'test';
+export const TEST_PASSWORD = process.env.TEST_PASSWORD;
 
 export const IS_PRODUCTION = APP_ENV === 'production';
 export const IS_STAGING = APP_ENV === 'staging';
@@ -173,9 +173,9 @@ export const MY_WALLET_BLOG: Partial<Record<LangCode, string>> = {};
 
 export const EMPTY_HASH_VALUE = 'NOHASH';
 
-export const IFRAME_WHITELIST = [
+export const IFRAME_WHITELIST = APP_ENV !== 'production' ? [
   'http://localhost:*',
-];
+] : [];
 export const SUBPROJECT_URL_MASK = 'https://*.wallet.ice.io';
 
 export const PROXY_HOSTS = process.env.PROXY_HOSTS;

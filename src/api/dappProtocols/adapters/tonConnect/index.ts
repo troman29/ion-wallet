@@ -490,6 +490,12 @@ class TonConnectAdapter implements DappProtocolAdapter<DappProtocolType.TonConne
         throw new BadRequestError(undefined, ApiTransactionError.WrongNetwork);
       }
 
+      // Check expiry before doing any work: signing an already-expired request is wasteful and
+      // could confuse the user who confirmed it.
+      if (validUntil && validUntil < (Date.now() / 1000)) {
+        throw new BadRequestError('The confirmation timeout has expired');
+      }
+
       await this.openExtensionPopup(true);
 
       this.onUpdate({

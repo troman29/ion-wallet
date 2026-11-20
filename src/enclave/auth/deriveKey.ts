@@ -1,6 +1,9 @@
 import { bufferFromBase64, bufferFromString } from '../../util/casting';
 
-const PBKDF2_ITERATIONS = 100000;
+/** Wallets created before the iteration count was stored derived their keys with this value. */
+export const LEGACY_PBKDF2_ITERATIONS = 100_000;
+/** OWASP 2023 minimum for PBKDF2-HMAC-SHA256; used for every newly created passcode. */
+export const PBKDF2_ITERATIONS = 600_000;
 const KEY_MATERIAL_BYTES = 32;
 
 /**
@@ -30,11 +33,12 @@ export async function deriveKeyFromPasscode(
   passcode: string,
   saltBase64: string,
   keyUsages: KeyUsage[] = ['encrypt', 'decrypt'],
+  iterations = LEGACY_PBKDF2_ITERATIONS,
 ) {
   const imported = await importPasscode(passcode);
   const salt = bufferFromBase64(saltBase64);
   const key = await crypto.subtle.deriveKey(
-    { name: 'PBKDF2', hash: 'SHA-256', iterations: PBKDF2_ITERATIONS, salt },
+    { name: 'PBKDF2', hash: 'SHA-256', iterations, salt },
     imported,
     { name: 'AES-GCM', length: 256 },
     false,
@@ -44,12 +48,16 @@ export async function deriveKeyFromPasscode(
   return key;
 }
 
-export async function deriveBitsFromPasscode(passcode: string, saltBase64: string) {
+export async function deriveBitsFromPasscode(
+  passcode: string,
+  saltBase64: string,
+  iterations = LEGACY_PBKDF2_ITERATIONS,
+) {
   const imported = await importPasscode(passcode);
   const salt = bufferFromBase64(saltBase64);
 
   return crypto.subtle.deriveBits(
-    { name: 'PBKDF2', hash: 'SHA-256', iterations: PBKDF2_ITERATIONS, salt },
+    { name: 'PBKDF2', hash: 'SHA-256', iterations, salt },
     imported,
     256,
   );

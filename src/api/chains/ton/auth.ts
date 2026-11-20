@@ -82,8 +82,7 @@ export async function fetchPrivateKey(accountId: string, enclaveToken: string, a
 
     return privateKey;
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
+    logDebugError('fetchPrivateKey', err);
 
     return undefined;
   }
