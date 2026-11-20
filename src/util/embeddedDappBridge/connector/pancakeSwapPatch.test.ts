@@ -14,7 +14,7 @@ describe('patchPancakeSwap', () => {
 
   it('leaves only BNB and ION in the token picker', async () => {
     document.body.innerHTML = '<div class="pcs-swap-picker-list"></div>';
-    const stop = patch(window.location.hostname, ION_ADDRESS);
+    const stop = patch([window.location.hostname], ION_ADDRESS);
 
     document.querySelector('.pcs-swap-picker-list')!.innerHTML = [
       row('BNB', 'BNB Chain Native Token'),
@@ -31,10 +31,22 @@ describe('patchPancakeSwap', () => {
     expect(visible).toEqual(['BNBBNB Chain Native Token', 'IONIce Open Network']);
   });
 
+  it('marks the injected provider as a wallet browser PancakeSwap connects by itself', () => {
+    const ethereum: { isBinance?: boolean } = {};
+    Object.assign(window, { ethereum });
+    const stop = patch([window.location.hostname], ION_ADDRESS);
+    stop?.();
+
+    expect(ethereum.isBinance).toBe(true);
+  });
+
   it('does nothing on other sites', () => {
+    const ethereum: { isBinance?: boolean } = {};
+    Object.assign(window, { ethereum });
     document.body.innerHTML = row('USDT', 'Tether USD');
-    patch('pancakeswap.finance', ION_ADDRESS);
+    patch(['pancake.xyz'], ION_ADDRESS);
 
     expect(document.querySelector<HTMLElement>('.pcs-swap-picker-row')!.style.display).toBe('');
+    expect(ethereum.isBinance).toBeUndefined();
   });
 });
