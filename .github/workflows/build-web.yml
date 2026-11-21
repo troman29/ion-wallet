@@ -34,6 +34,9 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Apply patches to the NPM packages
+        run: npx patch-package --error-on-fail
+
       - name: Build
         run: npm run build:production
 

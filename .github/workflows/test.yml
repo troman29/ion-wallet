@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Apply patches to the NPM packages
+        run: npx patch-package --error-on-fail
+
       - name: Prepare default translations
         run: npm run i18n:build:default
 
