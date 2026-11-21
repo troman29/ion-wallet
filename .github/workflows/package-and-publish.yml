@@ -288,6 +288,11 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Apply patches to the NPM packages
+        # The shared action keys its node_modules cache by package-lock.json only:
+        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
+        run: npx patch-package --error-on-fail
+
       - name: Import MacOS signing certificate
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
@@ -639,6 +644,11 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Apply patches to the NPM packages
+        # The shared action keys its node_modules cache by package-lock.json only:
+        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
+        run: npx patch-package --error-on-fail
+
       - name: Build and package
         env:
           FIREFOX_READY: ${{ needs.detect-changes.outputs.firefox-store-ready }}
@@ -852,6 +862,11 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Apply patches to the NPM packages
+        # The shared action keys its node_modules cache by package-lock.json only:
+        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
+        run: npx patch-package --error-on-fail
+
       - name: Build and sync mobile project
         run: |
           if [ "$ANDROID_DESTINATION" = "firebase" ]; then
@@ -1048,6 +1063,11 @@ jobs:
         uses: mytonwallet-org/shared-actions/prepare_node@master
         with:
           node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Apply patches to the NPM packages
+        # The shared action keys its node_modules cache by package-lock.json only:
+        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
+        run: npx patch-package --error-on-fail
 
       - name: Build and sync mobile project
         run: |
