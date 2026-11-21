@@ -1,0 +1,17 @@
+diff --git a/node_modules/@capacitor/keyboard/android/src/main/java/com/capacitorjs/plugins/keyboard/Keyboard.java b/node_modules/@capacitor/keyboard/android/src/main/java/com/capacitorjs/plugins/keyboard/Keyboard.java
+index e1a2ce5..30dfcb6 100644
+--- a/node_modules/@capacitor/keyboard/android/src/main/java/com/capacitorjs/plugins/keyboard/Keyboard.java
++++ b/node_modules/@capacitor/keyboard/android/src/main/java/com/capacitorjs/plugins/keyboard/Keyboard.java
+@@ -60,8 +60,10 @@ public class Keyboard {
+         ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+             boolean showingKeyboard = ViewCompat.getRootWindowInsets(rootView).isVisible(WindowInsetsCompat.Type.ime());
+ 
+-            if (showingKeyboard && resizeOnFullScreen) {
+-                possiblyResizeChildOfContent(true);
++            // The height is also restored here: a keyboard hidden while the app is in the background
++            // goes away without the insets animation, and the WebView would stay shrunk
++            if (resizeOnFullScreen) {
++                possiblyResizeChildOfContent(showingKeyboard);
+             }
+ 
+             return insets;

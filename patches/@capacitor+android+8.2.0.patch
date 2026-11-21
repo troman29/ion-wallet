@@ -1,0 +1,17 @@
+diff --git a/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java b/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java
+index 3f04adf..bdf8ad9 100644
+--- a/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java
++++ b/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/SystemBars.java
+@@ -179,6 +179,12 @@ public class SystemBars extends Plugin {
+                 }
+ 
+                 if (hasBrokenWebViewVersion) {
++                    // A keyboard hidden while the app is in the background is reported before the window gets focus back,
++                    // so the margin is dropped without the focus check, or the WebView would stay shrunk
++                    if (hasViewportCover && !insets.isVisible(WindowInsetsCompat.Type.ime())) {
++                        setViewMargins(v, Insets.NONE);
++                    }
++
+                     if (hasViewportCover && v.hasWindowFocus() && v.isShown()) {
+                         boolean keyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+                         if (keyboardVisible) {
