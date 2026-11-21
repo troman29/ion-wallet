@@ -289,8 +289,6 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Apply patches to the NPM packages
-        # The shared action keys its node_modules cache by package-lock.json only:
-        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
         run: npx patch-package --error-on-fail
 
       - name: Import MacOS signing certificate
@@ -645,8 +643,6 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Apply patches to the NPM packages
-        # The shared action keys its node_modules cache by package-lock.json only:
-        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
         run: npx patch-package --error-on-fail
 
       - name: Build and package
@@ -863,8 +859,6 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Apply patches to the NPM packages
-        # The shared action keys its node_modules cache by package-lock.json only:
-        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
         run: npx patch-package --error-on-fail
 
       - name: Build and sync mobile project
@@ -1065,8 +1059,6 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Apply patches to the NPM packages
-        # The shared action keys its node_modules cache by package-lock.json only:
-        # on a cache hit `npm ci` with its patch-package postinstall is skipped, and a new patch is not applied
         run: npx patch-package --error-on-fail
 
       - name: Build and sync mobile project
