@@ -1030,6 +1030,10 @@ addActionHandler('migrateLegacyIonDerivations', async (global, actions, { enclav
       logDebugError('migrateLegacyIonDerivations', failures);
       actions.showToast({ message: 'ION address migration is pending. Your old address remains accessible.' });
     }
+
+    // The unlock starts only this action, so it hands over the missing chains itself: a migration that keeps failing
+    // would otherwise block the multichain upgrade on every unlock. It takes its own hold before ours is dropped
+    actions.upgradeMultichainAccounts({ enclaveToken });
   } finally {
     if (dropEnclaveSessionHold(enclaveToken)) actions.releaseEnclaveSession({ enclaveToken });
   }
