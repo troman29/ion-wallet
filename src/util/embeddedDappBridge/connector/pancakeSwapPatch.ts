@@ -59,18 +59,25 @@ export function patchPancakeSwap(hosts: string[], ionTokenAddress: string) {
   const style = document.createElement('style');
   // Everything that leads to other tokens or other parts of PancakeSwap
   style.textContent = [
-    '.pcs-swap-picker-search-row',
-    '.pcs-swap-picker-network-label',
-    '.pcs-swap-picker-network-row',
-    '.pcs-swap-picker-group-label',
-    '.pcs-swap-exchange-page-column > :not(.pcs-swap-module)',
-    '.pcs-swap-module-tabs > .pcs-swap-module-tab:not(:first-child)',
-    '[class*="styled__MobileNavBox"]',
-    '[class*="styled__DesktopNavBox"]',
-    '[class*="styled__SearchRoot"]',
-    '[class*="styled__FooterWrapper"]',
-    '[class*="SwapAdFrame__Frame"]',
-  ].join(',') + '{display:none !important}';
+    [
+      '.pcs-swap-picker-search-row',
+      '.pcs-swap-picker-network-label',
+      '.pcs-swap-picker-network-row',
+      '.pcs-swap-picker-group-label',
+      '.pcs-swap-exchange-page-column > :not(.pcs-swap-module)',
+      '.pcs-swap-module-tabs > .pcs-swap-module-tab:not(:first-child)',
+      '.pcs-swap-mobile-hot-strip',
+      '.pcs-swap-mobile-mode-tab:not(:first-child)',
+      '[class*="styled__MobileNavBox"]',
+      '[class*="styled__DesktopNavBox"]',
+      '[class*="styled__SearchRoot"]',
+      '[class*="styled__FooterWrapper"]',
+      '[class*="SwapAdFrame__Frame"]',
+    ].join(','),
+    // The mobile bottom bar has only hashed classes, so it is found by its groups' test ids.
+    // A separate rule: a WebView without `:has` drops only this one, not the whole list
+    ':has(> [data-testid^="bottom-nav-group-"])',
+  ].map((selector) => `${selector}{display:none !important}`).join('');
 
   const observer = new MutationObserver(() => {
     keepAllowedCurrencies();
