@@ -231,6 +231,12 @@
   text-align: center;
 }
 
+.statusError {
+  box-sizing: border-box;
+  margin-block: 0.75rem 0.25rem;
+  overflow-wrap: anywhere;
+}
+
 .error {
   margin: 0;
 

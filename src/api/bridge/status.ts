@@ -8,6 +8,7 @@ import type { BridgeTransaction } from './helpers';
 import { BRIDGE_CONFIG, BRIDGE_CONFIRMATIONS, BRIDGE_TRANSACTION_PAGE_SIZE } from './config';
 import { parseAccountId } from '../../util/account';
 import { logDebugError } from '../../util/logs';
+import { pause } from '../../util/schedulers';
 import { getEvmProvider } from '../chains/evm/util/client';
 import { getTonClient } from '../chains/ton/util/tonCore';
 import { getBridgeContract } from './context';
@@ -15,6 +16,7 @@ import { BRIDGE_INTERFACE, getBridgeQueryId, getBridgeReceivedAmount, parseBridg
 import { recoverExpiredNativeTransfer } from './nativeRecovery';
 
 const VOTING_NOT_FOUND_EXIT_CODE = 309;
+const ORACLE_SET_RETRY_DELAY_MS = 500;
 
 export async function refreshBridgeTransfer(transfer: ApiBridgeTransfer): Promise<ApiBridgeTransfer> {
   const { network } = parseAccountId(transfer.accountId);
@@ -192,8 +194,15 @@ export async function refreshBridgeTransfer(transfer: ApiBridgeTransfer): Promis
 
 export async function getBridgeSignatures(network: ApiNetwork, swapId: string) {
   const contract = getBridgeContract(network);
-  const oracles = ((await contract.getFullOracleSet()) as string[]).map((address) => address.toLowerCase());
-  if (!oracles.length) throw new Error('Bridge is temporarily unavailable.');
+  let oracleSet: string[] = await contract.getFullOracleSet();
+  if (!oracleSet.length) {
+    await pause(ORACLE_SET_RETRY_DELAY_MS);
+    oracleSet = await contract.getFullOracleSet();
+  }
+  const oracles = oracleSet.map((address) => address.toLowerCase());
+  if (!oracles.length) {
+    throw new Error('Unable to read bridge confirmations.');
+  }
 
   const requiredVotes = Math.ceil((oracles.length * 2) / 3);
 

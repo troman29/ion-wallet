@@ -1711,6 +1711,8 @@ $connect_dapp_multichain_selected: "A compatible multichain wallet has been sele
 "Insufficient ION balance.": "Insufficient ION balance."
 "Not enough BNB for the network fee.": "Not enough BNB for the network fee."
 "Bridge is temporarily unavailable.": "Bridge is temporarily unavailable."
+"Unable to read bridge confirmations.": "Could not check confirmations. Try receiving ION again."
+"Bridge transfer is not ready to claim.": "ION is not ready to receive yet. Refresh the transfer status."
 "Unable to authorize the transfer.": "Unable to authorize the transfer."
 "Refresh": "Refresh"
 "Max": "Max"
