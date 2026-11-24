@@ -1,29 +1,241 @@
+@use "../../styles/mixins";
+
+.modalDialog {
+  overflow: hidden;
+  height: calc(40.125rem + var(--safe-area-bottom, 0rem));
+}
+
 .content {
   display: flex;
+  flex: 1 0 auto;
   flex-direction: column;
   gap: 1rem;
+
+  min-height: 0;
+  padding: 0.5rem 1rem 1rem;
+
+  :global(html:not(.is-android-app)) & {
+    padding-bottom: max(var(--safe-area-bottom, 1rem), 1rem);
+  }
+}
+
+.form {
+  padding-top: 0;
+}
+
+.swapFields,
+.inputContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.amountInput {
+  margin-bottom: 0.75rem;
+}
+
+.receiveInput {
+  margin-bottom: 0;
+}
+
+.inputLabel {
+  margin-bottom: 0.375rem;
+  line-height: 1.125rem;
+}
+
+.maxButton {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  inset-inline-end: 0.5rem;
+
+  overflow: hidden;
+
+  max-width: 60%;
+  padding: 0;
+
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  text-decoration: underline dotted;
+  text-overflow: ellipsis;
+}
+
+.swapButtonWrapper {
+  position: absolute;
+  z-index: 1;
+  top: 6.125rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
   align-items: center;
+  justify-content: center;
 
-  padding: 1.5rem;
+  width: 2.875rem;
+  height: 2.875rem;
+  border-radius: 50%;
 
+  background-color: var(--color-background-window);
+}
+
+.switchButton {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.375rem;
+  height: 2.375rem;
+  padding: 0;
+  border-radius: 50%;
+
+  font-size: 1.5rem;
+  color: var(--color-accent-button-text);
+
+  background-color: var(--color-accent-button-background);
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-accent-button-background-hover);
+    }
+  }
+}
+
+.swapCornerTop,
+.swapCornerBottom {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  overflow: hidden;
+
+  width: 3.25rem;
+  height: 0.5rem;
+
+  &::after,
+  &::before {
+    content: "";
+
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 2.875rem;
+    height: 2.875rem;
+    border-radius: 50%;
+
+    background: var(--color-background-first);
+  }
+
+  &::before {
+    @include mixins.transition(box-shadow 150ms);
+  }
+}
+
+.swapCornerTop {
+  bottom: 0;
+
+  &::after,
+  &::before {
+    top: 1.625rem;
+  }
+}
+
+.swapCornerBottom {
+  bottom: 3rem;
+
+  &::after,
+  &::before {
+    top: -1.125rem;
+  }
+}
+
+.route {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 0 0.5rem;
+
+  font-size: 0.8125rem;
+  color: var(--color-gray-2);
   text-align: center;
 }
 
-.asset {
+.footer {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 1rem;
+
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
-.asset strong {
-  font-size: 1.5rem;
-}
-
-.asset span,
-.content p {
+.note {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
   color: var(--color-gray-2);
 }
 
-.content p {
-  margin: 1rem 0 0;
+.minimumAmount {
+  text-align: center;
+}
+
+.receivingNote {
+  padding-inline: 0.5rem;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8125rem;
+
+  margin: 0;
+  padding: 1rem;
+  border-radius: var(--border-radius-default);
+
+  font-size: 0.8125rem;
+
+  background-color: var(--color-background-first);
+}
+
+.detailRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.detailLabel {
+  font-weight: 600;
+  color: var(--color-gray-1);
+}
+
+.detailValue {
+  margin: 0;
+
+  font-weight: 700;
+  color: var(--color-black);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.reviewDetails {
+  margin-bottom: 1.25rem;
+}
+
+.reviewRoute {
+  margin: 0 0 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--color-gray-2);
+  text-align: center;
+}
+
+.error {
+  margin: 0;
+
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--color-red);
+  text-align: center;
 }

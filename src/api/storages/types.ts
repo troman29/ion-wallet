@@ -33,6 +33,7 @@ export interface Storage {
 }
 
 export type StorageKey = 'accounts'
+  | 'bridgeTransfers'
   | 'ionDerivationMigrations'
   | 'stateVersion'
   | 'currentAccountId'

@@ -18,7 +18,7 @@ interface OwnProps {
   token?: ApiToken;
   noChainIcon?: boolean;
   className?: string;
-  onClick: NoneToVoidFunction;
+  onClick?: NoneToVoidFunction;
 }
 
 function SelectTokenButton({
@@ -35,7 +35,7 @@ function SelectTokenButton({
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     stopEvent(e);
 
-    onClick();
+    onClick?.();
   }
 
   function renderToken(tokenToRender?: ApiToken) {
@@ -50,6 +50,7 @@ function SelectTokenButton({
         <button
           type="button"
           className={styles.button}
+          disabled={!onClick}
           onClick={handleClick}
         >
           {tokenToRender && (
@@ -62,7 +63,7 @@ function SelectTokenButton({
           )}
           <div className={styles.content}>
             <span>{tokenToRender?.symbol}</span>
-            <i className={buildClassName('icon-expand', styles.caretIcon)} aria-hidden />
+            {onClick && <i className={buildClassName('icon-expand', styles.caretIcon)} aria-hidden />}
           </div>
         </button>
       </Transition>

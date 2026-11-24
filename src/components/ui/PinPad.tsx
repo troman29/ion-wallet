@@ -15,12 +15,14 @@ import { usePrevDuringAnimationSimple } from '../../hooks/usePrevDuringAnimation
 import usePrevious from '../../hooks/usePrevious';
 
 import PinPadButton from './PinPadButton';
+import Spinner from './Spinner';
 import Transition from './Transition';
 
 import styles from './PinPad.module.scss';
 
 interface OwnProps {
   isActive?: boolean;
+  isLoading?: boolean;
   title: string;
   type?: 'error' | 'success';
   value: string;
@@ -47,6 +49,7 @@ const STATE_ANIMATION_DURATION_MS = IS_IOS ? 650 : 300;
 
 function PinPad({
   isActive,
+  isLoading = false,
   title,
   type,
   value,
@@ -69,7 +72,7 @@ function PinPad({
   const isSuccess = type === 'success' || isPinAccepted;
   const isSuccessDuringAnimation = usePrevDuringAnimationSimple(isSuccess, STATE_ANIMATION_DURATION_MS);
   const prevIsPinAccepted = usePrevious(isPinAccepted);
-  const arePinButtonsDisabled = isSuccess
+  const arePinButtonsDisabled = isLoading || isSuccess
     || (value.length === length && type !== 'error'); // Allow pincode entry in case of an error
 
   const titleClassName = buildClassName(
@@ -165,9 +168,16 @@ function PinPad({
   }
 
   return (
-    <div className={buildClassName(styles.root, className, SWIPE_DISABLED_CLASS_NAME)}>
+    <div
+      className={buildClassName(styles.root, className, SWIPE_DISABLED_CLASS_NAME)}
+      aria-busy={isLoading || undefined}
+    >
       {topContent ?? <div className={titleClassName}>{title}</div>}
-      {renderDots()}
+      {isLoading ? (
+        <div className={styles.loading} role="status">
+          <Spinner />
+        </div>
+      ) : renderDots()}
 
       <div className={buildClassName(styles.grid, isMinified && styles.minified)}>
         <PinPadButton value="1" onClick={handleClick} isDisabled={arePinButtonsDisabled} />
@@ -180,7 +190,7 @@ function PinPad({
         <PinPadButton value="8" onClick={handleClick} isDisabled={arePinButtonsDisabled} />
         <PinPadButton value="9" onClick={handleClick} isDisabled={arePinButtonsDisabled} />
         {!onBiometricsClick ? <span /> : (
-          <PinPadButton onClick={onBiometricsClick} isDisabled={isSuccess}>
+          <PinPadButton onClick={onBiometricsClick} isDisabled={arePinButtonsDisabled}>
             <i className={buildClassName('icon', isFaceId ? 'icon-face-id' : 'icon-touch-id')} aria-hidden />
           </PinPadButton>
         )}
@@ -192,6 +202,7 @@ function PinPad({
           {onLogOutClick && shouldSuggestLogout && !value.length ? (
             <PinPadButton
               className={styles.buttonDanger}
+              isDisabled={arePinButtonsDisabled}
               onClick={onLogOutClick}
             >
               <i className="icon icon-exit" aria-hidden />
@@ -199,7 +210,7 @@ function PinPad({
           ) : (
             <PinPadButton
               className={!canRenderBackspace && styles.buttonHidden}
-              isDisabled={!canRenderBackspace || isSuccess}
+              isDisabled={!canRenderBackspace || arePinButtonsDisabled}
               onClick={handleBackspaceClick}
             >
               <i className="icon icon-backspace" aria-hidden />

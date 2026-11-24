@@ -8,14 +8,22 @@ import type {
 
 import { DEBUG } from '../../config';
 import { throwIfAborted } from '../../util/abortSignal';
-import { getActivityChains } from '../../util/activities';
-import { areActivitiesSortedAndUnique, mergeSortedActivitiesToMaxTime } from '../../util/activities/order';
+import { parseAccountId } from '../../util/account';
+import {
+  getActivityChains, getActivityContinuationTimestamp, getIsActivityPending, getIsTxIdLocal,
+} from '../../util/activities';
+import {
+  areActivitiesSortedAndUnique, mergeSortedActivitiesToMaxTime, sortActivities,
+} from '../../util/activities/order';
 import { getChainConfig, getOrderedAccountChains } from '../../util/chain';
 import { unique } from '../../util/iteratees';
 import { logDebug, logDebugError } from '../../util/logs';
 import { getChainBySlug } from '../../util/tokens';
 import chains from '../chains';
+import { getTokenActivitySlice as getEvmTokenActivitySlice } from '../chains/evm/activities';
 import { fetchStoredAccount } from '../common/accounts';
+import { fetchBridgeActivityDetails, fetchBridgeHistory } from '../common/activities/bridge/backend';
+import { hydrateBridgeActivityEvidence } from '../common/activities/bridge/hydration';
 import {
   getLastPageTraceBoundaryId,
   trimPageBoundaryTraceActivities,
@@ -25,6 +33,8 @@ import { reconcileNewActivitiesUpdate } from '../common/activities/reconciler/pe
 export type ActivitySliceResult = {
   activities: ApiActivity[];
   hasMore: boolean;
+  continuationTimestamp?: number;
+  removedIds?: string[];
 };
 
 type RawActivitySliceResult = ActivitySliceResult & {
@@ -42,12 +52,22 @@ export async function fetchPastActivities(
 ): Promise<ActivitySliceResult | undefined> {
   const { signal, shouldThrowOnError = false } = options ?? {};
   try {
-    if (tokenSlug) {
-      const { activities, hasMore } = await fetchTokenActivitySlice(accountId, limit, tokenSlug, toTimestamp, signal);
-      return { activities, hasMore };
-    }
+    const raw = tokenSlug
+      ? await fetchTokenActivitySlice(accountId, limit, tokenSlug, toTimestamp, signal)
+      : await fetchAllActivitySlice(accountId, limit, toTimestamp, signal);
+    const rawContinuationTimestamp = getActivityContinuationTimestamp(raw.activities, (activity) => activity);
+    const bridge = await fetchBridgeHistory(accountId, [], {
+      toTimestamp, throughTimestamp: rawContinuationTimestamp, tokenSlug, signal,
+    });
+    const continuationTimestamp = bridge.coverageTimestamp === undefined ? rawContinuationTimestamp
+      : Math.max(rawContinuationTimestamp ?? -Infinity, bridge.coverageTimestamp);
 
-    return await fetchAllActivitySlice(accountId, limit, toTimestamp, signal);
+    return {
+      activities: sortActivities([...raw.activities, ...bridge.activities]),
+      hasMore: raw.hasMore || bridge.hasMore,
+      continuationTimestamp,
+      removedIds: bridge.removedIds,
+    };
   } catch (err) {
     throwIfAborted(signal);
     logDebugError('fetchPastActivities', tokenSlug, err);
@@ -56,14 +76,39 @@ export async function fetchPastActivities(
   }
 }
 
-export function reconcileActivityUpdate(
+export async function reconcileActivityUpdate(
   accountId: string,
   previousActivities: readonly ApiActivity[],
   confirmedActivities: readonly ApiActivity[],
   pendingActivities?: readonly ApiActivity[],
 ) {
-  void accountId;
-  return reconcileNewActivitiesUpdate(previousActivities, confirmedActivities, pendingActivities);
+  const isTransaction = (activity: ApiActivity): activity is ApiTransactionActivity => activity.kind === 'transaction';
+  const previousTransactions = previousActivities.filter(isTransaction)
+    .filter((activity) => getIsTxIdLocal(activity.id) || getIsActivityPending(activity))
+    .sort((first, second) => Number(getIsTxIdLocal(second.id)) - Number(getIsTxIdLocal(first.id)));
+  const reconciliation = reconcileNewActivitiesUpdate(
+    previousTransactions, confirmedActivities.filter(isTransaction),
+    pendingActivities?.filter(isTransaction),
+  );
+  const bridge = await fetchBridgeHistory(accountId, previousActivities);
+  const rowsById = new Map([...previousActivities, ...reconciliation.patch.upsert]
+    .map((activity) => [activity.id, activity]));
+  const evidenceActivities = await hydrateBridgeActivityEvidence(
+    accountId, [...rowsById.values()], bridge.activities, (activity) => fetchActivityDetails(accountId, activity),
+  );
+
+  return {
+    bridgeHasMore: bridge.hasMore,
+    evidenceActivities,
+    confirmedActivities: [...reconciliation.confirmedActivities, ...bridge.activities] as ApiActivity[],
+    pendingActivities: reconciliation.pendingActivities,
+    patch: {
+      ...reconciliation.patch,
+      upsert: [...reconciliation.patch.upsert, ...bridge.activities] as ApiActivity[],
+      evidenceActivities,
+      removeIds: [...reconciliation.patch.removeIds, ...bridge.removedIds],
+    },
+  };
 }
 
 function fetchTokenActivitySlice(
@@ -118,7 +163,7 @@ async function fetchAllActivitySlice(
     }
     logDebugError(`fetchAllActivitySlice ${deduplicatedChains[index]}`, settledResult.reason);
     firstRejection ??= settledResult.reason;
-    return { activities: [], hasMore: false, incompleteTraceIds: [] };
+    return { activities: [], hasMore: true, incompleteTraceIds: [] };
   });
 
   // If every chain came back empty and at least one failed, we cannot tell "real end of history"
@@ -149,7 +194,11 @@ export function decryptComment(accountId: string, activity: ApiTransactionActivi
 }
 
 export async function fetchActivityDetails(accountId: string, activity: ApiActivity, signal?: AbortSignal) {
+  if (activity.kind === 'swap') return fetchBridgeActivityDetails(accountId, activity, signal);
+
+  const account = await fetchStoredAccount(accountId);
   for (const chain of getActivityChains(activity)) {
+    if (!account.byChain[chain]) continue;
     const newActivity = await chains[chain].fetchActivityDetails(accountId, activity, signal);
     throwIfAborted(signal);
     if (newActivity) {
@@ -183,8 +232,19 @@ async function fetchAndCheckActivitySlice(
   const chainStandard = getChainConfig(chain).chainStandard;
 
   let activities: ApiActivity[] = [];
+  let explicitHasMore: boolean | undefined;
 
-  if (shouldFetchCrossChain && chainStandard && !options.tokenSlug) {
+  if (chain === 'bnb') {
+    const account = await fetchStoredAccount(options.accountId);
+    const wallet = account.byChain.bnb;
+    if (!wallet) throw new Error('BNB wallet missing');
+
+    const result = await getEvmTokenActivitySlice('bnb', parseAccountId(options.accountId).network,
+      wallet.address, options.tokenSlug, options.toTimestamp, options.fromTimestamp, options.limit,
+      undefined, options.signal);
+    activities = result.activities;
+    explicitHasMore = result.hasMore || result.isBackfilling;
+  } else if (shouldFetchCrossChain && chainStandard && !options.tokenSlug) {
     activities = await chains[chain].crosschain!.fetchCrossChainActivitySlice(options);
   } else {
     activities = await chains[chain].fetchActivitySlice(options);
@@ -215,7 +275,7 @@ async function fetchAndCheckActivitySlice(
 
   return {
     activities,
-    hasMore: false,
+    hasMore: explicitHasMore ?? false,
     incompleteTraceIds: [],
   };
 }

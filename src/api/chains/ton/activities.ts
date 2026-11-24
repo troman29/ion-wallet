@@ -138,6 +138,8 @@ export async function fetchActivityDetails(
 }
 
 export function fillActivityDetails(activity: ApiActivity, parsedTrace: ParsedTrace): ApiActivity {
+  if (activity.kind !== 'transaction') return activity;
+
   const { actionId } = parseActionActivityId(activity.id);
   const { traceOutput, parsedAction } = findParsedAction(parsedTrace, actionId) ?? {};
 
@@ -150,7 +152,11 @@ export function fillActivityDetails(activity: ApiActivity, parsedTrace: ParsedTr
 
   activity = { ...activity, fee: realFee };
 
-  activity = { ...activity, shouldLoadDetails: undefined };
+  activity = {
+    ...activity,
+    shouldLoadDetails: undefined,
+    extra: { ...activity.extra, chainTransactionHashes: action.transactions },
+  };
 
   logDebug('Calculation of fee for action', {
     actionId: action.action_id,
@@ -180,5 +186,5 @@ function findParsedAction(parsedTrace: ParsedTrace, actionId: string): {
 }
 
 export function getActivityRealFee(activity: ApiActivity) {
-  return activity.fee;
+  return activity.kind === 'transaction' ? activity.fee : 0n;
 }

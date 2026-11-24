@@ -427,7 +427,7 @@ export default function createConfig(
         NO_TON: '0',
         NO_EVM: '0',
         CREATE_MULTICHAIN_WALLET: '1',
-        ENABLE_EXCHANGE: '0',
+        ENABLE_EXCHANGE: '1',
         NO_PENDING_ACTIVITIES: '1',
         NO_WEBSOCKET: '1',
         NO_TRACE_EMULATION: '1',

@@ -790,7 +790,8 @@ export async function processSelfDeeplink(deeplink: string, isFromInAppBrowser =
           return true;
         }
 
-        const viewAddress = activities[0].toAddress;
+        const activity = activities[0];
+        const viewAddress = activity.kind === 'transaction' ? activity.toAddress : activity.operation.toAddress;
 
         if (!viewAddress) {
           actions.showError({ error: '$could_not_determine_address' });

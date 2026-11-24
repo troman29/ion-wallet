@@ -75,6 +75,7 @@ type CustomTransactionOptions<T> = Omit<T, 'payload'> & {
 
 const WAIT_TRANSFER_TIMEOUT = MINUTE;
 const WAIT_PAUSE = SEC;
+const FIRST_TRANSFER_VALID_UNTIL = 0xffffffff;
 
 const WALLET_INFO_CACHE_TTL = 5 * SEC;
 
@@ -351,7 +352,15 @@ export async function checkToAddress(network: ApiNetwork, toAddress: string, sig
 }
 
 export async function submitGasfullTransfer(
-  options: CustomTransactionOptions<ApiSubmitGasfullTransferOptions> & { sourceWallet?: ApiTonWallet },
+  options: CustomTransactionOptions<ApiSubmitGasfullTransferOptions> & {
+    sourceWallet?: ApiTonWallet;
+    beforeBroadcast?: (message: {
+      boc: string;
+      msgHashNormalized: string;
+      validUntil: number;
+      seqno: number;
+    }) => Promise<void>;
+  },
 ): Promise<ApiSubmitGasfullTransferResult | { error: string }> {
   const {
     accountId,
@@ -363,6 +372,7 @@ export async function submitGasfullTransfer(
     forwardAmount,
     fee,
     noFeeCheck,
+    beforeBroadcast,
   } = options;
   let { toAddress } = options;
 
@@ -415,6 +425,7 @@ export async function submitGasfullTransfer(
 
         const { seqno, balance: toncoinBalance, isInitialized } = walletInfo;
         const isFullTonTransfer = !tokenAddress && toncoinBalance === amount;
+        const validUntil = Math.round(Date.now() / 1000) + TRANSFER_TIMEOUT_SEC;
 
         const signingResult = await signTransaction({
           account,
@@ -428,6 +439,7 @@ export async function submitGasfullTransfer(
           seqno,
           signer,
           doPayFeeFromAmount: isFullTonTransfer,
+          expireAt: validUntil,
         });
         if ('error' in signingResult) return signingResult;
         const { transaction } = signingResult;
@@ -462,6 +474,12 @@ export async function submitGasfullTransfer(
           wallet,
           transaction,
           isInitialized,
+          beforeBroadcast && ((message) => beforeBroadcast({
+            ...message,
+            seqno,
+            // Wallet contracts use an unlimited timeout for their first external message
+            validUntil: seqno === 0 ? FIRST_TRANSFER_VALID_UNTIL : validUntil,
+          })),
         );
 
         finalizeInBackground(async () => {

@@ -33,7 +33,7 @@ import {
   selectCurrentAccountState,
   selectIsHistoryEndReached,
 } from '../../../../global/selectors';
-import { getIsHiddenNftActivity } from '../../../../util/activities';
+import { getActivityTokenSlugs, getIsHiddenNftActivity } from '../../../../util/activities';
 import buildClassName from '../../../../util/buildClassName';
 import { formatHumanDay, getDayStartAt } from '../../../../util/dateFormat';
 import generateUniqueId from '../../../../util/generateUniqueId';
@@ -501,6 +501,7 @@ function filterActivityIds(
     if (!activity) return false;
 
     if (activity.shouldHide) return false;
+    if (activity.kind === 'swap') return !slug || getActivityTokenSlugs(activity).includes(slug);
 
     return activity.slug
       && (!slug || activity.slug === slug)

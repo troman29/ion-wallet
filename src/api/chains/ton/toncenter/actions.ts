@@ -285,7 +285,10 @@ function parseAction(action: AnyAction, options: ParseOptions): ParsedAction {
       activity.shouldLoadDetails ??= true;
     }
 
-    result.activities[i] = updateActivityMetadata(activity);
+    result.activities[i] = updateActivityMetadata({
+      ...activity,
+      extra: { ...activity.extra, chainTransactionHashes: action.transactions },
+    });
   }
 
   return result;

@@ -88,6 +88,8 @@ function addOrUpdateExcessActivity(walletAddress: string, activities: ApiActivit
 
   if (index !== -1) {
     const excessActivity = activities.splice(index, 1)[0];
+    if (excessActivity.kind !== 'transaction') return;
+
     activities.push({
       ...excessActivity,
       amount: excess,

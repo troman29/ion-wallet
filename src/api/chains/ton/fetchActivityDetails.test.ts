@@ -61,6 +61,7 @@ describe('fetchActivityDetails', () => {
           action: {
             action_id: actionId,
             details: {},
+            transactions: ['verified-chain-transaction'],
           } as any,
           activities: [activity],
         }],
@@ -82,6 +83,7 @@ describe('fetchActivityDetails', () => {
       ...activity,
       fee: 123n,
       shouldLoadDetails: undefined,
+      extra: { chainTransactionHashes: ['verified-chain-transaction'] },
     });
   });
 });

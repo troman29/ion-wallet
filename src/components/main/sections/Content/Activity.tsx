@@ -10,6 +10,7 @@ import type {
 } from '../../../../api/types';
 import type { Account, AppTheme, SavedAddress } from '../../../../global/types';
 
+import Swap from './Swap';
 import Transaction, { getTransactionHeight } from './Transaction';
 
 interface OwnProps {
@@ -53,6 +54,19 @@ export default function Activity({
   shouldHideStakingAnnualYield,
   onClick,
 }: OwnProps) {
+  if (activity.kind === 'swap') {
+    return (
+      <Swap
+        activity={activity}
+        isLast={isLast}
+        isActive={isActive}
+        isSensitiveDataHidden={isSensitiveDataHidden}
+        className={className}
+        onClick={onClick}
+      />
+    );
+  }
+
   const doesNftExist = Boolean(activity.nft && nftsByAddress?.[activity.nft.address]);
   const { annualYield, yieldType } = stakingStateBySlug[activity.slug] ?? {};
 
@@ -82,5 +96,7 @@ export default function Activity({
 }
 
 export function getActivityHeight(activity: ApiActivity, isFuture?: boolean) {
+  if (activity.kind === 'swap') return 4;
+
   return getTransactionHeight(activity, isFuture);
 }

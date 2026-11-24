@@ -211,7 +211,8 @@ function fillTraceOutput(
   const walletActions: ParsedAction[] = parsedActions.filter(({ action, activities }) => {
     const hasCommonTransactions = !!intersection(new Set(action.transactions), traceOutput.hashes).size;
     const isWalletAction = activities.some((activity) => (
-      activity.fromAddress === walletAddress || activity.toAddress === walletAddress
+      activity.kind === 'transaction'
+      && (activity.fromAddress === walletAddress || activity.toAddress === walletAddress)
     ));
 
     return hasCommonTransactions && isWalletAction;

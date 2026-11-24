@@ -42,6 +42,8 @@ import iconSettingsDark from '../../../assets/lottie/settings_dark.tgs';
 import iconSettingsLight from '../../../assets/lottie/settings_light.tgs';
 import iconSettingsSolidDark from '../../../assets/lottie/settings_solid_dark.tgs';
 import iconSettingsSolidLight from '../../../assets/lottie/settings_solid_light.tgs';
+import iconSwapDark from '../../../assets/lottie/swap_dark.tgs';
+import iconSwapLight from '../../../assets/lottie/swap_light.tgs';
 import iconWalletDark from '../../../assets/lottie/wallet_dark.tgs';
 import iconWalletLight from '../../../assets/lottie/wallet_light.tgs';
 import iconWalletSolidDark from '../../../assets/lottie/wallet_solid_dark.tgs';
@@ -135,6 +137,7 @@ export const ANIMATED_STICKERS_PATHS = {
     iconExplore: iconExploreLight,
     iconExploreSolid: iconExploreSolidLight,
     iconSend: iconSendLight,
+    iconSwap: iconSwapLight,
     iconSettings: iconSettingsLight,
     iconSettingsSolid: iconSettingsSolidLight,
     iconWallet: iconWalletLight,
@@ -175,6 +178,7 @@ export const ANIMATED_STICKERS_PATHS = {
     iconExplore: iconExploreDark,
     iconExploreSolid: iconExploreSolidDark,
     iconSend: iconSendDark,
+    iconSwap: iconSwapDark,
     iconSettings: iconSettingsDark,
     iconSettingsSolid: iconSettingsSolidDark,
     iconWallet: iconWalletDark,

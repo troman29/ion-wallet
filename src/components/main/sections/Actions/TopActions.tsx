@@ -4,13 +4,14 @@ import { getActions, withGlobal } from '../../../../global';
 import type { Theme } from '../../../../global/types';
 import type { StakingStateStatus } from '../../../../util/staking';
 
-import { ANIMATED_STICKER_ICON_PX, ENABLE_EXCHANGE, IONCOIN, STAKED_ION_SLUG } from '../../../../config';
+import { ANIMATED_STICKER_ICON_PX, IONCOIN, STAKED_ION_SLUG } from '../../../../config';
 import {
   selectAccountStakingState,
   selectAccountStakingStatesBySlug,
   selectCurrentAccountId,
   selectCurrentAccountSettings,
   selectCurrentAccountState,
+  selectIsBridgeAvailable,
   selectIsCurrentAccountViewMode,
   selectIsStakingDisabled,
 } from '../../../../global/selectors';
@@ -40,7 +41,8 @@ interface ActionButtonProps {
   label: string;
   className?: string;
   tgsUrl: string;
-  previewUrl: string;
+  previewUrl?: string;
+  previewIcon?: string;
   accentColor?: string;
   onClick: NoneToVoidFunction;
 }
@@ -50,6 +52,7 @@ interface OwnProps {
 }
 
 interface StateProps {
+  isBridgeAvailable: boolean;
   isViewMode: boolean;
   isEarnHidden: boolean;
   stakingStatus: StakingStateStatus;
@@ -58,6 +61,7 @@ interface StateProps {
 }
 
 function TopActions({
+  isBridgeAvailable,
   isViewMode,
   isEarnHidden,
   stakingStatus,
@@ -129,11 +133,11 @@ function TopActions({
         accentColor={accentColor}
         onClick={handleSendClick}
       />
-      {ENABLE_EXCHANGE && (
+      {isBridgeAvailable && (
         <ActionButton
-          label={lang('Exchange')}
-          tgsUrl={stickerPaths.iconSend}
-          previewUrl={stickerPaths.preview.iconSend}
+          label={lang('Bridge')}
+          tgsUrl={stickerPaths.iconSwap}
+          previewIcon="icon-action-swap"
           accentColor={accentColor}
           onClick={handleTradeClick}
         />
@@ -170,6 +174,7 @@ export default memo(
         );
 
       return {
+        isBridgeAvailable: selectIsBridgeAvailable(global),
         isViewMode: selectIsCurrentAccountViewMode(global),
         isEarnHidden,
         stakingStatus: stakingState ? getStakingStateStatus(stakingState) : 'inactive',
@@ -182,7 +187,7 @@ export default memo(
 );
 
 function ActionButtonInternal({
-  label, className, tgsUrl, previewUrl, accentColor, onClick,
+  label, className, tgsUrl, previewUrl, previewIcon, accentColor, onClick,
 }: ActionButtonProps) {
   const [isAnimating, play, stop] = useFlag();
 
@@ -210,6 +215,7 @@ function ActionButtonInternal({
         forceOnHeavyAnimation
         tgsUrl={tgsUrl}
         previewUrl={previewUrl}
+        iconPreviewClass={previewIcon}
         onEnded={stop}
       />
       <span className={styles.label}>{label}</span>

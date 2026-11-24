@@ -14,6 +14,7 @@ import {
   selectCurrentAccountSettings,
   selectCurrentAccountState,
   selectCurrentAccountTokens,
+  selectIsBridgeAvailable,
   selectIsCurrentAccountViewMode,
   selectIsMultichainAccount,
   selectIsStakingDisabled,
@@ -65,6 +66,7 @@ interface StateProps {
   areTokenNamesLocalized?: boolean;
   states?: ApiStakingState[];
   isViewMode?: boolean;
+  isBridgeAvailable: boolean;
   isMultichainAccount: boolean;
   isStakingDisabled?: boolean;
   pinnedSlugs?: string[];
@@ -88,6 +90,7 @@ function Assets({
   states,
   isMultichainAccount,
   isViewMode,
+  isBridgeAvailable,
   isStakingDisabled,
   pinnedSlugs = MEMO_EMPTY_ARRAY,
   alwaysHiddenSlugs = MEMO_EMPTY_ARRAY,
@@ -276,6 +279,7 @@ function Assets({
           withContextMenu
           tokenClassName={isWidget ? styles.tokenInWidget : undefined}
           isViewMode={isViewMode}
+          isBridgeAvailable={isBridgeAvailable}
           isStakingAvailable={isStakingAvailable}
           isPinned={isPinned}
           withPinTransition={withPinTransition}
@@ -374,6 +378,7 @@ export default memo(
         states,
         isMultichainAccount: selectIsMultichainAccount(global, currentAccountId),
         isViewMode,
+        isBridgeAvailable: selectIsBridgeAvailable(global),
         isStakingDisabled: selectIsStakingDisabled(global),
         pinnedSlugs: accountSettings?.pinnedSlugs,
         alwaysHiddenSlugs: accountSettings?.alwaysHiddenSlugs,

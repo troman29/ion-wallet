@@ -192,6 +192,7 @@ function RichNumberInput({
             id={id}
             role="textbox"
             aria-required
+            aria-invalid={hasError || undefined}
             aria-placeholder={lang('Amount value')}
             aria-labelledby={labelText ? `${id}Label` : undefined}
             tabIndex={0}

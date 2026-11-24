@@ -8,7 +8,7 @@ import { callApi } from '../../../api';
 import { SEC } from '../../../api/constants';
 import { getIsTinyOrScamTransaction } from '../../helpers';
 import { addActionHandler, getGlobal, setGlobal } from '../../index';
-import { addPastActivities, updateAccountState, updateActivity } from '../../reducers';
+import { addPastActivities, applyActivitiesPatch, updateAccountState, updateActivity } from '../../reducers';
 import {
   selectAccount,
   selectAccountState,
@@ -19,6 +19,7 @@ import {
 
 const PAST_ACTIVITY_DELAY = 200;
 const PAST_ACTIVITY_BATCH = 50;
+const MAX_PAST_ACTIVITY_PAGES = 10;
 
 const pastActivityThrottle: Record<string, NoneToVoidFunction> = {};
 const initialActivityWaitingByAccountId: Record<string, Promise<unknown>> = {};
@@ -59,19 +60,24 @@ async function fetchPastActivities(accountId: string, slug?: string) {
   let toTimestamp = selectLastActivityTimestamp(global, accountId, slug);
   let hasMore = true;
   let isEndReached = false;
+  let continuationTimestamp: number | undefined;
+  const removedIds = new Set<string>();
+  let pageCount = 0;
 
-  while (hasMore) {
+  while (hasMore && pageCount++ < MAX_PAST_ACTIVITY_PAGES) {
     const result = await callApi('fetchPastActivities', accountId, PAST_ACTIVITY_BATCH, slug, toTimestamp);
     if (!result) {
       return;
     }
 
     const { activities, hasMore: apiHasMore } = result;
+    isEndReached = !apiHasMore;
+    result.removedIds?.forEach((id) => removedIds.add(id));
 
     global = getGlobal();
 
     if (!activities.length) {
-      isEndReached = true;
+      isEndReached = !apiHasMore;
       break;
     }
 
@@ -97,7 +103,9 @@ async function fetchPastActivities(accountId: string, slug?: string) {
         filteredResult.length < PAST_ACTIVITY_BATCH
         && fetchedActivities.length < PAST_ACTIVITY_BATCH
       );
-    const nextTimestamp = getActivityContinuationTimestamp(activities, (activity) => activity);
+    const nextTimestamp = result.continuationTimestamp
+      ?? getActivityContinuationTimestamp(activities, (activity) => activity);
+    continuationTimestamp = nextTimestamp ?? continuationTimestamp;
     // The cursor must move backwards on every iteration. Upstream is asked for activities mined
     // before it, so a page can only push it back; a cursor that fails to move means the next
     // request would repeat this page forever. Stopping defers at most one page - the next trigger
@@ -109,7 +117,8 @@ async function fetchPastActivities(accountId: string, slug?: string) {
     toTimestamp = nextTimestamp;
   }
 
-  global = addPastActivities(global, accountId, slug, fetchedActivities, isEndReached);
+  global = applyActivitiesPatch(global, accountId, { upsert: [], removeIds: [...removedIds] });
+  global = addPastActivities(global, accountId, slug, fetchedActivities, isEndReached, continuationTimestamp);
   setGlobal(global);
 }
 

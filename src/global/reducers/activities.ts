@@ -1,4 +1,4 @@
-import type { ApiActivity, ApiChain } from '../../api/types';
+import type { ApiActivity, ApiChain, ApiTransactionActivity } from '../../api/types';
 import type { AccountState, GlobalState } from '../types';
 
 import {
@@ -12,6 +12,7 @@ import { mergeSortedActivityIds } from '../../util/activities/order';
 import { getOrderedAccountChains } from '../../util/chain';
 import { extractKey, mapValues, unique } from '../../util/iteratees';
 import { getChainBySlug } from '../../util/tokens';
+import { projectBridgeActivities } from '../../api/common/activities/bridge/projection';
 import { replaceActivityId } from '../helpers/misc';
 import { selectAccountOrAuthAccount, selectAccountState } from '../selectors';
 import { updateAccountState } from './misc';
@@ -123,7 +124,7 @@ export function addInitialActivities(
     global = addPastActivities(global, accountId, slug, activities, activities.length === 0);
   }
 
-  return global;
+  return applyBridgeActivityProjection(global, accountId);
 }
 
 /**
@@ -186,7 +187,7 @@ export function addNewActivities(
     },
   });
 
-  return global;
+  return applyBridgeActivityProjection(global, accountId);
 }
 
 export function addPastActivities(
@@ -195,6 +196,7 @@ export function addPastActivities(
   tokenSlug: string | undefined, // undefined for main activities
   pastActivities: ApiActivity[], // Must be sorted and contain no pending or local activities
   isEndReached?: boolean,
+  continuationTimestamp?: number,
 ) {
   const { activities } = selectAccountState(global, accountId) || {};
   let {
@@ -259,9 +261,15 @@ export function addPastActivities(
     }
   }
 
-  return updateAccountState(global, accountId, {
+  global = updateAccountState(global, accountId, {
     activities: {
       ...activities,
+      ...(continuationTimestamp !== undefined && {
+        historyContinuationBySlug: {
+          ...activities?.historyContinuationBySlug,
+          [tokenSlug ?? '__main__']: continuationTimestamp,
+        },
+      }),
       idsMain,
       byId,
       idsBySlug,
@@ -272,6 +280,8 @@ export function addPastActivities(
       mainHistoryHasMoreByChain,
     },
   });
+
+  return applyBridgeActivityProjection(global, accountId);
 }
 
 function groupMainPastIdsByChain(pastActivities: ApiActivity[]) {
@@ -301,6 +311,10 @@ function mergeActivitiesByIdPreservingStatusProgress(
 ) {
   const nextById = { ...byId };
   for (const activity of incomingActivities) {
+    const previous = nextById[activity.id];
+    if (previous?.kind === 'swap' && activity.kind === 'swap'
+      && BigInt(previous.operation.revision) > BigInt(activity.operation.revision)) continue;
+
     nextById[activity.id] = { ...nextById[activity.id], ...activity };
   }
 
@@ -379,7 +393,11 @@ export function removeActivities(
 export function applyActivitiesPatch(
   global: GlobalState,
   accountId: string,
-  patch: { upsert: readonly ApiActivity[]; removeIds: readonly string[] },
+  patch: {
+    upsert: readonly ApiActivity[];
+    removeIds: readonly string[];
+    evidenceActivities?: readonly ApiTransactionActivity[];
+  },
 ) {
   const visibleUpserts = patch.upsert.filter(({ shouldHide }) => shouldHide !== true);
   const hiddenUpsertIds = patch.upsert
@@ -395,9 +413,17 @@ export function applyActivitiesPatch(
   const { activities } = selectAccountState(global, accountId) || {};
   if (!activities) return global;
 
-  const byId = { ...activities.byId };
-  for (const activity of patch.upsert) {
-    byId[activity.id] = activity;
+  const byId = mergeActivitiesByIdPreservingStatusProgress(activities.byId, patch.upsert);
+  for (const evidence of patch.evidenceActivities ?? []) {
+    const current = byId[evidence.id];
+    if (current?.kind !== 'transaction' || current.extra?.chainTransactionHashes !== undefined
+      || current.externalMsgHashNorm !== evidence.externalMsgHashNorm
+      || !evidence.extra?.chainTransactionHashes?.length) continue;
+
+    byId[evidence.id] = {
+      ...current,
+      extra: { ...current.extra, chainTransactionHashes: evidence.extra.chainTransactionHashes },
+    };
   }
 
   const affectedVisibleSlugs = getActivityListTokenSlugs(
@@ -413,13 +439,15 @@ export function applyActivitiesPatch(
     affectedVisibleSlugs,
   );
 
-  return updateAccountState(global, accountId, {
+  global = updateAccountState(global, accountId, {
     activities: {
       ...activities,
       byId,
       newestActivitiesBySlug,
     },
   });
+
+  return applyBridgeActivityProjection(global, accountId);
 }
 
 export function updateActivity(global: GlobalState, accountId: string, activity: ApiActivity) {
@@ -432,13 +460,58 @@ export function updateActivity(global: GlobalState, accountId: string, activity:
     return global;
   }
 
-  return updateAccountState(global, accountId, {
+  return applyBridgeActivityProjection(updateAccountState(global, accountId, {
     activities: {
       ...activities,
-      byId: {
-        ...byId,
-        [id]: activity,
-      },
+      byId: mergeActivitiesByIdPreservingStatusProgress(byId, [activity]),
+    },
+  }), accountId);
+}
+
+/** Rebuilds visibility from verified operations while keeping every raw row available by id. */
+export function applyBridgeActivityProjection(global: GlobalState, accountId: string) {
+  const activities = selectAccountState(global, accountId)?.activities;
+  if (!activities) return global;
+
+  const { byId } = activities;
+  const rows = Object.values(byId);
+  if (!rows.some((activity) => activity.kind === 'swap' || activity.extra?.bridgeProjection)) return global;
+
+  const projected = projectBridgeActivities(rows);
+  const nextById = Object.fromEntries(projected.activities.map((activity) => [activity.id, activity]));
+  const affectedIds = rows.filter((activity) => activity.kind === 'swap' || activity.extra?.bridgeProjection
+    || nextById[activity.id].extra?.bridgeProjection).map(({ id }) => id);
+  const visibleIds = affectedIds.filter((id) => nextById[id].shouldHide !== true);
+  const filterVisible = (ids: readonly string[]) => ids.filter((id) => nextById[id]?.shouldHide !== true);
+  const idsMain = mergeSortedActivityIds(nextById, filterVisible(activities.idsMain ?? []), visibleIds);
+  const newIdsBySlug = buildActivityIdsBySlug(visibleIds.map((id) => nextById[id]));
+  const idsBySlug = mergeIdsBySlug(
+    mapValues(activities.idsBySlug ?? {}, filterVisible), newIdsBySlug, nextById,
+  );
+  const bridgeWatermarkIds = buildActivityIdsBySlug(projected.activities.filter((activity) =>
+    activity.kind === 'transaction' && Boolean(activity.extra?.bridgeProjection)));
+  const watermarkIdsBySlug = {
+    ...idsBySlug,
+    ...mapValues(bridgeWatermarkIds, (ids, slug) => mergeSortedActivityIds(nextById, idsBySlug[slug] ?? [], ids)),
+  };
+
+  return updateAccountState(global, accountId, {
+    currentActivityId: replaceActivityId(
+      selectAccountState(global, accountId)?.currentActivityId, projected.replacedIds,
+    ),
+    activities: {
+      ...activities,
+      byId: nextById,
+      idsMain,
+      idsBySlug,
+      localActivityIds: activities.localActivityIds && filterVisible(activities.localActivityIds),
+      pendingActivityIds: activities.pendingActivityIds && mapValues(activities.pendingActivityIds, filterVisible),
+      activityIdReplacements: mergeActivityIdReplacements(activities.activityIdReplacements, projected.replacedIds),
+      newestActivitiesBySlug: getNewestActivitiesBySlug({
+        byId: nextById,
+        idsBySlug: watermarkIdsBySlug,
+        newestActivitiesBySlug: activities.newestActivitiesBySlug,
+      }, Object.keys(idsBySlug)),
     },
   });
 }

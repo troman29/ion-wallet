@@ -7,6 +7,7 @@ export * from '../migrations';
 export * from './ionLegacyRecovery';
 export * from './wallet';
 export * from './transfer';
+export * from './bridge';
 export * from './nfts';
 export * from './domains';
 export {
