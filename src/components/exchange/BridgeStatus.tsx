@@ -24,6 +24,7 @@ import BridgeProgress from './BridgeProgress';
 import resultStyles from '../common/TransferResult.module.scss';
 import transferStyles from '../transfer/Transfer.module.scss';
 import modalStyles from '../ui/Modal.module.scss';
+import styles from './ExchangeModal.module.scss';
 
 const BRIDGE_STATUS_LABELS = {
   pending: 'Submitting transfer',
@@ -67,6 +68,7 @@ function BridgeStatus({
   const txId = transfer.serverDestinationTxHash ?? transfer.claimTxId ?? transfer.serverSourceTxHash ?? transfer.txId;
   const txChain = transfer.serverDestinationTxHash ? destination : transfer.claimTxId ? 'bnb' : transfer.source;
   const statusText = lang(BRIDGE_STATUS_LABELS[status]);
+  const visibleError = !isCompleted && !isLoading ? error ?? transfer.error : undefined;
 
   useHistoryBack({ isActive: true, onBack: onClose });
 
@@ -137,10 +139,6 @@ function BridgeStatus({
               </div>
             )}
 
-            {transfer.error && (
-              <div className={transferStyles.error} role="alert">{lang(transfer.error)}</div>
-            )}
-
             <div className={resultStyles.buttons}>
               {txId && (
                 <Button className={resultStyles.button} onClick={handleViewTransaction}>
@@ -155,7 +153,11 @@ function BridgeStatus({
           </>
         )}
 
-        {error && <div className={transferStyles.error} role="alert">{lang(error)}</div>}
+        {visibleError && (
+          <div className={buildClassName(transferStyles.error, styles.statusError)} role="alert">
+            {lang(visibleError)}
+          </div>
+        )}
 
         <div className={buildClassName(modalStyles.buttons, modalStyles.buttonsInsideContentWithScroll)}>
           <Button className={modalStyles.button} onClick={onClose} isPrimary={!isClaimable && !isFailed}>

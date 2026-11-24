@@ -19,6 +19,8 @@ const USER_ERRORS = new Set([
   'Bridge is temporarily unavailable.',
   'Unable to authorize the transfer.',
   'Waiting for bridge confirmations',
+  'Unable to read bridge confirmations.',
+  'Bridge transfer is not ready to claim.',
 ]);
 
 export function getBridgeError(error: unknown) {

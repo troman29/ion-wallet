@@ -585,7 +585,7 @@ it('keeps queued transfer history isolated between runtime profiles', async () =
   expect(second[0].id).toBe('profile-b');
 });
 
-it('sorts and deduplicates oracle signatures, claims once, and preserves the source fee', async () => {
+it.each([false, true])('claims once with sorted signatures (initial oracle set empty: %s)', async (isTransient) => {
   const quote = await getBridgeQuote('0-mainnet', 'ton', '100000000000');
   storedTransfers = [{
     ...quote,
@@ -605,6 +605,9 @@ it('sorts and deduplicates oracle signatures, claims once, and preserves the sou
   }];
   const oracles = [1, 2, 3].map((value) => `0x${String(value).repeat(40)}`);
   mockContract.getFullOracleSet.mockResolvedValue(oracles);
+  if (isTransient) {
+    mockContract.getFullOracleSet.mockResolvedValueOnce([]);
+  }
   mockContract.finishedVotings.mockResolvedValue(false);
   mockTonClient.callRpc.mockResolvedValue({
     exit_code: 0,
