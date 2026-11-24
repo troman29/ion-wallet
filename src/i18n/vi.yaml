@@ -1699,6 +1699,8 @@ $connect_dapp_multichain_selected: "Đã chọn một ví đa chuỗi tương th
 "Insufficient ION balance.": "Số dư ION không đủ."
 "Not enough BNB for the network fee.": "Không đủ BNB để trả phí mạng."
 "Bridge is temporarily unavailable.": "Cầu nối tạm thời không khả dụng."
+"Unable to read bridge confirmations.": "Không thể kiểm tra các xác nhận. Hãy thử nhận ION lại."
+"Bridge transfer is not ready to claim.": "Chưa thể nhận ION. Hãy làm mới trạng thái giao dịch."
 "Unable to authorize the transfer.": "Không thể cấp quyền cho giao dịch."
 "Refresh": "Làm mới"
 "Max": "Tối đa"
