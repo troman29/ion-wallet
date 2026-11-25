@@ -1,0 +1,85 @@
+name: Promote Android on Google Play
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: Exact Android version code already on the alpha track
+        required: true
+        type: string
+      rollout:
+        description: Fraction strictly between 0 and 1
+        required: true
+        default: '0.1'
+        type: string
+      publish:
+        description: Submit to Google Play (unchecked validates only)
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-play-production
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: mobile/android
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          working-directory: mobile
+          bundler-cache: true
+
+      - name: Promote the selected alpha release
+        env:
+          PLAY_KEY_BASE64: ${{ secrets.ANDROID_API_KEY_BASE64 }}
+          VERSION_CODE: ${{ inputs.version_code }}
+          ROLLOUT: ${{ inputs.rollout }}
+          VALIDATE_ONLY: ${{ !inputs.publish }}
+        run: |
+          if [[ ! "$VERSION_CODE" =~ ^[1-9][0-9]{0,9}$ ]] || (( VERSION_CODE > 2100000000 )); then
+            echo '::error::Enter a valid Android version code.'
+            exit 1
+          fi
+          if [[ ! "$ROLLOUT" =~ ^0\.[0-9]*[1-9][0-9]*$ ]]; then
+            echo '::error::Enter a rollout fraction strictly between 0 and 1.'
+            exit 1
+          fi
+          if [[ -z "$PLAY_KEY_BASE64" ]]; then
+            echo '::error::Missing Google Play service account credentials.'
+            exit 1
+          fi
+
+          umask 077
+          play_key=$(mktemp "$RUNNER_TEMP/android-play.XXXXXX")
+          trap 'rm -f -- "$play_key"' EXIT
+          printf '%s' "$PLAY_KEY_BASE64" | base64 --decode > "$play_key"
+
+          bundle exec fastlane supply \
+            --package_name io.ionwallet \
+            --json_key "$play_key" \
+            --track alpha \
+            --track_promote_to production \
+            --version_code "$VERSION_CODE" \
+            --rollout "$ROLLOUT" \
+            --validate_only "$VALIDATE_ONLY" \
+            --skip_upload_apk true \
+            --skip_upload_aab true \
+            --skip_upload_metadata true \
+            --skip_upload_changelogs true \
+            --skip_upload_images true \
+            --skip_upload_screenshots true
