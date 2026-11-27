@@ -75,7 +75,6 @@ env:
   CREATE_MULTICHAIN_WALLET: ${{ vars.CREATE_MULTICHAIN_WALLET }}
   ENABLE_EXCHANGE: ${{ vars.ENABLE_EXCHANGE }}
   ANDROID_KEYSTORE_ALIAS: ${{ vars.ANDROID_KEYSTORE_ALIAS }}
-  ANDROID_PLAY_TRACK: ${{ vars.ANDROID_PLAY_TRACK }}
   WALLET_CONNECT_PROJECT_ID: ${{ vars.WALLET_CONNECT_PROJECT_ID }}
   WALLET_CONNECT_PAY_APP_ID: ${{ vars.WALLET_CONNECT_PAY_APP_ID }}
 
@@ -822,7 +821,7 @@ jobs:
     name: Release Android app (${{ matrix.app_variant }})
     needs: detect-changes
     runs-on: ubuntu-latest
-    environment: production
+    environment: android-alpha
     timeout-minutes: 30
     if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_dispatch' && needs.detect-changes.outputs.ios-only != 'true' && needs.detect-changes.outputs.android-variants != '[]')
     strategy:
@@ -832,6 +831,7 @@ jobs:
     env:
       APP_VARIANT: ${{ matrix.app_variant }}
       CAP_PLATFORM: android
+      ANDROID_PLAY_TRACK: alpha
       IS_RELEASE_CANDIDATE: ${{ startsWith(github.ref, 'refs/heads/release/') && '1' || '' }}
       RC_NUMBER: ${{ needs.detect-changes.outputs.rc-number }}
       ANDROID_DESTINATION: ${{ github.event_name == 'push' && 'play' || inputs.android_destination }}
