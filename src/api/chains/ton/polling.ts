@@ -375,21 +375,27 @@ function setupStakingPolling(accountId: string, getBalances: () => Promise<ApiBa
   }
 
   let lastStates: ApiStakingState[] | undefined;
+  let isStopped = false;
 
-  return pollingLoop({
+  const polling = pollingLoop({
     period: STAKING_INTERVAL,
     async poll() {
       try {
+        // A cold start can outlive an early staking response if the indexer is unavailable.
+        const [common, balances] = await Promise.all([getStakingCommonCache('ton'), getBalances()]);
+        if (isStopped) {
+          return;
+        }
+
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const staking = require('./staking') as typeof import('./staking');
-        const [common, balances, backendState] = await Promise.all([
-          getStakingCommonCache('ton'),
-          getBalances(),
-          staking.getBackendStakingState(accountId),
-        ]);
-        const states = await staking.getStakingStates(accountId, common, backendState, balances);
+        const backendState = await staking.getBackendStakingState(accountId);
+        if (isStopped) {
+          return;
+        }
 
-        if (!areDeepEqual(states, lastStates)) {
+        const states = await staking.getStakingStates(accountId, common, backendState, balances);
+        if (!isStopped && !areDeepEqual(states, lastStates)) {
           lastStates = states;
           onUpdate({
             type: 'updateStaking',
@@ -401,7 +407,12 @@ function setupStakingPolling(accountId: string, getBalances: () => Promise<ApiBa
         logDebugError('setupStakingPolling', err);
       }
     },
-  }).stop;
+  });
+
+  return () => {
+    isStopped = true;
+    polling.stop();
+  };
 }
 
 async function loadInitialConfirmedActivities(accountId: string, onUpdate: OnApiUpdate) {
