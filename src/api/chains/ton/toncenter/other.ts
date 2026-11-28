@@ -7,6 +7,7 @@ import { fetchJson } from '../../../../util/fetch';
 import { buildCollectionByKey, split } from '../../../../util/iteratees';
 import { toRawAddress } from '../util/tonCore';
 import { getEnvironment } from '../../../environment';
+import { ApiBaseError } from '../../../errors';
 import { NETWORK_CONFIG } from '../constants';
 
 const ADDRESS_BOOK_CHUNK_SIZE = 128;
@@ -23,6 +24,8 @@ const VERSION_MAP: Record<WalletVersion, ApiTonWalletVersion> = {
   // 'wallet v5 beta': '', // Not used in production, wrapper is missing
   'wallet v5 r1': 'W5',
 };
+
+export class IncompleteWalletStateError extends ApiBaseError {}
 
 export async function fetchAddressBook(
   network: ApiNetwork,
@@ -57,7 +60,7 @@ export async function getWalletInfos(
   signal?: AbortSignal,
 ): Promise<Record<string, ApiWalletInfo>> {
   const { wallets: states, address_book: addressBook } = await callToncenterV3<{
-    address_book: AddressBook;
+    address_book?: AddressBook;
     wallets: WalletState[];
   }>(network, '/walletStates', { address: addresses.map(toRawAddress).join(',') }, signal);
 
@@ -80,18 +83,21 @@ export async function getWalletInfos(
   }));
 }
 
-function buildWalletInfo(state: WalletState, addressBook: AddressBook): ApiWalletInfo {
+function buildWalletInfo(state: WalletState, addressBook: AddressBook | undefined): ApiWalletInfo {
+  const addressInfo = addressBook?.[state.address];
+  if (typeof addressInfo?.user_friendly !== 'string' || !addressInfo.user_friendly) {
+    throw new IncompleteWalletStateError('Wallet state is missing its address book entry');
+  }
+
   return {
-    address: addressBook[state.address].user_friendly,
+    address: addressInfo.user_friendly,
     version: 'wallet_type' in state ? VERSION_MAP[state.wallet_type] : undefined,
     balance: BigInt(state.balance),
     isInitialized: state.status === 'active',
     seqno: 'seqno' in state ? state.seqno : 0,
     lastTxId: state.last_transaction_hash ? buildTxId(state.last_transaction_hash) : undefined,
-    domain: addressBook[state.address].domain ?? undefined,
-    interface: addressBook[state.address].interfaces
-      ? addressBook[state.address]?.interfaces?.[0] ?? undefined
-      : undefined,
+    domain: addressInfo.domain ?? undefined,
+    interface: addressInfo.interfaces?.[0] ?? undefined,
   };
 }
 

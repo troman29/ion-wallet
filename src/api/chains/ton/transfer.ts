@@ -24,12 +24,13 @@ import type {
 } from './types';
 import type { Signer } from './util/signer';
 import type { TonWallet } from './util/tonCore';
-import { ApiTransactionDraftError, ApiTransactionError } from '../../types';
+import { ApiCommonError, ApiTransactionDraftError, ApiTransactionError } from '../../types';
 
 import { NO_TRACE_EMULATION } from '../../../config';
 import { raceWithAbortSignal, throwIfAborted } from '../../../util/abortSignal';
 import { parseAccountId } from '../../../util/account';
 import { bigintMultiplyToNumber } from '../../../util/bigint';
+import { CircuitOpenError } from '../../../util/circuit-breaker';
 import { explainApiTransferFee } from '../../../util/fee/transferFee';
 import { omit, pick, split } from '../../../util/iteratees';
 import { logDebug, logDebugError } from '../../../util/logs';
@@ -56,6 +57,7 @@ import { withoutTransferConcurrency } from '../../common/preventTransferConcurre
 import { getTokenByAddress } from '../../common/tokens';
 import { MINUTE, SEC } from '../../constants';
 import { ApiServerError, handleServerError } from '../../errors';
+import { IncompleteWalletStateError } from './toncenter/other';
 import { checkHasTransaction, fetchHasTransaction } from './activities';
 import { resolveAddress } from './address';
 import { ATTEMPTS, FEE_FACTOR, TRANSFER_TIMEOUT_SEC } from './constants';
@@ -865,10 +867,21 @@ export async function signTransfers(
   // works in most cases.
   await withoutTransferConcurrency(network, account.byChain.ton.address, () => {});
 
-  const seqno = await getWalletSeqno(network, account.byChain.ton.address);
+  const walletSeqno = await getWalletSeqno(network, account.byChain.ton.address).catch((err: unknown) => {
+    if (err instanceof ApiServerError || err instanceof CircuitOpenError || err instanceof IncompleteWalletStateError) {
+      logDebugError('signTransfers: wallet state unavailable', err);
+      return { error: ApiCommonError.ServerError };
+    }
+
+    throw err;
+  });
+  if (typeof walletSeqno !== 'number') {
+    return walletSeqno;
+  }
+
   const signer = getSigner(accountId, account, enclaveToken);
   const signedTransactions = await signTransactions({
-    account, accountId, expireAt, messages, seqno, signer, isTonConnect,
+    account, accountId, expireAt, messages, seqno: walletSeqno, signer, isTonConnect,
   });
   if ('error' in signedTransactions) return signedTransactions;
 
