@@ -228,6 +228,16 @@ $signSizeDiff: 0.375rem;
   left: var(--offset-x-value, var(--offset-x));
 }
 
+.watchedBalance {
+  margin: 0.125rem 0 0;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  color: var(--second-text);
+  text-align: center;
+}
+
 .cardAddressContainer {
   height: 1.125rem;
   margin: auto auto 0.75rem;

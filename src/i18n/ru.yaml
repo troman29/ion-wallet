@@ -831,7 +831,9 @@ View Any Address: Просмотр адреса
 View Mode: Режим просмотра
 "%counts% Secret Words": "%counts% секретных слова"
 Address or Domain: Адрес или домен
-$import_view_account_note: Добавьте **любой** адрес, чтобы **наблюдать** за его действиями.
+$view_account_read_only_note: Добавьте публичный адрес, чтобы увидеть **его баланс и прошлые операции**. Режим просмотра не создаёт кошелёк и не позволяет переводить средства.
+$watched_address_balance: Баланс наблюдаемого адреса
+$watched_address_empty_history: Нет операций для отображения по этому адресу.
 $view_mode: Просмотр
 Import Wallet: Импорт кошелька
 Please top up your %token% balance.: Пожалуйста, пополните ваш %token%-баланс.

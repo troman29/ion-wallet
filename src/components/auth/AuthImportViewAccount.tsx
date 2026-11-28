@@ -134,7 +134,7 @@ function AuthImportViewAccount({
         />
 
         <p className={styles.info}>
-          {renderText(lang('$import_view_account_note'))}
+          {renderText(lang('$view_account_read_only_note'))}
         </p>
 
         <div className={buildClassName(styles.buttons, isInModal && styles.buttonsInModal)}>

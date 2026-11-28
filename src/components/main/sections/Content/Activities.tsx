@@ -19,6 +19,7 @@ import { ContentTab } from '../../../../global/types';
 
 import {
   ANIMATED_STICKER_BIG_SIZE_PX,
+  ANIMATED_STICKER_SMALL_SIZE_PX,
   PORTRAIT_MIN_ASSETS_TAB_VIEW,
 } from '../../../../config';
 import { forceMeasure } from '../../../../lib/fasterdom/stricterdom';
@@ -63,6 +64,7 @@ import Spinner from '../../../ui/Spinner';
 import Transition from '../../../ui/Transition';
 import Activity, { getActivityHeight } from './Activity';
 import ActivityListItem from './ActivityListItem';
+import EmptyListPlaceholder from './EmptyListPlaceholder';
 import NewWalletGreeting from './NewWalletGreeting';
 
 import styles from './Activities.module.scss';
@@ -382,6 +384,21 @@ function Activities({
   }
 
   if (!listItemIds.length) {
+    if (!slug && accounts?.[currentAccountId]?.type === 'view') {
+      return (
+        <div className={buildClassName(isLandscape && styles.greeting)}>
+          <EmptyListPlaceholder
+            isStickerActive={isActive}
+            stickerTgsUrl={ANIMATED_STICKERS_PATHS.noData}
+            stickerPreviewUrl={ANIMATED_STICKERS_PATHS.noDataPreview}
+            stickerSize={isLandscape ? ANIMATED_STICKER_BIG_SIZE_PX : ANIMATED_STICKER_SMALL_SIZE_PX}
+            title={lang('No Activity')}
+            description={lang('$watched_address_empty_history')}
+          />
+        </div>
+      );
+    }
+
     if (!slug) {
       return (
         <div className={buildClassName(isLandscape && styles.greeting)}>
@@ -391,22 +408,22 @@ function Activities({
           />
         </div>
       );
-    } else {
-      return (
-        <div className={styles.emptyList}>
-          <AnimatedIconWithPreview
-            play={isActive}
-            tgsUrl={ANIMATED_STICKERS_PATHS.noData}
-            previewUrl={ANIMATED_STICKERS_PATHS.noDataPreview}
-            size={ANIMATED_STICKER_BIG_SIZE_PX}
-            className={styles.sticker}
-            noLoop={false}
-            nonInteractive
-          />
-          <p className={styles.emptyListTitle}>{lang('No Activity')}</p>
-        </div>
-      );
     }
+
+    return (
+      <div className={styles.emptyList}>
+        <AnimatedIconWithPreview
+          play={isActive}
+          tgsUrl={ANIMATED_STICKERS_PATHS.noData}
+          previewUrl={ANIMATED_STICKERS_PATHS.noDataPreview}
+          size={ANIMATED_STICKER_BIG_SIZE_PX}
+          className={styles.sticker}
+          noLoop={false}
+          nonInteractive
+        />
+        <p className={styles.emptyListTitle}>{lang('No Activity')}</p>
+      </div>
+    );
   }
 
   return (

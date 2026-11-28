@@ -26,6 +26,7 @@ import { IS_IOS, IS_SAFARI } from '../../../../util/windowEnvironment';
 
 import { useDeviceScreen } from '../../../../hooks/useDeviceScreen';
 import useFontScale from '../../../../hooks/useFontScale';
+import useLang from '../../../../hooks/useLang';
 import useLastCallback from '../../../../hooks/useLastCallback';
 import useSyncEffect from '../../../../hooks/useSyncEffect';
 import useUpdateIndicator from '../../../../hooks/useUpdateIndicator';
@@ -73,6 +74,7 @@ function Card({
   isNftBuyingDisabled,
   isViewMode,
 }: OwnProps & StateProps) {
+  const lang = useLang();
   const amountRef = useRef<HTMLDivElement>();
   const cardRef = useRef<HTMLDivElement>();
   const shortBaseSymbol = getShortCurrencySymbol(baseCurrency);
@@ -261,6 +263,7 @@ function Card({
       >
         <div className={styles.containerInner}>
           {values ? renderBalance() : renderLoader()}
+          {values && isViewMode && <p className={styles.watchedBalance}>{lang('$watched_address_balance')}</p>}
           <Transition
             activeKey={mainKey}
             name="fade"
