@@ -825,7 +825,9 @@ View Any Address: Xem địa chỉ bất kỳ
 View Mode: Chế độ xem
 "%counts% Secret Words": "%counts% từ khôi phục"
 Address or Domain: Địa chỉ hoặc tên miền
-$import_view_account_note: Thêm địa chỉ **bất kỳ** để **theo dõi** hoạt động.
+$view_account_read_only_note: Thêm một địa chỉ công khai để xem **số dư và các giao dịch trước đây** của địa chỉ đó. Chế độ xem không tạo ví và không cho phép chuyển tiền.
+$watched_address_balance: Số dư của địa chỉ đang theo dõi
+$watched_address_empty_history: Không có giao dịch nào để hiển thị cho địa chỉ này.
 $view_mode: Xem
 Import Wallet: Nhập ví
 Please top up your %token% balance.: Vui lòng nạp thêm %token%.

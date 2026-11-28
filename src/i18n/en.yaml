@@ -825,7 +825,9 @@ View Any Address: View Any Address
 View Mode: View Mode
 "%counts% Secret Words": "%counts% Secret Words"
 Address or Domain: Address or Domain
-$import_view_account_note: Add **any** address to **monitor** its activity.
+$view_account_read_only_note: Add a public address to see its **balance and past transactions**. This does not create a wallet or let you move funds.
+$watched_address_balance: Watched address balance
+$watched_address_empty_history: No transactions to show for this address.
 $view_mode: View
 Import Wallet: Import Wallet
 Please top up your %token% balance.: Please top up your %token% balance.
