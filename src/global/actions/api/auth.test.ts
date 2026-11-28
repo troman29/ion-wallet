@@ -379,3 +379,30 @@ describe('mobile import failures', () => {
     expect(actions.showError).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('ION derivation migration on unlock', () => {
+  let store: GlobalState;
+
+  beforeEach(() => {
+    (getGlobal as jest.Mock).mockImplementation(() => store);
+    (setGlobal as jest.Mock).mockImplementation((next: GlobalState) => {
+      store = next;
+    });
+  });
+
+  it('still adds the missing chains when the migration fails', async () => {
+    store = makeGlobal({ ionDerivationMigrationCount: 1, multichainUpgradeCount: 1 });
+    (callApi as jest.Mock).mockImplementation((name: string) => Promise.resolve(
+      name === 'migrateLegacyIonDerivations' ? { [ACCOUNT_ID]: 'Invalid ION derivation target' } : [ACCOUNT_ID],
+    ));
+    const actions = {
+      showToast: jest.fn(),
+      upgradeMultichainAccounts: jest.fn(),
+      releaseEnclaveSession: jest.fn(),
+    };
+
+    await getHandler('migrateLegacyIonDerivations')(store, actions, { enclaveToken: 'passcode:token' });
+
+    expect(actions.upgradeMultichainAccounts).toHaveBeenCalledWith({ enclaveToken: 'passcode:token' });
+  });
+});
